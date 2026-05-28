@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autocatalytic Closure for the Working Mathematician</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+h3 {
+  color: var(--heading);
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.definition, .theorem {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.definition { border-left: 4px solid var(--blue); }
+.theorem { border-left: 4px solid var(--purple); }
+
+.definition-title, .theorem-title {
+  font-weight: 700;
+  color: var(--heading);
+  margin-bottom: 0.5rem;
+}
+
+.definition-title { color: var(--blue); }
+.theorem-title { color: var(--purple); }
+
+.math {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-style: italic;
+  color: var(--heading);
+}
+
+.math-block {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-style: italic;
+  color: var(--heading);
+  display: block;
+  text-align: center;
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+code {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+  color: var(--green);
+}
+
+.svg-container {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.svg-container svg { max-width: 100%; height: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  background: #334155;
+  color: var(--heading);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #334155;
+}
+
+tr:hover { background: rgba(59, 130, 246, 0.05); }
+
+.insight {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.insight::before {
+  content: "Key insight: ";
+  color: var(--golden);
+  font-weight: 700;
+}
+
+.callout {
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  font-size: 1.15rem;
+  color: var(--heading);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.controls button:hover { background: #2563eb; }
+.controls button:disabled { background: var(--muted); cursor: not-allowed; }
+
+.step-display {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  min-height: 3rem;
+  color: var(--text);
+}
+
+ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Autocatalytic Closure for the Working Mathematician</h1>
+<p class="subtitle">In which emergence turns out to be a theorem.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>1. You Already Know This</h2>
+
+<p>You have encountered this shape before. Consider three structures you command:</p>
+
+<p><strong>Generated groups.</strong> Given elements <span class="math">a, b</span> in a group <span class="math">G</span>, the subgroup &lang;<span class="math">a, b</span>&rang; is the smallest subgroup of <span class="math">G</span> containing <span class="math">a</span> and <span class="math">b</span>. You specify generators; the group structure determines what must exist.</p>
+
+<p><strong>Eigenspaces.</strong> Given a linear operator <span class="math">T</span> on <span class="math">V</span>, the eigenspace <span class="math">E</span><sub>&lambda;</sub> = ker(<span class="math">T</span> &minus; &lambda;<span class="math">I</span>) is not chosen&mdash;it falls out of the operator. You specify the relation (<span class="math">T</span>); the domain (<span class="math">E</span><sub>&lambda;</sub>) emerges.</p>
+
+<p><strong>Algebraic closure.</strong> The algebraic closure <span style="text-decoration:overline;color:var(--heading);font-family:serif;font-style:italic;">Q</span> is not given in advance. You specify the property (every polynomial splits); the field that satisfies it is the smallest such extension. The domain is the answer to a closure condition.</p>
+
+<p>In each case, you did not begin by specifying a domain. You specified a <em>relation</em> or <em>property</em>, and the domain fell out as a fixed point. This is routine mathematics&mdash;you do it without noticing the pattern.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 780 260" xmlns="http://www.w3.org/2000/svg">
+  <!-- Left column: classical -->
+  <rect x="20" y="20" width="350" height="220" rx="12" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="195" y="50" text-anchor="middle" fill="var(--muted)" font-size="13" font-weight="bold">Classical Mode</text>
+  <text x="195" y="72" text-anchor="middle" fill="var(--line)" font-size="12">Specify Domain &rarr; Discover Properties</text>
+
+  <rect x="55" y="95" width="130" height="42" rx="8" fill="var(--card)" stroke="var(--blue)" stroke-width="2"/>
+  <text x="120" y="121" text-anchor="middle" fill="var(--blue)" font-size="12">Domain D</text>
+
+  <line x1="185" y1="116" x2="225" y2="116" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="205" y="108" text-anchor="middle" fill="var(--muted)" font-size="10">analyze</text>
+
+  <rect x="225" y="95" width="130" height="42" rx="8" fill="var(--card)" stroke="var(--green)" stroke-width="2"/>
+  <text x="290" y="121" text-anchor="middle" fill="var(--green)" font-size="12">Properties</text>
+
+  <text x="195" y="168" text-anchor="middle" fill="var(--muted)" font-size="11" font-style="italic">Given: V. Find: eigenvalues of T.</text>
+  <text x="195" y="188" text-anchor="middle" fill="var(--muted)" font-size="11" font-style="italic">Given: R. Determine: ideal structure.</text>
+  <text x="195" y="208" text-anchor="middle" fill="var(--muted)" font-size="11" font-style="italic">Given: X. Classify: &pi;&#8321;(X).</text>
+
+  <!-- Right column: closure mode -->
+  <rect x="410" y="20" width="350" height="220" rx="12" fill="none" stroke="var(--golden)" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="585" y="50" text-anchor="middle" fill="var(--golden)" font-size="13" font-weight="bold">Closure Mode</text>
+  <text x="585" y="72" text-anchor="middle" fill="var(--line)" font-size="12">Specify Property &rarr; Domain Emerges</text>
+
+  <rect x="445" y="95" width="130" height="42" rx="8" fill="var(--card)" stroke="var(--golden)" stroke-width="2"/>
+  <text x="510" y="121" text-anchor="middle" fill="var(--golden)" font-size="12">Relations / Rule</text>
+
+  <line x1="575" y1="116" x2="615" y2="116" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="595" y="108" text-anchor="middle" fill="var(--muted)" font-size="10">close</text>
+
+  <rect x="615" y="95" width="130" height="42" rx="8" fill="var(--card)" stroke="var(--purple)" stroke-width="2"/>
+  <text x="680" y="121" text-anchor="middle" fill="var(--purple)" font-size="12">Domain D*</text>
+
+  <text x="585" y="168" text-anchor="middle" fill="var(--golden)" font-size="11" font-style="italic">&lang;a,b&rang; &mdash; generators &rarr; subgroup</text>
+  <text x="585" y="188" text-anchor="middle" fill="var(--golden)" font-size="11" font-style="italic">E&#x2097; &mdash; operator &rarr; eigenspace</text>
+  <text x="585" y="208" text-anchor="middle" fill="var(--golden)" font-size="11" font-style="italic"><tspan style="text-decoration:overline">Q</tspan> &mdash; "all polys split" &rarr; field</text>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="var(--line)"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="var(--red)"/>
+    </marker>
+  </defs>
+</svg>
+</div>
+
+<p>The left column is comfortable. The right column is <em>exactly the same mathematics</em>&mdash;closure under a specified operation&mdash;but you may not have noticed how often you already work in it.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>2. A Puzzle</h2>
+
+<p>Here is a small reaction network. Molecules are circles; reactions are diamonds. Solid arrows connect reactants to reactions and reactions to products. <span style="color:var(--red);">Dashed red arrows</span> show catalysis&mdash;which molecule enables which reaction. Molecules in <span style="color:var(--blue);">blue</span> are <em>food</em>: freely available from outside.</p>
+
+<div class="svg-container">
+<svg id="puzzle-svg" viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg">
+  <!-- Food molecules -->
+  <circle cx="100" cy="60" r="26" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2.5"/>
+  <text x="100" y="65" text-anchor="middle" fill="var(--blue)" font-size="14" font-weight="bold">f&#8321;</text>
+  <text x="100" y="30" text-anchor="middle" fill="var(--muted)" font-size="10">food</text>
+
+  <circle cx="250" cy="60" r="26" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2.5"/>
+  <text x="250" y="65" text-anchor="middle" fill="var(--blue)" font-size="14" font-weight="bold">f&#8322;</text>
+  <text x="250" y="30" text-anchor="middle" fill="var(--muted)" font-size="10">food</text>
+
+  <!-- Molecule a -->
+  <circle cx="175" cy="240" r="24" fill="#0f3d1a" stroke="var(--green)" stroke-width="2"/>
+  <text x="175" y="245" text-anchor="middle" fill="var(--green)" font-size="15" font-weight="bold">a</text>
+
+  <!-- Molecule b -->
+  <circle cx="60" cy="370" r="24" fill="#0f3d1a" stroke="var(--green)" stroke-width="2"/>
+  <text x="60" y="375" text-anchor="middle" fill="var(--green)" font-size="15" font-weight="bold">b</text>
+
+  <!-- Molecule c -->
+  <circle cx="290" cy="370" r="24" fill="#0f3d1a" stroke="var(--green)" stroke-width="2"/>
+  <text x="290" y="375" text-anchor="middle" fill="var(--green)" font-size="15" font-weight="bold">c</text>
+
+  <!-- Molecule d (orphan) -->
+  <circle cx="520" cy="60" r="24" fill="#1e293b" stroke="var(--muted)" stroke-width="1.5"/>
+  <text x="520" y="65" text-anchor="middle" fill="var(--muted)" font-size="15">d</text>
+
+  <!-- Reaction r1: f1 + f2 -> a, catalyzed by b -->
+  <rect x="162" y="135" width="26" height="26" rx="3" transform="rotate(45 175 148)" fill="var(--amber)" stroke="var(--golden)" stroke-width="1.5"/>
+  <text x="175" y="153" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold">r&#8321;</text>
+
+  <!-- r1 input arrows -->
+  <line x1="112" y1="82" x2="163" y2="136" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="238" y1="82" x2="187" y2="136" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- r1 -> a -->
+  <line x1="175" y1="166" x2="175" y2="214" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- b catalyzes r1 -->
+  <line x1="72" y1="350" x2="162" y2="160" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-red)"/>
+
+  <!-- Reaction r2: a -> b, catalyzed by a (self-catalysis) -->
+  <rect x="105" y="295" width="26" height="26" rx="3" transform="rotate(45 118 308)" fill="var(--amber)" stroke="var(--golden)" stroke-width="1.5"/>
+  <text x="118" y="313" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold">r&#8322;</text>
+
+  <!-- a -> r2 -->
+  <line x1="160" y1="258" x2="130" y2="296" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- r2 -> b -->
+  <line x1="106" y1="320" x2="72" y2="350" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- a catalyzes r2 -->
+  <line x1="155" y1="250" x2="130" y2="300" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-red)"/>
+
+  <!-- Reaction r3: f1 + a -> c, catalyzed by b -->
+  <rect x="220" y="295" width="26" height="26" rx="3" transform="rotate(45 233 308)" fill="var(--amber)" stroke="var(--golden)" stroke-width="1.5"/>
+  <text x="233" y="313" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold">r&#8323;</text>
+
+  <!-- f1 -> r3 (long arc) -->
+  <path d="M80,78 Q30,200 220,300" fill="none" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- a -> r3 -->
+  <line x1="192" y1="256" x2="222" y2="296" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- r3 -> c -->
+  <line x1="244" y1="320" x2="278" y2="352" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- b catalyzes r3 -->
+  <line x1="78" y1="360" x2="220" y2="310" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-red)"/>
+
+  <!-- Reaction r4: a + b -> c, catalyzed by c  (mutual dependency pair with r5) -->
+  <rect x="382" y="255" width="26" height="26" rx="3" transform="rotate(45 395 268)" fill="var(--amber)" stroke="var(--golden)" stroke-width="1.5"/>
+  <text x="395" y="273" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold">r&#8324;</text>
+
+  <!-- a -> r4 -->
+  <line x1="197" y1="248" x2="380" y2="260" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- b -> r4 -->
+  <line x1="82" y1="362" x2="380" y2="272" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- r4 -> c -->
+  <line x1="395" y1="282" x2="310" y2="356" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- c catalyzes r4 -->
+  <line x1="302" y1="350" x2="384" y2="262" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-red)"/>
+
+  <!-- Reaction r5: d + f2 -> a, catalyzed by d  (orphan: d not produced) -->
+  <rect x="452" y="135" width="26" height="26" rx="3" transform="rotate(45 465 148)" fill="var(--amber)" stroke="var(--golden)" stroke-width="1.5"/>
+  <text x="465" y="153" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold">r&#8325;</text>
+
+  <!-- d -> r5 -->
+  <line x1="502" y1="76" x2="476" y2="136" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- f2 -> r5 -->
+  <line x1="272" y1="70" x2="453" y2="142" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- r5 -> a -->
+  <line x1="454" y1="160" x2="198" y2="232" stroke="var(--line)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- d catalyzes r5 -->
+  <line x1="530" y1="82" x2="476" y2="140" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-red)"/>
+
+  <!-- Labels for the two special structures -->
+  <rect x="430" y="35" width="180" height="50" rx="6" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="520" y="95" text-anchor="middle" fill="var(--muted)" font-size="10" font-style="italic">d is never produced</text>
+
+  <!-- Legend -->
+  <g transform="translate(540, 260)">
+    <text x="0" y="0" fill="var(--line)" font-size="11" font-weight="bold">Legend</text>
+    <circle cx="10" cy="20" r="8" fill="#1e3a5f" stroke="var(--blue)" stroke-width="1.5"/>
+    <text x="25" y="24" fill="var(--line)" font-size="10">Food (free)</text>
+    <circle cx="10" cy="44" r="8" fill="#0f3d1a" stroke="var(--green)" stroke-width="1.5"/>
+    <text x="25" y="48" fill="var(--line)" font-size="10">Molecule</text>
+    <rect x="3" y="58" width="14" height="14" rx="2" transform="rotate(45 10 65)" fill="var(--amber)"/>
+    <text x="25" y="72" fill="var(--line)" font-size="10">Reaction</text>
+    <line x1="3" y1="88" x2="20" y2="88" stroke="var(--line)" stroke-width="1.5"/>
+    <text x="25" y="92" fill="var(--line)" font-size="10">Reactant/Product</text>
+    <line x1="3" y1="108" x2="20" y2="108" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="25" y="112" fill="var(--line)" font-size="10">Catalysis</text>
+  </g>
+</svg>
+</div>
+
+<p>Six molecules: <span class="math">f</span><sub>1</sub>, <span class="math">f</span><sub>2</sub> (food), <span class="math">a</span>, <span class="math">b</span>, <span class="math">c</span>, <span class="math">d</span>. Five reactions. One reaction (<span class="math">r</span><sub>5</sub>) needs molecule <span class="math">d</span> as both reactant and catalyst&mdash;but nothing produces <span class="math">d</span>. One pair (<span class="math">r</span><sub>1</sub> and <span class="math">r</span><sub>2</sub>) forms a mutual dependency: <span class="math">r</span><sub>1</sub> needs <span class="math">b</span> as catalyst; <span class="math">r</span><sub>2</sub> needs <span class="math">a</span> as catalyst and produces <span class="math">b</span>; but <span class="math">a</span> is produced by <span class="math">r</span><sub>1</sub>.</p>
+
+<p>The question: <strong>which reactions can sustain themselves from the food set alone?</strong></p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>3. The Mathematician's Instinct (And Why It Stalls Here)</h2>
+
+<p>Your training tells you: <em>define the domain, then prove theorems about it.</em> Fix a group <span class="math">G</span>, then study its structure. Fix a topological space <span class="math">X</span>, then classify its coverings. The domain comes first; results follow.</p>
+
+<p>Here, this instinct stalls. What "exists" in the system depends on what can be <em>produced</em>. What can be produced depends on which reactions can <em>fire</em>. Which reactions can fire depends on what exists to <em>catalyze</em> them. You feel a circularity&mdash;and your training says: stop. Circularity means ill-definition.</p>
+
+<p>But it isn't circular. It's a <strong>fixed-point equation on <span class="math">&weierp;</span>(<span class="math">R</span>)</strong>.</p>
+
+<p>You're looking for <span class="math">R</span>&prime; &sube; <span class="math">R</span> such that <span class="math">R</span>&prime; = <span class="math">&Phi;</span>(<span class="math">R</span>&prime;), where <span class="math">&Phi;</span> keeps exactly those reactions whose preconditions are met within the closure of <span class="math">R</span>&prime; itself. The apparent circularity is the self-referential character of any fixed-point condition. You solve these routinely in other contexts&mdash;you just haven't seen this one before.</p>
+
+<div class="callout">
+  The domain is not given. The domain is the answer.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>4. The Algorithm (Greatest Fixed Point)</h2>
+
+<p>Rather than searching bottom-up through 2<sup>|<span class="math">R</span>|</sup> subsets, start from the top. Begin with all reactions; iteratively remove any reaction whose preconditions fail; repeat until stable. This is a <em>greatest fixed-point</em> computation: a monotone map on (<span class="math">&weierp;</span>(<span class="math">R</span>), &supe;).</p>
+
+<p>Step through it on the puzzle from Section 2.</p>
+
+<div class="controls">
+  <button id="algo-next" onclick="algoStep()">Next Step</button>
+  <button id="algo-reset" onclick="algoReset()">Reset</button>
+  <span id="algo-counter" style="color:var(--muted);font-size:0.85rem;">Step 0</span>
+</div>
+<div class="step-display" id="algo-display">Click "Next Step" to begin. We start with R' = {r&#8321;, r&#8322;, r&#8323;, r&#8324;, r&#8325;} and food F = {f&#8321;, f&#8322;}.</div>
+
+<div class="svg-container">
+<svg id="algo-svg" viewBox="0 0 750 200" xmlns="http://www.w3.org/2000/svg">
+  <g id="ar1">
+    <rect x="15" y="40" width="130" height="65" rx="8" fill="var(--card)" stroke="var(--amber)" stroke-width="2"/>
+    <text x="80" y="60" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="bold">r&#8321;</text>
+    <text x="80" y="78" text-anchor="middle" fill="var(--line)" font-size="10">f&#8321; + f&#8322; &rarr; a</text>
+    <text x="80" y="94" text-anchor="middle" fill="var(--red)" font-size="10">cat: b</text>
+  </g>
+  <g id="ar2">
+    <rect x="160" y="40" width="130" height="65" rx="8" fill="var(--card)" stroke="var(--amber)" stroke-width="2"/>
+    <text x="225" y="60" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="bold">r&#8322;</text>
+    <text x="225" y="78" text-anchor="middle" fill="var(--line)" font-size="10">a &rarr; b</text>
+    <text x="225" y="94" text-anchor="middle" fill="var(--red)" font-size="10">cat: a</text>
+  </g>
+  <g id="ar3">
+    <rect x="305" y="40" width="130" height="65" rx="8" fill="var(--card)" stroke="var(--amber)" stroke-width="2"/>
+    <text x="370" y="60" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="bold">r&#8323;</text>
+    <text x="370" y="78" text-anchor="middle" fill="var(--line)" font-size="10">f&#8321; + a &rarr; c</text>
+    <text x="370" y="94" text-anchor="middle" fill="var(--red)" font-size="10">cat: b</text>
+  </g>
+  <g id="ar4">
+    <rect x="450" y="40" width="130" height="65" rx="8" fill="var(--card)" stroke="var(--amber)" stroke-width="2"/>
+    <text x="515" y="60" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="bold">r&#8324;</text>
+    <text x="515" y="78" text-anchor="middle" fill="var(--line)" font-size="10">a + b &rarr; c</text>
+    <text x="515" y="94" text-anchor="middle" fill="var(--red)" font-size="10">cat: c</text>
+  </g>
+  <g id="ar5">
+    <rect x="595" y="40" width="130" height="65" rx="8" fill="var(--card)" stroke="var(--amber)" stroke-width="2"/>
+    <text x="660" y="60" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="bold">r&#8325;</text>
+    <text x="660" y="78" text-anchor="middle" fill="var(--line)" font-size="10">d + f&#8322; &rarr; a</text>
+    <text x="660" y="94" text-anchor="middle" fill="var(--red)" font-size="10">cat: d</text>
+  </g>
+
+  <text x="15" y="145" fill="var(--line)" font-size="12" font-weight="bold">Closure:</text>
+  <text id="algo-closure" x="15" y="165" fill="var(--green)" font-size="12">{f&#8321;, f&#8322;}</text>
+  <text x="380" y="145" fill="var(--line)" font-size="12" font-weight="bold">R&prime;:</text>
+  <text id="algo-rprime" x="380" y="165" fill="var(--amber)" font-size="12">{r&#8321;, r&#8322;, r&#8323;, r&#8324;, r&#8325;}</text>
+</svg>
+</div>
+
+<script>
+(function() {
+  var step = 0;
+  var steps = [
+    { msg: "Compute closure of R' = {r₁, r₂, r₃, r₄, r₅} from food F = {f₁, f₂}. Apply all reactions whose reactants are available. r₁ fires (f₁, f₂ ∈ F), producing a. r₂ fires (a available), producing b. r₃ fires (f₁, a available), producing c. r₄ fires (a, b available), producing c. r₅ cannot fire: d ∉ closure. Closure = {f₁, f₂, a, b, c}.",
+      cl: "{f₁, f₂, a, b, c}", rp: "{r₁, r₂, r₃, r₄, r₅}", hi: null, rm: null },
+    { msg: "Check each reaction. r₁: reactants {f₁, f₂} ⊆ cl? YES. Catalyst b ∈ cl? YES. ✔",
+      cl: "{f₁, f₂, a, b, c}", rp: "{r₁, r₂, r₃, r₄, r₅}", hi: "ar1", rm: null },
+    { msg: "r₂: reactant {a} ⊆ cl? YES. Catalyst a ∈ cl? YES. ✔",
+      cl: "{f₁, f₂, a, b, c}", rp: "{r₁, r₂, r₃, r₄, r₅}", hi: "ar2", rm: null },
+    { msg: "r₃: reactants {f₁, a} ⊆ cl? YES. Catalyst b ∈ cl? YES. ✔",
+      cl: "{f₁, f₂, a, b, c}", rp: "{r₁, r₂, r₃, r₄, r₅}", hi: "ar3", rm: null },
+    { msg: "r₄: reactants {a, b} ⊆ cl? YES. Catalyst c ∈ cl? YES. ✔",
+      cl: "{f₁, f₂, a, b, c}", rp: "{r₁, r₂, r₃, r₄, r₅}", hi: "ar4", rm: null },
+    { msg: "r₅: reactants {d, f₂}. Is d ∈ cl? NO — d ∉ {f₁, f₂, a, b, c}. Not F-generated. REMOVE r₅.",
+      cl: "{f₁, f₂, a, b, c}", rp: "{r₁, r₂, r₃, r₄}", hi: "ar5", rm: "ar5" },
+    { msg: "R' changed. Recompute closure with R' = {r₁, r₂, r₃, r₄}. Same closure: {f₁, f₂, a, b, c}. (Removing r₅ didn't remove any products — d was never reachable.)",
+      cl: "{f₁, f₂, a, b, c}", rp: "{r₁, r₂, r₃, r₄}", hi: null, rm: null },
+    { msg: "Re-check all surviving reactions: r₁ ✔, r₂ ✔, r₃ ✔, r₄ ✔. No removals. CONVERGED.",
+      cl: "{f₁, f₂, a, b, c}", rp: "{r₁, r₂, r₃, r₄}  ← maxRAF", hi: null, rm: null, done: true }
+  ];
+
+  window.algoStep = function() {
+    if (step >= steps.length) return;
+    var s = steps[step];
+    document.getElementById('algo-display').textContent = s.msg;
+    document.getElementById('algo-closure').textContent = s.cl;
+    document.getElementById('algo-rprime').textContent = s.rp;
+    document.getElementById('algo-counter').textContent = "Step " + (step+1) + "/" + steps.length;
+
+    ['ar1','ar2','ar3','ar4','ar5'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.style.opacity !== '0.3') el.querySelector('rect').setAttribute('stroke', 'var(--amber)');
+    });
+
+    if (s.hi) {
+      var h = document.getElementById(s.hi);
+      if (h) h.querySelector('rect').setAttribute('stroke', 'var(--blue)');
+    }
+    if (s.rm) {
+      var r = document.getElementById(s.rm);
+      if (r) { r.querySelector('rect').setAttribute('stroke', 'var(--red)'); r.style.opacity = '0.3'; }
+    }
+    if (s.done) {
+      ['ar1','ar2','ar3','ar4'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) { el.querySelector('rect').setAttribute('stroke', 'var(--golden)'); el.querySelector('rect').setAttribute('fill', '#2d2005'); }
+      });
+      document.getElementById('algo-next').disabled = true;
+    }
+    step++;
+  };
+
+  window.algoReset = function() {
+    step = 0;
+    document.getElementById('algo-display').innerHTML = 'Click "Next Step" to begin. We start with R′ = {r₁, r₂, r₃, r₄, r₅} and food F = {f₁, f₂}.';
+    document.getElementById('algo-closure').textContent = '{f₁, f₂}';
+    document.getElementById('algo-rprime').textContent = '{r₁, r₂, r₃, r₄, r₅}';
+    document.getElementById('algo-counter').textContent = 'Step 0';
+    document.getElementById('algo-next').disabled = false;
+    ['ar1','ar2','ar3','ar4','ar5'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.querySelector('rect').setAttribute('stroke', 'var(--amber)'); el.querySelector('rect').setAttribute('fill', 'var(--card)'); el.style.opacity = '1'; }
+    });
+  };
+})();
+</script>
+
+<p>Observe the structure. The operator <span class="math">&Phi;</span>(<span class="math">R</span>&prime;) = {<span class="math">r</span> &isin; <span class="math">R</span>&prime; : <span class="math">&rho;</span>(<span class="math">r</span>) &sube; cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) &and; &exist;<span class="math">x</span> &isin; cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>), (<span class="math">x</span>,<span class="math">r</span>) &isin; <span class="math">C</span>} is monotone on (<span class="math">&weierp;</span>(<span class="math">R</span>), &supe;): if <span class="math">R</span>&prime; &supe; <span class="math">R</span>&Prime; then cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) &supe; cl<sub><span class="math">R</span>&Prime;</sub>(<span class="math">F</span>), so <span class="math">&Phi;</span>(<span class="math">R</span>&prime;) &supe; <span class="math">&Phi;</span>(<span class="math">R</span>&Prime;). Tarski guarantees a unique greatest fixed point. You just computed it.</p>
+
+<div class="insight">The algorithm is <span class="math">O</span>(|<span class="math">R</span>|<sup>2</sup> &middot; |<span class="math">X</span>|), not 2<sup>|<span class="math">R</span>|</sup>. This is not an optimisation&mdash;it is a structural consequence of the monotonicity of <span class="math">&Phi;</span>.</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>5. Now the Definition</h2>
+
+<div class="definition">
+  <div class="definition-title">Definition (RAF &mdash; Hordijk &amp; Steel, 2004)</div>
+  <p>A <em>Catalytic Reaction System</em> (CRS) is a triple <span class="math">Q</span> = (<span class="math">X</span>, <span class="math">R</span>, <span class="math">C</span>) where <span class="math">X</span> is a finite set of types, <span class="math">R</span> is a set of reactions (each <span class="math">r</span> with reactant set <span class="math">&rho;</span>(<span class="math">r</span>) &sube; <span class="math">X</span> and product set <span class="math">&pi;</span>(<span class="math">r</span>) &sube; <span class="math">X</span>), and <span class="math">C</span> &sube; <span class="math">X</span> &times; <span class="math">R</span> is the catalysis relation.</p>
+  <p>Given a food set <span class="math">F</span> &sube; <span class="math">X</span>, a subset <span class="math">R</span>&prime; &sube; <span class="math">R</span> is a <em>Reflexively Autocatalytic, F-generated</em> set (<strong>RAF</strong>) if:</p>
+  <ol style="margin-top: 0.5rem;">
+    <li><strong>F-generated:</strong> &forall;<span class="math">r</span> &isin; <span class="math">R</span>&prime; : <span class="math">&rho;</span>(<span class="math">r</span>) &sube; cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>)</li>
+    <li><strong>Reflexively autocatalytic:</strong> &forall;<span class="math">r</span> &isin; <span class="math">R</span>&prime; : &exist;<span class="math">x</span> &isin; cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) s.t. (<span class="math">x</span>,<span class="math">r</span>) &isin; <span class="math">C</span></li>
+  </ol>
+  <p style="margin-top:0.75rem;">where cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) is the smallest superset of <span class="math">F</span> closed under products of reactions in <span class="math">R</span>&prime; whose reactants are available.</p>
+</div>
+
+<p>Read the definition again. <em>No intrinsic property of the elements of <span class="math">X</span> appears anywhere.</em> The definition references only the maps <span class="math">&rho;</span>, <span class="math">&pi;</span>, and <span class="math">C</span>&mdash;which are relational structure on a graph. Identity of a type <span class="math">x</span> &isin; <span class="math">X</span> is exhaustively determined by its relational position: what it catalyzes, what produces it, what consumes it. Nothing else.</p>
+
+<p>This means the definition is <strong>substrate-independent</strong>. Any system that instantiates the same graph of reactant/product/catalysis relations is, formally, the same CRS. The labels change; the structure is identical.</p>
+
+<table>
+  <tr>
+    <th>Abstract</th>
+    <th>Chemistry</th>
+    <th>Ecology</th>
+    <th>Knowledge</th>
+    <th>Governance</th>
+  </tr>
+  <tr>
+    <td><span class="math">x</span> &isin; <span class="math">X</span></td>
+    <td>Molecule type</td>
+    <td>Species</td>
+    <td>Concept / technique</td>
+    <td>Institution / role</td>
+  </tr>
+  <tr>
+    <td><span class="math">r</span> &isin; <span class="math">R</span></td>
+    <td>Chemical reaction</td>
+    <td>Ecological interaction</td>
+    <td>Derivation / synthesis</td>
+    <td>Policy process</td>
+  </tr>
+  <tr>
+    <td><span class="math">&rho;</span>(<span class="math">r</span>)</td>
+    <td>Reactants consumed</td>
+    <td>Inputs required</td>
+    <td>Prerequisite concepts</td>
+    <td>Required inputs</td>
+  </tr>
+  <tr>
+    <td><span class="math">&pi;</span>(<span class="math">r</span>)</td>
+    <td>Products generated</td>
+    <td>Outputs produced</td>
+    <td>New concepts derived</td>
+    <td>Outputs / decisions</td>
+  </tr>
+  <tr>
+    <td>(<span class="math">x</span>,<span class="math">r</span>) &isin; <span class="math">C</span></td>
+    <td><span class="math">x</span> catalyzes <span class="math">r</span></td>
+    <td><span class="math">x</span> enables interaction</td>
+    <td><span class="math">x</span> enables derivation</td>
+    <td><span class="math">x</span> authorizes process</td>
+  </tr>
+  <tr>
+    <td><span class="math">F</span></td>
+    <td>Food molecules</td>
+    <td>Abiotic resources</td>
+    <td>Axioms / observations</td>
+    <td>Constitutional basis</td>
+  </tr>
+  <tr>
+    <td>RAF</td>
+    <td>Self-sustaining set</td>
+    <td>Stable ecosystem</td>
+    <td>Self-sustaining field</td>
+    <td>Viable governance</td>
+  </tr>
+</table>
+
+<div class="insight">Because the definition is purely relational, it applies to any substrate that instantiates these relations. The proof machinery&mdash;Tarski, monotonicity, lattice structure&mdash;transfers wholesale. No new theorems needed; only new labels.</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>6. Emergence, Proved</h2>
+
+<p>You do not need to accept "emergence" as a philosophical position. You can prove it as a theorem.</p>
+
+<div class="definition">
+  <div class="definition-title">Definition (Irreducible RAF)</div>
+  <p>A RAF <span class="math">R</span>&prime; is <em>irreducible</em> (an irrRAF) if it contains no proper non-empty sub-RAF. Equivalently: removing any single reaction from <span class="math">R</span>&prime; destroys the RAF property.</p>
+</div>
+
+<div class="theorem">
+  <div class="theorem-title">Theorem (Emergent Property)</div>
+  <p>Let <span class="math">R</span>&prime; be an irrRAF. The property "self-sustaining and autocatalytic" holds for <span class="math">R</span>&prime; but fails for every proper subset <span class="math">R</span>&Prime; &subne; <span class="math">R</span>&prime;.</p>
+  <p style="margin-top:0.5rem;color:var(--muted);"><strong>Proof.</strong> By the definition of irreducibility, no proper non-empty subset of <span class="math">R</span>&prime; is a RAF. The empty set is trivially not a RAF (it sustains nothing). Therefore self-sustenance is a property of <span class="math">R</span>&prime; that fails for all <span class="math">R</span>&Prime; &subne; <span class="math">R</span>&prime;. &square;</p>
+</div>
+
+<p>This is the precise algebraic definition of an <em>emergent property</em>: a property <span class="math">P</span> of a set <span class="math">S</span> that holds for <span class="math">S</span> but fails for all proper subsets of <span class="math">S</span>. No philosophy. No hand-waving. A property of the lattice.</p>
+
+<p>The collection of all RAFs of a CRS forms a partially ordered set under &sube;, with the maxRAF at the top. The irrRAFs are the minimal non-empty elements. Each irrRAF is a node where emergence <em>first appears</em>&mdash;the smallest subsets at which a collective property crystallizes.</p>
+
+<h3>The Phase Transition</h3>
+
+<p>Kauffman (1986) conjectured, and Mossel &amp; Steel (2005) proved for certain model classes, that in a random CRS with catalysis probability <span class="math">p</span>, the probability that a RAF exists undergoes a <em>sharp transition</em> near <span class="math">p</span> &sim; 1/<span class="math">n</span>:</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+  <!-- Axes -->
+  <line x1="80" y1="260" x2="560" y2="260" stroke="var(--line)" stroke-width="1.5"/>
+  <line x1="80" y1="260" x2="80" y2="40" stroke="var(--line)" stroke-width="1.5"/>
+
+  <!-- Axis labels -->
+  <text x="320" y="300" text-anchor="middle" fill="var(--heading)" font-size="14" font-style="italic">catalysis probability p</text>
+  <text x="30" y="150" text-anchor="middle" fill="var(--heading)" font-size="14" font-style="italic" transform="rotate(-90 30 150)">P(RAF exists)</text>
+
+  <!-- Tick marks -->
+  <text x="80" y="280" text-anchor="middle" fill="var(--muted)" font-size="11">0</text>
+  <text x="560" y="280" text-anchor="middle" fill="var(--muted)" font-size="11">1</text>
+  <text x="65" y="265" text-anchor="middle" fill="var(--muted)" font-size="11">0</text>
+  <text x="65" y="52" text-anchor="middle" fill="var(--muted)" font-size="11">1</text>
+
+  <!-- Sigmoid curve -->
+  <path d="M 80,255 C 120,255 180,254 220,252 C 250,248 270,240 290,215 C 310,180 320,140 330,100 C 340,72 350,58 370,50 C 400,44 450,42 560,42" fill="none" stroke="var(--golden)" stroke-width="3"/>
+
+  <!-- Threshold region -->
+  <rect x="265" y="38" width="80" height="224" rx="4" fill="rgba(251,191,36,0.06)" stroke="var(--golden)" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="305" y="30" text-anchor="middle" fill="var(--golden)" font-size="12" font-weight="bold">threshold</text>
+  <text x="305" y="310" text-anchor="middle" fill="var(--golden)" font-size="11" font-style="italic">p ~ 1/n</text>
+
+  <!-- Annotations -->
+  <text x="160" y="245" text-anchor="middle" fill="var(--muted)" font-size="11">no RAF</text>
+  <text x="160" y="230" text-anchor="middle" fill="var(--muted)" font-size="11">no collective property</text>
+  <text x="460" y="70" text-anchor="middle" fill="var(--green)" font-size="11">RAF exists</text>
+  <text x="460" y="86" text-anchor="middle" fill="var(--green)" font-size="11">irreducible self-sustenance</text>
+
+  <!-- Horizontal dashed lines -->
+  <line x1="80" y1="42" x2="560" y2="42" stroke="var(--muted)" stroke-width="0.5" stroke-dasharray="4,4"/>
+</svg>
+</div>
+
+<p>Below the threshold: no subset of <span class="math">R</span> is self-sustaining. Above: irreducible self-sustenance appears. The transition sharpens with <span class="math">n</span>. This is the moment emergence crystallizes&mdash;not as metaphor, but as a phase transition in the lattice of subsets of <span class="math">R</span>.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>7. Coda</h2>
+
+<p>You didn't need to define the domain first. You needed to specify the relations&mdash;the catalysis graph, the reactant/product maps, the food set. The domain fell out as a fixed point of a monotone operator on a finite powerset lattice. Tarski did the rest.</p>
+
+<p>This is how emergence works&mdash;not as philosophy, but as algebra. An irreducible RAF is a set whose defining property provably fails for every proper subset. That is a theorem, not an argument. And because the definition is purely relational&mdash;no intrinsic properties of <span class="math">X</span> appear anywhere&mdash;the theorem holds for any substrate that instantiates the graph. Chemistry, ecology, knowledge, governance: same lattice, same fixed point, same emergence.</p>
+
+<div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid #334155;color:var(--muted);font-size:0.85rem;">
+  <p style="margin-bottom:0.5rem;"><strong>References.</strong>
+  Hordijk, W. &amp; Steel, M. (2004). Detecting autocatalytic, self-sustaining sets in chemical reaction systems. <em>J. Theor. Biol.</em> 227:451&ndash;461.
+  Kauffman, S. A. (1986). Autocatalytic sets of proteins. <em>J. Theor. Biol.</em> 119:1&ndash;24.
+  Mossel, E. &amp; Steel, M. (2005). Random biochemical networks. <em>J. Theor. Biol.</em> 233:327&ndash;336.</p>
+  <p>Autocatalytic Closure for the Working Mathematician &mdash; B. Stephenson, 2026. No external dependencies.</p>
+</div>
+
+</div>
+</body>
+</html>
