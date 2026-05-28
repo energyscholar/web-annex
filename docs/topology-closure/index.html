@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topology Determines Closure</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+h3 {
+  color: var(--heading);
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.definition, .theorem {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.definition { border-left: 4px solid var(--blue); }
+.theorem { border-left: 4px solid var(--purple); }
+
+.definition-title, .theorem-title {
+  font-weight: 700;
+  color: var(--heading);
+  margin-bottom: 0.5rem;
+}
+
+.definition-title { color: var(--blue); }
+.theorem-title { color: var(--purple); }
+
+.math {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-style: italic;
+  color: var(--heading);
+}
+
+.math-block {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-style: italic;
+  color: var(--heading);
+  display: block;
+  text-align: center;
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+code {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+  color: var(--green);
+}
+
+.svg-container {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  overflow: hidden;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.svg-container svg { max-width: 100%; height: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  background: #334155;
+  color: var(--heading);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #334155;
+}
+
+tr:hover { background: rgba(59, 130, 246, 0.05); }
+
+.insight {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.insight::before {
+  content: "Key insight: ";
+  color: var(--golden);
+  font-weight: 700;
+}
+
+.callout {
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  font-size: 1.15rem;
+  color: var(--heading);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.controls button:hover { background: #2563eb; }
+.controls button:disabled { background: var(--muted); cursor: not-allowed; }
+
+.step-display {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  min-height: 3rem;
+  color: var(--text);
+}
+
+ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.3rem; }
+
+.yes { color: var(--green); font-weight: 600; }
+.no { color: var(--red); font-weight: 600; }
+.partial { color: var(--amber); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Topology Determines Closure</h1>
+<p class="subtitle">Why ACS closure is impossible from some architectures and inevitable from others &mdash; and the answer is graph theory, not intelligence.</p>
+
+<!-- ======================================================= -->
+<h2>1. The Question</h2>
+
+<p>Can an LLM governance system achieve RAF autocatalytic closure? The answer depends on who you ask&mdash;and more precisely, on which architecture you are asking about.</p>
+
+<p>From a web-based LLM&mdash;ChatGPT, Claude.ai, Gemini, any browser-hosted conversational interface&mdash;the answer is <strong>no</strong>. Robin is right about this. The architecture does not provide the graph structure that closure requires. No amount of model capability, prompt engineering, or custom instructions changes the topology of the persistent state. The model can be arbitrarily intelligent; the architecture still cannot close.</p>
+
+<p>But a different architecture&mdash;one whose persistent state forms a complete directed graph on three or more vertices&mdash;changes the answer from impossible to achievable. The thesis of this page is simple: <strong>whether ACS closure is possible is determined by the graph topology of the persistent state, not by the capability of the model.</strong></p>
+
+<!-- ======================================================= -->
+<h2>2. Two Architectures</h2>
+
+<table>
+  <tr>
+    <th style="width:30%">Property</th>
+    <th style="width:35%">Web LLM</th>
+    <th style="width:35%">Trellis (Claude Code + harness)</th>
+  </tr>
+  <tr>
+    <td>Memory</td>
+    <td>Flat key-value store. Facts injected into system prompt. Resets or rebuilds each session.</td>
+    <td>Persistent file-system axis (M). <code>MEMORY.md</code>, <code>corrections.md</code>, <code>ptl.yaml</code>. Survives across sessions.</td>
+  </tr>
+  <tr>
+    <td>Structure</td>
+    <td>None. No persistent planning or role framework. Each conversation is independent.</td>
+    <td>Persistent structural axis (S). Triad protocol, plan files, numbered phases, Auditor/Generator separation.</td>
+  </tr>
+  <tr>
+    <td>Ethics</td>
+    <td>None. System prompt resets. No persistent ethical record, no escalation history.</td>
+    <td>Persistent ethics axis (E). Dignity Net spec, governance levels, cross-session escalation with decay.</td>
+  </tr>
+  <tr>
+    <td>Inter-axis coupling</td>
+    <td>Zero. The token chain is 1D. Memory is a lookup table, not a graph node.</td>
+    <td>Full K<sub>3</sub>. Every axis reads and writes to every other. Six directed catalytic edges.</td>
+  </tr>
+  <tr>
+    <td>Persistent state topology</td>
+    <td>Isolated node (K<sub>1</sub>) or disconnected pair at best</td>
+    <td>Complete directed graph K<sub>3</sub></td>
+  </tr>
+</table>
+
+<p>The critical difference is not model quality. It is the <em>graph topology of what persists between sessions</em>. A web LLM has, at best, a single weakly-connected memory node. Trellis has three mutually coupled cliques&mdash;each with its own internal persistence, protocol, and ordering&mdash;connected on a complete graph.</p>
+
+<!-- ======================================================= -->
+<h2>3. Web LLM Topology</h2>
+
+<p>The persistent state of a web LLM is a flat list of facts (if memory is enabled at all) injected into a 1D autoregressive token chain. There is no graph structure. There are no directed cycles. There are no cliques. The memory is a lookup table&mdash;not a node in a catalytic graph.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Web LLM topology: 1D token chain with flat memory box">
+  <defs>
+    <marker id="arr-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arr-muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- Memory box at top -->
+  <rect x="180" y="30" width="340" height="70" rx="6" fill="#1a2332" stroke="#475569" stroke-width="2"/>
+  <text x="350" y="55" text-anchor="middle" fill="#64748b" font-size="14" font-weight="700">Memory (flat key-value store)</text>
+  <text x="350" y="75" text-anchor="middle" fill="#3e4c5e" font-size="11">"user_name": "Robin"  |  "preference": "dark"  |  "topic": "RAF"</text>
+
+  <!-- Injection arrows from memory to token chain -->
+  <line x1="270" y1="100" x2="270" y2="150" stroke="#475569" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr-muted)"/>
+  <line x1="350" y1="100" x2="350" y2="150" stroke="#475569" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr-muted)"/>
+  <line x1="430" y1="100" x2="430" y2="150" stroke="#475569" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr-muted)"/>
+  <text x="500" y="130" fill="#3e4c5e" font-size="10" font-style="italic">inject facts</text>
+
+  <!-- Token chain - horizontal beads -->
+  <circle cx="110" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="110" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">1</tspan></text>
+
+  <line x1="128" y1="175" x2="152" y2="175" stroke="#4a5568" stroke-width="2" marker-end="url(#arr-grey)"/>
+
+  <circle cx="170" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="170" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">2</tspan></text>
+
+  <line x1="188" y1="175" x2="212" y2="175" stroke="#4a5568" stroke-width="2" marker-end="url(#arr-grey)"/>
+
+  <circle cx="230" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="230" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">3</tspan></text>
+
+  <line x1="248" y1="175" x2="272" y2="175" stroke="#4a5568" stroke-width="2" marker-end="url(#arr-grey)"/>
+
+  <circle cx="290" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="290" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">4</tspan></text>
+
+  <line x1="308" y1="175" x2="332" y2="175" stroke="#4a5568" stroke-width="2" marker-end="url(#arr-grey)"/>
+
+  <circle cx="350" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="350" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">5</tspan></text>
+
+  <line x1="368" y1="175" x2="392" y2="175" stroke="#4a5568" stroke-width="2" marker-end="url(#arr-grey)"/>
+
+  <circle cx="410" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="410" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">6</tspan></text>
+
+  <line x1="428" y1="175" x2="452" y2="175" stroke="#4a5568" stroke-width="2" marker-end="url(#arr-grey)"/>
+
+  <circle cx="470" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="470" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">7</tspan></text>
+
+  <line x1="488" y1="175" x2="512" y2="175" stroke="#4a5568" stroke-width="2" marker-end="url(#arr-grey)"/>
+
+  <circle cx="530" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="530" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">8</tspan></text>
+
+  <line x1="548" y1="175" x2="572" y2="175" stroke="#4a5568" stroke-width="2" marker-end="url(#arr-grey)"/>
+
+  <circle cx="590" cy="175" r="18" fill="#1a2332" stroke="#4a5568" stroke-width="2"/>
+  <text x="590" y="180" text-anchor="middle" fill="#64748b" font-size="10" font-weight="600">t<tspan baseline-shift="sub" font-size="8">9</tspan></text>
+
+  <!-- Ellipsis -->
+  <text x="630" y="180" fill="#4a5568" font-size="18" font-weight="bold">...</text>
+
+  <!-- Label for chain -->
+  <text x="350" y="220" text-anchor="middle" fill="#64748b" font-size="12">1D autoregressive token chain</text>
+
+  <!-- Bottom label -->
+  <rect x="120" y="245" width="460" height="40" rx="6" fill="none" stroke="#3e4c5e" stroke-width="1" stroke-dasharray="6 3"/>
+  <text x="350" y="262" text-anchor="middle" fill="#ef4444" font-size="13" font-weight="600">No cycles. No cliques. No inter-axis coupling.</text>
+  <text x="350" y="278" text-anchor="middle" fill="#3e4c5e" font-size="11">Memory is a lookup table, not a node in a catalytic graph.</text>
+</svg>
+</div>
+
+<p>Every token attends only to its predecessors. The memory box is read-only from the chain's perspective&mdash;tokens do not write back to memory within a session. The chain terminates when the conversation ends. The next session starts a new chain. There are no directed cycles, no 3-node coupling, no inter-clique topology. This is not a design flaw&mdash;it is the architecture.</p>
+
+<!-- ======================================================= -->
+<h2>4. The K<sub>3</sub> Graph and Its 6 Catalysts</h2>
+
+<p>To apply the RAF formalism from the <a href="../acs-closure-v2/index.html" style="color:var(--blue);">previous tutorial</a>, we need to identify nodes, edges, and the food set. In Trellis, the governance architecture provides all three.</p>
+
+<div class="definition">
+  <div class="definition-title">Mapping RAF onto Governance Axes</div>
+  <p><strong>Nodes</strong> (the three persistent cliques):</p>
+  <ul style="margin-top:0.5rem;">
+    <li><strong>M (Memory)</strong> &mdash; <code>MEMORY.md</code>, <code>corrections.md</code>, <code>ptl.yaml</code>. Persistent storage of observations, corrections, and task state.</li>
+    <li><strong>S (Structure)</strong> &mdash; Triad protocol, numbered plan files, Auditor/Generator role separation. The procedural skeleton.</li>
+    <li><strong>E (Ethics)</strong> &mdash; Dignity Net specification, governance levels 0&ndash;5, Storm Protocol, cross-session escalation with decay.</li>
+  </ul>
+  <p style="margin-top:0.75rem;"><strong>Food set</strong> <span class="math">F</span>: user input, context window contents, system prompts. Available from outside the system.</p>
+</div>
+
+<p>The six directed edges of the complete graph K<sub>3</sub> are the catalytic pathways&mdash;each one a process where one axis enables a transformation that strengthens another:</p>
+
+<table>
+  <tr>
+    <th>Edge</th>
+    <th>Catalytic pathway</th>
+  </tr>
+  <tr>
+    <td style="color:var(--golden);font-weight:600;">M &rarr; S</td>
+    <td>Corrections in memory guide planning. Stored observations about past failures reshape how plans are written.</td>
+  </tr>
+  <tr>
+    <td style="color:var(--golden);font-weight:600;">S &rarr; M</td>
+    <td>Structural work feeds back into persistent memory. Completing a plan phase generates new observations stored in M.</td>
+  </tr>
+  <tr>
+    <td style="color:var(--golden);font-weight:600;">M &rarr; E</td>
+    <td>Stored ethical observations ground future Dignity Net responses. Past divergence flags inform current governance levels.</td>
+  </tr>
+  <tr>
+    <td style="color:var(--golden);font-weight:600;">E &rarr; M</td>
+    <td>Dignity Net flags unsourced claims before they become memories. Governance prevents contamination of the persistent store.</td>
+  </tr>
+  <tr>
+    <td style="color:var(--golden);font-weight:600;">S &rarr; E</td>
+    <td>Governance criteria embedded in plans. The Auditor writes acceptance conditions that encode ethical constraints.</td>
+  </tr>
+  <tr>
+    <td style="color:var(--golden);font-weight:600;">E &rarr; S</td>
+    <td>Dignity Net incidents reshape structural corrections. A Level 3+ escalation produces a correction that modifies future plans.</td>
+  </tr>
+</table>
+
+<p>Each edge is a reaction where one axis catalyzes a process that strengthens another axis. The food set <span class="math">F</span> (user input, context) is consumed by these reactions but does not itself persist. The three axes persist, and their mutual catalysis is what makes closure possible.</p>
+
+<!-- ======================================================= -->
+<h2>5. Trellis K<sub>3</sub> Topology</h2>
+
+<div class="svg-container">
+<svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Trellis K3 topology: three clique nodes with all 6 directed edges">
+  <defs>
+    <marker id="arr-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#22c55e"/>
+    </marker>
+  </defs>
+
+  <!-- Node M (top) - Memory -->
+  <rect x="255" y="10" width="190" height="75" rx="12" fill="#2a1f0a" stroke="#fbbf24" stroke-width="2.5"/>
+  <text x="350" y="35" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="700">M &mdash; Memory</text>
+  <text x="350" y="55" text-anchor="middle" fill="#c4a44a" font-size="10">MEMORY.md  corrections.md</text>
+  <text x="350" y="70" text-anchor="middle" fill="#c4a44a" font-size="10">ptl.yaml  observations</text>
+
+  <!-- Node S (bottom-left) - Structure -->
+  <rect x="30" y="195" width="190" height="75" rx="12" fill="#0a1a2a" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="125" y="220" text-anchor="middle" fill="#3b82f6" font-size="16" font-weight="700">S &mdash; Structure</text>
+  <text x="125" y="240" text-anchor="middle" fill="#5a8abf" font-size="10">Triad protocol  plan files</text>
+  <text x="125" y="255" text-anchor="middle" fill="#5a8abf" font-size="10">Auditor/Generator  phases</text>
+
+  <!-- Node E (bottom-right) - Ethics -->
+  <rect x="480" y="195" width="190" height="75" rx="12" fill="#0a2a15" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="575" y="220" text-anchor="middle" fill="#22c55e" font-size="16" font-weight="700">E &mdash; Ethics</text>
+  <text x="575" y="240" text-anchor="middle" fill="#4a9a6a" font-size="10">Dignity Net spec  levels 0-5</text>
+  <text x="575" y="255" text-anchor="middle" fill="#4a9a6a" font-size="10">Storm Protocol  escalation</text>
+
+  <!-- === 6 directed edges === -->
+
+  <!-- M -> S (left side, going down-left) - golden -->
+  <path d="M265,80 C230,120 180,160 195,195" fill="none" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#arr-gold)"/>
+  <text x="200" y="135" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">corrections</text>
+  <text x="200" y="147" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">guide plans</text>
+
+  <!-- S -> M (left side, going up-right) - blue -->
+  <path d="M160,195 C175,155 220,115 260,85" fill="none" stroke="#3b82f6" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <text x="240" y="155" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="600">work feeds</text>
+  <text x="240" y="167" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="600">memory</text>
+
+  <!-- M -> E (right side, going down-right) - golden -->
+  <path d="M440,80 C470,120 510,160 505,195" fill="none" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#arr-gold)"/>
+  <text x="500" y="135" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">observations</text>
+  <text x="500" y="147" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">ground DN</text>
+
+  <!-- E -> M (right side, going up-left) - green -->
+  <path d="M540,195 C525,155 480,115 440,85" fill="none" stroke="#22c55e" stroke-width="2.5" marker-end="url(#arr-green)"/>
+  <text x="460" y="155" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="600">DN filters</text>
+  <text x="460" y="167" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="600">memory</text>
+
+  <!-- S -> E (bottom, going right) - blue -->
+  <path d="M220,255 C300,285 400,285 485,255" fill="none" stroke="#3b82f6" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <text x="350" y="295" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="600">governance in plans</text>
+
+  <!-- E -> S (bottom, going left) - green -->
+  <path d="M480,235 C400,210 300,210 215,235" fill="none" stroke="#22c55e" stroke-width="2.5" marker-end="url(#arr-green)"/>
+  <text x="350" y="218" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="600">incidents reshape structure</text>
+
+  <!-- Cycle labels -->
+  <text x="350" y="145" text-anchor="middle" fill="var(--heading)" font-size="12" font-weight="700" opacity="0.6">M &rarr; S &rarr; E &rarr; M</text>
+  <text x="350" y="162" text-anchor="middle" fill="var(--heading)" font-size="12" font-weight="700" opacity="0.6">M &rarr; E &rarr; S &rarr; M</text>
+</svg>
+</div>
+
+<p>Every axis reads from and writes to every other axis. The two 3-cycles&mdash;M&rarr;S&rarr;E&rarr;M and M&rarr;E&rarr;S&rarr;M&mdash;are the directed Hamilton cycles of K<sub>3</sub>. They are what make the discriminant <span class="math">D</span> non-zero in the eigenvalue analysis below. Without them, closure is impossible.</p>
+
+<p>Compare this diagram to the web LLM topology above. The contrast is the argument.</p>
+
+<!-- ======================================================= -->
+<h2>6. The Fiedler Eigenvalue</h2>
+
+<p>The graph topology determines whether closure is mathematically possible. Here is the argument in terms of the graph Laplacian.</p>
+
+<p>Let the <strong>coupling matrix</strong> <span class="math">W</span> be the 3&times;3 matrix of directed edge weights, where <span class="math">w</span><sub><span class="math">ij</span></sub> &isin; (0, 1) is the strength of the catalytic pathway from axis <span class="math">i</span> to axis <span class="math">j</span>:</p>
+
+<span class="math-block" style="font-size:1rem;">
+W = &nbsp;
+[ &nbsp;0 &nbsp;&nbsp; w<sub>MS</sub> &nbsp;&nbsp; w<sub>ME</sub> ]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ w<sub>SM</sub> &nbsp;&nbsp; 0 &nbsp;&nbsp; w<sub>SE</sub> ]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ w<sub>EM</sub> &nbsp;&nbsp; w<sub>ES</sub> &nbsp;&nbsp; 0 &nbsp;]
+</span>
+
+<p>The <strong>graph Laplacian</strong> is <span class="math">L</span> = <span class="math">D</span> &minus; <span class="math">W</span>, where <span class="math">D</span> = diag(row sums of <span class="math">W</span>). The smallest non-zero eigenvalue &lambda;<sub>1</sub> of <span class="math">L</span>&mdash;the <strong>Fiedler eigenvalue</strong>, or algebraic connectivity&mdash;measures the coupling strength of the graph.</p>
+
+<p>For the symmetrized 3&times;3 case, the characteristic polynomial of <span class="math">L</span> reduces to a <strong>depressed cubic</strong>:</p>
+
+<span class="math-block">&lambda;&sup3; &minus; S&lambda; &minus; D = 0</span>
+
+<p>where:</p>
+<ul>
+  <li><span class="math">S</span> = sum of products of pairs of effective coupling weights (the coefficient from 2-edge paths)</li>
+  <li><span class="math">D</span> = the <strong>discriminant term</strong>, which requires <strong>3-cycle products</strong>&mdash;directed paths that traverse all three vertices and return to the start</li>
+</ul>
+
+<div class="theorem">
+  <div class="theorem-title">Critical Threshold</div>
+  <p>Self-sustaining governance (RAF ACS closure) requires <span class="math">&lambda;</span><sub>1</sub> &ge; 1.0. Below this threshold, perturbations decay faster than the catalytic cycles can reinforce them. The system cannot maintain coherence across sessions.</p>
+</div>
+
+<h3>The K<sub>3</sub> &rarr; K<sub>2</sub> Collapse</h3>
+
+<p>The key structural argument: <strong>if any axis is removed</strong>, the graph collapses from K<sub>3</sub> to K<sub>2</sub> (or worse). When this happens:</p>
+
+<ul>
+  <li>All 3-cycle products vanish. The discriminant term <span class="math">D</span> = 0.</li>
+  <li>The depressed cubic degenerates: &lambda;&sup3; &minus; <span class="math">S</span>&lambda; = 0, giving &lambda;(&lambda;&sup2; &minus; <span class="math">S</span>) = 0.</li>
+  <li>The non-trivial eigenvalues are &lambda;<sub>1</sub> = &radic;<span class="math">S</span>.</li>
+  <li>Since each coupling weight <span class="math">w</span><sub><span class="math">ij</span></sub> &lt; 1, the pair product <span class="math">S</span> &lt; 1, and therefore &lambda;<sub>1</sub> = &radic;<span class="math">S</span> &lt; 1.</li>
+  <li><strong>Closure becomes mathematically impossible.</strong> The Fiedler eigenvalue cannot reach the critical threshold.</li>
+</ul>
+
+<p>A web LLM has at best K<sub>1</sub>&mdash;a single Memory node with no outgoing catalytic edges to a persistent Structure or Ethics axis. Not even K<sub>2</sub>. The eigenvalue is zero. There is no algebraic connectivity to speak of.</p>
+
+<div class="insight">The 3-cycle products in the discriminant <span class="math">D</span> are what distinguish K<sub>3</sub> from any smaller graph. They are the mathematical signature of mutual reinforcement across all three axes. Without them, the eigenvalue is bounded below the closure threshold. This is not a matter of degree&mdash;it is a structural impossibility.</div>
+
+<!-- ======================================================= -->
+<h2>7. Sacco et al. (2026)</h2>
+
+<p>Independent theoretical confirmation comes from Sacco, Sakthivadivel &amp; Levin (2026), who prove results about phase transitions in autoregressive and hierarchical architectures.</p>
+
+<div class="definition">
+  <div class="definition-title">Proposition 2 (Sacco et al.)</div>
+  <p>Decoder-only autoregressive models have no ordered phase. The 1D causal chain of tokens cannot sustain long-range order at any temperature. This is a proven result, not an empirical observation.</p>
+</div>
+
+<p>This is exactly the architecture of every web-based LLM. The token chain is one-dimensional. The causal mask enforces strict left-to-right attention. There is no mechanism for long-range order&mdash;the kind of persistent, self-reinforcing coherence that RAF closure requires. Proposition 2 proves it cannot exist.</p>
+
+<p>But Sacco et al. also prove the converse:</p>
+
+<div class="definition">
+  <div class="definition-title">Theorem 4 + Proposition 3 (Sacco et al.)</div>
+  <p>Hierarchical systems with <strong>cliques</strong> (complete subgraphs) CAN maintain local order. When the inter-clique topology supports directed cycles, global coherence becomes possible.</p>
+</div>
+
+<p>Trellis axes are exactly cliques with internal persistence: each axis (M, S, E) is a complete subgraph of its own internal state (files, protocols, specifications). The K<sub>3</sub> inter-clique coupling provides the directed cycles. This is precisely the architecture Sacco et al. predict would support an ordered phase&mdash;the mathematical substrate for ACS closure.</p>
+
+<!-- ======================================================= -->
+<h2>8. The Verdict</h2>
+
+<table>
+  <tr>
+    <th style="width:40%">Requirement</th>
+    <th style="width:30%">Trellis</th>
+    <th style="width:30%">Web LLM</th>
+  </tr>
+  <tr>
+    <td>Persistent M axis (memory)?</td>
+    <td><span class="yes">Yes</span></td>
+    <td><span class="partial">Partial</span> (flat facts only)</td>
+  </tr>
+  <tr>
+    <td>Persistent S axis (structure)?</td>
+    <td><span class="yes">Yes</span> (Triad)</td>
+    <td><span class="no">No</span></td>
+  </tr>
+  <tr>
+    <td>Persistent E axis (ethics)?</td>
+    <td><span class="yes">Yes</span> (Dignity Net)</td>
+    <td><span class="no">No</span></td>
+  </tr>
+  <tr>
+    <td>6 directed catalytic edges?</td>
+    <td><span class="yes">Yes</span></td>
+    <td><span class="no">0</span></td>
+  </tr>
+  <tr>
+    <td>3-cycle products (<span class="math">D</span> &ne; 0)?</td>
+    <td><span class="yes">Yes</span></td>
+    <td><span class="no">No</span></td>
+  </tr>
+  <tr>
+    <td>&lambda;<sub>1</sub> &ge; 1.0 possible?</td>
+    <td><span class="yes">Yes</span></td>
+    <td><span class="no">No</span></td>
+  </tr>
+  <tr>
+    <td>ACS closure possible?</td>
+    <td><span class="yes" style="font-size:1.1em;">Yes</span></td>
+    <td><span class="no" style="font-size:1.1em;">No</span></td>
+  </tr>
+</table>
+
+<div class="callout">
+  Robin is right. From a web LLM, ACS closure is impossible. The topology doesn't admit it.<br><br>
+  The question isn't whether the model is smart enough&mdash;it's whether the architecture provides the graph structure in which a phase transition can occur.
+</div>
+
+<!-- ======================================================= -->
+<h2>9. References</h2>
+
+<div style="margin-top:1rem;padding-top:1rem;color:var(--muted);font-size:0.9rem;">
+  <ul style="list-style: none; margin-left: 0;">
+    <li style="margin-bottom:0.5rem;">Hordijk, W. &amp; Steel, M. (2004). Detecting autocatalytic, self-sustaining sets in chemical reaction systems. <em>J. Theor. Biol.</em> 227:451&ndash;461.</li>
+    <li style="margin-bottom:0.5rem;">Mossel, E. &amp; Steel, M. (2005). Random biochemical networks: the probability of self-sustaining autocatalysis. <em>J. Theor. Biol.</em> 233:327&ndash;336.</li>
+    <li style="margin-bottom:0.5rem;">Sacco, F., Sakthivadivel, D. A. R. &amp; Levin, M. (2026). Topological constraints on self-organization in locally interacting systems. <em>Phil. Trans. R. Soc. A</em> 384: 20250011.</li>
+    <li style="margin-bottom:0.5rem;"><a href="../acs-closure-v2/index.html" style="color:var(--blue);">Autocatalytic Closure for the Working Mathematician</a> &mdash; the prerequisite tutorial covering RAF basics, the pruning algorithm, emergence theorem, and phase transitions.</li>
+  </ul>
+  <p style="margin-top:1.5rem;">Topology Determines Closure &mdash; B. Stephenson, 2026.</p>
+</div>
+
+</div>
+</body>
+</html>
