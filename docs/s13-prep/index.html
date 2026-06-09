@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S13 Session Prep — Collace Arrival</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --teal: #14b8a6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 0;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+nav {
+  width: 240px;
+  background: #0b1120;
+  border-right: 1px solid #1e293b;
+  padding: 1.5rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+nav .nav-title {
+  color: var(--amber);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+nav .nav-section {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 1rem 0.25rem;
+}
+
+nav a {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.3rem 1rem;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+
+nav a:hover { background: rgba(59,130,246,0.1); color: var(--blue); }
+
+.main {
+  margin-left: 240px;
+  max-width: 900px;
+  padding: 2rem 2rem 4rem;
+}
+
+h1 { color: var(--heading); font-size: 2rem; margin-bottom: 0.3rem; letter-spacing: -0.02em; }
+h2 { color: var(--heading); font-size: 1.5rem; margin-top: 3rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #334155; }
+h3 { color: var(--heading); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+h4 { color: var(--amber); font-size: 0.95rem; margin-top: 1rem; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
+p { margin-bottom: 0.8rem; }
+
+.subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; background: var(--card); border-radius: 8px; overflow: hidden; font-size: 0.9rem; }
+th { background: #334155; color: var(--heading); padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; }
+td { padding: 0.5rem 0.8rem; border-top: 1px solid #334155; }
+tr:hover { background: rgba(59,130,246,0.05); }
+
+.card { background: var(--card); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
+.card-blue { border-left: 4px solid var(--blue); }
+.card-amber { border-left: 4px solid var(--amber); }
+.card-green { border-left: 4px solid var(--green); }
+.card-red { border-left: 4px solid var(--red); }
+.card-purple { border-left: 4px solid var(--purple); }
+.card-cyan { border-left: 4px solid var(--cyan); }
+
+.card-title { font-weight: 700; color: var(--heading); margin-bottom: 0.5rem; }
+
+.tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+.tag-critical { background: rgba(239,68,68,0.2); color: var(--red); }
+.tag-high { background: rgba(251,191,36,0.2); color: var(--golden); }
+.tag-normal { background: rgba(59,130,246,0.2); color: var(--blue); }
+.tag-canon { background: rgba(34,197,94,0.2); color: var(--green); }
+.tag-gm { background: rgba(168,85,247,0.2); color: var(--purple); }
+
+.boxed-text { background: #1a1a2e; border-left: 3px solid var(--cyan); padding: 1rem 1.25rem; margin: 1rem 0; font-style: italic; border-radius: 0 8px 8px 0; }
+
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding: 0.3rem 0; }
+.checklist li::before { content: "☐ "; color: var(--muted); }
+
+.prompt-box { background: #1a1a2e; border: 1px solid #334155; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; font-family: 'Georgia', serif; }
+.prompt-label { color: var(--amber); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+
+.discrepancy { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.85rem; }
+.discrepancy::before { content: "⚠ "; color: var(--red); }
+
+.resolved { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.85rem; }
+.resolved::before { content: "✓ "; color: var(--green); }
+
+svg text { font-family: system-ui, -apple-system, sans-serif; }
+
+@media (max-width: 900px) {
+  nav { display: none; }
+  .main { margin-left: 0; padding: 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <div class="nav-title">S13 — Collace</div>
+  <div class="nav-section">Overview</div>
+  <a href="#s12-debrief">S12 Debrief</a>
+  <a href="#collace-world">Collace World Data</a>
+  <a href="#system-map">System Map</a>
+  <div class="nav-section">Session Plan</div>
+  <a href="#robins-laws">Robin's Laws</a>
+  <a href="#five-act">Five-Act Structure</a>
+  <a href="#scene-1">Scene 1: Jump Week</a>
+  <a href="#scene-2">Scene 2: Kirkton Debrief</a>
+  <a href="#scene-3">Scene 3: Collace Surface</a>
+  <a href="#scene-4">Scene 4: Personal Threads</a>
+  <a href="#scene-5">Scene 5: Cassian Arrival</a>
+  <div class="nav-section">Reference</div>
+  <a href="#threads">Thread Status</a>
+  <a href="#npcs">NPC Reference</a>
+  <a href="#cassian">Cassian Dossier</a>
+  <div class="nav-section">Assets</div>
+  <a href="#image-prompts">Image Prompts</a>
+  <a href="#discord-briefings">Discord Briefings</a>
+  <a href="#data-audit">Data Audit</a>
+</nav>
+
+<div class="main">
+
+<h1>S13 Session Prep — Collace Arrival</h1>
+<p class="subtitle">ISS Astral Dawn &bull; Talos &rarr; Collace &bull; Days 117-123, 1105 Imperial</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="s12-debrief">S12 Debrief — What Actually Happened</h2>
+
+<h3>Jump Week (Bingees &rarr; Talos)</h3>
+<table>
+<tr><th>PC</th><th>Activity</th><th>Mechanical Result</th></tr>
+<tr><td><strong>Von Sydo</strong></td><td>Meditation, psionic practice, Flat reconnection attempts. Training with Vera intensified. Relationship going well.</td><td>Can't sustain Flat contact in jump space (established S11).</td></tr>
+<tr><td><strong>Max</strong></td><td>Xenobiology research on Flat intelligence. Dual neurojack AIs: Zhodani "motherly tutor" + pompous Imperial etiquette coach.</td><td><strong>Roll 15</strong> — breakthrough. Channel framework established. Needs more 12+ rolls for traction.</td></tr>
+<tr><td><strong>James</strong></td><td>Familiarized with robots. Braise (BR-4) attempted beef Wellington.</td><td>Kai Ren (KR-7) confirmed +1 enhancement when invoked. Wellington: mediocre.</td></tr>
+<tr><td><strong>Asao</strong></td><td>Routine training and drills. Focused on Collace mission.</td><td>—</td></tr>
+<tr><td><strong>Jack</strong></td><td>Tested Oracle voice system. Reading briefings.</td><td>Voice requests work but disruptive mid-session — text channel preferred.</td></tr>
+</table>
+
+<h3>Talos/Dustfall</h3>
+<div class="card card-blue">
+<div class="card-title">Intelligence Contacts</div>
+<p><strong>Alice:</strong> Excellent intel broker, uncrackable OPSEC, Vargr avatar, video-only. Knew Astral Dawn is a Q-ship — Blood Profit pack's encrypted message from Pagoton propagated through intel networks. <strong>Q-ship cover is blown</strong> to anyone with decent intel access.</p>
+<p><strong>Bob:</strong> Robert Mookdeen, identity easily compromised by Jeri. Less capable operative.</p>
+<p><strong>Commissioned:</strong> Pirate faction report + Judas IRS HUMINT/personnel dossier. 3,000 Cr from pocket.</p>
+</div>
+
+<div class="card card-red">
+<div class="card-title">CCF Surveillance Detected</div>
+<p>Someone tailing the group in Dustfall (Desmond Cray from GM prep). Asao argued persuasively: don't confront, don't expose counter-detection capability. Lose the tail subtly. Flagged: check ship access logs on both vessels — Blood Fang has no security upgrades.</p>
+</div>
+
+<h3>Key Outcomes</h3>
+<ul>
+<li><strong>Q-ship cover BLOWN</strong> — irreversible. Intel community knows.</li>
+<li>Alice report on pirate factions and Judas IRS personnel pending delivery during jump week.</li>
+<li>Oracle/Argus voice pipeline tested live — players impressed.</li>
+<li>Asao reminded group of Linda Montana/Gorham debt (2-year deadline) and Roland Platten contact.</li>
+<li>Cassian Voss Holt discussed between Bruce and John — Ambassador background, intro next session.</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="collace-world">Collace World Data</h2>
+
+<p><span class="tag tag-canon">CANON</span> All data below reconciled against Traveller Wiki (2026-03-11), Mongoose <em>Spinward Marches</em> (2008), <em>Behind the Claw</em> (2019), <em>Enemy of My Enemy</em> (2021).</p>
+
+<table>
+<tr><th>Attribute</th><th>Value</th><th>Notes</th></tr>
+<tr><td><strong>UWP</strong></td><td>B628943-D</td><td></td></tr>
+<tr><td><strong>Starport</strong></td><td>B (Good)</td><td>Highport (wheel, 5 docking arms) + Downport (Port Kessler). Refined fuel. Full shipyard.</td></tr>
+<tr><td><strong>Size</strong></td><td>6 (9,600 km)</td><td>0.6-0.8G. Horizon at 4.4 km.</td></tr>
+<tr><td><strong>Atmosphere</strong></td><td>2 (Very Thin, Tainted)</td><td>Filter/respirator combo required. Sulfur-compound taint. Sunburn risk (thin atmo + close orbit).</td></tr>
+<tr><td><strong>Hydrographics</strong></td><td>8 (75-85% water)</td><td>Limited dry land — arcology clusters. Wilderness refueling possible.</td></tr>
+<tr><td><strong>Population</strong></td><td>9 (~1 billion)</td><td>Arcology society. High-density clusters.</td></tr>
+<tr><td><strong>Government</strong></td><td>4 (Representative Democracy)</td><td>Elected Assembly. Referenda possible.</td></tr>
+<tr><td><strong>Law Level</strong></td><td>3 (Low)</td><td>No auto weapons. Personal arms legal. <strong>HIGH CRIME — offworlders preferred targets.</strong></td></tr>
+<tr><td><strong>Tech Level</strong></td><td>D (TL-13)</td><td>Highest in D268. Comparable to core Imperial worlds.</td></tr>
+<tr><td><strong>Stars</strong></td><td>F1 V "Gorie" + M3 V "Sonor"</td><td>Binary. HZ 1.8-3.11 AU.</td></tr>
+<tr><td><strong>Allegiance</strong></td><td>CsIm (Client State, Imperium)</td><td>NOT non-aligned. Seeks full membership.</td></tr>
+<tr><td><strong>Trade</strong></td><td>Hi, In, Ht</td><td>Importance 4 (important). Resources C (very abundant).</td></tr>
+<tr><td><strong>Culture</strong></td><td>Harmonious (6), Very Xenophilic (D)</td><td>Open to outsiders despite high crime.</td></tr>
+<tr><td><strong>Origin</strong></td><td>Sindalian Empire mining colony</td><td>Rescued by Darrian scouts -1310.</td></tr>
+</table>
+
+<h3>The Arcology Society</h3>
+<p>~1 billion people in arcology clusters built on scattered island landmasses. Canon: middle/upper classes gravitate to newer high-security arcos, leaving older structures to working class and poor. Lower-class arcos experience high criminal activity run by organized gangs. This stratification is structural, not recent.</p>
+
+<table>
+<tr><th>Tier</th><th>Description</th><th>Security</th><th>Pop (est.)</th></tr>
+<tr><td><strong>Upper Arcos</strong></td><td>Corporate towers, luxury, filtered air gardens</td><td>Private security, biometric</td><td>~50M</td></tr>
+<tr><td><strong>Mid Arcos</strong></td><td>Commercial, middle-class, public services</td><td>Police, moderate crime</td><td>~500M</td></tr>
+<tr><td><strong>Lower Arcos</strong></td><td>Industrial workers, cramped, run-down</td><td>Gangs, organized crime</td><td>~350M</td></tr>
+<tr><td><strong>Undercity</strong></td><td>Sub-basements, black markets, squatters</td><td>Lawless, syndicates</td><td>~100M</td></tr>
+</table>
+<p><span class="tag tag-gm">GM EMBELLISHMENT</span> Tier population distribution is estimated from canon ~1B total. Tier names and descriptions are GM-created to give S13 navigational structure.</p>
+
+<h3>Key Locations</h3>
+
+<div class="card card-blue">
+<div class="card-title">Kirkton Scout Base <span class="tag tag-canon">CANON</span> F200562-D</div>
+<p>Collace's <strong>principal moon</strong>. "Scout base" understates the scale: IISS facilities on <strong>half a dozen</strong> other planets and satellites system-wide. Training sites, supply depots, early warning stations. Pop ~100,000+. TL-13. Collace military provides ground + close-orbit defense for both Collace and IISS facilities. Crater-wall docking facility, concealed weapons emplacements. <strong>JSI debrief happens here.</strong></p>
+</div>
+
+<div class="card card-amber">
+<div class="card-title">Enborne Gas Giant Moons <span class="tag tag-canon">CANON</span></div>
+<p>Small gas giant at ~5.2 AU with <strong>four populated moons</strong> — a mini-civilization:</p>
+<table>
+<tr><th>Moon</th><th>UWP</th><th>Port</th><th>Pop</th><th>TL</th><th>Notes</th></tr>
+<tr><td>Cathay</td><td>F311564-D</td><td>F</td><td>~100K</td><td>13</td><td>Largest developed moon. Likely IISS support.</td></tr>
+<tr><td>Alcalall</td><td>GAA4262-C</td><td>G</td><td>~200</td><td>12</td><td>Exotic fluid ocean. Research/extraction.</td></tr>
+<tr><td>Innivar</td><td>H201315-A</td><td>H</td><td>~1K</td><td>10</td><td>Vacuum. Mining/observation.</td></tr>
+<tr><td>Orkist</td><td>H200200-9</td><td>H</td><td>~200</td><td>9</td><td>Outermost. Mining/relay.</td></tr>
+</table>
+</div>
+
+<p><strong>Port Kessler</strong> (Downport) — Surface starport. Filter domes. Commercial district. CCF Collace subsidiary in commercial annex. Oberlindes office.</p>
+<p><strong>Arco Prime</strong> — Government district. Assembly, embassies, corporate HQs. McClellan Factors + Tukera Lines corridor headquarters.</p>
+<p><strong>Havelock Industrial Zone</strong> — Manufacturing. SuSAG pharmaceutical campus (Havelock-3). Colmetal Inc. headquarters.</p>
+<p><strong>The Sink</strong> (Arco-7 sub-basements) — Largest black market. Information, weapons, forged docs. Syndicate-adjacent but older than Drakon.</p>
+<p><strong>Aslan Quarter</strong> (Arco-3, floors 40-60) — ~50,000. Hierate trade mission (Arco Prime). No permanent House Ataoh presence.</p>
+
+<h3>Military &amp; Political</h3>
+<p><span class="tag tag-canon">CANON</span> Collace military + IISS are deeply integrated. Local forces provide ground/close-orbit defense for Scout facilities. Collace has sought Imperial membership for decades — blocked by Trexalon (1339) cold war. TTC (Trexalon Technical Consortium) is anti-Imperial, perceives Imperium as impediment to D268 expansionist ambitions. Key flashpoint: Pavabid (1238) iridium deposits. Both sides competing for influence with xenophobic Church of Stellar Divinity theocracy.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="system-map">Collace System Map (PC-Safe)</h2>
+
+<p><span class="tag tag-canon">CANON</span> All body names, orbits, and UWPs from Traveller Wiki. No hostile ships or GM-only intel on this map.</p>
+
+<div class="card" style="padding: 0.5rem; text-align: center;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" style="background:#0a0a1a; max-width:100%; border-radius:8px;">
+<defs>
+  <radialGradient id="g-gorie" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" style="stop-color:#fffff0;stop-opacity:1"/>
+    <stop offset="50%" style="stop-color:#ffe066;stop-opacity:0.5"/>
+    <stop offset="100%" style="stop-color:#ffcc00;stop-opacity:0"/>
+  </radialGradient>
+  <radialGradient id="g-sonor" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" style="stop-color:#ff7755;stop-opacity:1"/>
+    <stop offset="60%" style="stop-color:#cc3311;stop-opacity:0.3"/>
+    <stop offset="100%" style="stop-color:#881100;stop-opacity:0"/>
+  </radialGradient>
+  <radialGradient id="g-ocean" cx="40%" cy="40%" r="60%">
+    <stop offset="0%" style="stop-color:#4488cc;stop-opacity:1"/>
+    <stop offset="50%" style="stop-color:#336699;stop-opacity:0.9"/>
+    <stop offset="100%" style="stop-color:#224466;stop-opacity:0.8"/>
+  </radialGradient>
+  <radialGradient id="g-giant" cx="40%" cy="40%" r="60%">
+    <stop offset="0%" style="stop-color:#deb887;stop-opacity:1"/>
+    <stop offset="40%" style="stop-color:#cd853f;stop-opacity:0.8"/>
+    <stop offset="100%" style="stop-color:#8b6914;stop-opacity:0.3"/>
+  </radialGradient>
+</defs>
+
+<!-- Title -->
+<text x="450" y="24" fill="#3b82f6" font-size="14" font-weight="bold" text-anchor="middle" font-family="system-ui">Collace System (1237) — B628943-D — Binary F1V + M3V</text>
+<text x="450" y="40" fill="#777" font-size="10" text-anchor="middle" font-family="system-ui">PC-Safe Reference Map — No GM-Only Data</text>
+
+<!-- Habitable zone band -->
+<rect x="265" y="50" width="115" height="340" fill="rgba(59,130,246,0.04)" rx="4"/>
+<text x="322" y="68" fill="rgba(59,130,246,0.25)" font-size="8" text-anchor="middle" font-family="system-ui">HABITABLE ZONE</text>
+
+<!-- Orbit lines (dashed) -->
+<line x1="80" y1="210" x2="80" y2="370" stroke="#222" stroke-width="0.5" stroke-dasharray="2,4"/>
+<line x1="130" y1="210" x2="130" y2="370" stroke="#222" stroke-width="0.5" stroke-dasharray="2,4"/>
+<line x1="190" y1="210" x2="190" y2="370" stroke="#222" stroke-width="0.5" stroke-dasharray="2,4"/>
+<line x1="240" y1="210" x2="240" y2="370" stroke="#222" stroke-width="0.5" stroke-dasharray="2,4"/>
+<line x1="295" y1="210" x2="295" y2="370" stroke="#333" stroke-width="0.5" stroke-dasharray="2,4"/>
+<line x1="390" y1="210" x2="390" y2="370" stroke="#222" stroke-width="0.5" stroke-dasharray="2,4"/>
+<line x1="520" y1="210" x2="520" y2="370" stroke="#222" stroke-width="0.5" stroke-dasharray="2,4"/>
+<line x1="700" y1="210" x2="700" y2="370" stroke="#222" stroke-width="0.5" stroke-dasharray="2,4"/>
+<line x1="830" y1="210" x2="830" y2="370" stroke="#222" stroke-width="0.5" stroke-dasharray="2,4"/>
+
+<!-- AU labels -->
+<text x="80" y="385" fill="#555" font-size="7" text-anchor="middle" font-family="monospace">0.2</text>
+<text x="130" y="385" fill="#555" font-size="7" text-anchor="middle" font-family="monospace">0.4</text>
+<text x="190" y="385" fill="#555" font-size="7" text-anchor="middle" font-family="monospace">0.7</text>
+<text x="240" y="385" fill="#555" font-size="7" text-anchor="middle" font-family="monospace">1.0</text>
+<text x="295" y="385" fill="#4488cc" font-size="7" text-anchor="middle" font-family="monospace" font-weight="bold">1.6</text>
+<text x="390" y="385" fill="#555" font-size="7" text-anchor="middle" font-family="monospace">~2.8</text>
+<text x="520" y="385" fill="#555" font-size="7" text-anchor="middle" font-family="monospace">~5.2</text>
+<text x="700" y="385" fill="#555" font-size="7" text-anchor="middle" font-family="monospace">~10</text>
+<text x="830" y="385" fill="#555" font-size="7" text-anchor="middle" font-family="monospace">~20</text>
+<text x="450" y="405" fill="#444" font-size="8" text-anchor="middle" font-family="system-ui">Distance (AU) — not to scale</text>
+
+<!-- Stars -->
+<circle cx="30" cy="250" r="28" fill="url(#g-gorie)"/>
+<circle cx="30" cy="250" r="14" fill="#fff8e0"/>
+<text x="30" y="290" fill="#ffe066" font-size="9" text-anchor="middle" font-family="system-ui" font-weight="bold">Gorie</text>
+<text x="30" y="300" fill="#777" font-size="7" text-anchor="middle" font-family="monospace">F1 V</text>
+<circle cx="52" cy="237" r="6" fill="url(#g-sonor)"/>
+<circle cx="52" cy="237" r="3" fill="#ff5533"/>
+<text x="62" y="228" fill="#ff7755" font-size="7" font-family="system-ui">Sonor (M3 V)</text>
+
+<!-- Inner unnamed worlds -->
+<circle cx="80" cy="260" r="3" fill="#666"/>
+<text x="80" y="250" fill="#666" font-size="7" text-anchor="middle" font-family="system-ui">I</text>
+<circle cx="130" cy="270" r="3.5" fill="#777"/>
+<text x="130" y="260" fill="#666" font-size="7" text-anchor="middle" font-family="system-ui">II</text>
+<circle cx="190" cy="255" r="4" fill="#888"/>
+<text x="190" y="245" fill="#666" font-size="7" text-anchor="middle" font-family="system-ui">III</text>
+<circle cx="240" cy="265" r="4" fill="#887766"/>
+<text x="240" y="255" fill="#666" font-size="7" text-anchor="middle" font-family="system-ui">IV</text>
+
+<!-- Collace (mainworld) -->
+<circle cx="295" cy="260" r="9" fill="url(#g-ocean)"/>
+<circle cx="295" cy="260" r="9" fill="none" stroke="#4488cc" stroke-width="1.5"/>
+<text x="295" y="240" fill="#4488cc" font-size="11" text-anchor="middle" font-family="system-ui" font-weight="bold">Collace</text>
+<text x="295" y="282" fill="#888" font-size="7" text-anchor="middle" font-family="monospace">B628943-D</text>
+<text x="295" y="292" fill="#666" font-size="7" text-anchor="middle" font-family="system-ui">~1B pop, TL-13</text>
+
+<!-- Kirkton (moon) -->
+<circle cx="315" cy="310" r="4" fill="#999"/>
+<line x1="300" y1="270" x2="312" y2="307" stroke="#555" stroke-width="0.5" stroke-dasharray="2,2"/>
+<text x="330" y="308" fill="#22c55e" font-size="8" font-family="system-ui" font-weight="bold">Kirkton</text>
+<text x="330" y="318" fill="#888" font-size="7" font-family="monospace">F200562-D</text>
+<text x="330" y="328" fill="#666" font-size="7" font-family="system-ui">IISS Main Base</text>
+
+<!-- Highport -->
+<rect x="280" y="230" width="3" height="3" fill="#22c55e"/>
+<text x="270" y="225" fill="#22c55e" font-size="7" text-anchor="middle" font-family="system-ui">Highport</text>
+
+<!-- Elkhorn -->
+<circle cx="390" cy="260" r="2.5" fill="#555"/>
+<text x="390" y="250" fill="#666" font-size="8" text-anchor="middle" font-family="system-ui">Elkhorn</text>
+<text x="390" y="275" fill="#555" font-size="6" text-anchor="middle" font-family="monospace">X100000-0</text>
+
+<!-- Enborne (gas giant) -->
+<circle cx="520" cy="255" r="16" fill="url(#g-giant)"/>
+<text x="520" y="232" fill="#deb887" font-size="10" text-anchor="middle" font-family="system-ui" font-weight="bold">Enborne</text>
+<text x="520" y="285" fill="#888" font-size="7" text-anchor="middle" font-family="system-ui">Small Gas Giant</text>
+<text x="520" y="295" fill="#666" font-size="7" text-anchor="middle" font-family="system-ui">Fuel skimming</text>
+
+<!-- Enborne moons -->
+<circle cx="485" cy="310" r="3" fill="#aaa"/>
+<text x="470" y="325" fill="#22c55e" font-size="7" font-family="system-ui">Cathay F311564-D</text>
+<line x1="520" y1="270" x2="487" y2="308" stroke="#444" stroke-width="0.5" stroke-dasharray="2,2"/>
+
+<circle cx="540" cy="320" r="3.5" fill="#6688aa"/>
+<text x="555" y="325" fill="#06b6d4" font-size="7" font-family="system-ui">Alcalall GAA4262-C</text>
+<line x1="525" y1="270" x2="540" y2="318" stroke="#444" stroke-width="0.5" stroke-dasharray="2,2"/>
+
+<circle cx="500" cy="340" r="2.5" fill="#888"/>
+<text x="470" y="350" fill="#888" font-size="6" font-family="system-ui">Innivar H201315-A</text>
+
+<circle cx="555" cy="345" r="2" fill="#777"/>
+<text x="570" y="348" fill="#888" font-size="6" font-family="system-ui">Orkist H200200-9</text>
+
+<!-- Hali -->
+<circle cx="700" cy="260" r="6" fill="#556677"/>
+<text x="700" y="250" fill="#666" font-size="8" text-anchor="middle" font-family="system-ui">Hali</text>
+<text x="700" y="275" fill="#555" font-size="6" text-anchor="middle" font-family="monospace">X7A9000-0</text>
+<circle cx="715" cy="280" r="1.5" fill="#555"/>
+<text x="728" y="283" fill="#555" font-size="6" font-family="system-ui">Auros</text>
+
+<!-- Scint -->
+<circle cx="830" cy="260" r="3" fill="#555"/>
+<text x="830" y="250" fill="#666" font-size="8" text-anchor="middle" font-family="system-ui">Scint</text>
+<text x="830" y="275" fill="#555" font-size="6" text-anchor="middle" font-family="monospace">X211000-0</text>
+
+<!-- Legend -->
+<rect x="20" y="55" width="150" height="100" fill="rgba(30,41,59,0.9)" rx="4" stroke="#334155" stroke-width="0.5"/>
+<text x="30" y="70" fill="#aaa" font-size="8" font-weight="bold" font-family="system-ui">LEGEND</text>
+<circle cx="35" cy="82" r="3" fill="url(#g-ocean)"/><text x="45" y="85" fill="#aaa" font-size="7" font-family="system-ui">Mainworld</text>
+<circle cx="35" cy="97" r="3" fill="url(#g-giant)"/><text x="45" y="100" fill="#aaa" font-size="7" font-family="system-ui">Gas Giant</text>
+<rect x="32" y="109" width="4" height="4" fill="#22c55e"/><text x="45" y="114" fill="#aaa" font-size="7" font-family="system-ui">Starport/Base</text>
+<circle cx="35" cy="127" r="2" fill="#999"/><text x="45" y="130" fill="#aaa" font-size="7" font-family="system-ui">Moon (w/ UWP if populated)</text>
+<rect x="32" y="138" width="30" height="8" fill="rgba(59,130,246,0.04)" stroke="rgba(59,130,246,0.15)" stroke-width="0.5"/><text x="70" y="146" fill="#aaa" font-size="7" font-family="system-ui">Habitable Zone</text>
+</svg>
+</div>
+<p style="font-size:0.8rem; color:var(--muted);">Note: Planet positions approximate. Orbits for Elkhorn, Enborne, Hali, Scint estimated from Titius-Bode spacing — canon lists "? AU" for these. Inner world radii are GM estimates. <strong>No hostile ships or GM-only intel shown.</strong> Bruce: add VTT tokens/layers for anything PCs shouldn't see.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="robins-laws">Robin's Laws — PC Engagement Audit</h2>
+
+<p>Each PC's planned S13 action evaluated against their player type. <strong>30-minute rule:</strong> every block needs at least one beat that feeds someone's type.</p>
+
+<table>
+<tr><th>Player</th><th>PC</th><th>Type</th><th>S13 Action</th><th>Feeds Type?</th><th>Risk</th></tr>
+<tr>
+<td><strong>Jaime</strong></td><td>James</td><td>Tactician / Storyteller</td>
+<td>Kirkton debrief with Vasquez. Evidence delivery. Political strategy decisions (who gets intel — Assembly? JSI? Vemene?). CCF dead-drop at Port Kessler.</td>
+<td><span class="tag tag-canon" style="background:rgba(34,197,94,0.3)">STRONG</span></td>
+<td>None. This is James's session. Multiple strategic decisions where his input shapes the arc.</td>
+</tr>
+<tr>
+<td><strong>Alexa</strong></td><td>Marina</td><td>Tactician / Method Actor</td>
+<td>Investigation support. Social encounters in Arco Prime. Possible Vemene contact (Reva Teng).</td>
+<td><span class="tag tag-high">WEAK</span></td>
+<td><strong>Underserved.</strong> Marina has no dedicated scene. Her Tactician side is fed by group strategy, but her Method Actor needs a personal beat. Fix: give her the Teng meeting (social dynamics, intelligence transaction) or a Collace-specific shore leave encounter that uses her diplomat skills.</td>
+</tr>
+<tr>
+<td><strong>Dragon</strong></td><td>Asao</td><td>Butt-Kicker / Specialist</td>
+<td>Marine operations. Ship security audit. Aslan Quarter visit (Hierate trade representative, <em>fteirle</em> recognition). Possible Undercity action.</td>
+<td><span class="tag tag-canon" style="background:rgba(34,197,94,0.3)">STRONG</span></td>
+<td>Aslan Quarter is a Specialist beat (honor culture, status). If energy flags, deploy an Undercity physical encounter — Lower Arco gangs testing outsiders. High crime + low law = Asao's playground.</td>
+</tr>
+<tr>
+<td><strong>Bagored</strong></td><td>Max</td><td>Specialist / Tactician</td>
+<td>Flat communication research (building on S12 roll 15 breakthrough). SuSAG campus as science lure. Enborne moons as research targets.</td>
+<td><span class="tag tag-canon" style="background:rgba(34,197,94,0.3)">STRONG</span></td>
+<td>Needs a xenobiology roll during jump week. If he fails, the channel goes quiet — but he knows HOW to set it up now. If he succeeds (12+), brief Flat contact in normal space upon arrival. Enborne's Alcalall (exotic fluid ocean) is a natural curiosity hook.</td>
+</tr>
+<tr>
+<td><strong>Les</strong></td><td>Von Sydo</td><td>Method Actor / Specialist</td>
+<td>Psionic development (DM-4 to DM-2, framework stage). Ethical decision: tell crew about S11 pre-arranged message? Vera relationship. SuSAG psionic research ethics.</td>
+<td><span class="tag tag-canon" style="background:rgba(34,197,94,0.3)">STRONG</span></td>
+<td>Von Sydo's best session yet. Character moments (Vera, ethical choices) feed Method Actor. Psionic rolls feed Specialist. <strong>Key scene:</strong> first intermittent Flat detection in normal space upon Collace arrival.</td>
+</tr>
+<tr>
+<td><strong>John</strong></td><td>Jack &rarr; Cassian</td><td>(developing)</td>
+<td>Jack Stone retirement. Cassian Voss Holt introduction. Red Archives reveal. Political web entry.</td>
+<td><span class="tag tag-canon" style="background:rgba(34,197,94,0.3)">STRONG</span></td>
+<td>The transition IS the content. Jack's farewell needs a dignified beat (Amy message? Final poker game?). Cassian's entrance needs gravitas — he arrives with information that changes the campaign's political dimension.</td>
+</tr>
+</table>
+
+<div class="card card-amber">
+<div class="card-title">Action Item: Marina Fix</div>
+<p>Marina is the <strong>only PC at risk of going dark</strong> in S13. Options:</p>
+<ul>
+<li><strong>Option A (recommended):</strong> Marina leads the Reva Teng (Vemene) meeting. Social dynamics, intelligence negotiation, corporate power play — feeds both Tactician and Method Actor.</li>
+<li><strong>Option B:</strong> Marina runs a shore leave scene in Arco Prime. She's the crew's best social operator. Give her a Collace-specific encounter: trade negotiation, local contact cultivation, or DX-7 firmware quest at the TL-13 market.</li>
+<li><strong>Option C:</strong> Marina and Anemone get a gunner-focused beat — Highport gunnery range, or evaluating Blood Fang's weapons refit options.</li>
+</ul>
+</div>
+
+<h3>30-Minute Block Map</h3>
+<table>
+<tr><th>Block</th><th>~Minutes</th><th>Content</th><th>Primary PCs Fed</th></tr>
+<tr><td>1</td><td>0-15</td><td>Jump week: mail delivery, Von Sydo psi roll, Max xeno roll, Alice reports</td><td>Von Sydo, Max</td></tr>
+<tr><td>2</td><td>15-45</td><td>Collace arrival: system approach, Kirkton escort, debrief opening</td><td>James, all</td></tr>
+<tr><td>3</td><td>45-75</td><td>Kirkton debrief: evidence delivery, Q-ship discussion, Arrangement reveal</td><td>James (Tactician), group strategy</td></tr>
+<tr><td>4</td><td>75-90</td><td>BREAK — Alice reports delivered to Discord channels during break</td><td>—</td></tr>
+<tr><td>5</td><td>90-120</td><td>Surface: Collace ashore. Split party: Aslan Quarter (Asao), Arco Prime (Marina/James), Science (Max)</td><td>Asao, Marina, Max</td></tr>
+<tr><td>6</td><td>120-140</td><td>Personal threads: Von Sydo Flat detection, Jack farewell</td><td>Von Sydo, Jack</td></tr>
+<tr><td>7</td><td>140-160</td><td>Cassian arrival: new PC introduction, Red Archives tease</td><td>John (Cassian)</td></tr>
+<tr><td>8</td><td>160-170</td><td>Cliffhanger: Voronov goes to ground / Cray report / political clock starts</td><td>All</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="five-act">Five-Act Structure</h2>
+
+<h3 id="scene-1">Act 1 — Jump Week: Talos &rarr; Collace (15 min)</h3>
+
+<h4>Jump Week Activities</h4>
+<ul class="checklist">
+<li><strong>Alice reports arrive</strong> — two Discord documents for #mail-james: pirate faction status + Judas IRS personnel dossier. Deliver during this scene or at break.</li>
+<li><strong>Von Sydo psionic roll</strong> — Framework stage (arc stage 2). DM-4 base → Max's physics gives +2 → effective DM-2. Roll 2d6+PSI+DM: on 10+ (after DM), intermittent Flat detection in normal space begins. On fail, conceptual progress but no contact yet.</li>
+<li><strong>Max xenobiology roll</strong> — Building on S12 roll-15 breakthrough. 2d6+6: on 12+, brief Flat communication. On 8-11, channel stable but silent. On 7-, channel setup lost (needs rebuilding).</li>
+<li><strong>Braise cooking</strong> — Redemption attempt after mediocre beef Wellington. Energy management beat if needed.</li>
+<li><strong>ORACLE briefing delivery</strong> — Collace system briefing to all crew. This gives players the world data before arrival. Post to Discord during jump week scene.</li>
+</ul>
+
+<div class="boxed-text">
+<strong>Read Aloud (Arrival):</strong> The week passes. On day seven, Gorie's yellow-white light fills the bridge viewports as the Astral Dawn drops out of jump space. An ocean world hangs below — blue-green under a yellowish haze, scattered islands barely visible through the tainted atmosphere. The sensors light up: thirty, forty transponders in close orbit. More traffic than anywhere you've been in District 268. This is Collace. Within minutes, a scout courier hails you on a military frequency: "Merchant vessel Astral Dawn, this is ISS Pathfinder. We have instructions to escort you to Kirkton approach lane. Please match course and speed. Do not — repeat, do not — contact Collace Highport or mainworld traffic control."
+</div>
+
+<h3 id="scene-2">Act 2 — Kirkton Debrief (30 min)</h3>
+
+<h4>The Mandatory Beat</h4>
+<p>This is the session's dramatic core. Commander Vasquez has been tracking their progress through coded scout courier messages. The crew has exceeded expectations — destroying Blood Profit was the mission; uncovering the Collace Arrangement is a bonus she didn't anticipate.</p>
+
+<div class="card card-purple">
+<div class="card-title">Commander Lira Vasquez — JSI D268 Station Chief</div>
+<p><strong>Age 52. Calm, speaks softly, expects results.</strong> She planned the Q-ship operation and selected the crew. Bureaucratically careful — wants to verify every piece of evidence before acting.</p>
+<p><strong>Knows:</strong> Crew's mission success (Blood Profit), general corridor intel.</p>
+<p><strong>Wants:</strong> Full intelligence dump. Every piece of evidence catalogued.</p>
+<p><strong>Doesn't know:</strong> The Arrangement. Nuclear weapon intel. Full scope of Drakon operations. Von Sydo's psionics.</p>
+</div>
+
+<div class="boxed-text">
+<strong>Vasquez (opening):</strong> "Captain Delleron. Welcome to Kirkton. I've been reading your message drops for months. Let's start with the Blood Profit Pack and work forward. Tell me everything."
+</div>
+
+<h4>Debrief Flow</h4>
+<ol>
+<li><strong>Blood Profit report</strong> — Vasquez expects this. Standard debrief. Hazard pay authorized.</li>
+<li><strong>Q-ship cover blown</strong> — Vasquez needs to know. Changes operational posture. "That complicates things considerably."</li>
+<li><strong>Nuclear weapon intel</strong> — This escalates to Priority Alpha. Vasquez gets visibly concerned. "That changes the threat assessment for the entire corridor."</li>
+<li><strong>The Arrangement</strong> — When the crew reveals what they found in the pirate data. Vasquez pauses. "You're telling me the piracy is a symptom, not the disease." She asks: <strong>"How do you want to handle this?"</strong></li>
+</ol>
+
+<p><strong>The Key Decision:</strong> Vasquez presents options. This is a player choice that shapes the rest of Phase 1:</p>
+<table>
+<tr><th>Option</th><th>Effect</th><th>Risk</th></tr>
+<tr><td>Give everything to JSI</td><td>Military/intelligence approach. Slow but thorough.</td><td>Bureaucracy. Evidence may be classified and sat on.</td></tr>
+<tr><td>Go to Senator Koss</td><td>Political approach. Assembly investigation.</td><td>Koss isn't subtle. Syndicate gets warning, operatives flee.</td></tr>
+<tr><td>Feed Tukera/Vemene</td><td>Corporate approach. Tukera acts fast with resources.</td><td>Tukera has its own agenda. May bury inconvenient evidence.</td></tr>
+<tr><td>All of the above</td><td>Maximum impact. Multiple pressure vectors.</td><td>Slower. Competing interests. Information leaks multiply.</td></tr>
+</table>
+
+<h3 id="scene-3">Act 3 — Collace Surface (20 min)</h3>
+
+<h4>Split Party — Multiple Threads</h4>
+<p>After debrief, crew goes ashore. First real shore leave since Milagro. Multiple optional encounters available — deploy based on player interest:</p>
+
+<div class="card card-green">
+<div class="card-title">Asao: Aslan Quarter (Butt-Kicker + Specialist feed)</div>
+<p>Arco-3, floors 40-60. Hierate trade representative can relay <em>fteirle</em> recognition to House Ataoh. Social encounter — Asao navigates Aslan honor protocols as a recognized <em>fteirle</em>-holder. If he handles it well, potential ally network in Collace's Aslan community (~50,000).</p>
+<p><strong>Backup:</strong> Lower Arco gang encounter. High crime, low law. Asao with gauss rifle in an arcology alley.</p>
+</div>
+
+<div class="card card-cyan">
+<div class="card-title">Marina: Reva Teng Meeting (Tactician + Method Actor feed)</div>
+<p>Tukera Tower, Arco Prime. Teng offers Tukera resources (safe houses, contacts, surveillance) in exchange for exclusive access to pirate intelligence. Ice-cold professionalism. Everything is a transaction. Marina's social skills (Persuade, Diplomat) are the right tool. Teng will try to extract more than she gives.</p>
+</div>
+
+<div class="card card-blue">
+<div class="card-title">Max: Havelock Science District (Specialist feed)</div>
+<p>TL-13 market: advanced sensors, lab equipment, xenobiology databases. SuSAG pharmaceutical campus tours available. Max hears rumors about "unusual research" at the Enborne moons — Alcalall's exotic fluid oceans attract xenobiologists.</p>
+</div>
+
+<div class="card card-amber">
+<div class="card-title">Port Kessler Commercial Annex — CCF Dead-Drop</div>
+<p>Same building as Three Moons Reinsurance (Drakon shell company). James/Jeri have the data linking CCF to pirate operations. Walking in is a choice. Voronov's office is small, unremarkable, staffed by careful people. Ticking clock: once the Arrangement is exposed, Voronov will flee to Trexalon.</p>
+</div>
+
+<h3 id="scene-4">Act 4 — Personal Threads (15 min)</h3>
+
+<div class="card card-purple">
+<div class="card-title">Von Sydo: First Intermittent Flat Detection</div>
+<p>If the jump-week psionic roll succeeded: Von Sydo senses something in the Collace arcologies. Brief, intermittent. Hundreds of nodes — every piece of TL-9+ electronics. The Flat is EVERYWHERE here. This is the framework stage — he can't sustain it, can't communicate, but he KNOWS it's there.</p>
+<p>If the roll failed: Von Sydo senses a ghost of something when they dock at Kirkton. Not enough to act on. "I thought I felt... something."</p>
+<p><strong>Ethical moment:</strong> Does Von Sydo tell anyone about the S11 pre-arranged message? This is a character decision Les should make.</p>
+</div>
+
+<div class="card card-blue">
+<div class="card-title">Jack Stone: Farewell</div>
+<p>Jack's last session before retirement. Needs a dignified exit. Options:</p>
+<ul>
+<li>Final message from Amy Torrelsen (via Oracle/Discord mail)</li>
+<li>Farewell drink with the crew — Braise cooks something special</li>
+<li>Jack gives Cassian advice about the crew: "Watch out for the Aslan. He's the most honorable person I've ever met, and that's more dangerous than it sounds."</li>
+</ul>
+</div>
+
+<h3 id="scene-5">Act 5 — Cassian Arrival &amp; Cliffhanger (15 min)</h3>
+
+<div class="card card-amber">
+<div class="card-title">Cassian Voss Holt Introduction</div>
+<p><strong>Baron. Former Ambassador Extraordinary. SOC 12. Advocate 3, Diplomat 3, Persuade 3.</strong></p>
+<p>Arrives at Collace independently (separate transport). Vasquez introduces him to the crew — or he approaches independently, drawn by the Astral Dawn's reputation.</p>
+<p><strong>What he brings:</strong> The Red Archives. Political-layer evidence of Drakon operations — shell companies, corrupted politicians, sabotaged treaties. The crew has operational evidence (pirates, ships, weapons). Together: complete case from pirate ship to Gram boardroom.</p>
+<p><strong>What he wants:</strong> The fuel station project. Vindication. House Holt's reputation restored.</p>
+<p><strong>Complications he carries:</strong> Cr 200,000 debt. Hollow Treaty scandal. Kheyra Indel (Aslan diplomat, Arco-3) — damaged by his manipulation. Lyra Voss (performer) — public accusations. These are threads, not problems to solve in S13.</p>
+</div>
+
+<div class="boxed-text">
+<strong>Cliffhanger options (pick one):</strong><br>
+<strong>A:</strong> Vasquez contacts James: "Voronov's office at Port Kessler was cleaned out this morning. He's running. We have maybe 72 hours before he reaches Trexalon."<br>
+<strong>B:</strong> Cassian opens the Red Archives. A name the crew recognizes appears in the political data. (Tease a connection they weren't expecting.)<br>
+<strong>C:</strong> Von Sydo detects something at Kirkton that shouldn't be there. A Flat presence that's... wrong. Structured in a way natural electronics aren't.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="threads">Thread Status at Collace</h2>
+
+<table>
+<tr><th>Thread</th><th>Priority</th><th>S13 Beat</th><th>Resolution Path</th></tr>
+<tr><td>Collace Arrangement</td><td><span class="tag tag-critical">CRITICAL</span></td><td>Revealed during debrief</td><td>Expose via Assembly, JSI, or Vemene</td></tr>
+<tr><td>Blood Profit Ambush</td><td><span class="tag tag-critical">CRITICAL</span></td><td>Debrief — aftermath report</td><td>Remnants scattered. Walston base unaddressed.</td></tr>
+<tr><td>Flat Detection</td><td><span class="tag tag-critical">CRITICAL</span></td><td>Von Sydo intermittent detection</td><td>Framework stage → breakthrough S15-18</td></tr>
+<tr><td>CCF Investigation</td><td><span class="tag tag-high">HIGH</span></td><td>Port Kessler dead-drop</td><td>Voronov investigation</td></tr>
+<tr><td>Syndicate Exposure</td><td><span class="tag tag-high">HIGH</span></td><td>Evidence delivery</td><td>Assembly hearing / JSI ops / Vemene action</td></tr>
+<tr><td>Naval Leak (Kowal)</td><td><span class="tag tag-high">HIGH</span></td><td>Report to Vasquez</td><td>Formal exposure or double-agent use</td></tr>
+<tr><td>Psionic Development</td><td><span class="tag tag-high">HIGH</span></td><td>DM-4→DM-2 framework</td><td>Ongoing — breakthrough S15-18</td></tr>
+<tr><td>Q-Ship Cover</td><td><span class="tag tag-high">HIGH</span></td><td>Vasquez informed. Cover blown.</td><td>New operating paradigm.</td></tr>
+<tr><td>Asao Charges</td><td><span class="tag tag-high">HIGH</span></td><td>Warrants withdrawn S11</td><td>Residual — Garoo reputation not fully cleared</td></tr>
+<tr><td>CCF Surveillance</td><td><span class="tag tag-high">HIGH</span></td><td>Desmond Cray report</td><td>CCF knows crew is counter-detecting</td></tr>
+<tr><td>Cassian Introduction</td><td><span class="tag tag-normal">NEW</span></td><td>PC transition</td><td>Red Archives + fuel station project</td></tr>
+</table>
+
+<h4>Thread Seeding (Plant Now, Pay Off Later)</h4>
+<ul>
+<li><strong>Bowman Pre-Maghiz (S25+ payoff):</strong> Library data mentions Darrian ship movements near Bowman cluster. Alice's intel may reference this. Cassian recognizes strategic implications (noble/diplomat background).</li>
+<li><strong>Ghost's Family (S15+ payoff):</strong> Ghost (fighter pilot) is from Forine — 3 parsecs from Collace. Proximity trigger. Homesick thread.</li>
+<li><strong>Collace Assembly Election (~90 days):</strong> Time-limited political window. Creates urgency for evidence delivery.</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="npcs">NPC Quick Reference</h2>
+
+<table>
+<tr><th>NPC</th><th>Role</th><th>Location</th><th>One Trait</th><th>Source</th></tr>
+<tr><td><strong>Cmdr. Lira Vasquez</strong></td><td>JSI D268 Station Chief</td><td>Kirkton</td><td>Calm, speaks softly, expects results</td><td><span class="tag tag-gm">GM</span></td></tr>
+<tr><td><strong>Senator Adama Koss</strong></td><td>Pro-Imperial Assembly leader</td><td>Arco Prime</td><td>Passionate, 20 years frustrated</td><td><span class="tag tag-gm">GM</span></td></tr>
+<tr><td><strong>Reva Teng</strong></td><td>Vemene/Tukera regional chief</td><td>Tukera Tower</td><td>Ice-cold, everything is a transaction</td><td><span class="tag tag-gm">GM</span></td></tr>
+<tr><td><strong>Dr. Wen Sato</strong></td><td>SuSAG campus director</td><td>Havelock-3</td><td>Warm bedside manner / corporate ruthless</td><td><span class="tag tag-gm">GM</span></td></tr>
+<tr><td><strong>Kellan Marsh</strong></td><td>McClellan Factors district mgr</td><td>Arco Prime</td><td>Affable, genuinely cares about D268</td><td><span class="tag tag-gm">GM</span></td></tr>
+<tr><td><strong>"Magistrate" Voronov</strong></td><td>CCF subsidiary / Drakon fixer</td><td>Port Kessler &rarr; fleeing</td><td>Utterly unremarkable. Forgettable by design.</td><td><span class="tag tag-gm">GM</span></td></tr>
+<tr><td><strong>Desmond Cray</strong></td><td>CCF field agent</td><td>Talos &rarr; Collace?</td><td>Surveillance specialist</td><td><span class="tag tag-gm">GM</span></td></tr>
+<tr><td><strong>Kheyra Indel</strong></td><td>Aslan diplomat</td><td>Arco-3, floor 52</td><td>Stained honor from Cassian's Hollow Treaty</td><td><span class="tag tag-gm">GM</span></td></tr>
+</table>
+
+<p><span class="tag tag-gm">GM</span> = GM-created NPC (no canon source). <span class="tag tag-canon">CANON</span> = from published material. All S13 NPCs are GM-created for the campaign.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="cassian">Cassian Voss Holt — Quick Reference</h2>
+
+<table>
+<tr><th>Stat</th><th>Value</th><th></th><th>Skill</th><th>Level</th></tr>
+<tr><td>STR</td><td>6 (+0)</td><td></td><td>Advocate</td><td>3</td></tr>
+<tr><td>DEX</td><td>10 (+1)</td><td></td><td>Diplomat</td><td>3</td></tr>
+<tr><td>END</td><td>7 (+0)</td><td></td><td>Persuade</td><td>3</td></tr>
+<tr><td>INT</td><td>12 (+2)</td><td></td><td>Admin</td><td>2</td></tr>
+<tr><td>EDU</td><td>12 (+2)</td><td></td><td>Carouse</td><td>2</td></tr>
+<tr><td>SOC</td><td>12 (+2)</td><td></td><td>Deception</td><td>2</td></tr>
+</table>
+<p><strong>Age 50. Baron, House Holt of Mertactor. Former Ambassador Extraordinary.</strong> 7 terms diplomat. TAS member. Languages: Zdetl, Oynprith. Carries: blade (TL-2), encrypted data crystals (Red Archives). Cr 200K debt. Co-owns yacht <em>Arbiter's Grace</em> (50%, frozen asset).</p>
+<p><strong>What he has that the crew needs:</strong> Political-layer evidence (shell companies, corrupted politicians, sabotaged treaties, Voronov connection, Gram noble patrons).</p>
+<p><strong>What the crew has that he needs:</strong> Operational evidence (pirate ships, weapons, financial pipelines, CCF network).</p>
+<p><strong>Homeworld:</strong> Mertactor (1537) — <strong>IN District 268.</strong> Local noble, not an Imperial outsider.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="image-prompts">Image Prompts (for ChatGPT)</h2>
+
+<div class="prompt-box">
+<div class="prompt-label">Prompt 1 — Collace from Orbit</div>
+<p>A science fiction illustration of a planet seen from orbit. The planet is mostly ocean (80% water) with scattered island landmasses, seen through a yellowish-brown atmospheric haze. The atmosphere is visibly thin — you can see stars through the limb. Clusters of enormous arcology buildings are visible on the islands, glowing with city lights. A wheel-shaped space station (five docking arms) orbits nearby. Binary star system: a bright yellow-white primary star dominates the sky, with a small dim red companion visible nearby. Style: realistic sci-fi, cool blue-green oceans, warm yellow starlight, atmospheric haze at the terminator. Dark space background. Cinematic composition.</p>
+</div>
+
+<div class="prompt-box">
+<div class="prompt-label">Prompt 2 — Kirkton Scout Base Interior</div>
+<p>Interior of a military intelligence briefing room carved into the rock of a lunar crater wall. A long table with holographic displays showing star maps and ship silhouettes. The room is dimly lit with blue-white overhead panels. Stone walls visible behind utilitarian metal panels. A woman in her 50s in a dark Scout Service uniform (no insignia visible) stands at the head of the table, calm and authoritative. Several empty chairs around the table — the crew hasn't arrived yet. Through a narrow viewport, the blue-green curve of an ocean planet is visible below. Style: gritty military sci-fi, lived-in, practical. Think Alien (1979) meets a NATO briefing room.</p>
+</div>
+
+<div class="prompt-box">
+<div class="prompt-label">Prompt 3 — Collace Arcology Street Level</div>
+<p>Street-level view inside a massive arcology — a self-contained city-building. Multiple levels visible above, connected by walkways and grav-lifts. The architecture is functional and slightly worn — this is a mid-tier level, not luxury. People wear fashionable filter respirator masks as everyday accessories (some ornate, some utilitarian). Holographic advertisements in alien scripts alongside human text. A yellow-brown haze is visible through large sealed windows. Mixed species crowd: mostly human, some tall Aslan (lion-like humanoids) in formal robes. TL-13 technology visible: personal grav-tubes, holographic signage, advanced but not magical. Warm artificial lighting. Style: Blade Runner meets Singapore hawker center — dense, functional, cosmopolitan, lived-in.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="discord-briefings">Discord Briefings to Prepare</h2>
+
+<ul class="checklist">
+<li><strong>ORACLE Collace system briefing</strong> — post to #general or #mail-james during jump week scene. Full system data, political landscape, hazards. (Already written: <code>session-prep-s12/oracle-briefing-collace.md</code> — now corrected to canon.)</li>
+<li><strong>Alice pirate faction report</strong> — post to #mail-james. Blood Profit remnants, remaining D268 pirates, Drakon-connected outfits. <em>Needs writing.</em></li>
+<li><strong>Alice Judas IRS personnel dossier</strong> — post to #mail-james. Rotation schedules, personnel profiles. <em>Needs writing.</em></li>
+<li><strong>Amy Torrelsen message to Jack</strong> — post to #mail-jackstone. Farewell beat for Jack's retirement. <em>Needs writing.</em></li>
+<li><strong>Vasquez Priority Alpha message</strong> — post to #mail-james. "Report to Kirkton. Priority Alpha." (May already exist from prior session prep.)</li>
+<li><strong>Cassian Voss Holt briefing</strong> — post to #mail-jackstone (John's new character channel). (Already written: <code>drafts/briefing-cassian-arrival.md</code>.)</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="data-audit">Data Audit — Canon vs. Generated</h2>
+
+<h3>Resolved This Session</h3>
+<div class="resolved"><strong>Population:</strong> 4 billion → ~1 billion. Canon explicit.</div>
+<div class="resolved"><strong>Allegiance:</strong> "Non-Aligned" → "Client State, Imperium" (CsIm). Canon + DB already correct.</div>
+<div class="resolved"><strong>Stars:</strong> Single → Binary (F1V "Gorie" + M3V "Sonor"). Canon confirmed.</div>
+<div class="resolved"><strong>Collace orbit:</strong> 0.469 AU → 1.6 AU. Canon orbit 4.</div>
+<div class="resolved"><strong>System bodies:</strong> Complete rebuild. All non-canon names (Meridian, Keystone, Apex, etc.) replaced with canon (Kirkton, Elkhorn, Enborne, Cathay, etc.).</div>
+<div class="resolved"><strong>Enborne moons:</strong> Four populated moons added (Cathay, Alcalall, Innivar, Orkist) with canon UWPs.</div>
+<div class="resolved"><strong>Enriched JSON:</strong> Rewritten from canon. Source tagged.</div>
+<div class="resolved"><strong>ORACLE briefing:</strong> System table, population, stars corrected.</div>
+<div class="resolved"><strong>World doc:</strong> Population, allegiance, history, culture, military, crime data added from canon.</div>
+
+<h3>Systemic Issue</h3>
+<div class="discrepancy"><strong>392 of 432 Spinward Marches systems</strong> have <code>hasWikiData: false</code> — AI-generated system bodies from physics, never reconciled with canon. Wiki reconciliation script running against all 16 subsectors. Initial D268 results: only 3 of 32 worlds have wiki system body tables (Inchin, Flexos, Collace). Most worlds have wiki pages but no detailed system data — for those, generated physics data stands as GM embellishment.</div>
+
+<h3>Remaining Discrepancies</h3>
+<div class="discrepancy"><strong>Vasquez first name:</strong> World doc says "Lira," DB says "Alexis." Neither used in play. Standardize to "Lira" (matches primary reference doc). Update DB.</div>
+<div class="discrepancy"><strong>Collace UWP Pop digit:</strong> Wiki header says B628<strong>9</strong>43-D but wiki system table shows B628<strong>8</strong>43-D. Article text confirms "approximately a billion" = Pop 9. System table Pop 8 appears to be a wiki error. Using Pop 9.</div>
+<div class="discrepancy"><strong>SVG system maps:</strong> Old SVG at <code>session-prep-s11/collace-system-map.svg</code> uses non-canon names. Needs regeneration from corrected data. New PC-safe SVG embedded in this document.</div>
+<div class="discrepancy"><strong>Outer body orbits:</strong> Canon lists "? AU" for Elkhorn, Enborne, Hali, Scint. Estimated as 2.8, 5.2, 10.0, 20.0 AU using Titius-Bode spacing. These are GM estimates, clearly labeled.</div>
+
+<h3>Root Cause</h3>
+<p>The <code>astrophysics-v2</code> generator (2026-01-07) created system bodies from UWP + stellar class using physics calculations. It explicitly flags <code>"hasWikiData": false</code>. The enrichment pipeline added creative names and magnetospheres but never consulted the Traveller Wiki for canonical system data. The wiki has had complete system body tables for Collace since at least the 2021 <em>Enemy of My Enemy</em> publication. No memory entry pointed to the subsector data files or wiki as the canonical source — this pointer was likely lost during a memory system upgrade ~6 weeks ago.</p>
+
+</div><!-- main -->
+</div><!-- layout -->
+</body>
+</html>
