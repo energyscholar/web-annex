@@ -595,6 +595,7 @@ p { margin-bottom: 0.7rem; }
   <button class="map-btn" onclick="zoomMap(1.5)" title="Zoom in">+</button>
   <button class="map-btn" onclick="zoomMap(0.667)" title="Zoom out">&minus;</button>
   <button class="map-btn" onclick="resetMap()" title="Home — reset view" style="font-size:0.75rem;font-weight:bold">&#8962;</button>
+  <button class="map-btn" id="pauseBtn" onclick="toggleAnim()" title="Pause/resume animation" style="font-size:0.85rem">&#9646;&#9646;</button>
 </div>
 </div>
 
@@ -799,6 +800,18 @@ function resetMap() {
   mapSvg.style.width = '4000px';
   mapSvg.style.height = '4000px';
   document.getElementById('mapContainer').scrollTo(800, 800);
+}
+
+// Pause/resume animation
+let animPaused = false;
+function toggleAnim() {
+  animPaused = !animPaused;
+  mapSvg.style.animationPlayState = animPaused ? 'paused' : 'running';
+  mapSvg.querySelectorAll('*').forEach(el => {
+    el.style.animationPlayState = animPaused ? 'paused' : 'running';
+  });
+  document.getElementById('pauseBtn').innerHTML = animPaused ? '&#9654;' : '&#9646;&#9646;';
+  document.getElementById('pauseBtn').title = animPaused ? 'Resume animation' : 'Pause animation';
 }
 
 // Center map on load
