@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Space Survey — Rogue Planets, District 268</title>
+<style>
+:root {
+  --bg: #060610;
+  --card: #0d1525;
+  --panel: #111a2a;
+  --text: #b0bec5;
+  --heading: #e8eaf0;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --cyan: #06b6d4;
+  --red: #ef4444;
+  --muted: #3a4a5a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+  padding: 2rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #1a2a3a;
+}
+header h1 {
+  color: var(--heading);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+header .sub {
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  margin-top: 0.3rem;
+}
+.oracle-tag {
+  display: inline-block;
+  background: rgba(6,182,212,0.15);
+  color: var(--cyan);
+  padding: 0.1rem 0.6rem;
+  border-radius: 3px;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  margin-top: 0.5rem;
+}
+.classification {
+  display: inline-block;
+  background: rgba(245,158,11,0.15);
+  color: var(--amber);
+  padding: 0.1rem 0.6rem;
+  border-radius: 3px;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  margin-top: 0.3rem;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 2.5rem;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #1a2a3a;
+}
+h3 {
+  color: var(--heading);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+th { background: #152030; color: var(--heading); padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid #2a3a4a; }
+td { padding: 0.45rem 0.7rem; border-bottom: 1px solid #111a2a; }
+tr:hover td { background: rgba(59,130,246,0.03); }
+
+.card { background: var(--card); border: 1px solid #1a2a3a; border-radius: 6px; padding: 1rem 1.2rem; margin: 1rem 0; }
+.card h3 { text-transform: uppercase; letter-spacing: 0.05em; }
+.card-cyan { border-left: 3px solid var(--cyan); }
+.card-amber { border-left: 3px solid var(--amber); }
+.card-green { border-left: 3px solid var(--green); }
+.card-red { border-left: 3px solid var(--red); }
+.card-blue { border-left: 3px solid var(--blue); }
+.card-purple { border-left: 3px solid #a855f7; }
+
+.tag { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 3px; font-size: 0.7rem; letter-spacing: 0.05em; font-weight: bold; vertical-align: middle; }
+.tag-danger { background: rgba(239,68,68,0.15); color: var(--red); }
+.tag-warning { background: rgba(245,158,11,0.15); color: var(--amber); }
+.tag-info { background: rgba(6,182,212,0.15); color: var(--cyan); }
+.tag-source { background: rgba(34,197,94,0.15); color: var(--green); }
+
+ul { margin: 0.5rem 0 0.5rem 1.5rem; }
+li { margin-bottom: 0.3rem; }
+
+.briefing-block {
+  background: rgba(6,182,212,0.06);
+  border: 1px solid rgba(6,182,212,0.2);
+  border-radius: 4px;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+}
+
+.route-diagram {
+  background: var(--card);
+  border: 1px solid #1a2a3a;
+  border-radius: 6px;
+  padding: 1.2rem;
+  margin: 1rem 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: var(--cyan);
+  text-align: center;
+  line-height: 1.8;
+}
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Deep Space Survey &mdash; Rogue Planets</h1>
+<div class="sub">District 268 &bull; Spinward Marches Sector</div>
+<div class="oracle-tag">ORACLE LIBRARY DATA &bull; IISS SURVEY RECORDS</div>
+<div class="classification">CREW ACCESS &mdash; ISS ASTRAL DAWN</div>
+</header>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Background</h2>
+
+<p>The spinward edge of District 268 has a navigational gap. The main trade corridor runs through Walston&ndash;Flexos&ndash;Collace (hexes 1232&ndash;1237), but reaching the spinward systems (Squallia 1133, Faldor 1131, Bowman 1132) requires Jump-2 minimum. Jump-1 ships are locked out. This chokes commerce, limits patrol range, and keeps the spinward systems economically marginal.</p>
+
+<p>Two rogue planets &mdash; gravitationally unbound from any star &mdash; have been identified in this gap. They offer potential deep space refueling waypoints that could open the route to Jump-1 traffic.</p>
+
+<div class="briefing-block">
+<strong>What are rogue planets?</strong> Planets ejected from their parent star systems during formation, or formed independently from gas cloud collapse. Current astrophysical estimates suggest 1&ndash;10 rogue planets per star in the galaxy. They are difficult to detect without deliberate infrared surveys, which is why these were not catalogued until recently.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Discovery History</h2>
+
+<table>
+<tr><th>Date</th><th>Event</th><th>Source</th></tr>
+<tr>
+  <td>~1055</td>
+  <td>Free prospector <strong>Kael Mardsen</strong> reports an infrared anomaly in hex 1235 while running speculative deep-space mineral surveys. Files a navigation advisory with the Collace Scout office. Coordinates are logged but not followed up &mdash; "something warm where nothing should be warm." Mardsen sells the data to several parties; nobody acts on it.</td>
+  <td><span class="tag tag-source">PROSPECTOR FILING</span></td>
+</tr>
+<tr>
+  <td>1082</td>
+  <td><strong>IISS Survey Mission 1082-D268/S7</strong> dispatched from Kirkton. Two scout ships survey hexes 1235 and 1134 over a six-week deployment. Confirm rogue gas giant in 1235 (designated <strong>Erebus</strong>) and rogue super-Earth in 1134 (designated <strong>Nerthus</strong>). Detailed sensor sweeps, atmospheric sampling of Erebus, surface mapping of Nerthus. Survey data filed with IISS Sector Archive. No follow-up development authorized &mdash; "insufficient strategic value at this time."</td>
+  <td><span class="tag tag-source">IISS ARCHIVE</span></td>
+</tr>
+<tr>
+  <td>1098</td>
+  <td>Collace Assembly discusses deep-space refueling infrastructure. Erebus mentioned as a candidate. Motion tabled due to cost estimates and political gridlock over Imperial membership debate. No action taken.</td>
+  <td><span class="tag tag-source">ASSEMBLY RECORD</span></td>
+</tr>
+<tr>
+  <td>1098</td>
+  <td>Collace Naval Office requests budget for a refueling survey. Denied.</td>
+  <td><span class="tag tag-source">NAVAL RECORD</span></td>
+</tr>
+<tr>
+  <td>1118</td>
+  <td><strong>IISS Research Mission 1118-D268/R2</strong> dispatched from Kirkton. Three personnel, one Type-S scout. Mission: detailed subsurface survey of Nerthus, thermal budget analysis, extended atmospheric study of Erebus. <strong>Mission failed to return.</strong> Last contact: routine status report from Nerthus orbit, day 12. Search-and-rescue found no wreckage, no beacon, no debris field. Crew declared missing, presumed dead. Cause unknown.</td>
+  <td><span class="tag tag-danger">IISS INCIDENT REPORT</span></td>
+</tr>
+<tr>
+  <td>1125</td>
+  <td>Present day. No further missions authorized. Survey data from 1082 remains the most recent reliable source. The 1118 loss is noted as an unresolved incident in IISS files.</td>
+  <td>&mdash;</td>
+</tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Route Potential</h2>
+
+<div class="route-diagram">
+Collace (1237) &mdash;&mdash;J2&mdash;&mdash;&gt; <strong>EREBUS</strong> (1235) &mdash;&mdash;J2&mdash;&mdash;&gt; Squallia (1133)<br>
+Flexos (1233) &mdash;&mdash;J2&mdash;&mdash;&gt; <strong>NERTHUS</strong> (1134) &mdash;&mdash;J1&mdash;&mdash;&gt; Squallia (1133)<br>
+<br>
+<span style="color:var(--green)">&#9654; Nerthus&ndash;Squallia link opens the route to Jump-1 ships</span>
+</div>
+
+<p>With both planets operational as refueling waypoints, the spinward transit no longer requires Jump-2. This is a potential commerce breakthrough for District 268's isolated spinward systems.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="erebus">Erebus &mdash; Rogue Gas Giant (Hex 1235)</h2>
+
+<div class="card card-cyan">
+<h3>Physical Profile</h3>
+<table>
+<tr><td><strong>Type</strong></td><td>Small gas giant (Saturn analogue)</td></tr>
+<tr><td><strong>Mass</strong></td><td>~0.3 Jupiter masses</td></tr>
+<tr><td><strong>Radius</strong></td><td>~55,000 km</td></tr>
+<tr><td><strong>Atmosphere</strong></td><td>96% H&#x2082;, 3% He, trace CH&#x2084;/NH&#x2083;</td></tr>
+<tr><td><strong>Cloud-top Temperature</strong></td><td>~60K (internal heat only &mdash; no stellar radiation)</td></tr>
+<tr><td><strong>Visibility</strong></td><td>Faint infrared glow from gravitational contraction. Invisible to optical sensors at interstellar range.</td></tr>
+<tr><td><strong>Ring System</strong></td><td>Ice and rock debris ring. Visible only on radar/IR.</td></tr>
+<tr><td><strong>Moons</strong></td><td>3&ndash;4 detected. One icy body large enough for surface operations.</td></tr>
+<tr><td><strong>Parent Star</strong></td><td>None. Gravitationally unbound.</td></tr>
+</table>
+</div>
+
+<div class="card card-green">
+<h3>Fuel Extraction</h3>
+<p><strong>Method:</strong> Standard atmospheric skimming. Hydrogen is the primary atmospheric component. Conventional fuel scoops are effective.</p>
+<p><strong>Supply:</strong> Functionally unlimited. Equivalent to any inhabited-system gas giant.</p>
+<p><strong>Advantage:</strong> Same-day refueling. No infrastructure required beyond the ship's own scoops.</p>
+</div>
+
+<div class="card card-red">
+<h3>Hazards <span class="tag tag-danger">CREW ADVISORY</span></h3>
+<ul>
+<li><strong>Total darkness.</strong> No star. All operations by sensor, radar, and floodlight. Cloud layers are black. The ring system is invisible to the naked eye. Pilots report spatial disorientation and vertigo.</li>
+<li><strong>Radiation belts.</strong> Saturn-class magnetosphere with trapped charged particles. Skimming requires specific entry corridors through the magnetotail. Unshielded exposure is lethal within hours. Monitor radiation dosimeters continuously.</li>
+<li><strong>Atmospheric turbulence.</strong> Without stellar heating, weather is driven by internal heat alone. Storm cells are deep, slow, and unpredictable. Downdrafts can drag a ship into the high-pressure interior with little warning.</li>
+<li><strong>Ring particle impacts.</strong> Fuel skimming orbits may intersect ring debris trajectories. Micro-impacts at orbital velocity. Maintain active sensor watch and plot approach vectors to minimize ring-plane crossings.</li>
+</ul>
+</div>
+
+<div class="briefing-block">
+<strong>Operational summary:</strong> Erebus is a straightforward refueling stop &mdash; mechanically identical to any gas giant. The hazards are environmental, not exotic. The difficulty is the darkness: every procedure that normally relies on visual reference must be done on instruments. Crew should expect elevated stress during approach and skimming operations.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="nerthus">Nerthus &mdash; Rogue Super-Earth (Hex 1134)</h2>
+
+<div class="card card-purple">
+<h3>Physical Profile</h3>
+<table>
+<tr><td><strong>Type</strong></td><td>Super-Earth with global ice shell over subsurface liquid ocean</td></tr>
+<tr><td><strong>Mass</strong></td><td>~3 Earth masses</td></tr>
+<tr><td><strong>Radius</strong></td><td>~9,500 km</td></tr>
+<tr><td><strong>Surface</strong></td><td>40&ndash;80 km water ice. Surface temperature ~35K.</td></tr>
+<tr><td><strong>Subsurface Ocean</strong></td><td>~200 km deep liquid water. 275&ndash;280K at the rocky seafloor. Heated by radioactive decay (U-238, Th-232, K-40).</td></tr>
+<tr><td><strong>Atmosphere</strong></td><td>Nitrogen/argon, ~0.01 atm. Too thin to breathe. Enough to carry sound faintly.</td></tr>
+<tr><td><strong>Hydrothermal Vents</strong></td><td>Detected at ocean floor via thermal mapping (1082 survey). Iron-sulfur chemistry, alkaline pH.</td></tr>
+<tr><td><strong>Moons</strong></td><td>None detected.</td></tr>
+<tr><td><strong>Parent Star</strong></td><td>None. Gravitationally unbound.</td></tr>
+</table>
+</div>
+
+<div class="card card-green">
+<h3>Fuel Extraction</h3>
+<p><strong>Method:</strong> Two-stage process.</p>
+<ol>
+<li>Mine surface ice (trivially abundant &mdash; the entire planet is covered)</li>
+<li>Melt &rarr; electrolyze &rarr; liquid hydrogen</li>
+</ol>
+<p><strong>Supply:</strong> Functionally infinite. The ice sheet is 40&ndash;80 km thick across the entire surface.</p>
+<p><strong>Requirement:</strong> Surface installation with power plant and electrolysis unit. A TL-12+ prefab station could be operational within weeks. Not instant like gas giant skimming &mdash; but no tanker dependency.</p>
+<p><strong>Advantage:</strong> Once operational, eliminates tanker logistics entirely. The Nerthus&ndash;Squallia link (1 hex, J1) opens the spinward route to all traffic.</p>
+</div>
+
+<div class="card card-red">
+<h3>Hazards <span class="tag tag-danger">CREW ADVISORY</span></h3>
+<ul>
+<li><strong>Total darkness.</strong> Same as Erebus &mdash; no parent star, no ambient light. Surface operations by floodlight only.</li>
+<li><strong>Cryovolcanism.</strong> The ice shell is geologically active. Geysers of liquid water and ammonia erupt without warning &mdash; plumes reaching 50+ km altitude. Surface bases near fissure zones are at risk of being hit, buried, or toppled.</li>
+<li><strong>Ice quakes.</strong> Tidal stresses from uneven radiogenic heating cause the ice shell to shift. Crevasses open without warning. Equipment can fall into melt-pockets.</li>
+<li><strong>Subsurface instability.</strong> The ice is not solid bedrock. Thermal gradients create weak zones. Load-bearing assessments required before establishing any permanent structure.</li>
+</ul>
+</div>
+
+<div class="card card-amber">
+<h3>Scientific Interest <span class="tag tag-info">XENOBIOLOGY</span></h3>
+<p>The 1082 IISS survey detected hydrothermal vent activity at the ocean floor. Thermal mapping indicates an active geochemical system consistent with chemosynthetic biology &mdash; life sustained by chemical energy rather than sunlight.</p>
+<p><strong>No direct biological sampling has been conducted.</strong> The 1118 mission was intended to perform subsurface surveys but was lost before completing its objectives.</p>
+<p>If confirmed, Nerthus would represent a biosphere that has existed for billions of years without ever seeing a star. The scientific implications are significant.</p>
+</div>
+
+<div class="briefing-block">
+<strong>Operational summary:</strong> Nerthus requires more investment than Erebus &mdash; surface infrastructure for ice mining vs. simple atmospheric skimming. But it is the higher-value target: the J1 link to Squallia makes it the commerce breakthrough. The scientific potential of the subsurface ocean adds long-term value. The missing 1118 mission is an unresolved concern.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Navigation Data</h2>
+
+<table>
+<tr><th>From</th><th>To</th><th>Jump</th><th>Fuel at Destination</th></tr>
+<tr><td>Collace (1237)</td><td>Erebus (1235)</td><td>J2</td><td>Gas giant skimming (immediate)</td></tr>
+<tr><td>Erebus (1235)</td><td>Squallia (1133)</td><td>J2</td><td>Squallia starport (C-class)</td></tr>
+<tr><td>Flexos (1233)</td><td>Nerthus (1134)</td><td>J2</td><td>Ice mining (requires installation)</td></tr>
+<tr><td>Nerthus (1134)</td><td>Squallia (1133)</td><td>J1</td><td>Squallia starport (C-class)</td></tr>
+<tr><td>Walston (1232)</td><td>Erebus (1235)</td><td>J2</td><td>Gas giant skimming (immediate)</td></tr>
+<tr><td>Collace (1237)</td><td>Nerthus (1134)</td><td>&mdash;</td><td>Beyond J2 range. Route via Flexos or Erebus.</td></tr>
+</table>
+
+<div class="card card-amber">
+<h3>Missing Mission Warning <span class="tag tag-danger">UNRESOLVED</span></h3>
+<p>IISS Research Mission 1118-D268/R2 was lost at Nerthus in 1118. Three crew, one Type-S scout. Last contact from Nerthus orbit. No wreckage found. <strong>Cause of loss is unknown.</strong></p>
+<p>Any expedition to Nerthus should be conducted with appropriate caution. Maintain continuous communication schedules. File flight plans with Kirkton Scout Base before departure.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Strategic Assessment</h2>
+
+<div class="two-col">
+<div class="card card-cyan">
+<h3>Erebus</h3>
+<ul>
+<li>Immediate refueling capability</li>
+<li>No infrastructure investment needed</li>
+<li>J2 from Collace &mdash; accessible now</li>
+<li>Environmental hazards are known and manageable</li>
+<li>Enables Collace&ndash;Squallia at J2</li>
+</ul>
+</div>
+<div class="card card-purple">
+<h3>Nerthus</h3>
+<ul>
+<li>Requires surface installation (weeks)</li>
+<li>Higher investment, higher payoff</li>
+<li>J1 to Squallia &mdash; opens route to all ships</li>
+<li>Scientific value (potential biosphere)</li>
+<li>Unresolved safety concern (missing mission)</li>
+</ul>
+</div>
+</div>
+
+<p>Whoever controls these refueling points controls the spinward route through District 268. Collace, the Imperium, Trexalon, and independent operators all have reason to claim them.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<div style="margin-top:2.5rem; padding-top:1rem; border-top:1px solid #1a2a3a; text-align:center;">
+<span style="color:var(--muted); font-size:0.7rem; letter-spacing:0.1em;">ORACLE LIBRARY DATA &bull; IISS SURVEY ARCHIVE &bull; COMPILED 1125</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rogue Planets — GM Notes</title>
+<style>
+:root {
+  --bg: #060610;
+  --card: #0d1525;
+  --text: #b0bec5;
+  --heading: #e8eaf0;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --cyan: #06b6d4;
+  --red: #ef4444;
+  --muted: #3a4a5a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+  padding: 2rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+header { text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #1a2a3a; }
+header h1 { color: var(--heading); font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.15em; }
+header .sub { color: var(--muted); font-size: 0.75rem; margin-top: 0.3rem; }
+.gm-tag { display: inline-block; background: rgba(239,68,68,0.15); color: var(--red); padding: 0.15rem 0.7rem; border-radius: 3px; font-size: 0.7rem; letter-spacing: 0.12em; font-weight: bold; margin-top: 0.5rem; }
+.player-link { display: inline-block; background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.3); border-radius: 4px; padding: 0.4rem 1rem; margin-top: 0.8rem; font-size: 0.8rem; }
+.player-link a { color: var(--cyan); text-decoration: none; }
+.player-link a:hover { text-decoration: underline; }
+
+h2 { color: var(--heading); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2.5rem; margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid #1a2a3a; }
+h3 { color: var(--heading); font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+th { background: #152030; color: var(--heading); padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid #2a3a4a; }
+td { padding: 0.45rem 0.7rem; border-bottom: 1px solid #111a2a; }
+
+.card { background: var(--card); border: 1px solid #1a2a3a; border-radius: 6px; padding: 1rem 1.2rem; margin: 1rem 0; }
+.card h3 { text-transform: uppercase; letter-spacing: 0.05em; }
+.card-red { border-left: 3px solid var(--red); }
+.card-amber { border-left: 3px solid var(--amber); }
+.card-green { border-left: 3px solid var(--green); }
+.card-cyan { border-left: 3px solid var(--cyan); }
+.card-purple { border-left: 3px solid #a855f7; }
+.card-blue { border-left: 3px solid var(--blue); }
+
+.tag { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 3px; font-size: 0.7rem; letter-spacing: 0.05em; font-weight: bold; }
+.tag-gm { background: rgba(239,68,68,0.15); color: var(--red); }
+.tag-secret { background: rgba(168,85,247,0.15); color: #a855f7; }
+.tag-hook { background: rgba(34,197,94,0.15); color: var(--green); }
+
+ul { margin: 0.5rem 0 0.5rem 1.5rem; }
+li { margin-bottom: 0.3rem; }
+
+.boxed-text {
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 4px;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+.boxed-text strong { font-style: normal; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Rogue Planets &mdash; GM Notes</h1>
+<div class="sub">What the players DON'T know</div>
+<div class="gm-tag">GM EYES ONLY</div>
+<div class="player-link"><a href="../maps/rogue-planets.html">Player Briefing &rarr;</a> (safe to share)</div>
+</header>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>What Players Know vs. What's Real</h2>
+
+<table>
+<tr><th>Topic</th><th>Player Version</th><th>GM Truth</th></tr>
+<tr>
+  <td>Discovery</td>
+  <td>Prospector filing, IISS surveys</td>
+  <td>Same &mdash; the discovery history is genuine</td>
+</tr>
+<tr>
+  <td>Missing 1118 mission</td>
+  <td>"Cause unknown"</td>
+  <td>Found something at Nerthus they weren't prepared for. See below.</td>
+</tr>
+<tr>
+  <td>Nerthus thermal budget</td>
+  <td>"Radioactive decay"</td>
+  <td>The numbers don't add up. Something else is keeping the ocean liquid. Ancient installation.</td>
+</tr>
+<tr>
+  <td>Subsurface life</td>
+  <td>"Chemosynthetic biology possible"</td>
+  <td>Confirmed. But evolved in response to the Ancient installation's waste heat, not natural volcanism. The ecosystem is an artifact.</td>
+</tr>
+<tr>
+  <td>Erebus location</td>
+  <td>"Convenient refueling waypoint"</td>
+  <td>Suspiciously convenient. The trajectory is too perfect &mdash; placed or nudged by Ancients 300,000 years ago.</td>
+</tr>
+<tr>
+  <td>Strategic value</td>
+  <td>"Commerce breakthrough"</td>
+  <td>Also true. CCF/Drakon will want to control or deny this route.</td>
+</tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>The Ancient Connection</h2>
+
+<div class="card card-purple">
+<h3>Nerthus: Subsurface Installation <span class="tag tag-secret">SECRET</span></h3>
+<p>At the ocean floor, near the hydrothermal vents, there is a structure. Metal. Geometric. Ancient. It has been running for approximately 300,000 years.</p>
+<p><strong>Function:</strong> Thermal maintenance. The installation is what keeps Nerthus's subsurface ocean liquid. Without it, the planet would have frozen solid billions of years ago. The radiogenic heating budget is insufficient &mdash; Max Planck will eventually notice this anomaly if he examines the thermal data carefully.</p>
+<p><strong>The life is an artifact.</strong> The chemosynthetic ecosystem around the vents evolved in response to the installation's waste heat. Remove the installation and the ocean freezes. The biosphere dies. The ecosystem exists because the Ancients decided to keep this planet warm.</p>
+<p><strong>Purpose:</strong> Waystation. The Ancients placed a fuel depot here &mdash; Erebus for quick hydrogen, Nerthus for a more permanent base. Both planets are on engineered trajectories. This is infrastructure, not accident.</p>
+</div>
+
+<div class="card card-amber">
+<h3>Erebus: Engineered Orbit <span class="tag tag-secret">SECRET</span></h3>
+<p>Erebus's trajectory through interstellar space is too stable. Natural rogue planets have essentially random, chaotic paths. This one has been on a precise, non-chaotic trajectory between star systems for hundreds of thousands of years. Astrodynamics analysis (if anyone runs one) reveals it was given a velocity kick at a specific point in the deep past.</p>
+<p>There may also be an Ancient navigation beacon buried in one of the moons &mdash; emitting a faint, specific-frequency signal. This is how Mardsen "found" it &mdash; he was using equipment sensitive enough to pick up the signal without knowing what he was detecting.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>The Missing Mission (1118)</h2>
+
+<div class="card card-red">
+<h3>What Happened to IISS 1118-D268/R2 <span class="tag tag-gm">GM DECISION NEEDED</span></h3>
+<p>Three crew, one Type-S. Last contact from Nerthus orbit, day 12. Options (pick one or combine):</p>
+<ul>
+<li><strong>Ice quake during surface ops.</strong> The ship was on the surface when a cryovolcanic event buried it under debris. It's down there, frozen, with the crew. Recoverable if someone drills in the right spot. The wreckage contains partial data on what they found at the seafloor.</li>
+<li><strong>They drilled through.</strong> Reached the ocean, found the Ancient installation, and something activated. The ship was pulled under or disabled by an Ancient defense system. The installation is not hostile &mdash; but it has automated responses to unauthorized contact that a TL-12 scout ship couldn't survive.</li>
+<li><strong>They're alive.</strong> The ship is trapped in an ice pocket, systems in low-power mode. The crew (or their descendants, if the installation has stasis technology) are in the ocean, kept alive by the installation's environmental systems. This is the maximum-drama option.</li>
+<li><strong>Unrelated accident.</strong> Jump drive malfunction on departure. The ship misjumped and is lost in deep space. Nothing to do with Nerthus itself. This option keeps Nerthus mysterious without adding another layer of danger.</li>
+</ul>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Von Sydo Connection</h2>
+
+<div class="card card-purple">
+<h3>The Thematic Rhyme <span class="tag tag-hook">CHARACTER ARC</span></h3>
+<p>Von Sydo detected non-biological life in Max's 2D electron gas wafer chip (the Flat). Now imagine his psionic senses picking up signatures from below Nerthus's ice. Life where it has no business being.</p>
+<p>The Flat was artificial life in silicon. Nerthus is natural life in darkness. Both challenge assumptions about where consciousness and biology can exist. Von Sydo is becoming the person who <em>notices</em> these things.</p>
+<p><strong>Mechanical beat:</strong> When the crew first orbits Nerthus, Von Sydo should roll for psionic detection. On success: "Something is alive down there. Not the way electronics are alive. Not the way the Flat is alive. Something older." On a strong success: "And there's something else. Deeper. Not alive. But... running."</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Discovery Arc &mdash; Session Pacing</h2>
+
+<table>
+<tr><th>Phase</th><th>Sessions</th><th>Content</th><th>Player Hook</th></tr>
+<tr>
+  <td><strong>1. The Rumor</strong></td>
+  <td>1 scene</td>
+  <td>At Collace, PCs hear about Mardsen's IR anomaly. Coordinates available. Or naval briefing mentions the survey gap.</td>
+  <td>PCs have already discussed building a refueling station. This answers their ambition.</td>
+</tr>
+<tr>
+  <td><strong>2. Finding Erebus</strong></td>
+  <td>1 session</td>
+  <td>Jump to 1235. Gas giant in the dark. First fuel skimming in total darkness. Radiation. They pull it off.</td>
+  <td>On the way out, Von Sydo's deep scan picks up a second anomaly in hex 1134.</td>
+</tr>
+<tr>
+  <td><strong>3. The Commerce Play</strong></td>
+  <td>Downtime</td>
+  <td>Claim Erebus, establish nav beacons, contract for a station. Business/political game.</td>
+  <td>Who controls the route? Collace? Imperium? Pirates? CCF?</td>
+</tr>
+<tr>
+  <td><strong>4. Finding Nerthus</strong></td>
+  <td>1 session</td>
+  <td>Jump to 1134. Ice world. Surface survey. Von Sydo senses something below. Max notices the thermal anomaly.</td>
+  <td>"The heat budget doesn't add up. Something is keeping that ocean liquid."</td>
+</tr>
+<tr>
+  <td><strong>5. The Drill</strong></td>
+  <td>1&ndash;2 sessions</td>
+  <td>Decision: drill through the ice? Equipment, time, cryovolcanism risk. If they do: the ocean. Life. And deeper &mdash; the installation.</td>
+  <td>Max wants samples. Von Sydo feels the installation. The players decide how far to go.</td>
+</tr>
+<tr>
+  <td><strong>6. What's Down There</strong></td>
+  <td>Open-ended</td>
+  <td>Ancient installation exploration. What is it? Why here? What does it connect to?</td>
+  <td>Campaign-defining discovery.</td>
+</tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Political Complications</h2>
+
+<div class="card card-amber">
+<h3>Who Wants to Control the Route</h3>
+<ul>
+<li><strong>Collace Assembly:</strong> This is Collace's route to spinward economic dominance. Pro-Imperial faction sees it as proof of value to the Imperium. Anti-Imperial faction wants it kept independent.</li>
+<li><strong>The Imperium (via IISS):</strong> Scout Service has prior survey claim. Would prefer to manage this as an IISS facility. Vasquez may have opinions.</li>
+<li><strong>Trexalon (TTC):</strong> Does NOT want Collace to control a major trade route. Will attempt to sabotage, claim-jump, or politicize the discovery.</li>
+<li><strong>CCF/Drakon Syndicate:</strong> A new route they don't control undermines their logistics monopoly. Voronov will try to either take it over or shut it down. This directly connects to the Arrangement thread.</li>
+<li><strong>Independent operators:</strong> Pirates, free traders, prospectors. An unpoliced refueling point in deep space is either an opportunity or a hunting ground.</li>
+</ul>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Robin's Laws Engagement</h2>
+
+<table>
+<tr><th>Player</th><th>Type</th><th>Hook</th></tr>
+<tr><td>James (jaimesbeam)</td><td>Tactician</td><td>Route logistics, station planning, political chess of who controls it</td></tr>
+<tr><td>Les (Von Sydo)</td><td>Specialist</td><td>Psionic detection scenes. "You're the only one who can sense this."</td></tr>
+<tr><td>Dan (Max)</td><td>Method Actor</td><td>Xenobiology of the subsurface ocean. Thermal budget puzzle. "Write the paper."</td></tr>
+<tr><td>Chris (Asao)</td><td>Butt-Kicker</td><td>Environmental combat &mdash; cryovolcanism, radiation, ring hazards. Protecting the crew.</td></tr>
+<tr><td>Marina</td><td>Storyteller</td><td>Missing mission mystery. "What happened to those three scouts?"</td></tr>
+<tr><td>John (Cassian)</td><td>Storyteller</td><td>Political dimension &mdash; who gets to claim a new trade route? Legal frameworks.</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Tone Notes</h2>
+
+<div class="card card-cyan">
+<h3>Erebus</h3>
+<p>Hard SF submarine warfare. Dark, tense, instruments-only. The gas giant is big and indifferent. Danger is physics, not malice.</p>
+</div>
+
+<div class="card card-purple">
+<h3>Nerthus</h3>
+<p>First-contact exploration. Awe mixed with unease. The ice is beautiful and silent. The ocean is warm and alive. The Ancient installation is <em>patient</em> &mdash; it has been waiting for 300,000 years. It does not care about another few months.</p>
+</div>
+
+<p><strong>Neither planet should feel like a dungeon crawl.</strong> These are natural environments. The dangers are environmental, not adversarial. Tension comes from isolation, the unknown, and the players' ambitions outrunning their caution.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Boxed Text</h2>
+
+<div class="boxed-text">
+<strong>Read Aloud (Arriving at Erebus):</strong> Jump space tears open and you're in darkness. Not the darkness of deep space &mdash; you can see stars behind you, the faint smear of the Spinward Main. But ahead, where there should be nothing, there's an <em>absence</em>. A disk of black that blocks the stars. Your sensors paint it in false color: hydrogen, helium, methane. Cloud bands in infrared. A ring system, invisible to the eye, glowing faintly on radar like a halo around nothing.<br><br>
+Erebus. A Saturn that never had a sun. It has been drifting through interstellar space for longer than humanity has been spacefaring, and it will keep drifting long after you leave. It does not care that you are here.
+</div>
+
+<div class="boxed-text">
+<strong>Read Aloud (Arriving at Nerthus):</strong> It's smaller than you expected. A pale sphere in your floodlights, blue-white ice scarred with fracture lines like veins under skin. No atmosphere worth mentioning &mdash; your lights hit the surface unscattered, sharp-edged. The shadows are absolute.<br><br>
+The surface temperature reads 35 Kelvin. Two hundred and forty degrees below freezing. And yet, somewhere beneath forty kilometers of ice, the sensors say there is liquid water. An ocean that has never seen sunlight. Warm. Alive, maybe. The thermal signature doesn't match the radiogenic models. Something is keeping this world from freezing solid, and the 1082 survey team couldn't explain what.
+</div>
+
+<div class="boxed-text">
+<strong>Read Aloud (Von Sydo at Nerthus &mdash; if psionic roll succeeds):</strong> It hits you as you cross the terminator into Nerthus's shadow. Not the Flat &mdash; you know what the Flat feels like now, the brittle hum of electrons thinking in silicon. This is different. Slower. Organic. Like holding your hand over soil and feeling the heat of decomposition.<br><br>
+Something is alive under the ice. Not intelligence &mdash; not yet, maybe not ever. But alive. Billions of organisms in warm water, in total darkness, and they have been there for a very long time.<br><br>
+And beneath that &mdash; deeper &mdash; something else. Not alive. But running. Patient. Old.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<div style="margin-top:2.5rem; padding-top:1rem; border-top:1px solid #1a2a3a; text-align:center;">
+<span style="color:var(--muted); font-size:0.7rem; letter-spacing:0.1em;">GM NOTES &bull; NOT FOR PLAYER DISTRIBUTION</span>
+</div>
+
+</body>
+</html>
