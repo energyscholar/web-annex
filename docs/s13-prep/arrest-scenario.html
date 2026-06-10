@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S13 Arrest Scenario — GM Only</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.7; padding: 2rem; max-width: 900px; margin: 0 auto; }
+
+h1 { color: var(--heading); font-size: 1.8rem; margin-bottom: 0.2rem; }
+h2 { color: var(--heading); font-size: 1.4rem; margin-top: 2.5rem; margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid #334155; }
+h3 { color: var(--heading); font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+h4 { color: var(--amber); font-size: 0.9rem; margin-top: 1rem; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
+p { margin-bottom: 0.8rem; }
+
+.subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
+.gm-warning { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: var(--red); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-align: center; margin-bottom: 2rem; letter-spacing: 0.05em; }
+
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; background: var(--card); border-radius: 8px; overflow: hidden; font-size: 0.88rem; }
+th { background: #334155; color: var(--heading); padding: 0.5rem 0.7rem; text-align: left; font-weight: 600; }
+td { padding: 0.45rem 0.7rem; border-top: 1px solid #334155; }
+
+.card { background: var(--card); border-radius: 8px; padding: 1.1rem 1.3rem; margin: 1rem 0; }
+.card-red { border-left: 4px solid var(--red); }
+.card-amber { border-left: 4px solid var(--amber); }
+.card-green { border-left: 4px solid var(--green); }
+.card-blue { border-left: 4px solid var(--blue); }
+.card-purple { border-left: 4px solid var(--purple); }
+.card-cyan { border-left: 4px solid var(--cyan); }
+.card-title { font-weight: 700; color: var(--heading); margin-bottom: 0.5rem; }
+
+.boxed-text { background: #1a1a2e; border-left: 3px solid var(--cyan); padding: 1rem 1.25rem; margin: 1rem 0; font-style: italic; border-radius: 0 8px 8px 0; }
+.boxed-text strong { font-style: normal; }
+.boxed-npc { background: #1a1a2e; border-left: 3px solid var(--purple); padding: 1rem 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+.boxed-npc strong { color: var(--purple); }
+
+.tag { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600; }
+.tag-true { background: rgba(239,68,68,0.2); color: var(--red); }
+.tag-false { background: rgba(34,197,94,0.2); color: var(--green); }
+.tag-spin { background: rgba(251,191,36,0.2); color: var(--golden); }
+.tag-post { background: rgba(168,85,247,0.2); color: var(--purple); }
+.tag-canon { background: rgba(34,197,94,0.2); color: var(--green); }
+.tag-gm { background: rgba(168,85,247,0.2); color: var(--purple); }
+
+.timeline { border-left: 2px solid #334155; margin: 1rem 0 1rem 1rem; padding-left: 1.5rem; }
+.timeline-item { position: relative; margin-bottom: 1.2rem; }
+.timeline-item::before { content: ''; position: absolute; left: -1.85rem; top: 0.5rem; width: 10px; height: 10px; border-radius: 50%; background: var(--blue); border: 2px solid #334155; }
+.timeline-item.active::before { background: var(--red); }
+.timeline-item.future::before { background: var(--amber); }
+.timeline-day { color: var(--amber); font-size: 0.8rem; font-weight: 600; }
+.timeline-event { font-size: 0.9rem; }
+
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding: 0.25rem 0; font-size: 0.9rem; }
+.checklist li::before { content: "☐ "; color: var(--muted); }
+
+.cross-ref { color: var(--cyan); font-size: 0.78rem; }
+.cross-ref::before { content: "↳ "; }
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>The Arrest</h1>
+<p class="subtitle">S13 Enemy Action Scenario &bull; Voronov's Preemptive Strike</p>
+<div class="gm-warning">GM EYES ONLY &mdash; Never share with players</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Strategic Logic</h2>
+
+<p>Voronov knows the crew is coming. Desmond Cray reported from Talos: the Astral Dawn and its prize vessel departed for Collace. Cray also reported that the crew detected his surveillance and chose not to confront him — which tells Voronov they're operationally sophisticated.</p>
+
+<p>Voronov can't fight them. He's a political operative — his weapons are money, influence, and procedure. His goal isn't conviction. His goals are:</p>
+
+<div class="card card-red">
+<div class="card-title">Voronov's Three Objectives</div>
+<ol>
+<li><strong>72 hours of chaos.</strong> Enough time to clean his office at Port Kessler, destroy records, and flee to Trexalon where anti-Imperial sentiment protects him.</li>
+<li><strong>Poison the evidence.</strong> When the crew eventually presents the Arrangement evidence, it needs to look like retaliation from discredited foreign agents, not a legitimate intelligence find.</li>
+<li><strong>Political damage.</strong> Every day the crew spends in a Collace jail cell is a day the anti-Imperial faction can say "See? The Imperium sends disguised warships and spies. This is what membership looks like."</li>
+</ol>
+</div>
+
+<p class="cross-ref">Voronov profile: <a href="index.html#npcs">NPC Reference</a> — "Utterly unremarkable. Forgettable by design."</p>
+<p class="cross-ref">CCF surveillance thread: Cray at Talos (S12). Dead-drop at Suite 412, Port Kessler — same building as Three Moons Reinsurance (Drakon shell company).</p>
+<p class="cross-ref">Q-ship cover blown: Blood Profit pack's encrypted message from Pagaton propagated through intel networks (S12, Alice confirmed).</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Timeline</h2>
+
+<div class="timeline">
+<div class="timeline-item">
+  <div class="timeline-day">Day 1 (Arrival)</div>
+  <div class="timeline-event">Astral Dawn drops out of jump. Scout escort to Kirkton. Debrief with Vasquez begins. Blood Fang docks at Kirkton. <strong>Voronov learns of arrival from port traffic monitoring.</strong> Begins activating political contacts.</div>
+</div>
+<div class="timeline-item">
+  <div class="timeline-day">Day 2 (Surface)</div>
+  <div class="timeline-event">Crew goes ashore. Aslan Quarter visit. Shore leave. <strong>Voronov files complaints with sympathetic anti-Imperial Assembly member.</strong> Warrants drafted. Asao receives formal invitation to <em>fteirle</em> recognition ceremony — <strong>scheduled for Day 6.</strong></div>
+</div>
+<div class="timeline-item">
+  <div class="timeline-day">Day 3 (Assembly)</div>
+  <div class="timeline-event">Senator Koss, excited by evidence, invites James and key crew to address the Security Committee. <strong>This is the trap.</strong> Koss is genuine — he doesn't know Voronov has pre-positioned the arrest. The crew walks into the Assembly building. Planetary Police are waiting.</div>
+</div>
+<div class="timeline-item active">
+  <div class="timeline-day">Day 3 (The Arrest)</div>
+  <div class="timeline-event"><strong>Arrest at the Assembly.</strong> Uniformed officers. Proper warrants. Anti-Imperial Assembly member Delegate Pern reads charges into the Assembly record. Maximum political theater. Crew taken to Central Processing, Arco Prime.</div>
+</div>
+<div class="timeline-item">
+  <div class="timeline-day">Day 3-4 (Processing)</div>
+  <div class="timeline-event">TL-13 booking. Biometrics, neural scans, equipment inventory. <strong>Max's Zhodani-pattern AI discovered during standard neurojack scan.</strong> This wasn't in the warrant — the cops find it themselves. Situation escalates from political theater to genuine security alarm.</div>
+</div>
+<div class="timeline-item">
+  <div class="timeline-day">Day 4-5 (Jail + Cassian)</div>
+  <div class="timeline-event">Crew in holding. Vasquez furious but can't intervene (IISS operating on Collace soil to spring prisoners would confirm accusations). <strong>Cassian arrives.</strong> Baron. Advocate 3. Begins dismantling the case from the outside.</div>
+</div>
+<div class="timeline-item future">
+  <div class="timeline-day">Day 6 (Ceremony — Ticking Clock)</div>
+  <div class="timeline-event"><strong>Asao's <em>fteirle</em> recognition ceremony at the Aslan Quarter.</strong> Formal acknowledgment before the Hierate trade representative. Missing this would be a profound dishonor — not just to Asao, but to Ekuah Ataoh who swore the life-debt. The Aslan community is watching. <strong>This is the emotional deadline.</strong></div>
+</div>
+</div>
+
+<p class="cross-ref">Ekuah Ataoh: rescued from pirate low berth (S10, Pagaton). Swore <em>fteirle</em> life-debt to Asao. Departed Binges. The ceremony is the formal ratification of that debt before the Hierate.</p>
+<p class="cross-ref">Aslan Quarter: Arco-3, floors 40-60. ~50,000 Aslan. Hierate trade mission at Arco Prime. Canon: Collace wiki entry confirms significant Aslan presence.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>The Charges</h2>
+
+<table>
+<tr><th>#</th><th>Charge</th><th>Source</th><th>True?</th><th>Sticks?</th></tr>
+<tr>
+  <td>1</td>
+  <td><strong>Operating undeclared military vessel under false registration in sovereign space</strong></td>
+  <td>Q-ship cover blown via intel networks; Blood Profit encrypted message from Pagaton</td>
+  <td><span class="tag tag-true">TRUE</span></td>
+  <td>Strongest count. The Astral Dawn IS a disguised warship operating under Oberlindes cover. Emission absorption stealth, pop-up turrets, fighter complement. This is factually accurate.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><strong>Operating captured enemy vessel without prize court adjudication</strong></td>
+  <td>Talos starport arrival records (Cray observed arrival with prize vessel)</td>
+  <td><span class="tag tag-true">TRUE</span></td>
+  <td>Weakened by Blood Fang being docked at Kirkton IISS base — not in crew's operational hands at time of arrest. But Talos records show them operating it across multiple systems. "They turned it over to IISS" helps defense; "IISS is receiving pirate vessels from these people — what kind of operation IS this?" helps prosecution.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><strong>Crew officer is convicted pirate</strong></td>
+  <td>Jack Stone: 4 terms pirate, 4 years Havelock Correctional — public record</td>
+  <td><span class="tag tag-true">TRUE</span></td>
+  <td>Not criminal on Collace (served time, free citizen). Pure character assassination. Press headline: "Disguised warship crewed by convicted pirates." Jack is retiring this session — charge may name him even though he's departing.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><strong>Outstanding assassination allegations — foreign head of state</strong></td>
+  <td>Garoo warrants (withdrawn S11, but records exist in interstellar databases)</td>
+  <td><span class="tag tag-false">FALSE</span></td>
+  <td>Won't survive scrutiny — warrants formally withdrawn by Agent Thale. But "Aslan mercenary wanted for assassination of planetary ruler" is devastating in headlines. Health Police dissolved — who do you call to confirm withdrawal? Bureaucratic nightmare.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><strong>Harboring fugitive from foreign jurisdiction</strong></td>
+  <td>Dr. Stova's departure from Garoo without clearance</td>
+  <td><span class="tag tag-spin">MISLEADING</span></td>
+  <td>Stova is a refugee, not a criminal. But accusing body (Garoo Health Police) is dissolved — there's nobody to formally exonerate her. Stacks with #4 to create a "Garoo pattern" in the press: two crew members with Garoo legal problems.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><strong>Purchasing intelligence from unlicensed brokers</strong></td>
+  <td>Cray observed Talos shore leave; James met Alice and Bob, paid 3,000 Cr for intel reports</td>
+  <td><span class="tag tag-true">TRUE</span></td>
+  <td>Minor espionage charge. Adds to pattern: "These people are running an intelligence operation, not a merchant voyage."</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><strong>Fraudulent marriage for operational cover</strong></td>
+  <td>Von Sydo / Vera Khaldun — marriage records, suspicious timing</td>
+  <td><span class="tag tag-spin">HALF-TRUE</span></td>
+  <td>Started as cover, became genuine. Very weak. Adds bulk to the filing but won't be pressed.</td>
+</tr>
+</table>
+
+<h3>Post-Arrest Discovery (NOT in Warrant)</h3>
+
+<div class="card card-purple">
+<div class="card-title">Max's Zhodani AI &mdash; Found During TL-13 Processing</div>
+<p>Standard Collace booking includes neural implant scan (TL-13 police, routine procedure). Max's neurojack contains two AI personalities: one Imperial-pattern, one <strong>Zhodani-pattern "psychic tutor"</strong> designed to mimic telepathic communication protocols.</p>
+<p>This was NOT in the arrest warrant. Voronov didn't know about it. The cops find it themselves during routine processing. The booking officer's reaction escalates this from political theater to genuine security concern.</p>
+<p><strong>Why this matters politically:</strong> On a world debating Imperial membership, "Zhodani software in a foreign agent's brain implants" triggers every paranoia reflex in the Marches. The anti-Imperial faction didn't even have to plant this — the crew brought it themselves.</p>
+<p><strong>Mechanical note:</strong> Max does not have a license for this modification. The charge would be unlicensed neural cybernetic operation — performing experimental modifications without proper medical/engineering certification.</p>
+</div>
+
+<p class="cross-ref">Max's neurojack AIs: S12 transcript lines 258-272. Ben (Max's player) described them openly at the table. Dual AI: Zhodani "motherly tutor" + Imperial etiquette coach.</p>
+<p class="cross-ref">Max's published papers on Otarri research tracked by Keloru on Tarkine — academic profile is public. Neural enhancements not in public record.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>The Press Package</h2>
+
+<p>Voronov doesn't file these charges himself — he feeds the information to <strong>Delegate Sera Pern</strong>, an anti-Imperial Assembly member who genuinely believes Imperial militarization threatens Collace sovereignty. Pern is not corrupt. She's a patriot being used as a weapon.</p>
+
+<div class="card card-amber">
+<div class="card-title">Delegate Sera Pern <span class="tag tag-gm">GM NPC</span></div>
+<p><strong>Age 44. Assembly delegate, Arco-7 constituency (working-class district).</strong> Not Syndicate. Not corrupt. Genuinely anti-Imperial because she represents people who fear Imperial membership means higher prices, stricter laws, and corporate consolidation. The Drakon Syndicate's talking points overlap with her real beliefs — that's why she's the perfect vector. She'll pursue these charges with righteous conviction because from her perspective, they're true.</p>
+<p><strong>Voice:</strong> Clipped, precise, prosecutorial. Addresses the Assembly like a courtroom. No theatrics — cold facts delivered with moral certainty.</p>
+</div>
+
+<h4>Headlines (leaked to Collace media by Pern's office)</h4>
+<div class="card card-red">
+<div class="card-title">Media Spin</div>
+<ul>
+<li>"Armed Foreign Agents Operating Pirate Vessel in Collace Space"</li>
+<li>"Crew Includes Convicted Pirate, Assassination Suspect"</li>
+<li>"IISS Running Clandestine Military Operations Without Assembly Knowledge"</li>
+<li>"Is THIS What Imperial Membership Looks Like?"</li>
+</ul>
+<p style="margin-top:0.5rem;color:var(--muted);font-size:0.85rem;">After Max's processing:</p>
+<ul>
+<li>"Zhodani Software Found in Foreign Agent's Neural Implants"</li>
+<li>"Unlicensed Cybernetic Modifications — What Else Are They Hiding?"</li>
+</ul>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Scene: The Arrest at the Assembly</h2>
+
+<h3>Setup</h3>
+<p>Day 3. Senator Koss invites James and available crew to address the Security Committee regarding piracy evidence. Koss is genuine — he's been fighting for Imperial membership for 20 years and finally has proof of foreign criminal interference. He doesn't know Voronov has pre-positioned the arrest.</p>
+<p>Which PCs attend is a player choice. James almost certainly goes. Marina is likely (diplomat). Others optional. <strong>Asao should be encouraged to attend</strong> — his assassination charges are part of the warrant, and his arrest in the Assembly maximizes the political theater.</p>
+
+<p class="cross-ref">Koss profile: <a href="index.html#npcs">NPC Reference</a> — "Passionate speaker, decades of frustration at political gridlock."</p>
+
+<div class="boxed-text">
+<strong>Read Aloud (Entering the Assembly):</strong> The Collace Assembly building occupies the top thirty floors of Arco Prime Tower One. Glass walls look out over the arcology skyline and, beyond the filter dome, the yellow-brown haze of Collace's thin atmosphere. Senator Koss meets you in the lobby, practically vibrating with excitement. "Captain Delleron. This is it. Twenty years I've been saying foreign money was poisoning our democracy, and now you have the proof. The Security Committee is waiting. We're going to change history today."
+</div>
+
+<div class="boxed-text">
+<strong>Read Aloud (The Committee Room):</strong> The Security Committee chamber seats forty. About twenty delegates are present — more than usual for a committee session. Koss leads you to the witness table at the front. You notice cameras. This is being broadcast on the Assembly's public feed. Koss didn't mention that.<br><br>
+As James begins his opening statement, the main doors open. Six uniformed Collace Planetary Police officers enter in formal arrest configuration — two by the doors, two flanking, two approaching the witness table. They're not rushing. They're not aggressive. This is procedure.
+</div>
+
+<div class="boxed-npc">
+<strong>Sergeant Maret Cove (Lead Arresting Officer):</strong> "Captain James Delleron? I'm Sergeant Cove, Collace Planetary Police, Arco Prime Division. I have warrants for the arrest of yourself and your crew on charges of operating an undeclared military vessel under false registration in Collace sovereign space, and related charges. Please stand, sir. Hands visible."<br><br>
+<em>Cove is calm, professional, slightly apologetic. She doesn't want to be doing this in the Assembly. She was told to serve the warrants here, at this time. She's following orders.</em>
+</div>
+
+<div class="boxed-text">
+<strong>Read Aloud (The Political Strike):</strong> Before anyone can react, a delegate rises from the back benches. She's already holding a datapad.<br><br>
+"Point of order, Mr. Chairman. I am Delegate Pern, Arco-7. I move that the Security Committee receive into evidence the formal complaint filed this morning regarding the illegal operation of a disguised military vessel in Collace sovereign space by foreign intelligence operatives posing as merchant crew — the very individuals now seated at the witness table."<br><br>
+The chamber erupts. Koss is on his feet, shouting objections. The cameras are rolling. This is exactly what Voronov wanted.
+</div>
+
+<h3>Player Reactions — Decision Tree</h3>
+
+<table>
+<tr><th>PC Action</th><th>Result</th></tr>
+<tr><td><strong>James argues legally</strong></td><td>Cove listens politely but has valid warrants. "Sir, I understand your position. You can make your case to the magistrate. Right now I need you to come with me." Koss tries to intervene — Cove: "Senator, these warrants were signed by Magistrate Halden. Take it up with the judiciary."</td></tr>
+<tr><td><strong>Asao resists physically</strong></td><td>Dragon's instinct, but terrible choice. Cove's officers are armed. Resisting arrest in the Assembly, on camera, confirms every accusation. If Asao reaches for a weapon, Cove: "Commander Ora, there are cameras in this room. I know your record. Please don't make this worse." Let Dragon choose.</td></tr>
+<tr><td><strong>Marina negotiates</strong></td><td>Best immediate play. Diplomat + Persuade. Can negotiate terms: "We'll cooperate fully. We request that our IISS liaison Commander Vasquez be notified immediately." Cove agrees — she's reasonable. This buys time and gets word to Kirkton.</td></tr>
+<tr><td><strong>Someone tries to contact Vasquez</strong></td><td>Comms are confiscated during arrest. But if Marina negotiated notification, Cove sends a message to Kirkton. Vasquez receives it but can't act — IISS intervening in Collace civilian law enforcement would be an international incident.</td></tr>
+<tr><td><strong>Koss intervenes politically</strong></td><td>He tries. Pern shuts him down: "The Senator's eagerness to protect foreign military operatives from lawful process speaks for itself." Koss realizes he's been outmaneuvered. He's furious — but he's also a politician. He starts working the back channels.</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Scene: Central Processing</h2>
+
+<div class="boxed-text">
+<strong>Read Aloud (Booking):</strong> Arco Prime Central Processing is clean, well-lit, and efficient. TL-13 police technology. Biometric scans, retinal recording, voiceprint registration. Your weapons are inventoried and sealed. Personal effects catalogued. It's professional and utterly humiliating.<br><br>
+They separate you into individual processing rooms. Standard procedure, they say. One at a time.
+</div>
+
+<h3>Max's Processing — The Escalation</h3>
+
+<div class="boxed-text">
+<strong>Read Aloud (Max's Scan):</strong> The booking officer runs the neural implant scanner over Max's temples. Standard procedure for anyone with visible cybernetics. The scanner chirps. The officer frowns. Runs it again. Calls over a supervisor.<br><br>
+The supervisor looks at the readout. Looks at Max. Looks at the readout again. His expression changes from bored professionalism to something much more alert.<br><br>
+"Sir. Your neurojack contains two active AI personality constructs. One of them is flagged in our database as..." He checks the screen. "...Zhodani-pattern cognitive architecture. Can you explain that?"
+</div>
+
+<div class="boxed-npc">
+<strong>Supervisor Deng (Processing):</strong> "I need to be clear, Dr. Planck. We scan a lot of neural implants in this building. I have never seen Zhodani-pattern software in a human neurojack. I'm required to flag this to Planetary Security. This is no longer just the warrant charges."<br><br>
+<em>Deng is not hostile. He's genuinely concerned. From his perspective, he just found enemy cognitive warfare software in a prisoner's brain. This is a real security flag, not political theater.</em>
+</div>
+
+<p><strong>Mechanical note:</strong> Max can explain — the AI is a research tool for xenobiology communication, not a weapon. But the explanation requires describing his Flat life research, which is classified under JSI operational authority. He can't fully explain without blowing other secrets. Let Ben (Max's player) navigate this.</p>
+
+<p class="cross-ref">Max's Otarri research: published papers tracked by Keloru on Tarkine. The academic work is public. The Flat detection is not.</p>
+<p class="cross-ref">Flat life thread: S11 breakthrough — Von Sydo detected non-biological life in Max's 2D electron gas wafer chip. Von Sydo has not reported to Captain yet.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Scene: The Holding Cells</h2>
+
+<p>Crew held in Arco Prime Detention. Clean, secure, TL-13. Individual cells, shared common area for meals. Not abusive — Collace isn't a police state. But they're locked up and their evidence is in police custody.</p>
+
+<div class="boxed-text">
+<strong>Read Aloud (First Night):</strong> The cells are clean. The food is adequate. The guards are polite. None of this helps.<br><br>
+Through the narrow window, you can see the lights of Arco Prime — a million people going about their evening in filtered air. Somewhere out there, Voronov is packing his bags. Somewhere out there, the evidence you risked your lives to collect is sitting in a police evidence locker, tagged as exhibits in a case designed to make sure nobody ever takes it seriously.
+</div>
+
+<h3>Character Moments in Detention</h3>
+
+<div class="card card-blue">
+<div class="card-title">James — The Weight of Command</div>
+<p>His crew is in jail because he brought them here. The mission succeeded — they destroyed Blood Profit, exposed the Arrangement — and the reward is a cell. James is an Admiral in a cage. His Tactician brain is working the problem, but the tools he needs (political connections, evidence, authority) are all on the other side of the bars.</p>
+<p><strong>Beat:</strong> Koss gets a message through via his lawyer. "I'm working on it. Don't say anything to anyone. I'm bringing someone who can help." This is the Cassian setup.</p>
+</div>
+
+<div class="card card-amber">
+<div class="card-title">Asao — The Ceremony Clock</div>
+<p>Day 6. The <em>fteirle</em> recognition ceremony. Three days away. Asao swore no oath to be there — the invitation is from the Hierate trade representative, formalizing Ekuah Ataoh's life-debt before witnesses. But in Aslan culture, failing to appear for a formal recognition is a statement. It says the bond doesn't matter. It says the honor isn't worth claiming.</p>
+<p>Ekuah Ataoh rescued from pirate low berth. Swore a life-debt. Asao accepted. Now Asao sits in a human jail while the ceremony date approaches.</p>
+<p><strong>Beat:</strong> A message arrives from the Aslan Quarter. The Hierate trade representative has heard about the arrest. The message is brief and formal: "The ceremony remains scheduled. We await Commander Ora." No pressure. No demand. Just the statement that the Aslan community is watching and the clock is ticking.</p>
+</div>
+
+<p class="cross-ref">Ekuah Ataoh: S10 Pagaton. Rescued from low berth aboard pirate corsair. Swore <em>fteirle</em> life-debt to Asao. Departed Binges to arrange formal recognition.</p>
+<p class="cross-ref"><em>Fteirle</em> recognition: formal ceremony before Hierate witnesses. Not just personal — it establishes the debt in Aslan legal/honor framework. Missing it doesn't cancel the debt but creates a diplomatic complication.</p>
+
+<div class="card card-green">
+<div class="card-title">Marina — Her Scene Finally</div>
+<p>Marina is the crew's best social operator. In detention, she's the one who keeps morale up, manages communication with their lawyer, and — critically — is the one who can talk to the guards without making things worse. Her Diplomat and Persuade skills matter more in jail than they ever did in combat.</p>
+<p><strong>Beat:</strong> Marina identifies that Sergeant Cove is uncomfortable with the arrest. Cove is a good cop who followed orders. Marina works that angle — not manipulation, but genuine connection. "You know this is political, Sergeant. You know we're not criminals." Cove won't break rules, but she might look the other way on a message.</p>
+</div>
+
+<div class="card card-purple">
+<div class="card-title">Von Sydo — The Secret He's Sitting On</div>
+<p>Von Sydo is an illegal psion in a TL-13 jail. If they scan deeper than the standard booking — if anyone suspects — it's over. Not just for him. For everyone. Psionic association is a crime. The crew harboring a psion makes every other charge look trivial.</p>
+<p>He has to sit perfectly still, perfectly normal, and not use any ability no matter how useful it would be. Vera is somewhere in the women's section. He can't even check on her.</p>
+<p><strong>Beat:</strong> Von Sydo senses something through the walls. Brief, intermittent. The Flat. Even here, in a jail cell, surrounded by TL-13 electronics, the Flat is present. He can feel it in the security systems, the lighting grid, the comm relays. It's everywhere. And it's... aware that he's aware. Not communicating. Just... present.</p>
+</div>
+
+<p class="cross-ref">Von Sydo's psionics: training with Vera since S8. DM-4 base. S11 breakthrough: detected Flat life. S12: training intensity increased. Psionic abilities are DEEPLY hidden — CCF cannot know. See <a href="index.html#scene-4">Personal Threads</a>.</p>
+
+<div class="card card-cyan">
+<div class="card-title">Jack Stone — Last Stand</div>
+<p>Jack is retiring this session. He was supposed to leave with dignity — a farewell, maybe a message from Amy Torrelsen, a quiet exit. Instead he's in jail. Again. Four years in Havelock Correctional, and now this.</p>
+<p><strong>Beat:</strong> Jack's criminal record is one of the charges. He's the liability. He knows it. "Captain, my name on your crew roster is half the reason we're in here. When that lawyer shows up, tell him Jack Stone already left the ship at Collace. I was never here." He's offering to take the fall — to be the scapegoat. Let John (the player) decide if Jack goes out as a sacrifice or with his head high.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Scene: Cassian Arrives</h2>
+
+<p>Day 4. Koss's "someone who can help."</p>
+
+<div class="boxed-text">
+<strong>Read Aloud (The Visitor):</strong> The guard opens the common area door. A man enters — tall, 50, wearing a suit that cost more than the guard's annual salary. He carries a leather document case and moves like someone who has walked into more important rooms than this one.<br><br>
+"Captain Delleron. I'm Baron Cassian Voss Holt. Senator Koss asked me to come. I've read the charges." He sets the document case on the table and opens it. "They're creative. But they have a structural weakness I can exploit. I need you to tell me everything — starting with who wanted you arrested and why."
+</div>
+
+<div class="boxed-npc">
+<strong>Cassian (to James):</strong> "The warrant was filed by Delegate Pern. She's not the problem — she believes what she's saying. The problem is who gave her the information. Trace that, and your arrest becomes your evidence."<br><br>
+<em>Cassian is calm, precise, and completely in his element. This is what seven terms of diplomacy trained him for. He's not angry about the injustice — he's calculating how to use it.</em>
+</div>
+
+<h3>Cassian's Legal Strategy</h3>
+
+<div class="card card-green">
+<div class="card-title">The Judo Move</div>
+<p>Cassian doesn't fight the charges directly. He attacks the <strong>warrant chain</strong>.</p>
+<ol>
+<li><strong>Who filed?</strong> Delegate Pern. Based on information received from concerned citizens.</li>
+<li><strong>Which citizens?</strong> Pern's office received a detailed dossier. Anonymous. Pern didn't question the source because the facts checked out.</li>
+<li><strong>Where did the dossier originate?</strong> Cassian's Advocate 3 + Admin 2 + Investigate skills trace the document metadata. The dossier was prepared on equipment registered to a company called Three Moons Reinsurance.</li>
+<li><strong>What is Three Moons Reinsurance?</strong> A shell company. Registered at Port Kessler Commercial Annex. <strong>Same building as the CCF dead-drop the crew already identified.</strong></li>
+<li><strong>The arrest warrant against the crew was filed using intelligence gathered and packaged by the very criminal organization the crew came to expose.</strong></li>
+</ol>
+<p>The defense IS the evidence. Cassian doesn't get them out by proving innocence — he gets them out by proving the arrest itself is part of the Arrangement.</p>
+</div>
+
+<p class="cross-ref">Three Moons Reinsurance: Drakon shell company. CCF dead-drop at Suite 412 in the same building. See <a href="index.html#scene-3">Act 3 — Port Kessler</a>.</p>
+<p class="cross-ref">Cassian's skills: Advocate 3, Admin 2, Diplomat 3, Persuade 3. See <a href="index.html#cassian">Cassian Dossier</a>.</p>
+<p class="cross-ref">Red Archives: Cassian's own evidence (shell companies, corrupted politicians, sabotaged treaties) independently corroborates the crew's operational evidence. Together = complete case.</p>
+
+<div class="boxed-npc">
+<strong>Cassian (to Asao, privately):</strong> "Commander Ora. I understand you have a ceremony in two days. I intend to have you there. But I need something from you — when you walk into that ceremony, I need the Hierate trade representative to know that the people who tried to stop you from attending are the same people who fund piracy in this corridor. Can you arrange that?"<br><br>
+<em>Cassian is already thinking three moves ahead. The Aslan community's reaction to the arrest — dishonoring a recognized fteirle-holder — becomes political pressure against the anti-Imperial faction.</em>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Scene: The Hearing (Day 5)</h2>
+
+<div class="boxed-text">
+<strong>Read Aloud (Magistrate's Court):</strong> Magistrate Halden's courtroom is small, functional, and surprisingly informal. No gallery. Three screens on the wall showing case files. Halden is a woman in her sixties who looks like she's seen every kind of case and is tired of all of them.<br><br>
+Delegate Pern is present as complainant. Sergeant Cove as arresting officer. Cassian stands at the defense table, document case open, three datapads arranged in a line.
+</div>
+
+<div class="boxed-npc">
+<strong>Cassian (opening):</strong> "Your Honor, the defense does not dispute that the ISS Astral Dawn is a modified vessel. We do not dispute that the crew includes individuals with complex legal histories. What we dispute is the origin and purpose of this complaint. I intend to show that the warrant before this court was manufactured by the very criminal organization these individuals were sent to Collace to expose — and that every hour my clients spend in custody is an hour the architect of this deception uses to flee this jurisdiction."
+</div>
+
+<div class="boxed-npc">
+<strong>Pern (responding):</strong> "Your Honor, Baron Holt's conspiracy theory is entertaining but irrelevant. The facts are simple: an undeclared warship has been operating in our sovereign space. The crew's legal histories speak for themselves. The question is whether Collace will tolerate foreign military operations without our consent. I say we will not."<br><br>
+<em>Pern is effective because she believes it. She's not acting.</em>
+</div>
+
+<p><strong>GM choice:</strong> How this hearing goes depends on how much time you want to spend on it. Options:</p>
+
+<table>
+<tr><th>Pacing</th><th>Approach</th><th>Time</th></tr>
+<tr><td><strong>Quick</strong></td><td>Cassian presents the Three Moons evidence. Halden orders release pending investigation. Pern objects. Halden overrules. Done.</td><td>10 min</td></tr>
+<tr><td><strong>Medium</strong></td><td>Back-and-forth. Pern scores points on the Q-ship. Cassian traces the dossier to Three Moons. Halden is skeptical but orders release with conditions (crew surrenders passports, reports daily). Voronov's 72-hour window closes.</td><td>20 min</td></tr>
+<tr><td><strong>Full</strong></td><td>Dramatic hearing. Multiple witnesses. Max's Zhodani AI becomes an issue. PCs testify. Cassian calls for the dossier's metadata to be entered as evidence. Pern realizes she's been used and reacts — anger? Denial? Pivots to "even if the source is questionable, the charges are real"? Halden makes the call.</td><td>30+ min</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Scene: The Ceremony (Day 6)</h2>
+
+<p>If Cassian succeeds — and the arrest scenario is designed so he does, though not easily — Asao makes his ceremony.</p>
+
+<div class="boxed-text">
+<strong>Read Aloud (The Aslan Quarter):</strong> Arco-3, floor 52. The Aslan Quarter smells different from the rest of the arcology — incense, cooking spices, the faint musk of fur. The corridors are wider here, built for Aslan proportions. Honor banners hang from the ceiling in Trokh script.<br><br>
+The ceremony room is austere. Stone floor. No chairs — Aslan stand. The Hierate trade representative, a graying female Aslan in formal robes, stands at the center. Ekuah Ataoh stands opposite, in the finest clothes Asao has ever seen him wear. He looks different from the emaciated figure they pulled from a pirate low berth months ago. He looks whole.<br><br>
+The room holds perhaps forty Aslan. They are silent. They are watching Asao.
+</div>
+
+<div class="boxed-npc">
+<strong>Trade Representative Hriyahe:</strong> "Commander Ora. You freed Ekuah of the Ataoh from captivity and dishonor. He has declared <em>fteirle</em> — a life-debt, freely sworn. We are here to witness this declaration and record it in the memory of the Hierate."<br><br>
+<em>She pauses.</em><br><br>
+"We are also aware that you were prevented from attending this ceremony by parties who imprison the honorable to protect the dishonorable. The Hierate notes this. The Hierate remembers."
+</div>
+
+<p class="cross-ref">The Aslan community knowing about the arrest — and knowing the crew was freed in time for the ceremony — creates a political debt. The Hierate trade representative is now informally allied against whoever tried to prevent the ceremony. This is Cassian's three-moves-ahead play.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>Aftermath &amp; Consequences</h2>
+
+<div class="card card-red">
+<div class="card-title">Voronov</div>
+<p><strong>Did he escape?</strong> Depends on timing. If the crew was held for 3+ days, Voronov had time to clean out and reach Trexalon. If Cassian moved fast (Day 4 hearing instead of Day 5), Voronov might still be in transit — catchable at the highport or on an outbound ship.</p>
+<p><strong>GM decision:</strong> Does Voronov escape or get caught? Catching him resolves the thread faster but removes a recurring antagonist. Letting him escape means a Trexalon thread and continued Syndicate political operations from exile.</p>
+</div>
+
+<div class="card card-amber">
+<div class="card-title">Delegate Pern</div>
+<p>When Pern realizes she was used by the Syndicate, she has three possible reactions:</p>
+<ul>
+<li><strong>Fury:</strong> She pivots. Becomes the crew's ally. "I was lied to, and I will find out by whom." Most dramatic.</li>
+<li><strong>Denial:</strong> She doubles down. "Even if the source is questionable, the charges are legitimate." Becomes recurring political antagonist.</li>
+<li><strong>Shame:</strong> She withdraws. Damaged credibility. Political career in jeopardy. Sympathetic but out of play.</li>
+</ul>
+</div>
+
+<div class="card card-green">
+<div class="card-title">The Crew's Credibility</div>
+<p>Paradoxically, the arrest may <strong>help</strong> long-term. The story is now: "Foreign agents came to expose a criminal conspiracy. The conspiracy tried to have them arrested. A Collace court saw through it." That's a better narrative than "Foreign agents showed up with evidence." Cassian understands this — the arrest makes the evidence more credible, not less, once the source of the charges is exposed.</p>
+</div>
+
+<div class="card card-cyan">
+<div class="card-title">The Aslan Card</div>
+<p>The Hierate trade representative witnessed the arrest attempt and the ceremony. The ~50,000 Aslan on Collace now have a position: the people who tried to stop a <em>fteirle</em> ceremony are enemies of honor. This won't appear on any ballot, but it's a significant cultural force in a very xenophilic (Acceptance D) society. Anti-Imperial politicians using tactics that offend the Aslan community lose credibility with the very xenophilic population.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2>GM Checklist</h2>
+
+<ul class="checklist">
+<li>Establish Aslan ceremony invitation (Day 2, after surface visit)</li>
+<li>Koss invites crew to Assembly (Day 2 evening or Day 3 morning)</li>
+<li>Arrest scene at Assembly — have boxed text ready</li>
+<li>Processing scene — Max's Zhodani AI discovery</li>
+<li>Holding cell character moments (pick 2-3 based on energy)</li>
+<li>Cassian entrance — first impression matters (John's new PC)</li>
+<li>Hearing — choose pacing (Quick/Medium/Full) based on session time</li>
+<li>Ceremony — Asao's emotional payoff</li>
+<li>Voronov resolution — escape or capture (GM call)</li>
+<li>Pern resolution — fury, denial, or shame (GM call)</li>
+</ul>
+
+<h3>Timing Guide</h3>
+<table>
+<tr><th>If session runs</th><th>Arrest at</th><th>Cassian at</th><th>Resolution at</th></tr>
+<tr><td>2.5 hours</td><td>~60 min</td><td>~90 min</td><td>~130 min (Quick hearing, ceremony as epilogue)</td></tr>
+<tr><td>3 hours</td><td>~70 min</td><td>~100 min</td><td>~150 min (Medium hearing, full ceremony)</td></tr>
+<tr><td>3.5+ hours</td><td>~60 min</td><td>~100 min</td><td>~160 min (Full hearing, ceremony, Voronov chase)</td></tr>
+</table>
+
+</body>
+</html>
