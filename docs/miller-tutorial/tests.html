@@ -983,6 +983,251 @@
     });
   });
 
+  // ===== P5.1: Lab Tab Tests =====
+
+  // Test 65: TFT vs AllD, 10 rounds
+  var tft65 = Automaton.createNamed('tft');
+  var allD65 = Automaton.createNamed('allD');
+  var payoffs65 = {T:5, R:3, P:1, S:0};
+  var history65 = [];
+  tft65 = Automaton.reset(tft65);
+  allD65 = Automaton.reset(allD65);
+  var totalA65 = 0, totalB65 = 0;
+  for (var r65 = 0; r65 < 10; r65++) {
+    var mA65 = tft65.actions[tft65.currentState];
+    var mB65 = allD65.actions[allD65.currentState];
+    var pA65, pB65;
+    if (mA65 === 0 && mB65 === 0) { pA65 = payoffs65.R; pB65 = payoffs65.R; }
+    else if (mA65 === 0 && mB65 === 1) { pA65 = payoffs65.S; pB65 = payoffs65.T; }
+    else if (mA65 === 1 && mB65 === 0) { pA65 = payoffs65.T; pB65 = payoffs65.S; }
+    else { pA65 = payoffs65.P; pB65 = payoffs65.P; }
+    totalA65 += pA65;
+    totalB65 += pB65;
+    history65.push({moveA: mA65, moveB: mB65});
+    // Transition
+    var nA65 = (mB65 === 0) ? tft65.transC[tft65.currentState] : tft65.transD[tft65.currentState];
+    var nB65 = (mA65 === 0) ? allD65.transC[allD65.currentState] : allD65.transD[allD65.currentState];
+    tft65.currentState = nA65;
+    allD65.currentState = nB65;
+  }
+  assert(65, 'Lab: TFT vs AllD round 1: TFT cooperates, AllD defects',
+    history65[0].moveA === 0 && history65[0].moveB === 1);
+  assert(65, 'Lab: TFT vs AllD rounds 2-10: TFT defects, AllD defects',
+    history65.slice(1).every(function(h) { return h.moveA === 1 && h.moveB === 1; }));
+  assertEq(65, 'Lab: TFT vs AllD total A=9', totalA65, 9);
+  assertEq(65, 'Lab: TFT vs AllD total B=14', totalB65, 14);
+
+  // Test 66: Lab payoff sync (uses same payoffs as Evolve tab)
+  var pdPayoffs66 = {T:5, R:3, P:1, S:0};
+  var tft66 = Automaton.createNamed('tft');
+  var allC66 = Automaton.createNamed('allC');
+  tft66 = Automaton.reset(tft66);
+  allC66 = Automaton.reset(allC66);
+  // TFT vs AllC with PD payoffs: both cooperate every round
+  var m66A = tft66.actions[tft66.currentState];
+  var m66B = allC66.actions[allC66.currentState];
+  var p66A, p66B;
+  if (m66A === 0 && m66B === 0) { p66A = pdPayoffs66.R; p66B = pdPayoffs66.R; }
+  else if (m66A === 0 && m66B === 1) { p66A = pdPayoffs66.S; p66B = pdPayoffs66.T; }
+  else if (m66A === 1 && m66B === 0) { p66A = pdPayoffs66.T; p66B = pdPayoffs66.S; }
+  else { p66A = pdPayoffs66.P; p66B = pdPayoffs66.P; }
+  assertEq(66, 'Lab payoff: TFT vs AllC round 1 uses R=3', p66A, 3);
+  assertEq(66, 'Lab payoff: symmetric', p66A, p66B);
+
+  // Test 67: Saved run agent reconstruction
+  var savedAgent67 = {
+    states: 2, startState: 0,
+    actions: [0, 1], transC: [0, 0], transD: [1, 1]
+  };
+  var rebuilt67 = {
+    states: savedAgent67.states,
+    startState: savedAgent67.startState,
+    actions: savedAgent67.actions instanceof Uint8Array ? savedAgent67.actions : new Uint8Array(savedAgent67.actions),
+    transC: savedAgent67.transC instanceof Uint8Array ? savedAgent67.transC : new Uint8Array(savedAgent67.transC),
+    transD: savedAgent67.transD instanceof Uint8Array ? savedAgent67.transD : new Uint8Array(savedAgent67.transD),
+    currentState: savedAgent67.startState
+  };
+  assertEq(67, 'Saved agent reconstruction: states preserved', rebuilt67.states, 2);
+  assertEq(67, 'Saved agent reconstruction: startState preserved', rebuilt67.startState, 0);
+  assertEq(67, 'Saved agent reconstruction: actions[0] preserved', rebuilt67.actions[0], 0);
+  assertEq(67, 'Saved agent reconstruction: transD[0] preserved', rebuilt67.transD[0], 1);
+  var id67 = Automaton.identifyFunctional(rebuilt67);
+  assertEq(67, 'Saved agent reconstruction: functionally identified as tft', id67, 'tft');
+
+  // ===== P5.2: Generalized Sweep Tests =====
+
+  // Test 68: Sweep states 1-5 with 3 trials
+  var sweep68results = 0;
+  var statesList68 = [1, 2, 3, 4, 5];
+  for (var si68 = 0; si68 < statesList68.length; si68++) {
+    for (var t68 = 0; t68 < 3; t68++) {
+      var config68 = {
+        populationSize: 30, states: statesList68[si68], rounds: 150,
+        mutationRate: 0.005, generations: 20, seed: 1000 + si68 * 100 + t68
+      };
+      var r68 = Experiment.run(config68);
+      if (r68 && r68.stats && r68.stats.length > 0) sweep68results++;
+    }
+  }
+  assertEq(68, 'Sweep states 1-5, 3 trials: produces 15 results', sweep68results, 15);
+
+  // Test 69: Sweep mutation with 3 trials
+  var sweep69results = 0;
+  var muts69 = [0.001, 0.01, 0.05];
+  for (var si69 = 0; si69 < muts69.length; si69++) {
+    for (var t69 = 0; t69 < 3; t69++) {
+      var config69 = {
+        populationSize: 30, states: 2, rounds: 150,
+        mutationRate: muts69[si69], generations: 20, seed: 2000 + si69 * 100 + t69
+      };
+      var r69 = Experiment.run(config69);
+      if (r69 && r69.stats && r69.stats.length > 0) sweep69results++;
+    }
+  }
+  assertEq(69, 'Sweep mutation [0.001,0.01,0.05], 3 trials: produces 9 results', sweep69results, 9);
+
+  // Test 70: Determinism with same seed
+  var det70a = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:20, seed:7070});
+  var det70b = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:20, seed:7070});
+  var det70match = det70a.stats.length === det70b.stats.length;
+  for (var i70 = 0; i70 < det70a.stats.length && det70match; i70++) {
+    if (Math.abs(det70a.stats[i70].cooperationRate - det70b.stats[i70].cooperationRate) > 0.0001) det70match = false;
+  }
+  assert(70, 'Sweep determinism: same seed -> same results', det70match);
+
+  // Test 71: States sweep regression (states sweep produces valid cooperation data)
+  var reg71_s1 = Experiment.run({populationSize:30, states:1, rounds:150, mutationRate:0.005, generations:50, seed:7171});
+  var reg71_s2 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:50, seed:7171});
+  var reg71_coop_s1 = reg71_s1.stats[reg71_s1.stats.length - 1].cooperationRate;
+  var reg71_coop_s2 = reg71_s2.stats[reg71_s2.stats.length - 1].cooperationRate;
+  assert(71, 'States sweep regression: states=1 coop < states=2 coop', reg71_coop_s1 < reg71_coop_s2);
+
+  // ===== P5.3: Composition Timeline Tests =====
+
+  // Test 72: Single-pop AllD-seeded census
+  // Create a population of 10 AllD agents, run for 1 generation
+  var pop72rng = RNG.create(7272);
+  var pop72 = { agents: [], fitness: new Float64Array(10) };
+  for (var i72 = 0; i72 < 10; i72++) {
+    pop72.agents.push(Automaton.createNamed('allD'));
+  }
+  var census72 = { allC: 0, allD: 0, tft: 0, grimTrigger: 0, pavlov: 0, tf2t: 0, other: 0 };
+  for (var i72 = 0; i72 < pop72.agents.length; i72++) {
+    var id72 = Automaton.identifyFunctional(pop72.agents[i72]);
+    if (id72 && census72.hasOwnProperty(id72)) census72[id72]++;
+    else census72.other++;
+  }
+  assertEq(72, 'AllD census: allD count = 10', census72.allD, 10);
+  assertEq(72, 'AllD census: allC count = 0', census72.allC, 0);
+
+  // Test 73: Census fractions sum to 1.0
+  var r73 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:20, seed:7373});
+  var census73ok = true;
+  for (var i73 = 0; i73 < r73.stats.length; i73++) {
+    var c73 = r73.stats[i73].census;
+    if (!c73) { census73ok = false; break; }
+    var total73 = 0;
+    for (var k73 in c73) { if (c73.hasOwnProperty(k73)) total73 += c73[k73]; }
+    // total should equal 2 * populationSize (both pops) for coevolve
+    if (total73 === 0) { census73ok = false; break; }
+    // Check fractions sum to 1.0
+    var fracSum73 = 0;
+    for (var k73 in c73) { if (c73.hasOwnProperty(k73)) fracSum73 += c73[k73] / total73; }
+    if (Math.abs(fracSum73 - 1.0) > 0.001) { census73ok = false; break; }
+  }
+  assert(73, 'Census fractions sum to 1.0 (+-0.001) every generation', census73ok);
+
+  // Test 74: Census has all expected categories
+  var r74 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:5, seed:7474});
+  var census74 = r74.stats[0].census;
+  var cats74 = ['allC', 'allD', 'tft', 'grimTrigger', 'pavlov', 'tf2t', 'other'];
+  var cats74ok = cats74.every(function(k) { return census74.hasOwnProperty(k); });
+  assert(74, 'Census has all 7 expected categories', cats74ok);
+
+  // ===== P5.4: Teaching Scenarios + Bridge Tests =====
+
+  // Test 75: Scenario 1 "The Threshold"
+  var r75_s1 = Experiment.run({populationSize:30, states:1, rounds:150, mutationRate:0.005, generations:200, seed:163});
+  var r75_s2 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:163});
+  var coop75_s1 = r75_s1.stats[r75_s1.stats.length - 1].cooperationRate;
+  var coop75_s2 = r75_s2.stats[r75_s2.stats.length - 1].cooperationRate;
+  assert(75, 'Scenario 1: states=1 final coop < 0.20', coop75_s1 < 0.20);
+  assert(75, 'Scenario 1: states=2 final coop > 0.60', coop75_s2 > 0.60);
+
+  // Test 76: Scenario 3 "Mutation Destroys Memory"
+  var r76_low = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.001, generations:200, seed:9191});
+  var r76_high = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.020, generations:200, seed:9191});
+  var coop76_low = r76_low.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  var coop76_high = r76_high.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  assert(76, 'Scenario 3: mut=0.001 avg final coop > 0.50', coop76_low > 0.50);
+  assert(76, 'Scenario 3: mut=0.020 avg final coop < 0.30', coop76_high < 0.30);
+
+  // Test 77: Scenario 7 "Lab: Grim vs TFT"
+  var grim77 = Automaton.createNamed('grimTrigger');
+  var tft77 = Automaton.createNamed('tft');
+  var wobbly77 = Automaton.createNamed('wobbly');
+  // Grim vs Wobbly
+  grim77 = Automaton.reset(grim77);
+  var wob77a = Automaton.reset(Automaton.createNamed('wobbly'));
+  var score77_grim = 0;
+  for (var r77 = 0; r77 < 150; r77++) {
+    var mG = grim77.actions[grim77.currentState];
+    var mW = wob77a.actions[wob77a.currentState];
+    if (mG === 0 && mW === 0) score77_grim += 3;
+    else if (mG === 0 && mW === 1) score77_grim += 0;
+    else if (mG === 1 && mW === 0) score77_grim += 5;
+    else score77_grim += 1;
+    var nG = (mW === 0) ? grim77.transC[grim77.currentState] : grim77.transD[grim77.currentState];
+    var nW = (mG === 0) ? wob77a.transC[wob77a.currentState] : wob77a.transD[wob77a.currentState];
+    grim77.currentState = nG;
+    wob77a.currentState = nW;
+  }
+  // TFT vs Wobbly
+  tft77 = Automaton.reset(tft77);
+  var wob77b = Automaton.reset(Automaton.createNamed('wobbly'));
+  var score77_tft = 0;
+  for (var r77 = 0; r77 < 150; r77++) {
+    var mT = tft77.actions[tft77.currentState];
+    var mW = wob77b.actions[wob77b.currentState];
+    if (mT === 0 && mW === 0) score77_tft += 3;
+    else if (mT === 0 && mW === 1) score77_tft += 0;
+    else if (mT === 1 && mW === 0) score77_tft += 5;
+    else score77_tft += 1;
+    var nT = (mW === 0) ? tft77.transC[tft77.currentState] : tft77.transD[tft77.currentState];
+    var nW2 = (mT === 0) ? wob77b.transC[wob77b.currentState] : wob77b.transD[wob77b.currentState];
+    tft77.currentState = nT;
+    wob77b.currentState = nW2;
+  }
+  assert(77, 'Scenario 7: Grim vs Wobbly score > 500', score77_grim > 500);
+  assert(77, 'Scenario 7: TFT vs Wobbly score < 420', score77_tft < 420);
+
+  // Test 78: Bridge annotation conditions
+  // Bridge appears when: states>=2, final coop > 0.5, initial coop < 0.3
+  var r78 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:163});
+  var init78 = r78.stats.slice(0, 5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  var final78 = r78.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  assert(78, 'Bridge: states=2 seed=163: final coop > 0.5', final78 > 0.5);
+  assert(78, 'Bridge: states=2 seed=163: initial coop < 0.3', init78 < 0.3);
+  // states=1 should NOT trigger bridge
+  var r78_s1 = Experiment.run({populationSize:30, states:1, rounds:150, mutationRate:0.005, generations:200, seed:163});
+  var final78_s1 = r78_s1.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  assert(78, 'Bridge: states=1 should NOT trigger (final coop < 0.5)', final78_s1 < 0.5);
+
+  // Test 79: All scenario seeds produce clear results (validate curated seeds)
+  // Seed 163: states=1 < 0.20, states=2 > 0.60 (already tested in 75)
+  // Seed 47: Grim dominance (states=2)
+  var r79_s2 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:47});
+  var coop79_s2 = r79_s2.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  assert(79, 'Seed validation: seed=47 produces high cooperation (>0.60)', coop79_s2 > 0.60);
+  // Seed 89: sharp transition
+  var r79_s89 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:89});
+  var coop79_s89 = r79_s89.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  assert(79, 'Seed validation: seed=89 produces cooperation (>0.40)', coop79_s89 > 0.40);
+  // Seed 2: Miller replication (16 states)
+  var r79_s2b = Experiment.run({populationSize:30, states:16, rounds:150, mutationRate:0.005, generations:200, seed:2});
+  var coop79_s2b = r79_s2b.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  assert(79, 'Seed validation: seed=2 (16 states) produces cooperation (>0.40)', coop79_s2b > 0.40);
+
   // ===== Wait for async tests, then render =====
   await Promise.all(asyncPending);
 

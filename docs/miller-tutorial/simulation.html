@@ -472,12 +472,191 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
+  /* Lab tab styles */
+  .lab-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .lab-player {
+    text-align: center;
+  }
+  .lab-player-label {
+    font-size: 0.82rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+  .lab-history {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 0.78rem;
+  }
+  .lab-history-row {
+    display: flex;
+    gap: 1rem;
+    padding: 0.15rem 0;
+    border-bottom: 1px solid rgba(30,42,58,0.3);
+  }
+  .lab-history-row.current {
+    background: rgba(79,195,247,0.08);
+    color: var(--accent);
+  }
+  .lab-history-row .round-num { color: var(--text-dim); min-width: 3em; }
+  .lab-history-row .moves { min-width: 5em; }
+  .lab-history-row .scores { color: var(--text-dim); }
+  .lab-history-row .totals { color: var(--accent2); }
+  .lab-summary {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.82rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 2rem;
+  }
+
+  /* Composition chart toggle */
+  .composition-toggle {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+  .composition-toggle:hover { color: var(--text); }
+  .composition-toggle .toggle-arrow { transition: transform 0.2s; display: inline-block; }
+  .composition-toggle.open .toggle-arrow { transform: rotate(90deg); }
+  .composition-container { display: none; margin-bottom: 1rem; }
+  .composition-container.open { display: block; }
+  .composition-legend {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.72rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 0.4rem;
+  }
+  .composition-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .composition-legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+
+  /* Scenarios bar */
+  .scenario-bar {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .scenario-btn {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 0.3rem 0.6rem;
+    background: var(--surface);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+  }
+  .scenario-btn:hover { color: var(--text); border-color: var(--text-dim); }
+  .scenario-btn.active { color: var(--accent); border-color: var(--accent); }
+  .scenario-description {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    display: none;
+  }
+  .scenario-description.visible { display: block; }
+  .scenario-description .scenario-title {
+    color: var(--accent);
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+  }
+  .scenario-description .scenario-question {
+    color: var(--accent3);
+    font-style: italic;
+    margin-bottom: 0.4rem;
+  }
+
+  /* Bridge annotation */
+  .bridge-annotation {
+    background: linear-gradient(135deg, #161d28 0%, #1a2535 100%);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 1.2rem 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    display: none;
+  }
+  .bridge-annotation.visible { display: block; }
+  .bridge-annotation p { margin-bottom: 0.8rem; }
+  .bridge-annotation p:last-child { margin-bottom: 0; }
+  .bridge-annotation a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .bridge-annotation a:hover { text-decoration: underline; }
+
+  /* Sweep parameter selector */
+  select {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    background: var(--surface);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.25rem 0.4rem;
+    outline: none;
+  }
+  select:focus { border-color: var(--accent); }
+
+  /* Hold-constant panel for sweep */
+  .hold-constant {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.4rem 0.6rem;
+    margin-top: 0.3rem;
+  }
+
   @media (max-width: 700px) {
     .hero h1 { font-size: 1.2rem; }
     .container { padding: 1rem; }
     .controls { grid-template-columns: 1fr; }
     .stats-bar { gap: 0.8rem; font-size: 0.75rem; }
     .strategy-cards { grid-template-columns: 1fr; }
+    .lab-display { grid-template-columns: 1fr; }
+    .lab-summary { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -493,6 +672,7 @@
 
   <div class="tabs">
     <button class="tab active" data-tab="single">Evolve</button>
+    <button class="tab" data-tab="lab">Lab</button>
     <button class="tab" data-tab="sweep">Sweep</button>
   </div>
 
@@ -608,6 +788,19 @@
       </div>
     </div>
 
+    <!-- Teaching Scenarios (P5.4) -->
+    <div class="scenario-bar" id="scenario-bar">
+      <span style="font-size:0.72rem;color:var(--text-dim);align-self:center;margin-right:0.3rem;">SCENARIOS:</span>
+      <button class="scenario-btn" data-scenario="1">1. Threshold</button>
+      <button class="scenario-btn" data-scenario="2">2. Who Wins?</button>
+      <button class="scenario-btn" data-scenario="3">3. Mutation</button>
+      <button class="scenario-btn" data-scenario="4">4. Revolution</button>
+      <button class="scenario-btn" data-scenario="5">5. Game Matters</button>
+      <button class="scenario-btn" data-scenario="6">6. Miller '96</button>
+      <button class="scenario-btn" data-scenario="7">7. Grim vs TFT</button>
+    </div>
+    <div class="scenario-description" id="scenario-desc"></div>
+
     <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
 
     <div class="legend">
@@ -630,6 +823,31 @@
       <div class="stat-item"><span class="stat-label">Cooperation:</span> <span class="stat-value" id="stat-coop">--</span></div>
       <div class="stat-item"><span class="stat-label">Avg Payoff:</span> <span class="stat-value" id="stat-avg">--</span></div>
       <div class="stat-item"><span class="stat-label">Max Payoff:</span> <span class="stat-value" id="stat-max">--</span></div>
+    </div>
+
+    <!-- Population Composition Timeline (P5.3) -->
+    <div class="composition-toggle" id="composition-toggle">
+      <span class="toggle-arrow">&#9656;</span> Show Composition
+    </div>
+    <div class="composition-container" id="composition-container">
+      <div class="composition-legend" id="composition-legend">
+        <div class="composition-legend-item"><div class="composition-legend-swatch" style="background:#ef5350;"></div> AllD</div>
+        <div class="composition-legend-item"><div class="composition-legend-swatch" style="background:#81c784;"></div> AllC</div>
+        <div class="composition-legend-item"><div class="composition-legend-swatch" style="background:#4fc3f7;"></div> TFT</div>
+        <div class="composition-legend-item"><div class="composition-legend-swatch" style="background:#ffb74d;"></div> Grim</div>
+        <div class="composition-legend-item"><div class="composition-legend-swatch" style="background:#ce93d8;"></div> Pavlov</div>
+        <div class="composition-legend-item"><div class="composition-legend-swatch" style="background:#80deea;"></div> TF2T</div>
+        <div class="composition-legend-item"><div class="composition-legend-swatch" style="background:#3a4a5c;"></div> Other</div>
+      </div>
+      <div class="chart-container">
+        <canvas id="chart-composition" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- Bridge Annotation (P5.4) -->
+    <div class="bridge-annotation" id="bridge-annotation">
+      <p>This transition &mdash; from asocial equilibrium to cooperative equilibrium via a sharp evolutionary revolution &mdash; is the pattern Miller identified as central to social origins. A single additional state, the minimum unit of computational capacity, produces a qualitative change in collective behavior. Kauffman found the same threshold structure in molecular autocatalysis (RAF theory). The structural question: does this pattern govern AI-human institutional closure?</p>
+      <p><a href="index.html">Read the full analysis &rarr;</a></p>
     </div>
 
     <!-- Strategy Panel (collapsible) -->
@@ -659,12 +877,113 @@
     <input type="file" id="import-file" accept=".json" style="display:none;">
   </div>
 
+  <!-- ===== LAB TAB (P5.1) ===== -->
+  <div id="tab-lab" class="tab-content">
+
+    <div class="controls">
+      <div class="control-group">
+        <span class="control-label">Player A</span>
+        <div class="control-row">
+          <select id="lab-player-a">
+            <option value="allC">AllC</option>
+            <option value="allD">AllD</option>
+            <option value="tft" selected>TFT</option>
+            <option value="grimTrigger">Grim Trigger</option>
+            <option value="pavlov">Pavlov</option>
+            <option value="tf2t">Tit-for-Two-Tats</option>
+            <option value="punishTwice">PunishTwice</option>
+            <option value="wobbly">Wobbly</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Player B</span>
+        <div class="control-row">
+          <select id="lab-player-b">
+            <option value="allC">AllC</option>
+            <option value="allD" selected>AllD</option>
+            <option value="tft">TFT</option>
+            <option value="grimTrigger">Grim Trigger</option>
+            <option value="pavlov">Pavlov</option>
+            <option value="tf2t">Tit-for-Two-Tats</option>
+            <option value="punishTwice">PunishTwice</option>
+            <option value="wobbly">Wobbly</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Rounds</span>
+        <div class="control-row">
+          <input type="range" id="lab-rounds" min="1" max="200" value="20">
+          <span class="control-value" id="lab-rounds-val">20</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Speed (steps/sec)</span>
+        <div class="control-row">
+          <input type="range" id="lab-speed" min="1" max="10" value="3">
+          <span class="control-value" id="lab-speed-val">3</span>
+        </div>
+      </div>
+
+      <div class="game-type-indicator" id="lab-payoffs-display">Payoffs: T=5 R=3 P=1 S=0</div>
+
+      <div class="buttons">
+        <button class="btn-secondary" id="btn-lab-step">Step</button>
+        <button class="btn-primary" id="btn-lab-play">Play &#9654;</button>
+        <button class="btn-secondary" id="btn-lab-reset">Reset</button>
+        <button class="btn-secondary" id="btn-lab-save">Save Matchup</button>
+      </div>
+    </div>
+
+    <div class="lab-display">
+      <div class="lab-player">
+        <div class="lab-player-label" id="lab-a-label">Player A: TFT</div>
+        <canvas id="lab-diagram-a" width="140" height="140" style="width:140px;height:140px;"></canvas>
+      </div>
+      <div class="lab-player">
+        <div class="lab-player-label" id="lab-b-label">Player B: AllD</div>
+        <canvas id="lab-diagram-b" width="140" height="140" style="width:140px;height:140px;"></canvas>
+      </div>
+    </div>
+
+    <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:0.5rem;" id="lab-round-display">Round: 0 / 20</div>
+
+    <div class="lab-history" id="lab-history">
+      <div style="color:var(--text-dim);text-align:center;padding:1rem;">Click Step or Play to begin.</div>
+    </div>
+
+    <div class="lab-summary" id="lab-summary" style="display:none;">
+      <div><span class="stat-label">A total:</span> <span class="stat-value" id="lab-score-a">0</span></div>
+      <div><span class="stat-label">B total:</span> <span class="stat-value" id="lab-score-b">0</span></div>
+      <div><span class="stat-label">A cooperated:</span> <span class="stat-value" id="lab-coop-a">--</span></div>
+      <div><span class="stat-label">B cooperated:</span> <span class="stat-value" id="lab-coop-b">--</span></div>
+    </div>
+  </div>
+
   <!-- ===== SWEEP TAB ===== -->
   <div id="tab-sweep" class="tab-content">
 
     <div class="controls">
       <div class="control-group">
-        <span class="control-label">Trials per state count</span>
+        <span class="control-label">Sweep parameter</span>
+        <div class="control-row">
+          <select id="sweep-param">
+            <option value="states" selected>States</option>
+            <option value="mutation">Mutation Rate</option>
+            <option value="rounds">Rounds</option>
+            <option value="population">Population Size</option>
+            <option value="temptation">Temptation (T)</option>
+            <option value="reward">Reward (R)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Trials per point</span>
         <div class="control-row">
           <input type="range" id="sweep-trials" min="3" max="20" value="8">
           <span class="control-value" id="sweep-trials-val">8</span>
@@ -672,9 +991,23 @@
       </div>
 
       <div class="control-group">
-        <span class="control-label">State counts to sweep</span>
+        <span class="control-label">Range: start</span>
         <div class="control-row">
-          <span style="color:var(--text);font-size:0.82rem;">1, 2, 3, 4, 5</span>
+          <input type="number" id="sweep-range-start" value="1" step="any">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Range: end</span>
+        <div class="control-row">
+          <input type="number" id="sweep-range-end" value="5" step="any">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Steps</span>
+        <div class="control-row">
+          <input type="number" id="sweep-range-steps" value="5" min="2" max="20">
         </div>
       </div>
 
@@ -691,6 +1024,10 @@
         <div class="control-row">
           <input type="number" id="sweep-seed" value="100">
         </div>
+      </div>
+
+      <div class="hold-constant" id="sweep-hold-constant">
+        Hold constant: pop=30, rounds=150, mut=0.005, T=5, R=3, P=1, S=0
       </div>
 
       <div class="buttons">
@@ -767,6 +1104,8 @@
       tab.classList.add('active');
       document.querySelectorAll('.tab-content').forEach(function(tc) { tc.classList.remove('active'); });
       document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      // When switching to Lab tab, update payoffs display
+      if (tab.dataset.tab === 'lab') updateLabPayoffsDisplay();
     });
   });
 
@@ -774,6 +1113,7 @@
   function bindSlider(id, valId, format) {
     var slider = document.getElementById(id);
     var valEl = document.getElementById(valId);
+    if (!slider || !valEl) return;
     slider.addEventListener('input', function() {
       valEl.textContent = format ? format(slider.value) : slider.value;
     });
@@ -787,6 +1127,8 @@
   bindSlider('speed', 'speed-val');
   bindSlider('sweep-trials', 'sweep-trials-val');
   bindSlider('sweep-gens', 'sweep-gens-val');
+  bindSlider('lab-rounds', 'lab-rounds-val');
+  bindSlider('lab-speed', 'lab-speed-val');
 
   // Payoff sliders with game type update
   function updateGameType() {
@@ -795,7 +1137,6 @@
     var el = document.getElementById('game-type');
     el.textContent = gameType;
 
-    // Color the indicator
     var colors = {
       "Prisoner's Dilemma": 'var(--accent)',
       "Chicken / Hawk-Dove": 'var(--accent3)',
@@ -806,7 +1147,6 @@
     el.style.color = colors[gameType] || 'var(--text-dim)';
     el.style.borderColor = colors[gameType] || 'var(--border)';
 
-    // Update preset button highlights
     document.querySelectorAll('.btn-preset').forEach(function(btn) { btn.classList.remove('active'); });
     if (payoffs.T === 5 && payoffs.R === 3 && payoffs.P === 1 && payoffs.S === 0) {
       document.querySelector('[data-preset="pd"]').classList.add('active');
@@ -824,7 +1164,6 @@
     document.getElementById(id).addEventListener('input', updateGameType);
   });
 
-  // Preset buttons
   var presets = {
     pd: {T:5, R:3, P:1, S:0},
     chicken: {T:5, R:3, P:0, S:1},
@@ -849,6 +1188,7 @@
   });
 
   function getVal(id) { return parseInt(document.getElementById(id).value); }
+  function getFloatVal(id) { return parseFloat(document.getElementById(id).value); }
   function getMutRate() { return getVal('mutation') / 1000; }
   function getPayoffs() {
     return {
@@ -863,7 +1203,6 @@
 
   function drawAutomaton(ctx, automaton, x, y, size, options) {
     options = options || {};
-    var dpr = options.dpr || (window.devicePixelRatio || 1);
     var n = automaton.states;
     var radius = size / 3;
     var stateR = Math.min(18, size / 5);
@@ -871,7 +1210,6 @@
     var cy = y + size / 2;
     var highlightState = options.highlightState !== undefined ? options.highlightState : -1;
 
-    // Compute state positions
     var positions = [];
     if (n === 1) {
       positions.push({x: cx, y: cy});
@@ -885,39 +1223,36 @@
       }
     }
 
-    // Draw transitions first (behind circles)
     ctx.lineWidth = 1;
     for (var s = 0; s < n; s++) {
       var from = positions[s];
-      // On opponent C transition
       var toC = automaton.transC[s];
       drawTransition(ctx, from, positions[toC], s, toC, n, stateR, false, '#6a7a8c');
-      // On opponent D transition
       var toD = automaton.transD[s];
       drawTransition(ctx, from, positions[toD], s, toD, n, stateR, true, '#6a7a8c');
     }
 
-    // Draw state circles
     for (var i = 0; i < n; i++) {
       var pos = positions[i];
       var action = automaton.actions[i];
 
-      // Fill
       ctx.beginPath();
       ctx.arc(pos.x, pos.y, stateR, 0, Math.PI * 2);
       ctx.fillStyle = action === 0 ? '#81c784' : '#ef5350';
       ctx.fill();
 
-      // Border
       ctx.lineWidth = (i === automaton.startState) ? 3 : 2;
       ctx.strokeStyle = '#c8d0dc';
       if (i === highlightState) {
         ctx.strokeStyle = '#4fc3f7';
         ctx.lineWidth = 3;
+        // Glow effect for highlighted state
+        ctx.shadowColor = '#4fc3f7';
+        ctx.shadowBlur = 8;
       }
       ctx.stroke();
+      ctx.shadowBlur = 0;
 
-      // Start state arrow
       if (i === automaton.startState) {
         var angle = n === 1 ? Math.PI : (-Math.PI / 2 + (2 * Math.PI * i / n));
         var ax = pos.x - (stateR + 10) * Math.cos(angle - Math.PI);
@@ -933,7 +1268,6 @@
         drawArrowhead(ctx, ax, ay, bx, by, 5, '#c8d0dc');
       }
 
-      // State label
       ctx.fillStyle = '#ffffff';
       ctx.font = '11px Courier New';
       ctx.textAlign = 'center';
@@ -952,7 +1286,6 @@
     }
 
     if (fromIdx === toIdx) {
-      // Self-loop
       var angle = n === 1 ? -Math.PI / 2 : (-Math.PI / 2 + (2 * Math.PI * fromIdx / n));
       var loopOffset = dashed ? stateR * 1.2 : stateR * 0.8;
       var lx = from.x + (stateR + loopOffset) * Math.cos(angle);
@@ -961,7 +1294,6 @@
       ctx.arc(lx, ly, stateR * 0.5, 0, Math.PI * 2);
       ctx.stroke();
     } else {
-      // Curved line between states
       var mx = (from.x + to.x) / 2;
       var my = (from.y + to.y) / 2;
       var dx = to.x - from.x;
@@ -973,7 +1305,6 @@
       var cpx = mx + nx * curveAmount;
       var cpy = my + ny * curveAmount;
 
-      // Find intersection with target circle
       var endAngle = Math.atan2(cpy - to.y, cpx - to.x);
       var ex = to.x + stateR * Math.cos(endAngle);
       var ey = to.y + stateR * Math.sin(endAngle);
@@ -987,7 +1318,6 @@
       ctx.quadraticCurveTo(cpx, cpy, ex, ey);
       ctx.stroke();
 
-      // Arrowhead at destination
       var t = 0.95;
       var ax = (1-t)*(1-t)*sx + 2*(1-t)*t*cpx + t*t*ex;
       var ay = (1-t)*(1-t)*sy + 2*(1-t)*t*cpy + t*t*ey;
@@ -1025,11 +1355,9 @@
     var cw = w - pad.left - pad.right;
     var ch = h - pad.top - pad.bottom;
 
-    // Clear
     ctx.fillStyle = '#111820';
     ctx.fillRect(0, 0, w, h);
 
-    // Grid
     ctx.strokeStyle = '#1e2a3a';
     ctx.lineWidth = 0.5;
     for (var i = 0; i <= 5; i++) {
@@ -1037,7 +1365,6 @@
       ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cw, y); ctx.stroke();
     }
 
-    // Y-axis labels (left: cooperation 0-1)
     ctx.fillStyle = '#4fc3f7';
     ctx.font = '10px Courier New';
     ctx.textAlign = 'right';
@@ -1047,7 +1374,6 @@
       ctx.fillText(val.toFixed(1), pad.left - 6, y + 4);
     }
 
-    // Y-axis labels (right: payoff)
     var maxPayoff = options.maxPayoff || 5;
     ctx.fillStyle = '#81c784';
     ctx.textAlign = 'left';
@@ -1057,7 +1383,6 @@
       ctx.fillText(val.toFixed(1), pad.left + cw + 6, y + 4);
     }
 
-    // X-axis labels
     ctx.fillStyle = '#6a7a8c';
     ctx.textAlign = 'center';
     var xSteps = Math.min(maxGen, 10);
@@ -1070,10 +1395,8 @@
 
     if (data.length < 2) return;
 
-    // Draw pinned (comparison) run first if present
     if (options.pinnedData && options.pinnedData.length >= 2) {
       ctx.globalAlpha = 0.3;
-      // Pinned cooperation line
       ctx.strokeStyle = '#4fc3f7';
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -1083,7 +1406,6 @@
         if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
       ctx.stroke();
-      // Pinned payoff line
       ctx.strokeStyle = '#81c784';
       ctx.beginPath();
       for (var i = 0; i < options.pinnedData.length; i++) {
@@ -1095,7 +1417,6 @@
       ctx.globalAlpha = 1.0;
     }
 
-    // Draw cooperation line (blue)
     ctx.strokeStyle = '#4fc3f7';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -1106,7 +1427,6 @@
     }
     ctx.stroke();
 
-    // Draw avg payoff line (green)
     ctx.strokeStyle = '#81c784';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -1117,6 +1437,109 @@
     }
     ctx.stroke();
   }
+
+  // ===== Composition Chart (P5.3) =====
+
+  var CENSUS_COLORS = {
+    allD: '#ef5350',
+    allC: '#81c784',
+    tft: '#4fc3f7',
+    grimTrigger: '#ffb74d',
+    pavlov: '#ce93d8',
+    tf2t: '#80deea',
+    other: '#3a4a5c'
+  };
+  var CENSUS_ORDER = ['allD', 'allC', 'tft', 'grimTrigger', 'pavlov', 'tf2t', 'other'];
+
+  function drawCompositionChart(canvas, data, maxGen) {
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    var w = canvas.parentElement.clientWidth - 32;
+    var h = 200;
+
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.scale(dpr, dpr);
+
+    var pad = { top: 10, right: 30, bottom: 30, left: 50 };
+    var cw = w - pad.left - pad.right;
+    var ch = h - pad.top - pad.bottom;
+
+    ctx.fillStyle = '#111820';
+    ctx.fillRect(0, 0, w, h);
+
+    if (!data || data.length < 2) return;
+
+    // Normalize census to fractions
+    var fractions = [];
+    for (var i = 0; i < data.length; i++) {
+      var c = data[i].census;
+      if (!c) { fractions.push(null); continue; }
+      var total = 0;
+      for (var k = 0; k < CENSUS_ORDER.length; k++) total += (c[CENSUS_ORDER[k]] || 0);
+      var f = {};
+      for (var k = 0; k < CENSUS_ORDER.length; k++) {
+        f[CENSUS_ORDER[k]] = total > 0 ? (c[CENSUS_ORDER[k]] || 0) / total : 0;
+      }
+      fractions.push(f);
+    }
+
+    // Draw stacked areas bottom-to-top
+    for (var ki = 0; ki < CENSUS_ORDER.length; ki++) {
+      var key = CENSUS_ORDER[ki];
+      ctx.fillStyle = CENSUS_COLORS[key];
+      ctx.beginPath();
+
+      // Top edge of this layer
+      var firstX = pad.left;
+      var moved = false;
+      for (var i = 0; i < fractions.length; i++) {
+        if (!fractions[i]) continue;
+        var x = pad.left + (cw * data[i].generation / Math.max(maxGen - 1, 1));
+        var cumulative = 0;
+        for (var kj = 0; kj <= ki; kj++) cumulative += fractions[i][CENSUS_ORDER[kj]];
+        var y = pad.top + ch * (1 - cumulative);
+        if (!moved) { ctx.moveTo(x, y); moved = true; firstX = x; }
+        else ctx.lineTo(x, y);
+      }
+
+      // Bottom edge of this layer (reverse)
+      for (var i = fractions.length - 1; i >= 0; i--) {
+        if (!fractions[i]) continue;
+        var x = pad.left + (cw * data[i].generation / Math.max(maxGen - 1, 1));
+        var cumulative = 0;
+        for (var kj = 0; kj < ki; kj++) cumulative += fractions[i][CENSUS_ORDER[kj]];
+        var y = pad.top + ch * (1 - cumulative);
+        ctx.lineTo(x, y);
+      }
+
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Y-axis labels
+    ctx.fillStyle = '#6a7a8c';
+    ctx.font = '10px Courier New';
+    ctx.textAlign = 'right';
+    for (var i = 0; i <= 4; i++) {
+      var val = 1 - i * 0.25;
+      var y = pad.top + (ch * i / 4);
+      ctx.fillText(val.toFixed(2), pad.left - 6, y + 4);
+    }
+
+    // X-axis
+    ctx.textAlign = 'center';
+    var xSteps = Math.min(maxGen, 10);
+    for (var i = 0; i <= xSteps; i++) {
+      var gen = Math.round(maxGen * i / xSteps);
+      var x = pad.left + (cw * i / xSteps);
+      ctx.fillText(gen, x, h - pad.bottom + 14);
+    }
+  }
+
+  // ===== Sweep Chart (generalized P5.2) =====
 
   function drawSweepChart(canvas, sweepData, options) {
     var ctx = canvas.getContext('2d');
@@ -1134,11 +1557,9 @@
     var cw = w - pad.left - pad.right;
     var ch = h - pad.top - pad.bottom;
 
-    // Clear
     ctx.fillStyle = '#111820';
     ctx.fillRect(0, 0, w, h);
 
-    // Grid
     ctx.strokeStyle = '#1e2a3a';
     ctx.lineWidth = 0.5;
     for (var i = 0; i <= 5; i++) {
@@ -1146,7 +1567,6 @@
       ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cw, y); ctx.stroke();
     }
 
-    // Y-axis labels (cooperation 0-1)
     ctx.fillStyle = '#4fc3f7';
     ctx.font = '10px Courier New';
     ctx.textAlign = 'right';
@@ -1156,21 +1576,25 @@
       ctx.fillText(val.toFixed(1), pad.left - 6, y + 4);
     }
 
-    // X-axis: state counts
-    var statesList = options.states || [1, 2, 3, 4, 5];
+    var paramValues = options.paramValues || [1, 2, 3, 4, 5];
+    var paramLabel = options.paramLabel || 'Automaton States';
     ctx.fillStyle = '#6a7a8c';
     ctx.textAlign = 'center';
-    for (var i = 0; i < statesList.length; i++) {
-      var x = pad.left + cw * (i + 0.5) / statesList.length;
-      ctx.fillText(statesList[i], x, h - pad.bottom + 18);
+    for (var i = 0; i < paramValues.length; i++) {
+      var x = pad.left + cw * (i + 0.5) / paramValues.length;
+      var label = typeof paramValues[i] === 'number' ?
+        (paramValues[i] % 1 !== 0 ? paramValues[i].toFixed(3) : String(paramValues[i])) :
+        String(paramValues[i]);
+      ctx.fillText(label, x, h - pad.bottom + 18);
     }
-    ctx.fillText('Automaton States', pad.left + cw / 2, h - 4);
+    ctx.fillText(paramLabel, pad.left + cw / 2, h - 4);
 
     // Plot individual trial dots
-    for (var si = 0; si < statesList.length; si++) {
-      var stateCount = statesList[si];
-      var trials = sweepData[stateCount] || [];
-      var baseX = pad.left + cw * (si + 0.5) / statesList.length;
+    for (var si = 0; si < paramValues.length; si++) {
+      var pVal = paramValues[si];
+      var key = typeof pVal === 'number' ? pVal : si;
+      var trials = sweepData[key] || [];
+      var baseX = pad.left + cw * (si + 0.5) / paramValues.length;
 
       for (var t = 0; t < trials.length; t++) {
         var coopRate = trials[t];
@@ -1185,18 +1609,38 @@
       }
     }
 
-    // Plot mean line
+    // Mean line + error bars (std dev)
     var means = [];
-    for (var si = 0; si < statesList.length; si++) {
-      var trials = sweepData[statesList[si]] || [];
+    for (var si = 0; si < paramValues.length; si++) {
+      var pVal = paramValues[si];
+      var key = typeof pVal === 'number' ? pVal : si;
+      var trials = sweepData[key] || [];
       if (trials.length === 0) continue;
       var sum = 0;
       for (var t = 0; t < trials.length; t++) sum += trials[t];
+      var mean = sum / trials.length;
+      var variance = 0;
+      for (var t = 0; t < trials.length; t++) variance += (trials[t] - mean) * (trials[t] - mean);
+      var std = trials.length > 1 ? Math.sqrt(variance / (trials.length - 1)) : 0;
       means.push({
-        x: pad.left + cw * (si + 0.5) / statesList.length,
-        y: pad.top + ch * (1 - sum / trials.length),
-        mean: sum / trials.length
+        x: pad.left + cw * (si + 0.5) / paramValues.length,
+        y: pad.top + ch * (1 - mean),
+        mean: mean,
+        std: std
       });
+    }
+
+    // Error bars (+-1 std)
+    ctx.strokeStyle = 'rgba(79, 195, 247, 0.4)';
+    ctx.lineWidth = 1.5;
+    for (var i = 0; i < means.length; i++) {
+      var m = means[i];
+      if (m.std < 0.001) continue;
+      var yTop = pad.top + ch * (1 - Math.min(1, m.mean + m.std));
+      var yBot = pad.top + ch * (1 - Math.max(0, m.mean - m.std));
+      ctx.beginPath(); ctx.moveTo(m.x, yTop); ctx.lineTo(m.x, yBot); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(m.x - 4, yTop); ctx.lineTo(m.x + 4, yTop); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(m.x - 4, yBot); ctx.lineTo(m.x + 4, yBot); ctx.stroke();
     }
 
     if (means.length >= 2) {
@@ -1209,33 +1653,12 @@
       }
       ctx.stroke();
 
-      // Mean dots
       ctx.fillStyle = '#4fc3f7';
       for (var i = 0; i < means.length; i++) {
         ctx.beginPath();
         ctx.arc(means[i].x, means[i].y, 5, 0, Math.PI * 2);
         ctx.fill();
       }
-    }
-
-    // Error bars (min/max)
-    ctx.strokeStyle = 'rgba(79, 195, 247, 0.4)';
-    ctx.lineWidth = 1.5;
-    for (var si = 0; si < statesList.length; si++) {
-      var trials = sweepData[statesList[si]] || [];
-      if (trials.length < 2) continue;
-      var minV = Math.min.apply(null, trials);
-      var maxV = Math.max.apply(null, trials);
-      var x = pad.left + cw * (si + 0.5) / statesList.length;
-      var yMin = pad.top + ch * (1 - minV);
-      var yMax = pad.top + ch * (1 - maxV);
-      ctx.beginPath();
-      ctx.moveTo(x, yMin);
-      ctx.lineTo(x, yMax);
-      ctx.stroke();
-      // Caps
-      ctx.beginPath(); ctx.moveTo(x - 4, yMin); ctx.lineTo(x + 4, yMin); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x - 4, yMax); ctx.lineTo(x + 4, yMax); ctx.stroke();
     }
   }
 
@@ -1326,10 +1749,11 @@
       var body = document.getElementById('saved-runs-body');
       if (runs.length === 0) {
         body.innerHTML = '<div class="sr-empty">No saved runs yet. Complete a simulation to auto-save.</div>';
+        // Also update Lab tab dropdowns
+        populateLabSavedAgents(runs);
         return;
       }
 
-      // Sort newest first
       runs.sort(function(a, b) { return (b.id || 0) - (a.id || 0); });
 
       var html = '<table class="saved-runs-table"><thead><tr>' +
@@ -1434,13 +1858,18 @@
               singleData = record.stats || [];
               singleMaxGen = singleData.length;
               redrawSingleChart();
+              drawCompositionChart(document.getElementById('chart-composition'), singleData, singleMaxGen);
               updateStatsDisplay(singleData.length > 0 ? singleData[singleData.length - 1] : null);
               showStrategyPanel(record.topAgents || []);
+              updateBridgeAnnotation();
               showToast('Loaded: ' + (record.label || 'Run #' + record.id));
             }
           });
         });
       });
+
+      // Update Lab tab dropdowns
+      populateLabSavedAgents(runs);
     });
   }
 
@@ -1499,7 +1928,6 @@
     }
     container.innerHTML = html;
 
-    // Draw diagrams after DOM update
     setTimeout(function() {
       for (var i = 0; i < topAgents.length; i++) {
         var agent = topAgents[i].agent;
@@ -1513,13 +1941,11 @@
       }
     }, 10);
 
-    // Auto-open the panel
     document.getElementById('strategy-toggle').classList.add('open');
     document.getElementById('strategy-panel').classList.add('open');
   }
 
   function reconstructAutomaton(agent) {
-    // Reconstruct from stored data (arrays may have been serialized)
     return {
       states: agent.states,
       startState: agent.startState,
@@ -1530,7 +1956,6 @@
     };
   }
 
-  // Strategy panel toggle
   document.getElementById('strategy-toggle').addEventListener('click', function() {
     this.classList.toggle('open');
     document.getElementById('strategy-panel').classList.toggle('open');
@@ -1579,7 +2004,6 @@
         var skipped = 0;
 
         getAllRuns(function(existingRuns) {
-          // Build hash set for deduplication
           var existingHashes = {};
           existingRuns.forEach(function(r) {
             var hash = JSON.stringify(r.params) + '|' + (r.stats ? r.stats.length : 0);
@@ -1623,7 +2047,6 @@
       }
     };
     reader.readAsText(file);
-    // Reset so same file can be imported again
     e.target.value = '';
   });
 
@@ -1637,6 +2060,35 @@
       });
     }
   });
+
+  // ===== Composition Toggle (P5.3) =====
+
+  document.getElementById('composition-toggle').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.getElementById('composition-container').classList.toggle('open');
+    if (document.getElementById('composition-container').classList.contains('open') && singleData.length > 0) {
+      drawCompositionChart(document.getElementById('chart-composition'), singleData, singleMaxGen);
+    }
+  });
+
+  // ===== Bridge Annotation (P5.4) =====
+
+  function updateBridgeAnnotation() {
+    var el = document.getElementById('bridge-annotation');
+    if (!singleData || singleData.length < 10) {
+      el.classList.remove('visible');
+      return;
+    }
+    var states = getVal('states');
+    var initialCoop = singleData.slice(0, 5).reduce(function(s, x) { return s + x.cooperationRate; }, 0) / Math.min(5, singleData.length);
+    var finalCoop = singleData.slice(-5).reduce(function(s, x) { return s + x.cooperationRate; }, 0) / Math.min(5, singleData.length);
+
+    if (states >= 2 && finalCoop > 0.5 && initialCoop < 0.3) {
+      el.classList.add('visible');
+    } else {
+      el.classList.remove('visible');
+    }
+  }
 
   // ===== EVOLVE (SINGLE RUN) =====
 
@@ -1681,10 +2133,12 @@
     drawLineChart(document.getElementById('chart-single'), [], 50,
       { height: 320, maxPayoff: getPayoffs().T || 5, pinnedData: pinnedRunData });
     enableSingleControls(true);
-    // Reset strategy panel
     document.getElementById('strategy-cards').innerHTML = '<div class="sr-empty">Run a simulation to see evolved strategies.</div>';
     document.getElementById('strategy-toggle').classList.remove('open');
     document.getElementById('strategy-panel').classList.remove('open');
+    document.getElementById('bridge-annotation').classList.remove('visible');
+    // Reset composition
+    drawCompositionChart(document.getElementById('chart-composition'), [], 50);
   }
 
   function enableSingleControls(en) {
@@ -1720,18 +2174,23 @@
       document.getElementById('btn-pause').disabled = true;
       enableSingleControls(true);
 
-      // Build run result and save
       lastRunResult = {
         stats: singleData,
         pop0: { agents: singlePop0.agents, fitness: singlePop0.fitness || new Float64Array(popSize) },
         pop1: { agents: singlePop1.agents, fitness: singlePop1.fitness || new Float64Array(popSize) }
       };
 
-      // Get top agents and show strategy panel
       var topAgents = Experiment.topAgents(lastRunResult, 5);
       showStrategyPanel(topAgents);
+      updateBridgeAnnotation();
 
-      // Prepare top agents for storage (convert Uint8Arrays to plain arrays)
+      // Auto-open composition chart for states >= 2
+      if (states >= 2) {
+        document.getElementById('composition-toggle').classList.add('open');
+        document.getElementById('composition-container').classList.add('open');
+        drawCompositionChart(document.getElementById('chart-composition'), singleData, singleMaxGen);
+      }
+
       var storedTopAgents = topAgents.map(function(entry) {
         return {
           agent: {
@@ -1746,7 +2205,6 @@
         };
       });
 
-      // Auto-save to IndexedDB
       runCounter++;
       var runRecord = {
         timestamp: new Date().toISOString(),
@@ -1775,17 +2233,14 @@
       return;
     }
 
-    // Run one generation -- two-population coevolution
     var result = GA.crossTournament(singlePop0, singlePop1, rounds, payoffs);
     var stats = Experiment._computeCoevolveStats(
       singlePop0, singlePop1, result.fitness0, result.fitness1, rounds, singleGen);
     singleData.push(stats);
 
-    // Store fitness for topAgents extraction at end
     singlePop0.fitness = result.fitness0;
     singlePop1.fitness = result.fitness1;
 
-    // Update display
     updateStatsDisplay(stats);
     document.getElementById('progress').style.width = ((singleGen + 1) / singleMaxGen * 100) + '%';
 
@@ -1793,7 +2248,11 @@
     drawLineChart(document.getElementById('chart-single'), singleData, singleMaxGen,
       { height: 320, maxPayoff: maxPayoff, pinnedData: pinnedRunData });
 
-    // Evolve both populations independently
+    // Update composition chart if visible
+    if (document.getElementById('composition-container').classList.contains('open')) {
+      drawCompositionChart(document.getElementById('chart-composition'), singleData, singleMaxGen);
+    }
+
     var eliteCount = Math.round(popSize * 2 / 3);
     if (singleGen < singleMaxGen - 1) {
       singlePop0 = GA.evolve(singlePop0, result.fitness0, {
@@ -1806,7 +2265,6 @@
 
     singleGen++;
 
-    // Schedule next step based on speed
     var speed = getVal('speed');
     var delay = Math.max(1, Math.round(500 / speed));
     singleTimer = setTimeout(singleStep, delay);
@@ -1838,13 +2296,344 @@
     document.getElementById('seed').value = Math.floor(tmpRng.random() * 100000);
   });
 
-  // Initialize chart on load
   drawLineChart(document.getElementById('chart-single'), [], 50, { height: 320, maxPayoff: 5 });
 
-  // ===== SWEEP TAB =====
+  // ===== LAB TAB (P5.1) =====
+
+  var labAutoA = null;
+  var labAutoB = null;
+  var labHistory = [];
+  var labRound = 0;
+  var labMaxRounds = 20;
+  var labScoreA = 0;
+  var labScoreB = 0;
+  var labPlaying = false;
+  var labTimer = null;
+  var labCoopA = 0;
+  var labCoopB = 0;
+
+  function updateLabPayoffsDisplay() {
+    var p = getPayoffs();
+    document.getElementById('lab-payoffs-display').textContent =
+      'Payoffs: T=' + p.T + ' R=' + p.R + ' P=' + p.P + ' S=' + p.S;
+  }
+
+  function getLabAutomaton(selectId) {
+    var sel = document.getElementById(selectId);
+    var val = sel.value;
+    // Check if it's a saved run agent
+    if (val.indexOf('saved:') === 0) {
+      var parts = val.split(':');
+      var runId = parseInt(parts[1]);
+      var agentIdx = parseInt(parts[2]);
+      // Return from cached saved agents
+      if (labSavedAgents[runId] && labSavedAgents[runId][agentIdx]) {
+        return reconstructAutomaton(labSavedAgents[runId][agentIdx]);
+      }
+    }
+    return Automaton.createNamed(val);
+  }
+
+  var labSavedAgents = {};
+
+  function populateLabSavedAgents(runs) {
+    labSavedAgents = {};
+    var selA = document.getElementById('lab-player-a');
+    var selB = document.getElementById('lab-player-b');
+    // Remove old saved options
+    ['lab-player-a', 'lab-player-b'].forEach(function(selId) {
+      var sel = document.getElementById(selId);
+      var opts = sel.querySelectorAll('option[data-saved]');
+      opts.forEach(function(o) { o.remove(); });
+    });
+    // Add saved run agents
+    for (var i = 0; i < runs.length; i++) {
+      var r = runs[i];
+      if (!r.topAgents || r.topAgents.length === 0) continue;
+      labSavedAgents[r.id] = r.topAgents.map(function(ta) { return ta.agent; });
+      for (var j = 0; j < r.topAgents.length; j++) {
+        var ta = r.topAgents[j];
+        var label = (r.label || 'Run #' + r.id) + ': #' + (j + 1) + ' (' + (ta.identified || 'other') + ')';
+        var val = 'saved:' + r.id + ':' + j;
+        var optA = document.createElement('option');
+        optA.value = val;
+        optA.textContent = label;
+        optA.setAttribute('data-saved', 'true');
+        selA.appendChild(optA);
+        var optB = optA.cloneNode(true);
+        selB.appendChild(optB);
+      }
+    }
+  }
+
+  function labReset() {
+    labHistory = [];
+    labRound = 0;
+    labScoreA = 0;
+    labScoreB = 0;
+    labCoopA = 0;
+    labCoopB = 0;
+    labPlaying = false;
+    if (labTimer) { clearTimeout(labTimer); labTimer = null; }
+    labMaxRounds = getVal('lab-rounds');
+
+    labAutoA = getLabAutomaton('lab-player-a');
+    labAutoB = getLabAutomaton('lab-player-b');
+    if (labAutoA) labAutoA = Automaton.reset(labAutoA);
+    if (labAutoB) labAutoB = Automaton.reset(labAutoB);
+
+    var selA = document.getElementById('lab-player-a');
+    var selB = document.getElementById('lab-player-b');
+    document.getElementById('lab-a-label').textContent = 'Player A: ' + selA.options[selA.selectedIndex].text;
+    document.getElementById('lab-b-label').textContent = 'Player B: ' + selB.options[selB.selectedIndex].text;
+
+    document.getElementById('lab-round-display').textContent = 'Round: 0 / ' + labMaxRounds;
+    document.getElementById('lab-history').innerHTML = '<div style="color:var(--text-dim);text-align:center;padding:1rem;">Click Step or Play to begin.</div>';
+    document.getElementById('lab-summary').style.display = 'none';
+    document.getElementById('btn-lab-play').textContent = 'Play ▶';
+
+    updateLabPayoffsDisplay();
+    drawLabDiagrams();
+  }
+
+  function drawLabDiagrams() {
+    var canvasA = document.getElementById('lab-diagram-a');
+    var canvasB = document.getElementById('lab-diagram-b');
+    if (!canvasA || !canvasB) return;
+    var ctxA = canvasA.getContext('2d');
+    var ctxB = canvasB.getContext('2d');
+    ctxA.clearRect(0, 0, 140, 140);
+    ctxB.clearRect(0, 0, 140, 140);
+    if (labAutoA) drawAutomaton(ctxA, labAutoA, 0, 0, 140, { highlightState: labAutoA.currentState });
+    if (labAutoB) drawAutomaton(ctxB, labAutoB, 0, 0, 140, { highlightState: labAutoB.currentState });
+  }
+
+  function labStepOne() {
+    if (!labAutoA || !labAutoB || labRound >= labMaxRounds) return false;
+
+    var payoffs = getPayoffs();
+    var moveA = labAutoA.actions[labAutoA.currentState];
+    var moveB = labAutoB.actions[labAutoB.currentState];
+
+    var pA = 0, pB = 0;
+    if (moveA === 0 && moveB === 0) { pA = payoffs.R; pB = payoffs.R; }
+    else if (moveA === 0 && moveB === 1) { pA = payoffs.S; pB = payoffs.T; }
+    else if (moveA === 1 && moveB === 0) { pA = payoffs.T; pB = payoffs.S; }
+    else { pA = payoffs.P; pB = payoffs.P; }
+
+    labScoreA += pA;
+    labScoreB += pB;
+    if (moveA === 0) labCoopA++;
+    if (moveB === 0) labCoopB++;
+
+    labHistory.push({ round: labRound + 1, moveA: moveA, moveB: moveB, pA: pA, pB: pB, totalA: labScoreA, totalB: labScoreB });
+
+    // Transition
+    var nextA = (moveB === 0) ? labAutoA.transC[labAutoA.currentState] : labAutoA.transD[labAutoA.currentState];
+    var nextB = (moveA === 0) ? labAutoB.transC[labAutoB.currentState] : labAutoB.transD[labAutoB.currentState];
+    labAutoA.currentState = nextA;
+    labAutoB.currentState = nextB;
+
+    labRound++;
+    updateLabDisplay();
+    return labRound < labMaxRounds;
+  }
+
+  function updateLabDisplay() {
+    document.getElementById('lab-round-display').textContent = 'Round: ' + labRound + ' / ' + labMaxRounds;
+
+    var html = '';
+    for (var i = 0; i < labHistory.length; i++) {
+      var h = labHistory[i];
+      var isCurrent = (i === labHistory.length - 1);
+      var mA = h.moveA === 0 ? 'C' : 'D';
+      var mB = h.moveB === 0 ? 'C' : 'D';
+      html += '<div class="lab-history-row' + (isCurrent ? ' current' : '') + '">';
+      html += '<span class="round-num">' + (isCurrent ? '▸ ' : '') + 'R' + h.round + '</span>';
+      html += '<span class="moves">' + mA + ' vs ' + mB + '</span>';
+      html += '<span class="scores">A:' + h.pA + ' B:' + h.pB + '</span>';
+      html += '<span class="totals">(A:' + h.totalA + ' B:' + h.totalB + ')</span>';
+      html += '</div>';
+    }
+    document.getElementById('lab-history').innerHTML = html;
+
+    // Auto-scroll to bottom
+    var historyEl = document.getElementById('lab-history');
+    historyEl.scrollTop = historyEl.scrollHeight;
+
+    drawLabDiagrams();
+
+    // Summary
+    if (labRound > 0) {
+      document.getElementById('lab-summary').style.display = 'grid';
+      document.getElementById('lab-score-a').textContent = labScoreA + ' (avg ' + (labScoreA / labRound).toFixed(2) + '/round)';
+      document.getElementById('lab-score-b').textContent = labScoreB + ' (avg ' + (labScoreB / labRound).toFixed(2) + '/round)';
+      document.getElementById('lab-coop-a').textContent = labCoopA + '/' + labRound + ' (' + (labCoopA / labRound * 100).toFixed(0) + '%)';
+      document.getElementById('lab-coop-b').textContent = labCoopB + '/' + labRound + ' (' + (labCoopB / labRound * 100).toFixed(0) + '%)';
+    }
+  }
+
+  document.getElementById('btn-lab-step').addEventListener('click', function() {
+    if (labRound === 0) labReset();
+    labStepOne();
+  });
+
+  document.getElementById('btn-lab-play').addEventListener('click', function() {
+    if (labPlaying) {
+      labPlaying = false;
+      if (labTimer) { clearTimeout(labTimer); labTimer = null; }
+      document.getElementById('btn-lab-play').textContent = 'Play ▶';
+      return;
+    }
+    if (labRound === 0) labReset();
+    labPlaying = true;
+    document.getElementById('btn-lab-play').textContent = 'Stop';
+    function autoStep() {
+      if (!labPlaying) return;
+      var hasMore = labStepOne();
+      if (hasMore && labPlaying) {
+        var speed = getVal('lab-speed');
+        labTimer = setTimeout(autoStep, Math.round(1000 / speed));
+      } else {
+        labPlaying = false;
+        document.getElementById('btn-lab-play').textContent = 'Play ▶';
+      }
+    }
+    autoStep();
+  });
+
+  document.getElementById('btn-lab-reset').addEventListener('click', labReset);
+
+  document.getElementById('btn-lab-save').addEventListener('click', function() {
+    if (labHistory.length === 0) { showToast('No matchup to save.'); return; }
+    var selA = document.getElementById('lab-player-a');
+    var selB = document.getElementById('lab-player-b');
+    var nameA = selA.options[selA.selectedIndex].text;
+    var nameB = selB.options[selB.selectedIndex].text;
+    var label = 'Lab: ' + nameA + ' vs ' + nameB;
+    var stats = [{
+      generation: 0,
+      cooperationRate: (labCoopA + labCoopB) / (2 * labRound),
+      avgPayoff: (labScoreA + labScoreB) / (2 * labRound),
+      maxPayoff: Math.max(labScoreA, labScoreB) / labRound,
+      census: {}
+    }];
+    var autoA = getLabAutomaton('lab-player-a');
+    var autoB = getLabAutomaton('lab-player-b');
+    var topAgents = [];
+    if (autoA) topAgents.push({
+      agent: { states: autoA.states, startState: autoA.startState, actions: Array.from(autoA.actions), transC: Array.from(autoA.transC), transD: Array.from(autoA.transD) },
+      fitness: labScoreA,
+      identified: Automaton.identifyFunctional(autoA)
+    });
+    if (autoB) topAgents.push({
+      agent: { states: autoB.states, startState: autoB.startState, actions: Array.from(autoB.actions), transC: Array.from(autoB.transC), transD: Array.from(autoB.transD) },
+      fitness: labScoreB,
+      identified: Automaton.identifyFunctional(autoB)
+    });
+
+    var runRecord = {
+      timestamp: new Date().toISOString(),
+      label: label,
+      params: { rounds: labMaxRounds, payoffs: getPayoffs() },
+      stats: stats,
+      topAgents: topAgents,
+      notes: 'Lab matchup'
+    };
+    saveRun(runRecord, function() {
+      refreshSavedRuns();
+      showToast('Matchup saved: ' + label);
+    });
+  });
+
+  // Initialize Lab on page load
+  labReset();
+
+  // ===== SWEEP TAB (Generalized P5.2) =====
 
   var sweepData = {};
   var sweepRunning = false;
+  var currentSweepParam = 'states';
+
+  // Sweep parameter defaults
+  var sweepDefaults = {
+    states:     { start: 1,     end: 5,     steps: 5  },
+    mutation:   { start: 0.001, end: 0.050, steps: 6  },
+    rounds:     { start: 1,     end: 200,   steps: 6  },
+    population: { start: 10,    end: 100,   steps: 5  },
+    temptation: { start: 3,     end: 10,    steps: 8  },
+    reward:     { start: 1,     end: 5,     steps: 5  }
+  };
+
+  var sweepAnnotations = {
+    states: '<p><span class="red">With 1 state</span>, agents can only play unconditionally. Always Defect dominates -- cooperation hovers near zero.</p><p><span class="green">With 2 states</span>, conditional strategies like Tit-for-Tat become possible. Cooperation emerges through reciprocity.</p><p><span class="orange">The transition is sharp</span> -- a single additional state, the minimum unit of computational capacity, produces a qualitative change in social behavior. This is Miller\'s central finding: social behavior requires crossing a <span class="highlight">computational threshold</span>.</p>',
+    mutation: '<p>Higher mutation rates disrupt the <span class="highlight">conditional transitions</span> that enable cooperation. Strategies like TFT and Grim Trigger depend on remembering the opponent\'s last move -- high mutation destroys this memory.</p><p><span class="orange">There is a second phase transition</span>: below ~0.005 mutation, cooperation thrives; above ~0.020, it collapses.</p>',
+    rounds: '<p>With very few rounds, there is no time for <span class="highlight">reciprocity</span> to develop. TFT needs at least a few rounds to establish mutual cooperation and punish defection.</p><p><span class="green">More rounds</span> give cooperative strategies the time advantage they need to outperform defectors.</p>',
+    population: '<p>Small populations have <span class="orange">higher variance</span> -- a lucky defector can dominate by chance. Larger populations provide more reliable selection pressure.</p>',
+    temptation: '<p>Higher temptation (T) makes <span class="red">defection more attractive</span>. When T >> R, even conditional cooperators struggle to maintain mutual cooperation.</p>',
+    reward: '<p>Higher reward (R) makes <span class="green">mutual cooperation more valuable</span>. When R approaches T, the incentive to defect diminishes.</p>'
+  };
+
+  function updateSweepDefaults() {
+    var param = document.getElementById('sweep-param').value;
+    currentSweepParam = param;
+    var def = sweepDefaults[param];
+    document.getElementById('sweep-range-start').value = def.start;
+    document.getElementById('sweep-range-end').value = def.end;
+    document.getElementById('sweep-range-steps').value = def.steps;
+
+    // Update hold-constant display
+    var hold = [];
+    if (param !== 'population') hold.push('pop=30');
+    if (param !== 'states') hold.push('states=2');
+    if (param !== 'rounds') hold.push('rounds=150');
+    if (param !== 'mutation') hold.push('mut=0.005');
+    if (param !== 'temptation') hold.push('T=5');
+    if (param !== 'reward') hold.push('R=3');
+    hold.push('P=1, S=0');
+    document.getElementById('sweep-hold-constant').textContent = 'Hold constant: ' + hold.join(', ');
+  }
+
+  document.getElementById('sweep-param').addEventListener('change', updateSweepDefaults);
+
+  function generateSweepValues() {
+    var start = getFloatVal('sweep-range-start');
+    var end = getFloatVal('sweep-range-end');
+    var steps = getVal('sweep-range-steps');
+    var values = [];
+    if (steps <= 1) {
+      values.push(start);
+    } else {
+      for (var i = 0; i < steps; i++) {
+        var v = start + (end - start) * i / (steps - 1);
+        values.push(v);
+      }
+    }
+    return values;
+  }
+
+  function buildSweepConfig(param, value, seed) {
+    var config = {
+      populationSize: 30,
+      states: 2,
+      rounds: 150,
+      mutationRate: 0.005,
+      generations: getVal('sweep-gens'),
+      seed: seed,
+      payoffs: { T: 5, R: 3, P: 1, S: 0 }
+    };
+
+    switch (param) {
+      case 'states':     config.states = Math.round(value); break;
+      case 'mutation':   config.mutationRate = value; break;
+      case 'rounds':     config.rounds = Math.round(value); break;
+      case 'population': config.populationSize = Math.round(value); break;
+      case 'temptation': config.payoffs.T = value; break;
+      case 'reward':     config.payoffs.R = value; break;
+    }
+
+    return config;
+  }
 
   function sweepReset() {
     sweepData = {};
@@ -1855,7 +2644,21 @@
     document.getElementById('sweep-annotation').style.display = 'none';
     document.getElementById('btn-sweep').disabled = false;
     document.getElementById('btn-sweep').textContent = 'Run Sweep';
-    drawSweepChart(document.getElementById('chart-sweep'), {}, { height: 360, states: [1,2,3,4,5] });
+    var paramValues = generateSweepValues();
+    drawSweepChart(document.getElementById('chart-sweep'), {},
+      { height: 360, paramValues: paramValues, paramLabel: getSweepLabel() });
+  }
+
+  function getSweepLabel() {
+    var labels = {
+      states: 'Automaton States',
+      mutation: 'Mutation Rate',
+      rounds: 'Rounds per Match',
+      population: 'Population Size',
+      temptation: 'Temptation (T)',
+      reward: 'Reward (R)'
+    };
+    return labels[currentSweepParam] || currentSweepParam;
   }
 
   document.getElementById('btn-sweep-reset').addEventListener('click', sweepReset);
@@ -1868,27 +2671,21 @@
     document.getElementById('btn-sweep').textContent = 'Running...';
     document.getElementById('sweep-annotation').style.display = 'none';
 
-    var statesList = [1, 2, 3, 4, 5];
-    var trialsPerState = getVal('sweep-trials');
-    var gensPerTrial = getVal('sweep-gens');
+    var param = currentSweepParam;
+    var paramValues = generateSweepValues();
+    var trialsPerPoint = getVal('sweep-trials');
     var baseSeed = getVal('sweep-seed');
-    var totalTrials = statesList.length * trialsPerState;
+    var totalTrials = paramValues.length * trialsPerPoint;
     var completed = 0;
 
-    statesList.forEach(function(s) { sweepData[s] = []; });
+    paramValues.forEach(function(v) { sweepData[v] = []; });
 
     var configs = [];
-    for (var si = 0; si < statesList.length; si++) {
-      for (var t = 0; t < trialsPerState; t++) {
-        configs.push({
-          populationSize: 30,
-          states: statesList[si],
-          rounds: 150,
-          generations: gensPerTrial,
-          mutationRate: 0.005,
-          seed: baseSeed + si * 1000 + t,
-          _stateCount: statesList[si]
-        });
+    for (var si = 0; si < paramValues.length; si++) {
+      for (var t = 0; t < trialsPerPoint; t++) {
+        var config = buildSweepConfig(param, paramValues[si], baseSeed + si * 1000 + t);
+        config._paramValue = paramValues[si];
+        configs.push(config);
       }
     }
 
@@ -1900,7 +2697,12 @@
         document.getElementById('btn-sweep').disabled = false;
         document.getElementById('btn-sweep').textContent = 'Run Sweep';
         document.getElementById('sweep-status').textContent = 'Complete';
-        document.getElementById('sweep-annotation').style.display = 'block';
+        // Show annotation
+        var annText = sweepAnnotations[param] || '';
+        if (annText) {
+          document.getElementById('sweep-annotation').innerHTML = annText;
+          document.getElementById('sweep-annotation').style.display = 'block';
+        }
         return;
       }
 
@@ -1916,14 +2718,15 @@
         }
         var finalCoop = sumCoop / lastN;
 
-        sweepData[config._stateCount].push(finalCoop);
+        sweepData[config._paramValue].push(finalCoop);
         completed++;
 
         document.getElementById('sweep-progress').style.width = (completed / totalTrials * 100) + '%';
         document.getElementById('sweep-count').textContent = completed + '/' + totalTrials;
-        document.getElementById('sweep-status').textContent = 'Running (states=' + config._stateCount + ')';
+        document.getElementById('sweep-status').textContent = 'Running (' + getSweepLabel() + '=' + (typeof config._paramValue === 'number' && config._paramValue % 1 !== 0 ? config._paramValue.toFixed(3) : config._paramValue) + ')';
 
-        drawSweepChart(document.getElementById('chart-sweep'), sweepData, { height: 360, states: statesList });
+        drawSweepChart(document.getElementById('chart-sweep'), sweepData,
+          { height: 360, paramValues: paramValues, paramLabel: getSweepLabel() });
 
         setTimeout(runNextTrial, 0);
       });
@@ -1932,21 +2735,195 @@
     runNextTrial();
   });
 
-  // Initialize sweep chart
-  drawSweepChart(document.getElementById('chart-sweep'), {}, { height: 360, states: [1,2,3,4,5] });
+  // Initialize sweep
+  drawSweepChart(document.getElementById('chart-sweep'), {}, { height: 360, paramValues: [1,2,3,4,5], paramLabel: 'Automaton States' });
 
-  // Handle window resize
+  // ===== TEACHING SCENARIOS (P5.4) =====
+
+  /**
+   * Seeds selected from 50-200 seed search per scenario.
+   * Each chosen for the clearest visual demonstration.
+   */
+  var scenarios = {
+    '1': {
+      title: 'The Threshold',
+      question: 'Why does one state change everything?',
+      description: 'Two runs with the same seed: first with 1-state automata (only AllC or AllD possible), then with 2 states (conditional strategies emerge). The jump in cooperation is sharp -- one additional state enables TFT and Grim Trigger.',
+      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 163 },
+      // Seed 163: s1=0.067, s2=0.952. Best gap found.
+      twoPhase: true, // Run states=1 first, then states=2
+      firstParams: { populationSize: 30, states: 1, rounds: 150, mutationRate: 0.005, generations: 200, seed: 163 }
+    },
+    '2': {
+      title: 'Who Wins?',
+      question: 'What strategies does evolution discover?',
+      description: 'Grim Trigger dominates in most 2-state evolutionary runs (65% of seeds). Its permanent retaliation beats wobbly cooperators more reliably than TFT\'s forgiving strategy. Check the strategy panel after the run completes.',
+      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 47 }
+      // Seed 47: grim=0.95 of final population
+    },
+    '3': {
+      title: 'Mutation Destroys Memory',
+      question: 'What happens with more noise?',
+      description: 'Switch to the Sweep tab to see this: sweep mutation rate from 0.001 to 0.050. Below ~0.005, cooperation thrives. Above ~0.020, mutation destroys the conditional transitions that enable reciprocity -- a second phase transition.',
+      params: null, // Opens sweep tab
+      sweepConfig: { param: 'mutation', start: 0.001, end: 0.050, steps: 6 }
+    },
+    '4': {
+      title: 'Epochal Revolution',
+      question: 'How does cooperation take over?',
+      description: 'Watch the composition chart below. Early generations: random mix then AllD dominance (red). Then a sudden cooperative sweep -- one or two generations from defection to cooperation. This is Miller\'s "revolution by evolution."',
+      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 89 }
+      // Seed 89: sharp transition around gen 21
+    },
+    '5': {
+      title: 'The Game Matters',
+      question: 'Does cooperation always emerge?',
+      description: 'Same seed, different payoff structures. Prisoner\'s Dilemma vs Chicken (Hawk-Dove). The payoff matrix determines whether reciprocity dominates -- different games produce different social structures.',
+      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 160 },
+      // Seed 160: PD=0.93, Chicken=0.42
+      twoPhase: true,
+      firstParams: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 160, payoffs: { T: 5, R: 3, P: 0, S: 1 } }
+    },
+    '6': {
+      title: 'Replicating Miller (1996)',
+      question: 'Can we reproduce the original paper?',
+      description: 'The classic paper conditions: 30 agents, 16 states, 150 rounds, 200 generations, standard PD payoffs. Two-population coevolution. Cooperation emerges but variance is high at 16 states -- the search space is enormous.',
+      params: { populationSize: 30, states: 16, rounds: 150, mutationRate: 0.005, generations: 200, seed: 2 }
+      // Seed 2: coop=0.987
+    },
+    '7': {
+      title: 'Lab: Grim vs TFT',
+      question: 'Why does Grim beat TFT?',
+      description: 'Opens the Lab tab. First watch Grim Trigger vs a Wobbly cooperator (CCD pattern), then TFT vs the same. Grim\'s permanent retaliation crushes the wobbler; TFT\'s forgiveness gets exploited repeatedly.',
+      params: null, // Opens Lab tab
+      labConfig: { playerA: 'grimTrigger', playerB: 'wobbly', rounds: 150 }
+    }
+  };
+
+  document.querySelectorAll('.scenario-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = btn.dataset.scenario;
+      var scenario = scenarios[id];
+      if (!scenario) return;
+
+      // Highlight button
+      document.querySelectorAll('.scenario-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      // Show description
+      var descEl = document.getElementById('scenario-desc');
+      descEl.innerHTML = '<div class="scenario-title">' + scenario.title + '</div>' +
+        '<div class="scenario-question">' + scenario.question + '</div>' +
+        '<div>' + scenario.description + '</div>';
+      descEl.classList.add('visible');
+
+      // Handle scenario 3 (sweep)
+      if (scenario.sweepConfig) {
+        // Switch to sweep tab
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.tab').forEach(function(t) {
+          if (t.dataset.tab === 'sweep') t.classList.add('active');
+        });
+        document.querySelectorAll('.tab-content').forEach(function(tc) { tc.classList.remove('active'); });
+        document.getElementById('tab-sweep').classList.add('active');
+
+        var sc = scenario.sweepConfig;
+        document.getElementById('sweep-param').value = sc.param;
+        currentSweepParam = sc.param;
+        document.getElementById('sweep-range-start').value = sc.start;
+        document.getElementById('sweep-range-end').value = sc.end;
+        document.getElementById('sweep-range-steps').value = sc.steps;
+        updateSweepDefaults();
+        // Auto-run
+        document.getElementById('btn-sweep').click();
+        return;
+      }
+
+      // Handle scenario 7 (lab)
+      if (scenario.labConfig) {
+        // Switch to lab tab
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.tab').forEach(function(t) {
+          if (t.dataset.tab === 'lab') t.classList.add('active');
+        });
+        document.querySelectorAll('.tab-content').forEach(function(tc) { tc.classList.remove('active'); });
+        document.getElementById('tab-lab').classList.add('active');
+
+        var lc = scenario.labConfig;
+        document.getElementById('lab-player-a').value = lc.playerA;
+        document.getElementById('lab-player-b').value = lc.playerB;
+        document.getElementById('lab-rounds').value = lc.rounds;
+        document.getElementById('lab-rounds-val').textContent = lc.rounds;
+        labReset();
+        // Auto-play
+        document.getElementById('btn-lab-play').click();
+        return;
+      }
+
+      // Handle two-phase scenarios (1 and 5)
+      if (scenario.twoPhase && scenario.firstParams) {
+        // Run first phase, pin it, then run second phase
+        singleReset();
+        var fp = scenario.firstParams;
+        setControlsFromParams(fp);
+        // Run the first phase silently using Experiment.run
+        var firstResult = Experiment.run(fp);
+        pinnedRunData = firstResult.stats;
+        pinnedRunId = null; // not from DB
+        // Now set second phase params and run
+        var sp = scenario.params;
+        setControlsFromParams(sp);
+        document.getElementById('btn-run').click();
+        return;
+      }
+
+      // Regular scenario: set params and run
+      if (scenario.params) {
+        singleReset();
+        setControlsFromParams(scenario.params);
+        document.getElementById('btn-run').click();
+      }
+    });
+  });
+
+  function setControlsFromParams(p) {
+    if (p.populationSize !== undefined) { document.getElementById('pop-size').value = p.populationSize; document.getElementById('pop-size-val').textContent = p.populationSize; }
+    if (p.states !== undefined) { document.getElementById('states').value = p.states; document.getElementById('states-val').textContent = p.states; }
+    if (p.rounds !== undefined) { document.getElementById('rounds').value = p.rounds; document.getElementById('rounds-val').textContent = p.rounds; }
+    if (p.mutationRate !== undefined) { document.getElementById('mutation').value = Math.round(p.mutationRate * 1000); document.getElementById('mutation-val').textContent = p.mutationRate.toFixed(3); }
+    if (p.generations !== undefined) { document.getElementById('generations').value = p.generations; document.getElementById('generations-val').textContent = p.generations; }
+    if (p.seed !== undefined) { document.getElementById('seed').value = p.seed; }
+    if (p.payoffs) {
+      document.getElementById('payoff-T').value = p.payoffs.T;
+      document.getElementById('payoff-T-val').textContent = p.payoffs.T;
+      document.getElementById('payoff-R').value = p.payoffs.R;
+      document.getElementById('payoff-R-val').textContent = p.payoffs.R;
+      document.getElementById('payoff-P').value = p.payoffs.P;
+      document.getElementById('payoff-P-val').textContent = p.payoffs.P;
+      document.getElementById('payoff-S').value = p.payoffs.S;
+      document.getElementById('payoff-S-val').textContent = p.payoffs.S;
+      updateGameType();
+    }
+  }
+
+  // ===== Window Resize =====
+
   var resizeTimer;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function() {
       if (singleData.length > 0) {
         redrawSingleChart();
+        if (document.getElementById('composition-container').classList.contains('open')) {
+          drawCompositionChart(document.getElementById('chart-composition'), singleData, singleMaxGen);
+        }
       } else {
         drawLineChart(document.getElementById('chart-single'), [], 50,
           { height: 320, maxPayoff: getPayoffs().T || 5 });
       }
-      drawSweepChart(document.getElementById('chart-sweep'), sweepData, { height: 360, states: [1,2,3,4,5] });
+      var paramValues = generateSweepValues();
+      drawSweepChart(document.getElementById('chart-sweep'), sweepData,
+        { height: 360, paramValues: paramValues, paramLabel: getSweepLabel() });
     }, 150);
   });
 
@@ -1954,7 +2931,6 @@
   sweepReset();
   refreshSavedRuns();
 
-  // Set runCounter from existing DB entries
   getAllRuns(function(runs) {
     if (runs.length > 0) {
       runCounter = Math.max.apply(null, runs.map(function(r) { return r.id || 0; }));

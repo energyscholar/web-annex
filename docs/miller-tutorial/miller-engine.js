@@ -146,6 +146,20 @@ const Miller = (function() {
           transD: new Uint8Array([1, 2, 2]),
           currentState: 0
         };
+      case 'wobbly':
+        // Wobbly cooperator: cooperates twice then defects once, repeat.
+        // Used in teaching scenarios to demonstrate why Grim beats TFT.
+        // State 0: C, on C->1, on D->1
+        // State 1: C, on C->2, on D->2
+        // State 2: D, on C->0, on D->0
+        return {
+          states: 3,
+          startState: 0,
+          actions: new Uint8Array([0, 0, 1]),
+          transC: new Uint8Array([1, 2, 0]),
+          transD: new Uint8Array([1, 2, 0]),
+          currentState: 0
+        };
       default:
         return null;
     }
@@ -235,7 +249,7 @@ const Miller = (function() {
   };
 
   Automaton.identify = function(auto) {
-    var names = ['allC', 'allD', 'tft', 'grimTrigger', 'pavlov', 'punishTwice', 'tf2t'];
+    var names = ['allC', 'allD', 'tft', 'grimTrigger', 'pavlov', 'punishTwice', 'tf2t', 'wobbly'];
     for (var i = 0; i < names.length; i++) {
       var named = Automaton.createNamed(names[i]);
       if (Automaton.equals(auto, named)) return names[i];
