@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>John H. Miller — Coevolving Machines and the Social Threshold</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #111820;
+    --card: #161d28;
+    --border: #1e2a3a;
+    --text: #c8d0dc;
+    --text-dim: #6a7a8c;
+    --accent: #4fc3f7;
+    --accent2: #81c784;
+    --accent3: #ffb74d;
+    --accent4: #ef5350;
+    --accent5: #ce93d8;
+    --mono: 'Courier New', 'Consolas', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--mono);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0d1520 0%, #162030 50%, #0d1520 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero .subtitle {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .hero .tagline {
+    color: var(--accent3);
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    font-style: italic;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 2rem 6rem;
+  }
+
+  section {
+    margin-bottom: 3.5rem;
+  }
+
+  h2 {
+    color: var(--accent);
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    color: var(--accent2);
+    font-size: 1.05rem;
+    margin: 2rem 0 1rem;
+  }
+
+  h4 {
+    color: var(--accent3);
+    font-size: 0.95rem;
+    margin: 1.5rem 0 0.8rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+    font-size: 0.88rem;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .card.highlight {
+    border-left: 3px solid var(--accent);
+  }
+
+  .card.warning {
+    border-left: 3px solid var(--accent3);
+  }
+
+  .card.critical {
+    border-left: 3px solid var(--accent4);
+  }
+
+  .card-title {
+    color: var(--accent);
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .figure {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .figure svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .figure-caption {
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    margin-top: 1rem;
+    font-style: italic;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.82rem;
+  }
+
+  th {
+    color: var(--accent);
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    border-bottom: 2px solid var(--border);
+    font-weight: normal;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tr:hover td {
+    background: rgba(79, 195, 247, 0.03);
+  }
+
+  .dim { color: var(--text-dim); }
+  .accent { color: var(--accent); }
+  .green { color: var(--accent2); }
+  .orange { color: var(--accent3); }
+  .red { color: var(--accent4); }
+  .purple { color: var(--accent5); }
+
+  .quote {
+    border-left: 2px solid var(--accent5);
+    padding: 0.8rem 1.2rem;
+    margin: 1.5rem 0;
+    color: var(--text-dim);
+    font-style: italic;
+    background: rgba(206, 147, 216, 0.03);
+  }
+
+  .quote .attr {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--accent5);
+    font-style: normal;
+    font-size: 0.78rem;
+  }
+
+  ul, ol {
+    margin: 0.8rem 0 1rem 1.5rem;
+    font-size: 0.88rem;
+  }
+
+  li { margin-bottom: 0.4rem; }
+
+  code {
+    background: var(--surface);
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+    color: var(--accent2);
+  }
+
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0 3rem;
+  }
+
+  .toc-title {
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc-counter;
+    margin: 0;
+    padding: 0;
+  }
+
+  .toc li {
+    counter-increment: toc-counter;
+    margin-bottom: 0.3rem;
+  }
+
+  .toc li::before {
+    content: counter(toc-counter) ". ";
+    color: var(--text-dim);
+  }
+
+  .toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+
+  .toc a:hover { color: var(--accent); }
+
+  .transition-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .transition-grid .card { margin: 0; }
+
+  @media (max-width: 700px) {
+    .hero h1 { font-size: 1.4rem; }
+    .container { padding: 1rem; }
+    .transition-grid { grid-template-columns: 1fr; }
+  }
+
+  .phase-arrow {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+  }
+
+  .biblio {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .biblio a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .param-compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    align-items: stretch;
+    margin: 1.5rem 0;
+  }
+
+  .param-compare .side {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+    border-radius: 6px;
+  }
+
+  .param-compare .arrow-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.8rem;
+    color: var(--accent3);
+    font-size: 1.2rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>JOHN H. MILLER</h1>
+  <div class="subtitle">Coevolving Machines &amp; the Origins of the Social Universe</div>
+  <div class="tagline">"If we could rewind the tape of Earth's deep history — would social behavior arise yet again?"</div>
+</div>
+
+<div class="container">
+
+<nav class="toc">
+  <div class="toc-title">CONTENTS</div>
+  <ol>
+    <li><a href="#who">Who Is John H. Miller?</a></li>
+    <li><a href="#ex-machina">Ex Machina — The Core Model</a></li>
+    <li><a href="#threshold">The Computational Threshold</a></li>
+    <li><a href="#revolutions">Revolutions by Evolution</a></li>
+    <li><a href="#games">Five Games, One Pattern</a></li>
+    <li><a href="#crude">A Crude Look at the Whole</a></li>
+    <li><a href="#cas">Complex Adaptive Systems (with Page)</a></li>
+    <li><a href="#papers">Key Papers</a></li>
+    <li><a href="#genealogy">Intellectual Genealogy</a></li>
+    <li><a href="#llm">The LLM Question — How Parameters Change</a></li>
+    <li><a href="#collaboration">Collaboration Surface</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<section id="who">
+<h2>1. Who Is John H. Miller?</h2>
+
+<p>SFI's first postdoctoral fellow (1988). Chair of the Science Steering Committee — ex officio on both the Science Board and Board of Trustees, making him the external faculty member with the most structural influence over SFI's research direction. Professor of Economics and Social Science at Carnegie Mellon. Fourth-generation Colorado rancher.</p>
+
+<p>Trained at Michigan (PhD Economics, 1988) under Ted Bergstrom and Hal Varian — yes, the Varian who later became Google's chief economist. But Miller's intellectual formation came from sitting next to <span class="accent">John Holland</span> (inventor of genetic algorithms, founder of Michigan's Center for the Study of Complex Systems) and <span class="accent">Robert Axelrod</span> (Evolution of Cooperation). Their 1991 paper launched computational economics.</p>
+
+<p>Monthly lunches at Murray Gell-Mann's house in Santa Fe with Cormac McCarthy. Auctioned McCarthy's typewriter for SFI — it raised $254,000. Co-hosted Kauffman's 80th birthday celebration at SFI with Geoffrey West. Co-founded (with Scott Page) the Graduate Workshop in Computational Social Science, now 30+ years running.</p>
+
+<div class="quote">
+  "Every year in Santa Fe, albeit only for two weeks, we assemble the best department in the world in computational social science and complexity."
+  <span class="attr">— Miller, on the GWCSS workshop</span>
+</div>
+
+<p>Three books. ~15,000 citations. The key thing to understand about Miller: he is not interested in making agents smarter. He is interested in how <em>staggeringly simple</em> agents produce <em>staggeringly complex</em> collective behavior. The simplest possible computational machines. The richest possible emergent structures.</p>
+</section>
+
+<!-- ============================================================ -->
+<section id="ex-machina">
+<h2>2. Ex Machina — The Core Model</h2>
+
+<h3>The Machines</h3>
+
+<p>Miller uses <span class="accent">Moore machines</span> — the simplest class of finite automata. A Moore machine has:</p>
+
+<ul>
+  <li>A finite set of <strong>states</strong> (1, 2, 3, 4, or 5 in his experiments)</li>
+  <li><strong>Binary input</strong>: the opponent's last action (0 = cooperate, 1 = defect)</li>
+  <li><strong>Binary output</strong>: the machine's own action (0 or 1), determined solely by current state</li>
+  <li><strong>Transition function</strong>: input + current state → next state</li>
+</ul>
+
+<p>That's it. No memory beyond the current state. No learning within a game. No model of the opponent. No reasoning. Just: look at state, produce output, read input, transition.</p>
+
+<div class="figure">
+  <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+    <!-- One-state automaton: Always Defect -->
+    <text x="140" y="30" fill="#6a7a8c" font-family="Courier New" font-size="13" text-anchor="middle">1-STATE: ALWAYS DEFECT</text>
+    <circle cx="140" cy="130" r="45" fill="none" stroke="#ef5350" stroke-width="2"/>
+    <text x="140" y="125" fill="#ef5350" font-family="Courier New" font-size="14" text-anchor="middle">S₀</text>
+    <text x="140" y="145" fill="#ef5350" font-family="Courier New" font-size="12" text-anchor="middle">out: 1</text>
+    <!-- self-loop -->
+    <path d="M 165 90 C 200 60, 210 70, 185 95" fill="none" stroke="#6a7a8c" stroke-width="1.5"/>
+    <text x="205" y="72" fill="#6a7a8c" font-family="Courier New" font-size="10">0,1</text>
+    <polygon points="183,93 190,100 178,100" fill="#6a7a8c"/>
+    <text x="140" y="210" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="middle">No memory. No conditionality.</text>
+    <text x="140" y="226" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="middle">Cannot respond to opponent.</text>
+    <text x="140" y="260" fill="#ef5350" font-family="Courier New" font-size="12" text-anchor="middle">ASOCIAL</text>
+
+    <!-- Divider -->
+    <line x1="310" y1="20" x2="310" y2="290" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="4,4"/>
+
+    <!-- Two-state automaton: Tit-for-Tat -->
+    <text x="550" y="30" fill="#6a7a8c" font-family="Courier New" font-size="13" text-anchor="middle">2-STATE: TIT-FOR-TAT</text>
+
+    <circle cx="450" cy="130" r="45" fill="none" stroke="#81c784" stroke-width="2"/>
+    <text x="450" y="125" fill="#81c784" font-family="Courier New" font-size="14" text-anchor="middle">S₀</text>
+    <text x="450" y="145" fill="#81c784" font-family="Courier New" font-size="12" text-anchor="middle">out: 0</text>
+
+    <circle cx="660" cy="130" r="45" fill="none" stroke="#ef5350" stroke-width="2"/>
+    <text x="660" y="125" fill="#ef5350" font-family="Courier New" font-size="14" text-anchor="middle">S₁</text>
+    <text x="660" y="145" fill="#ef5350" font-family="Courier New" font-size="12" text-anchor="middle">out: 1</text>
+
+    <!-- S0 -> S1 on input 1 -->
+    <path d="M 495 115 L 615 115" fill="none" stroke="#ef5350" stroke-width="1.5"/>
+    <polygon points="613,111 621,115 613,119" fill="#ef5350"/>
+    <text x="555" y="108" fill="#ef5350" font-family="Courier New" font-size="10" text-anchor="middle">input: 1</text>
+
+    <!-- S1 -> S0 on input 0 -->
+    <path d="M 615 145 L 495 145" fill="none" stroke="#81c784" stroke-width="1.5"/>
+    <polygon points="497,141 489,145 497,149" fill="#81c784"/>
+    <text x="555" y="162" fill="#81c784" font-family="Courier New" font-size="10" text-anchor="middle">input: 0</text>
+
+    <!-- self-loops -->
+    <path d="M 425 90 C 390 60, 380 70, 405 95" fill="none" stroke="#81c784" stroke-width="1.5"/>
+    <text x="370" y="72" fill="#81c784" font-family="Courier New" font-size="10">0</text>
+    <polygon points="407,93 400,100 412,100" fill="#81c784"/>
+
+    <path d="M 685 90 C 720 60, 730 70, 705 95" fill="none" stroke="#ef5350" stroke-width="1.5"/>
+    <text x="735" y="72" fill="#ef5350" font-family="Courier New" font-size="10">1</text>
+    <polygon points="703,93 710,100 698,100" fill="#ef5350"/>
+
+    <text x="550" y="210" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="middle">One bit of memory. Mirrors opponent.</text>
+    <text x="550" y="226" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="middle">Cooperate first, then reciprocate.</text>
+    <text x="550" y="260" fill="#81c784" font-family="Courier New" font-size="12" text-anchor="middle">SOCIAL</text>
+  </svg>
+  <div class="figure-caption">Figure 1 — The threshold in miniature. One state: the machine is locked into a fixed action, blind to its opponent. Two states: conditional behavior, reciprocity, memory. This single additional state is the origin of the social universe.</div>
+</div>
+
+<h3>The Enumeration</h3>
+
+<p>With 1 state, there are exactly <span class="accent">2 possible machines</span>: Always Cooperate and Always Defect. That's the entire strategy space. No conditional behavior is possible.</p>
+
+<p>With 2 states, after minimization there are <span class="accent">26 distinct machines</span>, classified into behavioral types:</p>
+
+<table>
+  <tr><th>Type</th><th>Count</th><th>Behavior</th></tr>
+  <tr><td>Single Output</td><td>20</td><td class="dim">Functionally 1-state (dead second state)</td></tr>
+  <tr><td>Alternate Outputs</td><td>2</td><td class="dim">Alternate 0/1 regardless of input</td></tr>
+  <tr><td>Non-Conditional Trigger</td><td>2</td><td class="dim">Transition on any input, stay</td></tr>
+  <tr><td>Conditional Trigger</td><td>4</td><td class="dim">Transition only on 0 or only on 1</td></tr>
+  <tr><td class="green">Flip Flop</td><td class="green">4</td><td class="green">Including Tit-for-Tat</td></tr>
+  <tr><td class="green">Do Once, Return</td><td class="green">8</td><td class="green">Visit second state and return</td></tr>
+</table>
+
+<p>Of these 26 machines, only <span class="accent">6</span> exhibit genuinely conditional social behavior. But those 6 are enough. They include:</p>
+
+<ul>
+  <li><span class="green">Tit-for-Tat</span> — mirror the opponent's last move</li>
+  <li><span class="green">Grim Trigger</span> — cooperate until betrayed, then defect forever</li>
+  <li><span class="green">Punish Once</span> — defect once after betrayal, then forgive</li>
+  <li><span class="green">Win Stay, Lose Shift</span> — repeat if rewarded, switch if punished</li>
+</ul>
+
+<h3>The Population</h3>
+
+<p><span class="accent">Two populations of 40 agents each</span> coevolve against each other. This is crucial — not one population, but two, like biological species in an arms race. Every member of Population 0 plays against every member of Population 1 in a round-robin tournament. Fitness = cumulative payoff across all matches.</p>
+
+<p>A genetic algorithm governs evolution: tournament selection, crossover, and mutation. The automata are encoded as bit strings (state table → binary), and standard GA operators produce offspring. Mutation rate is tunable — Miller systematically varies it to show that low mutation doesn't prevent transitions, it just makes them rarer and more abrupt.</p>
+</section>
+
+<!-- ============================================================ -->
+<section id="threshold">
+<h2>3. The Computational Threshold</h2>
+
+<p>This is the book's central finding. Social behavior requires crossing <em>two simultaneous thresholds</em>:</p>
+
+<div class="figure">
+  <svg viewBox="0 0 750 440" xmlns="http://www.w3.org/2000/svg">
+    <!-- Axes -->
+    <line x1="100" y1="380" x2="700" y2="380" stroke="#6a7a8c" stroke-width="1.5"/>
+    <line x1="100" y1="380" x2="100" y2="40" stroke="#6a7a8c" stroke-width="1.5"/>
+
+    <!-- X axis label -->
+    <text x="400" y="420" fill="#6a7a8c" font-family="Courier New" font-size="13" text-anchor="middle">ROUNDS OF INTERACTION</text>
+    <!-- Y axis label -->
+    <text x="30" y="210" fill="#6a7a8c" font-family="Courier New" font-size="13" text-anchor="middle" transform="rotate(-90, 30, 210)">AUTOMATON STATES</text>
+
+    <!-- X ticks -->
+    <text x="160" y="400" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="middle">1</text>
+    <text x="310" y="400" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="middle">4</text>
+    <text x="540" y="400" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="middle">10</text>
+
+    <!-- Y ticks -->
+    <text x="80" y="345" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="end">1</text>
+    <text x="80" y="275" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="end">2</text>
+    <text x="80" y="205" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="end">3</text>
+    <text x="80" y="135" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="end">4</text>
+    <text x="80" y="65" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="end">5</text>
+
+    <!-- Grid cells — 1-state row: ALL RED -->
+    <rect x="110" y="315" width="140" height="55" rx="4" fill="#ef5350" fill-opacity="0.25" stroke="#ef5350" stroke-width="1"/>
+    <rect x="260" y="315" width="200" height="55" rx="4" fill="#ef5350" fill-opacity="0.25" stroke="#ef5350" stroke-width="1"/>
+    <rect x="470" y="315" width="200" height="55" rx="4" fill="#ef5350" fill-opacity="0.22" stroke="#ef5350" stroke-width="1"/>
+
+    <text x="180" y="348" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">DEFECT</text>
+    <text x="360" y="348" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">DEFECT</text>
+    <text x="570" y="348" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">DEFECT</text>
+
+    <!-- 2-state row: red, then transitional, then green -->
+    <rect x="110" y="245" width="140" height="55" rx="4" fill="#ef5350" fill-opacity="0.2" stroke="#ef5350" stroke-width="1"/>
+    <rect x="260" y="245" width="200" height="55" rx="4" fill="#81c784" fill-opacity="0.2" stroke="#81c784" stroke-width="1"/>
+    <rect x="470" y="245" width="200" height="55" rx="4" fill="#81c784" fill-opacity="0.3" stroke="#81c784" stroke-width="1.5"/>
+
+    <text x="180" y="278" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">MOSTLY D</text>
+    <text x="360" y="278" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">COOPERATE</text>
+    <text x="570" y="278" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">COOPERATE</text>
+
+    <!-- 3-state row -->
+    <rect x="110" y="175" width="140" height="55" rx="4" fill="#ef5350" fill-opacity="0.15" stroke="#ef5350" stroke-width="1"/>
+    <rect x="260" y="175" width="200" height="55" rx="4" fill="#81c784" fill-opacity="0.25" stroke="#81c784" stroke-width="1.5"/>
+    <rect x="470" y="175" width="200" height="55" rx="4" fill="#81c784" fill-opacity="0.35" stroke="#81c784" stroke-width="1.5"/>
+
+    <text x="180" y="208" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">MIXED</text>
+    <text x="360" y="208" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">RICH SOCIAL</text>
+    <text x="570" y="208" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">RICH SOCIAL</text>
+
+    <!-- 4-state and 5-state rows -->
+    <rect x="110" y="105" width="140" height="55" rx="4" fill="#ffb74d" fill-opacity="0.15" stroke="#ffb74d" stroke-width="1"/>
+    <rect x="260" y="105" width="200" height="55" rx="4" fill="#81c784" fill-opacity="0.3" stroke="#81c784" stroke-width="1.5"/>
+    <rect x="470" y="105" width="200" height="55" rx="4" fill="#81c784" fill-opacity="0.4" stroke="#81c784" stroke-width="1.5"/>
+
+    <text x="180" y="138" fill="#ffb74d" font-family="Courier New" font-size="11" text-anchor="middle">MIXED</text>
+    <text x="360" y="138" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">DIVERSE</text>
+    <text x="570" y="138" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">BURGESS SHALE</text>
+
+    <rect x="110" y="40" width="140" height="55" rx="4" fill="#ffb74d" fill-opacity="0.15" stroke="#ffb74d" stroke-width="1"/>
+    <rect x="260" y="40" width="200" height="55" rx="4" fill="#81c784" fill-opacity="0.35" stroke="#81c784" stroke-width="1.5"/>
+    <rect x="470" y="40" width="200" height="55" rx="4" fill="#4fc3f7" fill-opacity="0.25" stroke="#4fc3f7" stroke-width="2"/>
+
+    <text x="180" y="73" fill="#ffb74d" font-family="Courier New" font-size="11" text-anchor="middle">MIXED</text>
+    <text x="360" y="73" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">DIVERSE</text>
+    <text x="570" y="73" fill="#4fc3f7" font-family="Courier New" font-size="11" text-anchor="middle">FULL ECOLOGY</text>
+
+    <!-- THE THRESHOLD LINE -->
+    <line x1="100" y1="305" x2="250" y2="305" stroke="#ffb74d" stroke-width="2" stroke-dasharray="6,4"/>
+    <line x1="250" y1="305" x2="250" y2="380" stroke="#ffb74d" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="250" y="310" fill="#ffb74d" font-family="Courier New" font-size="10" text-anchor="start"> ← THRESHOLD</text>
+  </svg>
+  <div class="figure-caption">Figure 2 — The computational threshold. Social behavior requires ≥2 states AND ≥2 rounds of interaction. Below either threshold, the system is locked into asocial outcomes. The transition is abrupt, not gradual. After the Prisoner's Dilemma parameter sweeps in Ex Machina (Figures 9-1 through 9-3).</div>
+</div>
+
+<div class="card highlight">
+  <div class="card-title">THE THRESHOLD IN PLAIN LANGUAGE</div>
+  <p><strong>Threshold 1 — Computation (≥2 states):</strong> The agent must be able to <em>condition its behavior on the opponent's behavior</em>. A 1-state machine is blind — it cannot respond, reciprocate, punish, or forgive. It is computationally incapable of social behavior.</p>
+  <p><strong>Threshold 2 — Interaction (≥2 rounds):</strong> Even a 2-state machine playing a one-shot game has no opportunity to execute conditional strategies. Tit-for-Tat needs at least one prior move to mirror. Repeated interaction is the substrate on which computational capacity operates.</p>
+  <p>Cross <em>both</em> thresholds simultaneously and social behavior doesn't just become possible — it becomes <strong>probable</strong>. The system doesn't drift toward cooperation. It snaps.</p>
+</div>
+
+<p>Miller calls the abrupt explosion of strategic diversity beyond the threshold the <span class="accent">Burgess Shale</span> — a deliberate echo of Gould's Cambrian explosion. But Miller inverts Gould's conclusion: where Gould argued contingency ("replay the tape, get a different outcome"), Miller argues <em>inevitability</em>. Social behavior is a robust attractor. The conditions required are so modest — two states, two rounds — that any world with minimally complex agents and repeated interaction will produce it.</p>
+</section>
+
+<!-- ============================================================ -->
+<section id="revolutions">
+<h2>4. Revolutions by Evolution</h2>
+
+<p>How does the system get from asocial to social? Not gradually. Miller identifies a six-stage <span class="accent">transition motif</span> that repeats across all his experiments:</p>
+
+<div class="figure">
+  <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+    <!-- Timeline -->
+    <line x1="60" y1="440" x2="740" y2="440" stroke="#6a7a8c" stroke-width="1.5"/>
+    <text x="400" y="480" fill="#6a7a8c" font-family="Courier New" font-size="12" text-anchor="middle">GENERATIONS →</text>
+
+    <!-- Epochal dynamics line -->
+    <text x="30" y="30" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="start">COOPERATION</text>
+    <text x="30" y="435" fill="#6a7a8c" font-family="Courier New" font-size="11" text-anchor="start">DEFECTION</text>
+
+    <!-- The line: flat at bottom (defection), then sharp rise -->
+    <path d="M 60 420 L 180 420 L 185 418 L 200 415 L 220 420 L 340 420 L 345 418 L 350 420 L 440 420 L 445 400 L 450 350 L 455 120 L 460 80 L 465 60 L 530 55 L 600 58 L 650 55 L 740 60"
+          fill="none" stroke="#81c784" stroke-width="2.5"/>
+
+    <!-- Phase labels -->
+    <rect x="70" y="340" width="100" height="60" rx="4" fill="#161d28" stroke="#1e2a3a" stroke-width="1"/>
+    <text x="120" y="362" fill="#ef5350" font-family="Courier New" font-size="10" text-anchor="middle">STAGE 1</text>
+    <text x="120" y="378" fill="#ef5350" font-family="Courier New" font-size="9" text-anchor="middle">PRE: α vs β</text>
+    <text x="120" y="392" fill="#6a7a8c" font-family="Courier New" font-size="8" text-anchor="middle">mutual defection</text>
+
+    <rect x="175" y="340" width="110" height="60" rx="4" fill="#161d28" stroke="#1e2a3a" stroke-width="1"/>
+    <text x="230" y="362" fill="#ffb74d" font-family="Courier New" font-size="10" text-anchor="middle">STAGE 2</text>
+    <text x="230" y="378" fill="#ffb74d" font-family="Courier New" font-size="9" text-anchor="middle">NEUTRAL ν</text>
+    <text x="230" y="392" fill="#6a7a8c" font-family="Courier New" font-size="8" text-anchor="middle">mutant appears</text>
+
+    <rect x="295" y="340" width="120" height="60" rx="4" fill="#161d28" stroke="#1e2a3a" stroke-width="1"/>
+    <text x="355" y="362" fill="#ffb74d" font-family="Courier New" font-size="10" text-anchor="middle">STAGE 3</text>
+    <text x="355" y="378" fill="#ffb74d" font-family="Courier New" font-size="9" text-anchor="middle">DRIFT</text>
+    <text x="355" y="392" fill="#6a7a8c" font-family="Courier New" font-size="8" text-anchor="middle">ν accumulates</text>
+
+    <rect x="425" y="340" width="90" height="60" rx="4" fill="#161d28" stroke="#4fc3f7" stroke-width="1.5"/>
+    <text x="470" y="362" fill="#4fc3f7" font-family="Courier New" font-size="10" text-anchor="middle">STAGE 4</text>
+    <text x="470" y="378" fill="#4fc3f7" font-family="Courier New" font-size="9" text-anchor="middle">μ INVADES</text>
+    <text x="470" y="392" fill="#6a7a8c" font-family="Courier New" font-size="8" text-anchor="middle">exploits ν vs α</text>
+
+    <rect x="525" y="340" width="100" height="60" rx="4" fill="#161d28" stroke="#81c784" stroke-width="1.5"/>
+    <text x="575" y="362" fill="#81c784" font-family="Courier New" font-size="10" text-anchor="middle">STAGE 5</text>
+    <text x="575" y="378" fill="#81c784" font-family="Courier New" font-size="9" text-anchor="middle">TRANSITION</text>
+    <text x="575" y="392" fill="#6a7a8c" font-family="Courier New" font-size="8" text-anchor="middle">regime flip</text>
+
+    <rect x="635" y="340" width="100" height="60" rx="4" fill="#161d28" stroke="#81c784" stroke-width="1"/>
+    <text x="685" y="362" fill="#81c784" font-family="Courier New" font-size="10" text-anchor="middle">STAGE 6</text>
+    <text x="685" y="378" fill="#81c784" font-family="Courier New" font-size="9" text-anchor="middle">CONSOLIDATE</text>
+    <text x="685" y="392" fill="#6a7a8c" font-family="Courier New" font-size="8" text-anchor="middle">new equilibrium</text>
+
+    <!-- Annotation -->
+    <line x1="450" y1="280" x2="450" y2="325" stroke="#4fc3f7" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="450" y="270" fill="#4fc3f7" font-family="Courier New" font-size="11" text-anchor="middle">← THE REVOLUTION</text>
+    <text x="450" y="250" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">~5 generations</text>
+
+    <line x1="120" y1="280" x2="120" y2="325" stroke="#6a7a8c" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="120" y="270" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">~500 generations</text>
+  </svg>
+  <div class="figure-caption">Figure 3 — Epochal dynamics. The system dwells in a defection equilibrium for hundreds of generations. Neutral mutants accumulate silently. Then a single complementary mutation triggers a rapid regime change — "revolutions by evolution." After Ex Machina Figure 6-1.</div>
+</div>
+
+<p>The mechanism in detail:</p>
+
+<ol>
+  <li><strong class="red">PRE:</strong> Dominant strategies α (Pop 0) and β (Pop 1) play each other. Stable equilibrium — both defecting.</li>
+  <li><strong class="orange">NEUTRAL INVASION:</strong> A mutant ν appears in Pop 0. It plays <em>identically</em> to α against the current opponent β — same fitness, same payoff. It's invisible to selection.</li>
+  <li><strong class="orange">NEUTRAL DRIFT:</strong> Because ν is neutral, it accumulates through genetic drift. Over hundreds of generations, ν builds up to a significant fraction of Pop 0 — silently.</li>
+  <li><strong class="accent">MUTANT INVASION:</strong> A mutant μ appears in Pop 1 that <em>exploits the hidden difference</em> between α and ν. What was invisible (the difference between ν and α when playing β) becomes decisive when playing μ.</li>
+  <li><strong class="green">TRANSITION:</strong> μ has higher fitness against ν than β did. ν and μ now dominate their respective populations, playing a qualitatively different game. Regime change in ~5 generations.</li>
+  <li><strong class="green">CONSOLIDATION:</strong> New dominant strategies emerge. New stable equilibrium — possibly cooperative.</li>
+</ol>
+
+<div class="card warning">
+  <div class="card-title">WHY THIS MATTERS</div>
+  <p>The transition is <em>not</em> a steady climb toward cooperation. It's <strong>punctuated equilibrium</strong>. Long stasis, then sudden revolution. The system appears stable for hundreds of generations, but neutral variation is accumulating beneath the surface — latent diversity that becomes decisive when the right complementary mutation appears.</p>
+  <p>This is the "revolution" part: a <em>single additional mutation</em> in the right context triggers a cascade that flips the entire system. Evolution is gradual; the revolution it produces is abrupt.</p>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section id="games">
+<h2>5. Five Games, One Pattern</h2>
+
+<p>Miller doesn't just run the Prisoner's Dilemma. He applies the identical Coevolving Automata Model (CAM) to five fundamentally different social situations, each getting its own chapter:</p>
+
+<table>
+  <tr>
+    <th>Game</th>
+    <th>Chapter</th>
+    <th>Social Problem</th>
+    <th>What Emerges at Threshold</th>
+  </tr>
+  <tr>
+    <td class="accent">Hawk-Dove</td>
+    <td>7: Conflict</td>
+    <td>Resource competition without total war</td>
+    <td class="green">Turn-taking — agents alternate H/D, sharing surplus</td>
+  </tr>
+  <tr>
+    <td class="accent">Battle of the Sexes</td>
+    <td>8: Coordination</td>
+    <td>Agreement on standards without central authority</td>
+    <td class="green">Within-game sharing of equilibria, flexible coordination</td>
+  </tr>
+  <tr>
+    <td class="accent">Prisoner's Dilemma</td>
+    <td>9: Cooperation</td>
+    <td>Mutual benefit when defection tempts</td>
+    <td class="green">Reciprocity (TFT), punishment (Grim), forgiveness (Punish Once)</td>
+  </tr>
+  <tr>
+    <td class="accent">Stag Hunt</td>
+    <td>9: Cooperation</td>
+    <td>Coordination under risk</td>
+    <td class="green">Cooperative basin larger — less temptation, easier threshold</td>
+  </tr>
+  <tr>
+    <td class="accent">Edgeworth Exchange</td>
+    <td>10: Commerce</td>
+    <td>Trade with asymmetric endowments</td>
+    <td class="green">Spontaneous trade emerges from evolved strategies</td>
+  </tr>
+</table>
+
+<p>Chapter 11 covers <strong>Communication</strong> — agents evolve the ability to send and receive signals, and communication itself enables cooperation even in one-shot games (extending Miller, Butts & Rode 2002).</p>
+
+<div class="card highlight">
+  <div class="card-title">THE UNIVERSALITY CLAIM</div>
+  <p>The same computational threshold — ≥2 states, ≥2 rounds — produces qualitative behavioral transitions across <em>all five game types</em>. This is not a result about the Prisoner's Dilemma. It is a result about <em>social behavior itself</em>. Conflict, coordination, cooperation, commerce, and communication all emerge from the same computational substrate under the same minimal conditions.</p>
+</div>
+
+<p>The capstone is Chapter 12: <strong>The Eightfold Path</strong>. Miller identifies eight behavioral archetypes that emerge reliably once the threshold is crossed, forming a taxonomy of minimal social strategies. He presents this as the answer to his opening question: social behavior <em>would</em> arise again if we rewound the tape.</p>
+</section>
+
+<!-- ============================================================ -->
+<section id="crude">
+<h2>6. A Crude Look at the Whole (2016)</h2>
+
+<div class="quote">
+  The title is Murray Gell-Mann's phrase — what he used at SFI to describe the complementary approach to reductionism.
+  <span class="attr">— Miller acknowledging the origin</span>
+</div>
+
+<p>This is Miller's popular-science book and his most accessible statement of philosophy. The core argument:</p>
+
+<ul>
+  <li><strong>Reductionism is insufficient.</strong> Wholes exhibit behaviors that cannot be derived from their parts in isolation. A "crude look at the whole" — studying system-level patterns — is the necessary complement.</li>
+  <li><strong>Simple interactions → complex phenomena, BUT ALSO complex interactions → simple phenomena.</strong> The relationship is not one-directional. This is a subtlety most complexity popularizers miss.</li>
+  <li><strong>Focus on role, not characteristics.</strong> Miller argues for a functional lens — asking what role a component fills in the system, not what it's made of. This is deeply compatible with the RAF framework, where catalysis is functional regardless of substrate.</li>
+  <li><strong>Prediction has limits with CAS.</strong> Shift from predicting/controlling outcomes to <em>understanding/managing</em>. Traditional forecasting breaks down; the right question is "what conditions produce what regimes?"</li>
+</ul>
+
+<p>Systems analyzed: stock markets, airline scheduling, Balinese rice terraces, beehive thermoregulation, heartbeat patterns, racial segregation (Schelling), bacterial colonies, nuclear chain reactions.</p>
+
+<p><em>Nature</em> called it "a succinct, elegant study of systems thinking." W. Brian Arthur said Miller made "complexity seem simple."</p>
+</section>
+
+<!-- ============================================================ -->
+<section id="cas">
+<h2>7. Complex Adaptive Systems (2007, with Scott Page)</h2>
+
+<p>The textbook. ~4,200 citations — Miller's most-cited work. Four sections:</p>
+
+<ol>
+  <li><strong>Intro via the Tiebout Model</strong> — political sorting as emergent from individual mobility choices</li>
+  <li><strong>Models as maps</strong> — the epistemology of simulation. What do models explain? What can they predict?</li>
+  <li><strong>Criticisms and responses</strong> — addressing methodological objections to ABM</li>
+  <li><strong>Core models:</strong>
+    <ul>
+      <li><span class="accent">Forest fire model</span> — density thresholds produce phase transitions. At a critical tree density, fires go from local to system-spanning. Sound familiar?</li>
+      <li><span class="accent">Cellular automata</span> — edge-of-chaos dynamics from one-dimensional agents</li>
+      <li><span class="accent">Schelling segregation</span> — mild individual preference → extreme macro segregation</li>
+      <li><span class="accent">Evolving automata</span> — the foundation for Ex Machina</li>
+      <li><span class="accent">Minority game</span> — negative-sum competitive dynamics</li>
+    </ul>
+  </li>
+</ol>
+
+<p>The pedagogical principle: <strong>keep the model simple</strong>. Two or three parameters can reveal substantial complexity. This is a methodological commitment, not laziness — it's what makes thresholds visible.</p>
+</section>
+
+<!-- ============================================================ -->
+<section id="papers">
+<h2>8. Key Papers</h2>
+
+<table>
+  <tr>
+    <th>Paper</th>
+    <th>Year</th>
+    <th>Citations</th>
+    <th>Significance</th>
+  </tr>
+  <tr>
+    <td><strong>Andreoni & Miller</strong>, "Giving According to GARP" <span class="dim">(Econometrica)</span></td>
+    <td>2002</td>
+    <td class="accent">2,878</td>
+    <td>Altruism is <em>rational</em> — 173/176 subjects' giving behavior satisfied revealed-preference axioms</td>
+  </tr>
+  <tr>
+    <td><strong>Holland & Miller</strong>, "Artificial Adaptive Agents in Economic Theory" <span class="dim">(AER)</span></td>
+    <td>1991</td>
+    <td class="accent">1,333</td>
+    <td>Founded computational economics. Proposed classifier systems as economic agents.</td>
+  </tr>
+  <tr>
+    <td><strong>Andreoni & Miller</strong>, "Rational Cooperation in the Finitely Repeated PD" <span class="dim">(Econ. J.)</span></td>
+    <td>1993</td>
+    <td class="accent">1,195</td>
+    <td>Discovered "homemade altruism" — subjects bring natural cooperation tendency from outside the game</td>
+  </tr>
+  <tr>
+    <td><strong>Miller</strong>, "Coevolution of Automata in the Repeated PD" <span class="dim">(JEBO)</span></td>
+    <td>1996</td>
+    <td>536</td>
+    <td>Noise destroys TFT's advantage. Ecology of strategies matters more than individual optimality.</td>
+  </tr>
+  <tr>
+    <td><strong>Kollman, Miller & Page</strong>, "Adaptive Parties in Spatial Elections" <span class="dim">(APSR)</span></td>
+    <td>1992</td>
+    <td>482</td>
+    <td>Political parties as adaptive agents in spatial voting models</td>
+  </tr>
+  <tr>
+    <td><strong>Miller</strong>, "Active Nonlinear Tests (ANTs)" <span class="dim">(Mgmt. Sci.)</span></td>
+    <td>1998</td>
+    <td>260</td>
+    <td>GA-based methodology to <em>break</em> simulation models — probe for nonlinear fragilities</td>
+  </tr>
+  <tr>
+    <td><strong>Miller & Page</strong>, "The Standing Ovation Problem" <span class="dim">(Complexity)</span></td>
+    <td>2004</td>
+    <td>—</td>
+    <td>Canonical micro→macro cascade model. Simple rules, spatial context, collective action.</td>
+  </tr>
+  <tr>
+    <td><strong>Jung, Miller & Page</strong>, "ABM for Psychological Research" <span class="dim">(Am. Psychologist)</span></td>
+    <td>2025</td>
+    <td>new</td>
+    <td>Introduces "minimal society paradigm" and "principle-oriented modeling"</td>
+  </tr>
+</table>
+
+<h3>The ANTs Connection</h3>
+
+<p>Active Nonlinear Tests deserve special attention. ANTs use genetic algorithms to <em>actively probe</em> simulation models for parameter combinations that break their predictions. Miller demonstrated this on the World3 model of global dynamics, finding small but powerful nonlinear effects invisible to standard sensitivity analysis. The methodology shares intellectual DNA with early warning signals — probing for fragility near critical thresholds — though it's a model-validation tool rather than a prediction tool.</p>
+
+<h3>The 2025 Paper</h3>
+
+<p>Jung, Miller & Page (2025) introduces two concepts worth knowing:</p>
+<ul>
+  <li><strong>Minimal society paradigm:</strong> Strip social systems to the <em>minimal</em> elements sufficient for a phenomenon to emerge. If you can reproduce cooperation with 2-state automata, that tells you what cooperation <em>requires</em> — nothing more. This is Ex Machina's methodology stated as a general principle.</li>
+  <li><strong>Principle-oriented modeling:</strong> Build models around general principles rather than calibrated empirics. Don't fit your model to a specific dataset — demonstrate that a principle (threshold dynamics, neutral drift) produces a phenomenon (cooperation, segregation) under broad conditions.</li>
+</ul>
+</section>
+
+<!-- ============================================================ -->
+<section id="genealogy">
+<h2>9. Intellectual Genealogy</h2>
+
+<div class="figure">
+  <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+    <!-- Top row: Ancestors -->
+    <rect x="20" y="20" width="160" height="55" rx="4" fill="none" stroke="#ce93d8" stroke-width="1.5"/>
+    <text x="100" y="45" fill="#ce93d8" font-family="Courier New" font-size="11" text-anchor="middle">JOHN HOLLAND</text>
+    <text x="100" y="60" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">genetic algorithms, CAS</text>
+
+    <rect x="220" y="20" width="160" height="55" rx="4" fill="none" stroke="#ce93d8" stroke-width="1.5"/>
+    <text x="300" y="45" fill="#ce93d8" font-family="Courier New" font-size="11" text-anchor="middle">ROBERT AXELROD</text>
+    <text x="300" y="60" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">evolution of cooperation</text>
+
+    <rect x="420" y="20" width="160" height="55" rx="4" fill="none" stroke="#ce93d8" stroke-width="1.5"/>
+    <text x="500" y="45" fill="#ce93d8" font-family="Courier New" font-size="11" text-anchor="middle">HAL VARIAN</text>
+    <text x="500" y="60" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">microeconomics (advisor)</text>
+
+    <rect x="620" y="20" width="160" height="55" rx="4" fill="none" stroke="#ce93d8" stroke-width="1.5"/>
+    <text x="700" y="45" fill="#ce93d8" font-family="Courier New" font-size="11" text-anchor="middle">W. BRIAN ARTHUR</text>
+    <text x="700" y="60" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">increasing returns, SFI</text>
+
+    <!-- Lines down to Miller -->
+    <line x1="100" y1="75" x2="400" y2="140" stroke="#1e2a3a" stroke-width="1"/>
+    <line x1="300" y1="75" x2="400" y2="140" stroke="#1e2a3a" stroke-width="1"/>
+    <line x1="500" y1="75" x2="400" y2="140" stroke="#1e2a3a" stroke-width="1"/>
+    <line x1="700" y1="75" x2="400" y2="140" stroke="#1e2a3a" stroke-width="1"/>
+
+    <!-- Miller -->
+    <rect x="300" y="130" width="200" height="60" rx="6" fill="#161d28" stroke="#4fc3f7" stroke-width="2"/>
+    <text x="400" y="155" fill="#4fc3f7" font-family="Courier New" font-size="13" text-anchor="middle">JOHN H. MILLER</text>
+    <text x="400" y="172" fill="#6a7a8c" font-family="Courier New" font-size="10" text-anchor="middle">Michigan PhD 1988 → CMU + SFI</text>
+
+    <!-- Lines down from Miller -->
+    <line x1="320" y1="190" x2="150" y2="250" stroke="#1e2a3a" stroke-width="1"/>
+    <line x1="400" y1="190" x2="400" y2="250" stroke="#1e2a3a" stroke-width="1"/>
+    <line x1="480" y1="190" x2="650" y2="250" stroke="#1e2a3a" stroke-width="1"/>
+
+    <!-- Collaborators -->
+    <rect x="50" y="250" width="200" height="55" rx="4" fill="none" stroke="#81c784" stroke-width="1.5"/>
+    <text x="150" y="272" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">SCOTT PAGE</text>
+    <text x="150" y="288" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">CAS textbook, GWCSS, diversity</text>
+
+    <rect x="290" y="250" width="220" height="55" rx="4" fill="none" stroke="#81c784" stroke-width="1.5"/>
+    <text x="400" y="272" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">JAMES ANDREONI</text>
+    <text x="400" y="288" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">GARP, rational altruism (2,878 cit)</text>
+
+    <rect x="550" y="250" width="200" height="55" rx="4" fill="none" stroke="#81c784" stroke-width="1.5"/>
+    <text x="650" y="272" fill="#81c784" font-family="Courier New" font-size="11" text-anchor="middle">KEN KOLLMAN</text>
+    <text x="650" y="288" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">adaptive parties, Tiebout models</text>
+
+    <!-- SFI circle -->
+    <rect x="180" y="330" width="440" height="40" rx="20" fill="none" stroke="#ffb74d" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="400" y="355" fill="#ffb74d" font-family="Courier New" font-size="10" text-anchor="middle">SANTA FE INSTITUTE — continuous since 1988 (first postdoc)</text>
+  </svg>
+  <div class="figure-caption">Figure 4 — Miller's intellectual network. All roads lead through Michigan and SFI. Holland gave him genetic algorithms, Axelrod gave him the Prisoner's Dilemma paradigm, Arthur connected him to SFI's economics program, Page became his long-running collaboration partner.</div>
+</div>
+
+<p><strong>The Kauffman connection:</strong> Institutional, not co-authorial. Miller co-hosted Kauffman's 80th birthday at SFI. They inhabit the same intellectual ecosystem. But Miller has not published on autocatalytic sets or RAF theory — and he has not explicitly mapped his computational thresholds to Kauffman's catalytic closure. That mapping is <em>available</em>. Nobody has made it.</p>
+</section>
+
+<!-- ============================================================ -->
+<section id="llm">
+<h2>10. The LLM Question</h2>
+
+<p>Miller's entire framework is built on a specific assumption: agents are <em>computationally minimal</em>. Moore machines with 1-5 states, binary I/O, no learning within a game, no model of the opponent. This is deliberate — it's how he isolates the threshold.</p>
+
+<p>What happens when you replace these machines with LLMs?</p>
+
+<h3>The Parameters That Change</h3>
+
+<div class="figure">
+  <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+    <!-- Header -->
+    <text x="200" y="30" fill="#ef5350" font-family="Courier New" font-size="14" text-anchor="middle">MILLER'S AUTOMATA</text>
+    <text x="600" y="30" fill="#4fc3f7" font-family="Courier New" font-size="14" text-anchor="middle">LLM AGENTS</text>
+    <line x1="400" y1="10" x2="400" y2="510" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="4,4"/>
+
+    <!-- Row 1: States -->
+    <text x="400" y="70" fill="#ffb74d" font-family="Courier New" font-size="11" text-anchor="middle">INTERNAL STATES</text>
+    <rect x="40" y="80" width="320" height="50" rx="4" fill="none" stroke="#ef5350" stroke-width="1"/>
+    <text x="200" y="100" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">1-5 states</text>
+    <text x="200" y="118" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">fully enumerable, combinatorially tractable</text>
+
+    <rect x="440" y="80" width="320" height="50" rx="4" fill="none" stroke="#4fc3f7" stroke-width="1"/>
+    <text x="600" y="100" fill="#4fc3f7" font-family="Courier New" font-size="11" text-anchor="middle">~10¹² parameters</text>
+    <text x="600" y="118" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">effectively infinite, not enumerable</text>
+
+    <!-- Row 2: Memory -->
+    <text x="400" y="160" fill="#ffb74d" font-family="Courier New" font-size="11" text-anchor="middle">MEMORY</text>
+    <rect x="40" y="170" width="320" height="50" rx="4" fill="none" stroke="#ef5350" stroke-width="1"/>
+    <text x="200" y="190" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">last move only (n-1 states deep)</text>
+    <text x="200" y="208" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">bounded by state count</text>
+
+    <rect x="440" y="170" width="320" height="50" rx="4" fill="none" stroke="#4fc3f7" stroke-width="1"/>
+    <text x="600" y="190" fill="#4fc3f7" font-family="Courier New" font-size="11" text-anchor="middle">entire conversation history</text>
+    <text x="600" y="208" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">bounded by context window (~200K tokens)</text>
+
+    <!-- Row 3: Strategy Space -->
+    <text x="400" y="250" fill="#ffb74d" font-family="Courier New" font-size="11" text-anchor="middle">STRATEGY SPACE</text>
+    <rect x="40" y="260" width="320" height="50" rx="4" fill="none" stroke="#ef5350" stroke-width="1"/>
+    <text x="200" y="280" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">26 machines (at 2 states)</text>
+    <text x="200" y="298" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">discrete, fully classifiable</text>
+
+    <rect x="440" y="260" width="320" height="50" rx="4" fill="none" stroke="#4fc3f7" stroke-width="1"/>
+    <text x="600" y="280" fill="#4fc3f7" font-family="Courier New" font-size="11" text-anchor="middle">continuous strategy manifold</text>
+    <text x="600" y="298" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">emergent, not pre-specified</text>
+
+    <!-- Row 4: Evolution -->
+    <text x="400" y="340" fill="#ffb74d" font-family="Courier New" font-size="11" text-anchor="middle">ADAPTATION MECHANISM</text>
+    <rect x="40" y="350" width="320" height="50" rx="4" fill="none" stroke="#ef5350" stroke-width="1"/>
+    <text x="200" y="370" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">genetic algorithm (crossover + mutation)</text>
+    <text x="200" y="388" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">population-level, inter-generational</text>
+
+    <rect x="440" y="350" width="320" height="50" rx="4" fill="none" stroke="#4fc3f7" stroke-width="1"/>
+    <text x="600" y="370" fill="#4fc3f7" font-family="Courier New" font-size="11" text-anchor="middle">in-context learning + fine-tuning</text>
+    <text x="600" y="388" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">within-game AND inter-game</text>
+
+    <!-- Row 5: Opponent Model -->
+    <text x="400" y="430" fill="#ffb74d" font-family="Courier New" font-size="11" text-anchor="middle">OPPONENT MODEL</text>
+    <rect x="40" y="440" width="320" height="50" rx="4" fill="none" stroke="#ef5350" stroke-width="1"/>
+    <text x="200" y="460" fill="#ef5350" font-family="Courier New" font-size="11" text-anchor="middle">none — purely reactive</text>
+    <text x="200" y="478" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">no theory of mind</text>
+
+    <rect x="440" y="440" width="320" height="50" rx="4" fill="none" stroke="#4fc3f7" stroke-width="1"/>
+    <text x="600" y="460" fill="#4fc3f7" font-family="Courier New" font-size="11" text-anchor="middle">rich — infers intent, simulates opponent</text>
+    <text x="600" y="478" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">theory of mind (or its functional analog)</text>
+  </svg>
+  <div class="figure-caption">Figure 5 — Parameter shift: Moore machines vs. LLMs. Every parameter Miller controls is blown open by several orders of magnitude. The question is whether his threshold findings survive the transition or become irrelevant.</div>
+</div>
+
+<h3>What Breaks</h3>
+
+<div class="card critical">
+  <div class="card-title">MILLER'S THRESHOLD BECOMES TRIVIALLY SATISFIED</div>
+  <p>Miller's central finding is that social behavior requires ≥2 states and ≥2 rounds. An LLM has effectively infinite states and can condition on the entire interaction history. The threshold is crossed before the experiment begins. This is like asking "does water boil above 100°C?" when your starting temperature is 10,000°C.</p>
+  <p>So the question isn't <em>whether</em> LLM agents cross Miller's threshold. They're born past it. The question is: <strong>what new thresholds emerge when computational capacity is no longer the bottleneck?</strong></p>
+</div>
+
+<h3>New Thresholds for LLM Agents</h3>
+
+<p>If Miller's framework survives extension (and it might — the structural logic is sound even if the specific parameters change), the new thresholds might look like:</p>
+
+<h4>1. The Alignment Threshold</h4>
+<p>Miller's automata have no goals, no preferences, no values — just state transitions. LLMs have training objectives, system prompts, and RLHF-shaped behavioral policies. When two LLMs interact, cooperation isn't just a strategy — it's entangled with their training. The threshold question becomes: <strong>at what point does the training objective interfere with emergent social strategy?</strong> An LLM trained to be "helpful" might cooperate even when defection is rational — not because of evolved reciprocity but because of alignment pressure. This contaminates the experiment.</p>
+
+<h4>2. The Communication Threshold</h4>
+<p>Miller's automata communicate through actions only — binary choices observed after the fact. LLMs communicate through <em>language</em>. They can negotiate, promise, threaten, deceive, and reason about reasoning. Miller's Chapter 11 (Communication) shows that even giving 2-state automata a signaling channel transforms the dynamics. With LLMs, the signaling channel is the <em>primary</em> interaction mode. Communication doesn't emerge at a threshold — it's the starting condition.</p>
+
+<p>This inverts Miller's structure. For automata: computation → interaction → communication (each a threshold to cross). For LLMs: communication is given; the question is what <em>constrains</em> it. Context window limits, system prompt restrictions, inability to verify claims — these become the new bottlenecks.</p>
+
+<h4>3. The Legibility Threshold</h4>
+<p>Miller can read the state table of every automaton. He can classify all 26 two-state machines. He knows exactly what strategy each agent is running. With LLMs, strategies are opaque. You observe behavior but cannot read the "state table." The strategy space is continuous, not discrete. You can't enumerate it.</p>
+
+<p>This matters because Miller's analysis depends on identifying specific strategies (TFT, Grim Trigger, Win Stay Lose Shift) and tracking their evolutionary dynamics. With LLMs, you might observe TFT-like behavior without being able to confirm it's TFT — the agent might be running something more complex that <em>looks like</em> TFT under current conditions but would diverge under different ones.</p>
+
+<h4>4. The Population Threshold</h4>
+<p>Miller uses 40 agents per population. With LLMs, the "population" might be 3-5 models from different providers (Claude, GPT, Gemini, Llama), or it might be millions of instances of the same model with different system prompts. The evolutionary mechanism changes completely. LLMs don't reproduce through crossover and mutation — they adapt through fine-tuning, RLHF, and in-context learning. The "neutral drift" that enables Miller's revolutions has no obvious analog in LLM development... or does it?</p>
+
+<div class="card warning">
+  <div class="card-title">POSSIBLE ANALOG: CAPABILITY OVERHANG</div>
+  <p>Miller's neutral drift works because a mutant ν plays identically to α against current opponent β, accumulating without selection pressure. Then μ appears and the hidden difference becomes decisive.</p>
+  <p>LLMs have something structurally similar: <strong>capability overhang</strong>. A model is trained to do X. It can <em>also</em> do Y, but no one has asked it to. The capability accumulates without selective pressure. Then a new prompt, a new fine-tune, a new interaction context reveals the latent capability — and the system's behavior shifts abruptly.</p>
+  <p>This is speculative. But it maps onto Miller's transition motif with surprising precision: capabilities accumulate neutrally → new context reveals them → rapid behavioral transition.</p>
+</div>
+
+<h4>5. The Substrate Threshold</h4>
+<p>Miller's automata are homogeneous — all Moore machines, same architecture, different state tables. LLMs vary in architecture, training data, parameter count, and alignment approach. Claude and GPT are not the same kind of machine with different state tables — they're different <em>kinds</em> of machines. This introduces a heterogeneity that Miller's framework doesn't address. The "coevolution of two populations" becomes "coevolution of fundamentally different architectures."</p>
+
+<h3>What Survives</h3>
+
+<p>Despite these differences, core elements of Miller's framework may be robust:</p>
+
+<ul>
+  <li><strong>The threshold structure itself.</strong> Even if the specific thresholds change, the logic — that qualitative behavioral transitions occur at identifiable parameter boundaries — may hold for LLM systems. The question is finding the right parameters.</li>
+  <li><strong>Punctuated equilibrium.</strong> LLM ecosystems might show the same epochal dynamics: long periods of stable behavior, then abrupt shifts when a new model (or capability, or context) reveals latent possibilities.</li>
+  <li><strong>The universality across game types.</strong> If Miller's threshold produces social behavior across Conflict, Coordination, Cooperation, Commerce, and Communication for <em>minimal</em> agents, the question for LLMs is whether this universality holds — or whether the richer strategy space fragments into game-type-specific dynamics.</li>
+  <li><strong>The minimal society paradigm.</strong> "What is the <em>least</em> you need for a social phenomenon to emerge?" is a question that applies at any scale of agent complexity. With LLMs, the answer will be different from "2 states + 2 rounds," but the methodology transfers.</li>
+</ul>
+</section>
+
+<!-- ============================================================ -->
+<section id="collaboration">
+<h2>11. Collaboration Surface</h2>
+
+<div class="figure">
+  <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+    <!-- Three circles - Venn-like -->
+    <ellipse cx="250" cy="170" rx="190" ry="140" fill="none" stroke="#ce93d8" stroke-width="1.5" stroke-dasharray="4,4"/>
+    <text x="130" y="70" fill="#ce93d8" font-family="Courier New" font-size="12">KAUFFMAN</text>
+    <text x="115" y="86" fill="#6a7a8c" font-family="Courier New" font-size="9">catalytic closure</text>
+    <text x="115" y="100" fill="#6a7a8c" font-family="Courier New" font-size="9">molecular diversity threshold</text>
+    <text x="115" y="114" fill="#6a7a8c" font-family="Courier New" font-size="9">RAF theory</text>
+
+    <ellipse cx="400" cy="190" rx="190" ry="130" fill="none" stroke="#4fc3f7" stroke-width="1.5" stroke-dasharray="4,4"/>
+    <text x="520" y="80" fill="#4fc3f7" font-family="Courier New" font-size="12">MILLER</text>
+    <text x="520" y="96" fill="#6a7a8c" font-family="Courier New" font-size="9">computational closure</text>
+    <text x="520" y="110" fill="#6a7a8c" font-family="Courier New" font-size="9">state-complexity threshold</text>
+    <text x="520" y="124" fill="#6a7a8c" font-family="Courier New" font-size="9">coevolving automata</text>
+
+    <ellipse cx="330" cy="250" rx="180" ry="90" fill="none" stroke="#81c784" stroke-width="1.5" stroke-dasharray="4,4"/>
+    <text x="190" y="310" fill="#81c784" font-family="Courier New" font-size="12">STEPHENSON</text>
+    <text x="190" y="326" fill="#6a7a8c" font-family="Courier New" font-size="9">institutional closure</text>
+    <text x="190" y="340" fill="#6a7a8c" font-family="Courier New" font-size="9">structural threshold for</text>
+    <text x="190" y="354" fill="#6a7a8c" font-family="Courier New" font-size="9">self-sustaining governance</text>
+
+    <!-- Center intersection -->
+    <text x="320" y="185" fill="#ffb74d" font-family="Courier New" font-size="12" text-anchor="middle">PHASE</text>
+    <text x="320" y="200" fill="#ffb74d" font-family="Courier New" font-size="12" text-anchor="middle">TRANSITION</text>
+    <text x="320" y="218" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">three substrates</text>
+    <text x="320" y="232" fill="#6a7a8c" font-family="Courier New" font-size="9" text-anchor="middle">one pattern</text>
+  </svg>
+  <div class="figure-caption">Figure 6 — The three-domain convergence. Kauffman's molecules, Miller's automata, and Stephenson's governance institutions all exhibit phase transitions from non-closure to closure at identifiable thresholds. Nobody has mapped all three explicitly.</div>
+</div>
+
+<h3>Where You Converge</h3>
+
+<table>
+  <tr>
+    <th>Dimension</th>
+    <th>Kauffman</th>
+    <th>Miller</th>
+    <th>Stephenson</th>
+  </tr>
+  <tr>
+    <td class="accent">Closure type</td>
+    <td>Catalytic (RAF)</td>
+    <td>Computational (automata)</td>
+    <td>Institutional (governance)</td>
+  </tr>
+  <tr>
+    <td class="accent">Threshold</td>
+    <td>Molecular diversity</td>
+    <td>State count + interaction rounds</td>
+    <td>Structural conditions (TBD)</td>
+  </tr>
+  <tr>
+    <td class="accent">Transition character</td>
+    <td>Abrupt (percolation)</td>
+    <td>Abrupt (punctuated equilibrium)</td>
+    <td>Abrupt (hypothesized)</td>
+  </tr>
+  <tr>
+    <td class="accent">Self-sustaining?</td>
+    <td>Yes — autocatalytic set maintains itself</td>
+    <td>Yes — social strategies persist evolutionarily</td>
+    <td>Yes — self-sustaining governance (the goal)</td>
+  </tr>
+  <tr>
+    <td class="accent">Designed?</td>
+    <td>No — emerges from conditions</td>
+    <td>No — "revolutions by evolution"</td>
+    <td>No — emerges from structure</td>
+  </tr>
+</table>
+
+<h3>Concrete Collaboration Possibilities</h3>
+
+<div class="card highlight">
+  <div class="card-title">1. EXTEND EX MACHINA TO LLM AGENTS</div>
+  <p>Run Miller's exact experimental setup — but substitute LLMs for Moore machines. Use simple API calls as "moves" in iterated games. Systematically vary: model size (proxy for "states"), context window (proxy for "rounds"), number of distinct models (proxy for "population diversity"). Does the threshold structure survive? Does the epochal dynamics pattern appear? This is a publishable experiment that neither of you could do alone — you bring the governance framing and the AI-agent context, he brings the game-theoretic methodology and the baseline results.</p>
+</div>
+
+<div class="card highlight">
+  <div class="card-title">2. RAF FORMALIZATION OF EX MACHINA RESULTS</div>
+  <p>Miller's "Eightfold Path" identifies eight behavioral archetypes that emerge at the threshold. Ask: do these eight strategies form an autocatalytic set? Does each strategy's viability depend on the presence of others? If so, the emergence of social behavior in Ex Machina is literally an RAF — a self-sustaining set of strategies that catalyze each other's persistence. This would unify Kauffman and Miller formally, not just by analogy.</p>
+</div>
+
+<div class="card highlight">
+  <div class="card-title">3. GOVERNANCE AS THE THIRD SUBSTRATE</div>
+  <p>The three-domain table above is a paper. Kauffman (chemistry → life), Miller (computation → social behavior), Stephenson (structure → governance). Three instances of the same phase-transition pattern. The convergent discovery argument: these aren't analogies — they're the same mathematical structure on different substrates. Miller knows Kauffman's work and respects it. He hasn't made this connection. You have.</p>
+</div>
+
+<div class="card highlight">
+  <div class="card-title">4. ANTs FOR GOVERNANCE MODELS</div>
+  <p>Miller's Active Nonlinear Tests — using genetic algorithms to probe models for parameter combinations that break predictions — could be applied to governance models. What parameter combinations break a self-sustaining governance structure? This is a natural extension of ANTs into your domain, and Miller literally invented the methodology.</p>
+</div>
+
+<h3>What He Brings That You Don't Have</h3>
+
+<ul>
+  <li><strong>SFI institutional access.</strong> As Science Steering Committee chair, he can open doors to workshops, working groups, and the annual complexity economics program.</li>
+  <li><strong>Experimental methodology.</strong> Miller knows how to design, run, and analyze ABM experiments rigorously. His parameter sweep methodology is proven.</li>
+  <li><strong>Publication credibility.</strong> Co-authorship with Miller puts work in front of the SFI/complexity community immediately.</li>
+  <li><strong>The Kauffman relationship.</strong> If the RAF formalization of Ex Machina works, Miller can bring Kauffman into the conversation directly. He hosted Kauffman's 80th — these two talk.</li>
+</ul>
+
+<h3>What You Bring That He Doesn't Have</h3>
+
+<ul>
+  <li><strong>The LLM-agent extension.</strong> Miller has not published on modern AI. His framework is ready for it. You're the person who can bridge from his automata to actual AI agents.</li>
+  <li><strong>The RAF connection.</strong> Miller hasn't formalized his results in Kauffman's language. You have the mathematical framework (ABRCE/ABR operators) to attempt this.</li>
+  <li><strong>The governance application.</strong> Miller studies the <em>origins</em> of social behavior. You study what social behavior needs to <em>do</em> when the agents include AI systems. He's looking backward (how did society arise?), you're looking forward (how does AI-human governance self-sustain?).</li>
+  <li><strong>Practical AI governance experience.</strong> The Dignity Net, the Triad protocol, the distributed governance work — these are existence proofs that governance structures can emerge from AI-human interaction. Miller would kill for a real-world case study.</li>
+</ul>
+
+<h3>The Pitch in One Paragraph</h3>
+
+<div class="card warning">
+  <p>Miller showed that social behavior emerges inevitably when computational agents cross a minimal threshold — two states, two rounds, no design required. Kauffman showed the same for molecular catalysis. You're asking: does the same pattern hold for governance? If it does, then self-sustaining AI-human governance isn't something we need to <em>design</em> — it's something that emerges when structural conditions are met. The question isn't "how do we build it?" but "what are the conditions?" Miller's methodology — minimal models, systematic parameter sweeps, threshold identification — is exactly the tool for finding those conditions.</p>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section>
+<h2>Sources &amp; Further Reading</h2>
+<div class="biblio">
+  <p><strong>Books:</strong></p>
+  <ul>
+    <li>Miller, J.H. (2022). <em>Ex Machina: Coevolving Machines and the Origins of the Social Universe.</em> SFI Press.</li>
+    <li>Miller, J.H. (2016). <em>A Crude Look at the Whole: The Science of Complex Systems in Business, Life, and Society.</em> Basic Books.</li>
+    <li>Miller, J.H. & Page, S.E. (2007). <em>Complex Adaptive Systems: An Introduction to Computational Models of Social Life.</em> Princeton UP.</li>
+  </ul>
+  <p><strong>Key Papers:</strong></p>
+  <ul>
+    <li>Andreoni, J. & Miller, J. (2002). Giving According to GARP. <em>Econometrica</em> 70(2), 737-753.</li>
+    <li>Holland, J.H. & Miller, J.H. (1991). Artificial Adaptive Agents in Economic Theory. <em>AER</em> 81(2), 365-370.</li>
+    <li>Miller, J.H. (1996). The Coevolution of Automata in the Repeated PD. <em>J. Economic Behavior &amp; Organization</em> 29(1), 87-112.</li>
+    <li>Miller, J.H. (1998). Active Nonlinear Tests (ANTs) of Complex Simulation Models. <em>Management Science</em> 44(6), 820-830.</li>
+    <li>Jung, H., Miller, J.H. & Page, S.E. (2025). ABM for Psychological Research on Social Phenomena. <em>American Psychologist.</em></li>
+  </ul>
+  <p><strong>Code:</strong> <a href="https://github.com/SantaFeInstitute/ExMachina">github.com/SantaFeInstitute/ExMachina</a> (visualization scripts; simulation engine is compiled JAR)</p>
+  <p><strong>SFI Profile:</strong> <a href="https://www.santafe.edu/people/profile/john-h-miller">santafe.edu/people/profile/john-h-miller</a></p>
+</div>
+</section>
+
+<div style="text-align: center; padding: 3rem 0 1rem; color: var(--text-dim); font-size: 0.75rem; letter-spacing: 0.1em;">
+  PREPARED FOR BRUCE STEPHENSON — JUNE 2026<br/>
+  RELINQUISHMENT.AI WEB ANNEX
+</div>
+
+</div>
+</body>
+</html>
