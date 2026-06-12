@@ -537,16 +537,7 @@
 <details class="accordion">
   <summary>FULL ENUMERATION: 26 TWO-STATE MACHINES</summary>
   <div class="accordion-body">
-    <table>
-      <tr><th>Type</th><th>Count</th><th>Behavior</th></tr>
-      <tr><td>Single Output</td><td>20</td><td class="dim">Functionally 1-state (dead second state)</td></tr>
-      <tr><td>Alternate Outputs</td><td>2</td><td class="dim">Alternate 0/1 regardless of input</td></tr>
-      <tr><td>Non-Conditional Trigger</td><td>2</td><td class="dim">Transition on any input, stay</td></tr>
-      <tr><td>Conditional Trigger</td><td>4</td><td class="dim">Transition only on 0 or only on 1</td></tr>
-      <tr><td class="green">Flip Flop</td><td class="green">4</td><td class="green">Including Tit-for-Tat</td></tr>
-      <tr><td class="green">Do Once, Return</td><td class="green">8</td><td class="green">Visit second state and return</td></tr>
-    </table>
-    <p>20 of the 26 machines are functionally 1-state — they have a second state that is either unreachable or produces the same output. Only the 12 machines in the bottom three rows exhibit any behavioral complexity.</p>
+    <p>Without minimization, there are 2<sup>10</sup> = 1024 possible 2-state machines (2 outputs &times; 4 transitions &times; 2 initial states &times; 2 initial actions). After removing duplicates and reducing functionally identical machines, Miller identifies <strong>26 behaviorally distinct</strong> automata. Of these, 20 are functionally 1-state (the second state is unreachable or produces the same output). Only 6 exhibit genuinely conditional social behavior — but those 6 include TFT, Grim Trigger, and other reciprocal strategies.</p>
   </div>
 </details>
 
@@ -566,7 +557,7 @@
 
 <h3>The Population</h3>
 
-<p><span class="accent">Two populations of 40 agents each</span> coevolve against each other. This is crucial — not one population, but two, like biological species in an arms race. Every member of Population 0 plays against every member of Population 1 in a round-robin tournament. Fitness = cumulative payoff across all matches.</p>
+<p><span class="accent">Two populations of 30 agents each</span> coevolve against each other. This is crucial — not one population, but two, like biological species in an arms race. Every member of Population 0 plays against every member of Population 1 in a round-robin tournament. Fitness = cumulative payoff across all matches.</p>
 
 <p>A <span class="tip">genetic algorithm<span class="tip-text">Optimization method inspired by natural selection: encode solutions as bit strings, select the fittest, recombine via crossover, introduce random mutations. Invented by John Holland (1975) — Miller's colleague at Michigan.</span></span> governs evolution: tournament selection, crossover, and mutation. The automata are encoded as 148-bit strings (4 bits start state + 16 × 9-bit state packets), and standard GA operators produce offspring. Mutation rate is tunable — Miller systematically varies it to show that low mutation doesn't prevent transitions, it just makes them rarer and more abrupt.</p>
 </section>
@@ -661,14 +652,14 @@
 
 <div class="data-callout">
   <div class="data-title">SIMULATION DATA — TWO-POPULATION COEVOLUTION</div>
-  <p>Running the model with Miller's two-population structure (30 agents per population, 150 rounds, mut=0.005, 200 generations) confirms the sharp threshold:</p>
+  <p>Running the model with Miller's two-population structure (30 agents per population, 150 rounds, mut=0.005, 200 generations, 30 seeds per state count) confirms the sharp threshold:</p>
   <table>
     <tr><th>States</th><th>Mean Cooperation</th><th>Character</th></tr>
-    <tr><td>1</td><td class="red">6.7%</td><td class="dim">AllD always dominates — no conditional behavior possible</td></tr>
-    <tr><td>2</td><td class="green">68.6%</td><td class="dim">Sharp jump — conditional strategies emerge via neutral drift</td></tr>
-    <tr><td>3</td><td class="green">73.4%</td><td class="dim">Richer strategy ecology, similar cooperation level</td></tr>
-    <tr><td>4</td><td class="green">74.3%</td><td class="dim">Diverse strategies, high variance across runs</td></tr>
-    <tr><td>5</td><td class="green">74.9%</td><td class="dim">No further improvement — complexity plateau</td></tr>
+    <tr><td>1</td><td class="red">6.0%</td><td class="dim">AllD always dominates — no conditional behavior possible</td></tr>
+    <tr><td>2</td><td class="green">75.0%</td><td class="dim">Sharp jump — conditional strategies emerge via neutral drift</td></tr>
+    <tr><td>3</td><td class="green">77.5%</td><td class="dim">Richer strategy ecology, similar cooperation level</td></tr>
+    <tr><td>4</td><td class="green">77.5%</td><td class="dim">Diverse strategies, high variance across runs</td></tr>
+    <tr><td>5</td><td class="green">77.0%</td><td class="dim">No further improvement — complexity plateau</td></tr>
   </table>
   <p style="margin-top:0.5rem;color:var(--text-dim);font-size:0.82rem;">The two-population model produces higher variance than single-population round-robin because cooperation requires coordination <em>across</em> independently evolving populations — the neutral drift → complementary mutation mechanism. Some runs haven't transitioned by generation 200; with 500 generations, all do.</p>
 </div>
@@ -681,10 +672,11 @@
     <p>Miller's threshold is about computational capacity (states) and opportunity (rounds). The simulation reveals a <strong>second <span class="tip">phase transition<span class="tip-text">An abrupt qualitative change in system behavior at a critical parameter value. Like water freezing at 0°C — gradual cooling, sudden crystallization.</span></span></strong>, orthogonal to the first: a mutation rate threshold.</p>
     <table>
       <tr><th>Mutation Rate</th><th>Cooperation</th><th>Character</th></tr>
-      <tr><td>0.001</td><td class="green">62%</td><td class="dim">Low exploration — some runs haven't transitioned yet</td></tr>
-      <tr><td>0.005</td><td class="green">69%</td><td class="dim">Miller's default — best balance of stability and exploration</td></tr>
-      <tr><td>0.010</td><td class="accent">29%</td><td class="dim">Sharp drop — mutation overwhelms conditional logic</td></tr>
-      <tr><td>0.020</td><td class="red">12%</td><td class="dim">Cooperation effectively destroyed</td></tr>
+      <tr><td>0.001</td><td class="green">62%</td><td class="dim">Low exploration — bimodal, many runs stuck at AllD</td></tr>
+      <tr><td class="green">0.003</td><td class="green">90%</td><td class="dim">Sweet spot — high cooperation, low variance (sd=7%)</td></tr>
+      <tr><td>0.005</td><td class="green">75%</td><td class="dim">Miller's default — good but high variance (sd=29%)</td></tr>
+      <tr><td>0.010</td><td class="red">17%</td><td class="dim">Sharp cliff — mutation overwhelms conditional logic</td></tr>
+      <tr><td>0.020</td><td class="red">15%</td><td class="dim">Cooperation effectively destroyed</td></tr>
     </table>
     <p>The mechanism: conditional strategies (TFT, Grim Trigger) depend on specific state transitions — "if opponent defects, go to state 1." High mutation rates corrupt these transitions faster than selection can repair them. This is analogous to <span class="tip">Eigen's error threshold<span class="tip-text">Manfred Eigen (1971): if mutation rate exceeds a critical value, selection cannot maintain genetic information. The quasispecies collapses into random sequences.</span></span> in molecular evolution: above a critical mutation rate, the information content of the genome cannot be maintained by selection.</p>
     <p>Cooperation requires not just the computational capacity to condition behavior, but enough <em>genetic stability</em> to maintain the conditioning across generations.</p>
@@ -781,7 +773,7 @@
       <tr><td class="green"><span class="tip">TFT<span class="tip-text">Tit-for-Tat: start cooperating, then copy the opponent's last move.</span></span></td><td class="dim">Mirror the opponent's last move</td><td class="dim">Recovers from mutual defection</td></tr>
       <tr><td class="accent">Novel (3+ states)</td><td class="dim">Graduated punishment — one-round retaliation, then forgive</td><td class="dim">Balances forgiveness and deterrence</td></tr>
     </table>
-    <p>Miller (1996) showed that noise — mutation — destroys TFT's advantage. In mutation-driven evolution, agents occasionally defect by accident. TFT forgives every wobble, getting repeatedly exploited. Grim's permanent retaliation is harsh but effective against imperfect cooperators.</p>
+    <p>In a noiseless environment with accurate mutation (guaranteed bit-flip), TFT dominates: ~64% of 2-state runs converge to TFT-dominant populations, vs ~16% for Grim. TFT's forgiving reciprocity outperforms Grim's permanent retaliation when opponents cooperate reliably. But add noise (environmental misreport of moves), and both strategies suffer — TFT retaliates against accidental "defections," triggering cascades. At 2 states there's no room for noise-tolerant strategies; at 16 states, automata evolve graduated punishment that absorbs noise gracefully.</p>
     <p><strong>The functional identification problem:</strong> Many agents appear "unknown" in a naive census because they're known strategies with swapped state numbering. A 2-state automaton has two equivalent encodings of the same behavior (start in state 0 or state 1, with outputs permuted). Reducing to accessible states and canonicalizing the numbering reveals the true strategy distribution — a critical step for meaningful analysis.</p>
   </div>
 </details>
@@ -1048,7 +1040,7 @@
   <div class="figure-caption">Figure 4 — Miller's intellectual network. All roads lead through Michigan and SFI. Holland gave him genetic algorithms, Axelrod gave him the Prisoner's Dilemma paradigm, Arthur connected him to SFI's economics program, Page became his long-running collaboration partner.</div>
 </div>
 
-<p><strong>The Kauffman connection:</strong> Institutional, not co-authorial. Miller co-hosted Kauffman's 80th birthday at SFI. They inhabit the same intellectual ecosystem. But Miller has not published on autocatalytic sets or RAF theory — and he has not explicitly mapped his computational thresholds to Kauffman's catalytic closure. That mapping is <em>available</em>. Nobody has made it.</p>
+<p><strong>The Kauffman connection:</strong> Institutional, not co-authorial. Miller co-hosted Kauffman's 80th birthday at SFI. They inhabit the same intellectual ecosystem. But Miller has not published on autocatalytic sets or RAF theory — and he has not explicitly mapped his computational thresholds to Kauffman's catalytic closure. That mapping is <em>available</em>.</p>
 </section>
 
 <!-- ============================================================ -->
@@ -1298,13 +1290,14 @@
 <h2>Interactive Simulation</h2>
 <div class="card highlight">
   <div class="card-title">TRY IT YOURSELF</div>
-  <p>Run Miller's coevolving automata model in your browser. The engine faithfully implements the core algorithms from Ex Machina: Moore machine automata, two-population coevolution with cross-population tournaments, genetic algorithm evolution with fitness-proportional selection, circular crossover, and per-gene mutation calibrated to Miller's 0.74 expected mutations per offspring.</p>
+  <p>Run Miller's coevolving automata model in your browser. The engine implements the core algorithms from Ex Machina: Moore machine automata, two-population coevolution with cross-population tournaments, genetic algorithm evolution with ranked tournament selection, circular crossover, and per-gene mutation calibrated to Miller's 0.74 expected mutations per offspring. (Miller uses fitness-proportional selection with z-scoring; we use tournament selection — see <a href="replication.html#methodology" style="color:var(--accent);">gap analysis</a>.)</p>
   <p style="margin-top:0.5rem;">Two modes:</p>
   <ul style="margin:0.5rem 0;padding-left:1.5rem;font-size:0.86rem;">
     <li><strong>Single Run</strong> — Watch cooperation emerge in real time across two coevolving populations. Start with states=2, 200 generations to see the epochal transition. Try seed 1042 for a fast revolution (~gen 80) or seed 42 for slow stasis→revolution (~gen 180).</li>
-    <li><strong>Phase Transition</strong> — Sweep across state counts to see the computational threshold. The jump from 1 state (~7% cooperation) to 2 states (~69%) is the central finding. Use 200+ generations to allow the neutral drift mechanism time to operate.</li>
+    <li><strong>Phase Transition</strong> — Sweep across state counts to see the computational threshold. The jump from 1 state (~6% cooperation) to 2 states (~75%) is the central finding. Use 200+ generations to allow the neutral drift mechanism time to operate.</li>
   </ul>
   <p style="margin-top:0.8rem;"><a href="simulation.html" style="color:var(--accent);text-decoration:none;font-size:0.95rem;">&rarr; Launch the simulation</a></p>
+  <p style="margin-top:0.4rem;"><a href="replication.html" style="color:var(--accent5);text-decoration:none;font-size:0.95rem;">&rarr; Replication results</a></p>
 </div>
 </section>
 
@@ -1332,7 +1325,9 @@
 </section>
 
 <div style="text-align: center; padding: 3rem 0 1rem; color: var(--text-dim); font-size: 0.75rem; letter-spacing: 0.1em;">
-  PREPARED FOR BRUCE STEPHENSON — JUNE 2026<br/>
+  <a href="simulation.html" style="color:var(--text-dim);text-decoration:none;">SIMULATION</a> &middot;
+  <a href="replication.html" style="color:var(--text-dim);text-decoration:none;">REPLICATIONS</a><br/>
+  PREPARED FOR BRUCE STEPHENSON &mdash; JUNE 2026<br/>
   RELINQUISHMENT.AI WEB ANNEX
 </div>
 
@@ -1352,11 +1347,11 @@
   ctx.scale(dpr, dpr);
 
   var data = [
-    { label: '1 STATE', coop: 0.067 },
-    { label: '2 STATES', coop: 0.686 },
-    { label: '3 STATES', coop: 0.734 },
-    { label: '4 STATES', coop: 0.743 },
-    { label: '5 STATES', coop: 0.749 }
+    { label: '1 STATE', coop: 0.060 },
+    { label: '2 STATES', coop: 0.750 },
+    { label: '3 STATES', coop: 0.775 },
+    { label: '4 STATES', coop: 0.775 },
+    { label: '5 STATES', coop: 0.770 }
   ];
 
   var barW = 90, gap = 28, maxH = 130, bottom = 185;
@@ -1444,7 +1439,7 @@
       ctx.font = 'bold 18px Courier New';
       ctx.fillStyle = '#ffb74d';
       ctx.textAlign = 'right';
-      ctx.fillText('7% → 69%', W - 20, 55);
+      ctx.fillText('6% → 75%', W - 20, 55);
       ctx.font = '10px Courier New';
       ctx.fillStyle = '#6a7a8c';
       ctx.fillText('one additional state', W - 20, 70);
