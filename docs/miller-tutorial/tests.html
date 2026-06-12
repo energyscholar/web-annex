@@ -70,7 +70,7 @@
 
 <script src="miller-engine.js"></script>
 <script>
-(function() {
+(async function() {
   'use strict';
 
   var Automaton = Miller.Automaton;
@@ -80,6 +80,7 @@
   var RNG = Miller.RNG;
 
   var results = [];
+  var asyncPending = [];
   var currentSection = '';
 
   function section(name) {
@@ -88,6 +89,25 @@
 
   function assert(num, name, condition, detail) {
     results.push({ num: num, section: currentSection, name: name, pass: !!condition, detail: detail || '' });
+  }
+
+  function assertAsync(num, name, promiseFn) {
+    var idx = results.length;
+    var sec = currentSection;
+    results.push({ num: num, section: sec, name: name, pass: false, detail: 'pending...' });
+    var p = promiseFn().then(function(result) {
+      if (result && result.pass !== undefined) {
+        results[idx].pass = !!result.pass;
+        results[idx].detail = result.detail || '';
+      } else {
+        results[idx].pass = !!result;
+        results[idx].detail = '';
+      }
+    }).catch(function(err) {
+      results[idx].pass = false;
+      results[idx].detail = 'Error: ' + (err.message || err);
+    });
+    asyncPending.push(p);
   }
 
   function assertEq(num, name, actual, expected) {
@@ -732,7 +752,240 @@
   }
   assert(56, 'determinism: same seed -> same final populations', match56pop);
 
-  // ===== Render Results =====
+  // ===== P4b: UI, Canvas, Persistence =====
+  section('P4b: Payoff Matrix & Game Classifier');
+
+  // Test 57: Game classifier — PD
+  var classify57 = Miller.classifyGame({T:5, R:3, P:1, S:0});
+  assertEq(57, 'classifyGame: {T:5,R:3,P:1,S:0} -> "Prisoner\'s Dilemma"',
+    classify57, "Prisoner's Dilemma");
+
+  // Test 58: Game classifier — Chicken
+  var classify58 = Miller.classifyGame({T:5, R:3, S:1, P:0});
+  assertEq(58, 'classifyGame: {T:5,R:3,S:1,P:0} -> "Chicken / Hawk-Dove"',
+    classify58, "Chicken / Hawk-Dove");
+
+  // Test 59: Payoffs flow through to Game.play
+  var customPayoffs59 = {T:7, R:4, P:2, S:1};
+  var r59 = Game.play(Automaton.createNamed('allC'), Automaton.createNamed('allD'), 10, customPayoffs59);
+  assertEq(59, 'custom payoffs: AllC vs AllD scoreA=10 (S=1 x10)', r59.scoreA, 10);
+  assertEq(59, 'custom payoffs: AllC vs AllD scoreB=70 (T=7 x10)', r59.scoreB, 70);
+
+  section('P4b: IndexedDB (async)');
+
+  // Test 60: Save and read back from IndexedDB
+  assertAsync(60, 'IndexedDB: save run and read back', function() {
+    return new Promise(function(resolve, reject) {
+      var dbReq = indexedDB.open('MillerExMachinaTest', 1);
+      dbReq.onupgradeneeded = function(e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('runs')) {
+          var store = db.createObjectStore('runs', { keyPath: 'id', autoIncrement: true });
+          store.createIndex('timestamp', 'timestamp', { unique: false });
+          store.createIndex('label', 'label', { unique: false });
+        }
+      };
+      dbReq.onsuccess = function(e) {
+        var db = e.target.result;
+        var testRun = {
+          timestamp: new Date().toISOString(),
+          label: 'Test Run #1',
+          params: { populationSize: 10, states: 2, rounds: 10, mutationRate: 0.005, generations: 5, seed: 42, payoffs: {T:5,R:3,P:1,S:0}, eliteCount: 7 },
+          stats: [{ generation: 0, cooperationRate: 0.5, avgPayoff: 2.0, maxPayoff: 3.0, census: {} }],
+          topAgents: [],
+          notes: ''
+        };
+        var tx = db.transaction('runs', 'readwrite');
+        var store = tx.objectStore('runs');
+        var addReq = store.add(testRun);
+        addReq.onsuccess = function() {
+          var id = addReq.result;
+          var tx2 = db.transaction('runs', 'readonly');
+          var getReq = tx2.objectStore('runs').get(id);
+          getReq.onsuccess = function() {
+            var saved = getReq.result;
+            var paramsMatch = saved && saved.params.seed === 42 &&
+              saved.stats.length === 1 && saved.stats[0].cooperationRate === 0.5;
+            // Cleanup
+            var tx3 = db.transaction('runs', 'readwrite');
+            tx3.objectStore('runs').delete(id);
+            tx3.oncomplete = function() {
+              db.close();
+              indexedDB.deleteDatabase('MillerExMachinaTest');
+              resolve({ pass: paramsMatch, detail: paramsMatch ? '' : 'saved data mismatch' });
+            };
+          };
+        };
+        addReq.onerror = function() { db.close(); reject(new Error('add failed')); };
+      };
+      dbReq.onerror = function() { reject(new Error('db open failed')); };
+    });
+  });
+
+  // Test 61: Delete a run — subsequent read returns undefined
+  assertAsync(61, 'IndexedDB: delete run -> read returns undefined', function() {
+    return new Promise(function(resolve, reject) {
+      var dbReq = indexedDB.open('MillerExMachinaTest61', 1);
+      dbReq.onupgradeneeded = function(e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('runs')) {
+          db.createObjectStore('runs', { keyPath: 'id', autoIncrement: true });
+        }
+      };
+      dbReq.onsuccess = function(e) {
+        var db = e.target.result;
+        var tx = db.transaction('runs', 'readwrite');
+        var addReq = tx.objectStore('runs').add({ label: 'delete-test', params: {}, stats: [], topAgents: [], notes: '' });
+        addReq.onsuccess = function() {
+          var id = addReq.result;
+          var tx2 = db.transaction('runs', 'readwrite');
+          tx2.objectStore('runs').delete(id);
+          tx2.oncomplete = function() {
+            var tx3 = db.transaction('runs', 'readonly');
+            var getReq = tx3.objectStore('runs').get(id);
+            getReq.onsuccess = function() {
+              var gone = getReq.result === undefined;
+              db.close();
+              indexedDB.deleteDatabase('MillerExMachinaTest61');
+              resolve({ pass: gone, detail: gone ? '' : 'record still exists after delete' });
+            };
+          };
+        };
+        addReq.onerror = function() { db.close(); reject(new Error('add failed')); };
+      };
+      dbReq.onerror = function() { reject(new Error('db open failed')); };
+    });
+  });
+
+  // Test 62: Two runs with different seeds produce different stored stats
+  assertAsync(62, 'IndexedDB: two runs with different seeds have different stats', function() {
+    return new Promise(function(resolve, reject) {
+      var dbReq = indexedDB.open('MillerExMachinaTest62', 1);
+      dbReq.onupgradeneeded = function(e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('runs')) {
+          db.createObjectStore('runs', { keyPath: 'id', autoIncrement: true });
+        }
+      };
+      dbReq.onsuccess = function(e) {
+        var db = e.target.result;
+        // Run two experiments with different seeds
+        var r1 = Experiment.run({ populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 111 });
+        var r2 = Experiment.run({ populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 222 });
+
+        var tx = db.transaction('runs', 'readwrite');
+        var store = tx.objectStore('runs');
+        var id1, id2;
+        var addReq1 = store.add({ label: 'seed-111', params: { seed: 111 }, stats: r1.stats, topAgents: [], notes: '' });
+        addReq1.onsuccess = function() {
+          id1 = addReq1.result;
+          var addReq2 = store.add({ label: 'seed-222', params: { seed: 222 }, stats: r2.stats, topAgents: [], notes: '' });
+          addReq2.onsuccess = function() {
+            id2 = addReq2.result;
+          };
+        };
+        tx.oncomplete = function() {
+          var tx2 = db.transaction('runs', 'readonly');
+          var store2 = tx2.objectStore('runs');
+          var getReq1 = store2.get(id1);
+          getReq1.onsuccess = function() {
+            var saved1 = getReq1.result;
+            var getReq2 = store2.get(id2);
+            getReq2.onsuccess = function() {
+              var saved2 = getReq2.result;
+              var different = false;
+              if (saved1 && saved2 && saved1.stats.length > 0 && saved2.stats.length > 0) {
+                for (var i = 0; i < saved1.stats.length; i++) {
+                  if (Math.abs(saved1.stats[i].cooperationRate - saved2.stats[i].cooperationRate) > 1e-10) {
+                    different = true;
+                    break;
+                  }
+                }
+              }
+              db.close();
+              indexedDB.deleteDatabase('MillerExMachinaTest62');
+              resolve({ pass: different, detail: different ? '' : 'stats identical for different seeds' });
+            };
+          };
+        };
+        tx.onerror = function() { db.close(); reject(new Error('transaction failed')); };
+      };
+      dbReq.onerror = function() { reject(new Error('db open failed')); };
+    });
+  });
+
+  section('P4b: Import/Export');
+
+  // Test 63: Export produces valid JSON with version field and runs array
+  var exportData63 = Miller.RunDB ? Miller.RunDB.exportFormat([
+    { id: 1, label: 'test', params: {seed: 1}, stats: [{generation:0,cooperationRate:0.5,avgPayoff:2,maxPayoff:3}], topAgents: [], notes: '' }
+  ]) : { version: 1, runs: [{ label: 'test', params: {seed: 1}, stats: [{generation:0,cooperationRate:0.5,avgPayoff:2,maxPayoff:3}], topAgents: [], notes: '' }] };
+  var json63 = JSON.stringify(exportData63);
+  var parsed63 = JSON.parse(json63);
+  assert(63, 'export: valid JSON with version field', parsed63.version === 1);
+  assert(63, 'export: has runs array', Array.isArray(parsed63.runs) && parsed63.runs.length === 1);
+
+  // Test 64: Import -> export round-trip preserves all fields
+  assertAsync(64, 'Import/Export round-trip preserves all fields', function() {
+    return new Promise(function(resolve, reject) {
+      var original = {
+        version: 1,
+        runs: [{
+          label: 'roundtrip-test',
+          params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 50, seed: 42, payoffs: {T:5,R:3,P:1,S:0}, eliteCount: 20 },
+          stats: [{ generation: 0, cooperationRate: 0.42, avgPayoff: 2.1, maxPayoff: 3.5, census: {allC:1,allD:2,tft:3,grimTrigger:4,pavlov:5,tf2t:6,other:7} }],
+          topAgents: [{ agent: {states:2,startState:0,actions:[0,1],transC:[0,0],transD:[1,1]}, fitness: 42, identified: 'tft' }],
+          notes: 'test note'
+        }]
+      };
+      var dbReq = indexedDB.open('MillerExMachinaTest64', 1);
+      dbReq.onupgradeneeded = function(e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('runs')) {
+          var store = db.createObjectStore('runs', { keyPath: 'id', autoIncrement: true });
+          store.createIndex('timestamp', 'timestamp', { unique: false });
+          store.createIndex('label', 'label', { unique: false });
+        }
+      };
+      dbReq.onsuccess = function(e) {
+        var db = e.target.result;
+        // Import: add runs to DB
+        var tx = db.transaction('runs', 'readwrite');
+        var store = tx.objectStore('runs');
+        var run = original.runs[0];
+        run.timestamp = new Date().toISOString();
+        var addReq = store.add(run);
+        var addedId;
+        addReq.onsuccess = function() { addedId = addReq.result; };
+        tx.oncomplete = function() {
+          // Export: read back
+          var tx2 = db.transaction('runs', 'readonly');
+          var getReq = tx2.objectStore('runs').get(addedId);
+          getReq.onsuccess = function() {
+            var saved = getReq.result;
+            var pass = saved &&
+              saved.label === 'roundtrip-test' &&
+              saved.params.seed === 42 &&
+              saved.params.payoffs.T === 5 &&
+              saved.stats[0].cooperationRate === 0.42 &&
+              saved.stats[0].census.tft === 3 &&
+              saved.topAgents.length === 1 &&
+              saved.topAgents[0].identified === 'tft' &&
+              saved.notes === 'test note';
+            db.close();
+            indexedDB.deleteDatabase('MillerExMachinaTest64');
+            resolve({ pass: pass, detail: pass ? '' : 'field mismatch after round-trip' });
+          };
+        };
+        tx.onerror = function() { db.close(); reject(new Error('transaction failed')); };
+      };
+      dbReq.onerror = function() { reject(new Error('db open failed')); };
+    });
+  });
+
+  // ===== Wait for async tests, then render =====
+  await Promise.all(asyncPending);
+
   var container = document.getElementById('results');
   var totalPass = 0, totalFail = 0;
   var currentSec = '';

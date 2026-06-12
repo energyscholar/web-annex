@@ -936,6 +936,36 @@ const Miller = (function() {
     });
   };
 
+  // ===== Game Type Classifier =====
+
+  function classifyGame(payoffs) {
+    var T = payoffs.T, R = payoffs.R, P = payoffs.P, S = payoffs.S;
+    if (T > R && R > P && P > S) return "Prisoner's Dilemma";
+    if (T > R && R > S && S > P) return "Chicken / Hawk-Dove";
+    if (R > T && T > P && P > S) return "Stag Hunt";
+    if (R > T && T > S && S > P) return "Harmony Game";
+    return "Custom Game";
+  }
+
+  // ===== Run Database Export Format Helper =====
+
+  var RunDB = {};
+
+  RunDB.exportFormat = function(runs) {
+    var cleaned = [];
+    for (var i = 0; i < runs.length; i++) {
+      var r = runs[i];
+      cleaned.push({
+        label: r.label || '',
+        params: r.params || {},
+        stats: r.stats || [],
+        topAgents: r.topAgents || [],
+        notes: r.notes || ''
+      });
+    }
+    return { version: 1, runs: cleaned };
+  };
+
   // ===== Public API =====
 
   return {
@@ -943,7 +973,9 @@ const Miller = (function() {
     Automaton: Automaton,
     Game: Game,
     GA: GA,
-    Experiment: Experiment
+    Experiment: Experiment,
+    classifyGame: classifyGame,
+    RunDB: RunDB
   };
 
 })();

@@ -177,6 +177,7 @@
     display: flex;
     gap: 0.6rem;
     padding-top: 0.5rem;
+    flex-wrap: wrap;
   }
 
   button {
@@ -203,6 +204,17 @@
     color: var(--text);
   }
   .btn-secondary:hover { border-color: var(--text-dim); }
+
+  .btn-preset {
+    background: var(--surface);
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+  .btn-preset:hover { color: var(--text); border-color: var(--text-dim); }
+  .btn-preset.active { color: var(--accent); border-color: var(--accent); }
 
   /* Chart */
   .chart-container {
@@ -280,6 +292,7 @@
     font-size: 0.78rem;
     margin-bottom: 0.5rem;
     justify-content: center;
+    flex-wrap: wrap;
   }
   .legend-item {
     display: flex;
@@ -292,11 +305,179 @@
     border-radius: 1px;
   }
 
+  /* Game type indicator */
+  .game-type-indicator {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 0.82rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  /* Payoff presets row */
+  .preset-row {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  .preset-row .preset-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-right: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Collapsible panel */
+  .collapsible-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+  .collapsible-header:hover { color: var(--text); }
+  .collapsible-header .arrow { transition: transform 0.2s; }
+  .collapsible-header.open .arrow { transform: rotate(90deg); }
+  .collapsible-body { display: none; }
+  .collapsible-body.open { display: block; }
+
+  /* Strategy cards */
+  .strategy-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .strategy-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.8rem;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+  .strategy-card .card-diagram {
+    flex-shrink: 0;
+  }
+  .strategy-card .card-info {
+    flex: 1;
+    font-size: 0.78rem;
+    min-width: 0;
+  }
+  .strategy-card .card-rank {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+  .strategy-card .card-name {
+    color: var(--accent);
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+  }
+  .strategy-card .card-fitness {
+    color: var(--accent2);
+  }
+  .strategy-card .card-stats {
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    margin-top: 0.3rem;
+    line-height: 1.5;
+  }
+
+  /* Saved runs table */
+  .saved-runs-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+  }
+  .saved-runs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+  .saved-runs-header .sr-title { letter-spacing: 0.05em; }
+  .saved-runs-header .sr-actions { display: flex; gap: 0.4rem; }
+  .saved-runs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+  .saved-runs-table th {
+    text-align: left;
+    color: var(--text-dim);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .saved-runs-table td {
+    padding: 0.35rem 0.4rem;
+    border-bottom: 1px solid rgba(30,42,58,0.5);
+    vertical-align: middle;
+  }
+  .saved-runs-table tr:hover { background: rgba(79,195,247,0.03); }
+  .saved-runs-table .sr-label {
+    cursor: pointer;
+    color: var(--accent);
+  }
+  .saved-runs-table .sr-label:hover { text-decoration: underline; }
+  .saved-runs-table .sr-actions-cell { white-space: nowrap; }
+  .saved-runs-table .sr-actions-cell button {
+    font-size: 0.72rem;
+    padding: 0.15rem 0.4rem;
+    margin-left: 0.2rem;
+  }
+  .sr-pinned { background: rgba(79,195,247,0.06) !important; }
+  .sr-empty {
+    text-align: center;
+    color: var(--text-dim);
+    padding: 1.5rem;
+    font-size: 0.78rem;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.78rem;
+    color: var(--accent);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
   @media (max-width: 700px) {
     .hero h1 { font-size: 1.2rem; }
     .container { padding: 1rem; }
     .controls { grid-template-columns: 1fr; }
     .stats-bar { gap: 0.8rem; font-size: 0.75rem; }
+    .strategy-cards { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -311,11 +492,11 @@
 <div class="container">
 
   <div class="tabs">
-    <button class="tab active" data-tab="single">Single Run</button>
-    <button class="tab" data-tab="sweep">Phase Transition</button>
+    <button class="tab active" data-tab="single">Evolve</button>
+    <button class="tab" data-tab="sweep">Sweep</button>
   </div>
 
-  <!-- ===== SINGLE RUN TAB ===== -->
+  <!-- ===== EVOLVE TAB ===== -->
   <div id="tab-single" class="tab-content active">
 
     <div class="controls">
@@ -367,6 +548,51 @@
         </div>
       </div>
 
+      <!-- Payoff matrix sliders -->
+      <div class="control-group">
+        <span class="control-label">T (Temptation)</span>
+        <div class="control-row">
+          <input type="range" id="payoff-T" min="0" max="10" value="5">
+          <span class="control-value" id="payoff-T-val">5</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">R (Reward)</span>
+        <div class="control-row">
+          <input type="range" id="payoff-R" min="0" max="9" value="3">
+          <span class="control-value" id="payoff-R-val">3</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">P (Punishment)</span>
+        <div class="control-row">
+          <input type="range" id="payoff-P" min="0" max="9" value="1">
+          <span class="control-value" id="payoff-P-val">1</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">S (Sucker)</span>
+        <div class="control-row">
+          <input type="range" id="payoff-S" min="0" max="9" value="0">
+          <span class="control-value" id="payoff-S-val">0</span>
+        </div>
+      </div>
+
+      <!-- Game type indicator -->
+      <div class="game-type-indicator" id="game-type">Prisoner's Dilemma</div>
+
+      <!-- Preset buttons -->
+      <div class="preset-row">
+        <span class="preset-label">Presets:</span>
+        <button class="btn-preset active" data-preset="pd">PD</button>
+        <button class="btn-preset" data-preset="chicken">Chicken</button>
+        <button class="btn-preset" data-preset="stag">Stag Hunt</button>
+        <button class="btn-preset" data-preset="bookpd">Book PD</button>
+      </div>
+
       <div class="control-group">
         <span class="control-label">RNG Seed</span>
         <div class="control-row">
@@ -405,9 +631,35 @@
       <div class="stat-item"><span class="stat-label">Avg Payoff:</span> <span class="stat-value" id="stat-avg">--</span></div>
       <div class="stat-item"><span class="stat-label">Max Payoff:</span> <span class="stat-value" id="stat-max">--</span></div>
     </div>
+
+    <!-- Strategy Panel (collapsible) -->
+    <div class="collapsible-header" id="strategy-toggle">
+      <span class="arrow">&#9656;</span> Evolved Strategies
+    </div>
+    <div class="collapsible-body" id="strategy-panel">
+      <div class="strategy-cards" id="strategy-cards">
+        <div class="sr-empty">Run a simulation to see evolved strategies.</div>
+      </div>
+    </div>
+
+    <!-- Saved Runs Panel -->
+    <div class="saved-runs-panel" id="saved-runs-panel">
+      <div class="saved-runs-header">
+        <span class="sr-title">Saved Runs</span>
+        <div class="sr-actions">
+          <button class="btn-secondary" id="btn-export" title="Export saved runs">Export</button>
+          <button class="btn-secondary" id="btn-import" title="Import runs from JSON">Import</button>
+          <button class="btn-secondary" id="btn-clear-all" title="Delete all saved runs">Clear All</button>
+        </div>
+      </div>
+      <div id="saved-runs-body">
+        <div class="sr-empty">No saved runs yet. Complete a simulation to auto-save.</div>
+      </div>
+    </div>
+    <input type="file" id="import-file" accept=".json" style="display:none;">
   </div>
 
-  <!-- ===== PHASE TRANSITION TAB ===== -->
+  <!-- ===== SWEEP TAB ===== -->
   <div id="tab-sweep" class="tab-content">
 
     <div class="controls">
@@ -478,6 +730,9 @@
 
 </div>
 
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
 <div style="text-align: center; padding: 0 0 2rem; color: var(--text-dim); font-size: 0.72rem; letter-spacing: 0.1em;">
   BASED ON MILLER (1996) JEBO 29:87-112 &amp; MILLER (2022) EX MACHINA, SFI PRESS<br/>
   <a href="index.html" style="color:var(--text-dim);text-decoration:none;">RELINQUISHMENT.AI WEB ANNEX</a>
@@ -493,6 +748,16 @@
   var GA = Miller.GA;
   var Experiment = Miller.Experiment;
   var RNG = Miller.RNG;
+
+  // ===== Toast =====
+  var toastTimer = null;
+  function showToast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { el.classList.remove('show'); }, 3000);
+  }
 
   // ===== Tab switching =====
   var tabs = document.querySelectorAll('.tab');
@@ -523,15 +788,231 @@
   bindSlider('sweep-trials', 'sweep-trials-val');
   bindSlider('sweep-gens', 'sweep-gens-val');
 
+  // Payoff sliders with game type update
+  function updateGameType() {
+    var payoffs = getPayoffs();
+    var gameType = Miller.classifyGame(payoffs);
+    var el = document.getElementById('game-type');
+    el.textContent = gameType;
+
+    // Color the indicator
+    var colors = {
+      "Prisoner's Dilemma": 'var(--accent)',
+      "Chicken / Hawk-Dove": 'var(--accent3)',
+      "Stag Hunt": 'var(--accent2)',
+      "Harmony Game": 'var(--accent5)',
+      "Custom Game": 'var(--text-dim)'
+    };
+    el.style.color = colors[gameType] || 'var(--text-dim)';
+    el.style.borderColor = colors[gameType] || 'var(--border)';
+
+    // Update preset button highlights
+    document.querySelectorAll('.btn-preset').forEach(function(btn) { btn.classList.remove('active'); });
+    if (payoffs.T === 5 && payoffs.R === 3 && payoffs.P === 1 && payoffs.S === 0) {
+      document.querySelector('[data-preset="pd"]').classList.add('active');
+    } else if (payoffs.T === 5 && payoffs.R === 3 && payoffs.P === 0 && payoffs.S === 1) {
+      document.querySelector('[data-preset="chicken"]').classList.add('active');
+    } else if (payoffs.T === 3 && payoffs.R === 4 && payoffs.P === 1 && payoffs.S === 0) {
+      document.querySelector('[data-preset="stag"]').classList.add('active');
+    } else if (payoffs.T === 5 && payoffs.R === 4 && payoffs.P === 1 && payoffs.S === 0) {
+      document.querySelector('[data-preset="bookpd"]').classList.add('active');
+    }
+  }
+
+  ['payoff-T', 'payoff-R', 'payoff-P', 'payoff-S'].forEach(function(id) {
+    bindSlider(id, id + '-val');
+    document.getElementById(id).addEventListener('input', updateGameType);
+  });
+
+  // Preset buttons
+  var presets = {
+    pd: {T:5, R:3, P:1, S:0},
+    chicken: {T:5, R:3, P:0, S:1},
+    stag: {T:3, R:4, P:1, S:0},
+    bookpd: {T:5, R:4, P:1, S:0}
+  };
+
+  document.querySelectorAll('.btn-preset').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var p = presets[btn.dataset.preset];
+      if (!p) return;
+      document.getElementById('payoff-T').value = p.T;
+      document.getElementById('payoff-T-val').textContent = p.T;
+      document.getElementById('payoff-R').value = p.R;
+      document.getElementById('payoff-R-val').textContent = p.R;
+      document.getElementById('payoff-P').value = p.P;
+      document.getElementById('payoff-P-val').textContent = p.P;
+      document.getElementById('payoff-S').value = p.S;
+      document.getElementById('payoff-S-val').textContent = p.S;
+      updateGameType();
+    });
+  });
+
   function getVal(id) { return parseInt(document.getElementById(id).value); }
   function getMutRate() { return getVal('mutation') / 1000; }
+  function getPayoffs() {
+    return {
+      T: getVal('payoff-T'),
+      R: getVal('payoff-R'),
+      P: getVal('payoff-P'),
+      S: getVal('payoff-S')
+    };
+  }
+
+  // ===== State Diagram Renderer (P4b.3) =====
+
+  function drawAutomaton(ctx, automaton, x, y, size, options) {
+    options = options || {};
+    var dpr = options.dpr || (window.devicePixelRatio || 1);
+    var n = automaton.states;
+    var radius = size / 3;
+    var stateR = Math.min(18, size / 5);
+    var cx = x + size / 2;
+    var cy = y + size / 2;
+    var highlightState = options.highlightState !== undefined ? options.highlightState : -1;
+
+    // Compute state positions
+    var positions = [];
+    if (n === 1) {
+      positions.push({x: cx, y: cy});
+    } else {
+      for (var i = 0; i < n; i++) {
+        var angle = -Math.PI / 2 + (2 * Math.PI * i / n);
+        positions.push({
+          x: cx + radius * Math.cos(angle),
+          y: cy + radius * Math.sin(angle)
+        });
+      }
+    }
+
+    // Draw transitions first (behind circles)
+    ctx.lineWidth = 1;
+    for (var s = 0; s < n; s++) {
+      var from = positions[s];
+      // On opponent C transition
+      var toC = automaton.transC[s];
+      drawTransition(ctx, from, positions[toC], s, toC, n, stateR, false, '#6a7a8c');
+      // On opponent D transition
+      var toD = automaton.transD[s];
+      drawTransition(ctx, from, positions[toD], s, toD, n, stateR, true, '#6a7a8c');
+    }
+
+    // Draw state circles
+    for (var i = 0; i < n; i++) {
+      var pos = positions[i];
+      var action = automaton.actions[i];
+
+      // Fill
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, stateR, 0, Math.PI * 2);
+      ctx.fillStyle = action === 0 ? '#81c784' : '#ef5350';
+      ctx.fill();
+
+      // Border
+      ctx.lineWidth = (i === automaton.startState) ? 3 : 2;
+      ctx.strokeStyle = '#c8d0dc';
+      if (i === highlightState) {
+        ctx.strokeStyle = '#4fc3f7';
+        ctx.lineWidth = 3;
+      }
+      ctx.stroke();
+
+      // Start state arrow
+      if (i === automaton.startState) {
+        var angle = n === 1 ? Math.PI : (-Math.PI / 2 + (2 * Math.PI * i / n));
+        var ax = pos.x - (stateR + 10) * Math.cos(angle - Math.PI);
+        var ay = pos.y - (stateR + 10) * Math.sin(angle - Math.PI);
+        var bx = pos.x - (stateR + 2) * Math.cos(angle - Math.PI);
+        var by = pos.y - (stateR + 2) * Math.sin(angle - Math.PI);
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        ctx.strokeStyle = '#c8d0dc';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        drawArrowhead(ctx, ax, ay, bx, by, 5, '#c8d0dc');
+      }
+
+      // State label
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '11px Courier New';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(i, pos.x, pos.y);
+    }
+  }
+
+  function drawTransition(ctx, from, to, fromIdx, toIdx, n, stateR, dashed, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    if (dashed) {
+      ctx.setLineDash([4, 3]);
+    } else {
+      ctx.setLineDash([]);
+    }
+
+    if (fromIdx === toIdx) {
+      // Self-loop
+      var angle = n === 1 ? -Math.PI / 2 : (-Math.PI / 2 + (2 * Math.PI * fromIdx / n));
+      var loopOffset = dashed ? stateR * 1.2 : stateR * 0.8;
+      var lx = from.x + (stateR + loopOffset) * Math.cos(angle);
+      var ly = from.y + (stateR + loopOffset) * Math.sin(angle);
+      ctx.beginPath();
+      ctx.arc(lx, ly, stateR * 0.5, 0, Math.PI * 2);
+      ctx.stroke();
+    } else {
+      // Curved line between states
+      var mx = (from.x + to.x) / 2;
+      var my = (from.y + to.y) / 2;
+      var dx = to.x - from.x;
+      var dy = to.y - from.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var nx = -dy / dist;
+      var ny = dx / dist;
+      var curveAmount = dashed ? 12 : -12;
+      var cpx = mx + nx * curveAmount;
+      var cpy = my + ny * curveAmount;
+
+      // Find intersection with target circle
+      var endAngle = Math.atan2(cpy - to.y, cpx - to.x);
+      var ex = to.x + stateR * Math.cos(endAngle);
+      var ey = to.y + stateR * Math.sin(endAngle);
+
+      var startAngle = Math.atan2(cpy - from.y, cpx - from.x);
+      var sx = from.x + stateR * Math.cos(startAngle);
+      var sy = from.y + stateR * Math.sin(startAngle);
+
+      ctx.beginPath();
+      ctx.moveTo(sx, sy);
+      ctx.quadraticCurveTo(cpx, cpy, ex, ey);
+      ctx.stroke();
+
+      // Arrowhead at destination
+      var t = 0.95;
+      var ax = (1-t)*(1-t)*sx + 2*(1-t)*t*cpx + t*t*ex;
+      var ay = (1-t)*(1-t)*sy + 2*(1-t)*t*cpy + t*t*ey;
+      drawArrowhead(ctx, ax, ay, ex, ey, 6, color);
+    }
+    ctx.setLineDash([]);
+  }
+
+  function drawArrowhead(ctx, fromX, fromY, toX, toY, size, color) {
+    var angle = Math.atan2(toY - fromY, toX - fromX);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(toX, toY);
+    ctx.lineTo(toX - size * Math.cos(angle - 0.4), toY - size * Math.sin(angle - 0.4));
+    ctx.lineTo(toX - size * Math.cos(angle + 0.4), toY - size * Math.sin(angle + 0.4));
+    ctx.closePath();
+    ctx.fill();
+  }
 
   // ===== Chart Drawing =====
 
   function drawLineChart(canvas, data, maxGen, options) {
     var ctx = canvas.getContext('2d');
     var dpr = window.devicePixelRatio || 1;
-    var w = canvas.parentElement.clientWidth - 32; // padding
+    var w = canvas.parentElement.clientWidth - 32;
     var h = options.height || 320;
 
     canvas.width = w * dpr;
@@ -588,6 +1069,31 @@
     ctx.fillText('Generation', pad.left + cw / 2, h - 4);
 
     if (data.length < 2) return;
+
+    // Draw pinned (comparison) run first if present
+    if (options.pinnedData && options.pinnedData.length >= 2) {
+      ctx.globalAlpha = 0.3;
+      // Pinned cooperation line
+      ctx.strokeStyle = '#4fc3f7';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (var i = 0; i < options.pinnedData.length; i++) {
+        var x = pad.left + (cw * options.pinnedData[i].generation / Math.max(maxGen - 1, 1));
+        var y = pad.top + ch * (1 - options.pinnedData[i].cooperationRate);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      // Pinned payoff line
+      ctx.strokeStyle = '#81c784';
+      ctx.beginPath();
+      for (var i = 0; i < options.pinnedData.length; i++) {
+        var x = pad.left + (cw * options.pinnedData[i].generation / Math.max(maxGen - 1, 1));
+        var y = pad.top + ch * (1 - options.pinnedData[i].avgPayoff / maxPayoff);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+    }
 
     // Draw cooperation line (blue)
     ctx.strokeStyle = '#4fc3f7';
@@ -733,7 +1239,406 @@
     }
   }
 
-  // ===== SINGLE RUN =====
+  // ===== IndexedDB (P4b.2) =====
+
+  var DB_NAME = 'MillerExMachina';
+  var DB_VERSION = 1;
+  var DB_STORE = 'runs';
+  var db = null;
+  var runCounter = 0;
+  var pinnedRunId = null;
+  var pinnedRunData = null;
+
+  function openDB(callback) {
+    if (db) { callback(db); return; }
+    var req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = function(e) {
+      var d = e.target.result;
+      if (!d.objectStoreNames.contains(DB_STORE)) {
+        var store = d.createObjectStore(DB_STORE, { keyPath: 'id', autoIncrement: true });
+        store.createIndex('timestamp', 'timestamp', { unique: false });
+        store.createIndex('label', 'label', { unique: false });
+      }
+    };
+    req.onsuccess = function(e) {
+      db = e.target.result;
+      callback(db);
+    };
+    req.onerror = function() {
+      console.error('IndexedDB open failed');
+    };
+  }
+
+  function saveRun(runRecord, callback) {
+    openDB(function(db) {
+      var tx = db.transaction(DB_STORE, 'readwrite');
+      var addReq = tx.objectStore(DB_STORE).add(runRecord);
+      addReq.onsuccess = function() {
+        if (callback) callback(addReq.result);
+      };
+    });
+  }
+
+  function getAllRuns(callback) {
+    openDB(function(db) {
+      var tx = db.transaction(DB_STORE, 'readonly');
+      var req = tx.objectStore(DB_STORE).getAll();
+      req.onsuccess = function() { callback(req.result || []); };
+    });
+  }
+
+  function getRun(id, callback) {
+    openDB(function(db) {
+      var tx = db.transaction(DB_STORE, 'readonly');
+      var req = tx.objectStore(DB_STORE).get(id);
+      req.onsuccess = function() { callback(req.result); };
+    });
+  }
+
+  function updateRun(record, callback) {
+    openDB(function(db) {
+      var tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).put(record);
+      tx.oncomplete = function() { if (callback) callback(); };
+    });
+  }
+
+  function deleteRun(id, callback) {
+    openDB(function(db) {
+      var tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).delete(id);
+      tx.oncomplete = function() { if (callback) callback(); };
+    });
+  }
+
+  function clearAllRuns(callback) {
+    openDB(function(db) {
+      var tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).clear();
+      tx.oncomplete = function() { if (callback) callback(); };
+    });
+  }
+
+  // ===== Saved Runs UI =====
+
+  function refreshSavedRuns() {
+    getAllRuns(function(runs) {
+      var body = document.getElementById('saved-runs-body');
+      if (runs.length === 0) {
+        body.innerHTML = '<div class="sr-empty">No saved runs yet. Complete a simulation to auto-save.</div>';
+        return;
+      }
+
+      // Sort newest first
+      runs.sort(function(a, b) { return (b.id || 0) - (a.id || 0); });
+
+      var html = '<table class="saved-runs-table"><thead><tr>' +
+        '<th>Label</th><th>Params</th><th>Result</th><th>Age</th><th>Actions</th>' +
+        '</tr></thead><tbody>';
+
+      for (var i = 0; i < runs.length; i++) {
+        var r = runs[i];
+        var p = r.params || {};
+        var lastStat = r.stats && r.stats.length > 0 ? r.stats[r.stats.length - 1] : null;
+        var coopPct = lastStat ? (lastStat.cooperationRate * 100).toFixed(0) + '%' : '--';
+        var gameType = p.payoffs ? Miller.classifyGame(p.payoffs) : 'PD';
+        var paramStr = (p.populationSize || '?') + 'p/' + (p.states || '?') + 's/' +
+          (p.rounds || '?') + 'r/' + (p.mutationRate || '?') + 'm';
+        var age = r.timestamp ? timeAgo(new Date(r.timestamp)) : '?';
+        var pinnedClass = pinnedRunId === r.id ? ' class="sr-pinned"' : '';
+
+        html += '<tr' + pinnedClass + ' data-run-id="' + r.id + '">';
+        html += '<td class="sr-label" data-run-id="' + r.id + '">' + escapeHtml(r.label || 'Run #' + r.id) + '</td>';
+        html += '<td style="color:var(--text-dim);font-size:0.72rem;">' + paramStr + '</td>';
+        html += '<td style="color:var(--accent2);">' + coopPct + ' <span style="color:var(--text-dim);font-size:0.68rem;">' + gameType + '</span></td>';
+        html += '<td style="color:var(--text-dim);">' + age + '</td>';
+        html += '<td class="sr-actions-cell">' +
+          '<button class="btn-secondary sr-compare-btn" data-run-id="' + r.id + '">' + (pinnedRunId === r.id ? 'Unpin' : 'Compare') + '</button>' +
+          '<button class="btn-secondary sr-inspect-btn" data-run-id="' + r.id + '">Inspect</button>' +
+          '<button class="btn-secondary sr-delete-btn" data-run-id="' + r.id + '" style="color:var(--accent4);">Del</button>' +
+          '</td>';
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      body.innerHTML = html;
+
+      // Bind events
+      body.querySelectorAll('.sr-label').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+          var id = parseInt(e.target.dataset.runId);
+          var current = e.target.textContent;
+          var input = document.createElement('input');
+          input.type = 'text';
+          input.value = current;
+          input.style.cssText = 'font-family:var(--mono);font-size:0.78rem;background:var(--surface);color:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:0.1rem 0.3rem;width:100%;';
+          e.target.replaceWith(input);
+          input.focus();
+          input.select();
+          function save() {
+            var newLabel = input.value.trim() || current;
+            getRun(id, function(record) {
+              if (record) {
+                record.label = newLabel;
+                updateRun(record, function() { refreshSavedRuns(); });
+              } else {
+                refreshSavedRuns();
+              }
+            });
+          }
+          input.addEventListener('blur', save);
+          input.addEventListener('keydown', function(ev) {
+            if (ev.key === 'Enter') { ev.preventDefault(); save(); }
+            if (ev.key === 'Escape') { refreshSavedRuns(); }
+          });
+        });
+      });
+
+      body.querySelectorAll('.sr-delete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var id = parseInt(btn.dataset.runId);
+          if (confirm('Delete this run?')) {
+            if (pinnedRunId === id) { pinnedRunId = null; pinnedRunData = null; }
+            deleteRun(id, function() { refreshSavedRuns(); showToast('Run deleted.'); });
+          }
+        });
+      });
+
+      body.querySelectorAll('.sr-compare-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var id = parseInt(btn.dataset.runId);
+          if (pinnedRunId === id) {
+            pinnedRunId = null;
+            pinnedRunData = null;
+            redrawSingleChart();
+            refreshSavedRuns();
+            showToast('Comparison unpinned.');
+          } else {
+            getRun(id, function(record) {
+              if (record && record.stats) {
+                pinnedRunId = id;
+                pinnedRunData = record.stats;
+                redrawSingleChart();
+                refreshSavedRuns();
+                showToast('Pinned for comparison.');
+              }
+            });
+          }
+        });
+      });
+
+      body.querySelectorAll('.sr-inspect-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var id = parseInt(btn.dataset.runId);
+          getRun(id, function(record) {
+            if (record) {
+              singleData = record.stats || [];
+              singleMaxGen = singleData.length;
+              redrawSingleChart();
+              updateStatsDisplay(singleData.length > 0 ? singleData[singleData.length - 1] : null);
+              showStrategyPanel(record.topAgents || []);
+              showToast('Loaded: ' + (record.label || 'Run #' + record.id));
+            }
+          });
+        });
+      });
+    });
+  }
+
+  function timeAgo(date) {
+    var seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (seconds < 60) return seconds + 's ago';
+    var minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return minutes + 'm ago';
+    var hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + 'h ago';
+    var days = Math.floor(hours / 24);
+    return days + 'd ago';
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function redrawSingleChart() {
+    var maxPayoff = getPayoffs().T || 5;
+    drawLineChart(document.getElementById('chart-single'), singleData, singleMaxGen,
+      { height: 320, maxPayoff: maxPayoff, pinnedData: pinnedRunData });
+  }
+
+  // ===== Strategy Panel (P4b.4) =====
+
+  function showStrategyPanel(topAgents) {
+    var container = document.getElementById('strategy-cards');
+    if (!topAgents || topAgents.length === 0) {
+      container.innerHTML = '<div class="sr-empty">No strategy data available.</div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < topAgents.length; i++) {
+      var entry = topAgents[i];
+      var agent = entry.agent;
+      var name = entry.identified || 'unknown';
+      var fitness = typeof entry.fitness === 'number' ? entry.fitness.toFixed(0) : '--';
+      var stats = agent ? Automaton.stats(reconstructAutomaton(agent)) : null;
+
+      var canvasId = 'strat-canvas-' + i;
+      html += '<div class="strategy-card">';
+      html += '<div class="card-diagram"><canvas id="' + canvasId + '" width="120" height="120" style="width:120px;height:120px;"></canvas></div>';
+      html += '<div class="card-info">';
+      html += '<div class="card-rank">#' + (i + 1) + '</div>';
+      html += '<div class="card-name">' + escapeHtml(name) + '</div>';
+      html += '<div class="card-fitness">fitness: ' + fitness + '</div>';
+      if (stats) {
+        html += '<div class="card-stats">';
+        html += 'accessible: ' + stats.accessibleStates + '  terminal: ' + stats.terminalStates + '<br>';
+        html += 'c-recip: ' + stats.cReciprocity.toFixed(2) + '  d-recip: ' + stats.dReciprocity.toFixed(2);
+        html += '</div>';
+      }
+      html += '</div></div>';
+    }
+    container.innerHTML = html;
+
+    // Draw diagrams after DOM update
+    setTimeout(function() {
+      for (var i = 0; i < topAgents.length; i++) {
+        var agent = topAgents[i].agent;
+        if (!agent) continue;
+        var canvas = document.getElementById('strat-canvas-' + i);
+        if (!canvas) continue;
+        var auto = reconstructAutomaton(agent);
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 120, 120);
+        drawAutomaton(ctx, auto, 0, 0, 120, {});
+      }
+    }, 10);
+
+    // Auto-open the panel
+    document.getElementById('strategy-toggle').classList.add('open');
+    document.getElementById('strategy-panel').classList.add('open');
+  }
+
+  function reconstructAutomaton(agent) {
+    // Reconstruct from stored data (arrays may have been serialized)
+    return {
+      states: agent.states,
+      startState: agent.startState,
+      actions: agent.actions instanceof Uint8Array ? agent.actions : new Uint8Array(agent.actions),
+      transC: agent.transC instanceof Uint8Array ? agent.transC : new Uint8Array(agent.transC),
+      transD: agent.transD instanceof Uint8Array ? agent.transD : new Uint8Array(agent.transD),
+      currentState: agent.startState
+    };
+  }
+
+  // Strategy panel toggle
+  document.getElementById('strategy-toggle').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.getElementById('strategy-panel').classList.toggle('open');
+  });
+
+  // ===== Import / Export (P4b.5) =====
+
+  document.getElementById('btn-export').addEventListener('click', function() {
+    getAllRuns(function(runs) {
+      if (runs.length === 0) {
+        showToast('No runs to export.');
+        return;
+      }
+      var exportObj = Miller.RunDB.exportFormat(runs);
+      var json = JSON.stringify(exportObj, null, 2);
+      var blob = new Blob([json], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      var dateStr = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = 'miller-runs-' + dateStr + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Exported ' + runs.length + ' run(s).');
+    });
+  });
+
+  document.getElementById('btn-import').addEventListener('click', function() {
+    document.getElementById('import-file').click();
+  });
+
+  document.getElementById('import-file').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var data = JSON.parse(ev.target.result);
+        if (!data.version || !Array.isArray(data.runs)) {
+          showToast('Invalid file format.');
+          return;
+        }
+        var imported = 0;
+        var skipped = 0;
+
+        getAllRuns(function(existingRuns) {
+          // Build hash set for deduplication
+          var existingHashes = {};
+          existingRuns.forEach(function(r) {
+            var hash = JSON.stringify(r.params) + '|' + (r.stats ? r.stats.length : 0);
+            existingHashes[hash] = true;
+          });
+
+          var toAdd = [];
+          data.runs.forEach(function(run) {
+            var hash = JSON.stringify(run.params) + '|' + (run.stats ? run.stats.length : 0);
+            if (existingHashes[hash]) {
+              skipped++;
+            } else {
+              toAdd.push(run);
+              existingHashes[hash] = true;
+            }
+          });
+
+          if (toAdd.length === 0) {
+            showToast('All runs already exist (' + skipped + ' skipped).');
+            return;
+          }
+
+          openDB(function(db) {
+            var tx = db.transaction(DB_STORE, 'readwrite');
+            var store = tx.objectStore(DB_STORE);
+            toAdd.forEach(function(run) {
+              run.timestamp = run.timestamp || new Date().toISOString();
+              store.add(run);
+              imported++;
+            });
+            tx.oncomplete = function() {
+              refreshSavedRuns();
+              var msg = 'Imported ' + imported + ' run(s).';
+              if (skipped > 0) msg += ' ' + skipped + ' duplicate(s) skipped.';
+              showToast(msg);
+            };
+          });
+        });
+      } catch (err) {
+        showToast('Error reading file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    // Reset so same file can be imported again
+    e.target.value = '';
+  });
+
+  document.getElementById('btn-clear-all').addEventListener('click', function() {
+    if (confirm('Delete ALL saved runs?') && confirm('Are you sure? This cannot be undone.')) {
+      pinnedRunId = null;
+      pinnedRunData = null;
+      clearAllRuns(function() {
+        refreshSavedRuns();
+        showToast('All runs cleared.');
+      });
+    }
+  });
+
+  // ===== EVOLVE (SINGLE RUN) =====
 
   var singleData = [];
   var singleRunning = false;
@@ -744,30 +1649,50 @@
   var singleGen = 0;
   var singleMaxGen = 200;
   var singleTimer = null;
+  var lastRunResult = null;
+
+  function updateStatsDisplay(stat) {
+    if (!stat) {
+      document.getElementById('stat-gen').textContent = '--';
+      document.getElementById('stat-coop').textContent = '--';
+      document.getElementById('stat-avg').textContent = '--';
+      document.getElementById('stat-max').textContent = '--';
+      return;
+    }
+    document.getElementById('stat-gen').textContent = stat.generation + '/' + singleMaxGen;
+    document.getElementById('stat-coop').textContent = (stat.cooperationRate * 100).toFixed(1) + '%';
+    document.getElementById('stat-avg').textContent = stat.avgPayoff.toFixed(3);
+    document.getElementById('stat-max').textContent = stat.maxPayoff.toFixed(3);
+  }
 
   function singleReset() {
     singleData = [];
     singleRunning = false;
     singlePaused = false;
     singleGen = 0;
+    lastRunResult = null;
     if (singleTimer) { clearTimeout(singleTimer); singleTimer = null; }
     document.getElementById('btn-run').disabled = false;
     document.getElementById('btn-run').textContent = 'Run';
     document.getElementById('btn-pause').disabled = true;
     document.getElementById('btn-pause').textContent = 'Pause';
     document.getElementById('progress').style.width = '0%';
-    document.getElementById('stat-gen').textContent = '--';
-    document.getElementById('stat-coop').textContent = '--';
-    document.getElementById('stat-avg').textContent = '--';
-    document.getElementById('stat-max').textContent = '--';
-    drawLineChart(document.getElementById('chart-single'), [], 50, { height: 320, maxPayoff: 5 });
+    updateStatsDisplay(null);
+    drawLineChart(document.getElementById('chart-single'), [], 50,
+      { height: 320, maxPayoff: getPayoffs().T || 5, pinnedData: pinnedRunData });
     enableSingleControls(true);
+    // Reset strategy panel
+    document.getElementById('strategy-cards').innerHTML = '<div class="sr-empty">Run a simulation to see evolved strategies.</div>';
+    document.getElementById('strategy-toggle').classList.remove('open');
+    document.getElementById('strategy-panel').classList.remove('open');
   }
 
   function enableSingleControls(en) {
-    ['pop-size', 'states', 'rounds', 'mutation', 'generations', 'seed'].forEach(function(id) {
+    ['pop-size', 'states', 'rounds', 'mutation', 'generations', 'seed',
+     'payoff-T', 'payoff-R', 'payoff-P', 'payoff-S'].forEach(function(id) {
       document.getElementById(id).disabled = !en;
     });
+    document.querySelectorAll('.btn-preset').forEach(function(btn) { btn.disabled = !en; });
   }
 
   function singleStep() {
@@ -778,7 +1703,7 @@
     var rounds = getVal('rounds');
     var mutRate = getMutRate();
     var maxGen = getVal('generations');
-    var payoffs = Game.defaultPD();
+    var payoffs = getPayoffs();
 
     if (singleGen === 0) {
       singleMaxGen = maxGen;
@@ -794,23 +1719,79 @@
       document.getElementById('btn-run').textContent = 'Run';
       document.getElementById('btn-pause').disabled = true;
       enableSingleControls(true);
+
+      // Build run result and save
+      lastRunResult = {
+        stats: singleData,
+        pop0: { agents: singlePop0.agents, fitness: singlePop0.fitness || new Float64Array(popSize) },
+        pop1: { agents: singlePop1.agents, fitness: singlePop1.fitness || new Float64Array(popSize) }
+      };
+
+      // Get top agents and show strategy panel
+      var topAgents = Experiment.topAgents(lastRunResult, 5);
+      showStrategyPanel(topAgents);
+
+      // Prepare top agents for storage (convert Uint8Arrays to plain arrays)
+      var storedTopAgents = topAgents.map(function(entry) {
+        return {
+          agent: {
+            states: entry.agent.states,
+            startState: entry.agent.startState,
+            actions: Array.from(entry.agent.actions),
+            transC: Array.from(entry.agent.transC),
+            transD: Array.from(entry.agent.transD)
+          },
+          fitness: entry.fitness,
+          identified: entry.identified
+        };
+      });
+
+      // Auto-save to IndexedDB
+      runCounter++;
+      var runRecord = {
+        timestamp: new Date().toISOString(),
+        label: 'Run #' + runCounter,
+        params: {
+          populationSize: popSize,
+          states: states,
+          rounds: rounds,
+          mutationRate: mutRate,
+          generations: maxGen,
+          seed: getVal('seed'),
+          payoffs: payoffs,
+          eliteCount: Math.round(popSize * 2 / 3)
+        },
+        stats: singleData,
+        topAgents: storedTopAgents,
+        notes: ''
+      };
+
+      saveRun(runRecord, function(id) {
+        runRecord.id = id;
+        refreshSavedRuns();
+        showToast('Run saved. Click label to rename.');
+      });
+
       return;
     }
 
-    // Run one generation — two-population coevolution
+    // Run one generation -- two-population coevolution
     var result = GA.crossTournament(singlePop0, singlePop1, rounds, payoffs);
     var stats = Experiment._computeCoevolveStats(
       singlePop0, singlePop1, result.fitness0, result.fitness1, rounds, singleGen);
     singleData.push(stats);
 
+    // Store fitness for topAgents extraction at end
+    singlePop0.fitness = result.fitness0;
+    singlePop1.fitness = result.fitness1;
+
     // Update display
-    document.getElementById('stat-gen').textContent = stats.generation + '/' + singleMaxGen;
-    document.getElementById('stat-coop').textContent = (stats.cooperationRate * 100).toFixed(1) + '%';
-    document.getElementById('stat-avg').textContent = stats.avgPayoff.toFixed(3);
-    document.getElementById('stat-max').textContent = stats.maxPayoff.toFixed(3);
+    updateStatsDisplay(stats);
     document.getElementById('progress').style.width = ((singleGen + 1) / singleMaxGen * 100) + '%';
 
-    drawLineChart(document.getElementById('chart-single'), singleData, singleMaxGen, { height: 320, maxPayoff: 5 });
+    var maxPayoff = payoffs.T || 5;
+    drawLineChart(document.getElementById('chart-single'), singleData, singleMaxGen,
+      { height: 320, maxPayoff: maxPayoff, pinnedData: pinnedRunData });
 
     // Evolve both populations independently
     var eliteCount = Math.round(popSize * 2 / 3);
@@ -860,9 +1841,9 @@
   // Initialize chart on load
   drawLineChart(document.getElementById('chart-single'), [], 50, { height: 320, maxPayoff: 5 });
 
-  // ===== PHASE TRANSITION SWEEP =====
+  // ===== SWEEP TAB =====
 
-  var sweepData = {}; // { stateCount: [coopRate, ...] }
+  var sweepData = {};
   var sweepRunning = false;
 
   function sweepReset() {
@@ -894,10 +1875,8 @@
     var totalTrials = statesList.length * trialsPerState;
     var completed = 0;
 
-    // Initialize data structure
     statesList.forEach(function(s) { sweepData[s] = []; });
 
-    // Build config list
     var configs = [];
     for (var si = 0; si < statesList.length; si++) {
       for (var t = 0; t < trialsPerState; t++) {
@@ -913,7 +1892,6 @@
       }
     }
 
-    // Run trials sequentially with async yielding
     var idx = 0;
 
     function runNextTrial() {
@@ -930,9 +1908,7 @@
       idx++;
 
       Experiment.runAsync(config).then(function(runResult) {
-        // runResult is {stats, pop0, pop1} — extract stats array
         var stats = runResult.stats;
-        // Get final cooperation rate (average of last 5 generations for stability)
         var lastN = Math.min(5, stats.length);
         var sumCoop = 0;
         for (var i = stats.length - lastN; i < stats.length; i++) {
@@ -943,7 +1919,6 @@
         sweepData[config._stateCount].push(finalCoop);
         completed++;
 
-        // Update display
         document.getElementById('sweep-progress').style.width = (completed / totalTrials * 100) + '%';
         document.getElementById('sweep-count').textContent = completed + '/' + totalTrials;
         document.getElementById('sweep-status').textContent = 'Running (states=' + config._stateCount + ')';
@@ -966,15 +1941,25 @@
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function() {
       if (singleData.length > 0) {
-        drawLineChart(document.getElementById('chart-single'), singleData, singleMaxGen, { height: 320, maxPayoff: 5 });
+        redrawSingleChart();
       } else {
-        drawLineChart(document.getElementById('chart-single'), [], 50, { height: 320, maxPayoff: 5 });
+        drawLineChart(document.getElementById('chart-single'), [], 50,
+          { height: 320, maxPayoff: getPayoffs().T || 5 });
       }
       drawSweepChart(document.getElementById('chart-sweep'), sweepData, { height: 360, states: [1,2,3,4,5] });
     }, 150);
   });
 
+  // Initialize
   sweepReset();
+  refreshSavedRuns();
+
+  // Set runCounter from existing DB entries
+  getAllRuns(function(runs) {
+    if (runs.length > 0) {
+      runCounter = Math.max.apply(null, runs.map(function(r) { return r.id || 0; }));
+    }
+  });
 
 })();
 </script>
