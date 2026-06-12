@@ -315,13 +315,14 @@
     border-radius: 6px;
   }
 
-  /* Tooltips */
+  /* Tooltips — title-attribute based for text-browser graceful degradation */
   .tip {
     position: relative;
     border-bottom: 1px dotted var(--accent);
     cursor: help;
   }
-  .tip .tip-text {
+  .tip::after {
+    content: attr(title);
     visibility: hidden;
     opacity: 0;
     position: absolute;
@@ -342,16 +343,7 @@
     transition: opacity 0.15s;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   }
-  .tip .tip-text::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: var(--border);
-  }
-  .tip:hover .tip-text {
+  .tip:hover::after {
     visibility: visible;
     opacity: 1;
   }
@@ -462,7 +454,7 @@
 
 <h3>The Machines</h3>
 
-<p>Miller uses <span class="tip">Moore machines<span class="tip-text">A finite automaton whose output depends only on its current state — not on input. Named after Edward F. Moore (1956). The simplest class of sequential logic machines.</span></span> — the simplest class of finite automata. A Moore machine has:</p>
+<p>Miller uses <span class="tip" title="A finite automaton whose output depends only on its current state — not on input. Named after Edward F. Moore (1956). The simplest class of sequential logic machines.">Moore machines</span> — the simplest class of finite automata. A Moore machine has:</p>
 
 <ul>
   <li>A finite set of <strong>states</strong> (1, 2, 3, 4, or 5 in his experiments)</li>
@@ -544,22 +536,22 @@
 <p>Of these 26 machines, only <span class="accent">6</span> exhibit genuinely conditional social behavior. But those 6 are enough. They include:</p>
 
 <ul>
-  <li><span class="green"><span class="tip">Tit-for-Tat<span class="tip-text">Start cooperating, then copy what the opponent did last round. Won Axelrod's 1980 tournaments. Nice, retaliatory, forgiving, clear.</span></span></span> — mirror the opponent's last move</li>
-  <li><span class="green"><span class="tip">Grim Trigger<span class="tip-text">Cooperate until the opponent defects once, then defect permanently. Maximally retaliatory — no forgiveness. Also called "trigger strategy" or "Friedman strategy."</span></span></span> — cooperate until betrayed, then defect forever</li>
+  <li><span class="green"><span class="tip" title="Start cooperating, then copy what the opponent did last round. Won Axelrod's 1980 tournaments. Nice, retaliatory, forgiving, clear.">Tit-for-Tat</span></span> — mirror the opponent's last move</li>
+  <li><span class="green"><span class="tip" title="Cooperate until the opponent defects once, then defect permanently. Maximally retaliatory — no forgiveness. Also called &quot;trigger strategy&quot; or &quot;Friedman strategy.&quot;">Grim Trigger</span></span> — cooperate until betrayed, then defect forever</li>
   <li><span class="green">Punish Once</span> — defect once after betrayal, then forgive</li>
   <li><span class="green">Win Stay, Lose Shift</span> — repeat if rewarded, switch if punished</li>
 </ul>
 
 <div class="data-callout">
   <div class="data-title">EXPERIMENTAL FINDING</div>
-  <p>With accurate bit-flip mutation, <strong>Tit-for-Tat dominates ~64% of 2-state runs</strong>. TFT's forgiving reciprocity outperforms Grim Trigger when populations are clean — most opponents cooperate reliably, so forgiveness pays. But add <span class="tip">noise<span class="tip-text">Implementation error: each move has a probability of being flipped before the opponent sees it. Miller (1996) tested 1% and 5% noise conditions.</span></span> (misreported moves), and TFT collapses: it can't distinguish accidental defection from real betrayal. At 2 states, even 1% noise destroys cooperation entirely. At 16 states, complex strategies absorb noise better — <em>computational capacity is a buffer against environmental uncertainty</em>.</p>
+  <p>With accurate bit-flip mutation, <strong>Tit-for-Tat dominates ~64% of 2-state runs</strong>. TFT's forgiving reciprocity outperforms Grim Trigger when populations are clean — most opponents cooperate reliably, so forgiveness pays. But add <span class="tip" title="Implementation error: each move has a probability of being flipped before the opponent sees it. Miller (1996) tested 1% and 5% noise conditions.">noise</span> (misreported moves), and TFT collapses: it can't distinguish accidental defection from real betrayal. At 2 states, even 1% noise destroys cooperation entirely. At 16 states, complex strategies absorb noise better — <em>computational capacity is a buffer against environmental uncertainty</em>.</p>
 </div>
 
 <h3>The Population</h3>
 
 <p><span class="accent">Two populations of 30 agents each</span> coevolve against each other. This is crucial — not one population, but two, like biological species in an arms race. Every member of Population 0 plays against every member of Population 1 in a round-robin tournament. Fitness = cumulative payoff across all matches.</p>
 
-<p>A <span class="tip">genetic algorithm<span class="tip-text">Optimization method inspired by natural selection: encode solutions as bit strings, select the fittest, recombine via crossover, introduce random mutations. Invented by John Holland (1975) — Miller's colleague at Michigan.</span></span> governs evolution: tournament selection, crossover, and mutation. The automata are encoded as 148-bit strings (4 bits start state + 16 × 9-bit state packets), and standard GA operators produce offspring. Mutation rate is tunable — Miller systematically varies it to show that low mutation doesn't prevent transitions, it just makes them rarer and more abrupt.</p>
+<p>A <span class="tip" title="Optimization method inspired by natural selection: encode solutions as bit strings, select the fittest, recombine via crossover, introduce random mutations. Invented by John Holland (1975) — Miller's colleague at Michigan.">genetic algorithm</span> governs evolution: tournament selection, crossover, and mutation. The automata are encoded as 148-bit strings (4 bits start state + 16 × 9-bit state packets), and standard GA operators produce offspring. Mutation rate is tunable — Miller systematically varies it to show that low mutation doesn't prevent transitions, it just makes them rarer and more abrupt.</p>
 </section>
 
 <!-- ============================================================ -->
@@ -669,7 +661,7 @@
 <details class="accordion">
   <summary>A SECOND THRESHOLD: MUTATION RATE</summary>
   <div class="accordion-body">
-    <p>Miller's threshold is about computational capacity (states) and opportunity (rounds). The simulation reveals a <strong>second <span class="tip">phase transition<span class="tip-text">An abrupt qualitative change in system behavior at a critical parameter value. Like water freezing at 0°C — gradual cooling, sudden crystallization.</span></span></strong>, orthogonal to the first: a mutation rate threshold.</p>
+    <p>Miller's threshold is about computational capacity (states) and opportunity (rounds). The simulation reveals a <strong>second <span class="tip" title="An abrupt qualitative change in system behavior at a critical parameter value. Like water freezing at 0°C — gradual cooling, sudden crystallization.">phase transition</span></strong>, orthogonal to the first: a mutation rate threshold.</p>
     <table>
       <tr><th>Mutation Rate</th><th>Cooperation</th><th>Character</th></tr>
       <tr><td>0.001</td><td class="green">62%</td><td class="dim">Low exploration — bimodal, many runs stuck at AllD</td></tr>
@@ -678,7 +670,7 @@
       <tr><td>0.010</td><td class="red">17%</td><td class="dim">Sharp cliff — mutation overwhelms conditional logic</td></tr>
       <tr><td>0.020</td><td class="red">15%</td><td class="dim">Cooperation effectively destroyed</td></tr>
     </table>
-    <p>The mechanism: conditional strategies (TFT, Grim Trigger) depend on specific state transitions — "if opponent defects, go to state 1." High mutation rates corrupt these transitions faster than selection can repair them. This is analogous to <span class="tip">Eigen's error threshold<span class="tip-text">Manfred Eigen (1971): if mutation rate exceeds a critical value, selection cannot maintain genetic information. The quasispecies collapses into random sequences.</span></span> in molecular evolution: above a critical mutation rate, the information content of the genome cannot be maintained by selection.</p>
+    <p>The mechanism: conditional strategies (TFT, Grim Trigger) depend on specific state transitions — "if opponent defects, go to state 1." High mutation rates corrupt these transitions faster than selection can repair them. This is analogous to <span class="tip" title="Manfred Eigen (1971): if mutation rate exceeds a critical value, selection cannot maintain genetic information. The quasispecies collapses into random sequences.">Eigen's error threshold</span> in molecular evolution: above a critical mutation rate, the information content of the genome cannot be maintained by selection.</p>
     <p>Cooperation requires not just the computational capacity to condition behavior, but enough <em>genetic stability</em> to maintain the conditioning across generations.</p>
   </div>
 </details>
@@ -769,8 +761,8 @@
     <p>Tracking which strategies dominate across runs reveals the ecology beneath the cooperation rate:</p>
     <table>
       <tr><th>Strategy</th><th>Behavior</th><th>Advantage</th></tr>
-      <tr><td class="green"><span class="tip">Grim Trigger<span class="tip-text">Cooperate until the opponent defects once, then defect permanently. Maximally retaliatory — no forgiveness.</span></span></td><td class="dim">Cooperate until betrayed, defect permanently</td><td class="dim">Crushes "wobbly" mutants</td></tr>
-      <tr><td class="green"><span class="tip">TFT<span class="tip-text">Tit-for-Tat: start cooperating, then copy the opponent's last move.</span></span></td><td class="dim">Mirror the opponent's last move</td><td class="dim">Recovers from mutual defection</td></tr>
+      <tr><td class="green"><span class="tip" title="Cooperate until the opponent defects once, then defect permanently. Maximally retaliatory — no forgiveness.">Grim Trigger</span></td><td class="dim">Cooperate until betrayed, defect permanently</td><td class="dim">Crushes "wobbly" mutants</td></tr>
+      <tr><td class="green"><span class="tip" title="Tit-for-Tat: start cooperating, then copy the opponent's last move.">TFT</span></td><td class="dim">Mirror the opponent's last move</td><td class="dim">Recovers from mutual defection</td></tr>
       <tr><td class="accent">Novel (3+ states)</td><td class="dim">Graduated punishment — one-round retaliation, then forgive</td><td class="dim">Balances forgiveness and deterrence</td></tr>
     </table>
     <p>In a noiseless environment with accurate mutation (guaranteed bit-flip), TFT dominates: ~64% of 2-state runs converge to TFT-dominant populations, vs ~16% for Grim. TFT's forgiving reciprocity outperforms Grim's permanent retaliation when opponents cooperate reliably. But add noise (environmental misreport of moves), and both strategies suffer — TFT retaliates against accidental "defections," triggering cascades. At 2 states there's no room for noise-tolerant strategies; at 16 states, automata evolve graduated punishment that absorbs noise gracefully.</p>
@@ -780,7 +772,7 @@
 
 <div class="data-callout">
   <div class="data-title">EPOCHAL DYNAMICS IN PRACTICE</div>
-  <p>In the two-population model, the revolution is slower but more dramatic than in single-population variants. Cooperation at states=2 requires <span class="tip">neutral drift<span class="tip-text">Genetic variants invisible to selection accumulate randomly in the population. Builds latent diversity that becomes relevant when conditions change.</span></span> in <em>both</em> populations, then a complementary mutation in one that exploits the other's latent diversity:</p>
+  <p>In the two-population model, the revolution is slower but more dramatic than in single-population variants. Cooperation at states=2 requires <span class="tip" title="Genetic variants invisible to selection accumulate randomly in the population. Builds latent diversity that becomes relevant when conditions change.">neutral drift</span> in <em>both</em> populations, then a complementary mutation in one that exploits the other's latent diversity:</p>
   <ul style="margin:0.5rem 0;padding-left:1.5rem;">
     <li><strong>Fast transition (seed 1042):</strong> Revolution at generation ~80 — cooperation jumps from 4% to 95% in ~20 generations</li>
     <li><strong>Slow transition (seed 42):</strong> Defection stasis for 150 generations, then sudden revolution at gen 180–200</li>
@@ -843,10 +835,10 @@
       <tr><th>Game</th><th>Payoffs (T,R,P,S)</th><th>Cooperation</th><th>Character</th></tr>
       <tr><td class="green">Stag Hunt</td><td class="dim">3, 4, 1, 0</td><td class="green">91%</td><td class="dim">Easiest — no temptation to defect when opponent cooperates</td></tr>
       <tr><td class="accent">Classic PD</td><td class="dim">5, 3, 1, 0</td><td class="green">69%</td><td class="dim">Baseline — temptation creates adversarial tension</td></tr>
-      <tr><td class="orange"><span class="tip">Chicken<span class="tip-text">Also called Hawk-Dove. Unlike PD, mutual defection (P=0) is worse than being exploited (S=1). This changes the strategic landscape entirely.</span></span></td><td class="dim">5, 3, 0, 1</td><td class="accent">49%</td><td class="dim">Converges to mixed equilibrium — remarkably consistent</td></tr>
+      <tr><td class="orange"><span class="tip" title="Also called Hawk-Dove. Unlike PD, mutual defection (P=0) is worse than being exploited (S=1). This changes the strategic landscape entirely.">Chicken</span></td><td class="dim">5, 3, 0, 1</td><td class="accent">49%</td><td class="dim">Converges to mixed equilibrium — remarkably consistent</td></tr>
       <tr><td class="red">Strong Temptation</td><td class="dim">8, 3, 1, 0</td><td class="red">20%</td><td class="dim">High T overwhelms cooperative incentives</td></tr>
     </table>
-    <p>Chicken is especially revealing. When mutual defection is the worst outcome (P=0 < S=1), the automata converge to an almost exactly 50/50 mixed strategy across all trials — the game-theoretic <span class="tip">mixed strategy Nash equilibrium<span class="tip-text">When no pure strategy is optimal, players randomize. In Chicken, the equilibrium has each player choosing Cooperate with probability (T-P)/(T-S+R-P).</span></span>. The GA doesn't "know" game theory — it discovers the equilibrium through selection pressure alone.</p>
+    <p>Chicken is especially revealing. When mutual defection is the worst outcome (P=0 < S=1), the automata converge to an almost exactly 50/50 mixed strategy across all trials — the game-theoretic <span class="tip" title="When no pure strategy is optimal, players randomize. In Chicken, the equilibrium has each player choosing Cooperate with probability (T-P)/(T-S+R-P).">mixed strategy Nash equilibrium</span>. The GA doesn't "know" game theory — it discovers the equilibrium through selection pressure alone.</p>
   </div>
 </details>
 
