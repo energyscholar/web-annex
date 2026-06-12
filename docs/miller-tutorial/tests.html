@@ -395,7 +395,7 @@
 
   // Test 33: run produces correct number of stats
   var stats33 = Experiment.run({
-    populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 42
+    populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 42, singlePopulation: true
   });
   assertEq(33, 'run(5 gens): produces 5 stats', stats33.length, 5);
 
@@ -415,7 +415,7 @@
   // Actually, use the run with states=1 which should produce ~0 or ~1 cooperation
   // (1-state automata can only be AllC or AllD; AllD dominates)
   var stats35 = Experiment.run({
-    populationSize: 10, states: 1, rounds: 10, generations: 5, seed: 42, mutationRate: 0.001
+    populationSize: 10, states: 1, rounds: 10, generations: 5, seed: 42, mutationRate: 0.001, singlePopulation: true
   });
   // With 1-state automata, AllD dominates, so final cooperation should be low
   // But random initial population has ~50% AllC, so first gen may have some cooperation.
@@ -437,10 +437,10 @@
 
   // Test 37: deterministic with same seed
   var stats37a = Experiment.run({
-    populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 12345
+    populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 12345, singlePopulation: true
   });
   var stats37b = Experiment.run({
-    populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 12345
+    populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 12345, singlePopulation: true
   });
   var match37 = true;
   for (var i = 0; i < 5; i++) {
@@ -498,6 +498,45 @@
   for (var i = 0; i < 200; i++) seen42[rng42b.randInt(0, 9)] = true;
   assert(42, 'randInt(0,9) produces multiple distinct values', Object.keys(seen42).length >= 5,
     'saw ' + Object.keys(seen42).length + ' distinct values');
+
+  // ===== P1.6: Two-Population Coevolution =====
+  section('P1.6: Coevolution');
+
+  // Test 46: crossTournament produces correct fitness arrays
+  var coevRng = RNG.create(42);
+  var coPop0 = GA.createPopulation(6, 2, coevRng);
+  var coPop1 = GA.createPopulation(6, 2, coevRng);
+  var coResult = GA.crossTournament(coPop0, coPop1, 10, pd);
+  assertEq(46, 'crossTournament: fitness0.length = pop0.size', coResult.fitness0.length, 6);
+  assertEq(46, 'crossTournament: fitness1.length = pop1.size', coResult.fitness1.length, 6);
+  assert(46, 'crossTournament: all fitness >= 0',
+    Array.from(coResult.fitness0).every(function(f) { return f >= 0; }) &&
+    Array.from(coResult.fitness1).every(function(f) { return f >= 0; }));
+
+  // Test 47: coevolution run produces correct stats
+  var stats47 = Experiment.run({
+    populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 42
+  });
+  assertEq(47, 'coevolve run(5 gens): produces 5 stats', stats47.length, 5);
+  assert(47, 'coevolve stats have required fields',
+    stats47.every(function(s) {
+      return typeof s.generation === 'number' &&
+             typeof s.cooperationRate === 'number' &&
+             typeof s.avgPayoff === 'number';
+    }));
+
+  // Test 48: coevolution is deterministic
+  var stats48a = Experiment.run({
+    populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 7777
+  });
+  var stats48b = Experiment.run({
+    populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 7777
+  });
+  var match48 = true;
+  for (var i = 0; i < 5; i++) {
+    if (Math.abs(stats48a[i].cooperationRate - stats48b[i].cooperationRate) > 1e-10) match48 = false;
+  }
+  assert(48, 'coevolve: same seed -> same results (deterministic)', match48);
 
   // ===== Additional tests =====
   section('Additional');

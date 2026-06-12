@@ -2,9 +2,11 @@
  * Miller Engine — Coevolving Automata Model
  *
  * Pure logic, no DOM. Implements Miller's (1989/1996/2022) model:
- * Moore machines playing iterated Prisoner's Dilemma,
- * evolved by genetic algorithm with fitness-proportional selection,
- * circular crossover, and per-gene mutation.
+ * Moore machines playing iterated games, two populations coevolving
+ * via cross-population tournament. Genetic algorithm with
+ * fitness-proportional selection, circular crossover, per-gene mutation.
+ * Default: two-population coevolution (Miller's model).
+ * Set singlePopulation:true for single-population round-robin variant.
  *
  * Reference: Miller (1996) JEBO 29:87-112
  *            Miller (2022) Ex Machina, SFI Press
@@ -353,6 +355,23 @@ const Miller = (function() {
     return fitness;
   };
 
+  GA.crossTournament = function(pop0, pop1, rounds, payoffs) {
+    var n0 = pop0.size;
+    var n1 = pop1.size;
+    var fitness0 = new Float64Array(n0);
+    var fitness1 = new Float64Array(n1);
+
+    for (var i = 0; i < n0; i++) {
+      for (var j = 0; j < n1; j++) {
+        var result = Game.playNoHistory(pop0.agents[i], pop1.agents[j], rounds, payoffs);
+        fitness0[i] += result.scoreA;
+        fitness1[j] += result.scoreB;
+      }
+    }
+
+    return { fitness0: fitness0, fitness1: fitness1 };
+  };
+
   GA.normalizeScores = function(fitness, alpha) {
     var n = fitness.length;
     if (n === 0) return new Float64Array(0);
@@ -587,6 +606,50 @@ const Miller = (function() {
     };
   };
 
+  Experiment._computeCoevolveStats = function(pop0, pop1, fitness0, fitness1, rounds, generation) {
+    var n0 = pop0.size, n1 = pop1.size;
+
+    var totalC = 0, totalD = 0;
+    for (var i = 0; i < n0; i++) {
+      for (var j = 0; j < n1; j++) {
+        var a = Automaton.reset(pop0.agents[i]);
+        var b = Automaton.reset(pop1.agents[j]);
+        for (var r = 0; r < rounds; r++) {
+          var moveA = a.actions[a.currentState];
+          var moveB = b.actions[b.currentState];
+          totalC += (moveA === 0 ? 1 : 0) + (moveB === 0 ? 1 : 0);
+          totalD += (moveA === 1 ? 1 : 0) + (moveB === 1 ? 1 : 0);
+          var nextA = (moveB === 0) ? a.transC[a.currentState] : a.transD[a.currentState];
+          var nextB = (moveA === 0) ? b.transC[b.currentState] : b.transD[b.currentState];
+          a.currentState = nextA;
+          b.currentState = nextB;
+        }
+      }
+    }
+
+    var cooperationRate = (totalC + totalD) > 0 ? totalC / (totalC + totalD) : 0;
+
+    var sumFit = 0, maxFit = -Infinity;
+    for (var i = 0; i < n0; i++) {
+      sumFit += fitness0[i];
+      if (fitness0[i] > maxFit) maxFit = fitness0[i];
+    }
+    for (var j = 0; j < n1; j++) {
+      sumFit += fitness1[j];
+      if (fitness1[j] > maxFit) maxFit = fitness1[j];
+    }
+
+    var avgPayoff = sumFit / (2 * n0 * n1 * rounds);
+    var maxPayoff = maxFit / (Math.max(n0, n1) * rounds);
+
+    return {
+      generation: generation,
+      cooperationRate: cooperationRate,
+      avgPayoff: avgPayoff,
+      maxPayoff: maxPayoff
+    };
+  };
+
   Experiment.run = function(config) {
     var rng = RNG.create(config.seed || 12345);
     var payoffs = config.payoffs || Game.defaultPD();
@@ -597,24 +660,40 @@ const Miller = (function() {
     var eliteCount = config.eliteCount || 20;
     var mutationRate = config.mutationRate || 0.005;
     var onGeneration = config.onGeneration || null;
-
-    var population = GA.createPopulation(popSize, states, rng);
     var stats = [];
 
+    if (config.singlePopulation) {
+      var population = GA.createPopulation(popSize, states, rng);
+      for (var g = 0; g < generations; g++) {
+        var fitness = GA.tournament(population, rounds, payoffs);
+        population.fitness = fitness;
+        var genStats = Experiment._computeStats(population, fitness, rounds, g);
+        stats.push(genStats);
+        if (onGeneration) onGeneration(genStats);
+        if (g < generations - 1) {
+          population = GA.evolve(population, fitness, {
+            rng: rng, eliteCount: eliteCount, mutationRate: mutationRate
+          });
+        }
+      }
+      return stats;
+    }
+
+    var pop0 = GA.createPopulation(popSize, states, rng);
+    var pop1 = GA.createPopulation(popSize, states, rng);
+
     for (var g = 0; g < generations; g++) {
-      var fitness = GA.tournament(population, rounds, payoffs);
-      population.fitness = fitness;
-
-      var genStats = Experiment._computeStats(population, fitness, rounds, g);
+      var result = GA.crossTournament(pop0, pop1, rounds, payoffs);
+      var genStats = Experiment._computeCoevolveStats(
+        pop0, pop1, result.fitness0, result.fitness1, rounds, g);
       stats.push(genStats);
-
       if (onGeneration) onGeneration(genStats);
-
       if (g < generations - 1) {
-        population = GA.evolve(population, fitness, {
-          rng: rng,
-          eliteCount: eliteCount,
-          mutationRate: mutationRate
+        pop0 = GA.evolve(pop0, result.fitness0, {
+          rng: rng, eliteCount: eliteCount, mutationRate: mutationRate
+        });
+        pop1 = GA.evolve(pop1, result.fitness1, {
+          rng: rng, eliteCount: eliteCount, mutationRate: mutationRate
         });
       }
     }
@@ -634,37 +713,56 @@ const Miller = (function() {
       var mutationRate = config.mutationRate || 0.005;
       var onGeneration = config.onGeneration || null;
       var batchSize = config.batchSize || 2;
-
-      var population = GA.createPopulation(popSize, states, rng);
       var stats = [];
       var g = 0;
+
+      if (config.singlePopulation) {
+        var population = GA.createPopulation(popSize, states, rng);
+        function batchSingle() {
+          var end = Math.min(g + batchSize, generations);
+          while (g < end) {
+            var fitness = GA.tournament(population, rounds, payoffs);
+            population.fitness = fitness;
+            var genStats = Experiment._computeStats(population, fitness, rounds, g);
+            stats.push(genStats);
+            if (onGeneration) onGeneration(genStats);
+            if (g < generations - 1) {
+              population = GA.evolve(population, fitness, {
+                rng: rng, eliteCount: eliteCount, mutationRate: mutationRate
+              });
+            }
+            g++;
+          }
+          if (g < generations) setTimeout(batchSingle, 0);
+          else resolve(stats);
+        }
+        batchSingle();
+        return;
+      }
+
+      var pop0 = GA.createPopulation(popSize, states, rng);
+      var pop1 = GA.createPopulation(popSize, states, rng);
 
       function batch() {
         var end = Math.min(g + batchSize, generations);
         while (g < end) {
-          var fitness = GA.tournament(population, rounds, payoffs);
-          population.fitness = fitness;
-
-          var genStats = Experiment._computeStats(population, fitness, rounds, g);
+          var result = GA.crossTournament(pop0, pop1, rounds, payoffs);
+          var genStats = Experiment._computeCoevolveStats(
+            pop0, pop1, result.fitness0, result.fitness1, rounds, g);
           stats.push(genStats);
-
           if (onGeneration) onGeneration(genStats);
-
           if (g < generations - 1) {
-            population = GA.evolve(population, fitness, {
-              rng: rng,
-              eliteCount: eliteCount,
-              mutationRate: mutationRate
+            pop0 = GA.evolve(pop0, result.fitness0, {
+              rng: rng, eliteCount: eliteCount, mutationRate: mutationRate
+            });
+            pop1 = GA.evolve(pop1, result.fitness1, {
+              rng: rng, eliteCount: eliteCount, mutationRate: mutationRate
             });
           }
           g++;
         }
-
-        if (g < generations) {
-          setTimeout(batch, 0);
-        } else {
-          resolve(stats);
-        }
+        if (g < generations) setTimeout(batch, 0);
+        else resolve(stats);
       }
 
       batch();

@@ -354,8 +354,8 @@
       <div class="control-group">
         <span class="control-label">Generations</span>
         <div class="control-row">
-          <input type="range" id="generations" min="10" max="500" value="50">
-          <span class="control-value" id="generations-val">50</span>
+          <input type="range" id="generations" min="10" max="500" value="200">
+          <span class="control-value" id="generations-val">200</span>
         </div>
       </div>
 
@@ -429,8 +429,8 @@
       <div class="control-group">
         <span class="control-label">Generations per trial</span>
         <div class="control-row">
-          <input type="range" id="sweep-gens" min="20" max="200" value="50">
-          <span class="control-value" id="sweep-gens-val">50</span>
+          <input type="range" id="sweep-gens" min="20" max="500" value="200">
+          <span class="control-value" id="sweep-gens-val">200</span>
         </div>
       </div>
 
@@ -739,9 +739,10 @@
   var singleRunning = false;
   var singlePaused = false;
   var singleRng = null;
-  var singlePop = null;
+  var singlePop0 = null;
+  var singlePop1 = null;
   var singleGen = 0;
-  var singleMaxGen = 50;
+  var singleMaxGen = 200;
   var singleTimer = null;
 
   function singleReset() {
@@ -782,7 +783,8 @@
     if (singleGen === 0) {
       singleMaxGen = maxGen;
       singleRng = RNG.create(getVal('seed'));
-      singlePop = GA.createPopulation(popSize, states, singleRng);
+      singlePop0 = GA.createPopulation(popSize, states, singleRng);
+      singlePop1 = GA.createPopulation(popSize, states, singleRng);
       singleData = [];
     }
 
@@ -795,11 +797,10 @@
       return;
     }
 
-    // Run one generation
-    var fitness = GA.tournament(singlePop, rounds, payoffs);
-    singlePop.fitness = fitness;
-
-    var stats = Experiment._computeStats(singlePop, fitness, rounds, singleGen);
+    // Run one generation — two-population coevolution
+    var result = GA.crossTournament(singlePop0, singlePop1, rounds, payoffs);
+    var stats = Experiment._computeCoevolveStats(
+      singlePop0, singlePop1, result.fitness0, result.fitness1, rounds, singleGen);
     singleData.push(stats);
 
     // Update display
@@ -811,12 +812,14 @@
 
     drawLineChart(document.getElementById('chart-single'), singleData, singleMaxGen, { height: 320, maxPayoff: 5 });
 
-    // Evolve
+    // Evolve both populations independently
+    var eliteCount = Math.round(popSize * 2 / 3);
     if (singleGen < singleMaxGen - 1) {
-      singlePop = GA.evolve(singlePop, fitness, {
-        rng: singleRng,
-        eliteCount: Math.round(popSize * 2 / 3),
-        mutationRate: mutRate
+      singlePop0 = GA.evolve(singlePop0, result.fitness0, {
+        rng: singleRng, eliteCount: eliteCount, mutationRate: mutRate
+      });
+      singlePop1 = GA.evolve(singlePop1, result.fitness1, {
+        rng: singleRng, eliteCount: eliteCount, mutationRate: mutRate
       });
     }
 
