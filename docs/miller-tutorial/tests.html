@@ -499,6 +499,38 @@
   assert(42, 'randInt(0,9) produces multiple distinct values', Object.keys(seen42).length >= 5,
     'saw ' + Object.keys(seen42).length + ' distinct values');
 
+  // ===== Additional tests =====
+  section('Additional');
+
+  // Test 43: Pavlov (Win Stay, Lose Shift) structure
+  var pavlov = Automaton.createNamed('pavlov');
+  assertEq(43, 'pavlov: 2 states', pavlov.states, 2);
+  assert(43, 'pavlov state0: C, transC=0, transD=1',
+    pavlov.actions[0] === 0 && pavlov.transC[0] === 0 && pavlov.transD[0] === 1);
+  assert(43, 'pavlov state1: D, transC=1, transD=0',
+    pavlov.actions[1] === 1 && pavlov.transC[1] === 1 && pavlov.transD[1] === 0);
+  assertEq(43, 'identify(pavlov) = pavlov', Automaton.identify(pavlov), 'pavlov');
+
+  // Test 44: TF2T (Tit-for-Two-Tats)
+  var tf2t = Automaton.createNamed('tf2t');
+  assertEq(44, 'tf2t: 3 states', tf2t.states, 3);
+  assertEq(44, 'identify(tf2t) = tf2t', Automaton.identify(tf2t), 'tf2t');
+  // TF2T vs AllD: C, C, D, D, D... (cooperates twice before retaliating)
+  var r44 = Game.play(tf2t, allD, 5, pd);
+  assert(44, 'tf2t vs allD: cooperates first 2 rounds',
+    r44.history[0].moveA === 0 && r44.history[1].moveA === 0,
+    'round1=' + r44.history[0].moveA + ' round2=' + r44.history[1].moveA);
+  assert(44, 'tf2t vs allD: defects from round 3',
+    r44.history[2].moveA === 1 && r44.history[3].moveA === 1,
+    'round3=' + r44.history[2].moveA + ' round4=' + r44.history[3].moveA);
+
+  // Test 45: bookPD payoffs
+  var bpd = Game.bookPD();
+  assert(45, 'bookPD: T=5,R=4,P=1,S=0',
+    bpd.T === 5 && bpd.R === 4 && bpd.P === 1 && bpd.S === 0);
+  var r45 = Game.play(allC, allC, 10, bpd);
+  assertEq(45, 'bookPD: AllC vs AllC = 40 each', r45.scoreA, 40);
+
   // ===== P1.6: Two-Population Coevolution =====
   section('P1.6: Coevolution');
 
@@ -537,38 +569,6 @@
     if (Math.abs(stats48a[i].cooperationRate - stats48b[i].cooperationRate) > 1e-10) match48 = false;
   }
   assert(48, 'coevolve: same seed -> same results (deterministic)', match48);
-
-  // ===== Additional tests =====
-  section('Additional');
-
-  // Test 43: Pavlov (Win Stay, Lose Shift) structure
-  var pavlov = Automaton.createNamed('pavlov');
-  assertEq(43, 'pavlov: 2 states', pavlov.states, 2);
-  assert(43, 'pavlov state0: C, transC=0, transD=1',
-    pavlov.actions[0] === 0 && pavlov.transC[0] === 0 && pavlov.transD[0] === 1);
-  assert(43, 'pavlov state1: D, transC=1, transD=0',
-    pavlov.actions[1] === 1 && pavlov.transC[1] === 1 && pavlov.transD[1] === 0);
-  assertEq(43, 'identify(pavlov) = pavlov', Automaton.identify(pavlov), 'pavlov');
-
-  // Test 44: TF2T (Tit-for-Two-Tats)
-  var tf2t = Automaton.createNamed('tf2t');
-  assertEq(44, 'tf2t: 3 states', tf2t.states, 3);
-  assertEq(44, 'identify(tf2t) = tf2t', Automaton.identify(tf2t), 'tf2t');
-  // TF2T vs AllD: C, C, D, D, D... (cooperates twice before retaliating)
-  var r44 = Game.play(tf2t, allD, 5, pd);
-  assert(44, 'tf2t vs allD: cooperates first 2 rounds',
-    r44.history[0].moveA === 0 && r44.history[1].moveA === 0,
-    'round1=' + r44.history[0].moveA + ' round2=' + r44.history[1].moveA);
-  assert(44, 'tf2t vs allD: defects from round 3',
-    r44.history[2].moveA === 1 && r44.history[3].moveA === 1,
-    'round3=' + r44.history[2].moveA + ' round4=' + r44.history[3].moveA);
-
-  // Test 45: bookPD payoffs
-  var bpd = Game.bookPD();
-  assert(45, 'bookPD: T=5,R=4,P=1,S=0',
-    bpd.T === 5 && bpd.R === 4 && bpd.P === 1 && bpd.S === 0);
-  var r45 = Game.play(allC, allC, 10, bpd);
-  assertEq(45, 'bookPD: AllC vs AllC = 40 each', r45.scoreA, 40);
 
   // ===== Render Results =====
   var container = document.getElementById('results');
