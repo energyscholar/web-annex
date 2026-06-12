@@ -929,7 +929,9 @@
       var config = configs[idx];
       idx++;
 
-      Experiment.runAsync(config).then(function(stats) {
+      Experiment.runAsync(config).then(function(runResult) {
+        // runResult is {stats, pop0, pop1} — extract stats array
+        var stats = runResult.stats;
         // Get final cooperation rate (average of last 5 generations for stability)
         var lastN = Math.min(5, stats.length);
         var sumCoop = 0;

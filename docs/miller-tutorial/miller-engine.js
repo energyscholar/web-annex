@@ -243,6 +243,65 @@ const Miller = (function() {
     return null;
   };
 
+  /**
+   * Reduce an automaton to its accessible states via BFS from startState.
+   * Remaps visited states to 0,1,2... in BFS order. Returns a new automaton
+   * with only accessible states and canonicalized state numbering.
+   */
+  Automaton.reduce = function(auto) {
+    // BFS from startState
+    var visited = [];
+    var queue = [auto.startState];
+    var oldToNew = {};
+    oldToNew[auto.startState] = 0;
+    visited.push(auto.startState);
+
+    while (queue.length > 0) {
+      var s = queue.shift();
+      var neighbors = [auto.transC[s], auto.transD[s]];
+      for (var k = 0; k < neighbors.length; k++) {
+        var nb = neighbors[k];
+        if (oldToNew[nb] === undefined) {
+          oldToNew[nb] = visited.length;
+          visited.push(nb);
+          queue.push(nb);
+        }
+      }
+    }
+
+    var n = visited.length;
+    var actions = new Uint8Array(n);
+    var transC = new Uint8Array(n);
+    var transD = new Uint8Array(n);
+
+    for (var i = 0; i < n; i++) {
+      var oldState = visited[i];
+      actions[i] = auto.actions[oldState];
+      transC[i] = oldToNew[auto.transC[oldState]];
+      transD[i] = oldToNew[auto.transD[oldState]];
+    }
+
+    return {
+      states: n,
+      startState: 0, // always 0 after canonicalization
+      actions: actions,
+      transC: transC,
+      transD: transD,
+      currentState: 0
+    };
+  };
+
+  /**
+   * Functional strategy identification: reduce the automaton to accessible states
+   * with canonical numbering, then compare to known strategies.
+   * Critical: ~35% of 2-state evolved agents labeled "other" by structural identify()
+   * are functionally Grim Trigger with swapped state numbering.
+   */
+  Automaton.identifyFunctional = function(auto) {
+    var reduced = Automaton.reduce(auto);
+    return Automaton.identify(reduced);
+  };
+
   // ===== Game Module =====
 
   var Game = {};
@@ -598,11 +657,23 @@ const Miller = (function() {
     var avgPayoff = (sumFit / n) / (matchesPerAgent * rounds);
     var maxPayoff = maxFit / (matchesPerAgent * rounds);
 
+    // Strategy census using functional identification
+    var census = { allC: 0, allD: 0, tft: 0, grimTrigger: 0, pavlov: 0, tf2t: 0, other: 0 };
+    for (var i = 0; i < n; i++) {
+      var id = Automaton.identifyFunctional(agents[i]);
+      if (id && census.hasOwnProperty(id)) {
+        census[id]++;
+      } else {
+        census.other++;
+      }
+    }
+
     return {
       generation: generation,
       cooperationRate: cooperationRate,
       avgPayoff: avgPayoff,
-      maxPayoff: maxPayoff
+      maxPayoff: maxPayoff,
+      census: census
     };
   };
 
@@ -642,11 +713,31 @@ const Miller = (function() {
     var avgPayoff = sumFit / (2 * n0 * n1 * rounds);
     var maxPayoff = maxFit / (Math.max(n0, n1) * rounds);
 
+    // Strategy census: merge both populations using functional identification
+    var census = { allC: 0, allD: 0, tft: 0, grimTrigger: 0, pavlov: 0, tf2t: 0, other: 0 };
+    for (var i = 0; i < n0; i++) {
+      var id = Automaton.identifyFunctional(pop0.agents[i]);
+      if (id && census.hasOwnProperty(id)) {
+        census[id]++;
+      } else {
+        census.other++;
+      }
+    }
+    for (var j = 0; j < n1; j++) {
+      var id = Automaton.identifyFunctional(pop1.agents[j]);
+      if (id && census.hasOwnProperty(id)) {
+        census[id]++;
+      } else {
+        census.other++;
+      }
+    }
+
     return {
       generation: generation,
       cooperationRate: cooperationRate,
       avgPayoff: avgPayoff,
-      maxPayoff: maxPayoff
+      maxPayoff: maxPayoff,
+      census: census
     };
   };
 
@@ -676,7 +767,7 @@ const Miller = (function() {
           });
         }
       }
-      return stats;
+      return { stats: stats, population: population };
     }
 
     var pop0 = GA.createPopulation(popSize, states, rng);
@@ -698,7 +789,7 @@ const Miller = (function() {
       }
     }
 
-    return stats;
+    return { stats: stats, pop0: pop0, pop1: pop1 };
   };
 
   Experiment.runAsync = function(config) {
@@ -734,7 +825,7 @@ const Miller = (function() {
             g++;
           }
           if (g < generations) setTimeout(batchSingle, 0);
-          else resolve(stats);
+          else resolve({ stats: stats, population: population });
         }
         batchSingle();
         return;
@@ -762,11 +853,55 @@ const Miller = (function() {
           g++;
         }
         if (g < generations) setTimeout(batch, 0);
-        else resolve(stats);
+        else resolve({ stats: stats, pop0: pop0, pop1: pop1 });
       }
 
       batch();
     });
+  };
+
+  /**
+   * Extract top N agents from a run result, sorted by fitness descending.
+   * For two-pop: merges pop0 and pop1 agents with their fitness arrays.
+   * For single-pop: sorts population.agents by population.fitness.
+   * Each entry: {agent, fitness, identified} where identified = identifyFunctional result.
+   */
+  Experiment.topAgents = function(runResult, n) {
+    var entries = [];
+
+    if (runResult.population) {
+      // Single-pop result
+      var pop = runResult.population;
+      for (var i = 0; i < pop.agents.length; i++) {
+        entries.push({ agent: pop.agents[i], fitness: pop.fitness[i] });
+      }
+    } else {
+      // Two-pop result: merge both populations
+      var p0 = runResult.pop0;
+      var p1 = runResult.pop1;
+      for (var i = 0; i < p0.agents.length; i++) {
+        entries.push({ agent: p0.agents[i], fitness: p0.fitness[i] });
+      }
+      for (var j = 0; j < p1.agents.length; j++) {
+        entries.push({ agent: p1.agents[j], fitness: p1.fitness[j] });
+      }
+    }
+
+    // Sort by fitness descending
+    entries.sort(function(a, b) { return b.fitness - a.fitness; });
+
+    // Take top n and add identification
+    var result = [];
+    var count = Math.min(n, entries.length);
+    for (var i = 0; i < count; i++) {
+      result.push({
+        agent: entries[i].agent,
+        fitness: entries[i].fitness,
+        identified: Automaton.identifyFunctional(entries[i].agent)
+      });
+    }
+
+    return result;
   };
 
   Experiment.sweep = function(configs) {

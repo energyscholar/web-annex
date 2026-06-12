@@ -393,10 +393,11 @@
   // ===== P1.4: Experiment Runner =====
   section('P1.4: Experiment');
 
-  // Test 33: run produces correct number of stats
-  var stats33 = Experiment.run({
+  // Test 33: run produces correct number of stats (API returns {stats, population} for singlePopulation)
+  var result33 = Experiment.run({
     populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 42, singlePopulation: true
   });
+  var stats33 = result33.stats;
   assertEq(33, 'run(5 gens): produces 5 stats', stats33.length, 5);
 
   // Test 34: each stat has required fields
@@ -414,9 +415,10 @@
   // Create a population of AllD agents manually, then run with very low mutation
   // Actually, use the run with states=1 which should produce ~0 or ~1 cooperation
   // (1-state automata can only be AllC or AllD; AllD dominates)
-  var stats35 = Experiment.run({
+  var result35 = Experiment.run({
     populationSize: 10, states: 1, rounds: 10, generations: 5, seed: 42, mutationRate: 0.001, singlePopulation: true
   });
+  var stats35 = result35.stats;
   // With 1-state automata, AllD dominates, so final cooperation should be low
   // But random initial population has ~50% AllC, so first gen may have some cooperation.
   // By gen 5, defectors should dominate.
@@ -436,16 +438,16 @@
   assert(36, 'cooperation rate: no extreme single-step jumps (>0.95)', !crazy36);
 
   // Test 37: deterministic with same seed
-  var stats37a = Experiment.run({
+  var result37a = Experiment.run({
     populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 12345, singlePopulation: true
   });
-  var stats37b = Experiment.run({
+  var result37b = Experiment.run({
     populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 12345, singlePopulation: true
   });
   var match37 = true;
   for (var i = 0; i < 5; i++) {
-    if (Math.abs(stats37a[i].cooperationRate - stats37b[i].cooperationRate) > 1e-10) match37 = false;
-    if (Math.abs(stats37a[i].avgPayoff - stats37b[i].avgPayoff) > 1e-10) match37 = false;
+    if (Math.abs(result37a.stats[i].cooperationRate - result37b.stats[i].cooperationRate) > 1e-10) match37 = false;
+    if (Math.abs(result37a.stats[i].avgPayoff - result37b.stats[i].avgPayoff) > 1e-10) match37 = false;
   }
   assert(37, 'same seed -> same results (deterministic)', match37);
 
@@ -545,30 +547,190 @@
     Array.from(coResult.fitness0).every(function(f) { return f >= 0; }) &&
     Array.from(coResult.fitness1).every(function(f) { return f >= 0; }));
 
-  // Test 47: coevolution run produces correct stats
-  var stats47 = Experiment.run({
+  // Test 47: coevolution run produces correct stats (API returns {stats, pop0, pop1})
+  var result47 = Experiment.run({
     populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 42
   });
-  assertEq(47, 'coevolve run(5 gens): produces 5 stats', stats47.length, 5);
+  assertEq(47, 'coevolve run(5 gens): produces 5 stats', result47.stats.length, 5);
   assert(47, 'coevolve stats have required fields',
-    stats47.every(function(s) {
+    result47.stats.every(function(s) {
       return typeof s.generation === 'number' &&
              typeof s.cooperationRate === 'number' &&
              typeof s.avgPayoff === 'number';
     }));
 
   // Test 48: coevolution is deterministic
-  var stats48a = Experiment.run({
+  var result48a = Experiment.run({
     populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 7777
   });
-  var stats48b = Experiment.run({
+  var result48b = Experiment.run({
     populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 7777
   });
   var match48 = true;
   for (var i = 0; i < 5; i++) {
-    if (Math.abs(stats48a[i].cooperationRate - stats48b[i].cooperationRate) > 1e-10) match48 = false;
+    if (Math.abs(result48a.stats[i].cooperationRate - result48b.stats[i].cooperationRate) > 1e-10) match48 = false;
   }
   assert(48, 'coevolve: same seed -> same results (deterministic)', match48);
+
+  // ===== P4a: Engine Upgrades =====
+  section('P4a: Engine Upgrades');
+
+  // Test 49: Automaton.reduce on a 3-state automaton with 1 unreachable state
+  // Create: state0 -> transC=1, transD=1; state1 -> transC=0, transD=0; state2 unreachable
+  var unreachable49 = {
+    states: 3,
+    startState: 0,
+    actions: new Uint8Array([0, 1, 0]),
+    transC: new Uint8Array([1, 0, 2]),
+    transD: new Uint8Array([1, 0, 2]),
+    currentState: 0
+  };
+  var reduced49 = Automaton.reduce(unreachable49);
+  assertEq(49, 'reduce: 3-state with 1 unreachable -> 2 states', reduced49.states, 2);
+  assert(49, 'reduce: startState=0 after canonicalization', reduced49.startState === 0);
+  // state0 (was 0): action=0, transC -> new(1), transD -> new(1)
+  assert(49, 'reduce: state 0 action preserved', reduced49.actions[0] === 0);
+  assert(49, 'reduce: state 0 transitions remapped', reduced49.transC[0] === 1 && reduced49.transD[0] === 1);
+  // state1 (was 1): action=1, transC -> new(0), transD -> new(0)
+  assert(49, 'reduce: state 1 action preserved', reduced49.actions[1] === 1);
+  assert(49, 'reduce: state 1 transitions remapped', reduced49.transC[1] === 0 && reduced49.transD[1] === 0);
+
+  // Test 50: identifyFunctional on a state-swapped TFT
+  // Normal TFT: start=0, actions=[0,1], transC=[0,0], transD=[1,1]
+  // State-swapped: start=1, actions=[1,0], transC=[1,1], transD=[0,0]
+  // After reduce BFS from state 1: state1->newState0 (action=0), state0->newState1 (action=1)
+  // transC: newState0->transC[1]=1->newState0, newState1->transC[0]=1->newState0. So transC=[0,0]
+  // transD: newState0->transD[1]=0->newState1, newState1->transD[0]=0->newState1. So transD=[1,1]
+  // That's TFT!
+  var swappedTFT = {
+    states: 2,
+    startState: 1,
+    actions: new Uint8Array([1, 0]),
+    transC: new Uint8Array([1, 1]),
+    transD: new Uint8Array([0, 0]),
+    currentState: 1
+  };
+  assertEq(50, 'identifyFunctional: state-swapped TFT -> "tft"',
+    Automaton.identifyFunctional(swappedTFT), 'tft');
+  // Also verify structural identify returns null (swapped states don't match)
+  assertEq(50, 'identify (structural): state-swapped TFT -> null',
+    Automaton.identify(swappedTFT), null);
+
+  // Test 51: _computeStats returns census (single-pop path)
+  var pop51 = {
+    agents: [
+      Automaton.createNamed('allC'),
+      Automaton.createNamed('allD'),
+      Automaton.createNamed('tft')
+    ],
+    fitness: new Float64Array(3),
+    size: 3
+  };
+  var fit51 = GA.tournament(pop51, 10, pd);
+  var statResult51 = Experiment._computeStats(pop51, fit51, 10, 0);
+  assert(51, '_computeStats: census has all 7 keys',
+    statResult51.census && typeof statResult51.census.allC === 'number' &&
+    typeof statResult51.census.allD === 'number' && typeof statResult51.census.tft === 'number' &&
+    typeof statResult51.census.grimTrigger === 'number' && typeof statResult51.census.pavlov === 'number' &&
+    typeof statResult51.census.tf2t === 'number' && typeof statResult51.census.other === 'number');
+  assertEq(51, '_computeStats: census.allC=1', statResult51.census.allC, 1);
+  assertEq(51, '_computeStats: census.allD=1', statResult51.census.allD, 1);
+  assertEq(51, '_computeStats: census.tft=1', statResult51.census.tft, 1);
+  assertEq(51, '_computeStats: census.other=0', statResult51.census.other, 0);
+
+  // Test 52: _computeCoevolveStats returns census (two-pop path)
+  var coPop52a = {
+    agents: [Automaton.createNamed('allC'), Automaton.createNamed('tft')],
+    fitness: new Float64Array(2),
+    size: 2
+  };
+  var coPop52b = {
+    agents: [Automaton.createNamed('allD'), Automaton.createNamed('grimTrigger')],
+    fitness: new Float64Array(2),
+    size: 2
+  };
+  var coFit52 = GA.crossTournament(coPop52a, coPop52b, 10, pd);
+  var coStats52 = Experiment._computeCoevolveStats(coPop52a, coPop52b,
+    coFit52.fitness0, coFit52.fitness1, 10, 0);
+  assert(52, '_computeCoevolveStats: census has all 7 keys',
+    coStats52.census && typeof coStats52.census.allC === 'number' &&
+    typeof coStats52.census.allD === 'number' && typeof coStats52.census.tft === 'number' &&
+    typeof coStats52.census.grimTrigger === 'number' && typeof coStats52.census.pavlov === 'number' &&
+    typeof coStats52.census.tf2t === 'number' && typeof coStats52.census.other === 'number');
+  assertEq(52, '_computeCoevolveStats: census.allC=1 (from pop0)', coStats52.census.allC, 1);
+  assertEq(52, '_computeCoevolveStats: census.allD=1 (from pop1)', coStats52.census.allD, 1);
+  assertEq(52, '_computeCoevolveStats: census.tft=1 (from pop0)', coStats52.census.tft, 1);
+  assertEq(52, '_computeCoevolveStats: census.grimTrigger=1 (from pop1)', coStats52.census.grimTrigger, 1);
+
+  // Test 53: Experiment.run returns {stats, pop0, pop1} for two-pop
+  var result53 = Experiment.run({
+    populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 42
+  });
+  assert(53, 'run (two-pop): returns object with stats array',
+    Array.isArray(result53.stats), 'typeof stats: ' + typeof result53.stats);
+  assertEq(53, 'run (two-pop): stats.length = 5', result53.stats.length, 5);
+  assert(53, 'run (two-pop): pop0 has agents',
+    result53.pop0 && Array.isArray(result53.pop0.agents));
+  assertEq(53, 'run (two-pop): pop0.agents.length = populationSize',
+    result53.pop0.agents.length, 8);
+  assert(53, 'run (two-pop): pop1 has agents',
+    result53.pop1 && Array.isArray(result53.pop1.agents));
+  assertEq(53, 'run (two-pop): pop1.agents.length = populationSize',
+    result53.pop1.agents.length, 8);
+
+  // Test 54: Experiment.run({singlePopulation:true}) returns {stats, population}
+  var result54 = Experiment.run({
+    populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 42, singlePopulation: true
+  });
+  assert(54, 'run (single-pop): returns object with stats array',
+    Array.isArray(result54.stats));
+  assertEq(54, 'run (single-pop): stats.length = 5', result54.stats.length, 5);
+  assert(54, 'run (single-pop): population has agents',
+    result54.population && Array.isArray(result54.population.agents));
+  assertEq(54, 'run (single-pop): population.agents.length = populationSize',
+    result54.population.agents.length, 8);
+  assert(54, 'run (single-pop): no pop0/pop1 fields',
+    result54.pop0 === undefined && result54.pop1 === undefined);
+
+  // Test 55: Experiment.topAgents returns sorted agents with identified field
+  var result55 = Experiment.run({
+    populationSize: 10, states: 2, rounds: 10, generations: 5, seed: 42
+  });
+  var top55 = Experiment.topAgents(result55, 3);
+  assertEq(55, 'topAgents: returns 3 agents', top55.length, 3);
+  assert(55, 'topAgents: sorted by fitness descending',
+    top55[0].fitness >= top55[1].fitness && top55[1].fitness >= top55[2].fitness,
+    'fitness: ' + top55[0].fitness + ', ' + top55[1].fitness + ', ' + top55[2].fitness);
+  assert(55, 'topAgents: each entry has identified field',
+    top55.every(function(e) { return e.hasOwnProperty('identified'); }));
+  assert(55, 'topAgents: each entry has agent field',
+    top55.every(function(e) { return e.agent && typeof e.agent.states === 'number'; }));
+
+  // Also test topAgents with single-pop
+  var top55sp = Experiment.topAgents(result54, 3);
+  assertEq(55, 'topAgents (single-pop): returns 3 agents', top55sp.length, 3);
+  assert(55, 'topAgents (single-pop): sorted by fitness descending',
+    top55sp[0].fitness >= top55sp[1].fitness && top55sp[1].fitness >= top55sp[2].fitness);
+
+  // Test 56: Determinism preserved after API change — same seed -> same stats AND same final population
+  var result56a = Experiment.run({
+    populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 9999
+  });
+  var result56b = Experiment.run({
+    populationSize: 8, states: 2, rounds: 10, generations: 5, seed: 9999
+  });
+  var match56stats = true;
+  for (var i = 0; i < 5; i++) {
+    if (Math.abs(result56a.stats[i].cooperationRate - result56b.stats[i].cooperationRate) > 1e-10) match56stats = false;
+  }
+  assert(56, 'determinism: same seed -> same stats after API change', match56stats);
+  // Check final populations match
+  var match56pop = true;
+  for (var i = 0; i < 8; i++) {
+    if (!Automaton.equals(result56a.pop0.agents[i], result56b.pop0.agents[i])) match56pop = false;
+    if (!Automaton.equals(result56a.pop1.agents[i], result56b.pop1.agents[i])) match56pop = false;
+  }
+  assert(56, 'determinism: same seed -> same final populations', match56pop);
 
   // ===== Render Results =====
   var container = document.getElementById('results');
