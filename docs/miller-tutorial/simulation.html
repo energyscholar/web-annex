@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miller's Coevolving Automata -- Interactive Simulation</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #111820;
+    --card: #161d28;
+    --border: #1e2a3a;
+    --text: #c8d0dc;
+    --text-dim: #6a7a8c;
+    --accent: #4fc3f7;
+    --accent2: #81c784;
+    --accent3: #ffb74d;
+    --accent4: #ef5350;
+    --accent5: #ce93d8;
+    --mono: 'Courier New', 'Consolas', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--mono);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0d1520 0%, #162030 50%, #0d1520 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 1.6rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.3rem;
+  }
+
+  .hero .subtitle {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .hero .back-link {
+    display: inline-block;
+    margin-top: 0.8rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.78rem;
+  }
+  .hero .back-link:hover { color: var(--accent); }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem 4rem;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .tab {
+    padding: 0.6rem 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    background: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--accent);
+    border-color: var(--border);
+    border-bottom: 1px solid var(--bg);
+    background: var(--bg);
+    margin-bottom: -1px;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Controls */
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .control-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+  }
+
+  .control-value {
+    font-size: 0.82rem;
+    color: var(--accent);
+    min-width: 3em;
+    text-align: right;
+  }
+
+  input[type="number"] {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    background: var(--surface);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.25rem 0.4rem;
+    width: 7em;
+    outline: none;
+  }
+  input[type="number"]:focus { border-color: var(--accent); }
+
+  .buttons {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.6rem;
+    padding-top: 0.5rem;
+  }
+
+  button {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .btn-primary:hover { background: #3db8e8; }
+  .btn-primary:disabled { opacity: 0.4; cursor: default; }
+
+  .btn-secondary {
+    background: var(--card);
+    color: var(--text);
+  }
+  .btn-secondary:hover { border-color: var(--text-dim); }
+
+  /* Chart */
+  .chart-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.82rem;
+    padding: 0.8rem 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .stat-label { color: var(--text-dim); }
+  .stat-value { color: var(--accent); }
+
+  /* Progress bar */
+  .progress-container {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* Sweep annotation */
+  .annotation {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent3);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+    line-height: 1.8;
+  }
+  .annotation p { margin-bottom: 0.6rem; }
+  .annotation p:last-child { margin-bottom: 0; }
+  .annotation .highlight { color: var(--accent); }
+  .annotation .green { color: var(--accent2); }
+  .annotation .red { color: var(--accent4); }
+  .annotation .orange { color: var(--accent3); }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.78rem;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .legend-swatch {
+    width: 16px;
+    height: 3px;
+    border-radius: 1px;
+  }
+
+  @media (max-width: 700px) {
+    .hero h1 { font-size: 1.2rem; }
+    .container { padding: 1rem; }
+    .controls { grid-template-columns: 1fr; }
+    .stats-bar { gap: 0.8rem; font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>COEVOLVING AUTOMATA</h1>
+  <div class="subtitle">Interactive Simulation of Miller's Model</div>
+  <a href="index.html" class="back-link">&larr; Back to tutorial</a>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab active" data-tab="single">Single Run</button>
+    <button class="tab" data-tab="sweep">Phase Transition</button>
+  </div>
+
+  <!-- ===== SINGLE RUN TAB ===== -->
+  <div id="tab-single" class="tab-content active">
+
+    <div class="controls">
+      <div class="control-group">
+        <span class="control-label">Population</span>
+        <div class="control-row">
+          <input type="range" id="pop-size" min="10" max="100" value="30" step="2">
+          <span class="control-value" id="pop-size-val">30</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">States per agent</span>
+        <div class="control-row">
+          <input type="range" id="states" min="1" max="16" value="2">
+          <span class="control-value" id="states-val">2</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Rounds per match</span>
+        <div class="control-row">
+          <input type="range" id="rounds" min="1" max="200" value="150">
+          <span class="control-value" id="rounds-val">150</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Mutation rate</span>
+        <div class="control-row">
+          <input type="range" id="mutation" min="1" max="50" value="5">
+          <span class="control-value" id="mutation-val">0.005</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Generations</span>
+        <div class="control-row">
+          <input type="range" id="generations" min="10" max="500" value="50">
+          <span class="control-value" id="generations-val">50</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Speed</span>
+        <div class="control-row">
+          <input type="range" id="speed" min="1" max="100" value="50">
+          <span class="control-value" id="speed-val">50</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">RNG Seed</span>
+        <div class="control-row">
+          <input type="number" id="seed" value="42">
+          <button class="btn-secondary" id="btn-new-seed" title="Random seed">New</button>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button class="btn-primary" id="btn-run">Run</button>
+        <button class="btn-secondary" id="btn-pause" disabled>Pause</button>
+        <button class="btn-secondary" id="btn-reset">Reset</button>
+      </div>
+    </div>
+
+    <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#4fc3f7;"></div>
+        <span>Cooperation Rate (left axis, 0-1)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#81c784;"></div>
+        <span>Avg Payoff (right axis)</span>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="chart-single" height="320"></canvas>
+    </div>
+
+    <div class="stats-bar" id="stats-single">
+      <div class="stat-item"><span class="stat-label">Generation:</span> <span class="stat-value" id="stat-gen">--</span></div>
+      <div class="stat-item"><span class="stat-label">Cooperation:</span> <span class="stat-value" id="stat-coop">--</span></div>
+      <div class="stat-item"><span class="stat-label">Avg Payoff:</span> <span class="stat-value" id="stat-avg">--</span></div>
+      <div class="stat-item"><span class="stat-label">Max Payoff:</span> <span class="stat-value" id="stat-max">--</span></div>
+    </div>
+  </div>
+
+  <!-- ===== PHASE TRANSITION TAB ===== -->
+  <div id="tab-sweep" class="tab-content">
+
+    <div class="controls">
+      <div class="control-group">
+        <span class="control-label">Trials per state count</span>
+        <div class="control-row">
+          <input type="range" id="sweep-trials" min="3" max="20" value="8">
+          <span class="control-value" id="sweep-trials-val">8</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">State counts to sweep</span>
+        <div class="control-row">
+          <span style="color:var(--text);font-size:0.82rem;">1, 2, 3, 4, 5</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Generations per trial</span>
+        <div class="control-row">
+          <input type="range" id="sweep-gens" min="20" max="200" value="50">
+          <span class="control-value" id="sweep-gens-val">50</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Base seed</span>
+        <div class="control-row">
+          <input type="number" id="sweep-seed" value="100">
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button class="btn-primary" id="btn-sweep">Run Sweep</button>
+        <button class="btn-secondary" id="btn-sweep-reset">Reset</button>
+      </div>
+    </div>
+
+    <div class="progress-container"><div class="progress-bar" id="sweep-progress"></div></div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#6a7a8c; height:8px; width:8px; border-radius:50%;"></div>
+        <span>Individual trial (final cooperation rate)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch" style="background:#4fc3f7;"></div>
+        <span>Mean cooperation rate</span>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="chart-sweep" height="360"></canvas>
+    </div>
+
+    <div class="stats-bar" id="stats-sweep">
+      <div class="stat-item"><span class="stat-label">Status:</span> <span class="stat-value" id="sweep-status">Ready</span></div>
+      <div class="stat-item"><span class="stat-label">Trials:</span> <span class="stat-value" id="sweep-count">0</span></div>
+    </div>
+
+    <div class="annotation" id="sweep-annotation" style="display:none;">
+      <p><span class="red">With 1 state</span>, agents can only play unconditionally. Always Defect dominates -- cooperation hovers near zero.</p>
+      <p><span class="green">With 2 states</span>, conditional strategies like Tit-for-Tat become possible. Cooperation emerges through reciprocity.</p>
+      <p><span class="orange">The transition is sharp</span> -- a single additional state, the minimum unit of computational capacity, produces a qualitative change in social behavior. This is Miller's central finding: social behavior requires crossing a <span class="highlight">computational threshold</span>.</p>
+    </div>
+  </div>
+
+</div>
+
+<div style="text-align: center; padding: 0 0 2rem; color: var(--text-dim); font-size: 0.72rem; letter-spacing: 0.1em;">
+  BASED ON MILLER (1996) JEBO 29:87-112 &amp; MILLER (2022) EX MACHINA, SFI PRESS<br/>
+  <a href="index.html" style="color:var(--text-dim);text-decoration:none;">RELINQUISHMENT.AI WEB ANNEX</a>
+</div>
+
+<script src="miller-engine.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var Automaton = Miller.Automaton;
+  var Game = Miller.Game;
+  var GA = Miller.GA;
+  var Experiment = Miller.Experiment;
+  var RNG = Miller.RNG;
+
+  // ===== Tab switching =====
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(function(tc) { tc.classList.remove('active'); });
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ===== Control binding =====
+  function bindSlider(id, valId, format) {
+    var slider = document.getElementById(id);
+    var valEl = document.getElementById(valId);
+    slider.addEventListener('input', function() {
+      valEl.textContent = format ? format(slider.value) : slider.value;
+    });
+  }
+
+  bindSlider('pop-size', 'pop-size-val');
+  bindSlider('states', 'states-val');
+  bindSlider('rounds', 'rounds-val');
+  bindSlider('mutation', 'mutation-val', function(v) { return (v / 1000).toFixed(3); });
+  bindSlider('generations', 'generations-val');
+  bindSlider('speed', 'speed-val');
+  bindSlider('sweep-trials', 'sweep-trials-val');
+  bindSlider('sweep-gens', 'sweep-gens-val');
+
+  function getVal(id) { return parseInt(document.getElementById(id).value); }
+  function getMutRate() { return getVal('mutation') / 1000; }
+
+  // ===== Chart Drawing =====
+
+  function drawLineChart(canvas, data, maxGen, options) {
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    var w = canvas.parentElement.clientWidth - 32; // padding
+    var h = options.height || 320;
+
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.scale(dpr, dpr);
+
+    var pad = { top: 15, right: 55, bottom: 35, left: 50 };
+    var cw = w - pad.left - pad.right;
+    var ch = h - pad.top - pad.bottom;
+
+    // Clear
+    ctx.fillStyle = '#111820';
+    ctx.fillRect(0, 0, w, h);
+
+    // Grid
+    ctx.strokeStyle = '#1e2a3a';
+    ctx.lineWidth = 0.5;
+    for (var i = 0; i <= 5; i++) {
+      var y = pad.top + (ch * i / 5);
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cw, y); ctx.stroke();
+    }
+
+    // Y-axis labels (left: cooperation 0-1)
+    ctx.fillStyle = '#4fc3f7';
+    ctx.font = '10px Courier New';
+    ctx.textAlign = 'right';
+    for (var i = 0; i <= 5; i++) {
+      var val = 1 - i * 0.2;
+      var y = pad.top + (ch * i / 5);
+      ctx.fillText(val.toFixed(1), pad.left - 6, y + 4);
+    }
+
+    // Y-axis labels (right: payoff)
+    var maxPayoff = options.maxPayoff || 5;
+    ctx.fillStyle = '#81c784';
+    ctx.textAlign = 'left';
+    for (var i = 0; i <= 5; i++) {
+      var val = maxPayoff * (1 - i / 5);
+      var y = pad.top + (ch * i / 5);
+      ctx.fillText(val.toFixed(1), pad.left + cw + 6, y + 4);
+    }
+
+    // X-axis labels
+    ctx.fillStyle = '#6a7a8c';
+    ctx.textAlign = 'center';
+    var xSteps = Math.min(maxGen, 10);
+    for (var i = 0; i <= xSteps; i++) {
+      var gen = Math.round(maxGen * i / xSteps);
+      var x = pad.left + (cw * i / xSteps);
+      ctx.fillText(gen, x, h - pad.bottom + 18);
+    }
+    ctx.fillText('Generation', pad.left + cw / 2, h - 4);
+
+    if (data.length < 2) return;
+
+    // Draw cooperation line (blue)
+    ctx.strokeStyle = '#4fc3f7';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (var i = 0; i < data.length; i++) {
+      var x = pad.left + (cw * data[i].generation / Math.max(maxGen - 1, 1));
+      var y = pad.top + ch * (1 - data[i].cooperationRate);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Draw avg payoff line (green)
+    ctx.strokeStyle = '#81c784';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (var i = 0; i < data.length; i++) {
+      var x = pad.left + (cw * data[i].generation / Math.max(maxGen - 1, 1));
+      var y = pad.top + ch * (1 - data[i].avgPayoff / maxPayoff);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  function drawSweepChart(canvas, sweepData, options) {
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    var w = canvas.parentElement.clientWidth - 32;
+    var h = options.height || 360;
+
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.scale(dpr, dpr);
+
+    var pad = { top: 15, right: 30, bottom: 40, left: 50 };
+    var cw = w - pad.left - pad.right;
+    var ch = h - pad.top - pad.bottom;
+
+    // Clear
+    ctx.fillStyle = '#111820';
+    ctx.fillRect(0, 0, w, h);
+
+    // Grid
+    ctx.strokeStyle = '#1e2a3a';
+    ctx.lineWidth = 0.5;
+    for (var i = 0; i <= 5; i++) {
+      var y = pad.top + (ch * i / 5);
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cw, y); ctx.stroke();
+    }
+
+    // Y-axis labels (cooperation 0-1)
+    ctx.fillStyle = '#4fc3f7';
+    ctx.font = '10px Courier New';
+    ctx.textAlign = 'right';
+    for (var i = 0; i <= 5; i++) {
+      var val = 1 - i * 0.2;
+      var y = pad.top + (ch * i / 5);
+      ctx.fillText(val.toFixed(1), pad.left - 6, y + 4);
+    }
+
+    // X-axis: state counts
+    var statesList = options.states || [1, 2, 3, 4, 5];
+    ctx.fillStyle = '#6a7a8c';
+    ctx.textAlign = 'center';
+    for (var i = 0; i < statesList.length; i++) {
+      var x = pad.left + cw * (i + 0.5) / statesList.length;
+      ctx.fillText(statesList[i], x, h - pad.bottom + 18);
+    }
+    ctx.fillText('Automaton States', pad.left + cw / 2, h - 4);
+
+    // Plot individual trial dots
+    for (var si = 0; si < statesList.length; si++) {
+      var stateCount = statesList[si];
+      var trials = sweepData[stateCount] || [];
+      var baseX = pad.left + cw * (si + 0.5) / statesList.length;
+
+      for (var t = 0; t < trials.length; t++) {
+        var coopRate = trials[t];
+        var jitter = (t - trials.length / 2) * 4;
+        var x = baseX + jitter;
+        var y = pad.top + ch * (1 - coopRate);
+
+        ctx.fillStyle = 'rgba(106, 122, 140, 0.7)';
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Plot mean line
+    var means = [];
+    for (var si = 0; si < statesList.length; si++) {
+      var trials = sweepData[statesList[si]] || [];
+      if (trials.length === 0) continue;
+      var sum = 0;
+      for (var t = 0; t < trials.length; t++) sum += trials[t];
+      means.push({
+        x: pad.left + cw * (si + 0.5) / statesList.length,
+        y: pad.top + ch * (1 - sum / trials.length),
+        mean: sum / trials.length
+      });
+    }
+
+    if (means.length >= 2) {
+      ctx.strokeStyle = '#4fc3f7';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (var i = 0; i < means.length; i++) {
+        if (i === 0) ctx.moveTo(means[i].x, means[i].y);
+        else ctx.lineTo(means[i].x, means[i].y);
+      }
+      ctx.stroke();
+
+      // Mean dots
+      ctx.fillStyle = '#4fc3f7';
+      for (var i = 0; i < means.length; i++) {
+        ctx.beginPath();
+        ctx.arc(means[i].x, means[i].y, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Error bars (min/max)
+    ctx.strokeStyle = 'rgba(79, 195, 247, 0.4)';
+    ctx.lineWidth = 1.5;
+    for (var si = 0; si < statesList.length; si++) {
+      var trials = sweepData[statesList[si]] || [];
+      if (trials.length < 2) continue;
+      var minV = Math.min.apply(null, trials);
+      var maxV = Math.max.apply(null, trials);
+      var x = pad.left + cw * (si + 0.5) / statesList.length;
+      var yMin = pad.top + ch * (1 - minV);
+      var yMax = pad.top + ch * (1 - maxV);
+      ctx.beginPath();
+      ctx.moveTo(x, yMin);
+      ctx.lineTo(x, yMax);
+      ctx.stroke();
+      // Caps
+      ctx.beginPath(); ctx.moveTo(x - 4, yMin); ctx.lineTo(x + 4, yMin); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x - 4, yMax); ctx.lineTo(x + 4, yMax); ctx.stroke();
+    }
+  }
+
+  // ===== SINGLE RUN =====
+
+  var singleData = [];
+  var singleRunning = false;
+  var singlePaused = false;
+  var singleRng = null;
+  var singlePop = null;
+  var singleGen = 0;
+  var singleMaxGen = 50;
+  var singleTimer = null;
+
+  function singleReset() {
+    singleData = [];
+    singleRunning = false;
+    singlePaused = false;
+    singleGen = 0;
+    if (singleTimer) { clearTimeout(singleTimer); singleTimer = null; }
+    document.getElementById('btn-run').disabled = false;
+    document.getElementById('btn-run').textContent = 'Run';
+    document.getElementById('btn-pause').disabled = true;
+    document.getElementById('btn-pause').textContent = 'Pause';
+    document.getElementById('progress').style.width = '0%';
+    document.getElementById('stat-gen').textContent = '--';
+    document.getElementById('stat-coop').textContent = '--';
+    document.getElementById('stat-avg').textContent = '--';
+    document.getElementById('stat-max').textContent = '--';
+    drawLineChart(document.getElementById('chart-single'), [], 50, { height: 320, maxPayoff: 5 });
+    enableSingleControls(true);
+  }
+
+  function enableSingleControls(en) {
+    ['pop-size', 'states', 'rounds', 'mutation', 'generations', 'seed'].forEach(function(id) {
+      document.getElementById(id).disabled = !en;
+    });
+  }
+
+  function singleStep() {
+    if (!singleRunning || singlePaused) return;
+
+    var popSize = getVal('pop-size');
+    var states = getVal('states');
+    var rounds = getVal('rounds');
+    var mutRate = getMutRate();
+    var maxGen = getVal('generations');
+    var payoffs = Game.defaultPD();
+
+    if (singleGen === 0) {
+      singleMaxGen = maxGen;
+      singleRng = RNG.create(getVal('seed'));
+      singlePop = GA.createPopulation(popSize, states, singleRng);
+      singleData = [];
+    }
+
+    if (singleGen >= singleMaxGen) {
+      singleRunning = false;
+      document.getElementById('btn-run').disabled = false;
+      document.getElementById('btn-run').textContent = 'Run';
+      document.getElementById('btn-pause').disabled = true;
+      enableSingleControls(true);
+      return;
+    }
+
+    // Run one generation
+    var fitness = GA.tournament(singlePop, rounds, payoffs);
+    singlePop.fitness = fitness;
+
+    var stats = Experiment._computeStats(singlePop, fitness, rounds, singleGen);
+    singleData.push(stats);
+
+    // Update display
+    document.getElementById('stat-gen').textContent = stats.generation + '/' + singleMaxGen;
+    document.getElementById('stat-coop').textContent = (stats.cooperationRate * 100).toFixed(1) + '%';
+    document.getElementById('stat-avg').textContent = stats.avgPayoff.toFixed(3);
+    document.getElementById('stat-max').textContent = stats.maxPayoff.toFixed(3);
+    document.getElementById('progress').style.width = ((singleGen + 1) / singleMaxGen * 100) + '%';
+
+    drawLineChart(document.getElementById('chart-single'), singleData, singleMaxGen, { height: 320, maxPayoff: 5 });
+
+    // Evolve
+    if (singleGen < singleMaxGen - 1) {
+      singlePop = GA.evolve(singlePop, fitness, {
+        rng: singleRng,
+        eliteCount: Math.round(popSize * 2 / 3),
+        mutationRate: mutRate
+      });
+    }
+
+    singleGen++;
+
+    // Schedule next step based on speed
+    var speed = getVal('speed');
+    var delay = Math.max(1, Math.round(500 / speed));
+    singleTimer = setTimeout(singleStep, delay);
+  }
+
+  document.getElementById('btn-run').addEventListener('click', function() {
+    if (singleRunning) return;
+    singleRunning = true;
+    singlePaused = false;
+    singleGen = 0;
+    enableSingleControls(false);
+    document.getElementById('btn-run').disabled = true;
+    document.getElementById('btn-run').textContent = 'Running...';
+    document.getElementById('btn-pause').disabled = false;
+    singleStep();
+  });
+
+  document.getElementById('btn-pause').addEventListener('click', function() {
+    if (!singleRunning) return;
+    singlePaused = !singlePaused;
+    document.getElementById('btn-pause').textContent = singlePaused ? 'Resume' : 'Pause';
+    if (!singlePaused) singleStep();
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', singleReset);
+
+  document.getElementById('btn-new-seed').addEventListener('click', function() {
+    var tmpRng = RNG.create(Date.now());
+    document.getElementById('seed').value = Math.floor(tmpRng.random() * 100000);
+  });
+
+  // Initialize chart on load
+  drawLineChart(document.getElementById('chart-single'), [], 50, { height: 320, maxPayoff: 5 });
+
+  // ===== PHASE TRANSITION SWEEP =====
+
+  var sweepData = {}; // { stateCount: [coopRate, ...] }
+  var sweepRunning = false;
+
+  function sweepReset() {
+    sweepData = {};
+    sweepRunning = false;
+    document.getElementById('sweep-progress').style.width = '0%';
+    document.getElementById('sweep-status').textContent = 'Ready';
+    document.getElementById('sweep-count').textContent = '0';
+    document.getElementById('sweep-annotation').style.display = 'none';
+    document.getElementById('btn-sweep').disabled = false;
+    document.getElementById('btn-sweep').textContent = 'Run Sweep';
+    drawSweepChart(document.getElementById('chart-sweep'), {}, { height: 360, states: [1,2,3,4,5] });
+  }
+
+  document.getElementById('btn-sweep-reset').addEventListener('click', sweepReset);
+
+  document.getElementById('btn-sweep').addEventListener('click', function() {
+    if (sweepRunning) return;
+    sweepRunning = true;
+    sweepData = {};
+    document.getElementById('btn-sweep').disabled = true;
+    document.getElementById('btn-sweep').textContent = 'Running...';
+    document.getElementById('sweep-annotation').style.display = 'none';
+
+    var statesList = [1, 2, 3, 4, 5];
+    var trialsPerState = getVal('sweep-trials');
+    var gensPerTrial = getVal('sweep-gens');
+    var baseSeed = getVal('sweep-seed');
+    var totalTrials = statesList.length * trialsPerState;
+    var completed = 0;
+
+    // Initialize data structure
+    statesList.forEach(function(s) { sweepData[s] = []; });
+
+    // Build config list
+    var configs = [];
+    for (var si = 0; si < statesList.length; si++) {
+      for (var t = 0; t < trialsPerState; t++) {
+        configs.push({
+          populationSize: 30,
+          states: statesList[si],
+          rounds: 150,
+          generations: gensPerTrial,
+          mutationRate: 0.005,
+          seed: baseSeed + si * 1000 + t,
+          _stateCount: statesList[si]
+        });
+      }
+    }
+
+    // Run trials sequentially with async yielding
+    var idx = 0;
+
+    function runNextTrial() {
+      if (idx >= configs.length || !sweepRunning) {
+        sweepRunning = false;
+        document.getElementById('btn-sweep').disabled = false;
+        document.getElementById('btn-sweep').textContent = 'Run Sweep';
+        document.getElementById('sweep-status').textContent = 'Complete';
+        document.getElementById('sweep-annotation').style.display = 'block';
+        return;
+      }
+
+      var config = configs[idx];
+      idx++;
+
+      Experiment.runAsync(config).then(function(stats) {
+        // Get final cooperation rate (average of last 5 generations for stability)
+        var lastN = Math.min(5, stats.length);
+        var sumCoop = 0;
+        for (var i = stats.length - lastN; i < stats.length; i++) {
+          sumCoop += stats[i].cooperationRate;
+        }
+        var finalCoop = sumCoop / lastN;
+
+        sweepData[config._stateCount].push(finalCoop);
+        completed++;
+
+        // Update display
+        document.getElementById('sweep-progress').style.width = (completed / totalTrials * 100) + '%';
+        document.getElementById('sweep-count').textContent = completed + '/' + totalTrials;
+        document.getElementById('sweep-status').textContent = 'Running (states=' + config._stateCount + ')';
+
+        drawSweepChart(document.getElementById('chart-sweep'), sweepData, { height: 360, states: statesList });
+
+        setTimeout(runNextTrial, 0);
+      });
+    }
+
+    runNextTrial();
+  });
+
+  // Initialize sweep chart
+  drawSweepChart(document.getElementById('chart-sweep'), {}, { height: 360, states: [1,2,3,4,5] });
+
+  // Handle window resize
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      if (singleData.length > 0) {
+        drawLineChart(document.getElementById('chart-single'), singleData, singleMaxGen, { height: 320, maxPayoff: 5 });
+      } else {
+        drawLineChart(document.getElementById('chart-single'), [], 50, { height: 320, maxPayoff: 5 });
+      }
+      drawSweepChart(document.getElementById('chart-sweep'), sweepData, { height: 360, states: [1,2,3,4,5] });
+    }, 150);
+  });
+
+  sweepReset();
+
+})();
+</script>
+
+</body>
+</html>
