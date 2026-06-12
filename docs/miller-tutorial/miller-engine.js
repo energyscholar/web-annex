@@ -328,18 +328,24 @@ const Miller = (function() {
     return { T: 5, R: 4, P: 1, S: 0 };
   };
 
-  Game.play = function(autoA, autoB, rounds, payoffs) {
+  Game.play = function(autoA, autoB, rounds, payoffs, options) {
     var a = Automaton.reset(autoA);
     var b = Automaton.reset(autoB);
     var scoreA = 0, scoreB = 0;
     var history = [];
+    var noise = (options && options.noise) || 0;
+    var rng = (options && options.rng) || null;
 
     for (var r = 0; r < rounds; r++) {
-      // Read actions from current state (Moore machine: output depends only on state)
       var moveA = a.actions[a.currentState];
       var moveB = b.actions[b.currentState];
 
-      // Compute payoffs
+      // Implementation error: move is flipped before broadcast (Miller 1996 NE)
+      if (noise > 0 && rng) {
+        if (rng.random() < noise) moveA = 1 - moveA;
+        if (rng.random() < noise) moveB = 1 - moveB;
+      }
+
       if (moveA === 0 && moveB === 0) {
         scoreA += payoffs.R; scoreB += payoffs.R;
       } else if (moveA === 0 && moveB === 1) {
@@ -352,7 +358,7 @@ const Miller = (function() {
 
       history.push({ moveA: moveA, moveB: moveB });
 
-      // Transition: each sees opponent's move
+      // Transition: each sees opponent's actual (possibly noisy) move
       var nextA = (moveB === 0) ? a.transC[a.currentState] : a.transD[a.currentState];
       var nextB = (moveA === 0) ? b.transC[b.currentState] : b.transD[b.currentState];
       a.currentState = nextA;
@@ -362,14 +368,21 @@ const Miller = (function() {
     return { scoreA: scoreA, scoreB: scoreB, history: history };
   };
 
-  Game.playNoHistory = function(autoA, autoB, rounds, payoffs) {
+  Game.playNoHistory = function(autoA, autoB, rounds, payoffs, options) {
     var a = Automaton.reset(autoA);
     var b = Automaton.reset(autoB);
     var scoreA = 0, scoreB = 0;
+    var noise = (options && options.noise) || 0;
+    var rng = (options && options.rng) || null;
 
     for (var r = 0; r < rounds; r++) {
       var moveA = a.actions[a.currentState];
       var moveB = b.actions[b.currentState];
+
+      if (noise > 0 && rng) {
+        if (rng.random() < noise) moveA = 1 - moveA;
+        if (rng.random() < noise) moveB = 1 - moveB;
+      }
 
       if (moveA === 0 && moveB === 0) {
         scoreA += payoffs.R; scoreB += payoffs.R;
@@ -406,7 +419,7 @@ const Miller = (function() {
     };
   };
 
-  GA.tournament = function(population, rounds, payoffs) {
+  GA.tournament = function(population, rounds, payoffs, options) {
     var n = population.size;
     var agents = population.agents;
     var fitness = new Float64Array(n);
@@ -414,9 +427,8 @@ const Miller = (function() {
     // Round-robin including self-play
     for (var i = 0; i < n; i++) {
       for (var j = i; j < n; j++) {
-        var result = Game.playNoHistory(agents[i], agents[j], rounds, payoffs);
+        var result = Game.playNoHistory(agents[i], agents[j], rounds, payoffs, options);
         if (i === j) {
-          // Self-play: agent gets average score
           fitness[i] += result.scoreA;
         } else {
           fitness[i] += result.scoreA;
@@ -428,7 +440,7 @@ const Miller = (function() {
     return fitness;
   };
 
-  GA.crossTournament = function(pop0, pop1, rounds, payoffs) {
+  GA.crossTournament = function(pop0, pop1, rounds, payoffs, options) {
     var n0 = pop0.size;
     var n1 = pop1.size;
     var fitness0 = new Float64Array(n0);
@@ -436,7 +448,7 @@ const Miller = (function() {
 
     for (var i = 0; i < n0; i++) {
       for (var j = 0; j < n1; j++) {
-        var result = Game.playNoHistory(pop0.agents[i], pop1.agents[j], rounds, payoffs);
+        var result = Game.playNoHistory(pop0.agents[i], pop1.agents[j], rounds, payoffs, options);
         fitness0[i] += result.scoreA;
         fitness1[j] += result.scoreB;
       }
@@ -546,24 +558,30 @@ const Miller = (function() {
     var auto = Automaton.clone(automaton);
     var n = auto.states;
 
-    // Mutate startState
-    if (rng.random() < rate) {
-      auto.startState = rng.randInt(0, n - 1);
+    // Mutate startState — always pick a DIFFERENT value (bit-flip semantics)
+    if (rng.random() < rate && n > 1) {
+      var newStart = rng.randInt(0, n - 2);
+      if (newStart >= auto.startState) newStart++;
+      auto.startState = newStart;
     }
 
     // Mutate each state's genes
     for (var i = 0; i < n; i++) {
-      // Action: flip
+      // Action: flip (always changes — XOR)
       if (rng.random() < rate) {
         auto.actions[i] = auto.actions[i] ^ 1;
       }
-      // transC: random state
-      if (rng.random() < rate) {
-        auto.transC[i] = rng.randInt(0, n - 1);
+      // transC: pick a different state (bit-flip semantics)
+      if (rng.random() < rate && n > 1) {
+        var newC = rng.randInt(0, n - 2);
+        if (newC >= auto.transC[i]) newC++;
+        auto.transC[i] = newC;
       }
-      // transD: random state
-      if (rng.random() < rate) {
-        auto.transD[i] = rng.randInt(0, n - 1);
+      // transD: pick a different state (bit-flip semantics)
+      if (rng.random() < rate && n > 1) {
+        var newD = rng.randInt(0, n - 2);
+        if (newD >= auto.transD[i]) newD++;
+        auto.transD[i] = newD;
       }
     }
 
@@ -636,9 +654,11 @@ const Miller = (function() {
 
   // Compute stats by replaying matches for cooperation counting,
   // reusing fitness from tournament
-  Experiment._computeStats = function(population, fitness, rounds, generation) {
+  Experiment._computeStats = function(population, fitness, rounds, generation, options) {
     var n = population.size;
     var agents = population.agents;
+    var noise = (options && options.noise) || 0;
+    var rng = (options && options.rng) || null;
 
     // Count cooperation moves by replaying all matches
     var totalC = 0, totalD = 0;
@@ -649,6 +669,10 @@ const Miller = (function() {
         for (var r = 0; r < rounds; r++) {
           var moveA = a.actions[a.currentState];
           var moveB = b.actions[b.currentState];
+          if (noise > 0 && rng) {
+            if (rng.random() < noise) moveA = 1 - moveA;
+            if (rng.random() < noise) moveB = 1 - moveB;
+          }
           totalC += (moveA === 0 ? 1 : 0) + (moveB === 0 ? 1 : 0);
           totalD += (moveA === 1 ? 1 : 0) + (moveB === 1 ? 1 : 0);
           var nextA = (moveB === 0) ? a.transC[a.currentState] : a.transD[a.currentState];
@@ -691,8 +715,10 @@ const Miller = (function() {
     };
   };
 
-  Experiment._computeCoevolveStats = function(pop0, pop1, fitness0, fitness1, rounds, generation) {
+  Experiment._computeCoevolveStats = function(pop0, pop1, fitness0, fitness1, rounds, generation, options) {
     var n0 = pop0.size, n1 = pop1.size;
+    var noise = (options && options.noise) || 0;
+    var rng = (options && options.rng) || null;
 
     var totalC = 0, totalD = 0;
     for (var i = 0; i < n0; i++) {
@@ -702,6 +728,10 @@ const Miller = (function() {
         for (var r = 0; r < rounds; r++) {
           var moveA = a.actions[a.currentState];
           var moveB = b.actions[b.currentState];
+          if (noise > 0 && rng) {
+            if (rng.random() < noise) moveA = 1 - moveA;
+            if (rng.random() < noise) moveB = 1 - moveB;
+          }
           totalC += (moveA === 0 ? 1 : 0) + (moveB === 0 ? 1 : 0);
           totalD += (moveA === 1 ? 1 : 0) + (moveB === 1 ? 1 : 0);
           var nextA = (moveB === 0) ? a.transC[a.currentState] : a.transD[a.currentState];
@@ -764,15 +794,22 @@ const Miller = (function() {
     var generations = config.generations || 50;
     var eliteCount = config.eliteCount || 20;
     var mutationRate = config.mutationRate || 0.005;
+    var noise = config.noise || 0;
     var onGeneration = config.onGeneration || null;
     var stats = [];
+    // Separate RNG for noise so it doesn't disturb the evolution sequence
+    var noiseRng = noise > 0 ? RNG.create(rng.randInt(0, 2147483646)) : null;
+    var gameOpts = noise > 0 ? { noise: noise, rng: noiseRng } : null;
+    // Stats replays get their own noise RNG to avoid coupling
+    var statsNoiseRng = noise > 0 ? RNG.create(rng.randInt(0, 2147483646)) : null;
+    var statsOpts = noise > 0 ? { noise: noise, rng: statsNoiseRng } : null;
 
     if (config.singlePopulation) {
       var population = GA.createPopulation(popSize, states, rng);
       for (var g = 0; g < generations; g++) {
-        var fitness = GA.tournament(population, rounds, payoffs);
+        var fitness = GA.tournament(population, rounds, payoffs, gameOpts);
         population.fitness = fitness;
-        var genStats = Experiment._computeStats(population, fitness, rounds, g);
+        var genStats = Experiment._computeStats(population, fitness, rounds, g, statsOpts);
         stats.push(genStats);
         if (onGeneration) onGeneration(genStats);
         if (g < generations - 1) {
@@ -788,9 +825,9 @@ const Miller = (function() {
     var pop1 = GA.createPopulation(popSize, states, rng);
 
     for (var g = 0; g < generations; g++) {
-      var result = GA.crossTournament(pop0, pop1, rounds, payoffs);
+      var result = GA.crossTournament(pop0, pop1, rounds, payoffs, gameOpts);
       var genStats = Experiment._computeCoevolveStats(
-        pop0, pop1, result.fitness0, result.fitness1, rounds, g);
+        pop0, pop1, result.fitness0, result.fitness1, rounds, g, statsOpts);
       stats.push(genStats);
       if (onGeneration) onGeneration(genStats);
       if (g < generations - 1) {
@@ -816,19 +853,24 @@ const Miller = (function() {
       var generations = config.generations || 50;
       var eliteCount = config.eliteCount || 20;
       var mutationRate = config.mutationRate || 0.005;
+      var noise = config.noise || 0;
       var onGeneration = config.onGeneration || null;
       var batchSize = config.batchSize || 2;
       var stats = [];
       var g = 0;
+      var noiseRng = noise > 0 ? RNG.create(rng.randInt(0, 2147483646)) : null;
+      var gameOpts = noise > 0 ? { noise: noise, rng: noiseRng } : null;
+      var statsNoiseRng = noise > 0 ? RNG.create(rng.randInt(0, 2147483646)) : null;
+      var statsOpts = noise > 0 ? { noise: noise, rng: statsNoiseRng } : null;
 
       if (config.singlePopulation) {
         var population = GA.createPopulation(popSize, states, rng);
         function batchSingle() {
           var end = Math.min(g + batchSize, generations);
           while (g < end) {
-            var fitness = GA.tournament(population, rounds, payoffs);
+            var fitness = GA.tournament(population, rounds, payoffs, gameOpts);
             population.fitness = fitness;
-            var genStats = Experiment._computeStats(population, fitness, rounds, g);
+            var genStats = Experiment._computeStats(population, fitness, rounds, g, statsOpts);
             stats.push(genStats);
             if (onGeneration) onGeneration(genStats);
             if (g < generations - 1) {
@@ -851,9 +893,9 @@ const Miller = (function() {
       function batch() {
         var end = Math.min(g + batchSize, generations);
         while (g < end) {
-          var result = GA.crossTournament(pop0, pop1, rounds, payoffs);
+          var result = GA.crossTournament(pop0, pop1, rounds, payoffs, gameOpts);
           var genStats = Experiment._computeCoevolveStats(
-            pop0, pop1, result.fitness0, result.fitness1, rounds, g);
+            pop0, pop1, result.fitness0, result.fitness1, rounds, g, statsOpts);
           stats.push(genStats);
           if (onGeneration) onGeneration(genStats);
           if (g < generations - 1) {

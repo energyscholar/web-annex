@@ -713,6 +713,14 @@
       </div>
 
       <div class="control-group">
+        <span class="control-label">Noise (misreport)</span>
+        <div class="control-row">
+          <input type="range" id="noise" min="0" max="100" value="0">
+          <span class="control-value" id="noise-val">0.0%</span>
+        </div>
+      </div>
+
+      <div class="control-group">
         <span class="control-label">Generations</span>
         <div class="control-row">
           <input type="range" id="generations" min="10" max="500" value="200">
@@ -797,7 +805,8 @@
       <button class="scenario-btn" data-scenario="4">4. Revolution</button>
       <button class="scenario-btn" data-scenario="5">5. Game Matters</button>
       <button class="scenario-btn" data-scenario="6">6. Miller '96</button>
-      <button class="scenario-btn" data-scenario="7">7. Grim vs TFT</button>
+      <button class="scenario-btn" data-scenario="7">7. TFT vs Grim</button>
+      <button class="scenario-btn" data-scenario="8">8. Noise</button>
     </div>
     <div class="scenario-description" id="scenario-desc"></div>
 
@@ -978,6 +987,7 @@
             <option value="population">Population Size</option>
             <option value="temptation">Temptation (T)</option>
             <option value="reward">Reward (R)</option>
+            <option value="noise">Noise (Misreport)</option>
           </select>
         </div>
       </div>
@@ -1123,6 +1133,7 @@
   bindSlider('states', 'states-val');
   bindSlider('rounds', 'rounds-val');
   bindSlider('mutation', 'mutation-val', function(v) { return (v / 1000).toFixed(3); });
+  bindSlider('noise', 'noise-val', function(v) { return (v / 10).toFixed(1) + '%'; });
   bindSlider('generations', 'generations-val');
   bindSlider('speed', 'speed-val');
   bindSlider('sweep-trials', 'sweep-trials-val');
@@ -2096,6 +2107,8 @@
   var singleRunning = false;
   var singlePaused = false;
   var singleRng = null;
+  var singleNoiseRng = null;
+  var singleStatsNoiseRng = null;
   var singlePop0 = null;
   var singlePop1 = null;
   var singleGen = 0;
@@ -2142,7 +2155,7 @@
   }
 
   function enableSingleControls(en) {
-    ['pop-size', 'states', 'rounds', 'mutation', 'generations', 'seed',
+    ['pop-size', 'states', 'rounds', 'mutation', 'noise', 'generations', 'seed',
      'payoff-T', 'payoff-R', 'payoff-P', 'payoff-S'].forEach(function(id) {
       document.getElementById(id).disabled = !en;
     });
@@ -2159,9 +2172,13 @@
     var maxGen = getVal('generations');
     var payoffs = getPayoffs();
 
+    var noise = getVal('noise') / 1000;
+
     if (singleGen === 0) {
       singleMaxGen = maxGen;
       singleRng = RNG.create(getVal('seed'));
+      singleNoiseRng = noise > 0 ? RNG.create(singleRng.randInt(0, 2147483646)) : null;
+      singleStatsNoiseRng = noise > 0 ? RNG.create(singleRng.randInt(0, 2147483646)) : null;
       singlePop0 = GA.createPopulation(popSize, states, singleRng);
       singlePop1 = GA.createPopulation(popSize, states, singleRng);
       singleData = [];
@@ -2216,6 +2233,7 @@
           mutationRate: mutRate,
           generations: maxGen,
           seed: getVal('seed'),
+          noise: noise,
           payoffs: payoffs,
           eliteCount: Math.round(popSize * 2 / 3)
         },
@@ -2233,9 +2251,11 @@
       return;
     }
 
-    var result = GA.crossTournament(singlePop0, singlePop1, rounds, payoffs);
+    var gameOpts = noise > 0 ? { noise: noise, rng: singleNoiseRng } : null;
+    var statsOpts = noise > 0 ? { noise: noise, rng: singleStatsNoiseRng } : null;
+    var result = GA.crossTournament(singlePop0, singlePop1, rounds, payoffs, gameOpts);
     var stats = Experiment._computeCoevolveStats(
-      singlePop0, singlePop1, result.fitness0, result.fitness1, rounds, singleGen);
+      singlePop0, singlePop1, result.fitness0, result.fitness1, rounds, singleGen, statsOpts);
     singleData.push(stats);
 
     singlePop0.fitness = result.fitness0;
@@ -2562,7 +2582,8 @@
     rounds:     { start: 1,     end: 200,   steps: 6  },
     population: { start: 10,    end: 100,   steps: 5  },
     temptation: { start: 3,     end: 10,    steps: 8  },
-    reward:     { start: 1,     end: 5,     steps: 5  }
+    reward:     { start: 1,     end: 5,     steps: 5  },
+    noise:      { start: 0,     end: 0.10,  steps: 6  }
   };
 
   var sweepAnnotations = {
@@ -2571,7 +2592,8 @@
     rounds: '<p>With very few rounds, there is no time for <span class="highlight">reciprocity</span> to develop. TFT needs at least a few rounds to establish mutual cooperation and punish defection.</p><p><span class="green">More rounds</span> give cooperative strategies the time advantage they need to outperform defectors.</p>',
     population: '<p>Small populations have <span class="orange">higher variance</span> -- a lucky defector can dominate by chance. Larger populations provide more reliable selection pressure.</p>',
     temptation: '<p>Higher temptation (T) makes <span class="red">defection more attractive</span>. When T >> R, even conditional cooperators struggle to maintain mutual cooperation.</p>',
-    reward: '<p>Higher reward (R) makes <span class="green">mutual cooperation more valuable</span>. When R approaches T, the incentive to defect diminishes.</p>'
+    reward: '<p>Higher reward (R) makes <span class="green">mutual cooperation more valuable</span>. When R approaches T, the incentive to defect diminishes.</p>',
+    noise: '<p><span class="highlight">Noise</span> (misreport probability) models <span class="red">implementation error</span>: each move has a chance of being flipped before the opponent sees it. This is Miller\'s (1996) "noisy environment" condition.</p><p>Even small noise destroys cooperation at <span class="orange">2 states</span> — TFT and Grim cannot distinguish real defection from accidents. At <span class="green">16 states</span>, complex strategies absorb noise better, but cooperation still degrades. This reveals that the <span class="highlight">computational threshold</span> interacts with environmental noise.</p>'
   };
 
   function updateSweepDefaults() {
@@ -2591,6 +2613,7 @@
     if (param !== 'temptation') hold.push('T=5');
     if (param !== 'reward') hold.push('R=3');
     hold.push('P=1, S=0');
+    if (param !== 'noise') hold.push('noise=0');
     document.getElementById('sweep-hold-constant').textContent = 'Hold constant: ' + hold.join(', ');
   }
 
@@ -2630,6 +2653,7 @@
       case 'population': config.populationSize = Math.round(value); break;
       case 'temptation': config.payoffs.T = value; break;
       case 'reward':     config.payoffs.R = value; break;
+      case 'noise':      config.noise = value; config.states = 16; break;
     }
 
     return config;
@@ -2656,7 +2680,8 @@
       rounds: 'Rounds per Match',
       population: 'Population Size',
       temptation: 'Temptation (T)',
-      reward: 'Reward (R)'
+      reward: 'Reward (R)',
+      noise: 'Noise (Misreport Rate)'
     };
     return labels[currentSweepParam] || currentSweepParam;
   }
@@ -2749,17 +2774,17 @@
       title: 'The Threshold',
       question: 'Why does one state change everything?',
       description: 'Two runs with the same seed: first with 1-state automata (only AllC or AllD possible), then with 2 states (conditional strategies emerge). The jump in cooperation is sharp -- one additional state enables TFT and Grim Trigger.',
-      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 163 },
-      // Seed 163: s1=0.067, s2=0.952. Best gap found.
+      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 179 },
+      // Seed 179: s1=0.000, s2=0.907. Best gap found.
       twoPhase: true, // Run states=1 first, then states=2
-      firstParams: { populationSize: 30, states: 1, rounds: 150, mutationRate: 0.005, generations: 200, seed: 163 }
+      firstParams: { populationSize: 30, states: 1, rounds: 150, mutationRate: 0.005, generations: 200, seed: 179 }
     },
     '2': {
       title: 'Who Wins?',
       question: 'What strategies does evolution discover?',
-      description: 'Grim Trigger dominates in most 2-state evolutionary runs (65% of seeds). Its permanent retaliation beats wobbly cooperators more reliably than TFT\'s forgiving strategy. Check the strategy panel after the run completes.',
-      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 47 }
-      // Seed 47: grim=0.95 of final population
+      description: 'Tit for Tat dominates in most 2-state evolutionary runs (~64% of seeds). Its forgiving reciprocity outperforms Grim Trigger\'s permanent retaliation when mutation fidelity is high. Check the strategy panel after the run completes.',
+      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 23 }
+      // Seed 23: TFT=52/60 of final population
     },
     '3': {
       title: 'Mutation Destroys Memory',
@@ -2772,17 +2797,17 @@
       title: 'Epochal Revolution',
       question: 'How does cooperation take over?',
       description: 'Watch the composition chart below. Early generations: random mix then AllD dominance (red). Then a sudden cooperative sweep -- one or two generations from defection to cooperation. This is Miller\'s "revolution by evolution."',
-      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 89 }
-      // Seed 89: sharp transition around gen 21
+      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 236 }
+      // Seed 236: sharp transition around gen 46
     },
     '5': {
       title: 'The Game Matters',
       question: 'Does cooperation always emerge?',
       description: 'Same seed, different payoff structures. Prisoner\'s Dilemma vs Chicken (Hawk-Dove). The payoff matrix determines whether reciprocity dominates -- different games produce different social structures.',
-      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 160 },
-      // Seed 160: PD=0.93, Chicken=0.42
+      params: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 280 },
+      // Seed 280: PD=0.937, Chicken=0.464
       twoPhase: true,
-      firstParams: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 160, payoffs: { T: 5, R: 3, P: 0, S: 1 } }
+      firstParams: { populationSize: 30, states: 2, rounds: 150, mutationRate: 0.005, generations: 200, seed: 280, payoffs: { T: 5, R: 3, P: 0, S: 1 } }
     },
     '6': {
       title: 'Replicating Miller (1996)',
@@ -2792,11 +2817,18 @@
       // Seed 2: coop=0.987
     },
     '7': {
-      title: 'Lab: Grim vs TFT',
-      question: 'Why does Grim beat TFT?',
-      description: 'Opens the Lab tab. First watch Grim Trigger vs a Wobbly cooperator (CCD pattern), then TFT vs the same. Grim\'s permanent retaliation crushes the wobbler; TFT\'s forgiveness gets exploited repeatedly.',
+      title: 'Lab: TFT vs Grim',
+      question: 'How do strategies handle imperfect opponents?',
+      description: 'Opens the Lab tab. Watch Grim Trigger vs a Wobbly cooperator (CCD pattern), then TFT vs the same. Grim\'s permanent retaliation crushes the wobbler; TFT forgives and gets exploited -- yet TFT still dominates in evolution because most opponents cooperate reliably.',
       params: null, // Opens Lab tab
       labConfig: { playerA: 'grimTrigger', playerB: 'wobbly', rounds: 150 }
+    },
+    '8': {
+      title: 'Noise Destroys Trust',
+      question: 'What happens when moves are misreported?',
+      description: 'Miller (1996) tested "noisy environments" where each move has a chance of being flipped before the opponent sees it. Sweep noise from 0% to 10% at 16 states. Even small noise degrades cooperation — complex strategies absorb it better than simple ones, but no strategy is immune.',
+      params: null,
+      sweepConfig: { param: 'noise', start: 0, end: 0.10, steps: 6 }
     }
   };
 
@@ -2892,6 +2924,9 @@
     if (p.rounds !== undefined) { document.getElementById('rounds').value = p.rounds; document.getElementById('rounds-val').textContent = p.rounds; }
     if (p.mutationRate !== undefined) { document.getElementById('mutation').value = Math.round(p.mutationRate * 1000); document.getElementById('mutation-val').textContent = p.mutationRate.toFixed(3); }
     if (p.generations !== undefined) { document.getElementById('generations').value = p.generations; document.getElementById('generations-val').textContent = p.generations; }
+    var noiseRate = p.noise !== undefined ? p.noise : 0;
+    document.getElementById('noise').value = Math.round(noiseRate * 1000);
+    document.getElementById('noise-val').textContent = (noiseRate * 100).toFixed(1) + '%';
     if (p.seed !== undefined) { document.getElementById('seed').value = p.seed; }
     if (p.payoffs) {
       document.getElementById('payoff-T').value = p.payoffs.T;

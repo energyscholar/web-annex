@@ -1147,8 +1147,8 @@
   // ===== P5.4: Teaching Scenarios + Bridge Tests =====
 
   // Test 75: Scenario 1 "The Threshold"
-  var r75_s1 = Experiment.run({populationSize:30, states:1, rounds:150, mutationRate:0.005, generations:200, seed:163});
-  var r75_s2 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:163});
+  var r75_s1 = Experiment.run({populationSize:30, states:1, rounds:150, mutationRate:0.005, generations:200, seed:179});
+  var r75_s2 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:179});
   var coop75_s1 = r75_s1.stats[r75_s1.stats.length - 1].cooperationRate;
   var coop75_s2 = r75_s2.stats[r75_s2.stats.length - 1].cooperationRate;
   assert(75, 'Scenario 1: states=1 final coop < 0.20', coop75_s1 < 0.20);
@@ -1203,30 +1203,77 @@
 
   // Test 78: Bridge annotation conditions
   // Bridge appears when: states>=2, final coop > 0.5, initial coop < 0.3
-  var r78 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:163});
+  var r78 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:179});
   var init78 = r78.stats.slice(0, 5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
   var final78 = r78.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
-  assert(78, 'Bridge: states=2 seed=163: final coop > 0.5', final78 > 0.5);
-  assert(78, 'Bridge: states=2 seed=163: initial coop < 0.3', init78 < 0.3);
+  assert(78, 'Bridge: states=2 seed=179: final coop > 0.5', final78 > 0.5);
+  assert(78, 'Bridge: states=2 seed=179: initial coop < 0.3', init78 < 0.3);
   // states=1 should NOT trigger bridge
-  var r78_s1 = Experiment.run({populationSize:30, states:1, rounds:150, mutationRate:0.005, generations:200, seed:163});
+  var r78_s1 = Experiment.run({populationSize:30, states:1, rounds:150, mutationRate:0.005, generations:200, seed:179});
   var final78_s1 = r78_s1.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
   assert(78, 'Bridge: states=1 should NOT trigger (final coop < 0.5)', final78_s1 < 0.5);
 
   // Test 79: All scenario seeds produce clear results (validate curated seeds)
-  // Seed 163: states=1 < 0.20, states=2 > 0.60 (already tested in 75)
-  // Seed 47: Grim dominance (states=2)
-  var r79_s2 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:47});
+  // Seed 179: states=1 < 0.20, states=2 > 0.60 (already tested in 75)
+  // Seed 23: TFT dominance (states=2)
+  var r79_s2 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:23});
   var coop79_s2 = r79_s2.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
-  assert(79, 'Seed validation: seed=47 produces high cooperation (>0.60)', coop79_s2 > 0.60);
-  // Seed 89: sharp transition
-  var r79_s89 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:89});
+  assert(79, 'Seed validation: seed=23 produces high cooperation (>0.60)', coop79_s2 > 0.60);
+  // Seed 236: sharp transition
+  var r79_s89 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:200, seed:236});
   var coop79_s89 = r79_s89.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
-  assert(79, 'Seed validation: seed=89 produces cooperation (>0.40)', coop79_s89 > 0.40);
+  assert(79, 'Seed validation: seed=236 produces cooperation (>0.40)', coop79_s89 > 0.40);
   // Seed 2: Miller replication (16 states)
   var r79_s2b = Experiment.run({populationSize:30, states:16, rounds:150, mutationRate:0.005, generations:200, seed:2});
   var coop79_s2b = r79_s2b.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
   assert(79, 'Seed validation: seed=2 (16 states) produces cooperation (>0.40)', coop79_s2b > 0.40);
+
+  // ===== Noise Injection Tests =====
+  section('Noise Injection');
+
+  // Test 80: noise=0 matches no-noise run exactly
+  var rNoNoise = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:50, seed:42});
+  var rNoise0 = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:50, seed:42, noise:0});
+  var matchN0 = true;
+  for (var gi = 0; gi < rNoNoise.stats.length; gi++) {
+    if (Math.abs(rNoNoise.stats[gi].cooperationRate - rNoise0.stats[gi].cooperationRate) > 1e-10) {
+      matchN0 = false; break;
+    }
+  }
+  assert(80, 'noise=0 produces identical results to no-noise run', matchN0);
+
+  // Test 81: noise > 0 reduces cooperation at 16 states
+  var rPIE = Experiment.run({populationSize:30, states:16, rounds:150, mutationRate:0.005, generations:50, seed:46});
+  var rNE5 = Experiment.run({populationSize:30, states:16, rounds:150, mutationRate:0.005, generations:50, seed:46, noise:0.05});
+  var coopPIE = rPIE.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  var coopNE5 = rNE5.stats.slice(-5).reduce(function(s,x){return s+x.cooperationRate;},0)/5;
+  assert(81, 'noise=5% reduces cooperation vs no-noise (16 states)', coopNE5 < coopPIE);
+
+  // Test 82: noise runs are deterministic (same seed + same noise = same results)
+  var rN1a = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:30, seed:7, noise:0.01});
+  var rN1b = Experiment.run({populationSize:30, states:2, rounds:150, mutationRate:0.005, generations:30, seed:7, noise:0.01});
+  var matchN1 = true;
+  for (var gi2 = 0; gi2 < rN1a.stats.length; gi2++) {
+    if (Math.abs(rN1a.stats[gi2].cooperationRate - rN1b.stats[gi2].cooperationRate) > 1e-10) {
+      matchN1 = false; break;
+    }
+  }
+  assert(82, 'Noise runs are deterministic (same seed = same results)', matchN1);
+
+  // Test 83: Game.play with noise flips moves (direct test using history)
+  var tftAuto = { states:2, startState:0, actions:new Uint8Array([0,1]), transC:new Uint8Array([0,0]), transD:new Uint8Array([1,1]) };
+  var allcAuto = { states:1, startState:0, actions:new Uint8Array([0]), transC:new Uint8Array([0]), transD:new Uint8Array([0]) };
+  var testRng = RNG.create(999);
+  var resultNoNoise = Game.play(tftAuto, allcAuto, 50, {T:5,R:3,P:1,S:0});
+  var resultWithNoise = Game.play(tftAuto, allcAuto, 50, {T:5,R:3,P:1,S:0}, {noise:0.5, rng:testRng});
+  var historyDiffers = false;
+  for (var hi = 0; hi < resultNoNoise.history.length; hi++) {
+    if (resultNoNoise.history[hi].moveA !== resultWithNoise.history[hi].moveA ||
+        resultNoNoise.history[hi].moveB !== resultWithNoise.history[hi].moveB) {
+      historyDiffers = true; break;
+    }
+  }
+  assert(83, 'Game.play with 50% noise produces different move history than noise-free', historyDiffers);
 
   // ===== Wait for async tests, then render =====
   await Promise.all(asyncPending);

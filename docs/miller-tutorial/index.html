@@ -561,7 +561,7 @@
 
 <div class="data-callout">
   <div class="data-title">EXPERIMENTAL FINDING</div>
-  <p>Miller (1996) showed that noise — i.e., mutation — destroys <span class="tip">TFT<span class="tip-text">Tit-for-Tat: start cooperating, then copy the opponent's last move. Won Axelrod's 1980 tournaments.</span></span>'s advantage. In the simulation, <strong>Grim Trigger dominates most 2-state runs, not TFT</strong>. The mechanism: mutation creates "wobbly" cooperators — imperfect agents that occasionally defect by accident. TFT forgives each wobble and gets repeatedly exploited. Grim retaliates permanently. In a mutation-driven ecology, <em>forgiveness is a liability</em>.</p>
+  <p>With accurate bit-flip mutation, <strong>Tit-for-Tat dominates ~64% of 2-state runs</strong>. TFT's forgiving reciprocity outperforms Grim Trigger when populations are clean — most opponents cooperate reliably, so forgiveness pays. But add <span class="tip">noise<span class="tip-text">Implementation error: each move has a probability of being flipped before the opponent sees it. Miller (1996) tested 1% and 5% noise conditions.</span></span> (misreported moves), and TFT collapses: it can't distinguish accidental defection from real betrayal. At 2 states, even 1% noise destroys cooperation entirely. At 16 states, complex strategies absorb noise better — <em>computational capacity is a buffer against environmental uncertainty</em>.</p>
 </div>
 
 <h3>The Population</h3>
