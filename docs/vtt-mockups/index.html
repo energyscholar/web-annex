@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shared Display Mockup — Starship Operations VTT</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0e14; color: #c8d0d8; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+  .app-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    gap: 8px;
+  }
+
+  /* ── Header bar ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    background: #131920;
+    border: 1px solid #1e2830;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .header .ship-name { color: #6fb3d2; font-weight: 600; }
+  .header .alert-badge { padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .alert-green { background: #1a3a1a; color: #4caf50; border: 1px solid #2e7d32; }
+
+  /* ── Shared Display ── */
+  .shared-display {
+    background: #0d1117;
+    border: 1px solid #1e2830;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 500px;
+  }
+
+  .mode-tabs {
+    display: flex;
+    background: #131920;
+    border-bottom: 1px solid #1e2830;
+    padding: 0 4px;
+  }
+  .mode-tab {
+    padding: 8px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #6c7a88;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .mode-tab:hover { color: #a0b0c0; background: #1a2230; }
+  .mode-tab.active { color: #6fb3d2; border-bottom-color: #6fb3d2; background: #0d1117; }
+
+  .view-content {
+    flex: 1;
+    display: none;
+    padding: 12px;
+    overflow: auto;
+  }
+  .view-content.active { display: flex; flex-direction: column; }
+
+  /* ── Summon notification ── */
+  .summon-notification {
+    background: #1a2a3a;
+    border: 1px solid #2a5a8a;
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+  @keyframes pulse-border { 0%,100% { border-color: #2a5a8a; } 50% { border-color: #4a9aea; } }
+  .summon-notification .player-name { color: #6fb3d2; font-weight: 600; }
+  .summon-notification .target { color: #a0d0a0; }
+  .btn-sm { padding: 3px 10px; border-radius: 4px; border: 1px solid #3a4a5a; background: #1a2a3a; color: #c8d0d8; cursor: pointer; font-size: 11px; margin-left: 6px; }
+  .btn-sm.primary { background: #2a5a8a; border-color: #4a8aca; }
+
+  /* ── System Map ── */
+  .system-map-svg { width: 100%; flex: 1; min-height: 400px; }
+  .system-map-svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+  /* ── Subsector Map ── */
+  .subsector-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .subsector-header h3 { color: #6fb3d2; font-size: 14px; }
+  .subsector-header select { background: #131920; color: #c8d0d8; border: 1px solid #2a3a4a; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+  .subsector-svg { width: 100%; flex: 1; min-height: 400px; }
+
+  /* ── Ship Exterior ── */
+  .exterior-container { text-align: center; }
+  .exterior-image-placeholder {
+    background: #131920;
+    border: 1px dashed #2a3a4a;
+    border-radius: 8px;
+    padding: 40px;
+    margin: 12px 0;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .exterior-description {
+    font-style: italic;
+    color: #8a9aaa;
+    max-width: 600px;
+    line-height: 1.6;
+    margin: 0 auto;
+    font-size: 14px;
+  }
+  .ship-stats {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .stat-badge {
+    background: #131920;
+    border: 1px solid #1e2830;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+  .stat-label { color: #6c7a88; font-size: 10px; text-transform: uppercase; }
+  .stat-value { color: #c8d0d8; font-weight: 600; margin-top: 2px; }
+  .stat-ok { color: #4caf50; }
+  .stat-warn { color: #ff9800; }
+
+  /* ── Deck Plan ── */
+  .deck-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .deck-tab {
+    padding: 4px 12px;
+    background: #131920;
+    border: 1px solid #1e2830;
+    border-radius: 4px;
+    color: #6c7a88;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .deck-tab.active { color: #6fb3d2; border-color: #6fb3d2; background: #0d1a28; }
+  .deck-plan-svg { width: 100%; flex: 1; min-height: 400px; }
+  .deck-plan-svg .room { cursor: pointer; transition: opacity 0.15s; }
+  .deck-plan-svg .room:hover { opacity: 0.85; }
+  .token-label { font-size: 7px; fill: #e0e0e0; text-anchor: middle; }
+  .room-label { font-size: 9px; fill: #c8d0d8; text-anchor: middle; dominant-baseline: central; }
+  .door-line { stroke: #4a5a6a; stroke-width: 1; stroke-dasharray: 3,2; }
+
+  /* ── Room Focus ── */
+  .room-focus {
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .room-focus h2 { color: #6fb3d2; font-size: 18px; margin-bottom: 4px; }
+  .room-focus .ship-label { color: #6c7a88; font-size: 12px; margin-bottom: 12px; }
+  .room-focus .description-block {
+    background: #131920;
+    border: 1px solid #1e2830;
+    border-radius: 6px;
+    padding: 16px;
+    font-style: italic;
+    color: #a0b0c0;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .room-section { margin-bottom: 14px; }
+  .room-section h4 { color: #6c7a88; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; border-bottom: 1px solid #1e2830; padding-bottom: 4px; }
+  .occupant {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+  .occupant-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .occupant-role { color: #6c7a88; font-size: 11px; }
+  .feature-tag {
+    display: inline-block;
+    background: #1a2230;
+    border: 1px solid #2a3a4a;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin: 2px 4px 2px 0;
+    font-size: 11px;
+    color: #8a9aaa;
+  }
+  .exit-link {
+    display: inline-block;
+    background: #0d1a28;
+    border: 1px solid #2a5a8a;
+    border-radius: 4px;
+    padding: 4px 12px;
+    margin: 2px 4px 2px 0;
+    font-size: 12px;
+    color: #6fb3d2;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .exit-link:hover { background: #1a2a3a; }
+
+  /* ── Scene ── */
+  .scene-container { max-width: 700px; margin: 0 auto; width: 100%; }
+  .narration-block {
+    background: #131920;
+    border-left: 3px solid #6fb3d2;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #c8d0d8;
+  }
+  .narration-timestamp { color: #4a5a6a; font-size: 10px; margin-bottom: 4px; }
+  .scene-image-slot {
+    background: #131920;
+    border: 1px dashed #2a3a4a;
+    border-radius: 8px;
+    padding: 60px 20px;
+    text-align: center;
+    color: #4a5a6a;
+    font-size: 13px;
+  }
+
+  /* ── GM Controls (bottom strip) ── */
+  .gm-controls {
+    background: #131920;
+    border: 1px solid #1e2830;
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .gm-controls .label { color: #ff9800; font-weight: 600; font-size: 11px; text-transform: uppercase; }
+  .gm-btn {
+    padding: 4px 12px;
+    background: #1a2a3a;
+    border: 1px solid #2a4a6a;
+    border-radius: 4px;
+    color: #6fb3d2;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  .gm-btn:hover { background: #2a3a4a; }
+  .gm-btn.active-mode { background: #2a5a8a; border-color: #4a8aca; }
+  .gm-divider { width: 1px; height: 20px; background: #2a3a4a; }
+  .gm-toggle { display: flex; align-items: center; gap: 4px; }
+  .gm-toggle input[type="checkbox"] { accent-color: #6fb3d2; }
+
+  /* ── Player points ── */
+  @keyframes point-pulse {
+    0% { r: 8; opacity: 1; }
+    100% { r: 20; opacity: 0; }
+  }
+  .point-ring { fill: none; stroke: #ffd700; stroke-width: 2; animation: point-pulse 2s ease-out infinite; }
+  .point-label { font-size: 9px; fill: #ffd700; text-anchor: middle; }
+
+  /* ── Info panel (for room click) ── */
+  .mockup-note {
+    background: #1a1a2a;
+    border: 1px solid #3a3a5a;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #8a8aaa;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    font-size: 10px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── Jump range legend ── */
+  .jump-legend { display: flex; gap: 12px; margin-top: 6px; font-size: 10px; }
+  .jump-legend span { display: flex; align-items: center; gap: 4px; }
+  .jump-dash { width: 16px; height: 0; border-top: 2px dashed; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="ship-name">ISS Astral Dawn</span>
+    <span>Collace (1237) &mdash; Highport</span>
+    <span>Playing as: <strong>Marina Vasquez</strong> (Sensors)</span>
+    <span class="alert-badge alert-green">Green</span>
+  </div>
+
+  <!-- Shared Display -->
+  <div class="shared-display">
+    <div class="mode-tabs">
+      <button class="mode-tab" onclick="switchMode('system')" id="tab-system">System</button>
+      <button class="mode-tab" onclick="switchMode('subsector')" id="tab-subsector">Subsector</button>
+      <button class="mode-tab" onclick="switchMode('exterior')" id="tab-exterior">Exterior</button>
+      <button class="mode-tab active" onclick="switchMode('deck')" id="tab-deck">Deck Plan</button>
+      <button class="mode-tab" onclick="switchMode('room')" id="tab-room">Room</button>
+      <button class="mode-tab" onclick="switchMode('scene')" id="tab-scene">Scene</button>
+    </div>
+
+    <!-- Summon notification -->
+    <div class="summon-notification" style="margin: 8px 12px 0;">
+      <span><span class="player-name">Asao (Captain)</span> wants to show you: <span class="target">Subsector &mdash; Collace (1237)</span></span>
+      <span>
+        <button class="btn-sm primary">View</button>
+        <button class="btn-sm">Dismiss</button>
+        <span style="color:#4a5a6a; font-size:10px; margin-left:6px;">28s</span>
+      </span>
+    </div>
+
+    <!-- ════ SYSTEM MAP ════ -->
+    <div class="view-content" id="view-system">
+      <svg class="system-map-svg" viewBox="0 0 800 450">
+        <defs>
+          <radialGradient id="star-glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff8e0" stop-opacity="0.8"/>
+            <stop offset="40%" stop-color="#ffd080" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#ffd080" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="hab-zone" cx="50%" cy="50%" r="50%">
+            <stop offset="60%" stop-color="#2a5a2a" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#2a5a2a" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- Background -->
+        <rect width="800" height="450" fill="#060a10"/>
+        <!-- Stars background -->
+        <circle cx="120" cy="45" r="0.5" fill="#ffffff" opacity="0.4"/>
+        <circle cx="340" cy="82" r="0.7" fill="#ffffff" opacity="0.3"/>
+        <circle cx="560" cy="30" r="0.4" fill="#ffffff" opacity="0.5"/>
+        <circle cx="710" cy="110" r="0.6" fill="#ffffff" opacity="0.3"/>
+        <circle cx="50" cy="200" r="0.5" fill="#ffffff" opacity="0.4"/>
+        <circle cx="750" cy="350" r="0.7" fill="#ffffff" opacity="0.3"/>
+        <circle cx="200" cy="380" r="0.4" fill="#ffffff" opacity="0.5"/>
+        <circle cx="600" cy="400" r="0.5" fill="#ffffff" opacity="0.4"/>
+        <!-- Habitable zone -->
+        <circle cx="400" cy="225" r="180" fill="url(#hab-zone)"/>
+        <!-- Star -->
+        <circle cx="400" cy="225" r="40" fill="url(#star-glow)"/>
+        <circle cx="400" cy="225" r="14" fill="#ffd080"/>
+        <text x="400" y="195" fill="#ffd080" text-anchor="middle" font-size="11">Collace</text>
+        <text x="400" y="207" fill="#6c7a88" text-anchor="middle" font-size="8">K5 V</text>
+        <!-- Orbit lines -->
+        <circle cx="400" cy="225" r="80" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+        <circle cx="400" cy="225" r="140" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+        <circle cx="400" cy="225" r="210" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+        <circle cx="400" cy="225" r="290" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+        <!-- Planet 1 (inner rocky) -->
+        <circle cx="480" cy="225" r="4" fill="#aa8866"/>
+        <text x="480" y="215" fill="#8a9aaa" text-anchor="middle" font-size="8">Collace I</text>
+        <!-- Planet 2 (main world) -->
+        <circle cx="330" cy="130" r="7" fill="#4488aa"/>
+        <circle cx="330" cy="130" r="9" fill="none" stroke="#6fb3d2" stroke-width="1.5"/>
+        <text x="330" y="117" fill="#6fb3d2" text-anchor="middle" font-size="9" font-weight="600">Collace</text>
+        <text x="330" y="148" fill="#6c7a88" text-anchor="middle" font-size="7">B628943-D</text>
+        <!-- Highport marker (ship is here) -->
+        <polygon points="330,126 326,132 334,132" fill="#4caf50" stroke="#8aff8a" stroke-width="0.5"/>
+        <text x="346" y="132" fill="#4caf50" font-size="8">Astral Dawn</text>
+        <!-- Gas giant -->
+        <circle cx="200" cy="320" r="12" fill="#cc9944" opacity="0.7"/>
+        <ellipse cx="200" cy="320" rx="16" ry="3" fill="none" stroke="#ddaa55" stroke-width="0.5" opacity="0.5"/>
+        <text x="200" y="340" fill="#8a9aaa" text-anchor="middle" font-size="8">Collace IV</text>
+        <!-- Contact (passive scan) -->
+        <circle cx="580" cy="160" r="5" fill="none" stroke="#cccc44" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="580" y="150" fill="#cccc44" text-anchor="middle" font-size="8">Contact Alpha</text>
+        <text x="580" y="175" fill="#6c7a88" text-anchor="middle" font-size="7">Ship &bull; 48,000km &bull; Faint</text>
+        <!-- Contact (active scan - known) -->
+        <circle cx="650" cy="300" r="5" fill="none" stroke="#44cc44" stroke-width="1.5"/>
+        <text x="650" y="290" fill="#44cc44" text-anchor="middle" font-size="8">SDB Vigilant</text>
+        <text x="650" y="315" fill="#6c7a88" text-anchor="middle" font-size="7">400t Patrol &bull; 25,000km</text>
+        <!-- Player pointing -->
+        <circle cx="580" cy="160" r="8" class="point-ring"/>
+        <text x="580" y="140" class="point-label">Kai points here</text>
+        <!-- Scale -->
+        <line x1="30" y1="430" x2="130" y2="430" stroke="#3a4a5a" stroke-width="1"/>
+        <text x="80" y="443" fill="#4a5a6a" text-anchor="middle" font-size="9">1.0 AU</text>
+      </svg>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#cccc44"></span> Passive scan</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#44cc44"></span> Active scan</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#4488ff"></span> Deep scan</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#888"></span> Unscanned</span>
+        <span class="legend-item"><span style="color:#4caf50">&#9650;</span> Ship position</span>
+      </div>
+    </div>
+
+    <!-- ════ SUBSECTOR MAP ════ -->
+    <div class="view-content" id="view-subsector">
+      <div class="subsector-header">
+        <h3>District 268 &mdash; Spinward Marches</h3>
+        <select>
+          <option>A - Cronor</option><option>B - Jewell</option><option>C - Regina</option><option>D - Aramis</option>
+          <option>E - Querion</option><option>F - Vilis</option><option>G - Lanth</option><option>H - Rhylanor</option>
+          <option>I - Darrian</option><option>J - Sword Worlds</option><option>K - Lunion</option><option>L - Mora</option>
+          <option>M - Five Sisters</option><option selected>N - District 268</option><option>O - Glisten</option><option>P - Trin's Veil</option>
+        </select>
+      </div>
+      <svg class="subsector-svg" viewBox="-10 -10 500 600">
+        <defs>
+          <pattern id="hex-pattern" width="100" height="100">
+            <rect width="100" height="100" fill="none"/>
+          </pattern>
+        </defs>
+        <rect x="-10" y="-10" width="520" height="620" fill="#060a10"/>
+
+        <!-- Hex grid: pointy-top, 8 cols x 10 rows -->
+        <!-- Row helper: odd cols offset down by half-height -->
+        <!-- Hex size: flat-to-flat 50px. Pointy-top: width=57.7, height=50 -->
+
+        <!-- Jump range circles from current position (hex 1237 = Collace, mapped to col 4 row 7 roughly) -->
+        <!-- Using approximate center for Collace -->
+        <circle cx="230" cy="370" r="58" fill="none" stroke="#4caf50" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <circle cx="230" cy="370" r="116" fill="none" stroke="#cccc44" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <circle cx="230" cy="370" r="174" fill="none" stroke="#cc4444" stroke-width="1" stroke-dasharray="4,3" opacity="0.3"/>
+
+        <!-- Sample hex grid with worlds -->
+        <!-- Simplified: showing ~20 systems to give the feel -->
+
+        <!-- Helper: hex polygon pointy-top, radius 28 -->
+        <!-- 0101 = Mertactor -->
+        <g transform="translate(40, 40)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="4" fill="#44cc44"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Mertactor</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">0101</text>
+        </g>
+        <!-- 0201 -->
+        <g transform="translate(100, 70)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="3" fill="#cccc44"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Dallia</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">0201</text>
+        </g>
+        <!-- 0302 -->
+        <g transform="translate(160, 100)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="3" fill="#cc8844"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Avastan</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">0302</text>
+        </g>
+        <!-- 0403 -->
+        <g transform="translate(220, 130)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="3" fill="#888"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Tarkine</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">0403</text>
+        </g>
+
+        <!-- Nirton (0505) -->
+        <g transform="translate(280, 220)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="3" fill="#cc8844"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Nirton</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">0505</text>
+        </g>
+
+        <!-- Trexalon (0704) -->
+        <g transform="translate(400, 190)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="4" fill="#44cc44"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Trexalon</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">0704</text>
+        </g>
+
+        <!-- Asteltine (0931) -->
+        <g transform="translate(100, 310)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="4" fill="#4488ff"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Asteltine</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">0931</text>
+        </g>
+
+        <!-- Collace (current system - highlighted) -->
+        <g transform="translate(230, 370)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="18" fill="none" stroke="#6fb3d2" stroke-width="2" opacity="0.6"/>
+          <circle cx="0" cy="0" r="6" fill="#4488ff"/>
+          <text x="0" y="18" fill="#6fb3d2" text-anchor="middle" font-size="8" font-weight="600">Collace</text>
+          <text x="0" y="-30" fill="#6fb3d2" text-anchor="middle" font-size="7">1237</text>
+          <!-- Ship marker -->
+          <polygon points="0,-10 -4,-4 4,-4" fill="#4caf50" stroke="#8aff8a" stroke-width="0.5"/>
+        </g>
+
+        <!-- Inchin (nearby) -->
+        <g transform="translate(170, 430)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="3" fill="#cccc44"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Inchin</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">1338</text>
+        </g>
+
+        <!-- Bowman -->
+        <g transform="translate(340, 340)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="3" fill="#cc4444"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Bowman</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">1132</text>
+        </g>
+
+        <!-- Pavabid -->
+        <g transform="translate(290, 490)">
+          <polygon points="0,-28 24.2,-14 24.2,14 0,28 -24.2,14 -24.2,-14" fill="none" stroke="#1a2a3a" stroke-width="0.5"/>
+          <circle cx="0" cy="0" r="3" fill="#888"/>
+          <text x="0" y="18" fill="#6c7a88" text-anchor="middle" font-size="7">Pavabid</text>
+          <text x="0" y="-30" fill="#3a4a5a" text-anchor="middle" font-size="6">1238</text>
+        </g>
+
+        <!-- Player pointing on hex -->
+        <g transform="translate(340, 340)">
+          <circle cx="0" cy="0" r="8" class="point-ring"/>
+          <text x="0" y="-42" class="point-label">Tomas points here</text>
+        </g>
+      </svg>
+      <div class="jump-legend">
+        <span><span class="jump-dash" style="border-color:#4caf50"></span> J-1</span>
+        <span><span class="jump-dash" style="border-color:#cccc44"></span> J-2</span>
+        <span><span class="jump-dash" style="border-color:#cc4444"></span> J-3</span>
+        <span style="margin-left: 12px;">Starport: </span>
+        <span class="legend-item"><span class="legend-dot" style="background:#4488ff"></span> A</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#44cc44"></span> B</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#cccc44"></span> C</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#cc8844"></span> D</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#cc4444"></span> E</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#888"></span> X</span>
+      </div>
+    </div>
+
+    <!-- ════ SHIP EXTERIOR ════ -->
+    <div class="view-content" id="view-exterior">
+      <div class="exterior-container">
+        <h3 style="color:#6fb3d2; margin-bottom:4px;">ISS Astral Dawn</h3>
+        <span style="color:#6c7a88; font-size:12px;">Bastien-Class Subsidized Liner (600t) &mdash; Q-Ship Conversion</span>
+
+        <div class="exterior-image-placeholder">
+          <div class="exterior-description">
+            600-ton semi-streamlined hull, heavy armor plating visible along the waterline. Pop-up turret housings flush against the dorsal hull. The bow disc &mdash; formerly a luxury observation lounge &mdash; now bristles with sensor arrays behind darkened transparencies. A battered Q-ship disguised as a converted liner, bearing the scars of service in the Spinward Marches. Scoring from laser fire runs along the port hull plating, hastily patched. The ship rides at highport mooring, loading gantries attached, running lights cycling through standard commercial sequences.
+          </div>
+          <div style="margin-top:16px; color:#4a5a6a; font-size:11px;">
+            [Image slot &mdash; text above is the generation prompt]
+          </div>
+        </div>
+
+        <div class="ship-stats">
+          <div class="stat-badge"><div class="stat-label">Hull</div><div class="stat-value stat-ok">92%</div></div>
+          <div class="stat-badge"><div class="stat-label">Armor</div><div class="stat-value">14 pts</div></div>
+          <div class="stat-badge"><div class="stat-label">Thrust</div><div class="stat-value">3G</div></div>
+          <div class="stat-badge"><div class="stat-label">Jump</div><div class="stat-value">J-3</div></div>
+          <div class="stat-badge"><div class="stat-label">Fuel</div><div class="stat-value stat-ok">78%</div></div>
+          <div class="stat-badge"><div class="stat-label">Power</div><div class="stat-value stat-ok">480 / 480</div></div>
+          <div class="stat-badge"><div class="stat-label">Systems</div><div class="stat-value stat-warn">1 Damaged</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ DECK PLAN ════ -->
+    <div class="view-content active" id="view-deck">
+      <div class="deck-tabs">
+        <button class="deck-tab" onclick="switchDeck('d1')">D1 Engineering</button>
+        <button class="deck-tab active" onclick="switchDeck('d2')">D2 Main</button>
+        <button class="deck-tab" onclick="switchDeck('d3')">D3 Upper</button>
+      </div>
+      <svg class="deck-plan-svg" viewBox="0 0 700 420" id="deck-svg">
+        <!-- Hull outline - D2 Main Deck -->
+        <path d="M 100,50 C 60,50 30,100 30,210 C 30,320 60,370 100,370 L 600,370 C 630,370 650,340 660,300 L 680,250 L 680,170 L 660,120 C 650,80 630,50 600,50 Z"
+              fill="none" stroke="#2a3a4a" stroke-width="1.5"/>
+        <!-- Bow disc (greenspace) -->
+        <path d="M 100,50 C 60,50 30,100 30,210 C 30,320 60,370 100,370 L 100,50 Z"
+              fill="#1a3a1a" stroke="#2e5a2e" stroke-width="1" opacity="0.6"/>
+
+        <!-- Rooms -->
+        <!-- Bridge (aft, elevated) -->
+        <rect class="room" x="610" y="140" width="60" height="140" rx="4" fill="#4a7c9b" opacity="0.4" stroke="#5a8cAb" stroke-width="1"/>
+        <text x="640" y="215" class="room-label">Bridge</text>
+
+        <!-- Sensors Station -->
+        <rect class="room" x="555" y="140" width="50" height="65" rx="4" fill="#4a7c9b" opacity="0.4" stroke="#5a8cAb" stroke-width="1"/>
+        <text x="580" y="178" class="room-label" font-size="7">Sensors</text>
+
+        <!-- Galley -->
+        <rect class="room" x="130" y="100" width="80" height="80" rx="4" fill="#9b8c4a" opacity="0.4" stroke="#Ab9c5a" stroke-width="1"/>
+        <text x="170" y="145" class="room-label">Galley</text>
+
+        <!-- Medbay -->
+        <rect class="room" x="220" y="100" width="70" height="65" rx="4" fill="#4a9b8b" opacity="0.4" stroke="#5aAb9b" stroke-width="1"/>
+        <text x="255" y="138" class="room-label">Medbay</text>
+
+        <!-- Crew Quarters -->
+        <rect class="room" x="300" y="100" width="80" height="65" rx="4" fill="#9b8c4a" opacity="0.4" stroke="#Ab9c5a" stroke-width="1"/>
+        <text x="340" y="130" class="room-label" font-size="8">Crew Qtrs</text>
+
+        <!-- Captain's Cabin -->
+        <rect class="room" x="300" y="175" width="55" height="50" rx="4" fill="#9b8c4a" opacity="0.4" stroke="#Ab9c5a" stroke-width="1"/>
+        <text x="327" y="203" class="room-label" font-size="7">Captain</text>
+
+        <!-- Staterooms -->
+        <rect class="room" x="220" y="175" width="70" height="50" rx="4" fill="#9b8c4a" opacity="0.4" stroke="#Ab9c5a" stroke-width="1"/>
+        <text x="255" y="203" class="room-label" font-size="7">Staterooms</text>
+
+        <!-- Marines Barracks -->
+        <rect class="room" x="390" y="100" width="75" height="65" rx="4" fill="#cc4444" opacity="0.3" stroke="#dd5555" stroke-width="1"/>
+        <text x="427" y="130" class="room-label" font-size="7">Marines</text>
+
+        <!-- Armory -->
+        <rect class="room" x="390" y="175" width="75" height="50" rx="4" fill="#cc4444" opacity="0.3" stroke="#dd5555" stroke-width="1"/>
+        <text x="427" y="203" class="room-label" font-size="7">Armory</text>
+
+        <!-- Workshop -->
+        <rect class="room" x="475" y="100" width="70" height="65" rx="4" fill="#4a9b5c" opacity="0.4" stroke="#5aAb6c" stroke-width="1"/>
+        <text x="510" y="138" class="room-label" font-size="7">Workshop</text>
+
+        <!-- Engineering access -->
+        <rect class="room" x="475" y="250" width="70" height="65" rx="4" fill="#9b4a4a" opacity="0.4" stroke="#Ab5a5a" stroke-width="1"/>
+        <text x="510" y="278" class="room-label" font-size="7">Eng Access</text>
+
+        <!-- Cargo bay -->
+        <rect class="room" x="220" y="260" width="150" height="90" rx="4" fill="#5a6a7a" opacity="0.4" stroke="#6a7a8a" stroke-width="1"/>
+        <text x="295" y="310" class="room-label">Cargo Bay</text>
+
+        <!-- Hangar access -->
+        <rect class="room" x="380" y="260" width="85" height="90" rx="4" fill="#5a6a7a" opacity="0.4" stroke="#6a7a8a" stroke-width="1"/>
+        <text x="422" y="300" class="room-label" font-size="7">Hangar</text>
+        <text x="422" y="312" class="room-label" font-size="7">Access</text>
+
+        <!-- Port Airlock -->
+        <rect class="room" x="130" y="190" width="40" height="35" rx="4" fill="#4a6b8a" opacity="0.4" stroke="#5a7b9a" stroke-width="1"/>
+        <text x="150" y="211" class="room-label" font-size="6">P.Lock</text>
+
+        <!-- Starboard Airlock -->
+        <rect class="room" x="555" y="260" width="50" height="40" rx="4" fill="#4a6b8a" opacity="0.4" stroke="#5a7b9a" stroke-width="1"/>
+        <text x="580" y="283" class="room-label" font-size="6">S.Lock</text>
+
+        <!-- Green space label -->
+        <text x="65" y="200" fill="#4caf50" text-anchor="middle" font-size="8" transform="rotate(-90, 65, 210)">Green Space</text>
+
+        <!-- Door connections (adjacency) -->
+        <line class="door-line" x1="210" y1="140" x2="220" y2="140"/>
+        <line class="door-line" x1="290" y1="140" x2="300" y2="140"/>
+        <line class="door-line" x1="380" y1="140" x2="390" y2="140"/>
+        <line class="door-line" x1="465" y1="140" x2="475" y2="140"/>
+        <line class="door-line" x1="545" y1="175" x2="555" y2="175"/>
+        <line class="door-line" x1="605" y1="210" x2="610" y2="210"/>
+        <line class="door-line" x1="370" y1="310" x2="380" y2="310"/>
+        <line class="door-line" x1="465" y1="310" x2="475" y2="290"/>
+
+        <!-- ═══ Crew Tokens ═══ -->
+        <!-- Kai (Captain) on Bridge -->
+        <circle cx="625" cy="190" r="6" fill="#ffd700" stroke="#fff" stroke-width="0.5"/>
+        <text x="625" y="205" class="token-label">Kai</text>
+        <!-- Marina (Sensors) on Sensors Station -->
+        <circle cx="575" cy="165" r="6" fill="#00ff00" stroke="#fff" stroke-width="0.5"/>
+        <text x="575" y="180" class="token-label">Marina</text>
+        <!-- Jeri (Pilot) on Bridge -->
+        <circle cx="640" cy="190" r="6" fill="#00ffff" stroke="#fff" stroke-width="0.5"/>
+        <text x="640" y="205" class="token-label">Jeri</text>
+        <!-- Asao (Comms) on Bridge -->
+        <circle cx="655" cy="190" r="6" fill="#ffffff" stroke="#888" stroke-width="0.5"/>
+        <text x="655" y="205" class="token-label">Asao</text>
+        <!-- Tomas (Marines) in Barracks -->
+        <circle cx="420" cy="125" r="6" fill="#8b0000" stroke="#fff" stroke-width="0.5"/>
+        <text x="420" y="140" class="token-label">Tomas</text>
+        <!-- Lise (Marines) in Armory -->
+        <circle cx="420" cy="195" r="6" fill="#8b0000" stroke="#fff" stroke-width="0.5"/>
+        <text x="420" y="210" class="token-label">Lise</text>
+        <!-- Eddie (Engineer) at Eng Access -->
+        <circle cx="505" cy="275" r="6" fill="#ff0000" stroke="#fff" stroke-width="0.5"/>
+        <text x="505" y="290" class="token-label">Eddie</text>
+        <!-- Braise (Steward) in Galley -->
+        <circle cx="160" cy="135" r="6" fill="#ff69b4" stroke="#fff" stroke-width="0.5"/>
+        <text x="160" y="150" class="token-label">Braise</text>
+        <!-- Wellen (Medic) in Medbay -->
+        <circle cx="250" cy="128" r="6" fill="#008080" stroke="#fff" stroke-width="0.5"/>
+        <text x="250" y="143" class="token-label">Wellen</text>
+
+        <!-- Adjacent room highlight (player can move here) -->
+        <rect x="475" y="175" width="70" height="50" rx="4" fill="none" stroke="#4caf50" stroke-width="2" stroke-dasharray="4,2" opacity="0.6"/>
+        <text x="510" y="203" class="room-label" font-size="7" fill="#4caf50">Click to move</text>
+      </svg>
+      <div class="legend" style="margin-top: 4px;">
+        <span class="legend-item"><span class="legend-dot" style="background:#ffd700"></span> Captain</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#00ffff"></span> Pilot</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#00ff00"></span> Sensors</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ff0000"></span> Engineer</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ffffff; border:1px solid #888"></span> Comms</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#8b0000"></span> Marines</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#008080"></span> Medic</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ff69b4"></span> Steward</span>
+      </div>
+    </div>
+
+    <!-- ════ ROOM FOCUS ════ -->
+    <div class="view-content" id="view-room">
+      <div class="room-focus">
+        <h2>Galley</h2>
+        <div class="ship-label">ISS Astral Dawn &mdash; Deck 2 (Main)</div>
+
+        <div class="description-block">
+          Ship's kitchen and dining area. Long composite tables seat the crew of thirty, bolted to the deck against maneuver thrust. The cooking station gleams with brushed stainless — Braise keeps it spotless. A viewport in the forward bulkhead looks into the green space, where hydroponics trays glow under grow-lights. The recycler hums in the corner. Smell of coffee and something spiced. This is where the crew actually lives, between watches.
+        </div>
+
+        <div class="room-section">
+          <h4>Present</h4>
+          <div class="occupant">
+            <span class="occupant-dot" style="background:#ff69b4"></span>
+            <span>Braise (BR-4)</span>
+            <span class="occupant-role">Steward</span>
+          </div>
+          <div class="occupant">
+            <span class="occupant-dot" style="background:#ffd700"></span>
+            <span>Kai Ren</span>
+            <span class="occupant-role">Captain &mdash; off duty</span>
+          </div>
+          <div class="occupant">
+            <span class="occupant-dot" style="background:#9370db"></span>
+            <span>Breck (92)</span>
+            <span class="occupant-role">NPC</span>
+          </div>
+        </div>
+
+        <div class="room-section">
+          <h4>Features</h4>
+          <span class="feature-tag">cooking-station</span>
+          <span class="feature-tag">dining-tables</span>
+          <span class="feature-tag">food-storage</span>
+          <span class="feature-tag">recycler</span>
+          <span class="feature-tag">viewport (green space)</span>
+        </div>
+
+        <div class="room-section">
+          <h4>Exits</h4>
+          <a class="exit-link">&#8592; Port Airlock</a>
+          <a class="exit-link">&#8594; Crew Quarters</a>
+          <a class="exit-link">&#8593; Green Space (Bow Disc)</a>
+          <a class="exit-link">&#8595; Cargo Bay</a>
+        </div>
+
+        <div class="room-section">
+          <h4>Systems</h4>
+          <span style="color:#6c7a88; font-size:12px;">No ship systems accessible from this room.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCENE ════ -->
+    <div class="view-content" id="view-scene">
+      <div class="scene-container">
+        <div class="narration-block">
+          <div class="narration-timestamp">1105-127 / 14:30 ship time</div>
+          Sensors detect a vessel dropping out of jump at extreme range. The signature is faint &mdash; either a small ship or something running low emissions. It's on a vector that will bring it past the gas giant within six hours. Contact designated Alpha.
+        </div>
+        <div class="narration-block">
+          <div class="narration-timestamp">1105-127 / 14:32 ship time</div>
+          The SDB <em>Vigilant</em> hails on local defense frequency. "Unidentified vessel at Collace highport, this is System Defense Boat <em>Vigilant</em>. Confirm your identity and business." Routine patrol check &mdash; or are they interested in Contact Alpha too?
+        </div>
+
+        <div class="scene-image-slot">
+          [Image slot &mdash; GM can upload or generate from narration text]<br/>
+          <span style="font-size:11px; color:#3a4a5a;">Prompt: "Deep space, orange dwarf star in background. A battered 600-ton converted liner at highport mooring. A small patrol boat approaching on an intercept course. Cinematic sci-fi, Traveller RPG aesthetic, used-future technology."</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GM Controls -->
+  <div class="gm-controls">
+    <span class="label">GM</span>
+    <button class="gm-btn" onclick="switchMode('system')">System</button>
+    <button class="gm-btn" onclick="switchMode('subsector')">Subsector</button>
+    <button class="gm-btn" onclick="switchMode('exterior')">Exterior</button>
+    <button class="gm-btn active-mode" onclick="switchMode('deck')">Deck</button>
+    <button class="gm-btn" onclick="switchMode('room')">Room</button>
+    <button class="gm-btn" onclick="switchMode('scene')">Scene</button>
+    <span class="gm-divider"></span>
+    <select style="background:#1a2a3a; color:#c8d0d8; border:1px solid #2a4a6a; border-radius:4px; padding:2px 6px; font-size:11px;">
+      <option>ISS Astral Dawn</option>
+      <option>Armored Pinnace</option>
+      <option>Armed Launch</option>
+    </select>
+    <span class="gm-divider"></span>
+    <div class="gm-toggle">
+      <input type="checkbox" checked id="summon-toggle"/>
+      <label for="summon-toggle" style="font-size:11px;">Player Summon</label>
+    </div>
+    <span class="gm-divider"></span>
+    <button class="gm-btn">Narrate</button>
+    <button class="gm-btn">Upload Image</button>
+    <button class="gm-btn" style="color:#cc4444;">Clear</button>
+  </div>
+
+</div>
+
+<script>
+function switchMode(mode) {
+  document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + mode).classList.add('active');
+  document.getElementById('tab-' + mode).classList.add('active');
+  // Update GM button highlight
+  document.querySelectorAll('.gm-btn').forEach(b => b.classList.remove('active-mode'));
+  // Find matching GM button (approximate)
+  document.querySelectorAll('.gm-btn').forEach(b => {
+    if (b.textContent.toLowerCase().startsWith(mode.substring(0,4))) b.classList.add('active-mode');
+  });
+}
+function switchDeck(deck) {
+  document.querySelectorAll('.deck-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
