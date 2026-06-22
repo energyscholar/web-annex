@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content-Selective Search De-Indexing: A Reproducibility Report</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --muted: #475569;
+  --border: #334155;
+  --suppressed: #ef4444;
+  --indexed: #22c55e;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  color: var(--heading);
+  font-size: 1.15rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+.meta {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.abstract {
+  background: var(--card);
+  border-left: 4px solid var(--blue);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.abstract-title {
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 0.5rem;
+}
+
+.test-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.test-table th {
+  background: var(--card);
+  color: var(--heading);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+  position: sticky;
+  top: 0;
+}
+
+.test-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.test-table tr:hover { background: rgba(30, 41, 59, 0.5); }
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-suppressed { background: rgba(239, 68, 68, 0.15); color: var(--suppressed); }
+.badge-indexed { background: rgba(34, 197, 94, 0.15); color: var(--indexed); }
+.badge-control { background: rgba(34, 197, 94, 0.15); color: var(--indexed); border: 1px solid var(--indexed); }
+
+.query-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.query-text {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--heading);
+  word-break: break-all;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:hover { opacity: 0.85; text-decoration: none; }
+
+.btn-copy {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-try {
+  background: var(--blue);
+  color: white;
+}
+
+.btn-link {
+  background: transparent;
+  color: var(--blue);
+  border: 1px solid var(--blue);
+}
+
+.section-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.alt-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.alt-table th {
+  color: var(--heading);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+
+.alt-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.check { color: var(--green); font-weight: bold; }
+.cross { color: var(--red); font-weight: bold; }
+
+.changelog {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.toc {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.toc-title {
+  color: var(--heading);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.toc ol {
+  padding-left: 1.5rem;
+  color: var(--text);
+}
+
+.toc li { margin: 0.25rem 0; }
+
+.decisive {
+  background: var(--card);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.decisive-title {
+  font-weight: 700;
+  color: var(--amber);
+  margin-bottom: 0.5rem;
+}
+
+ol.steps { padding-left: 1.5rem; }
+ol.steps li { margin-bottom: 0.75rem; }
+
+ul.plain { padding-left: 1.5rem; }
+ul.plain li { margin-bottom: 0.5rem; }
+
+.test-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid var(--border);
+}
+
+.test-card.suppressed { border-left-color: var(--red); }
+.test-card.control { border-left-color: var(--green); }
+
+.test-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.test-card-id {
+  font-weight: 700;
+  color: var(--heading);
+  font-size: 1.05rem;
+}
+
+.test-card-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.test-card-query {
+  margin: 0.75rem 0;
+}
+
+.test-card-result {
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.test-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.copied-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--green);
+  color: #0f172a;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.copied-toast.show { opacity: 1; }
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  .test-table { font-size: 0.8rem; }
+  .test-table th, .test-table td { padding: 0.5rem; }
+  body { padding: 1rem 0.5rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Content-Selective Search De-Indexing: A Reproducibility Report</h1>
+<div class="meta">
+  Bruce Stephenson &middot; June 2026 &middot; Initial measurement: June 21, 2026
+</div>
+
+<div class="abstract">
+  <div class="abstract-title">Abstract</div>
+  <p style="margin-bottom:0">We document content-selective search de-indexing across two platforms (Cryptome, Substack). Control cases on each platform demonstrate that the de-indexing is content-based, not domain-level or SEO-related. Every test in this report is a Google search that a reader can perform independently in under five minutes. We make no claims about the mechanism or intent behind the de-indexing. This report documents <em>that</em> it occurs, provides evidence of selectivity, and is designed for independent replication.</p>
+</div>
+
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <ol>
+    <li><a href="#methodology">Methodology</a></li>
+    <li><a href="#tests">Test Battery</a></li>
+    <li><a href="#controls">Controls &amp; Alternative Explanations</a></li>
+    <li><a href="#preservation">Preservation Evidence</a></li>
+    <li><a href="#replication">Reproducibility Instructions</a></li>
+    <li><a href="#changelog">Change Log</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════════════════════ 1. METHODOLOGY ═══════════════════════════ -->
+
+<h2 id="methodology">1. Methodology</h2>
+
+<h3>What We Test</h3>
+<p>Whether specific URLs that exist and return HTTP 200 appear in Google search results when searched by exact title, by content keywords, or by the <code>site:</code> operator.</p>
+
+<h3>What Constitutes a Control</h3>
+<p>Content on the <strong>same domain</strong>, by the <strong>same author</strong>, with <strong>similar age and traffic characteristics</strong>, that <em>is</em> indexed by Google. If the suppressed content's absence were caused by domain-level blocking, poor SEO, or low traffic, the control content would be equally absent.</p>
+
+<h3>Tool Required</h3>
+<p><a href="https://www.google.com" target="_blank" rel="noopener">Google Search</a>. No specialized software, subscriptions, or technical skills are needed.</p>
+
+<h3>Selection Criteria</h3>
+<p>Only cases that meet <strong>all three</strong> conditions are included:</p>
+<ul class="plain">
+  <li>Replicable by anyone in 30 seconds with a Google search</li>
+  <li>Have a control case on the same platform proving selectivity is not domain-level</li>
+  <li>Cannot be explained by any standard alternative (low traffic, robots.txt, platform moderation, content age, noindex tags)</li>
+</ul>
+<p>Cases that are ambiguous, require platform-specific knowledge, or could plausibly be explained by organic search behavior are excluded.</p>
+
+<!-- ═══════════════════════════ 2. TEST BATTERY ═══════════════════════════ -->
+
+<h2 id="tests">2. Test Battery</h2>
+
+<p>Each test below includes the exact search query, a button to copy it to your clipboard, a link to run it on Google, and a direct link to the content proving it exists.</p>
+
+<!-- T01 -->
+<div class="test-card suppressed">
+  <div class="test-card-header">
+    <span class="test-card-id">T01 &mdash; Cryptome Title Search</span>
+    <span class="badge badge-suppressed">Not Found</span>
+  </div>
+  <div class="test-card-meta">Platform: Cryptome &middot; Type: Title + keyword search</div>
+  <div class="test-card-query">
+    <div class="query-box">
+      <span class="query-text" data-query="Quantum Computation Cognitive Footprint cryptome">Quantum Computation Cognitive Footprint cryptome</span>
+    </div>
+  </div>
+  <div class="test-card-actions">
+    <button class="btn btn-copy" onclick="copyQuery(this)">Copy query</button>
+    <a class="btn btn-try" href="https://www.google.com/search?q=Quantum+Computation+Cognitive+Footprint+cryptome" target="_blank" rel="noopener">Try it on Google</a>
+    <a class="btn btn-link" href="http://cryptome.org/2012/03/qc-footprint.htm" target="_blank" rel="noopener">Direct link</a>
+  </div>
+  <div class="test-card-result">
+    <strong>Expected if indexed:</strong> The Cryptome page appears in results.<br>
+    <strong>Actual result:</strong> Zero relevant results. The page does not appear in any form.
+  </div>
+</div>
+
+<!-- T02 -->
+<div class="test-card suppressed">
+  <div class="test-card-header">
+    <span class="test-card-id">T02 &mdash; Substack site: Search ("Kangaroos")</span>
+    <span class="badge badge-suppressed">Not Found</span>
+  </div>
+  <div class="test-card-meta">Platform: Substack &middot; Type: <code>site:</code> operator</div>
+  <div class="test-card-query">
+    <div class="query-box">
+      <span class="query-text" data-query='site:postquantum.substack.com "Kangaroos"'>site:postquantum.substack.com "Kangaroos"</span>
+    </div>
+  </div>
+  <div class="test-card-actions">
+    <button class="btn btn-copy" onclick="copyQuery(this)">Copy query</button>
+    <a class="btn btn-try" href="https://www.google.com/search?q=site%3Apostquantum.substack.com+%22Kangaroos%22" target="_blank" rel="noopener">Try it on Google</a>
+    <a class="btn btn-link" href="https://postquantum.substack.com/p/kangaroos" target="_blank" rel="noopener">Direct link</a>
+  </div>
+  <div class="test-card-result">
+    <strong>Expected if indexed:</strong> The article appears as a result from postquantum.substack.com.<br>
+    <strong>Actual result:</strong> Zero results from this domain for this query.
+  </div>
+</div>
+
+<!-- T03 -->
+<div class="test-card suppressed">
+  <div class="test-card-header">
+    <span class="test-card-id">T03 &mdash; Substack site: Search ("Death of Alan Turing")</span>
+    <span class="badge badge-suppressed">Not Found</span>
+  </div>
+  <div class="test-card-meta">Platform: Substack &middot; Type: <code>site:</code> operator</div>
+  <div class="test-card-query">
+    <div class="query-box">
+      <span class="query-text" data-query='site:postquantum.substack.com "Death of Alan Turing"'>site:postquantum.substack.com "Death of Alan Turing"</span>
+    </div>
+  </div>
+  <div class="test-card-actions">
+    <button class="btn btn-copy" onclick="copyQuery(this)">Copy query</button>
+    <a class="btn btn-try" href="https://www.google.com/search?q=site%3Apostquantum.substack.com+%22Death+of+Alan+Turing%22" target="_blank" rel="noopener">Try it on Google</a>
+    <a class="btn btn-link" href="https://postquantum.substack.com/p/death-alan-turing" target="_blank" rel="noopener">Direct link</a>
+  </div>
+  <div class="test-card-result">
+    <strong>Expected if indexed:</strong> The article appears as a result from postquantum.substack.com.<br>
+    <strong>Actual result:</strong> Zero results from this domain for this query.
+  </div>
+</div>
+
+<!-- C01 -->
+<div class="test-card control">
+  <div class="test-card-header">
+    <span class="test-card-id">C01 &mdash; Substack site: Search ("Magic Numbers") — CONTROL</span>
+    <span class="badge badge-control">Indexed</span>
+  </div>
+  <div class="test-card-meta">Platform: Substack &middot; Type: <code>site:</code> operator &middot; Same author, same domain</div>
+  <div class="test-card-query">
+    <div class="query-box">
+      <span class="query-text" data-query='site:postquantum.substack.com "Magic Numbers"'>site:postquantum.substack.com "Magic Numbers"</span>
+    </div>
+  </div>
+  <div class="test-card-actions">
+    <button class="btn btn-copy" onclick="copyQuery(this)">Copy query</button>
+    <a class="btn btn-try" href="https://www.google.com/search?q=site%3Apostquantum.substack.com+%22Magic+Numbers%22" target="_blank" rel="noopener">Try it on Google</a>
+    <a class="btn btn-link" href="https://postquantum.substack.com/p/magic-numbers-are-a-joke" target="_blank" rel="noopener">Direct link</a>
+  </div>
+  <div class="test-card-result">
+    <strong>Expected if indexed:</strong> The article appears as a first result.<br>
+    <strong>Actual result:</strong> <span class="check">Article returned as first result.</span>
+  </div>
+</div>
+
+<div class="decisive">
+  <div class="decisive-title">Why C01 Is Decisive</div>
+  <p style="margin-bottom:0">C01 uses the <strong>same author</strong>, <strong>same domain</strong>, <strong>same Substack account</strong>, and a <strong>similar publication date range</strong> as T02 and T03. If SEO quality, traffic volume, or domain reputation explained the absence, all articles on this Substack would be equally invisible. They are not. The selectivity is content-based.</p>
+</div>
+
+<!-- ═══════════════════════ 3. CONTROLS & ALTERNATIVES ═══════════════════ -->
+
+<h2 id="controls">3. Controls &amp; Alternative Explanations</h2>
+
+<p>Each standard explanation for a URL not appearing in search results is examined and ruled out.</p>
+
+<table class="alt-table">
+  <thead>
+    <tr>
+      <th>Alternative Explanation</th>
+      <th>Evidence Against</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Domain-level blocking</strong></td>
+      <td>C01 proves <code>postquantum.substack.com</code> is indexed. Other Cryptome pages (e.g., the site's front page, its widely linked documents) appear normally in Google results. The de-indexing is page-specific, not domain-level.</td>
+    </tr>
+    <tr>
+      <td><strong>Low PageRank / poor SEO</strong></td>
+      <td>T02, T03, and C01 are on the same Substack account by the same author, with similar publication dates and audience. Substack controls the page structure, metadata, and SEO for all articles equally. T01 (Cryptome) has 42 Wayback Machine captures over 12 years — Google's crawler has visited it hundreds of times.</td>
+    </tr>
+    <tr>
+      <td><strong>robots.txt exclusion</strong></td>
+      <td>
+        Substack's <a href="https://substack.com/robots.txt" target="_blank" rel="noopener">robots.txt</a> does not disallow post pages. All articles from the account (including C01) use the same URL structure (<code>/p/slug</code>).<br>
+        Cryptome's <a href="http://cryptome.org/robots.txt" target="_blank" rel="noopener">robots.txt</a> does not disallow the path <code>/2012/03/qc-footprint.htm</code>.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>noindex meta tag</strong></td>
+      <td>Substack controls the <code>&lt;meta&gt;</code> tags for all articles. Since C01 is indexed, Substack does not set <code>noindex</code> on articles by default. The suppressed and control articles use the same template. T01 (Cryptome) uses static HTML with no <code>noindex</code> directive.</td>
+    </tr>
+    <tr>
+      <td><strong>Content age</strong></td>
+      <td>T01 was published in March 2012. T02 and T03 are from 2022&ndash;2024. C01 is from December 2022. Age does not correlate with de-indexing — old and recent content are both affected, while content of similar age is indexed.</td>
+    </tr>
+    <tr>
+      <td><strong>Platform moderation</strong></td>
+      <td>All four URLs return HTTP 200 — neither platform has removed or restricted the content. The content is publicly accessible to anyone who visits the URL directly.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════ 4. PRESERVATION ═══════════════════════ -->
+
+<h2 id="preservation">4. Preservation Evidence</h2>
+
+<p>Each URL is verified to exist and to be archived independently of this report.</p>
+
+<table class="alt-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>URL</th>
+      <th>HTTP Status</th>
+      <th>Wayback Machine</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>T01</td>
+      <td><a href="http://cryptome.org/2012/03/qc-footprint.htm" target="_blank" rel="noopener">cryptome.org/2012/03/qc-footprint.htm</a></td>
+      <td><span class="check">200</span></td>
+      <td><a href="https://web.archive.org/web/2024*/http://cryptome.org/2012/03/qc-footprint.htm" target="_blank" rel="noopener">42 captures, 2012&ndash;2024</a></td>
+    </tr>
+    <tr>
+      <td>T02</td>
+      <td><a href="https://postquantum.substack.com/p/kangaroos" target="_blank" rel="noopener">postquantum.substack.com/p/kangaroos</a></td>
+      <td><span class="check">200</span></td>
+      <td><a href="https://web.archive.org/web/2024*/https://postquantum.substack.com/p/kangaroos" target="_blank" rel="noopener">Archive link</a></td>
+    </tr>
+    <tr>
+      <td>T03</td>
+      <td><a href="https://postquantum.substack.com/p/death-alan-turing" target="_blank" rel="noopener">postquantum.substack.com/p/death-alan-turing</a></td>
+      <td><span class="check">200</span></td>
+      <td><a href="https://web.archive.org/web/2024*/https://postquantum.substack.com/p/death-alan-turing" target="_blank" rel="noopener">Archive link</a></td>
+    </tr>
+    <tr>
+      <td>C01</td>
+      <td><a href="https://postquantum.substack.com/p/magic-numbers-are-a-joke" target="_blank" rel="noopener">postquantum.substack.com/p/magic-numbers-are-a-joke</a></td>
+      <td><span class="check">200</span></td>
+      <td><a href="https://web.archive.org/web/2024*/https://postquantum.substack.com/p/magic-numbers-are-a-joke" target="_blank" rel="noopener">Archive link</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════ 5. REPRODUCIBILITY ═══════════════════════ -->
+
+<h2 id="replication">5. Reproducibility Instructions</h2>
+
+<h3>Replicate the Full Battery</h3>
+<ol class="steps">
+  <li>Open Google Search in a standard browser (private/incognito window recommended to avoid personalization).</li>
+  <li>For each test above, click "Copy query" and paste it into Google, or click "Try it on Google."</li>
+  <li>Record whether the target URL appears anywhere in the results.</li>
+  <li>Click each "Direct link" to confirm the content still exists (HTTP 200).</li>
+</ol>
+
+<h3>Test from Different Locations</h3>
+<ul class="plain">
+  <li>Try Google domains for different countries: <code>google.co.uk</code>, <code>google.de</code>, <code>google.ca</code></li>
+  <li>Use a VPN to test from different geographic regions</li>
+  <li>Results that differ by location are themselves informative — note the location in your log</li>
+</ul>
+
+<h3>Test on Alternative Search Engines</h3>
+<ul class="plain">
+  <li><a href="https://www.bing.com" target="_blank" rel="noopener">Bing</a> — repeat each query, note whether suppression is Google-specific</li>
+  <li><a href="https://duckduckgo.com" target="_blank" rel="noopener">DuckDuckGo</a> — uses Bing's index; differences from Bing indicate DDG-specific filtering</li>
+  <li><a href="https://search.brave.com" target="_blank" rel="noopener">Brave Search</a> — independent index</li>
+</ul>
+
+<h3>Set Up Monitoring</h3>
+<p>To track changes over time, re-run the full battery monthly and record the date and result for each test. Any change in status (SUPPRESSED &rarr; INDEXED or vice versa) is itself a data point worth documenting.</p>
+
+<!-- ═══════════════════════ 6. CHANGE LOG ═══════════════════════ -->
+
+<h2 id="changelog">6. Change Log</h2>
+
+<div class="changelog">
+<strong>2026-06-21</strong> — Initial measurement. All tests performed from Bellingham, WA, USA.
+T01: NOT FOUND. T02: NOT FOUND. T03: NOT FOUND. C01: FOUND (first result).
+</div>
+
+<!-- ═══════════════════════ 7. CONTACT ═══════════════════════ -->
+
+<h2 id="contact">7. Contact</h2>
+
+<p>To report your replication results, discrepancies with the documented outcomes, or changes observed over time:</p>
+<p><a href="mailto:energyscholar@gmail.com">energyscholar@gmail.com</a></p>
+
+</div><!-- .container -->
+
+<div class="copied-toast" id="toast">Copied to clipboard</div>
+
+<script>
+function copyQuery(btn) {
+  var card = btn.closest('.test-card');
+  var queryEl = card.querySelector('.query-text');
+  var text = queryEl.getAttribute('data-query');
+  navigator.clipboard.writeText(text).then(function() {
+    var toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 1500);
+  });
+}
+</script>
+</body>
+</html>
