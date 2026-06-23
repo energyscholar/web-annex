@@ -334,7 +334,7 @@ ul.plain li { margin-bottom: 0.5rem; }
 
 <div class="abstract">
   <div class="abstract-title">Abstract</div>
-  <p style="margin-bottom:0">We document content-selective search de-indexing across two platforms (Cryptome, Substack). Control cases on each platform demonstrate that the de-indexing is content-based, not domain-level or SEO-related. Every test in this report is a Google search that a reader can perform independently in under five minutes. We make no claims about the mechanism or intent behind the de-indexing. This report documents <em>that</em> it occurs, provides evidence of selectivity, and is designed for independent replication.</p>
+  <p style="margin-bottom:0">We document content-selective search de-indexing across three platforms (Cryptome, Slashdot, Substack). Control cases on each platform demonstrate that the de-indexing is content-based, not domain-level or SEO-related. Every test in this report is a Google search that a reader can perform independently in under five minutes. We make no claims about the mechanism or intent behind the de-indexing. This report documents <em>that</em> it occurs, provides evidence of selectivity, and is designed for independent replication.</p>
 </div>
 
 <div class="toc">
@@ -482,6 +482,57 @@ ul.plain li { margin-bottom: 0.5rem; }
   <p style="margin-bottom:0">C01 uses the <strong>same author</strong>, <strong>same domain</strong>, <strong>same Substack account</strong>, and a <strong>similar publication date range</strong> as T02 and T03. If SEO quality, traffic volume, or domain reputation explained the absence, all articles on this Substack would be equally invisible. They are not. The selectivity is content-based.</p>
 </div>
 
+<!-- T04 -->
+<div class="test-card suppressed">
+  <div class="test-card-header">
+    <span class="test-card-id">T04 &mdash; Slashdot Ghost Comment (Direct URL Search)</span>
+    <span class="badge badge-suppressed">Not Found</span>
+  </div>
+  <div class="test-card-meta">Platform: Slashdot &middot; Type: Direct URL search &middot; Comment by EnergyScholar (UID 801915), Score 5/Funny</div>
+  <div class="test-card-query">
+    <div class="query-box">
+      <span class="query-text" data-query="slashdot.org/comments.pl?sid=2926019&cid=40375589">slashdot.org/comments.pl?sid=2926019&amp;cid=40375589</span>
+    </div>
+  </div>
+  <div class="test-card-actions">
+    <button class="btn btn-copy" onclick="copyQuery(this)">Copy query</button>
+    <a class="btn btn-try" href="https://www.google.com/search?q=slashdot.org%2Fcomments.pl%3Fsid%3D2926019%26cid%3D40375589" target="_blank" rel="noopener">Try it on Google</a>
+    <a class="btn btn-link" href="https://slashdot.org/comments.pl?sid=2926019&cid=40375589" target="_blank" rel="noopener">Direct link</a>
+  </div>
+  <div class="test-card-result">
+    <strong>Expected if indexed:</strong> The Slashdot comment page appears in results.<br>
+    <strong>Actual result:</strong> Zero results. The comment exists at the direct URL (Score 5, fully visible) but is invisible to search. The parent article is "NSA Claims It Would Violate Americans' Privacy To Say How Many of Us It Spied On" (June 2012).
+  </div>
+</div>
+
+<!-- C02 -->
+<div class="test-card control">
+  <div class="test-card-header">
+    <span class="test-card-id">C02 &mdash; Slashdot EnergyScholar Comments (site: Search) — CONTROL</span>
+    <span class="badge badge-control">Indexed</span>
+  </div>
+  <div class="test-card-meta">Platform: Slashdot &middot; Type: <code>site:</code> operator &middot; Same author, same platform, same era</div>
+  <div class="test-card-query">
+    <div class="query-box">
+      <span class="query-text" data-query='site:slashdot.org "energyscholar"'>site:slashdot.org "energyscholar"</span>
+    </div>
+  </div>
+  <div class="test-card-actions">
+    <button class="btn btn-copy" onclick="copyQuery(this)">Copy query</button>
+    <a class="btn btn-try" href="https://www.google.com/search?q=site%3Aslashdot.org+%22energyscholar%22" target="_blank" rel="noopener">Try it on Google</a>
+    <a class="btn btn-link" href="https://slashdot.org/~EnergyScholar/comments" target="_blank" rel="noopener">Profile</a>
+  </div>
+  <div class="test-card-result">
+    <strong>Expected if indexed:</strong> Multiple EnergyScholar comments appear across Slashdot articles.<br>
+    <strong>Actual result:</strong> <span class="check">10+ comments returned across multiple articles from 2011&ndash;2013.</span>
+  </div>
+</div>
+
+<div class="decisive">
+  <div class="decisive-title">Why T04/C02 Is the Strongest Case</div>
+  <p style="margin-bottom:0">The same user (EnergyScholar) has 10+ comments indexed on Slashdot — including comments about NSA surveillance, cryptography, and WikiLeaks. The <em>one</em> comment that is invisible to search is the one combining claims about Five Eyes topological quantum computing capability with a prediction that the comment itself would be suppressed. Same user, same platform, same era, same topic area. The selectivity is at the level of a single comment.</p>
+</div>
+
 <!-- ═══════════════════════ 3. CONTROLS & ALTERNATIVES ═══════════════════ -->
 
 <h2 id="controls">3. Controls &amp; Alternative Explanations</h2>
@@ -498,30 +549,31 @@ ul.plain li { margin-bottom: 0.5rem; }
   <tbody>
     <tr>
       <td><strong>Domain-level blocking</strong></td>
-      <td>C01 proves <code>postquantum.substack.com</code> is indexed. Other Cryptome pages (e.g., the site's front page, its widely linked documents) appear normally in Google results. The de-indexing is page-specific, not domain-level.</td>
+      <td>C01 proves <code>postquantum.substack.com</code> is indexed. C02 proves Slashdot comments by the same user are indexed (10+). Other Cryptome pages (e.g., the site's front page, its widely linked documents) appear normally in Google results. The de-indexing is page-specific, not domain-level.</td>
     </tr>
     <tr>
       <td><strong>Low PageRank / poor SEO</strong></td>
-      <td>T02, T03, and C01 are on the same Substack account by the same author, with similar publication dates and audience. Substack controls the page structure, metadata, and SEO for all articles equally. T01 (Cryptome) has 42 Wayback Machine captures over 12 years — Google's crawler has visited it hundreds of times.</td>
+      <td>T02, T03, and C01 are on the same Substack account by the same author, with similar publication dates and audience. Substack controls the page structure, metadata, and SEO for all articles equally. T01 (Cryptome) has 42 Wayback Machine captures over 12 years — Google's crawler has visited it hundreds of times. T04 (Slashdot) is a Score 5 comment by a user whose other 10+ comments are all indexed (C02).</td>
     </tr>
     <tr>
       <td><strong>robots.txt exclusion</strong></td>
       <td>
         Substack's <a href="https://substack.com/robots.txt" target="_blank" rel="noopener">robots.txt</a> does not disallow post pages. All articles from the account (including C01) use the same URL structure (<code>/p/slug</code>).<br>
-        Cryptome's <a href="http://cryptome.org/robots.txt" target="_blank" rel="noopener">robots.txt</a> does not disallow the path <code>/2012/03/qc-footprint.htm</code>.
+        Cryptome's <a href="http://cryptome.org/robots.txt" target="_blank" rel="noopener">robots.txt</a> does not disallow the path <code>/2012/03/qc-footprint.htm</code>.<br>
+        Slashdot's <a href="https://slashdot.org/robots.txt" target="_blank" rel="noopener">robots.txt</a> does not disallow comment pages — and C02 proves they are indexed when not selectively excluded.
       </td>
     </tr>
     <tr>
       <td><strong>noindex meta tag</strong></td>
-      <td>Substack controls the <code>&lt;meta&gt;</code> tags for all articles. Since C01 is indexed, Substack does not set <code>noindex</code> on articles by default. The suppressed and control articles use the same template. T01 (Cryptome) uses static HTML with no <code>noindex</code> directive.</td>
+      <td>Substack controls the <code>&lt;meta&gt;</code> tags for all articles. Since C01 is indexed, Substack does not set <code>noindex</code> on articles by default. The suppressed and control articles use the same template. T01 (Cryptome) uses static HTML with no <code>noindex</code> directive. T04 (Slashdot) uses the same comment template as the 10+ indexed comments by the same user.</td>
     </tr>
     <tr>
       <td><strong>Content age</strong></td>
-      <td>T01 was published in March 2012. T02 and T03 are from 2022&ndash;2024. C01 is from December 2022. Age does not correlate with de-indexing — old and recent content are both affected, while content of similar age is indexed.</td>
+      <td>T01 was published in March 2012. T04 is from June 2012. T02 and T03 are from 2022&ndash;2024. C01 is from December 2022. C02 includes comments from 2011&ndash;2013, the same era as T04. Age does not correlate with de-indexing — old and recent content are both affected, while content of similar age is indexed.</td>
     </tr>
     <tr>
       <td><strong>Platform moderation</strong></td>
-      <td>All four URLs return HTTP 200 — neither platform has removed or restricted the content. The content is publicly accessible to anyone who visits the URL directly.</td>
+      <td>All URLs return HTTP 200 — no platform has removed or restricted the content. The content is publicly accessible to anyone who visits the URL directly.</td>
     </tr>
   </tbody>
 </table>
@@ -561,10 +613,22 @@ ul.plain li { margin-bottom: 0.5rem; }
       <td><a href="https://web.archive.org/web/2024*/https://postquantum.substack.com/p/death-alan-turing" target="_blank" rel="noopener">Archive link</a></td>
     </tr>
     <tr>
+      <td>T04</td>
+      <td><a href="https://slashdot.org/comments.pl?sid=2926019&cid=40375589" target="_blank" rel="noopener">slashdot.org/comments.pl?sid=2926019&amp;cid=40375589</a></td>
+      <td><span class="check">200</span></td>
+      <td><a href="https://web.archive.org/web/2024*/https://slashdot.org/comments.pl?sid=2926019&cid=40375589" target="_blank" rel="noopener">Archive link</a></td>
+    </tr>
+    <tr>
       <td>C01</td>
       <td><a href="https://postquantum.substack.com/p/magic-numbers-are-a-joke" target="_blank" rel="noopener">postquantum.substack.com/p/magic-numbers-are-a-joke</a></td>
       <td><span class="check">200</span></td>
       <td><a href="https://web.archive.org/web/2024*/https://postquantum.substack.com/p/magic-numbers-are-a-joke" target="_blank" rel="noopener">Archive link</a></td>
+    </tr>
+    <tr>
+      <td>C02</td>
+      <td><a href="https://yro.slashdot.org/story/12/07/24/1348219/spooky-how-nsas-surveillance-algorithms-see-into-your-life" target="_blank" rel="noopener">slashdot.org &mdash; "Spooky: How NSA's Surveillance Algorithms See Into Your Life" (EnergyScholar comments)</a></td>
+      <td><span class="check">200</span></td>
+      <td><a href="https://web.archive.org/web/2024*/https://yro.slashdot.org/story/12/07/24/1348219/spooky-how-nsas-surveillance-algorithms-see-into-your-life" target="_blank" rel="noopener">Archive link</a></td>
     </tr>
   </tbody>
 </table>
@@ -603,6 +667,10 @@ ul.plain li { margin-bottom: 0.5rem; }
 <h2 id="changelog">6. Change Log</h2>
 
 <div class="changelog">
+<strong>2026-06-22</strong> — Added T04 (Slashdot Ghost Comment) and C02 (Slashdot EnergyScholar control).
+Note: prior to June 2026, site:slashdot.org "energyscholar" returned 0 results.
+As of this date, 10+ comments are indexed — but T04 remains selectively excluded.
+
 <strong>2026-06-21</strong> — Initial measurement. All tests performed from Bellingham, WA, USA.
 T01: NOT FOUND. T02: NOT FOUND. T03: NOT FOUND. C01: FOUND (first result).
 </div>
