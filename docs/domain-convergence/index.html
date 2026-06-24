@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain Convergence &mdash; An Animated Introduction</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 2.6rem;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin: 3.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--muted);
+}
+
+h2 .section-number {
+  color: var(--blue);
+  font-size: 0.9em;
+  margin-right: 0.3em;
+}
+
+h3 {
+  font-size: 1.3rem;
+  margin: 1.8rem 0 0.8rem;
+  color: var(--line);
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 1.5rem 1.8rem;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.card.highlight {
+  border-left: 3px solid var(--golden);
+}
+
+.math {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  color: var(--heading);
+}
+
+.math-block {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  color: var(--heading);
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 1.1em;
+}
+
+em {
+  font-style: italic;
+  color: var(--line);
+}
+
+strong {
+  color: var(--heading);
+  font-weight: 600;
+}
+
+.svg-container {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.svg-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.replay-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--muted);
+  color: var(--line);
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: system-ui, sans-serif;
+  z-index: 10;
+  transition: all 0.2s;
+}
+.replay-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: var(--heading);
+  border-color: var(--line);
+}
+
+.domain-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem 2rem;
+  margin: 1.2rem 0;
+}
+
+.domain-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.domain-num {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--muted);
+  font-size: 0.9em;
+  min-width: 1.5em;
+  text-align: right;
+}
+
+.cluster-label {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
+  margin-right: 0.3em;
+}
+.cluster-A { background: rgba(59,130,246,0.15); color: var(--blue); }
+.cluster-B { background: rgba(34,197,94,0.15); color: var(--green); }
+.cluster-C { background: rgba(251,191,36,0.15); color: var(--golden); }
+.cluster-D { background: rgba(168,85,247,0.15); color: var(--purple); }
+.cluster-E { background: rgba(239,68,68,0.15); color: var(--red); }
+
+.bridge-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2rem 0;
+  font-size: 0.95em;
+}
+
+.bridge-table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--muted);
+}
+
+.bridge-table td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+  vertical-align: top;
+}
+
+.bridge-table tr:last-child td {
+  border-bottom: none;
+}
+
+.status-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+.status-known { background: rgba(34,197,94,0.15); color: var(--green); }
+.status-theoretical { background: rgba(168,85,247,0.15); color: var(--purple); }
+.status-speculative { background: rgba(245,158,11,0.15); color: var(--amber); }
+.status-emerging { background: rgba(251,191,36,0.15); color: var(--golden); }
+
+.stack-item {
+  display: flex;
+  align-items: stretch;
+  margin: 0.4rem 0;
+  gap: 0;
+}
+
+.stack-num {
+  min-width: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.1em;
+  color: var(--heading);
+  background: rgba(59,130,246,0.1);
+  border-radius: 6px 0 0 6px;
+}
+
+.stack-content {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  background: var(--card);
+  border-radius: 0 6px 6px 0;
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  border-left: none;
+}
+
+.stack-content .property {
+  color: var(--heading);
+  font-weight: 600;
+}
+
+.stack-content .domains {
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.toc {
+  margin: 2rem 0;
+}
+
+.toc ol {
+  list-style: none;
+  counter-reset: toc-counter;
+}
+
+.toc li {
+  counter-increment: toc-counter;
+  margin: 0.4rem 0;
+}
+
+.toc li::before {
+  content: counter(toc-counter) ".";
+  color: var(--blue);
+  font-family: 'Times New Roman', Georgia, serif;
+  margin-right: 0.5em;
+}
+
+.toc a {
+  color: var(--text);
+  transition: color 0.2s;
+}
+.toc a:hover {
+  color: var(--heading);
+}
+
+.citation {
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.closing-line {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.15em;
+  color: var(--heading);
+  text-align: center;
+  padding: 2.5rem 1rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85em;
+  padding: 3rem 0 1rem;
+  border-top: 1px solid rgba(71,85,105,0.3);
+  margin-top: 3rem;
+}
+
+abbr {
+  text-decoration: underline dotted;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.4rem; }
+  .domain-list { grid-template-columns: 1fr; }
+  body { font-size: 16px; }
+  .container { padding: 1rem 1rem 3rem; }
+}
+</style>
+</head>
+<body>
+<nav style="background:#1e293b;padding:0.5rem 1rem;font-family:system-ui,sans-serif;font-size:0.85rem;border-bottom:1px solid #334155;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;">
+    <a href="../" style="color:#64748b;text-decoration:none;">&#8592; Web Annex</a>
+    <span style="color:#334155;">|</span>
+    <a href="../anyon-fusion/" style="color:#94a3b8;text-decoration:none;">Anyon Fusion</a>
+    <a href="../domain-convergence/" style="color:#f1f5f9;text-decoration:none;font-weight:600;">Domain Convergence</a>
+    <a href="../criticality-bridges/" style="color:#94a3b8;text-decoration:none;">Criticality Bridges</a>
+    <a href="../physical-systems-chart/" style="color:#94a3b8;text-decoration:none;">Physical Systems</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<h1>Domain Convergence</h1>
+<p class="subtitle">An Animated Introduction</p>
+
+<nav class="toc card">
+  <ol>
+    <li><a href="#puzzle">The Puzzle</a></li>
+    <li><a href="#domains">Eleven Domains</a></li>
+    <li><a href="#clusters">Five Clusters</a></li>
+    <li><a href="#bridges">Seven Bridges</a></li>
+    <li><a href="#scale">Scale Invariance as Stitching</a></li>
+    <li><a href="#pylons">The Pylon Inventory</a></li>
+    <li><a href="#ac-bridge">The AC Bridge &mdash; Structural Identity</a></li>
+    <li><a href="#stack">The Emergent Stack</a></li>
+  </ol>
+</nav>
+
+<!-- ======================================================================
+     SECTION 1: THE PUZZLE
+     ====================================================================== -->
+
+<h2 id="puzzle"><span class="section-number">1.</span> The Puzzle</h2>
+
+<p>Why do eleven apparently unrelated scientific fields keep discovering the same mathematical structures?</p>
+
+<p>Across topology, condensed matter physics, origin-of-life chemistry, nonlinear dynamics, computation theory, and materials science, researchers working independently &mdash; often unaware of each other's results &mdash; find the same patterns recurring:</p>
+
+<div class="card">
+  <p><strong>Self-sustaining closure.</strong> Systems that maintain themselves by producing their own components.</p>
+  <p><strong>Spontaneous emergence at critical thresholds.</strong> Order appearing abruptly when a parameter crosses a value.</p>
+  <p><strong>Topological protection.</strong> Properties that survive local perturbation because they depend on global structure.</p>
+  <p><strong>Distributed coordination.</strong> Coherent behavior without central control.</p>
+</div>
+
+<p>Each field has its own vocabulary, its own journals, its own conferences. A topologist studying knot invariants does not typically read Stuart Kauffman's work on autocatalytic sets. A condensed matter physicist measuring anyonic braiding statistics rarely encounters Maturana and Varela's theory of autopoiesis. Yet the mathematical forms they discover are, in several precise senses, identical.</p>
+
+<p>This tutorial presents the observation and asks what it might mean.</p>
+
+<!-- ======================================================================
+     SECTION 2: ELEVEN DOMAINS
+     ====================================================================== -->
+
+<h2 id="domains"><span class="section-number">2.</span> Eleven Domains</h2>
+
+<p>The eleven domains below each represent a mature scientific literature. They span pure mathematics, theoretical physics, chemistry, biology, and computer science. Their shared feature is that each studies some aspect of what happens when a two-dimensional substrate develops topological order.</p>
+
+<div class="svg-container" id="svg-domains">
+  <button class="replay-btn" onclick="replayDomains()">Replay</button>
+  <svg viewBox="0 0 860 520" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Domain circles will be populated by JS -->
+    <g id="domain-circles"></g>
+  </svg>
+</div>
+
+<div class="domain-list">
+  <div class="domain-item"><span class="domain-num">1.</span> <span><strong>Topology</strong> &mdash; knots, tangles, braids</span></div>
+  <div class="domain-item"><span class="domain-num">2.</span> <span><strong>Topological field theory</strong> &mdash; anyons, <abbr title="Topological Quantum Field Theory &mdash; physics of anyons and topological invariants">TQFT</abbr></span></div>
+  <div class="domain-item"><span class="domain-num">3.</span> <span><strong>Condensed matter</strong> &mdash; materials where topology becomes real</span></div>
+  <div class="domain-item"><span class="domain-num">4.</span> <span><strong>Topological quantum computation</strong> &mdash; topology as logic gates</span></div>
+  <div class="domain-item"><span class="domain-num">5.</span> <span><strong>Solitons</strong> &mdash; persistent nonlinear waves</span></div>
+  <div class="domain-item"><span class="domain-num">6.</span> <span><strong>Nonlinear dynamics / criticality</strong> &mdash; phase transitions, tipping points</span></div>
+  <div class="domain-item"><span class="domain-num">7.</span> <span><strong>Autocatalysis</strong> &mdash; self-sustaining chemical networks (Kauffman)</span></div>
+  <div class="domain-item"><span class="domain-num">8.</span> <span><strong>Autopoiesis</strong> &mdash; self-creating systems (Maturana, Varela)</span></div>
+  <div class="domain-item"><span class="domain-num">9.</span> <span><strong>Universality / cellular automata</strong> &mdash; simple rules, complex behavior (Wolfram)</span></div>
+  <div class="domain-item"><span class="domain-num">10.</span> <span><strong>Parallel computation</strong> &mdash; distributed processing without central control</span></div>
+  <div class="domain-item"><span class="domain-num">11.</span> <span><strong>Materials science</strong> &mdash; physical instantiation</span></div>
+</div>
+
+<p>Each domain has produced deep results independently. The question is what happens when you read across all eleven.</p>
+
+<!-- ======================================================================
+     SECTION 3: FIVE CLUSTERS
+     ====================================================================== -->
+
+<h2 id="clusters"><span class="section-number">3.</span> Five Clusters</h2>
+
+<p>The eleven domains are not uniformly distant from each other. They organize naturally into five clusters, each representing a group of fields where researchers already cite each other's work. The interesting gaps &mdash; and the interesting connections &mdash; lie <em>between</em> clusters.</p>
+
+<div class="svg-container" id="svg-clusters">
+  <button class="replay-btn" onclick="replayClusters()">Replay</button>
+  <svg viewBox="0 0 860 560" xmlns="http://www.w3.org/2000/svg">
+    <g id="cluster-scene"></g>
+  </svg>
+</div>
+
+<div class="card">
+  <p><span class="cluster-label cluster-A">A</span> <strong>Topology</strong> &mdash; domains 1, 2, 3, 4. The mathematical core: pure topology, topological field theory, condensed matter realizations, and topological quantum computation. A highly interconnected literature unified by the language of braids, anyons, and modular tensor categories.</p>
+  <p><span class="cluster-label cluster-B">B</span> <strong>Dynamics</strong> &mdash; domains 5, 6. Nonlinear coherent structures: solitons as persistent nonlinear waves, criticality as the study of phase transitions and scaling behavior. Connected by the mathematics of nonlinear partial differential equations.</p>
+  <p><span class="cluster-label cluster-C">C</span> <strong>Origin-of-life</strong> &mdash; domains 7, 8. Self-sustaining networks: Kauffman's reflexively autocatalytic food-generated (<abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr>) sets, and Maturana and Varela's autopoiesis. Connected by the question of how systems produce their own components.</p>
+  <p><span class="cluster-label cluster-D">D</span> <strong>Computation</strong> &mdash; domains 9, 10. Emergent information processing: Wolfram's cellular automata and universality, and parallel/distributed computation. Connected by the question of how complex behavior emerges from simple local rules.</p>
+  <p><span class="cluster-label cluster-E">E</span> <strong>Materials</strong> &mdash; domain 11, with overlap into 3 and 4. Physical realization: topological insulators, Majorana fermions, photonic crystals. The domain where mathematical structures become measurable.</p>
+</div>
+
+<!-- ======================================================================
+     SECTION 4: SEVEN BRIDGES
+     ====================================================================== -->
+
+<h2 id="bridges"><span class="section-number">4.</span> Seven Bridges</h2>
+
+<p>Five clusters require a minimum of five bridges to form a connected network. The proposed structure includes seven: five primary bridges and two redundancy backups. The redundancy matters because two of the primary bridges are fragile &mdash; they cross the deepest disciplinary divides.</p>
+
+<div class="svg-container" id="svg-bridges">
+  <button class="replay-btn" onclick="replayBridges()">Replay</button>
+  <svg viewBox="0 0 860 500" xmlns="http://www.w3.org/2000/svg">
+    <g id="bridge-scene"></g>
+  </svg>
+</div>
+
+<div class="card">
+  <p><strong>Bridge 1: CB &mdash; Autocatalysis &harr; Criticality.</strong> The easiest bridge. Kauffman's edge-of-chaos transition in random Boolean networks <em>is</em> directed percolation. Two literatures have arrived at the same result through different formalisms. The connection has been noted but not yet formalized as a mathematical identity. <span class="citation">(Kauffman 1993; Derrida &amp; Pomeau 1986)</span></p>
+
+  <p><strong>Bridge 2: CD-a &mdash; Autocatalysis &harr; Cellular automata.</strong> Boolean networks are cellular automata with irregular connectivity. The category-theoretic formalization of this equivalence is underway. <span class="citation">(Kauffman 1969; Wolfram 2002)</span></p>
+
+  <p><strong>Bridge 3: CD-b &mdash; Autopoiesis &harr; Computation.</strong> A fragile bridge. Philosophy meets engineering. Louis Kauffman's eigenform theory provides the strongest existing link: a self-referential fixed point where observation and object co-arise. <span class="citation">(L. Kauffman 2005; Maturana &amp; Varela 1980)</span></p>
+
+  <p><strong>Bridge 4: BC &mdash; Solitons &harr; Origin-of-life.</strong> A fragile bridge. Nobody currently spans both fields at a technical level. The connection runs through dissipative solitons in reaction-diffusion systems, which can form self-sustaining localized structures in chemical media. <span class="citation">(Akhmediev &amp; Ankiewicz 2005)</span></p>
+
+  <p><strong>Bridge 5: AC &mdash; Topology &harr; Autocatalysis.</strong> The capstone &mdash; the largest gap and the most consequential bridge. Discussed in detail in Section 7.</p>
+
+  <p><strong>Bridge 6: BD &mdash; Dynamics &harr; Computation.</strong> Redundancy backup for bridge 3. Reservoir computing at criticality: dynamical systems at phase transitions perform optimal computation. <span class="citation">(Bertschinger &amp; Natschl&auml;ger 2004; Langton 1990)</span></p>
+
+  <p><strong>Bridge 7: AB &mdash; Topology &harr; Solitons.</strong> Redundancy backup for bridge 4. Topological solitons are already classified by homotopy groups. This bridge is partially built. <span class="citation">(Manton &amp; Sutcliffe 2004)</span></p>
+</div>
+
+<p>The two backup bridges (6 and 7) ensure that even if both fragile bridges fail, the network of five clusters still forms a connected graph. Five bridges suffice for closure; seven provide fault tolerance.</p>
+
+<!-- ======================================================================
+     SECTION 5: SCALE INVARIANCE AS STITCHING
+     ====================================================================== -->
+
+<h2 id="scale"><span class="section-number">5.</span> Scale Invariance as Stitching</h2>
+
+<p>A hypothesis: <strong>criticality and scale invariance may serve as the mathematical bridge between domains.</strong></p>
+
+<p>At a critical point &mdash; a continuous phase transition &mdash; microscopic details wash out. The correlation length diverges, fluctuations occur at all scales, and the system's behavior is governed entirely by symmetry, dimensionality, and the nature of the order parameter. Systems in the same <em>universality class</em> share identical critical exponents regardless of their physical substrate.</p>
+
+<p>This is a remarkable fact. It means that:</p>
+
+<div class="card">
+  <p>A percolating catalytic network <span class="citation">(domain 7: autocatalysis)</span>,</p>
+  <p>a neural network at criticality <span class="citation">(domain 6: nonlinear dynamics)</span>,</p>
+  <p>and a Boolean network at connectivity <span class="math">K &asymp; 2</span> <span class="citation">(domain 9: cellular automata)</span></p>
+  <p style="margin-bottom:0">all share the same mathematical description at the critical point &mdash; identical scaling exponents, identical scaling functions, identical renormalization group flow.</p>
+</div>
+
+<div class="svg-container" id="svg-rg">
+  <button class="replay-btn" onclick="replayRG()">Replay</button>
+  <svg viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg">
+    <g id="rg-scene"></g>
+  </svg>
+</div>
+
+<p>The renormalization group (<abbr title="Renormalization Group &mdash; mathematical framework for coarse-graining; how microscopic details wash out at critical points">RG</abbr>) provides the machinery. Under coarse-graining, diverse microscopic systems flow to the same fixed point. At that fixed point, the system is described by a conformal field theory (<abbr title="Conformal Field Theory &mdash; quantum field theory invariant under conformal (angle-preserving) transformations">CFT</abbr>) &mdash; a quantum field theory invariant under conformal transformations.</p>
+
+<p>Scale invariance works strongly for three bridges:</p>
+
+<div class="card">
+  <p><strong>CB (autocatalysis &harr; criticality)</strong> &mdash; <abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr> emergence is literally a percolation transition. Same universality class, same exponents.</p>
+  <p><strong>CD-a (autocatalysis &harr; cellular automata)</strong> &mdash; Kauffman's random Boolean networks at <span class="math">K = 2</span> are in the directed percolation universality class, as are Wolfram's Class IV <abbr title="Cellular Automata &mdash; discrete systems where cells update by local rules (Wolfram)">CA</abbr> near criticality.</p>
+  <p><strong>BD (dynamics &harr; computation)</strong> &mdash; reservoir computing achieves optimal computational capacity exactly at the critical point. The "edge of chaos" is a phase transition.</p>
+</div>
+
+<p>It works indirectly for <strong>BC (solitons &harr; origin-of-life)</strong>: dissipative structures near bifurcation points exhibit scaling, though the connection to autocatalytic closure is not yet formalized.</p>
+
+<p>It is weak for <strong>CD-b (autopoiesis &harr; computation)</strong>: eigenform theory operates at a more abstract level than scaling exponents.</p>
+
+<p>For the capstone bridge <strong>AC (topology &harr; autocatalysis)</strong>, scale invariance opens an intriguing corridor rather than a direct path. The CFT/<abbr title="Topological Field Theory &mdash; quantum field theory whose observables depend only on topology, not geometry">TFT</abbr> correspondence &mdash; established by Witten in 1988 &mdash; shows that every rational conformal field theory in two dimensions corresponds to a topological field theory in three dimensions. <span class="citation">(Witten 1988)</span>. This means the mathematics of critical phenomena is already formally connected to the mathematics of anyons and braiding. Whether that formal connection can be extended to encompass autocatalytic closure at the algebraic level is the central open question.</p>
+
+<!-- ======================================================================
+     SECTION 6: THE PYLON INVENTORY
+     ====================================================================== -->
+
+<h2 id="pylons"><span class="section-number">6.</span> The Pylon Inventory</h2>
+
+<p>Each bridge has two endpoints &mdash; call them pylons. Some pylons are well-characterized mathematical structures with established literatures. Others are theoretical proposals. Others remain speculative. An honest assessment requires inventorying what is known at each end.</p>
+
+<div class="svg-container" id="svg-pylons">
+  <button class="replay-btn" onclick="replayPylons()">Replay</button>
+  <svg viewBox="0 0 860 580" xmlns="http://www.w3.org/2000/svg">
+    <g id="pylon-scene"></g>
+  </svg>
+</div>
+
+<table class="bridge-table">
+  <thead>
+    <tr>
+      <th>Bridge</th>
+      <th>Pylon 1</th>
+      <th>Pylon 2</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CB</strong></td>
+      <td>Percolation threshold <span class="citation">(well-characterized)</span></td>
+      <td><abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr> emergence as phase transition <span class="citation">(well-characterized)</span></td>
+      <td><span class="status-tag status-known">Both known</span></td>
+    </tr>
+    <tr>
+      <td><strong>CD-a</strong></td>
+      <td>Boolean network <span class="math">K &asymp; 2</span> <span class="citation">(well-characterized)</span></td>
+      <td><abbr title="Cellular Automata &mdash; discrete systems where cells update by local rules (Wolfram)">CA</abbr> Class IV behavior <span class="citation">(well-characterized)</span></td>
+      <td><span class="status-tag status-known">Both known</span></td>
+    </tr>
+    <tr>
+      <td><strong>CD-b</strong></td>
+      <td>Eigenform fixed point <span class="citation">(theoretical)</span></td>
+      <td>Self-referential computation <span class="citation">(theoretical)</span></td>
+      <td><span class="status-tag status-theoretical">Both philosophical</span></td>
+    </tr>
+    <tr>
+      <td><strong>BC</strong></td>
+      <td>Dissipative solitons <span class="citation">(known)</span></td>
+      <td>Membrane formation in prebiotic chemistry <span class="citation">(speculative)</span></td>
+      <td><span class="status-tag status-speculative">Connection unclear</span></td>
+    </tr>
+    <tr>
+      <td><strong>AC</strong></td>
+      <td>Modular tensor categories <span class="citation">(known)</span></td>
+      <td>RAF algebra on <abbr title="Modular Tensor Category &mdash; mathematical classification of anyon types and their fusion/braiding rules">MTC</abbr> <span class="citation">(proposed)</span></td>
+      <td><span class="status-tag status-emerging">Structural identity emerging</span></td>
+    </tr>
+    <tr>
+      <td><strong>BD</strong></td>
+      <td>Reservoir computing at criticality <span class="citation">(known)</span></td>
+      <td><abbr title="Cellular Automata &mdash; discrete systems where cells update by local rules (Wolfram)">CA</abbr> universality <span class="citation">(known)</span></td>
+      <td><span class="status-tag status-known">Both known</span></td>
+    </tr>
+    <tr>
+      <td><strong>AB</strong></td>
+      <td>Topological solitons <span class="citation">(known)</span></td>
+      <td>Homotopy classification <span class="citation">(known)</span></td>
+      <td><span class="status-tag status-known">Partially connected</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Three bridges have both pylons well-characterized (CB, CD-a, BD). One bridge is already partially built (AB). The fragile bridges (CD-b, BC) have at least one uncertain pylon. The capstone bridge (AC) is the most interesting case: its pylons are individually well-characterized, but the connection between them is only now being recognized as a structural identity rather than a loose analogy.</p>
+
+<!-- ======================================================================
+     SECTION 7: THE AC BRIDGE
+     ====================================================================== -->
+
+<h2 id="ac-bridge"><span class="section-number">7.</span> The AC Bridge &mdash; Structural Identity</h2>
+
+<p>The hardest bridge turns out to be the most interesting. It connects the mathematical core of topology (cluster A) to the origin-of-life mathematics of autocatalysis (cluster C). These fields have essentially no shared literature. A topologist studying modular tensor categories does not read Kauffman's work on <abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr> sets, and vice versa.</p>
+
+<p>Yet there is a striking structural parallel.</p>
+
+<h3>Kauffman's Three Closure Criteria</h3>
+
+<p>Stuart Kauffman defined a reflexively autocatalytic food-generated (<abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr>) set by three properties <span class="citation">(Kauffman 1971, 1986; Hordijk &amp; Steel 2004)</span>:</p>
+
+<div class="card">
+  <p><strong>1. Generation.</strong> The set contains generators &mdash; elements from which all other members can be produced.</p>
+  <p><strong>2. Transformation.</strong> Each element catalyzes the production of some other element in the set.</p>
+  <p><strong>3. Closure.</strong> All outputs of all reactions remain within the set. Nothing escapes; nothing external is required beyond the initial food source.</p>
+</div>
+
+<h3>Fibonacci Anyon Fusion Algebra</h3>
+
+<p>Now consider the simplest non-trivial anyon model: the Fibonacci anyon system. It has two particle types: the vacuum <span class="math">1</span> and the non-abelian anyon <span class="math">&tau;</span>. Their fusion rules are:</p>
+
+<div class="math-block">
+  &tau; &times; &tau; = 1 + &tau;
+</div>
+
+<p>This is the complete fusion algebra. Compare it against Kauffman's criteria:</p>
+
+<div class="svg-container" id="svg-ac">
+  <button class="replay-btn" onclick="replayAC()">Replay</button>
+  <svg viewBox="0 0 860 380" xmlns="http://www.w3.org/2000/svg">
+    <g id="ac-scene"></g>
+  </svg>
+</div>
+
+<div class="card highlight">
+  <p><strong>Generation:</strong> <span class="math">&tau;</span> generates all fusion outcomes. From <span class="math">&tau;</span> alone, both <span class="math">1</span> and <span class="math">&tau;</span> can be produced. <span class="math">&tau;</span> is the generator of the algebra.</p>
+  <p><strong>Transformation:</strong> Fusion transforms particle types. <span class="math">&tau; &times; &tau;</span> can produce either <span class="math">1</span> or <span class="math">&tau;</span>, depending on the fusion channel. Each element participates in producing others.</p>
+  <p><strong>Closure:</strong> <span class="math">&tau; &times; &tau; = 1 + &tau;</span> stays within {<span class="math">1, &tau;</span>}. No new particle types are created. The set is closed under fusion.</p>
+</div>
+
+<p>The Fibonacci anyon fusion algebra satisfies all three of Kauffman's autocatalytic closure criteria at the algebraic level. This is not a metaphor or an analogy. It is a <strong>structural identity</strong>: the same abstract axioms are satisfied by both systems.</p>
+
+<p>The bridge is not two things that need connecting by some external construction. It is the recognition that the same mathematical structure appeared independently in two fields that have never communicated.</p>
+
+<p>This extends beyond Fibonacci anyons. Any modular tensor category with a generating object satisfies <abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr> closure. The Ising anyons {<span class="math">1, &sigma;, &psi;</span>}, the <span class="math">SU(2)</span> Chern-Simons theories at various levels &mdash; each provides a fusion algebra that is reflexively autocatalytic in Kauffman's precise sense.</p>
+
+<!-- ======================================================================
+     SECTION 8: THE EMERGENT STACK
+     ====================================================================== -->
+
+<h2 id="stack"><span class="section-number">8.</span> The Emergent Stack</h2>
+
+<p>If the bridges hold, something interesting emerges. Each domain contributes a distinct <em>property</em> to a composite picture. Read together, the eleven domains describe a system that is self-sustaining, spontaneously emergent, self-bounding, coherently transporting, topologically protected, distributedly coordinating, fault-tolerantly computing, and physically real.</p>
+
+<p>No single domain provides all of these properties. The stack only appears when you read across all eleven.</p>
+
+<div class="svg-container" id="svg-stack">
+  <button class="replay-btn" onclick="replayStack()">Replay</button>
+  <svg viewBox="0 0 860 520" xmlns="http://www.w3.org/2000/svg">
+    <g id="stack-scene"></g>
+  </svg>
+</div>
+
+<div class="stack-item"><div class="stack-num">1</div><div class="stack-content"><span class="property">Self-sustenance</span> &mdash; things that make each other <span class="domains">(domain 7: autocatalysis)</span></div></div>
+<div class="stack-item"><div class="stack-num">2</div><div class="stack-content"><span class="property">Spontaneity</span> &mdash; happens by itself at thresholds <span class="domains">(+ domains 6, 9: criticality, universality)</span></div></div>
+<div class="stack-item"><div class="stack-num">3</div><div class="stack-content"><span class="property">Self-creation</span> &mdash; makes its own boundary <span class="domains">(+ domain 8: autopoiesis)</span></div></div>
+<div class="stack-item"><div class="stack-num">4</div><div class="stack-content"><span class="property">Coherent transport</span> &mdash; moves without falling apart <span class="domains">(+ domain 5: solitons)</span></div></div>
+<div class="stack-item"><div class="stack-num">5</div><div class="stack-content"><span class="property">Protection</span> &mdash; survives local damage <span class="domains">(+ domain 1: topology)</span></div></div>
+<div class="stack-item"><div class="stack-num">6</div><div class="stack-content"><span class="property">Coordination</span> &mdash; cooperates without a boss <span class="domains">(+ domain 10: parallel computation)</span></div></div>
+<div class="stack-item"><div class="stack-num">7</div><div class="stack-content"><span class="property">Computation</span> &mdash; processes information, fault-tolerantly <span class="domains">(+ domains 2, 3, 4: <abbr title="Topological Quantum Field Theory &mdash; physics of anyons and topological invariants">TQFT</abbr>, condensed matter, <abbr title="Topological Quantum Computation &mdash; using anyon braiding as logic gates">TQC</abbr>)</span></div></div>
+<div class="stack-item"><div class="stack-num">8</div><div class="stack-content"><span class="property">Physical reality</span> &mdash; it exists in matter, right now <span class="domains">(+ domain 11: materials science)</span></div></div>
+
+<div class="closing-line">
+  The question is not whether these domains are connected &mdash;<br>
+  the mathematical evidence is already substantial.<br>
+  The question is what emerges when we read all eleven literatures together.
+</div>
+
+<footer>
+  Companion to the Web Annex
+</footer>
+
+</div><!-- .container -->
+
+<!-- ======================================================================
+     JAVASCRIPT: ANIMATIONS
+     ====================================================================== -->
+<script>
+(function() {
+  'use strict';
+
+  // ---- Color constants ----
+  const BLUE = '#3b82f6';
+  const GREEN = '#22c55e';
+  const AMBER = '#f59e0b';
+  const RED = '#ef4444';
+  const GOLDEN = '#fbbf24';
+  const PURPLE = '#a855f7';
+  const MUTED = '#475569';
+  const LINE = '#94a3b8';
+  const HEADING = '#f1f5f9';
+  const TEXT = '#cbd5e1';
+  const CARD = '#1e293b';
+  const BG = '#0f172a';
+
+  // ---- Domain data ----
+  const domains = [
+    { id: 1, label: 'Topology',      short: 'Topology',   cluster: 'A', color: BLUE },
+    { id: 2, label: 'Topological\nfield theory', short: 'TFT', cluster: 'A', color: BLUE },
+    { id: 3, label: 'Condensed\nmatter',  short: 'CM',  cluster: 'A', color: BLUE },
+    { id: 4, label: 'Topological\nquantum comp.', short: 'TQC', cluster: 'A', color: BLUE },
+    { id: 5, label: 'Solitons',       short: 'Solitons',  cluster: 'B', color: GREEN },
+    { id: 6, label: 'Nonlinear\ndynamics', short: 'Dynamics', cluster: 'B', color: GREEN },
+    { id: 7, label: 'Autocatalysis',  short: 'Autocat.',   cluster: 'C', color: GOLDEN },
+    { id: 8, label: 'Autopoiesis',    short: 'Autopoiesis',cluster: 'C', color: GOLDEN },
+    { id: 9, label: 'Universality /\ncellular automata', short: 'CA/Univ.', cluster: 'D', color: PURPLE },
+    { id: 10, label: 'Parallel\ncomputation', short: 'Parallel', cluster: 'D', color: PURPLE },
+    { id: 11, label: 'Materials\nscience', short: 'Materials', cluster: 'E', color: RED }
+  ];
+
+  // ---- Utility ----
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const [k, v] of Object.entries(attrs || {})) el.setAttribute(k, v);
+    return el;
+  }
+
+  function multiLineText(parent, x, y, text, attrs) {
+    const lines = text.split('\n');
+    const lineHeight = parseFloat(attrs['font-size'] || 12) * 1.25;
+    const startY = y - (lines.length - 1) * lineHeight / 2;
+    lines.forEach((line, i) => {
+      const t = svgEl('text', {
+        ...attrs,
+        x: x,
+        y: startY + i * lineHeight,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central'
+      });
+      t.textContent = line;
+      parent.appendChild(t);
+    });
+  }
+
+  function animateOpacity(el, delay, duration) {
+    el.style.opacity = '0';
+    el.style.transition = `opacity ${duration || 600}ms ease`;
+    setTimeout(() => { el.style.opacity = '1'; }, delay);
+  }
+
+  // ---- IntersectionObserver system ----
+  const observed = new Map();
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const fn = observed.get(id);
+        if (fn) {
+          fn();
+          observed.delete(id);
+          observer.unobserve(entry.target);
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+
+  function onVisible(id, fn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    observed.set(id, fn);
+    observer.observe(el);
+  }
+
+  // =================================================================
+  // ANIMATION 1: ELEVEN DOMAINS (orbital layout)
+  // =================================================================
+
+  // ---- Domain tooltips ----
+  const domainTooltips = [
+    'Topology — mathematical study of knots, tangles, braids, and spaces that are equivalent under continuous deformation',
+    'Topological Field Theory — the physics of anyons: particles unique to two dimensions with exotic quantum statistics',
+    'Condensed Matter — the materials where topological order becomes physically real (quantum Hall systems, topological insulators)',
+    'Topological Quantum Computation — using anyon braiding operations as fault-tolerant quantum logic gates',
+    'Solitons — persistent nonlinear waves that maintain their shape while propagating (discovered 1834, Union Canal)',
+    'Nonlinear Dynamics / Criticality — phase transitions, tipping points, the edge of chaos (K≈2)',
+    'Autocatalysis — self-sustaining chemical networks where products catalyze their own production (Kauffman)',
+    'Autopoiesis — self-creating systems that produce and maintain their own boundary (Maturana & Varela)',
+    'Universality / Cellular Automata — simple local rules producing complex emergent behavior (Wolfram)',
+    'Parallel Computation — distributed processing without central control; emergence of coordination',
+    'Materials Science — physical instantiation: the crystals, thin films, and devices where topology becomes engineering'
+  ];
+
+  function drawDomains() {
+    const g = document.getElementById('domain-circles');
+    g.innerHTML = '';
+
+    const cx = 430, cy = 260, rx = 320, ry = 200;
+
+    domains.forEach((d, i) => {
+      const angle = (i / 11) * Math.PI * 2 - Math.PI / 2;
+      const x = cx + rx * Math.cos(angle);
+      const y = cy + ry * Math.sin(angle);
+      d.ox = x; d.oy = y;
+
+      const group = svgEl('g', {});
+
+      // tooltip
+      const title = svgEl('title', {});
+      title.textContent = domainTooltips[i];
+      group.appendChild(title);
+
+      // circle
+      const circle = svgEl('circle', {
+        cx: x, cy: y, r: 32,
+        fill: 'none',
+        stroke: d.color,
+        'stroke-width': 2,
+        opacity: 0.9
+      });
+      group.appendChild(circle);
+
+      // number
+      const numText = svgEl('text', {
+        x: x, y: y - 6,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: d.color,
+        'font-size': '18',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      numText.textContent = d.id;
+      group.appendChild(numText);
+
+      // short label
+      const labelText = svgEl('text', {
+        x: x, y: y + 13,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: TEXT,
+        'font-size': '9.5',
+        'font-family': "system-ui, sans-serif"
+      });
+      labelText.textContent = d.short;
+      group.appendChild(labelText);
+
+      animateOpacity(group, 200 + i * 200, 500);
+      g.appendChild(group);
+    });
+  }
+
+  function replayDomains() {
+    drawDomains();
+  }
+
+  onVisible('svg-domains', drawDomains);
+
+  // =================================================================
+  // ANIMATION 2: FIVE CLUSTERS
+  // =================================================================
+
+  const clusterDefs = [
+    { id: 'A', label: 'Topology', color: BLUE, members: [0,1,2,3], cx: 200, cy: 160 },
+    { id: 'B', label: 'Dynamics', color: GREEN, members: [4,5], cx: 660, cy: 120 },
+    { id: 'C', label: 'Origin-of-life', color: GOLDEN, members: [6,7], cx: 430, cy: 280 },
+    { id: 'D', label: 'Computation', color: PURPLE, members: [8,9], cx: 660, cy: 420 },
+    { id: 'E', label: 'Materials', color: RED, members: [10], cx: 200, cy: 430 }
+  ];
+
+  // ---- Cluster tooltips ----
+  const clusterTooltips = {
+    A: 'Cluster A (Topology) — domains 1,2,3,4: the mathematical-physical core. Well-connected internally: topologists, condensed matter physicists, and quantum computing researchers already cite each other.',
+    B: 'Cluster B (Dynamics) — domains 5,6: nonlinear coherent structures and critical phenomena. Soliton physics and phase transitions share mathematical tools (bifurcation theory, dynamical systems).',
+    C: 'Cluster C (Origin-of-life) — domains 7,8: self-sustaining and self-creating networks. Kauffman\'s autocatalysis and Maturana\'s autopoiesis are philosophically related but use different formalisms.',
+    D: 'Cluster D (Computation) — domains 9,10: emergent information processing. Cellular automata universality and parallel computing share the question of how local rules produce global computation.',
+    E: 'Cluster E (Materials) — domain 11 plus overlap with 3,4: the realization layer. Already well-connected because materials scientists work directly with condensed matter physicists.'
+  };
+
+  function drawClusters() {
+    const g = document.getElementById('cluster-scene');
+    g.innerHTML = '';
+
+    // Phase 1: Show individual domain circles scattered
+    const positions = [];
+    const cx0 = 430, cy0 = 280, rx0 = 310, ry0 = 200;
+    domains.forEach((d, i) => {
+      const angle = (i / 11) * Math.PI * 2 - Math.PI / 2;
+      positions.push({
+        x: cx0 + rx0 * Math.cos(angle),
+        y: cy0 + ry0 * Math.sin(angle)
+      });
+    });
+
+    // Phase 2: After delay, cluster backgrounds appear
+    clusterDefs.forEach((cl, ci) => {
+      // Cluster enclosing shape
+      const memberPositions = cl.members.map(mi => {
+        // Target positions within cluster
+        const count = cl.members.length;
+        const spread = count === 1 ? 0 : 50;
+        return cl.members.map((_, j) => {
+          const a = (j / count) * Math.PI * 2 - Math.PI / 2;
+          return {
+            x: cl.cx + spread * Math.cos(a),
+            y: cl.cy + spread * Math.sin(a)
+          };
+        });
+      });
+
+      const clGroup = svgEl('g', {});
+
+      // cluster tooltip
+      const clTitle = svgEl('title', {});
+      clTitle.textContent = clusterTooltips[cl.id];
+      clGroup.appendChild(clTitle);
+
+      // Background ellipse
+      const bgR = cl.members.length === 1 ? 55 : (cl.members.length <= 2 ? 80 : 100);
+      const bgEllipse = svgEl('ellipse', {
+        cx: cl.cx, cy: cl.cy,
+        rx: bgR, ry: bgR * 0.75,
+        fill: cl.color,
+        opacity: 0,
+        'fill-opacity': 0.06,
+        stroke: cl.color,
+        'stroke-opacity': 0.25,
+        'stroke-width': 1.5,
+        'stroke-dasharray': '6 3'
+      });
+      bgEllipse.style.transition = 'opacity 800ms ease';
+      setTimeout(() => { bgEllipse.style.opacity = '1'; }, 600 + ci * 300);
+      clGroup.appendChild(bgEllipse);
+
+      // Cluster label
+      const clLabel = svgEl('text', {
+        x: cl.cx, y: cl.cy - bgR * 0.75 - 14,
+        'text-anchor': 'middle',
+        fill: cl.color,
+        'font-size': '14',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600',
+        opacity: 0
+      });
+      clLabel.textContent = `${cl.id}: ${cl.label}`;
+      clLabel.style.transition = 'opacity 600ms ease';
+      setTimeout(() => { clLabel.style.opacity = '1'; }, 900 + ci * 300);
+      clGroup.appendChild(clLabel);
+
+      // Individual domain circles within cluster
+      cl.members.forEach((mi, j) => {
+        const d = domains[mi];
+        const count = cl.members.length;
+        const spread = count === 1 ? 0 : 45;
+        const a = count === 1 ? 0 : (j / count) * Math.PI * 2 - Math.PI / 2;
+        const tx = cl.cx + spread * Math.cos(a);
+        const ty = cl.cy + spread * Math.sin(a);
+
+        const nodeG = svgEl('g', {});
+
+        const circle = svgEl('circle', {
+          cx: tx, cy: ty, r: 22,
+          fill: 'none',
+          stroke: d.color,
+          'stroke-width': 1.5,
+          opacity: 0.85
+        });
+        nodeG.appendChild(circle);
+
+        const numT = svgEl('text', {
+          x: tx, y: ty - 4,
+          'text-anchor': 'middle',
+          'dominant-baseline': 'central',
+          fill: d.color,
+          'font-size': '14',
+          'font-family': "'Times New Roman', Georgia, serif",
+          'font-weight': '600'
+        });
+        numT.textContent = d.id;
+        nodeG.appendChild(numT);
+
+        const lT = svgEl('text', {
+          x: tx, y: ty + 11,
+          'text-anchor': 'middle',
+          fill: TEXT,
+          'font-size': '8',
+          'font-family': "system-ui, sans-serif",
+          opacity: 0.8
+        });
+        lT.textContent = d.short;
+        nodeG.appendChild(lT);
+
+        // Intra-cluster connections
+        if (j > 0) {
+          const prevA = ((j - 1) / count) * Math.PI * 2 - Math.PI / 2;
+          const px = cl.cx + spread * Math.cos(prevA);
+          const py = cl.cy + spread * Math.sin(prevA);
+          const line = svgEl('line', {
+            x1: px, y1: py, x2: tx, y2: ty,
+            stroke: d.color,
+            'stroke-width': 0.8,
+            'stroke-opacity': 0.3
+          });
+          animateOpacity(line, 1200 + ci * 300, 500);
+          clGroup.appendChild(line);
+        }
+
+        animateOpacity(nodeG, 800 + ci * 300 + j * 100, 500);
+        clGroup.appendChild(nodeG);
+      });
+
+      g.appendChild(clGroup);
+    });
+  }
+
+  function replayClusters() {
+    drawClusters();
+  }
+
+  onVisible('svg-clusters', drawClusters);
+
+  // =================================================================
+  // ANIMATION 3: SEVEN BRIDGES
+  // =================================================================
+
+  const bridgeDefs = [
+    { id: 'CB',   from: 2, to: 1, label: '1: CB',   color: GREEN, dash: '', desc: 'Autocatalysis ↔ Criticality', thick: 2, tooltip: 'Bridge 1 (CB) — EASIEST. Kauffman\'s edge-of-chaos at K≈2 IS directed percolation. Two literatures describing the same phase transition, not yet formally unified.' },
+    { id: 'CD-a', from: 2, to: 3, label: '2: CD-a', color: PURPLE, dash: '', desc: 'Autocatalysis ↔ Cellular automata', thick: 2, tooltip: 'Bridge 2 (CD-a) — Boolean networks ARE cellular automata viewed differently. Category theory formalization underway (Jade Master).' },
+    { id: 'CD-b', from: 2, to: 3, label: '3: CD-b', color: PURPLE, dash: '8 4', desc: 'Autopoiesis ↔ Computation', thick: 1.5, offset: true, tooltip: 'Bridge 3 (CD-b) — FRAGILE. Autopoiesis resists formalization. L. Kauffman\'s eigenform theory is the only mathematical path.' },
+    { id: 'BC',   from: 1, to: 2, label: '4: BC',   color: GREEN, dash: '8 4', desc: 'Solitons ↔ Origin-of-life', thick: 1.5, offset: true, tooltip: 'Bridge 4 (BC) — FRAGILE. Dissipative solitons appear in reaction-diffusion systems but nobody currently spans soliton physics and origin-of-life chemistry.' },
+    { id: 'AC',   from: 0, to: 2, label: '5: AC',   color: GOLDEN, dash: '10 5', desc: 'Topology ↔ Autocatalysis (CAPSTONE)', thick: 3, tooltip: 'Bridge 5 (AC) — CAPSTONE. The largest gap. Connects topology to autocatalysis. Kauffman\'s closure criteria are structurally satisfied by anyon fusion algebras.' },
+    { id: 'BD',   from: 1, to: 3, label: '6: BD',   color: LINE, dash: '4 4', desc: 'Dynamics ↔ Computation', thick: 1.2, tooltip: 'Bridge 6 (BD) — Redundancy for bridge 3. Reservoir computing at criticality: dynamical systems at the critical point perform computation.' },
+    { id: 'AB',   from: 0, to: 1, label: '7: AB',   color: LINE, dash: '4 4', desc: 'Topology ↔ Solitons', thick: 1.2, tooltip: 'Bridge 7 (AB) — Redundancy for bridge 4. Topological solitons (skyrmions, vortices) are already classified by homotopy theory.' }
+  ];
+
+  function drawBridges() {
+    const g = document.getElementById('bridge-scene');
+    g.innerHTML = '';
+
+    // Cluster node positions
+    const cpos = [
+      { x: 160, y: 190, label: 'A: Topology', color: BLUE, r: 55 },
+      { x: 650, y: 130, label: 'B: Dynamics', color: GREEN, r: 50 },
+      { x: 400, y: 250, label: 'C: Origin-of-life', color: GOLDEN, r: 55 },
+      { x: 680, y: 380, label: 'D: Computation', color: PURPLE, r: 55 },
+      { x: 160, y: 410, label: 'E: Materials', color: RED, r: 45 }
+    ];
+
+    // Draw cluster nodes
+    cpos.forEach((c, i) => {
+      const nodeG = svgEl('g', {});
+
+      const circle = svgEl('circle', {
+        cx: c.x, cy: c.y, r: c.r,
+        fill: c.color,
+        'fill-opacity': 0.08,
+        stroke: c.color,
+        'stroke-width': 2,
+        'stroke-opacity': 0.5
+      });
+      nodeG.appendChild(circle);
+
+      const t = svgEl('text', {
+        x: c.x, y: c.y,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: c.color,
+        'font-size': '14',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      t.textContent = c.label;
+      nodeG.appendChild(t);
+
+      animateOpacity(nodeG, 100 + i * 100, 400);
+      g.appendChild(nodeG);
+    });
+
+    // Draw bridges with staggered animation
+    bridgeDefs.forEach((b, i) => {
+      const from = cpos[b.from];
+      const to = cpos[b.to];
+
+      let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+
+      // Offset parallel bridges slightly
+      if (b.offset) {
+        const dx = x2 - x1, dy = y2 - y1;
+        const len = Math.sqrt(dx*dx + dy*dy);
+        const nx = -dy / len * 15, ny = dx / len * 15;
+        x1 += nx; y1 += ny; x2 += nx; y2 += ny;
+      }
+
+      const bridgeG = svgEl('g', {});
+
+      // bridge tooltip
+      const bTitle = svgEl('title', {});
+      bTitle.textContent = b.tooltip;
+      bridgeG.appendChild(bTitle);
+
+      const line = svgEl('line', {
+        x1, y1, x2, y2,
+        stroke: b.color,
+        'stroke-width': b.thick,
+        'stroke-dasharray': b.dash || 'none',
+        'stroke-opacity': 0.7,
+        'stroke-linecap': 'round'
+      });
+
+      // Animate line drawing
+      const len = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+      line.setAttribute('stroke-dasharray', b.dash || `${len}`);
+      if (!b.dash) {
+        line.setAttribute('stroke-dashoffset', len);
+        line.style.transition = `stroke-dashoffset 1200ms ease`;
+      }
+
+      bridgeG.appendChild(line);
+
+      // Label at midpoint
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2) / 2 - 10;
+      const labelT = svgEl('text', {
+        x: mx, y: my,
+        'text-anchor': 'middle',
+        fill: b.color,
+        'font-size': '11',
+        'font-family': "system-ui, sans-serif",
+        'font-weight': '500',
+        opacity: 0
+      });
+      labelT.textContent = b.label;
+      bridgeG.appendChild(labelT);
+
+      const delay = 700 + i * 500;
+      animateOpacity(bridgeG, delay, 300);
+      setTimeout(() => {
+        if (!b.dash) line.setAttribute('stroke-dashoffset', '0');
+        labelT.style.transition = 'opacity 400ms ease';
+        labelT.style.opacity = '1';
+      }, delay + 200);
+
+      g.appendChild(bridgeG);
+    });
+
+    // Legend
+    const legendG = svgEl('g', {});
+    const legendItems = [
+      { dash: '', label: 'Solid: established connection', y: 455 },
+      { dash: '8 4', label: 'Dashed: fragile bridge', y: 473 },
+      { dash: '4 4', label: 'Dotted: redundancy backup', y: 491 }
+    ];
+    legendItems.forEach(item => {
+      const l = svgEl('line', {
+        x1: 30, y1: item.y, x2: 65, y2: item.y,
+        stroke: LINE,
+        'stroke-width': 1.5,
+        'stroke-dasharray': item.dash || 'none',
+        'stroke-opacity': 0.6
+      });
+      legendG.appendChild(l);
+      const t = svgEl('text', {
+        x: 72, y: item.y + 1,
+        fill: MUTED,
+        'font-size': '11',
+        'font-family': 'system-ui, sans-serif',
+        'dominant-baseline': 'central'
+      });
+      t.textContent = item.label;
+      legendG.appendChild(t);
+    });
+    animateOpacity(legendG, 4500, 600);
+    g.appendChild(legendG);
+  }
+
+  function replayBridges() {
+    drawBridges();
+  }
+
+  onVisible('svg-bridges', drawBridges);
+
+  // =================================================================
+  // ANIMATION 4: RG FLOW (Scale Invariance)
+  // =================================================================
+
+  function drawRG() {
+    const g = document.getElementById('rg-scene');
+    g.innerHTML = '';
+
+    const systems = [
+      { x: 160, y: 100, label: 'Catalytic\nnetwork', color: GOLDEN, icon: 'hex', tooltip: 'A random catalytic network at the percolation threshold — molecules catalyze each other\'s production' },
+      { x: 430, y: 80,  label: 'Neural network\nat criticality', color: GREEN, icon: 'net', tooltip: 'A neural network at the critical branching ratio — neurons fire in scale-free avalanches' },
+      { x: 700, y: 100, label: 'Boolean network\nK ≈ 2', color: PURPLE, icon: 'grid', tooltip: 'A Boolean network at K≈2 — genes regulate each other at the edge of chaos' }
+    ];
+
+    const fpx = 430, fpy = 340;
+
+    // Draw systems
+    systems.forEach((s, i) => {
+      const sG = svgEl('g', {});
+
+      // system tooltip
+      const sTitle = svgEl('title', {});
+      sTitle.textContent = s.tooltip;
+      sG.appendChild(sTitle);
+
+      // Icon representations
+      if (s.icon === 'hex') {
+        // Small hexagonal network
+        for (let j = 0; j < 6; j++) {
+          const a1 = j * Math.PI / 3;
+          const a2 = (j + 1) * Math.PI / 3;
+          const r = 25;
+          const l = svgEl('line', {
+            x1: s.x + r * Math.cos(a1), y1: s.y + r * Math.sin(a1),
+            x2: s.x + r * Math.cos(a2), y2: s.y + r * Math.sin(a2),
+            stroke: s.color, 'stroke-width': 1.5, 'stroke-opacity': 0.6
+          });
+          sG.appendChild(l);
+          // Radial lines
+          const l2 = svgEl('line', {
+            x1: s.x, y1: s.y,
+            x2: s.x + r * Math.cos(a1), y2: s.y + r * Math.sin(a1),
+            stroke: s.color, 'stroke-width': 1, 'stroke-opacity': 0.3
+          });
+          sG.appendChild(l2);
+        }
+      } else if (s.icon === 'net') {
+        // Neural-like connections
+        const nodes = [];
+        for (let j = 0; j < 8; j++) {
+          const a = j * Math.PI / 4 + Math.PI / 8;
+          const r = 22 + (j % 2) * 8;
+          nodes.push({ x: s.x + r * Math.cos(a), y: s.y + r * Math.sin(a) });
+        }
+        nodes.forEach((n, j) => {
+          const dot = svgEl('circle', { cx: n.x, cy: n.y, r: 2.5, fill: s.color, 'fill-opacity': 0.6 });
+          sG.appendChild(dot);
+          if (j > 0) {
+            const l = svgEl('line', {
+              x1: nodes[j-1].x, y1: nodes[j-1].y,
+              x2: n.x, y2: n.y,
+              stroke: s.color, 'stroke-width': 0.8, 'stroke-opacity': 0.3
+            });
+            sG.appendChild(l);
+          }
+          // Cross connections
+          const k = (j + 3) % nodes.length;
+          const l = svgEl('line', {
+            x1: n.x, y1: n.y,
+            x2: nodes[k].x, y2: nodes[k].y,
+            stroke: s.color, 'stroke-width': 0.5, 'stroke-opacity': 0.2
+          });
+          sG.appendChild(l);
+        });
+      } else if (s.icon === 'grid') {
+        // Grid pattern
+        for (let row = -1; row <= 1; row++) {
+          for (let col = -1; col <= 1; col++) {
+            const gx = s.x + col * 16;
+            const gy = s.y + row * 16;
+            const rect = svgEl('rect', {
+              x: gx - 5, y: gy - 5, width: 10, height: 10,
+              fill: (row + col) % 2 === 0 ? s.color : 'none',
+              'fill-opacity': 0.3,
+              stroke: s.color,
+              'stroke-width': 0.8,
+              'stroke-opacity': 0.4
+            });
+            sG.appendChild(rect);
+          }
+        }
+      }
+
+      // Label
+      const lines = s.label.split('\n');
+      lines.forEach((line, li) => {
+        const t = svgEl('text', {
+          x: s.x, y: s.y + 40 + li * 15,
+          'text-anchor': 'middle',
+          fill: TEXT,
+          'font-size': '12',
+          'font-family': 'system-ui, sans-serif'
+        });
+        t.textContent = line;
+        sG.appendChild(t);
+      });
+
+      animateOpacity(sG, 200 + i * 300, 500);
+      g.appendChild(sG);
+    });
+
+    // RG flow arrows
+    systems.forEach((s, i) => {
+      const arrowG = svgEl('g', {});
+
+      // Curved path from system to fixed point
+      const midx = (s.x + fpx) / 2 + (i === 0 ? -40 : i === 2 ? 40 : 0);
+      const midy = (s.y + fpy) / 2;
+
+      const path = svgEl('path', {
+        d: `M ${s.x} ${s.y + 35} Q ${midx} ${midy} ${fpx} ${fpy - 30}`,
+        fill: 'none',
+        stroke: s.color,
+        'stroke-width': 1.5,
+        'stroke-opacity': 0.5,
+        'stroke-dasharray': '6 4'
+      });
+
+      // Arrow head
+      const ah = svgEl('polygon', {
+        points: `${fpx},${fpy - 25} ${fpx - 5},${fpy - 35} ${fpx + 5},${fpy - 35}`,
+        fill: s.color,
+        'fill-opacity': 0.5
+      });
+
+      arrowG.appendChild(path);
+      arrowG.appendChild(ah);
+
+      // "RG flow" label on first arrow
+      if (i === 1) {
+        const rgLabel = svgEl('text', {
+          x: midx + 50, y: midy,
+          'text-anchor': 'middle',
+          fill: MUTED,
+          'font-size': '11',
+          'font-family': "'Times New Roman', Georgia, serif",
+          'font-style': 'italic'
+        });
+        rgLabel.textContent = 'RG flow';
+        arrowG.appendChild(rgLabel);
+      }
+
+      animateOpacity(arrowG, 1200 + i * 400, 800);
+      g.appendChild(arrowG);
+    });
+
+    // Fixed point (glowing)
+    const fpG = svgEl('g', {});
+
+    // fixed point tooltip
+    const fpTitle = svgEl('title', {});
+    fpTitle.textContent = 'Universality class fixed point — all three systems share identical scaling exponents here, despite completely different microscopic details';
+    fpG.appendChild(fpTitle);
+
+    // Glow circles
+    for (let r = 35; r >= 5; r -= 10) {
+      const gc = svgEl('circle', {
+        cx: fpx, cy: fpy, r: r,
+        fill: GOLDEN,
+        'fill-opacity': 0.03 + (35 - r) * 0.015,
+        stroke: 'none'
+      });
+      fpG.appendChild(gc);
+    }
+
+    const fpCircle = svgEl('circle', {
+      cx: fpx, cy: fpy, r: 18,
+      fill: GOLDEN,
+      'fill-opacity': 0.15,
+      stroke: GOLDEN,
+      'stroke-width': 2,
+      filter: 'url(#glow)'
+    });
+    fpG.appendChild(fpCircle);
+
+    const fpLabel = svgEl('text', {
+      x: fpx, y: fpy,
+      'text-anchor': 'middle',
+      'dominant-baseline': 'central',
+      fill: HEADING,
+      'font-size': '11',
+      'font-family': "'Times New Roman', Georgia, serif",
+      'font-weight': '600'
+    });
+    fpLabel.textContent = 'Fixed point';
+    fpG.appendChild(fpLabel);
+
+    const fpSub = svgEl('text', {
+      x: fpx, y: fpy + 35,
+      'text-anchor': 'middle',
+      fill: GOLDEN,
+      'font-size': '12',
+      'font-family': "'Times New Roman', Georgia, serif",
+      'font-style': 'italic'
+    });
+    fpSub.textContent = 'Same exponents · Same scaling · Different substrates';
+    fpG.appendChild(fpSub);
+
+    animateOpacity(fpG, 2400, 1000);
+    g.appendChild(fpG);
+  }
+
+  function replayRG() {
+    drawRG();
+  }
+
+  onVisible('svg-rg', drawRG);
+
+  // =================================================================
+  // ANIMATION 5: PYLON INVENTORY
+  // =================================================================
+
+  function drawPylons() {
+    const g = document.getElementById('pylon-scene');
+    g.innerHTML = '';
+
+    const pylons = [
+      { bridge: 'CB',   p1: 'Percolation threshold', p2: 'RAF emergence', s1: 'known', s2: 'known', y: 50, color: GREEN, p1tip: 'Percolation threshold (known)', p2tip: 'RAF emergence as phase transition (known)' },
+      { bridge: 'CD-a', p1: 'Boolean network K≈2', p2: 'CA Class IV', s1: 'known', s2: 'known', y: 125, color: PURPLE, p1tip: 'Boolean network K≈2 (known)', p2tip: 'CA Class IV behavior (known)' },
+      { bridge: 'CD-b', p1: 'Eigenform fixed point', p2: 'Self-referential computation', s1: 'theoretical', s2: 'theoretical', y: 200, color: PURPLE, p1tip: 'Eigenform fixed point (theoretical)', p2tip: 'Self-referential computation (theoretical)' },
+      { bridge: 'BC',   p1: 'Dissipative solitons', p2: 'Prebiotic membranes', s1: 'known', s2: 'speculative', y: 275, color: GREEN, p1tip: 'Dissipative solitons (known)', p2tip: 'Membrane formation in prebiotic chemistry (speculative)' },
+      { bridge: 'AC',   p1: 'Modular tensor categories', p2: 'RAF algebra on MTC', s1: 'known', s2: 'emerging', y: 350, color: GOLDEN, p1tip: 'Modular tensor categories (known)', p2tip: 'RAF algebra on MTC (emerging)' },
+      { bridge: 'BD',   p1: 'Reservoir computing', p2: 'CA universality', s1: 'known', s2: 'known', y: 425, color: LINE, p1tip: 'Reservoir computing at criticality (known)', p2tip: 'CA universality (known)' },
+      { bridge: 'AB',   p1: 'Topological solitons', p2: 'Homotopy classification', s1: 'known', s2: 'known', y: 500, color: LINE, p1tip: 'Topological solitons (known)', p2tip: 'Homotopy classification (known)' }
+    ];
+
+    const statusColors = {
+      known: GREEN,
+      theoretical: PURPLE,
+      speculative: AMBER,
+      emerging: GOLDEN
+    };
+
+    pylons.forEach((p, i) => {
+      const pG = svgEl('g', {});
+
+      // Bridge label
+      const bl = svgEl('text', {
+        x: 430, y: p.y + 5,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: p.color,
+        'font-size': '14',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      bl.textContent = p.bridge;
+      pG.appendChild(bl);
+
+      // Bridge center line
+      const centerDot = svgEl('circle', {
+        cx: 430, cy: p.y + 5, r: 20,
+        fill: p.color,
+        'fill-opacity': 0.06,
+        stroke: p.color,
+        'stroke-width': 1.5,
+        'stroke-opacity': 0.4
+      });
+      pG.appendChild(centerDot);
+
+      // Pylon 1 (left)
+      const p1G = svgEl('g', {});
+      const p1Title = svgEl('title', {});
+      p1Title.textContent = p.p1tip;
+      p1G.appendChild(p1Title);
+      const p1Rect = svgEl('rect', {
+        x: 60, y: p.y - 15, width: 240, height: 40, rx: 6,
+        fill: CARD,
+        stroke: statusColors[p.s1],
+        'stroke-width': 1.5,
+        'stroke-opacity': 0.5
+      });
+      p1G.appendChild(p1Rect);
+      const p1T = svgEl('text', {
+        x: 180, y: p.y + 5,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: TEXT,
+        'font-size': '12',
+        'font-family': 'system-ui, sans-serif'
+      });
+      p1T.textContent = p.p1;
+      p1G.appendChild(p1T);
+
+      // Status indicator
+      const p1S = svgEl('circle', {
+        cx: 80, cy: p.y + 5, r: 4,
+        fill: statusColors[p.s1]
+      });
+      p1G.appendChild(p1S);
+      pG.appendChild(p1G);
+
+      // Line from pylon 1 to bridge
+      const l1 = svgEl('line', {
+        x1: 300, y1: p.y + 5, x2: 408, y2: p.y + 5,
+        stroke: p.color, 'stroke-width': 1, 'stroke-opacity': 0.3,
+        'stroke-dasharray': '4 3'
+      });
+      pG.appendChild(l1);
+
+      // Pylon 2 (right)
+      const p2G = svgEl('g', {});
+      const p2Title = svgEl('title', {});
+      p2Title.textContent = p.p2tip;
+      p2G.appendChild(p2Title);
+      const p2Rect = svgEl('rect', {
+        x: 560, y: p.y - 15, width: 240, height: 40, rx: 6,
+        fill: CARD,
+        stroke: statusColors[p.s2],
+        'stroke-width': 1.5,
+        'stroke-opacity': 0.5
+      });
+      p2G.appendChild(p2Rect);
+      const p2T = svgEl('text', {
+        x: 680, y: p.y + 5,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: TEXT,
+        'font-size': '12',
+        'font-family': 'system-ui, sans-serif'
+      });
+      p2T.textContent = p.p2;
+      p2G.appendChild(p2T);
+
+      const p2S = svgEl('circle', {
+        cx: 780, cy: p.y + 5, r: 4,
+        fill: statusColors[p.s2]
+      });
+      p2G.appendChild(p2S);
+      pG.appendChild(p2G);
+
+      // Line from bridge to pylon 2
+      const l2 = svgEl('line', {
+        x1: 452, y1: p.y + 5, x2: 560, y2: p.y + 5,
+        stroke: p.color, 'stroke-width': 1, 'stroke-opacity': 0.3,
+        'stroke-dasharray': '4 3'
+      });
+      pG.appendChild(l2);
+
+      animateOpacity(pG, 200 + i * 250, 500);
+      g.appendChild(pG);
+    });
+
+    // Legend
+    const legG = svgEl('g', {});
+    const legItems = [
+      { color: GREEN, label: 'Well-characterized', x: 120 },
+      { color: PURPLE, label: 'Theoretical', x: 310 },
+      { color: AMBER, label: 'Speculative', x: 460 },
+      { color: GOLDEN, label: 'Emerging', x: 600 }
+    ];
+    legItems.forEach(item => {
+      const d = svgEl('circle', { cx: item.x, cy: 555, r: 4, fill: item.color });
+      legG.appendChild(d);
+      const t = svgEl('text', {
+        x: item.x + 10, y: 556,
+        fill: MUTED,
+        'font-size': '11',
+        'font-family': 'system-ui, sans-serif',
+        'dominant-baseline': 'central'
+      });
+      t.textContent = item.label;
+      legG.appendChild(t);
+    });
+    animateOpacity(legG, 2200, 600);
+    g.appendChild(legG);
+  }
+
+  function replayPylons() {
+    drawPylons();
+  }
+
+  onVisible('svg-pylons', drawPylons);
+
+  // =================================================================
+  // ANIMATION 6: AC BRIDGE (Structural Identity)
+  // =================================================================
+
+  function drawAC() {
+    const g = document.getElementById('ac-scene');
+    g.innerHTML = '';
+
+    // Left side: Fibonacci anyons
+    const leftG = svgEl('g', {});
+
+    // left side tooltip
+    const leftTip = svgEl('title', {});
+    leftTip.textContent = 'Fibonacci anyon fusion algebra — the simplest non-trivial anyon model, with two particle types: vacuum (1) and anyon (τ)';
+    leftG.appendChild(leftTip);
+
+    // Title
+    const leftTitle = svgEl('text', {
+      x: 215, y: 35,
+      'text-anchor': 'middle',
+      fill: BLUE,
+      'font-size': '16',
+      'font-family': "'Times New Roman', Georgia, serif",
+      'font-weight': '600'
+    });
+    leftTitle.textContent = 'Fibonacci Anyon Fusion';
+    leftG.appendChild(leftTitle);
+
+    // Fusion diagram: tau x tau = 1 + tau
+    // Show tau particles merging
+    const tauL = svgEl('circle', { cx: 150, cy: 110, r: 20, fill: BLUE, 'fill-opacity': 0.15, stroke: BLUE, 'stroke-width': 2 });
+    leftG.appendChild(tauL);
+    const tauLt = svgEl('text', { x: 150, y: 112, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: BLUE, 'font-size': '18', 'font-family': "'Times New Roman', Georgia, serif", 'font-style': 'italic' });
+    tauLt.textContent = 'τ';
+    leftG.appendChild(tauLt);
+
+    const times = svgEl('text', { x: 215, y: 112, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: MUTED, 'font-size': '20', 'font-family': "'Times New Roman', Georgia, serif" });
+    times.textContent = '×';
+    leftG.appendChild(times);
+
+    const tauR = svgEl('circle', { cx: 280, cy: 110, r: 20, fill: BLUE, 'fill-opacity': 0.15, stroke: BLUE, 'stroke-width': 2 });
+    leftG.appendChild(tauR);
+    const tauRt = svgEl('text', { x: 280, y: 112, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: BLUE, 'font-size': '18', 'font-family': "'Times New Roman', Georgia, serif", 'font-style': 'italic' });
+    tauRt.textContent = 'τ';
+    leftG.appendChild(tauRt);
+
+    // Equals
+    const eq = svgEl('text', { x: 215, y: 170, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: MUTED, 'font-size': '20', 'font-family': "'Times New Roman', Georgia, serif" });
+    eq.textContent = '=';
+    leftG.appendChild(eq);
+
+    // Results: 1 + tau
+    const one = svgEl('circle', { cx: 170, cy: 220, r: 18, fill: 'none', stroke: LINE, 'stroke-width': 1.5 });
+    leftG.appendChild(one);
+    const oneT = svgEl('text', { x: 170, y: 222, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: LINE, 'font-size': '16', 'font-family': "'Times New Roman', Georgia, serif" });
+    oneT.textContent = '1';
+    leftG.appendChild(oneT);
+
+    const plus = svgEl('text', { x: 215, y: 222, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: MUTED, 'font-size': '18', 'font-family': "'Times New Roman', Georgia, serif" });
+    plus.textContent = '+';
+    leftG.appendChild(plus);
+
+    const tauOut = svgEl('circle', { cx: 260, cy: 220, r: 18, fill: BLUE, 'fill-opacity': 0.15, stroke: BLUE, 'stroke-width': 1.5 });
+    leftG.appendChild(tauOut);
+    const tauOutT = svgEl('text', { x: 260, y: 222, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: BLUE, 'font-size': '16', 'font-family': "'Times New Roman', Georgia, serif", 'font-style': 'italic' });
+    tauOutT.textContent = 'τ';
+    leftG.appendChild(tauOutT);
+
+    // Closure note
+    const closureNote = svgEl('text', { x: 215, y: 280, 'text-anchor': 'middle', fill: MUTED, 'font-size': '12', 'font-family': "'Times New Roman', Georgia, serif", 'font-style': 'italic' });
+    closureNote.textContent = 'Closed within {1, τ}';
+    leftG.appendChild(closureNote);
+
+    animateOpacity(leftG, 300, 800);
+    g.appendChild(leftG);
+
+    // Central divider
+    const divider = svgEl('line', { x1: 430, y1: 30, x2: 430, y2: 350, stroke: MUTED, 'stroke-width': 1, 'stroke-opacity': 0.3, 'stroke-dasharray': '4 4' });
+    animateOpacity(divider, 600, 400);
+    g.appendChild(divider);
+
+    // Right side: RAF closure criteria
+    const rightG = svgEl('g', {});
+
+    // right side tooltip
+    const rightTip = svgEl('title', {});
+    rightTip.textContent = 'Kauffman\'s RAF closure criteria — three properties that define a reflexively autocatalytic food-generated set';
+    rightG.appendChild(rightTip);
+
+    const rightTitle = svgEl('text', {
+      x: 645, y: 35,
+      'text-anchor': 'middle',
+      fill: GOLDEN,
+      'font-size': '16',
+      'font-family': "'Times New Roman', Georgia, serif",
+      'font-weight': '600'
+    });
+    rightTitle.textContent = 'RAF Closure Criteria';
+    rightG.appendChild(rightTitle);
+
+    const criteria = [
+      { label: 'Generation', desc: 'τ generates all outcomes', y: 100 },
+      { label: 'Transformation', desc: 'Fusion transforms types', y: 190 },
+      { label: 'Closure', desc: 'Outputs stay within set', y: 280 }
+    ];
+
+    criteria.forEach((c, i) => {
+      const cG = svgEl('g', {});
+
+      const rect = svgEl('rect', {
+        x: 490, y: c.y - 25, width: 310, height: 55, rx: 8,
+        fill: GOLDEN,
+        'fill-opacity': 0.05,
+        stroke: GOLDEN,
+        'stroke-width': 1.5,
+        'stroke-opacity': 0.3
+      });
+      cG.appendChild(rect);
+
+      const num = svgEl('text', {
+        x: 510, y: c.y + 2,
+        'dominant-baseline': 'central',
+        fill: GOLDEN,
+        'font-size': '18',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      num.textContent = (i + 1) + '.';
+      cG.appendChild(num);
+
+      const name = svgEl('text', {
+        x: 540, y: c.y - 5,
+        fill: HEADING,
+        'font-size': '14',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      name.textContent = c.label;
+      cG.appendChild(name);
+
+      const desc = svgEl('text', {
+        x: 540, y: c.y + 15,
+        fill: TEXT,
+        'font-size': '12',
+        'font-family': 'system-ui, sans-serif',
+        'font-style': 'italic'
+      });
+      desc.textContent = c.desc;
+      cG.appendChild(desc);
+
+      animateOpacity(cG, 800 + i * 400, 600);
+      rightG.appendChild(cG);
+    });
+
+    g.appendChild(rightG);
+
+    // Connection lines from left to right
+    const connections = [
+      { lx: 280, ly: 110, ry: 100, delay: 2000, tooltip: 'Both systems contain generators that produce all other members from a starting set' },
+      { lx: 215, ly: 170, ry: 190, delay: 2400, tooltip: 'Both systems transform members into other members through binary operations (fusion / catalysis)' },
+      { lx: 215, ly: 255, ry: 280, delay: 2800, tooltip: 'Both systems are closed: all outputs remain within the set (τ×τ = 1+τ stays in {1,τ}; RAF products catalyze RAF reactions)' }
+    ];
+
+    connections.forEach((conn) => {
+      const connG = svgEl('g', {});
+
+      // connection tooltip
+      const connTitle = svgEl('title', {});
+      connTitle.textContent = conn.tooltip;
+      connG.appendChild(connTitle);
+
+      const path = svgEl('path', {
+        d: `M ${conn.lx + 30} ${conn.ly} C ${380} ${conn.ly} ${460} ${conn.ry} ${488} ${conn.ry}`,
+        fill: 'none',
+        stroke: GOLDEN,
+        'stroke-width': 1.5,
+        'stroke-opacity': 0.4,
+        'stroke-dasharray': '6 4'
+      });
+      connG.appendChild(path);
+
+      animateOpacity(connG, conn.delay, 800);
+      g.appendChild(connG);
+    });
+
+    // Bottom label
+    const bottomLabel = svgEl('text', {
+      x: 430, y: 355,
+      'text-anchor': 'middle',
+      fill: GOLDEN,
+      'font-size': '13',
+      'font-family': "'Times New Roman', Georgia, serif",
+      'font-style': 'italic'
+    });
+    bottomLabel.textContent = 'Structural identity — not analogy';
+    animateOpacity(bottomLabel, 3200, 800);
+    g.appendChild(bottomLabel);
+  }
+
+  function replayAC() {
+    drawAC();
+  }
+
+  onVisible('svg-ac', drawAC);
+
+  // =================================================================
+  // ANIMATION 7: EMERGENT STACK
+  // =================================================================
+
+  function drawStack() {
+    const g = document.getElementById('stack-scene');
+    g.innerHTML = '';
+
+    const items = [
+      { property: 'Self-sustenance', domain: 'Autocatalysis', color: GOLDEN, num: 1, tooltip: 'Layer 1: The system sustains itself — products catalyze their own production, creating a self-maintaining cycle' },
+      { property: 'Spontaneity', domain: 'Criticality + Universality', color: GREEN, num: 2, tooltip: 'Layer 2: The transition happens spontaneously at a threshold — no external direction needed (phase transition)' },
+      { property: 'Self-creation', domain: 'Autopoiesis', color: GOLDEN, num: 3, tooltip: 'Layer 3: The system creates and maintains its own boundary, distinguishing self from environment' },
+      { property: 'Coherent transport', domain: 'Solitons', color: GREEN, num: 4, tooltip: 'Layer 4: Information and structure move coherently without dispersing (solitonic transport)' },
+      { property: 'Protection', domain: 'Topology', color: BLUE, num: 5, tooltip: 'Layer 5: Local damage cannot destroy global structure (topological protection)' },
+      { property: 'Coordination', domain: 'Parallel computation', color: PURPLE, num: 6, tooltip: 'Layer 6: Components coordinate without any central controller (distributed consensus)' },
+      { property: 'Computation', domain: 'TQFT + CM + TQC', color: BLUE, num: 7, tooltip: 'Layer 7: The system processes information in a fault-tolerant way (topological quantum computation)' },
+      { property: 'Physical reality', domain: 'Materials science', color: RED, num: 8, tooltip: 'Layer 8: All of this exists in real physical materials, not just in mathematics' }
+    ];
+
+    const startY = 460;
+    const layerH = 52;
+    const layerW = 500;
+    const cx = 430;
+
+    items.forEach((item, i) => {
+      const y = startY - i * layerH;
+      const iG = svgEl('g', {});
+
+      // layer tooltip
+      const layerTitle = svgEl('title', {});
+      layerTitle.textContent = item.tooltip;
+      iG.appendChild(layerTitle);
+
+      // Layer rectangle
+      const rect = svgEl('rect', {
+        x: cx - layerW / 2, y: y - layerH / 2 + 5,
+        width: layerW, height: layerH - 6,
+        rx: 6,
+        fill: item.color,
+        'fill-opacity': 0.04 + i * 0.01,
+        stroke: item.color,
+        'stroke-width': 1.5,
+        'stroke-opacity': 0.3 + i * 0.05
+      });
+      iG.appendChild(rect);
+
+      // Number
+      const numT = svgEl('text', {
+        x: cx - layerW / 2 + 25, y: y + 6,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: item.color,
+        'font-size': '18',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      numT.textContent = item.num;
+      iG.appendChild(numT);
+
+      // Property name
+      const propT = svgEl('text', {
+        x: cx - layerW / 2 + 55, y: y + 2,
+        'dominant-baseline': 'central',
+        fill: HEADING,
+        'font-size': '15',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      propT.textContent = item.property;
+      iG.appendChild(propT);
+
+      // Domain source
+      const domT = svgEl('text', {
+        x: cx + layerW / 2 - 20, y: y + 2,
+        'text-anchor': 'end',
+        'dominant-baseline': 'central',
+        fill: MUTED,
+        'font-size': '12',
+        'font-family': 'system-ui, sans-serif'
+      });
+      domT.textContent = item.domain;
+      iG.appendChild(domT);
+
+      // Animate building upward
+      iG.style.opacity = '0';
+      iG.style.transform = `translateY(20px)`;
+      iG.style.transition = `opacity 600ms ease, transform 600ms ease`;
+      setTimeout(() => {
+        iG.style.opacity = '1';
+        iG.style.transform = 'translateY(0)';
+      }, 300 + i * 300);
+
+      g.appendChild(iG);
+    });
+
+    // Up-arrow on left
+    const arrowG = svgEl('g', {});
+    const arrowLine = svgEl('line', {
+      x1: cx - layerW / 2 - 30, y1: startY + 10,
+      x2: cx - layerW / 2 - 30, y2: startY - items.length * layerH + layerH / 2,
+      stroke: LINE,
+      'stroke-width': 1.5,
+      'stroke-opacity': 0.3
+    });
+    arrowG.appendChild(arrowLine);
+
+    const arrowHead = svgEl('polygon', {
+      points: `${cx - layerW / 2 - 30},${startY - items.length * layerH + layerH / 2 - 8} ${cx - layerW / 2 - 35},${startY - items.length * layerH + layerH / 2 + 2} ${cx - layerW / 2 - 25},${startY - items.length * layerH + layerH / 2 + 2}`,
+      fill: LINE,
+      'fill-opacity': 0.3
+    });
+    arrowG.appendChild(arrowHead);
+
+    const arrowLabel = svgEl('text', {
+      x: cx - layerW / 2 - 30, y: startY - items.length * layerH + layerH / 2 - 18,
+      'text-anchor': 'middle',
+      fill: MUTED,
+      'font-size': '11',
+      'font-family': "'Times New Roman', Georgia, serif",
+      'font-style': 'italic'
+    });
+    arrowLabel.textContent = 'Emergent properties';
+    arrowG.appendChild(arrowLabel);
+
+    animateOpacity(arrowG, 2800, 800);
+    g.appendChild(arrowG);
+  }
+
+  function replayStack() {
+    drawStack();
+  }
+
+  onVisible('svg-stack', drawStack);
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lattice Braiding Search &mdash; Spatially Extended Dynamics</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+h3 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 2rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.back-link:hover { color: var(--blue); }
+
+.subtitle {
+  color: var(--line);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.section-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #334155;
+  margin: 1.5rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+th {
+  background: #334155;
+  color: var(--heading);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  white-space: nowrap;
+}
+
+td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+tr:last-child td { border-bottom: none; }
+
+.highlight { color: var(--golden); font-weight: 600; }
+.zero { color: var(--red); font-weight: 600; }
+.notable { color: var(--green); font-weight: 600; }
+
+.honest-box {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--red);
+  margin: 1.5rem 0;
+}
+
+.honest-box strong {
+  color: var(--heading);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.1rem;
+}
+
+.bottleneck-box {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--amber);
+  margin: 1.5rem 0;
+}
+
+.bottleneck-box strong {
+  color: var(--heading);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.1rem;
+}
+
+.forward-box {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--green);
+  margin: 1.5rem 0;
+}
+
+.forward-box strong {
+  color: var(--heading);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.1rem;
+}
+
+.plot-container {
+  margin: 1.5rem 0;
+}
+
+.plot-container img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  display: block;
+  margin: 1rem 0;
+}
+
+.plot-caption {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+.formula {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  color: var(--line);
+}
+
+.crosslink {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #334155;
+  display: block;
+  margin: 1.5rem 0;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s;
+}
+
+.crosslink:hover {
+  border-color: var(--blue);
+  text-decoration: none;
+}
+
+.crosslink-label {
+  color: var(--blue);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+abbr {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+  cursor: help;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="back-link" href="../">&larr; Domain Convergence Research</a>
+
+<h1>Lattice Braiding Search</h1>
+<p class="subtitle">Spatially extended Fibonacci anyon braiding on 60-site chains &mdash; searching for genuine complexity</p>
+
+<h2>Overview</h2>
+
+<p>The <a href="../braiding-search/">braiding phase space search</a> established that single-rule repetition on a finite Hilbert space cannot produce genuine complexity. This search extends to <strong>spatially extended systems</strong>: 1D lattice chains where different braiding rules operate at different sites, producing emergent spatiotemporal patterns.</p>
+
+<p>The motivation is physical: real topological systems involve many anyons distributed in space. Complexity might emerge from the interplay between local quantum dynamics (braiding) and spatial structure (the lattice pattern), even when each local operation is simple.</p>
+
+<h2>Method</h2>
+
+<div class="section-card">
+<p><strong>Lattice model.</strong> A 1D chain of 60 Fibonacci anyons. Each adjacent pair has a local 2D fusion space. At each time step:</p>
+<ol style="padding-left:1.5rem; margin:0.75rem 0;">
+  <li>Apply braiding unitary U<sub>A</sub> or U<sub>B</sub> at each site according to a spatial pattern</li>
+  <li>Apply F-matrix coupling to propagate information between neighbors (coupling strength 0.3)</li>
+</ol>
+
+<p><strong>Rule selection.</strong> The top 50 rule pairs were selected from the single-rule search, ranked by commutator norm (maximizing non-commutativity of the two rules).</p>
+
+<p><strong>Spatial patterns.</strong> 12 pattern types tested: uniform A, uniform B, alternating, period-3 (AAB), period-4 (ABBA), Fibonacci word, three random densities (30%, 50%, 70%), block (half/half), gradient, and Thue-Morse.</p>
+
+<p><strong>Two models:</strong></p>
+<ul style="padding-left:1.5rem; margin:0.75rem 0;">
+  <li><strong>Linear model:</strong> Braiding rule at each site determined by the fixed spatial pattern. Product-state approximation (no entanglement between sites).</li>
+  <li><strong>Nonlinear model:</strong> Braiding rule at each site depends on the current state of its neighbor (if P(&tau;) > threshold, use rule B; otherwise rule A). This is a true <abbr title="Cellular Automaton">CA</abbr> with state-dependent update rules.</li>
+</ul>
+
+<p><strong>Total simulations:</strong> 1,570 (50 rule pairs &times; 12 patterns &times; 2&ndash;3 configurations, plus nonlinear variants).</p>
+</div>
+
+<h2>Linear Model Results</h2>
+
+<table>
+<thead>
+<tr><th>Class</th><th>Count</th><th>Percentage</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>I (fixed)</td><td>36</td><td>2.3%</td><td>Spatially uniform convergence</td></tr>
+<tr><td>II (periodic)</td><td>1,387</td><td>88.3%</td><td>Spatiotemporal periodicity or standing waves</td></tr>
+<tr><td>III (chaotic)</td><td>93</td><td>5.9%</td><td>Domain-wall dynamics and interference</td></tr>
+<tr><td>IV (complex)</td><td class="highlight">54</td><td class="highlight">3.4%</td><td>Apparent spatiotemporal complexity</td></tr>
+</tbody>
+</table>
+
+<h3>Class IV distribution by spatial pattern</h3>
+
+<table>
+<thead>
+<tr><th>Pattern</th><th>Class IV count</th><th>Class IV rate</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td>Period-4 (ABBA)</td><td>19</td><td class="notable">12.7%</td><td>Best performer by far</td></tr>
+<tr><td>Fibonacci word</td><td>14</td><td class="notable">5.8%</td><td>Aperiodic structure helps</td></tr>
+<tr><td>Random (30%)</td><td>4</td><td>8.0%</td><td>Low density + disorder</td></tr>
+<tr><td>Period-3 (AAB)</td><td>8</td><td>5.3%</td><td>Moderate</td></tr>
+<tr><td>Block (half/half)</td><td>5</td><td>2.1%</td><td>Single domain wall</td></tr>
+<tr><td>Thue-Morse</td><td>4</td><td>2.7%</td><td>Substitution aperiodicity</td></tr>
+<tr><td>Uniform A/B</td><td>0</td><td class="zero">0.0%</td><td>No spatial heterogeneity</td></tr>
+<tr><td>Alternating</td><td>0</td><td class="zero">0.0%</td><td>Too regular</td></tr>
+<tr><td>Random (50%, 70%)</td><td>0</td><td class="zero">0.0%</td><td>High density suppresses structure</td></tr>
+<tr><td>Gradient</td><td>0</td><td class="zero">0.0%</td><td>Smooth variation not sufficient</td></tr>
+</tbody>
+</table>
+
+<p>The pattern is clear: intermediate structure wins. Period-4 ABBA (12.7% Class IV) and Fibonacci word (5.8%) both have the right balance of regularity and variation. Uniform patterns produce no complexity. Pure randomness at high density also fails.</p>
+
+<h2>Nonlinear Model Results</h2>
+
+<p>The nonlinear model applies state-dependent rule selection: if the left neighbor's P(&tau;) exceeds a threshold, use rule B; otherwise rule A. This creates a genuine <abbr title="Cellular Automaton">CA</abbr> where the update rule depends on the current state.</p>
+
+<table>
+<thead>
+<tr><th>Class</th><th>Percentage</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>II (periodic)</td><td>~88%</td><td>Threshold feedback creates fast lock-in</td></tr>
+<tr><td>III (chaotic)</td><td>~12%</td><td>Period-doubling to chaos</td></tr>
+<tr><td>IV (complex)</td><td class="zero">0%</td><td>No complex intermediate</td></tr>
+</tbody>
+</table>
+
+<p>The nonlinear model is <em>worse</em> for complexity. The threshold feedback overwhelms spatial pattern within approximately 20 timesteps, driving the system either to period-doubling cascades (Class III) or to stable oscillations (Class II). There is no complex intermediate regime.</p>
+
+<h2>Honest Assessment</h2>
+
+<div class="honest-box">
+<strong>The linear "Class IV" candidates are not genuinely complex.</strong>
+<p>Close inspection reveals that the 54 candidates classified as Class IV are <strong>domain-wall interference patterns</strong>: standing and traveling waves created by the boundary between regions with different braiding rules. These patterns have spatial structure, but they lack the hallmarks of genuine complexity:</p>
+<ul style="padding-left:1.5rem; margin:0.75rem 0;">
+  <li>No gliders or localized propagating structures</li>
+  <li>No information processing or logical operations</li>
+  <li>No sensitivity to initial conditions beyond the initial transient</li>
+  <li>Spatial Fourier spectra are discrete (quasi-periodic), not broadband</li>
+</ul>
+<p>The nonlinear model shows period-doubling to chaos with no complex intermediate. The threshold mechanism is too blunt: it creates a binary switch that locks in quickly, destroying the spatial structure that might support complexity.</p>
+</div>
+
+<h2>The Fundamental Bottleneck</h2>
+
+<div class="bottleneck-box">
+<strong>Product-state approximation strips out entanglement.</strong>
+<p>Both models use a product-state (mean-field) approximation: each site's state is independent of its neighbors, coupled only through the F-matrix at each time step. This is computationally tractable (the state is 60 &times; 2 complex numbers, not a 2<sup>60</sup>-dimensional vector), but it discards the very thing that makes quantum systems quantum: <strong>entanglement</strong>.</p>
+
+<p>In a full quantum simulation, braiding would create entanglement between sites. This entanglement is where the complexity lives. The topological properties that make Fibonacci anyons computationally universal are properties of the <em>entangled</em> many-body state, not properties that can be captured in a product-state approximation.</p>
+
+<p>The null result is therefore <strong>expected and informative</strong>: it confirms that complexity in topological systems is a genuinely quantum phenomenon, not a classical one dressed in quantum language.</p>
+</div>
+
+<h2>Paths Forward</h2>
+
+<div class="forward-box">
+<strong>Four approaches could break through the entanglement barrier.</strong>
+<ol style="padding-left:1.5rem; margin:0.75rem 0;">
+  <li><strong>Matrix Product State (<abbr title="Matrix Product State">MPS</abbr>) simulation.</strong> Represent the chain as an <abbr title="Matrix Product State">MPS</abbr> with bond dimension chi. This captures entanglement up to chi correlations. Cost: O(N chi<sup>3</sup>) per step. For 60 sites at chi=64, this is feasible on modern hardware. The question: does entanglement entropy grow with time (indicating genuine complexity) or saturate (indicating topological order without dynamics)?</li>
+  <li><strong>Measurement-based dynamics.</strong> Intersperse braiding with projective measurements. This breaks unitarity and can create genuinely irreversible dynamics. The measurement collapses entanglement locally, but the braiding re-creates it. The interplay might support complex dynamics.</li>
+  <li><strong>Dissipative coupling (Lindblad dynamics).</strong> Add controlled decoherence via a Lindblad master equation. This models a topological system coupled to an environment. Dissipation breaks unitarity and can drive the system to non-equilibrium steady states with complex structure.</li>
+  <li><strong>Smooth nonlinear feedback.</strong> Replace the binary threshold with a smooth function (e.g., tanh with adjustable steepness). The binary threshold is a singular limit that destroys intermediate behavior. A smooth feedback function might support a richer dynamical landscape.</li>
+</ol>
+</div>
+
+<h2>Plots</h2>
+
+<div class="plot-container">
+<h3>Linear model: Class IV candidates</h3>
+<img src="lattice_class4_candidates.png" alt="Spacetime diagrams of Class IV candidate lattice braiding simulations. 60-site chains evolved over 200 timesteps showing domain-wall interference patterns.">
+<p class="plot-caption">Spacetime diagrams for the top Class IV candidates in the linear lattice model. Horizontal axis: site position (60 sites). Vertical axis: time (200 steps). Color: P(&tau;) at each site. The patterns show domain-wall interference, not genuine complexity.</p>
+</div>
+
+<div class="plot-container">
+<h3>Linear model: Class IV by spatial pattern</h3>
+<img src="lattice_class4_candidates_by_pattern.png" alt="Class IV candidates grouped by spatial pattern type, showing Period-4 ABBA and Fibonacci word as top performers.">
+<p class="plot-caption">Class IV candidate distribution across spatial pattern types. Period-4 ABBA dominates at 12.7% Class IV rate. Fibonacci word is second at 5.8%. Uniform and alternating patterns produce zero Class IV.</p>
+</div>
+
+<div class="plot-container">
+<h3>Nonlinear model: candidate trajectories</h3>
+<img src="lattice_nonlinear_candidates.png" alt="Spacetime diagrams of nonlinear lattice braiding simulations showing period-doubling cascades.">
+<p class="plot-caption">Nonlinear model (state-dependent rule selection). The threshold feedback drives the system to period-doubling cascades within ~20 timesteps. No complex intermediate regime.</p>
+</div>
+
+<div class="plot-container">
+<h3>Nonlinear model: by spatial pattern</h3>
+<img src="lattice_nonlinear_candidates_by_pattern.png" alt="Nonlinear lattice model results by spatial pattern type. Threshold feedback overwhelms spatial structure.">
+<p class="plot-caption">Nonlinear model results grouped by spatial pattern. The threshold feedback mechanism dominates over the spatial pattern: all patterns converge to similar periodic or chaotic behavior within 20 steps.</p>
+</div>
+
+</div>
+</body>
+</html>

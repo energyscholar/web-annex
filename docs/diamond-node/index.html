@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain Convergence Research</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+h3 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+.subtitle {
+  color: var(--line);
+  font-size: 1.15rem;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #334155;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.card:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.card-title {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+}
+
+.card-number {
+  color: var(--blue);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+
+.card-desc {
+  color: var(--line);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.card-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.tag-interactive {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--blue);
+}
+
+.tag-computational {
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--purple);
+}
+
+.findings {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #334155;
+  margin-top: 1rem;
+}
+
+.findings ul {
+  list-style: none;
+  padding: 0;
+}
+
+.findings li {
+  padding: 0.6rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.findings li:last-child {
+  border-bottom: none;
+}
+
+.findings li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.findings li.proven::before { background: var(--green); }
+.findings li.structural::before { background: var(--blue); }
+.findings li.hypothesis::before { background: var(--amber); }
+.findings li.null-result::before { background: var(--red); }
+.findings li.gap::before { background: var(--muted); }
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #334155;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.intro-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--line);
+  margin-bottom: 0.5rem;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Domain Convergence Research</h1>
+<p class="subtitle">Investigating cross-domain bridges between eleven scientific fields</p>
+
+<p class="intro-text">This collection documents a systematic investigation into structural relationships between criticality, topology, autocatalysis, computation, and seven other scientific domains. The work combines interactive tutorials with computational experiments, tracking both positive findings and null results.</p>
+
+<h2>Interactive Tutorials</h2>
+<div class="card-grid">
+
+<a class="card" href="../domain-convergence/">
+  <div class="card-number">Tutorial 1</div>
+  <div class="card-title">Domain Convergence</div>
+  <div class="card-desc">Eleven domains, five clusters, seven bridges, and the emergent property stack. The central map of how criticality, topology, computation, autocatalysis, and related fields connect.</div>
+  <span class="card-tag tag-interactive">Interactive</span>
+</a>
+
+<a class="card" href="../criticality-bridges/">
+  <div class="card-number">Tutorial 2</div>
+  <div class="card-title">Criticality Bridges</div>
+  <div class="card-desc">Six physical systems where critical phenomena couple domains. Detailed analysis of how power-law correlations, universality, and scale invariance create cross-domain bridges.</div>
+  <span class="card-tag tag-interactive">Interactive</span>
+</a>
+
+<a class="card" href="../physical-systems-chart/">
+  <div class="card-number">Tutorial 3</div>
+  <div class="card-title">Physical Systems Chart</div>
+  <div class="card-desc">Interactive matrix mapping physical systems against domain clusters. Filter by system, domain, or bridge type to explore the evidence landscape.</div>
+  <span class="card-tag tag-interactive">Interactive</span>
+</a>
+
+<a class="card" href="../anyon-fusion/">
+  <div class="card-number">Tutorial 4</div>
+  <div class="card-title">Anyon Fusion Algebra</div>
+  <div class="card-desc">Fibonacci anyon fusion rules, braiding, and topological quantum computation. Interactive fusion tree visualization with step-by-step algebraic operations.</div>
+  <span class="card-tag tag-interactive">Interactive</span>
+</a>
+
+</div>
+
+<h2>Computational Research</h2>
+<div class="card-grid">
+
+<a class="card" href="anyon-family-sweep/">
+  <div class="card-number">Analysis</div>
+  <div class="card-title">Anyon Family Sweep</div>
+  <div class="card-desc">Which non-abelian anyon families support complex systems? Systematic evaluation of SU(2)<sub>k</sub>, SU(3)<sub>k</sub>, SO(3)<sub>k</sub>, D(S<sub>3</sub>), and Haagerup categories for self-catalysis, RAF closure, and computational universality. Finding: sharp phase transition at k=2 to k=3.</div>
+  <span class="card-tag tag-computational">Computational</span>
+</a>
+
+<a class="card" href="braiding-search/">
+  <div class="card-number">Experiment</div>
+  <div class="card-title">Braiding Phase Space Search</div>
+  <div class="card-desc">NKS enumeration of 1,364 braiding rules on Fibonacci anyons, classified by Wolfram's four complexity classes. Finding: unitary evolution on finite Hilbert space cannot produce genuine chaos&mdash;all "Class IV" candidates are quasi-periodic.</div>
+  <span class="card-tag tag-computational">Computational</span>
+</a>
+
+<a class="card" href="lattice-search/">
+  <div class="card-number">Experiment</div>
+  <div class="card-title">Lattice Braiding Search</div>
+  <div class="card-desc">Spatially extended braiding dynamics on 60-anyon chains. 1,570 simulations across 12 spatial patterns. Finding: product-state approximation cannot capture genuine complexity&mdash;it lives in quantum entanglement.</div>
+  <span class="card-tag tag-computational">Computational</span>
+</a>
+
+</div>
+
+<h2>Key Findings</h2>
+<div class="findings">
+<ul>
+  <li class="proven">Self-catalysis and RAF closure are <strong>generic</strong> for k&ge;3 in SU(2)<sub>k</sub> Chern-Simons theory, not special to Fibonacci anyons. Verified by explicit construction of fusion rules for k=2 through k=6.</li>
+  <li class="proven">Sharp phase transition at k=2 to k=3: self-catalysis and computational universality share the same algebraic root (non-trivial self-coupling N<sup>j</sup><sub>jj</sub> &ge; 1). Below threshold, neither property holds; at or above, both hold.</li>
+  <li class="structural">Fibonacci anyons sit at the edge of chaos for fusion algebras: minimal self-catalysis, minimal universality, golden ratio dimension growth. Analogous to K=2 in Boolean networks.</li>
+  <li class="null-result">No genuine Class IV behavior in braiding phase space: unitary evolution on finite Hilbert space is linear and norm-preserving, giving Lyapunov exponent exactly zero. The 360 "Class IV" candidates (n=3) are quasi-periodic with irrational eigenvalue phases.</li>
+  <li class="structural">Bridge mechanism taxonomy: approximately 4 of 7 identified bridges operate on rule-space structural identity rather than parameter coincidence or dynamical coupling.</li>
+  <li class="hypothesis">The AC bridge (topology &harr; autocatalysis) is the largest gap in the convergence map. No physical system demonstrating this bridge has been identified; the evidence is purely algebraic.</li>
+</ul>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span> Proven (explicit construction)</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span> Structural (well-supported)</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span> Hypothesis (under investigation)</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--red)"></span> Null result (informative)</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>

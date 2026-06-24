@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physical Systems &times; Domain Bridge Chart</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 2.6rem;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin: 3.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--muted);
+}
+
+h2 .section-number {
+  color: var(--blue);
+  font-size: 0.9em;
+  margin-right: 0.3em;
+}
+
+h3 {
+  font-size: 1.3rem;
+  margin: 1.8rem 0 0.8rem;
+  color: var(--line);
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 1.5rem 1.8rem;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.card.highlight {
+  border-left: 3px solid var(--golden);
+}
+
+em {
+  font-style: italic;
+  color: var(--line);
+}
+
+strong {
+  color: var(--heading);
+  font-weight: 600;
+}
+
+.citation {
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+abbr {
+  text-decoration: underline dotted;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+/* Table of contents */
+.toc {
+  margin: 2rem 0;
+}
+
+.toc ol {
+  list-style: none;
+  counter-reset: toc-counter;
+}
+
+.toc li {
+  counter-increment: toc-counter;
+  margin: 0.4rem 0;
+}
+
+.toc li::before {
+  content: counter(toc-counter) ".";
+  color: var(--blue);
+  font-family: 'Times New Roman', Georgia, serif;
+  margin-right: 0.5em;
+}
+
+.toc a {
+  color: var(--text);
+  transition: color 0.2s;
+}
+.toc a:hover {
+  color: var(--heading);
+}
+
+/* Cluster labels */
+.cluster-label {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
+  margin-right: 0.3em;
+}
+.cluster-A { background: rgba(59,130,246,0.15); color: var(--blue); }
+.cluster-B { background: rgba(34,197,94,0.15); color: var(--green); }
+.cluster-C { background: rgba(251,191,36,0.15); color: var(--golden); }
+.cluster-D { background: rgba(168,85,247,0.15); color: var(--purple); }
+.cluster-E { background: rgba(239,68,68,0.15); color: var(--red); }
+
+/* Status tags */
+.status-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+.status-confirmed { background: rgba(34,197,94,0.15); color: var(--green); }
+.status-theoretical { background: rgba(168,85,247,0.15); color: var(--purple); }
+.status-candidate { background: rgba(245,158,11,0.15); color: var(--amber); }
+.status-hypothesis { background: rgba(251,191,36,0.15); color: var(--golden); }
+
+/* =====================================================
+   MATRIX STYLES
+   ===================================================== */
+.matrix-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.matrix-instructions {
+  color: var(--muted);
+  font-size: 0.88em;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.systems-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.systems-matrix th {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-weight: 600;
+  padding: 0.7rem 0.6rem;
+  text-align: center;
+  font-size: 0.92em;
+  border-bottom: 2px solid var(--muted);
+  position: relative;
+}
+
+.systems-matrix th.col-header {
+  cursor: pointer;
+  transition: background 0.2s;
+  min-width: 120px;
+}
+.systems-matrix th.col-header:hover {
+  background: rgba(148,163,184,0.06);
+}
+
+.systems-matrix th.col-A { color: var(--blue); }
+.systems-matrix th.col-B { color: var(--green); }
+.systems-matrix th.col-C { color: var(--golden); }
+.systems-matrix th.col-D { color: var(--purple); }
+.systems-matrix th.col-E { color: var(--red); }
+
+.systems-matrix th.corner {
+  text-align: left;
+  min-width: 180px;
+}
+
+.systems-matrix td {
+  text-align: center;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.systems-matrix td.row-header {
+  text-align: left;
+  font-weight: 500;
+  color: var(--heading);
+  font-size: 0.95em;
+  cursor: pointer;
+  padding-left: 0.8rem;
+  white-space: nowrap;
+}
+
+.systems-matrix td.row-header .system-sub {
+  display: block;
+  font-size: 0.82em;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.systems-matrix td.row-header .candidate-tag {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 3px;
+  font-size: 0.75em;
+  font-weight: 500;
+  background: rgba(245,158,11,0.15);
+  color: var(--amber);
+  margin-left: 0.3em;
+  vertical-align: middle;
+}
+
+/* Matrix cell states */
+.cell-confirmed {
+  font-size: 1.2em;
+  color: var(--heading);
+}
+
+.cell-theoretical {
+  font-size: 1.1em;
+  color: var(--line);
+}
+
+.cell-empty {
+  color: rgba(71,85,105,0.3);
+  font-size: 0.85em;
+}
+
+/* Cell background fills */
+td[data-state="confirmed"] {
+  background: rgba(148, 163, 184, 0.06);
+}
+td[data-state="theoretical"] {
+  background: rgba(148, 163, 184, 0.03);
+}
+
+/* Column-specific confirmed backgrounds */
+td.col-A[data-state="confirmed"] { background: rgba(59,130,246,0.08); }
+td.col-B[data-state="confirmed"] { background: rgba(34,197,94,0.08); }
+td.col-C[data-state="confirmed"] { background: rgba(251,191,36,0.08); }
+td.col-D[data-state="confirmed"] { background: rgba(168,85,247,0.08); }
+td.col-E[data-state="confirmed"] { background: rgba(239,68,68,0.08); }
+
+td.col-A[data-state="theoretical"] { background: rgba(59,130,246,0.04); }
+td.col-B[data-state="theoretical"] { background: rgba(34,197,94,0.04); }
+td.col-C[data-state="theoretical"] { background: rgba(251,191,36,0.04); }
+td.col-D[data-state="theoretical"] { background: rgba(168,85,247,0.04); }
+td.col-E[data-state="theoretical"] { background: rgba(239,68,68,0.04); }
+
+/* Highlight states */
+.matrix-highlight-row td {
+  background: rgba(148,163,184,0.1) !important;
+}
+.matrix-highlight-col {
+  background: rgba(148,163,184,0.1) !important;
+}
+.matrix-dim {
+  opacity: 0.25;
+  transition: opacity 0.25s ease;
+}
+.matrix-active-cell {
+  outline: 2px solid var(--line);
+  outline-offset: -2px;
+  z-index: 2;
+}
+
+/* Tooltip */
+.matrix-tooltip {
+  display: none;
+  position: fixed;
+  max-width: 380px;
+  background: #1a2438;
+  border: 1px solid rgba(148,163,184,0.2);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 0.88em;
+  line-height: 1.5;
+  color: var(--text);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  z-index: 100;
+  pointer-events: none;
+}
+.matrix-tooltip.visible {
+  display: block;
+}
+.matrix-tooltip .tooltip-system {
+  color: var(--heading);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+.matrix-tooltip .tooltip-cluster {
+  font-size: 0.85em;
+  margin-bottom: 0.4rem;
+}
+
+/* =====================================================
+   SVG CONTAINERS
+   ===================================================== */
+.svg-container {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.svg-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.replay-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--muted);
+  color: var(--line);
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: system-ui, sans-serif;
+  z-index: 10;
+  transition: all 0.2s;
+}
+.replay-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: var(--heading);
+  border-color: var(--line);
+}
+
+/* System selector for bridge coverage */
+.system-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.2rem 0;
+  justify-content: center;
+}
+
+.system-btn {
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85em;
+  cursor: pointer;
+  background: var(--card);
+  border: 1px solid rgba(148,163,184,0.15);
+  color: var(--text);
+  transition: all 0.2s;
+  font-family: system-ui, sans-serif;
+}
+.system-btn:hover {
+  background: rgba(148,163,184,0.1);
+  color: var(--heading);
+}
+.system-btn.active {
+  background: rgba(59,130,246,0.15);
+  border-color: var(--blue);
+  color: var(--heading);
+}
+
+/* =====================================================
+   EXPANDABLE CARDS
+   ===================================================== */
+.expand-card {
+  background: var(--card);
+  border-radius: 10px;
+  margin: 1rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  overflow: hidden;
+}
+
+.expand-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+}
+.expand-header:hover {
+  background: rgba(148,163,184,0.04);
+}
+
+.expand-arrow {
+  color: var(--muted);
+  font-size: 0.8em;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+
+.expand-card.open .expand-arrow {
+  transform: rotate(90deg);
+}
+
+.expand-title {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+  font-size: 1.05em;
+}
+
+.expand-meta {
+  font-size: 0.85em;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+.expand-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.expand-card.open .expand-body {
+  max-height: 2000px;
+}
+
+.expand-content {
+  padding: 0 1.4rem 1.2rem;
+  border-top: 1px solid rgba(71,85,105,0.2);
+}
+
+.endpoint-block {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--muted);
+}
+
+.endpoint-block .ep-label {
+  font-weight: 600;
+  color: var(--heading);
+  font-size: 0.95em;
+  margin-bottom: 0.2rem;
+}
+
+.endpoint-block .ep-detail {
+  color: var(--text);
+  font-size: 0.92em;
+  margin: 0.15rem 0;
+}
+
+.endpoint-block .ep-detail span.ep-key {
+  color: var(--muted);
+  font-size: 0.88em;
+}
+
+.mechanism-block {
+  margin: 1rem 0;
+  padding: 0.8rem 1rem;
+  background: rgba(59,130,246,0.05);
+  border-radius: 6px;
+  border-left: 3px solid var(--blue);
+}
+
+.mechanism-block .mech-label {
+  color: var(--blue);
+  font-weight: 600;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.2rem;
+}
+
+/* =====================================================
+   BRIDGE TABLE
+   ===================================================== */
+.bridge-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2rem 0;
+  font-size: 0.95em;
+}
+
+.bridge-table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--muted);
+}
+
+.bridge-table td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+  vertical-align: top;
+}
+
+.bridge-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* =====================================================
+   MECHANISM TYPE CARDS
+   ===================================================== */
+.mechanism-type {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid rgba(148,163,184,0.1);
+}
+.mechanism-type h4 {
+  font-size: 1.05em;
+  margin-bottom: 0.4rem;
+}
+.mechanism-type .mech-bridges {
+  color: var(--muted);
+  font-size: 0.88em;
+  margin-bottom: 0.5rem;
+}
+
+/* =====================================================
+   RESEARCH TARGET LIST
+   ===================================================== */
+.research-target {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid rgba(148,163,184,0.1);
+}
+.research-target h4 {
+  font-size: 1.05em;
+  margin-bottom: 0.5rem;
+}
+.research-target .priority-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.78em;
+  font-weight: 500;
+  margin-left: 0.4em;
+  vertical-align: middle;
+}
+.priority-high { background: rgba(239,68,68,0.15); color: var(--red); }
+.priority-medium { background: rgba(245,158,11,0.15); color: var(--amber); }
+.priority-low { background: rgba(148,163,184,0.15); color: var(--line); }
+
+.research-target ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.research-target ul li {
+  padding: 0.25rem 0 0.25rem 1.2rem;
+  position: relative;
+  font-size: 0.94em;
+}
+.research-target ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.research-target .key-question {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  background: rgba(251,191,36,0.06);
+  border-radius: 4px;
+  border-left: 3px solid var(--golden);
+  font-size: 0.92em;
+  font-style: italic;
+  color: var(--heading);
+}
+
+.closing-line {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.15em;
+  color: var(--heading);
+  text-align: center;
+  padding: 2.5rem 1rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85em;
+  padding: 3rem 0 1rem;
+  border-top: 1px solid rgba(71,85,105,0.3);
+  margin-top: 3rem;
+}
+
+footer a {
+  color: var(--text);
+}
+footer a:hover {
+  color: var(--heading);
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.4rem; }
+  body { font-size: 16px; }
+  .container { padding: 1rem 1rem 3rem; }
+}
+</style>
+</head>
+<body>
+<nav style="background:#1e293b;padding:0.5rem 1rem;font-family:system-ui,sans-serif;font-size:0.85rem;border-bottom:1px solid #334155;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;">
+    <a href="../" style="color:#64748b;text-decoration:none;">&#8592; Web Annex</a>
+    <span style="color:#334155;">|</span>
+    <a href="../anyon-fusion/" style="color:#94a3b8;text-decoration:none;">Anyon Fusion</a>
+    <a href="../domain-convergence/" style="color:#94a3b8;text-decoration:none;">Domain Convergence</a>
+    <a href="../criticality-bridges/" style="color:#94a3b8;text-decoration:none;">Criticality Bridges</a>
+    <a href="../physical-systems-chart/" style="color:#f1f5f9;text-decoration:none;font-weight:600;">Physical Systems</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<h1>Physical Systems &times; Domain Bridge Chart</h1>
+<p class="subtitle">Which physical systems bridge which domains &mdash; and where are the gaps?</p>
+
+<nav class="toc card">
+  <ol>
+    <li><a href="#matrix">Physical Systems &times; Domain Matrix</a></li>
+    <li><a href="#bridge-coverage">Bridge Coverage</a></li>
+    <li><a href="#endpoints">Endpoint Complex Systems</a></li>
+    <li><a href="#gap-map">The Gap Map</a></li>
+    <li><a href="#taxonomy">Bridge Mechanism Taxonomy</a></li>
+    <li><a href="#targets">Research Targets</a></li>
+  </ol>
+</nav>
+
+<!-- ======================================================================
+     SECTION 1: PHYSICAL SYSTEMS × DOMAIN MATRIX
+     ====================================================================== -->
+
+<h2 id="matrix"><span class="section-number">1.</span> Physical Systems &times; Domain Matrix</h2>
+
+<p>Ten physical systems mapped against five domain clusters. Each cell records whether the system exhibits behavior in that domain: confirmed (<span style="color:var(--heading)">&check;</span>), theoretical/proposed (<span style="color:var(--line)">?</span>), or no known connection. Click any cell, row header, or column header to highlight connections.</p>
+
+<p class="matrix-instructions">Click a cell to highlight its row and column. Click a row header to highlight that system's bridges. Click a column header to highlight all systems in that cluster.</p>
+
+<div class="matrix-wrapper">
+<table class="systems-matrix" id="systemsMatrix">
+  <thead>
+    <tr>
+      <th class="corner">Physical System</th>
+      <th class="col-header col-A" data-col="A"><span class="cluster-label cluster-A">A</span> Topology</th>
+      <th class="col-header col-B" data-col="B"><span class="cluster-label cluster-B">B</span> Dynamics</th>
+      <th class="col-header col-C" data-col="C"><span class="cluster-label cluster-C">C</span> Origin-of-life</th>
+      <th class="col-header col-D" data-col="D"><span class="cluster-label cluster-D">D</span> Computation</th>
+      <th class="col-header col-E" data-col="E"><span class="cluster-label cluster-E">E</span> Materials</th>
+    </tr>
+  </thead>
+  <tbody id="matrixBody">
+  </tbody>
+</table>
+</div>
+
+<div class="matrix-tooltip" id="matrixTooltip">
+  <div class="tooltip-system" id="tooltipSystem"></div>
+  <div class="tooltip-cluster" id="tooltipCluster"></div>
+  <div id="tooltipText"></div>
+</div>
+
+<!-- ======================================================================
+     SECTION 2: BRIDGE COVERAGE
+     ====================================================================== -->
+
+<h2 id="bridge-coverage"><span class="section-number">2.</span> Bridge Coverage</h2>
+
+<p>Each physical system demonstrates one or more inter-cluster bridges. Select a system below to highlight the bridges it demonstrates on the cluster diagram.</p>
+
+<div class="system-selector" id="systemSelector"></div>
+
+<div class="svg-container" id="svg-bridge-coverage">
+  <button class="replay-btn" onclick="drawBridgeCoverage()">Reset</button>
+  <svg viewBox="0 0 860 500" xmlns="http://www.w3.org/2000/svg">
+    <g id="bridge-coverage-scene"></g>
+  </svg>
+</div>
+
+<div class="card" style="overflow-x:auto;">
+<table class="bridge-table">
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Bridges</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="color:var(--heading);">Magnetosphere</td>
+      <td><span class="cluster-label cluster-A">A</span><span class="cluster-label cluster-B">B</span></td>
+      <td>Topology + solitons/dynamics in same system</td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);">Quantum Hall / <abbr title="Two-Dimensional Electron Gas">2DEG</abbr></td>
+      <td><span class="cluster-label cluster-A">A</span>&ndash;internal</td>
+      <td>Mostly within Cluster A + edge to B</td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);">Living cell</td>
+      <td><span class="cluster-label cluster-C">C</span><span class="cluster-label cluster-B">B</span>, <span class="cluster-label cluster-C">C</span><span class="cluster-label cluster-D">D</span>-a, <span class="cluster-label cluster-C">C</span><span class="cluster-label cluster-D">D</span>-b</td>
+      <td>Covers entire right side (B, C, D)</td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);">Brain (cortex)</td>
+      <td><span class="cluster-label cluster-B">B</span><span class="cluster-label cluster-D">D</span></td>
+      <td>Dynamics &harr; computation</td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);">BZ reaction</td>
+      <td><span class="cluster-label cluster-C">C</span><span class="cluster-label cluster-B">B</span>, <span class="cluster-label cluster-B">B</span><span class="cluster-label cluster-C">C</span></td>
+      <td>Only system bridging B and C with both endpoints active</td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);">Skyrmion lattice</td>
+      <td><span class="cluster-label cluster-A">A</span><span class="cluster-label cluster-B">B</span></td>
+      <td>Topology + solitons in same crystal</td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);">Immune system</td>
+      <td><span class="cluster-label cluster-C">C</span><span class="cluster-label cluster-B">B</span>, <span class="cluster-label cluster-C">C</span><span class="cluster-label cluster-D">D</span>-a</td>
+      <td>Autocatalysis &harr; criticality, autocatalysis &harr; <abbr title="Cellular Automata &mdash; discrete computational systems with local update rules">CA</abbr></td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);">Slime mold</td>
+      <td><span class="cluster-label cluster-B">B</span><span class="cluster-label cluster-D">D</span>, <span class="cluster-label cluster-B">B</span><span class="cluster-label cluster-C">C</span>?</td>
+      <td>Dynamics &harr; computation, possibly solitons &harr; autopoiesis</td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);"><abbr title="Fractional Quantum Hall &mdash; quantum state with fractionally charged quasiparticles">FQH</abbr> edge networks <span class="status-tag status-candidate">CANDIDATE</span></td>
+      <td><span class="cluster-label cluster-A">A</span><span class="cluster-label cluster-C">C</span>?</td>
+      <td>Candidate for capstone bridge</td>
+    </tr>
+    <tr>
+      <td style="color:var(--heading);">Topological metamaterials <span class="status-tag status-candidate">CANDIDATE</span></td>
+      <td><span class="cluster-label cluster-A">A</span><span class="cluster-label cluster-C">C</span>?</td>
+      <td>Candidate for capstone bridge</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ======================================================================
+     SECTION 3: ENDPOINT COMPLEX SYSTEMS
+     ====================================================================== -->
+
+<h2 id="endpoints"><span class="section-number">3.</span> Endpoint Complex Systems</h2>
+
+<p>For each bridge with a physical demonstrator, what complex system exists at each endpoint? Click to expand.</p>
+
+<!-- CB Bridge -->
+<div class="expand-card" id="bridge-CB">
+  <div class="expand-header" onclick="toggleExpand('bridge-CB')">
+    <span class="expand-arrow">&#9654;</span>
+    <span class="expand-title"><span class="cluster-label cluster-C">C</span><span class="cluster-label cluster-B">B</span> Autocatalysis &harr; Criticality</span>
+    <span class="expand-meta"><span class="status-tag status-confirmed">3+ demonstrators</span></span>
+  </div>
+  <div class="expand-body">
+    <div class="expand-content">
+      <h4 style="color:var(--golden); margin-top:0.8rem;">In the BZ reaction</h4>
+      <div class="endpoint-block" style="border-color:var(--golden);">
+        <div class="ep-label">C-endpoint: Oregonator autocatalytic kinetics</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Self-catalyzing reaction network. Bromate oxidizes malonic acid; the product (<abbr title="Hydrogen Bromous Acid">HBrO<sub>2</sub></abbr>) catalyzes its own production. The kinetics form a <abbr title="Reflexively Autocatalytic and Food-generated &mdash; a self-sustaining catalytic network where every molecule's production is catalyzed by some molecule in the set">RAF</abbr> set.</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+      <div class="endpoint-block" style="border-color:var(--green);">
+        <div class="ep-label">B-endpoint: Hopf bifurcation &rarr; spiral waves</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Dissipative solitons. The system crosses a Hopf bifurcation from steady state to limit-cycle oscillation, producing spiral waves that are self-sustaining coherent structures in 2D.</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+
+      <h4 style="color:var(--golden); margin-top:1.2rem;">In the living cell</h4>
+      <div class="endpoint-block" style="border-color:var(--golden);">
+        <div class="ep-label">C-endpoint: Metabolic <abbr title="Reflexively Autocatalytic and Food-generated &mdash; a self-sustaining catalytic network where every molecule's production is catalyzed by some molecule in the set">RAF</abbr> network</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> ~1000 metabolic intermediates forming a self-sustaining catalytic network. Each molecule's production is catalyzed by some other molecule in the set. The cell is autopoietic. <span class="citation">(Hordijk &amp; Steel 2004; Maturana &amp; Varela 1973)</span></div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+      <div class="endpoint-block" style="border-color:var(--green);">
+        <div class="ep-label">B-endpoint: Gene regulation at <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Boolean network at the edge of chaos. Gene regulation with average connectivity <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2 sits at the directed percolation universality class critical point. <span class="citation">(Kauffman 1993)</span></div>
+        <div class="ep-detail"><span class="ep-key">Universality class:</span> Directed percolation</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+
+      <div class="mechanism-block">
+        <div class="mech-label">Bridge mechanism</div>
+        Criticality as generative mechanism &mdash; the critical point is where the <abbr title="Reflexively Autocatalytic and Food-generated &mdash; a self-sustaining catalytic network where every molecule's production is catalyzed by some molecule in the set">RAF</abbr> spontaneously assembles. The phase transition generates the autocatalytic closure.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CD-a Bridge -->
+<div class="expand-card" id="bridge-CDa">
+  <div class="expand-header" onclick="toggleExpand('bridge-CDa')">
+    <span class="expand-arrow">&#9654;</span>
+    <span class="expand-title"><span class="cluster-label cluster-C">C</span><span class="cluster-label cluster-D">D</span>-a Autocatalysis &harr; Cellular automata</span>
+    <span class="expand-meta"><span class="status-tag status-confirmed">2+ demonstrators</span></span>
+  </div>
+  <div class="expand-body">
+    <div class="expand-content">
+      <h4 style="color:var(--golden); margin-top:0.8rem;">In the living cell</h4>
+      <div class="endpoint-block" style="border-color:var(--golden);">
+        <div class="ep-label">C-endpoint: Metabolic <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr></div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Same metabolic RAF as in CB bridge. Self-sustaining catalytic closure.</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+      <div class="endpoint-block" style="border-color:var(--purple);">
+        <div class="ep-label">D-endpoint: Gene regulation as Boolean network / <abbr title="Cellular Automata &mdash; discrete computational systems with local update rules">CA</abbr></div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Gene regulation operates as a Boolean network with connectivity <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2, equivalent to a cellular automaton. Class IV equivalent &mdash; computationally complex. <span class="citation">(Kauffman 1969; Wolfram 2002)</span></div>
+        <div class="ep-detail"><span class="ep-key">Wolfram class:</span> Class IV equivalent</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+
+      <h4 style="color:var(--golden); margin-top:1.2rem;">In the immune system</h4>
+      <div class="endpoint-block" style="border-color:var(--golden);">
+        <div class="ep-label">C-endpoint: Idiotypic network <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr></div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Antibodies catalyze production of other antibodies. The idiotypic network is an RAF set. <span class="citation">(Jerne 1974)</span></div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+      <div class="endpoint-block" style="border-color:var(--purple);">
+        <div class="ep-label">D-endpoint: Immune cell <abbr title="Cellular Automata">CA</abbr> dynamics</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Discrete immune cells follow local rules: recognize, proliferate, attack, die. Cellular automaton dynamics on the immune cell population.</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+
+      <div class="mechanism-block">
+        <div class="mech-label">Bridge mechanism</div>
+        Rule-space structural identity &mdash; Boolean networks ARE cellular automata. The two formalisms describe the same mathematical object. At <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2, the system is a Class IV cellular automaton.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BD Bridge -->
+<div class="expand-card" id="bridge-BD">
+  <div class="expand-header" onclick="toggleExpand('bridge-BD')">
+    <span class="expand-arrow">&#9654;</span>
+    <span class="expand-title"><span class="cluster-label cluster-B">B</span><span class="cluster-label cluster-D">D</span> Dynamics &harr; Computation</span>
+    <span class="expand-meta"><span class="status-tag status-confirmed">2+ demonstrators</span></span>
+  </div>
+  <div class="expand-body">
+    <div class="expand-content">
+      <h4 style="color:var(--green); margin-top:0.8rem;">In the brain (cortex)</h4>
+      <div class="endpoint-block" style="border-color:var(--green);">
+        <div class="ep-label">B-endpoint: Neuronal avalanches at <span style="font-family:'Times New Roman',serif;font-style:italic;">&sigma;</span>&thinsp;=&thinsp;1</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Cortical neural tissue exhibits neuronal avalanches with power-law exponent &minus;3/2 at critical branching ratio <span style="font-family:'Times New Roman',serif;font-style:italic;">&sigma;</span>&thinsp;=&thinsp;1. <span class="citation">(Beggs &amp; Plenz 2003)</span></div>
+        <div class="ep-detail"><span class="ep-key">Universality class:</span> Mean-field branching process</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+      <div class="endpoint-block" style="border-color:var(--purple);">
+        <div class="ep-label">D-endpoint: Reservoir computing at criticality</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Maximum computational capacity occurs at the critical branching ratio <span style="font-family:'Times New Roman',serif;font-style:italic;">&sigma;</span>&thinsp;=&thinsp;1. The network performs reservoir computing &mdash; massively parallel distributed processing. <span class="citation">(Bertschinger &amp; Natschl&auml;ger 2004)</span></div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+
+      <div class="mechanism-block">
+        <div class="mech-label">Bridge mechanism</div>
+        Rule-space structural identity &mdash; the dynamical system at criticality IS the computation. The critical point maximizes both the range of dynamics and the computational capacity simultaneously. They are not two separate phenomena that happen to co-occur; they are the same mathematical object.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AB Bridge -->
+<div class="expand-card" id="bridge-AB">
+  <div class="expand-header" onclick="toggleExpand('bridge-AB')">
+    <span class="expand-arrow">&#9654;</span>
+    <span class="expand-title"><span class="cluster-label cluster-A">A</span><span class="cluster-label cluster-B">B</span> Topology &harr; Solitons</span>
+    <span class="expand-meta"><span class="status-tag status-confirmed">2 demonstrators</span></span>
+  </div>
+  <div class="expand-body">
+    <div class="expand-content">
+      <h4 style="color:var(--blue); margin-top:0.8rem;">In the skyrmion lattice</h4>
+      <div class="endpoint-block" style="border-color:var(--blue);">
+        <div class="ep-label">A-endpoint: Topological charge, homotopy classification</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Topological charge (winding number &isin; &#8484;). Homotopy classification: <span style="font-family:'Times New Roman',serif;font-style:italic;">&pi;</span><sub>2</sub>(<span style="font-family:'Times New Roman',serif;font-style:italic;">S</span><sup>2</sup>) = &#8484;. Skyrmions cannot be continuously unwound &mdash; topologically protected.</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+      <div class="endpoint-block" style="border-color:var(--green);">
+        <div class="ep-label">B-endpoint: Localized coherent magnetic structure</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Skyrmions are topological solitons &mdash; localized coherent structures that propagate without dispersing. They exhibit phase transitions near critical temperature/field boundaries.</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+
+      <div class="mechanism-block">
+        <div class="mech-label">Bridge mechanism</div>
+        Topological protection &mdash; topology stabilizes the soliton. The homotopy invariant (winding number) prevents the coherent structure from unwinding or dispersing. The bridge mechanism is protection/stabilization rather than identity.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BC Bridge -->
+<div class="expand-card" id="bridge-BC">
+  <div class="expand-header" onclick="toggleExpand('bridge-BC')">
+    <span class="expand-arrow">&#9654;</span>
+    <span class="expand-title"><span class="cluster-label cluster-B">B</span><span class="cluster-label cluster-C">C</span> Solitons &harr; Origin-of-life</span>
+    <span class="expand-meta"><span class="status-tag status-confirmed">1 demonstrator</span></span>
+  </div>
+  <div class="expand-body">
+    <div class="expand-content">
+      <h4 style="color:var(--green); margin-top:0.8rem;">In the BZ reaction</h4>
+      <div class="endpoint-block" style="border-color:var(--green);">
+        <div class="ep-label">B-endpoint: Spiral waves (dissipative solitons)</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Spiral waves in the BZ thin film are dissipative solitons &mdash; self-sustaining coherent rotating structures that maintain their form through continuous energy dissipation.</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+      <div class="endpoint-block" style="border-color:var(--golden);">
+        <div class="ep-label">C-endpoint: Autocatalytic reaction kinetics</div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> The BZ reaction's Oregonator kinetics: bromate oxidizes malonic acid, with the intermediate catalyzing its own production. A self-sustaining chemical network.</div>
+        <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
+      </div>
+
+      <div class="mechanism-block">
+        <div class="mech-label">Bridge mechanism</div>
+        Co-emergence at criticality. Both the solitonic structures (spiral waves) and the autocatalytic dynamics arise from the same Hopf bifurcation in the same physical system. They co-occur because criticality generates both simultaneously. The bridge is the shared bifurcation.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AC Bridge — THE GAP -->
+<div class="expand-card" id="bridge-AC" style="border-color: rgba(251,191,36,0.3);">
+  <div class="expand-header" onclick="toggleExpand('bridge-AC')">
+    <span class="expand-arrow">&#9654;</span>
+    <span class="expand-title"><span class="cluster-label cluster-A">A</span><span class="cluster-label cluster-C">C</span> Topology &harr; Autocatalysis &mdash; THE GAP</span>
+    <span class="expand-meta"><span class="status-tag status-candidate">0 confirmed</span></span>
+  </div>
+  <div class="expand-body">
+    <div class="expand-content">
+      <div class="card highlight" style="margin-top:0.8rem;">
+        <p><strong>No confirmed physical demonstrator.</strong> This is the largest gap in the bridge network and the most consequential open question.</p>
+      </div>
+
+      <div class="endpoint-block" style="border-color:var(--amber);">
+        <div class="ep-label">Theoretical basis</div>
+        <div class="ep-detail">Anyon fusion algebra satisfies <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure criteria at the algebraic level. In Fibonacci anyons: <span style="font-family:'Times New Roman',serif;font-style:italic;">&tau;</span> &times; <span style="font-family:'Times New Roman',serif;font-style:italic;">&tau;</span> = 1 + <span style="font-family:'Times New Roman',serif;font-style:italic;">&tau;</span> is self-catalytic &mdash; the fusion of two <span style="font-family:'Times New Roman',serif;font-style:italic;">&tau;</span> particles produces another <span style="font-family:'Times New Roman',serif;font-style:italic;">&tau;</span>. This is a structural identity at the algebraic level, not an analogy.</div>
+      </div>
+
+      <h4 style="color:var(--amber); margin-top:1.2rem;">Candidate 1: <abbr title="Fractional Quantum Hall">FQH</abbr> edge networks</h4>
+      <div class="endpoint-block" style="border-color:var(--amber);">
+        <div class="ep-label">Anyon production/fusion network as <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> on topological substrate</div>
+        <div class="ep-detail">In a GaAs antidot lattice: a network of <abbr title="Fractional Quantum Hall">FQH</abbr> edge channels with anyon fusion events at antidot junctions. If the anyon production/fusion network is self-sustaining, it would constitute an <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> on a topological substrate.</div>
+        <div class="ep-detail"><span class="ep-key">Status:</span> <span class="status-tag status-hypothesis">HYPOTHESIS</span> &mdash; antidot lattices exist, patterning demonstrated, but self-sustaining fusion dynamics not yet shown.</div>
+      </div>
+
+      <h4 style="color:var(--amber); margin-top:1rem;">Candidate 2: Topological metamaterials with gain feedback</h4>
+      <div class="endpoint-block" style="border-color:var(--amber);">
+        <div class="ep-label">Amplification network as <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> on topological substrate</div>
+        <div class="ep-detail">Topological edge states in photonic/phononic crystals coupled to a gain medium. If the feedback network is autocatalytic &mdash; the amplification process sustains itself through the topological channels &mdash; it would constitute an <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> on a topological substrate.</div>
+        <div class="ep-detail"><span class="ep-key">Status:</span> <span class="status-tag status-hypothesis">HYPOTHESIS</span> &mdash; topological edge states and gain media exist independently, but their combination as autocatalytic network not yet demonstrated.</div>
+      </div>
+
+      <h4 style="color:var(--amber); margin-top:1rem;">Candidate 3: Magnetospheric reconnection cascades</h4>
+      <div class="endpoint-block" style="border-color:var(--amber);">
+        <div class="ep-label">Reconnection cascades in topologically ordered plasma</div>
+        <div class="ep-detail">Magnetic reconnection events in the magnetotail may form cascade networks in plasma with non-trivial topological band structure. If the reconnection cascade is self-sustaining, it would bridge topology and autocatalysis.</div>
+        <div class="ep-detail"><span class="ep-key">Status:</span> <span class="status-tag status-hypothesis">HYPOTHESIS</span> &mdash; highly speculative. Requires topological band structure in magnetospheric plasma to be confirmed first.</div>
+      </div>
+
+      <div class="mechanism-block" style="border-left-color:var(--golden); background:rgba(251,191,36,0.05);">
+        <div class="mech-label" style="color:var(--golden);">What measurements would confirm</div>
+        Demonstrate self-sustaining anyon production/fusion dynamics in a patterned <abbr title="Fractional Quantum Hall">FQH</abbr> system at the plateau transition. The key measurement: does the anyon fusion network self-sustain? If fusion products catalyze production of new anyons, and this forms a closed network, the AC bridge is established.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================================
+     SECTION 4: THE GAP MAP
+     ====================================================================== -->
+
+<h2 id="gap-map"><span class="section-number">4.</span> The Gap Map</h2>
+
+<p>All seven bridges between domain clusters, with line thickness proportional to the number of physical demonstrators. The AC bridge &mdash; the capstone &mdash; is the only bridge with zero confirmed demonstrators.</p>
+
+<div class="svg-container" id="svg-gap-map">
+  <button class="replay-btn" onclick="drawGapMap()">Replay</button>
+  <svg viewBox="0 0 860 500" xmlns="http://www.w3.org/2000/svg">
+    <g id="gap-map-scene"></g>
+  </svg>
+</div>
+
+<div class="card">
+  <table class="bridge-table">
+    <thead>
+      <tr>
+        <th>Bridge</th>
+        <th>Demonstrators</th>
+        <th>Line style</th>
+        <th>Mechanism type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--heading);">CB</td>
+        <td>3+ (BZ, cell, immune)</td>
+        <td>Thick solid</td>
+        <td>Rule-space identity</td>
+      </tr>
+      <tr>
+        <td style="color:var(--heading);">CD-a</td>
+        <td>2+ (cell, immune)</td>
+        <td>Thick solid</td>
+        <td>Rule-space identity</td>
+      </tr>
+      <tr>
+        <td style="color:var(--heading);">CD-b</td>
+        <td>1 (cell &mdash; philosophical)</td>
+        <td>Medium dashed</td>
+        <td>Fixpoint/eigenform</td>
+      </tr>
+      <tr>
+        <td style="color:var(--heading);">BD</td>
+        <td>2+ (brain, slime mold)</td>
+        <td>Thick solid</td>
+        <td>Rule-space identity</td>
+      </tr>
+      <tr>
+        <td style="color:var(--heading);">AB</td>
+        <td>2 (skyrmion, magnetosphere)</td>
+        <td>Medium solid</td>
+        <td>Topological protection</td>
+      </tr>
+      <tr>
+        <td style="color:var(--heading);">BC</td>
+        <td>1 (BZ only)</td>
+        <td>Thin solid</td>
+        <td>Co-emergence</td>
+      </tr>
+      <tr>
+        <td style="color:var(--golden);">AC</td>
+        <td>0 confirmed, 2 candidates</td>
+        <td>Dotted golden with &ldquo;?&rdquo;</td>
+        <td>Rule-space identity (predicted)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ======================================================================
+     SECTION 5: BRIDGE MECHANISM TAXONOMY
+     ====================================================================== -->
+
+<h2 id="taxonomy"><span class="section-number">5.</span> Bridge Mechanism Taxonomy</h2>
+
+<p>Four distinct types of bridge mechanism have been observed. The correlation between mechanism type and bridge strength may not be coincidental.</p>
+
+<div class="mechanism-type" style="border-left: 3px solid var(--blue);">
+  <h4 style="color:var(--blue);">Type 1: Rule-space structural identity</h4>
+  <div class="mech-bridges">Bridges: CB, CD-a, BD, AC (if confirmed) &mdash; ~4 bridges</div>
+  <p>Both endpoints are complex systems whose rule spaces share the same mathematical structure. The bridge is not an analogy &mdash; it is a provable isomorphism between rule spaces. At the critical point, the systems are literally the same mathematics.</p>
+  <p style="margin-bottom:0;">Example: a Boolean network at <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2 <em>is</em> a cellular automaton in the directed percolation universality class. This is not a metaphor; the dynamical systems are mathematically identical at the <abbr title="Renormalization Group &mdash; mathematical framework for coarse-graining">RG</abbr> fixed point.</p>
+</div>
+
+<div class="mechanism-type" style="border-left: 3px solid var(--green);">
+  <h4 style="color:var(--green);">Type 2: Topological protection</h4>
+  <div class="mech-bridges">Bridges: AB &mdash; ~1 bridge</div>
+  <p>Topology provides the invariant that stabilizes structures from another domain. The bridge mechanism is protection/stabilization rather than identity. The topological charge (winding number, Chern number) prevents the solitonic structure from dispersing or unwinding.</p>
+  <p style="margin-bottom:0;">Example: skyrmions are stable because their homotopy class <span style="font-family:'Times New Roman',serif;font-style:italic;">&pi;</span><sub>2</sub>(<span style="font-family:'Times New Roman',serif;font-style:italic;">S</span><sup>2</sup>) = &#8484; prevents continuous deformation to the vacuum state.</p>
+</div>
+
+<div class="mechanism-type" style="border-left: 3px solid var(--golden);">
+  <h4 style="color:var(--golden);">Type 3: Co-emergence at criticality</h4>
+  <div class="mech-bridges">Bridges: BC &mdash; ~1 bridge</div>
+  <p>Both phenomena emerge from the same critical point in the same physical system. They co-occur because criticality generates both simultaneously. The bridge is the shared bifurcation.</p>
+  <p style="margin-bottom:0;">Example: in the BZ reaction, the Hopf bifurcation simultaneously produces both the solitonic structures (spiral waves) and the autocatalytic dynamics. They are two aspects of the same phase transition.</p>
+</div>
+
+<div class="mechanism-type" style="border-left: 3px solid var(--purple);">
+  <h4 style="color:var(--purple);">Type 4: Fixpoint/eigenform</h4>
+  <div class="mech-bridges">Bridges: CD-b &mdash; ~1 bridge</div>
+  <p>The bridge is a self-referential fixed point where the system produces its own description. Louis Kauffman's eigenform theory: an object is a fixed point of the process of observation. The system's organizational closure (autopoiesis) is the same mathematical structure as a computable fixed point.</p>
+  <p style="margin-bottom:0;">The most philosophical, least formalized bridge type. Category-theoretic fixed points may provide the path to formalization.</p>
+</div>
+
+<div class="card highlight">
+  <p><strong>Pattern:</strong> The Type 1 bridges (rule-space identity) are exactly the robust primary bridges with multiple demonstrators. The other types correspond to the fragile or single-demonstrator bridges. Structural identity is a stronger connection than co-emergence or protection &mdash; identity bridges are harder to break because they are mathematical truths, not empirical coincidences.</p>
+  <p style="margin-bottom:0;">If AC is confirmed as a Type 1 bridge (rule-space identity between anyon fusion algebras and <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure), it would immediately be a strong bridge &mdash; not fragile &mdash; because the connection would be mathematical rather than merely observational.</p>
+</div>
+
+<!-- ======================================================================
+     SECTION 6: RESEARCH TARGETS
+     ====================================================================== -->
+
+<h2 id="targets"><span class="section-number">6.</span> Research Targets</h2>
+
+<p>Prioritized by which measurements or computations would most advance the bridge network.</p>
+
+<div class="research-target" style="border-left: 3px solid var(--red);">
+  <h4>1. AC bridge (Topology &harr; Autocatalysis) <span class="priority-tag priority-high">HIGHEST PRIORITY</span></h4>
+  <ul>
+    <li><strong>Compute:</strong> <abbr title="A New Kind of Science &mdash; Stephen Wolfram's classification framework for computational complexity">NKS</abbr> search for Class IV braiding rules on anyon lattice <span class="status-tag status-confirmed" style="font-size:0.78em;">IN PROGRESS</span> &mdash; <a href="braiding-search.py">braiding search</a></li>
+    <li><strong>Theory:</strong> Prove that anyon fusion networks in antidot lattices satisfy <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure conditions</li>
+    <li><strong>Experiment:</strong> Measure anyon production/fusion statistics in patterned <abbr title="Fractional Quantum Hall">FQH</abbr> systems at plateau transitions</li>
+  </ul>
+  <div class="key-question">Key question: Does the anyon fusion network self-sustain?</div>
+</div>
+
+<div class="research-target" style="border-left: 3px solid var(--amber);">
+  <h4>2. BC bridge (Solitons &harr; Origin-of-life) <span class="priority-tag priority-medium">MEDIUM PRIORITY</span></h4>
+  <ul>
+    <li><strong>Compute:</strong> Model dissipative solitons in prebiotic membrane systems</li>
+    <li><strong>Theory:</strong> Can solitonic transport deliver reagents to an autocatalytic network?</li>
+    <li><strong>Experiment:</strong> BZ reaction in lipid vesicle &mdash; does the soliton maintain the vesicle boundary?</li>
+  </ul>
+  <div class="key-question">Key question: Do solitons enable or participate in autocatalytic closure?</div>
+</div>
+
+<div class="research-target" style="border-left: 3px solid var(--muted);">
+  <h4>3. CD-b bridge (Autopoiesis &harr; Computation) <span class="priority-tag priority-low">LOWER PRIORITY</span></h4>
+  <ul>
+    <li><strong>Theory:</strong> Formalize Kauffman's eigenform as a category-theoretic fixed point</li>
+    <li><strong>Compute:</strong> Find computational fixed points in autopoietic models</li>
+  </ul>
+  <div class="key-question">Key question: Can organizational closure be expressed as a computable fixed point?</div>
+</div>
+
+<p class="closing-line">
+  The chart is a working document.<br>
+  Eight of ten systems are confirmed. Two are candidates.<br>
+  Six of seven bridges have at least one physical demonstrator.<br>
+  One bridge &mdash; the capstone &mdash; remains open.
+</p>
+
+<footer>
+  Companion to <a href="../domain-convergence/">Domain Convergence</a> and <a href="../criticality-bridges/">Criticality Bridges</a>
+</footer>
+
+</div><!-- .container -->
+
+<!-- ======================================================================
+     JAVASCRIPT
+     ====================================================================== -->
+<script>
+(function() {
+  'use strict';
+
+  // ---- Color constants ----
+  const BLUE = '#3b82f6';
+  const GREEN = '#22c55e';
+  const AMBER = '#f59e0b';
+  const RED = '#ef4444';
+  const GOLDEN = '#fbbf24';
+  const MUTED = '#475569';
+  const LINE = '#94a3b8';
+  const PURPLE = '#a855f7';
+  const HEADING = '#f1f5f9';
+  const CARD = '#1e293b';
+
+  const COLORS = { BLUE, GREEN, AMBER, RED, GOLDEN, MUTED, LINE, PURPLE, HEADING, CARD };
+
+  // ---- SVG helper ----
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    return el;
+  }
+
+  // ---- Animation helper ----
+  function animateOpacity(el, delay, duration) {
+    el.style.opacity = '0';
+    el.style.transition = `opacity ${duration}ms ease`;
+    setTimeout(() => { el.style.opacity = '1'; }, delay);
+  }
+
+  // =================================================================
+  // MATRIX DATA
+  // =================================================================
+
+  const systems = [
+    {
+      id: 'magnetosphere', name: 'Magnetosphere', sub: "Earth's magnetospheric plasma sheet",
+      candidate: false,
+      cells: {
+        A: { state: 'theoretical', symbol: '?', tooltip: 'Fu & Qin (2021): non-trivial topological band structure in magnetized plasma. Theoretical — not yet confirmed experimentally in magnetospheric context.' },
+        B: { state: 'confirmed', symbol: '✓', tooltip: 'SOC in substorm dynamics — power-law statistics (Uritsky et al. 2002). Alfvén solitons in magnetotail current sheet.' },
+        C: { state: 'empty' },
+        D: { state: 'empty' },
+        E: { state: 'empty' }
+      },
+      bridges: ['AB']
+    },
+    {
+      id: 'qh2deg', name: 'Quantum Hall / 2DEG', sub: 'Fractional quantum Hall systems in strong magnetic fields',
+      candidate: false,
+      cells: {
+        A: { state: 'confirmed', symbol: '✓', tooltip: 'Fractional charges (Laughlin 1983). Non-abelian anyons predicted at ν=5/2 (Moore-Read) and ν=12/5 (Read-Rezayi). Braiding = quantum gates.' },
+        B: { state: 'confirmed', symbol: '✓', tooltip: 'Plateau-to-plateau transitions are quantum phase transitions. Critical exponents measured.' },
+        C: { state: 'empty' },
+        D: { state: 'empty' },
+        E: { state: 'confirmed', symbol: '✓', tooltip: 'GaAs/AlGaAs heterostructures, graphene. Physical devices exist.' }
+      },
+      bridges: ['A-int']
+    },
+    {
+      id: 'cell', name: 'Living cell', sub: 'Gene regulatory networks + metabolic networks',
+      candidate: false,
+      cells: {
+        A: { state: 'empty' },
+        B: { state: 'confirmed', symbol: '✓', tooltip: 'Gene regulation at K≈2 (Kauffman 1993). Edge of chaos = directed percolation universality class.' },
+        C: { state: 'confirmed', symbol: '✓', tooltip: 'Metabolic network is an RAF set (Hordijk & Steel 2004). Cell is autopoietic (Maturana & Varela 1973).' },
+        D: { state: 'confirmed', symbol: '✓', tooltip: 'Gene regulation operates as Boolean network / cellular automaton. Distributed information processing.' },
+        E: { state: 'empty' }
+      },
+      bridges: ['CB', 'CD-a', 'CD-b']
+    },
+    {
+      id: 'brain', name: 'Brain (cortex)', sub: 'Cortical neural tissue, in vivo',
+      candidate: false,
+      cells: {
+        A: { state: 'empty' },
+        B: { state: 'confirmed', symbol: '✓', tooltip: 'Neuronal avalanches at critical branching ratio σ=1. Power-law exponent −3/2 (Beggs & Plenz 2003). Action potentials as solitons (Heimburg-Jackson model).' },
+        C: { state: 'empty' },
+        D: { state: 'confirmed', symbol: '✓', tooltip: 'Reservoir computing at criticality — maximum computational capacity at σ=1. Massively parallel distributed processing.' },
+        E: { state: 'empty' }
+      },
+      bridges: ['BD']
+    },
+    {
+      id: 'bz', name: 'BZ reaction', sub: 'Belousov-Zhabotinsky reaction in thin film',
+      candidate: false,
+      cells: {
+        A: { state: 'empty' },
+        B: { state: 'confirmed', symbol: '✓', tooltip: 'Hopf bifurcation from steady state to oscillation. Spiral waves = dissipative solitons in 2D.' },
+        C: { state: 'confirmed', symbol: '✓', tooltip: 'Autocatalytic: bromate oxidizes malonic acid, product catalyzes own production. The reaction network is self-sustaining.' },
+        D: { state: 'empty' },
+        E: { state: 'empty' }
+      },
+      bridges: ['CB', 'BC']
+    },
+    {
+      id: 'skyrmion', name: 'Skyrmion lattice', sub: 'Magnetic skyrmions in chiral magnets (MnSi, FeGe)',
+      candidate: false,
+      cells: {
+        A: { state: 'confirmed', symbol: '✓', tooltip: 'Topological charge (winding number ∈ ℤ). Homotopy classification: π₂(S²) = ℤ. Cannot be continuously unwound.' },
+        B: { state: 'confirmed', symbol: '✓', tooltip: 'Skyrmions are topological solitons — localized coherent structures. Phase transition near critical T/B field.' },
+        C: { state: 'empty' },
+        D: { state: 'empty' },
+        E: { state: 'confirmed', symbol: '✓', tooltip: 'Real crystals: MnSi, FeGe, Cu₂OSeO₃. Thin film fabrication for applications.' }
+      },
+      bridges: ['AB']
+    },
+    {
+      id: 'immune', name: 'Immune system', sub: 'Adaptive immune system (idiotypic network)',
+      candidate: false,
+      cells: {
+        A: { state: 'empty' },
+        B: { state: 'confirmed', symbol: '✓', tooltip: 'Phase transitions between dormant/memory/autoimmune states. Percolation-like threshold (Perelson & Weisbuch 1997).' },
+        C: { state: 'confirmed', symbol: '✓', tooltip: 'Idiotypic network: antibodies catalyze production of other antibodies (Jerne 1974). The network is an RAF set.' },
+        D: { state: 'confirmed', symbol: '✓', tooltip: 'Discrete immune cells follow local rules (recognize, proliferate, attack, die). Cellular automaton dynamics.' },
+        E: { state: 'empty' }
+      },
+      bridges: ['CB', 'CD-a']
+    },
+    {
+      id: 'slimemold', name: 'Slime mold', sub: 'Physarum polycephalum',
+      candidate: false,
+      cells: {
+        A: { state: 'empty' },
+        B: { state: 'confirmed', symbol: '✓', tooltip: 'Peristaltic waves in tube network are soliton-like. Network percolation transitions as tubes form/dissolve.' },
+        C: { state: 'confirmed', symbol: '✓', tooltip: 'Self-creating network topology. The organism builds and rebuilds its own transport network (autopoietic aspects).' },
+        D: { state: 'confirmed', symbol: '✓', tooltip: 'Solves shortest-path and optimization problems (Nakagaki et al. 2000). Network computation.' },
+        E: { state: 'empty' }
+      },
+      bridges: ['BD', 'BC?']
+    },
+    {
+      id: 'fqh-edge', name: 'FQH edge networks', sub: 'Fractional quantum Hall edge state networks',
+      candidate: true,
+      cells: {
+        A: { state: 'theoretical', symbol: '?', tooltip: 'Anyonic excitations propagate along edge channels. In antidot lattice: network of edge channels with anyon fusion events. [CANDIDATE]' },
+        B: { state: 'theoretical', symbol: '?', tooltip: 'At plateau transitions: critical behavior in edge transport. [CANDIDATE]' },
+        C: { state: 'theoretical', symbol: '?', tooltip: 'If anyon production/fusion network is self-sustaining → RAF on topological substrate. τ×τ = 1+τ is self-catalytic. [HYPOTHESIS]' },
+        D: { state: 'empty' },
+        E: { state: 'theoretical', symbol: '?', tooltip: 'GaAs antidot lattices exist. Patterning demonstrated. [FEASIBLE]' }
+      },
+      bridges: ['AC?']
+    },
+    {
+      id: 'metamaterial', name: 'Topological metamaterials', sub: 'Engineered photonic/phononic topological insulators with feedback',
+      candidate: true,
+      cells: {
+        A: { state: 'confirmed', symbol: '✓', tooltip: 'Topological edge states in photonic/phononic crystals. Protected by bulk-boundary correspondence. [DEMONSTRATED]' },
+        B: { state: 'theoretical', symbol: '?', tooltip: 'Nonlinear topological edge solitons demonstrated in some platforms. [EMERGING]' },
+        C: { state: 'theoretical', symbol: '?', tooltip: 'Coupled to gain medium → self-sustaining amplification. If feedback network is autocatalytic → RAF on topological substrate. [HYPOTHESIS]' },
+        D: { state: 'empty' },
+        E: { state: 'confirmed', symbol: '✓', tooltip: 'Engineered materials: silicon photonics, acoustic metamaterials. [DEMONSTRATED]' }
+      },
+      bridges: ['AC?']
+    }
+  ];
+
+  const cols = ['A', 'B', 'C', 'D', 'E'];
+  const colNames = { A: 'Topology', B: 'Dynamics', C: 'Origin-of-life', D: 'Computation', E: 'Materials' };
+
+  // =================================================================
+  // BUILD MATRIX
+  // =================================================================
+
+  function buildMatrix() {
+    const tbody = document.getElementById('matrixBody');
+    tbody.innerHTML = '';
+
+    systems.forEach((sys, ri) => {
+      const tr = document.createElement('tr');
+      tr.dataset.row = ri;
+
+      // Row header
+      const th = document.createElement('td');
+      th.className = 'row-header';
+      th.dataset.row = ri;
+      let nameHtml = sys.name;
+      if (sys.candidate) nameHtml += ' <span class="candidate-tag">CANDIDATE</span>';
+      nameHtml += '<span class="system-sub">' + sys.sub + '</span>';
+      th.innerHTML = nameHtml;
+      th.addEventListener('click', () => highlightRow(ri));
+      tr.appendChild(th);
+
+      // Data cells
+      cols.forEach(col => {
+        const td = document.createElement('td');
+        td.className = 'col-' + col;
+        td.dataset.row = ri;
+        td.dataset.col = col;
+        const cell = sys.cells[col];
+
+        if (cell.state === 'confirmed') {
+          td.dataset.state = 'confirmed';
+          td.innerHTML = '<span class="cell-confirmed">✓</span>';
+        } else if (cell.state === 'theoretical') {
+          td.dataset.state = 'theoretical';
+          td.innerHTML = '<span class="cell-theoretical">?</span>';
+        } else {
+          td.innerHTML = '<span class="cell-empty">&mdash;</span>';
+        }
+
+        if (cell.tooltip) {
+          td.addEventListener('mouseenter', (e) => showTooltip(e, sys.name, colNames[col], col, cell.tooltip));
+          td.addEventListener('mousemove', moveTooltip);
+          td.addEventListener('mouseleave', hideTooltip);
+        }
+
+        td.addEventListener('click', () => highlightCell(ri, col));
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  // =================================================================
+  // MATRIX INTERACTION
+  // =================================================================
+
+  let activeHighlight = null;
+
+  function clearHighlights() {
+    document.querySelectorAll('.matrix-dim, .matrix-highlight-row, .matrix-highlight-col, .matrix-active-cell').forEach(el => {
+      el.classList.remove('matrix-dim', 'matrix-highlight-row', 'matrix-highlight-col', 'matrix-active-cell');
+    });
+    activeHighlight = null;
+  }
+
+  function highlightCell(row, col) {
+    const key = 'cell-' + row + '-' + col;
+    if (activeHighlight === key) { clearHighlights(); return; }
+    clearHighlights();
+    activeHighlight = key;
+
+    const matrix = document.getElementById('systemsMatrix');
+    // Dim all rows
+    matrix.querySelectorAll('tbody tr').forEach(tr => {
+      if (parseInt(tr.dataset.row) !== row) {
+        tr.classList.add('matrix-dim');
+      }
+    });
+
+    // Highlight column headers
+    matrix.querySelectorAll('th.col-header').forEach(th => {
+      if (th.dataset.col !== col) th.classList.add('matrix-dim');
+      else th.classList.add('matrix-highlight-col');
+    });
+
+    // Highlight active cell
+    const activeCell = matrix.querySelector(`td[data-row="${row}"][data-col="${col}"]`);
+    if (activeCell) activeCell.classList.add('matrix-active-cell');
+  }
+
+  function highlightRow(row) {
+    const key = 'row-' + row;
+    if (activeHighlight === key) { clearHighlights(); return; }
+    clearHighlights();
+    activeHighlight = key;
+
+    const matrix = document.getElementById('systemsMatrix');
+    matrix.querySelectorAll('tbody tr').forEach(tr => {
+      if (parseInt(tr.dataset.row) !== row) {
+        tr.classList.add('matrix-dim');
+      } else {
+        tr.classList.add('matrix-highlight-row');
+      }
+    });
+  }
+
+  function highlightCol(col) {
+    const key = 'col-' + col;
+    if (activeHighlight === key) { clearHighlights(); return; }
+    clearHighlights();
+    activeHighlight = key;
+
+    const matrix = document.getElementById('systemsMatrix');
+    // Dim non-matching columns
+    matrix.querySelectorAll('td').forEach(td => {
+      if (td.dataset.col && td.dataset.col !== col) {
+        td.classList.add('matrix-dim');
+      } else if (td.dataset.col === col) {
+        td.classList.add('matrix-highlight-col');
+      }
+    });
+    matrix.querySelectorAll('th.col-header').forEach(th => {
+      if (th.dataset.col !== col) th.classList.add('matrix-dim');
+      else th.classList.add('matrix-highlight-col');
+    });
+    // Dim row headers
+    matrix.querySelectorAll('td.row-header').forEach(td => td.classList.add('matrix-dim'));
+  }
+
+  // Column header clicks
+  document.querySelectorAll('.col-header').forEach(th => {
+    th.addEventListener('click', () => highlightCol(th.dataset.col));
+  });
+
+  // Click outside to clear
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.systems-matrix')) {
+      clearHighlights();
+    }
+  });
+
+  // =================================================================
+  // TOOLTIP
+  // =================================================================
+
+  const tooltip = document.getElementById('matrixTooltip');
+  const tooltipSystem = document.getElementById('tooltipSystem');
+  const tooltipCluster = document.getElementById('tooltipCluster');
+  const tooltipText = document.getElementById('tooltipText');
+
+  function showTooltip(e, sysName, clusterName, colId, text) {
+    tooltipSystem.textContent = sysName;
+    const colorMap = { A: BLUE, B: GREEN, C: GOLDEN, D: PURPLE, E: RED };
+    tooltipCluster.innerHTML = '<span style="color:' + colorMap[colId] + '">' + colId + ': ' + clusterName + '</span>';
+    tooltipText.textContent = text;
+    tooltip.classList.add('visible');
+    moveTooltip(e);
+  }
+
+  function moveTooltip(e) {
+    const pad = 15;
+    let x = e.clientX + pad;
+    let y = e.clientY + pad;
+
+    // Keep tooltip in viewport
+    const rect = tooltip.getBoundingClientRect();
+    if (x + rect.width > window.innerWidth - pad) {
+      x = e.clientX - rect.width - pad;
+    }
+    if (y + rect.height > window.innerHeight - pad) {
+      y = e.clientY - rect.height - pad;
+    }
+
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove('visible');
+  }
+
+  // =================================================================
+  // EXPANDABLE CARDS
+  // =================================================================
+
+  window.toggleExpand = function(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  };
+
+  // =================================================================
+  // BRIDGE COVERAGE SVG (Section 2)
+  // =================================================================
+
+  // Cluster positions (same layout as domain-convergence.html)
+  const clusterPos = [
+    { x: 160, y: 190, label: 'A: Topology', color: BLUE, r: 55 },
+    { x: 650, y: 130, label: 'B: Dynamics', color: GREEN, r: 50 },
+    { x: 400, y: 250, label: 'C: Origin-of-life', color: GOLDEN, r: 55 },
+    { x: 680, y: 380, label: 'D: Computation', color: PURPLE, r: 55 },
+    { x: 160, y: 410, label: 'E: Materials', color: RED, r: 45 }
+  ];
+
+  // Bridge definitions: from/to index into clusterPos
+  const bridgeDefs = {
+    'CB':   { from: 2, to: 1 },
+    'CD-a': { from: 2, to: 3 },
+    'CD-b': { from: 2, to: 3, offset: true },
+    'BC':   { from: 1, to: 2, offset: true },
+    'AC':   { from: 0, to: 2 },
+    'BD':   { from: 1, to: 3 },
+    'AB':   { from: 0, to: 1 },
+    'A-int':{ from: 0, to: 0 },
+    'AC?':  { from: 0, to: 2 },
+    'BC?':  { from: 1, to: 2, offset: true }
+  };
+
+  // System-to-bridge mapping for the selector
+  const systemBridgeMap = {
+    'magnetosphere': ['AB'],
+    'qh2deg': ['A-int'],
+    'cell': ['CB', 'CD-a', 'CD-b'],
+    'brain': ['BD'],
+    'bz': ['CB', 'BC'],
+    'skyrmion': ['AB'],
+    'immune': ['CB', 'CD-a'],
+    'slimemold': ['BD', 'BC?'],
+    'fqh-edge': ['AC?'],
+    'metamaterial': ['AC?']
+  };
+
+  let activeSystem = null;
+
+  function buildSystemSelector() {
+    const sel = document.getElementById('systemSelector');
+    sel.innerHTML = '';
+    systems.forEach(sys => {
+      const btn = document.createElement('button');
+      btn.className = 'system-btn';
+      btn.textContent = sys.name;
+      btn.dataset.system = sys.id;
+      btn.addEventListener('click', () => {
+        if (activeSystem === sys.id) {
+          activeSystem = null;
+          document.querySelectorAll('.system-btn').forEach(b => b.classList.remove('active'));
+          drawBridgeCoverage();
+        } else {
+          activeSystem = sys.id;
+          document.querySelectorAll('.system-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          drawBridgeCoverage(sys.id);
+        }
+      });
+      sel.appendChild(btn);
+    });
+  }
+
+  window.drawBridgeCoverage = function(selectedSystem) {
+    activeSystem = selectedSystem || null;
+    if (!selectedSystem) {
+      document.querySelectorAll('.system-btn').forEach(b => b.classList.remove('active'));
+    }
+
+    const g = document.getElementById('bridge-coverage-scene');
+    g.innerHTML = '';
+
+    const activeBridges = selectedSystem ? systemBridgeMap[selectedSystem] || [] : [];
+
+    // Draw all possible bridge lines (dimmed)
+    const allBridgeIds = ['CB', 'CD-a', 'CD-b', 'BC', 'AC', 'BD', 'AB'];
+    allBridgeIds.forEach(bid => {
+      const def = bridgeDefs[bid];
+      if (!def || def.from === def.to) return;
+
+      const from = clusterPos[def.from];
+      const to = clusterPos[def.to];
+      let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+
+      if (def.offset) {
+        const dx = x2 - x1, dy = y2 - y1;
+        const len = Math.sqrt(dx*dx + dy*dy);
+        const nx = -dy / len * 15, ny = dx / len * 15;
+        x1 += nx; y1 += ny; x2 += nx; y2 += ny;
+      }
+
+      // Check if this bridge or a variant is active
+      const isActive = !selectedSystem || activeBridges.some(ab => {
+        const base = ab.replace('?', '');
+        return base === bid || bid === 'AC' && base === 'AC';
+      });
+
+      const bridgeColor = bid === 'AC' ? GOLDEN : LINE;
+
+      const line = svgEl('line', {
+        x1, y1, x2, y2,
+        stroke: isActive ? bridgeColor : MUTED,
+        'stroke-width': isActive ? 2.5 : 1,
+        'stroke-opacity': isActive ? 0.8 : 0.15,
+        'stroke-dasharray': bid === 'AC' ? '6 4' : (bid === 'CD-b' || bid === 'BC' ? '8 4' : 'none'),
+        'stroke-linecap': 'round'
+      });
+      g.appendChild(line);
+
+      // Label
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2) / 2 - 10;
+      const labelT = svgEl('text', {
+        x: mx, y: my,
+        'text-anchor': 'middle',
+        fill: isActive ? bridgeColor : MUTED,
+        'font-size': '11',
+        'font-family': "system-ui, sans-serif",
+        'font-weight': '500',
+        opacity: isActive ? 1 : 0.3
+      });
+      labelT.textContent = bid;
+      g.appendChild(labelT);
+    });
+
+    // Draw cluster nodes
+    clusterPos.forEach((c, i) => {
+      const circle = svgEl('circle', {
+        cx: c.x, cy: c.y, r: c.r,
+        fill: c.color,
+        'fill-opacity': 0.08,
+        stroke: c.color,
+        'stroke-width': 2,
+        'stroke-opacity': 0.5
+      });
+      g.appendChild(circle);
+
+      const t = svgEl('text', {
+        x: c.x, y: c.y,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: c.color,
+        'font-size': '14',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      t.textContent = c.label;
+      g.appendChild(t);
+    });
+
+    // If a system is selected, show its name
+    if (selectedSystem) {
+      const sys = systems.find(s => s.id === selectedSystem);
+      if (sys) {
+        const label = svgEl('text', {
+          x: 430, y: 470,
+          'text-anchor': 'middle',
+          fill: HEADING,
+          'font-size': '16',
+          'font-family': "'Times New Roman', Georgia, serif",
+          'font-weight': '600'
+        });
+        label.textContent = sys.name;
+        g.appendChild(label);
+
+        const bridges = (systemBridgeMap[selectedSystem] || []).join(', ');
+        const bridgeLabel = svgEl('text', {
+          x: 430, y: 490,
+          'text-anchor': 'middle',
+          fill: LINE,
+          'font-size': '12',
+          'font-family': 'system-ui, sans-serif'
+        });
+        bridgeLabel.textContent = 'Bridges: ' + bridges;
+        g.appendChild(bridgeLabel);
+      }
+    }
+  };
+
+  // =================================================================
+  // GAP MAP SVG (Section 4)
+  // =================================================================
+
+  const gapMapBridges = [
+    { id: 'CB',   from: 2, to: 1, color: GREEN,  thick: 3.5, dash: '', label: 'CB' },
+    { id: 'CD-a', from: 2, to: 3, color: PURPLE, thick: 3.5, dash: '', label: 'CD-a' },
+    { id: 'CD-b', from: 2, to: 3, color: PURPLE, thick: 2, dash: '8 4', label: 'CD-b', offset: true },
+    { id: 'BD',   from: 1, to: 3, color: BLUE,   thick: 3.5, dash: '', label: 'BD' },
+    { id: 'AB',   from: 0, to: 1, color: RED,    thick: 2.5, dash: '', label: 'AB' },
+    { id: 'BC',   from: 1, to: 2, color: GREEN,  thick: 1.5, dash: '', label: 'BC', offset: true },
+    { id: 'AC',   from: 0, to: 2, color: GOLDEN, thick: 3, dash: '6 4', label: 'AC ?' }
+  ];
+
+  window.drawGapMap = function() {
+    const g = document.getElementById('gap-map-scene');
+    g.innerHTML = '';
+
+    // Draw bridges first (behind nodes)
+    gapMapBridges.forEach((b, i) => {
+      const from = clusterPos[b.from];
+      const to = clusterPos[b.to];
+      let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+
+      if (b.offset) {
+        const dx = x2 - x1, dy = y2 - y1;
+        const len = Math.sqrt(dx*dx + dy*dy);
+        const nx = -dy / len * 15, ny = dx / len * 15;
+        x1 += nx; y1 += ny; x2 += nx; y2 += ny;
+      }
+
+      const bridgeG = svgEl('g', {});
+
+      const line = svgEl('line', {
+        x1, y1, x2, y2,
+        stroke: b.color,
+        'stroke-width': b.thick,
+        'stroke-dasharray': b.dash || 'none',
+        'stroke-opacity': b.id === 'AC' ? 0.9 : 0.7,
+        'stroke-linecap': 'round'
+      });
+
+      // Animate drawing
+      const len = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+      if (!b.dash) {
+        line.setAttribute('stroke-dasharray', len);
+        line.setAttribute('stroke-dashoffset', len);
+        line.style.transition = 'stroke-dashoffset 1200ms ease';
+      }
+
+      bridgeG.appendChild(line);
+
+      // Label
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2) / 2 - 10;
+      const labelT = svgEl('text', {
+        x: mx, y: my,
+        'text-anchor': 'middle',
+        fill: b.color,
+        'font-size': b.id === 'AC' ? '14' : '11',
+        'font-family': b.id === 'AC' ? "'Times New Roman', Georgia, serif" : "system-ui, sans-serif",
+        'font-weight': b.id === 'AC' ? '700' : '500',
+        opacity: 0
+      });
+      labelT.textContent = b.label;
+      bridgeG.appendChild(labelT);
+
+      const delay = 500 + i * 400;
+      animateOpacity(bridgeG, delay, 300);
+      setTimeout(() => {
+        if (!b.dash) line.setAttribute('stroke-dashoffset', '0');
+        labelT.style.transition = 'opacity 400ms ease';
+        labelT.style.opacity = '1';
+      }, delay + 200);
+
+      g.appendChild(bridgeG);
+    });
+
+    // Draw cluster nodes (on top)
+    clusterPos.forEach((c, i) => {
+      const nodeG = svgEl('g', {});
+
+      const circle = svgEl('circle', {
+        cx: c.x, cy: c.y, r: c.r,
+        fill: c.color,
+        'fill-opacity': 0.08,
+        stroke: c.color,
+        'stroke-width': 2,
+        'stroke-opacity': 0.5
+      });
+      nodeG.appendChild(circle);
+
+      const t = svgEl('text', {
+        x: c.x, y: c.y,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        fill: c.color,
+        'font-size': '14',
+        'font-family': "'Times New Roman', Georgia, serif",
+        'font-weight': '600'
+      });
+      t.textContent = c.label;
+      nodeG.appendChild(t);
+
+      animateOpacity(nodeG, 100 + i * 100, 400);
+      g.appendChild(nodeG);
+    });
+
+    // AC candidate icons
+    const acFrom = clusterPos[0];
+    const acTo = clusterPos[2];
+    const acMx = (acFrom.x + acTo.x) / 2;
+    const acMy = (acFrom.y + acTo.y) / 2;
+
+    const candidates = [
+      { label: 'FQH', dx: -45, dy: 18 },
+      { label: 'Meta', dx: 0, dy: 30 },
+      { label: 'Mag', dx: 45, dy: 18 }
+    ];
+
+    candidates.forEach((cand, i) => {
+      const candG = svgEl('g', {});
+
+      const rect = svgEl('rect', {
+        x: acMx + cand.dx - 20,
+        y: acMy + cand.dy - 8,
+        width: 40,
+        height: 16,
+        rx: 3,
+        fill: 'rgba(251,191,36,0.12)',
+        stroke: GOLDEN,
+        'stroke-width': 0.8,
+        'stroke-opacity': 0.5
+      });
+      candG.appendChild(rect);
+
+      const t = svgEl('text', {
+        x: acMx + cand.dx,
+        y: acMy + cand.dy + 4,
+        'text-anchor': 'middle',
+        fill: GOLDEN,
+        'font-size': '9',
+        'font-family': 'system-ui, sans-serif',
+        'font-weight': '500'
+      });
+      t.textContent = cand.label;
+      candG.appendChild(t);
+
+      animateOpacity(candG, 3500 + i * 200, 400);
+      g.appendChild(candG);
+    });
+
+    // Legend
+    const legendG = svgEl('g', {});
+    const legendItems = [
+      { dash: '', thick: 3.5, label: 'Thick solid: 3+ demonstrators', y: 440 },
+      { dash: '', thick: 2.5, label: 'Medium solid: 2 demonstrators', y: 458 },
+      { dash: '', thick: 1.5, label: 'Thin solid: 1 demonstrator', y: 476 },
+      { dash: '8 4', thick: 2, label: 'Dashed: thin evidence', y: 494 }
+    ];
+    legendItems.forEach(item => {
+      const l = svgEl('line', {
+        x1: 30, y1: item.y, x2: 65, y2: item.y,
+        stroke: LINE,
+        'stroke-width': item.thick,
+        'stroke-dasharray': item.dash || 'none',
+        'stroke-opacity': 0.6
+      });
+      legendG.appendChild(l);
+      const t = svgEl('text', {
+        x: 72, y: item.y + 1,
+        fill: MUTED,
+        'font-size': '11',
+        'font-family': 'system-ui, sans-serif',
+        'dominant-baseline': 'central'
+      });
+      t.textContent = item.label;
+      legendG.appendChild(t);
+    });
+    // Special golden dotted entry
+    const goldenLine = svgEl('line', {
+      x1: 620, y1: 458, x2: 655, y2: 458,
+      stroke: GOLDEN,
+      'stroke-width': 3,
+      'stroke-dasharray': '6 4',
+      'stroke-opacity': 0.9
+    });
+    legendG.appendChild(goldenLine);
+    const goldenLabel = svgEl('text', {
+      x: 662, y: 459,
+      fill: GOLDEN,
+      'font-size': '11',
+      'font-family': 'system-ui, sans-serif',
+      'dominant-baseline': 'central'
+    });
+    goldenLabel.textContent = 'Dotted golden: candidate only (AC)';
+    legendG.appendChild(goldenLabel);
+
+    animateOpacity(legendG, 4000, 600);
+    g.appendChild(legendG);
+  };
+
+  // =================================================================
+  // VISIBILITY OBSERVER
+  // =================================================================
+
+  function onVisible(elId, callback) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          callback();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(el);
+  }
+
+  // =================================================================
+  // INIT
+  // =================================================================
+
+  buildMatrix();
+  buildSystemSelector();
+  onVisible('svg-bridge-coverage', () => drawBridgeCoverage());
+  onVisible('svg-gap-map', drawGapMap);
+
+})();
+</script>
+
+</body>
+</html>

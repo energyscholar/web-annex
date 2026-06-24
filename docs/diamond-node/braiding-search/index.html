@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Braiding Phase Space Search &mdash; NKS Enumeration</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+h3 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 2rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.back-link:hover { color: var(--blue); }
+
+.subtitle {
+  color: var(--line);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.section-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #334155;
+  margin: 1.5rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+th {
+  background: #334155;
+  color: var(--heading);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  white-space: nowrap;
+}
+
+td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+tr:last-child td { border-bottom: none; }
+
+.highlight { color: var(--golden); font-weight: 600; }
+.zero { color: var(--green); font-weight: 600; }
+
+.key-finding {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--amber);
+  margin: 1.5rem 0;
+}
+
+.key-finding strong {
+  color: var(--heading);
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.1rem;
+}
+
+.plot-container {
+  margin: 1.5rem 0;
+}
+
+.plot-container img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  display: block;
+  margin: 1rem 0;
+}
+
+.plot-caption {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+.formula {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  color: var(--line);
+}
+
+.crosslink {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #334155;
+  display: block;
+  margin: 1.5rem 0;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s;
+}
+
+.crosslink:hover {
+  border-color: var(--blue);
+  text-decoration: none;
+}
+
+.crosslink-label {
+  color: var(--blue);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+abbr {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+  cursor: help;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="back-link" href="../">&larr; Domain Convergence Research</a>
+
+<h1>Braiding Phase Space Search</h1>
+<p class="subtitle"><abbr title="New Kind of Science">NKS</abbr> enumeration of Fibonacci anyon braiding rules, classified by Wolfram's four complexity classes</p>
+
+<h2>Overview</h2>
+
+<p>This search systematically enumerates braiding rules on Fibonacci anyons and classifies the resulting dynamics by Wolfram's four complexity classes (the <abbr title="New Kind of Science">NKS</abbr> approach). The goal: determine whether any braiding rule on a finite fusion space can produce genuine Class IV (complex) behavior&mdash;the kind of dynamics that supports computation.</p>
+
+<p>Fibonacci anyons have two particle types: <strong>1</strong> (vacuum) and <strong>&tau;</strong>. Their fusion rule is <span class="formula">&tau; &times; &tau; = 1 + &tau;</span>. For <span class="formula">n</span> anyons fusing left-to-right, the state space dimension follows the Fibonacci sequence: F(n&minus;1). Braiding is represented by unitary matrices (R-matrices composed with F-matrices) acting on this fusion space.</p>
+
+<h2>Method</h2>
+
+<div class="section-card">
+<p><strong>Braid word enumeration.</strong> For n=3 anyons (2D fusion space), the braid group generators are &sigma;<sub>1</sub> and &sigma;<sub>2</sub>, each with an inverse. A braiding rule is a word in {&sigma;<sub>1</sub>, &sigma;<sub>1</sub><sup>&minus;1</sup>, &sigma;<sub>2</sub>, &sigma;<sub>2</sub><sup>&minus;1</sup>} of length 1 through 5. This gives:</p>
+<ul style="padding-left:1.5rem; margin:0.75rem 0;">
+  <li>n=3: <strong>1,364 rules</strong> (lengths 1&ndash;5, 4 generators per position)</li>
+  <li>n=4: <strong>258 rules</strong> (lengths 1&ndash;3, 6 generators per position, 3D fusion space)</li>
+</ul>
+
+<p><strong>Classification.</strong> Each rule is iterated 200 times from a random initial state. The trajectory is classified by:</p>
+<ul style="padding-left:1.5rem; margin:0.75rem 0;">
+  <li><strong>Class I</strong> (fixed point): trajectory converges to a fixed state</li>
+  <li><strong>Class II</strong> (periodic): trajectory repeats with detectable period</li>
+  <li><strong>Class III</strong> (chaotic): positive Lyapunov exponent, sensitive dependence</li>
+  <li><strong>Class IV</strong> (complex): intermediate&mdash;neither periodic nor fully random</li>
+</ul>
+
+<p><strong>Physics verification.</strong> Each composite braid matrix is checked for unitarity (&sigma;&sigma;<sup>&dagger;</sup> = I) and eigenvalue structure. Yang-Baxter satisfaction is verified for the physical R-matrices.</p>
+</div>
+
+<h2>Results</h2>
+
+<h3>n=3 strands (2D fusion space, 1,364 rules)</h3>
+
+<table>
+<thead>
+<tr><th>Class</th><th>Count</th><th>Percentage</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>I (fixed)</td><td>268</td><td>19.6%</td><td>Trajectory converges to eigenstate</td></tr>
+<tr><td>II (periodic)</td><td>736</td><td>54.0%</td><td>Rational eigenvalue phases &rarr; exact recurrence</td></tr>
+<tr><td>III (chaotic)</td><td class="zero">0</td><td class="zero">0.0%</td><td>None found</td></tr>
+<tr><td>IV (complex)</td><td class="highlight">360</td><td class="highlight">26.4%</td><td>Quasi-periodic candidates</td></tr>
+</tbody>
+</table>
+
+<h3>n=4 strands (3D fusion space, 258 rules)</h3>
+
+<table>
+<thead>
+<tr><th>Class</th><th>Count</th><th>Percentage</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>I (fixed)</td><td>6</td><td>2.3%</td><td>Trajectory converges to eigenstate</td></tr>
+<tr><td>II (periodic)</td><td>196</td><td>76.0%</td><td>Rational eigenvalue phases &rarr; exact recurrence</td></tr>
+<tr><td>III (chaotic)</td><td class="zero">0</td><td class="zero">0.0%</td><td>None found</td></tr>
+<tr><td>IV (complex)</td><td class="highlight">56</td><td class="highlight">21.7%</td><td>Quasi-periodic candidates</td></tr>
+</tbody>
+</table>
+
+<p><strong>Critical observation:</strong> Zero Class III in both searches. And the "Class IV" candidates are not genuinely complex&mdash;they are quasi-periodic, as explained below.</p>
+
+<h2>Key Finding: No Genuine Chaos</h2>
+
+<div class="key-finding">
+<strong>Unitary evolution on finite Hilbert space cannot produce chaos.</strong>
+<p>This is provable from first principles. A braiding rule acts as a unitary matrix U on the fusion space. Iteration produces the sequence U, U<sup>2</sup>, U<sup>3</sup>, ... The eigenvalues of U are phases <span class="formula">e<sup>i&theta;<sub>j</sub></sup></span>. After n iterations, the state components evolve as <span class="formula">e<sup>in&theta;<sub>j</sub></sup></span>.</p>
+
+<p>This evolution is <strong>linear</strong> and <strong>norm-preserving</strong>. The Lyapunov exponent is <strong>exactly zero</strong>: nearby trajectories neither converge nor diverge. There is no sensitive dependence on initial conditions.</p>
+
+<p>If all eigenvalue phases <span class="formula">&theta;<sub>j</sub>/2&pi;</span> are rational, the trajectory is exactly periodic (period = LCM of denominators). If any phase is irrational, the trajectory is <strong>quasi-periodic</strong>&mdash;it never exactly repeats but fills a torus densely. This quasi-periodicity can mimic complexity over short timescales, which is why these candidates appear as "Class IV" in the NKS classifier. But they are not genuinely complex: they have zero entropy rate and no computational capacity.</p>
+
+<p>The 360 Class IV candidates (n=3) all have irrational eigenvalue phases related to <span class="formula">&phi; = (1+&radic;5)/2</span>. They are dense quasi-periodic orbits on a 2-torus, not complex dynamics.</p>
+</div>
+
+<h2>Implication</h2>
+
+<p>Complexity cannot emerge from single-rule repetition on a finite-dimensional Hilbert space. This is a structural limitation, not a failure of search: the mathematics of unitary evolution forbids it.</p>
+
+<p>For genuine complexity to arise from anyon braiding, we need <strong>spatial extent</strong>: a lattice where different braiding rules operate at different sites, producing emergent spatiotemporal patterns that are not captured by any single unitary matrix. This is the motivation for the lattice extension.</p>
+
+<a class="crosslink" href="../lattice-search/">
+  <div class="crosslink-label">Next: Lattice Extension</div>
+  <div>Spatially extended braiding on 60-anyon chains. Does spatial extent rescue complexity?</div>
+</a>
+
+<h2>Plots</h2>
+
+<div class="plot-container">
+<h3>n=3 strands: Class IV candidates</h3>
+<img src="braiding_class4_3strand.png" alt="Class IV candidate trajectories for 3-strand Fibonacci anyon braiding. State space projections showing quasi-periodic orbits on a 2-torus.">
+<p class="plot-caption">Class IV candidates for n=3 Fibonacci anyon braiding. The apparent complexity is quasi-periodic: dense orbits on a torus, not genuine chaos. All trajectories have Lyapunov exponent exactly zero.</p>
+</div>
+
+<div class="plot-container">
+<h3>n=4 strands: Class IV candidates</h3>
+<img src="braiding_class4_4strand.png" alt="Class IV candidate trajectories for 4-strand Fibonacci anyon braiding. 3D state space projections showing quasi-periodic orbits.">
+<p class="plot-caption">Class IV candidates for n=4 Fibonacci anyon braiding (3D fusion space). Higher-dimensional quasi-periodic orbits, still with zero Lyapunov exponent. The richer structure comes from three eigenvalue phases rather than two.</p>
+</div>
+
+</div>
+</body>
+</html>

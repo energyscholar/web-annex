@@ -1,1 +1,270 @@
-# Web Annex
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Annex — Bruce Stephenson</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-size: 2.4rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  font-style: italic;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 2rem;
+}
+
+h2 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-top: 2.5rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid transparent;
+  transition: border-color 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: block;
+}
+
+.card:hover {
+  border-color: var(--blue);
+  transform: translateY(-1px);
+}
+
+.card-title {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: 0.4rem;
+}
+
+.card-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  margin-left: 0.6rem;
+  vertical-align: middle;
+  font-family: system-ui, sans-serif;
+}
+
+.tag-tutorial { background: rgba(59,130,246,0.15); color: var(--blue); }
+.tag-interactive { background: rgba(251,191,36,0.15); color: var(--golden); }
+.tag-research { background: rgba(168,85,247,0.15); color: var(--purple); }
+.tag-rpg { background: rgba(34,197,94,0.15); color: var(--green); }
+.tag-design { background: rgba(245,158,11,0.15); color: var(--amber); }
+
+.card-desc {
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.card-meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #1e293b;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .card-grid { grid-template-columns: 1fr 1fr; }
+  .card-grid.single { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Web Annex</h1>
+<p class="subtitle">Companion materials, interactive tutorials, and research supplements</p>
+
+<!-- ============================================================ -->
+<h2>Science Tutorials</h2>
+<!-- ============================================================ -->
+
+<div class="card-grid">
+
+<a class="card" href="anyon-fusion/">
+  <div class="card-title">Fibonacci Anyon Fusion Algebra <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Animated introduction to the Fibonacci anyon model. Covers fusion rules (&tau;&times;&tau; = 1+&tau;), the Fibonacci dimension sequence, fusion trees, braiding as quantum gates, and the connection to topological quantum computation. Eight sections with replay-able SVG animations.</div>
+</a>
+
+<a class="card" href="acs-closure-v2/">
+  <div class="card-title">Autocatalytic Closure for the Working Mathematician <span class="card-tag tag-tutorial">Tutorial</span></div>
+  <div class="card-desc">Kauffman's autocatalytic sets presented as formal mathematics. Covers RAF theory (reflexively autocatalytic, food-generated sets), closure properties, the percolation phase transition in random catalytic networks, and the connection to origin-of-life chemistry. Revised edition.</div>
+</a>
+
+<a class="card" href="topology-closure/">
+  <div class="card-title">Where the Topology Lives <span class="card-tag tag-tutorial">Tutorial</span></div>
+  <div class="card-desc">How topological order emerges in two-dimensional systems. Covers the quantum Hall effect, anyonic statistics, braiding, and why topology provides error protection. Bridges abstract mathematics to the physical systems where these phenomena appear.</div>
+</a>
+
+<a class="card" href="miller-tutorial/">
+  <div class="card-title">Coevolving Machines and the Social Threshold <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Interactive evolutionary game theory simulation based on John H. Miller's research. Explores how simple adaptive agents produce complex cooperative dynamics, phase transitions in social systems, and the emergence of collective behavior from individual strategy.</div>
+  <div class="card-meta">Includes live simulation engine, replication studies, and test suite</div>
+</a>
+
+<a class="card" href="acs-closure/">
+  <div class="card-title">Autocatalytic Closure (Original) <span class="card-tag tag-tutorial">Tutorial</span></div>
+  <div class="card-desc">First edition of the autocatalytic closure tutorial. Superseded by the revised v2, retained for reference.</div>
+</a>
+
+<a class="card" href="domain-convergence/">
+  <div class="card-title">Domain Convergence &mdash; An Animated Introduction <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">How eleven scientific fields independently discovered different faces of the same physical phenomenon. Covers domain clusters, seven bridges, scale invariance as stitching mechanism, the AC bridge structural identity, and the emergent property stack. Interactive SVGs with tooltips.</div>
+</a>
+
+<a class="card" href="criticality-bridges/">
+  <div class="card-title">Criticality Bridges &mdash; Physical Systems <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Six concrete physical systems where critical phenomena demonstrably couple scientific domains. Gene regulatory networks, BZ reaction, cortical neural tissue, immune system, magnetic skyrmions, and Earth's magnetosphere. Each with animated visualizations.</div>
+</a>
+
+<a class="card" href="physical-systems-chart/">
+  <div class="card-title">Physical Systems &times; Domain Bridge Chart <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Interactive working document mapping ten physical systems against five domain clusters. Clickable matrix, bridge coverage diagram, endpoint characterization, gap analysis, mechanism taxonomy, and research targets.</div>
+</a>
+
+</div>
+
+<!-- ============================================================ -->
+<h2>Research</h2>
+<!-- ============================================================ -->
+
+<div class="card-grid">
+
+<a class="card" href="diamond-node/">
+  <div class="card-title">Domain Convergence Research <span class="card-tag tag-research">Research</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Systematic investigation into structural relationships between eleven scientific domains. Interactive tutorials, computational experiments (NKS braiding search, lattice dynamics, anyon family sweep), and key findings on cross-domain bridges.</div>
+  <div class="card-meta">Includes 4 interactive tutorials and 3 computational research reports</div>
+</a>
+
+<a class="card" href="search-suppression/">
+  <div class="card-title">Content-Selective Search De-Indexing <span class="card-tag tag-research">Report</span></div>
+  <div class="card-desc">Reproducibility report documenting content-selective removal of specific pages from search engine indices. Four test cases and two controls across Cryptome, Substack, and Slashdot, with methodology for independent verification. Includes temporal sensitivity analysis.</div>
+  <div class="card-meta">Published June 2026</div>
+</a>
+
+</div>
+
+<!-- ============================================================ -->
+<h2>Letters</h2>
+<!-- ============================================================ -->
+
+<div class="card-grid single">
+
+<a class="card" href="letters/kw-norton/">
+  <div class="card-title">A Note on Topological Protection</div>
+  <div class="card-desc">Technical correspondence on topological protection mechanisms.</div>
+</a>
+
+</div>
+
+<!-- ============================================================ -->
+<h2>Traveller RPG</h2>
+<!-- ============================================================ -->
+
+<div class="card-grid">
+
+<a class="card" href="maps/collace-system.html">
+  <div class="card-title">Collace System Map <span class="card-tag tag-rpg">Traveller</span></div>
+  <div class="card-desc">Interactive system map for Collace, ISS Astral Dawn campaign. Orbital mechanics and planetary data.</div>
+</a>
+
+<a class="card" href="maps/rogue-planets.html">
+  <div class="card-title">Deep Space Survey &mdash; Rogue Planets <span class="card-tag tag-rpg">Traveller</span></div>
+  <div class="card-desc">Survey of rogue planet candidates in District 268. Deep space refueling opportunities and navigation hazards.</div>
+</a>
+
+<a class="card" href="s13-prep/">
+  <div class="card-title">S13 Session Prep &mdash; Collace Arrival <span class="card-tag tag-rpg">Traveller</span></div>
+  <div class="card-desc">GM preparation materials for Session 13. Includes arrest scenario, rogue planet encounters, and system arrival sequences.</div>
+</a>
+
+</div>
+
+<!-- ============================================================ -->
+<h2>Design</h2>
+<!-- ============================================================ -->
+
+<div class="card-grid single">
+
+<a class="card" href="vtt-mockups/">
+  <div class="card-title">Starship Operations VTT &mdash; Shared Display Mockup <span class="card-tag tag-design">Mockup</span></div>
+  <div class="card-desc">UI mockup for the Starship Operations virtual tabletop shared display. Grid layout with ship status, navigation, and crew panels.</div>
+</a>
+
+</div>
+
+<footer>
+  Web Annex &mdash; companion to <em>Relinquishment</em> and related work
+</footer>
+
+</div>
+</body>
+</html>

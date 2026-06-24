@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fibonacci Anyon Fusion Algebra</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+h3 {
+  color: var(--heading);
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.definition, .theorem {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.definition { border-left: 4px solid var(--blue); }
+.theorem { border-left: 4px solid var(--purple); }
+
+.definition-title, .theorem-title {
+  font-weight: 700;
+  color: var(--heading);
+  margin-bottom: 0.5rem;
+}
+
+.definition-title { color: var(--blue); }
+.theorem-title { color: var(--purple); }
+
+.math {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-style: italic;
+  color: var(--heading);
+}
+
+.math-block {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-style: italic;
+  color: var(--heading);
+  display: block;
+  text-align: center;
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+code {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+  color: var(--green);
+}
+
+.svg-container {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  overflow: hidden;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.svg-container svg { max-width: 100%; height: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  background: #334155;
+  color: var(--heading);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #334155;
+}
+
+tr:hover { background: rgba(59, 130, 246, 0.05); }
+
+.insight {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.insight::before {
+  content: "Key insight: ";
+  color: var(--golden);
+  font-weight: 700;
+}
+
+.callout {
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  font-size: 1.15rem;
+  color: var(--heading);
+}
+
+ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.3rem; }
+
+.replay-btn {
+  background: var(--card);
+  color: var(--muted);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.35rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.75rem;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.replay-btn:hover {
+  color: var(--heading);
+  border-color: var(--blue);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.section.visible { opacity: 1; transform: translateY(0); }
+
+.golden { color: var(--golden); font-weight: 700; }
+
+.three-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.panel {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.panel h4 {
+  color: var(--heading);
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.panel .math-block { font-size: 1rem; margin: 0.5rem 0; }
+
+@media (max-width: 700px) {
+  .three-panel { grid-template-columns: 1fr; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.3rem; }
+  body { padding: 1rem 0.5rem; }
+}
+
+.section-number {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.contact {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #334155;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Fusion rule SVG animations */
+@keyframes moveRight {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(150px); }
+}
+@keyframes moveLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-150px); }
+}
+@keyframes flashIn {
+  0% { r: 0; opacity: 0; }
+  50% { r: 35; opacity: 0.9; }
+  100% { r: 0; opacity: 0; }
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes branchLeft {
+  0% { opacity: 0; transform: translate(0, 0); }
+  100% { opacity: 1; transform: translate(-80px, 70px); }
+}
+@keyframes branchRight {
+  0% { opacity: 0; transform: translate(0, 0); }
+  100% { opacity: 1; transform: translate(80px, 70px); }
+}
+@keyframes pulseGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.3)); }
+  50% { filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.7)); }
+}
+
+/* Braid animation */
+@keyframes braidOver {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(40px, -25px); }
+  50% { transform: translate(80px, 0); }
+  100% { transform: translate(80px, 0); }
+}
+@keyframes braidUnder {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-80px, 0); }
+  100% { transform: translate(-80px, 0); }
+}
+
+/* Tree grow animation */
+@keyframes growDown {
+  0% { stroke-dashoffset: 40; opacity: 0; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes nodeAppear {
+  0% { r: 0; opacity: 0; }
+  100% { r: 8; opacity: 1; }
+}
+
+/* Wobble for topological protection */
+@keyframes wobblePath {
+  0% { d: path('M 40 40 C 80 10, 120 10, 160 40'); }
+  25% { d: path('M 40 40 C 70 5, 130 15, 160 40'); }
+  50% { d: path('M 40 40 C 85 15, 115 5, 160 40'); }
+  75% { d: path('M 40 40 C 75 8, 125 12, 160 40'); }
+  100% { d: path('M 40 40 C 80 10, 120 10, 160 40'); }
+}
+</style>
+</head>
+<body>
+<nav style="background:#1e293b;padding:0.5rem 1rem;font-family:system-ui,sans-serif;font-size:0.85rem;border-bottom:1px solid #334155;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;">
+    <a href="../" style="color:#64748b;text-decoration:none;">&#8592; Web Annex</a>
+    <span style="color:#334155;">|</span>
+    <a href="../anyon-fusion/" style="color:#f1f5f9;text-decoration:none;font-weight:600;">Anyon Fusion</a>
+    <a href="../domain-convergence/" style="color:#94a3b8;text-decoration:none;">Domain Convergence</a>
+    <a href="../criticality-bridges/" style="color:#94a3b8;text-decoration:none;">Criticality Bridges</a>
+    <a href="../physical-systems-chart/" style="color:#94a3b8;text-decoration:none;">Physical Systems</a>
+  </div>
+</nav>
+<div class="container">
+
+<h1>Fibonacci Anyon Fusion Algebra</h1>
+<p class="subtitle">The simplest model of universal topological quantum computation.</p>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: Two Particles, One Rule -->
+<!-- ============================================================ -->
+<div class="section" id="sec1">
+<p class="section-number">Section 1</p>
+<h2>Two Particles, One Rule</h2>
+
+<p>In the simplest universal model of quantum computation, there are only two kinds of particle. Everything follows from one fusion rule.</p>
+
+<p>These particles are <em>anyons</em> &mdash; quasiparticles that exist only in two-dimensional systems and obey exchange statistics that are neither bosonic nor fermionic. Fibonacci anyons are the simplest anyon model that supports universal quantum computation.</p>
+
+<div class="svg-container" id="particles-svg">
+<svg viewBox="0 0 500 160" width="500" height="160">
+  <defs>
+    <radialGradient id="vacGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(203,213,225,0.15)" />
+      <stop offset="100%" stop-color="rgba(203,213,225,0)" />
+    </radialGradient>
+    <radialGradient id="tauGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(251,191,36,0.25)" />
+      <stop offset="100%" stop-color="rgba(251,191,36,0)" />
+    </radialGradient>
+  </defs>
+  <!-- Vacuum particle -->
+  <g class="particle-vac" opacity="0">
+    <circle cx="150" cy="70" r="40" fill="url(#vacGlow)" />
+    <circle cx="150" cy="70" r="14" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.6" />
+    <circle cx="150" cy="70" r="14" fill="rgba(148,163,184,0.08)" />
+    <text x="150" y="75" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16">1</text>
+    <text x="150" y="120" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="13">Vacuum</text>
+  </g>
+  <!-- Fibonacci anyon -->
+  <g class="particle-tau" opacity="0">
+    <circle cx="350" cy="70" r="50" fill="url(#tauGlow)" />
+    <circle cx="350" cy="70" r="18" fill="none" stroke="#fbbf24" stroke-width="2" />
+    <circle cx="350" cy="70" r="18" fill="rgba(251,191,36,0.12)" />
+    <text x="350" y="76" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="18" font-weight="bold">&tau;</text>
+    <text x="350" y="120" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="13">Fibonacci anyon</text>
+  </g>
+</svg>
+<button class="replay-btn" onclick="replaySection('sec1')">Replay</button>
+</div>
+
+<table>
+  <tr><th>Label</th><th>Name</th><th>Quantum dimension</th></tr>
+  <tr>
+    <td><span class="math">1</span></td>
+    <td>Vacuum (trivial)</td>
+    <td><span class="math">d</span> = 1</td>
+  </tr>
+  <tr>
+    <td><span class="math" style="color: var(--golden)">&tau;</span></td>
+    <td>Fibonacci anyon</td>
+    <td><span class="math">d</span> = <span class="math">&phi;</span> = (1+&radic;5)/2 &asymp; 1.618</td>
+  </tr>
+</table>
+
+<div class="insight">The quantum dimension of <span class="math" style="color: var(--golden)">&tau;</span> is the golden ratio <span class="math">&phi;</span>. This is not a coincidence &mdash; it is the deepest fact about this model. The golden ratio enters because the fusion rule <span class="math">&tau; &times; &tau; = 1 + &tau;</span> forces the quantum dimension to satisfy <span class="math">d</span><sup>2</sup> = 1 + <span class="math">d</span>, whose positive root is <span class="math">&phi;</span>.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: The Fusion Rules -->
+<!-- ============================================================ -->
+<div class="section" id="sec2">
+<p class="section-number">Section 2</p>
+<h2>The Fusion Rules</h2>
+
+<p>Anyon fusion is the quantum analog of adding angular momenta. When two anyons meet, their topological charges combine according to algebraic rules &mdash; not resonance, not collision, not interference. Algebra.</p>
+
+<h3>Rule 1: <span class="math">1 &times; 1 = 1</span></h3>
+<p>Vacuum fused with vacuum produces vacuum. The trivial case.</p>
+
+<div class="svg-container" id="rule1-svg">
+<svg viewBox="0 0 400 100" width="400" height="100">
+  <g class="rule1-anim">
+    <circle class="r1-left" cx="100" cy="50" r="12" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5" />
+    <text class="r1-left" x="100" y="55" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1</text>
+    <circle class="r1-right" cx="300" cy="50" r="12" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5" />
+    <text class="r1-right" x="300" y="55" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1</text>
+    <text x="200" y="20" text-anchor="middle" fill="#475569" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1 &times; 1 = 1</text>
+    <!-- Result (hidden initially) -->
+    <g class="r1-result" opacity="0">
+      <circle cx="200" cy="50" r="12" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5" />
+      <text x="200" y="55" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<h3>Rule 2: <span class="math">1 &times; <span style="color: var(--golden)">&tau;</span> = <span style="color: var(--golden)">&tau;</span></span></h3>
+<p>Vacuum acts as the identity. Fusing vacuum with <span class="math" style="color: var(--golden)">&tau;</span> leaves <span class="math" style="color: var(--golden)">&tau;</span> unchanged.</p>
+
+<div class="svg-container" id="rule2-svg">
+<svg viewBox="0 0 400 100" width="400" height="100">
+  <g class="rule2-anim">
+    <circle class="r2-left" cx="100" cy="50" r="12" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5" />
+    <text class="r2-left" x="100" y="55" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1</text>
+    <circle class="r2-right" cx="300" cy="50" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text class="r2-right" x="300" y="56" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16" font-weight="bold">&tau;</text>
+    <text x="200" y="20" text-anchor="middle" fill="#475569" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1 &times; &tau; = &tau;</text>
+    <g class="r2-result" opacity="0">
+      <circle cx="200" cy="50" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+      <text x="200" y="56" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16" font-weight="bold">&tau;</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<h3>Rule 3: <span class="math" style="color: var(--golden)">&tau; &times; &tau;</span> = <span class="math">1</span> + <span class="math" style="color: var(--golden)">&tau;</span></h3>
+<p>This is <em>the</em> rule. Two Fibonacci anyons fuse into a quantum superposition of vacuum and a new Fibonacci anyon. Everything else in this tutorial follows from here.</p>
+
+<div class="svg-container" id="rule3-svg">
+<svg viewBox="0 0 600 220" width="600" height="220" id="rule3-canvas">
+  <defs>
+    <radialGradient id="flashGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.9)" />
+      <stop offset="60%" stop-color="rgba(251,191,36,0.4)" />
+      <stop offset="100%" stop-color="rgba(251,191,36,0)" />
+    </radialGradient>
+  </defs>
+  <text x="300" y="20" text-anchor="middle" fill="#f1f5f9" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16">&tau; &times; &tau; = 1 + &tau;</text>
+  <!-- Left tau -->
+  <g class="r3-left">
+    <circle cx="150" cy="60" r="18" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="150" y="66" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="18" font-weight="bold">&tau;</text>
+  </g>
+  <!-- Right tau -->
+  <g class="r3-right">
+    <circle cx="450" cy="60" r="18" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="450" y="66" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="18" font-weight="bold">&tau;</text>
+  </g>
+  <!-- Flash -->
+  <circle class="r3-flash" cx="300" cy="60" r="0" fill="url(#flashGrad)" opacity="0" />
+  <!-- Branch lines -->
+  <line class="r3-branch-line-l" x1="300" y1="60" x2="220" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" opacity="0" />
+  <line class="r3-branch-line-r" x1="300" y1="60" x2="380" y2="170" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4 3" opacity="0" />
+  <!-- Vacuum outcome -->
+  <g class="r3-out-vac" opacity="0">
+    <circle cx="220" cy="180" r="14" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.6" />
+    <text x="220" y="185" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1</text>
+    <text x="220" y="210" text-anchor="middle" fill="#475569" font-size="11">vacuum</text>
+  </g>
+  <!-- Tau outcome -->
+  <g class="r3-out-tau" opacity="0">
+    <circle cx="380" cy="180" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="380" y="186" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16" font-weight="bold">&tau;</text>
+    <text x="380" y="210" text-anchor="middle" fill="#fbbf24" font-size="11">anyon</text>
+  </g>
+  <!-- Superposition bracket -->
+  <g class="r3-superpos" opacity="0">
+    <text x="300" y="210" text-anchor="middle" fill="#475569" font-size="12" font-style="italic">superposition</text>
+  </g>
+</svg>
+<button class="replay-btn" onclick="replaySection('sec2')">Replay</button>
+</div>
+
+<div class="definition">
+  <p class="definition-title">Definition: Fusion</p>
+  <p>Fusion is deterministic algebra, not probabilistic collision. The &lsquo;+&rsquo; in <span class="math">&tau; &times; &tau; = 1 + &tau;</span> means the outcome space contains <em>both</em> possibilities &mdash; the system is in a quantum superposition of having produced vacuum <em>or</em> a new <span class="math" style="color: var(--golden)">&tau;</span> anyon. Which outcome you get is determined only when measured.</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: The Fibonacci Connection -->
+<!-- ============================================================ -->
+<div class="section" id="sec3">
+<p class="section-number">Section 3</p>
+<h2>The Fibonacci Connection</h2>
+
+<p>When you fuse <span class="math">n</span> Fibonacci anyons sequentially, the number of valid fusion paths follows the Fibonacci sequence. This is not a metaphor &mdash; it is a direct algebraic consequence of the fusion rule.</p>
+
+<p>Consider fusing <span class="math">n</span> anyons of type <span class="math" style="color: var(--golden)">&tau;</span> left to right. At each step, the intermediate result can be <span class="math">1</span> or <span class="math" style="color: var(--golden)">&tau;</span>. The fusion rule determines which branches are valid:</p>
+
+<ul>
+  <li>If the intermediate charge is <span class="math">1</span>, fusing with <span class="math" style="color: var(--golden)">&tau;</span> gives only <span class="math" style="color: var(--golden)">&tau;</span> (one branch).</li>
+  <li>If the intermediate charge is <span class="math" style="color: var(--golden)">&tau;</span>, fusing with <span class="math" style="color: var(--golden)">&tau;</span> gives <span class="math">1 + &tau;</span> (two branches).</li>
+</ul>
+
+<p>Let <span class="math">a<sub>n</sub></span> = number of paths ending in <span class="math">1</span>, and <span class="math">b<sub>n</sub></span> = number ending in <span class="math" style="color: var(--golden)">&tau;</span>. Then:</p>
+
+<span class="math-block">a<sub>n+1</sub> = b<sub>n</sub> &emsp;&emsp; b<sub>n+1</sub> = a<sub>n</sub> + b<sub>n</sub></span>
+
+<p>This is exactly the Fibonacci recurrence. The total dimension of the fusion space (both charge sectors) is <span class="math">a<sub>n</sub> + b<sub>n</sub></span>.</p>
+
+<div class="svg-container" id="tree-svg">
+<svg viewBox="0 0 600 380" width="600" height="380" id="tree-canvas">
+  <!-- Level 0: two tau anyons at top -->
+  <g class="tree-level-0">
+    <circle cx="180" cy="30" r="14" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="180" y="36" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">&tau;<tspan font-size="9" dy="4">1</tspan></text>
+    <circle cx="270" cy="30" r="14" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="270" y="36" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">&tau;<tspan font-size="9" dy="4">2</tspan></text>
+  </g>
+
+  <!-- Level 1: tau x tau -> 1 or tau -->
+  <g class="tree-level-1" opacity="0">
+    <line x1="220" y1="45" x2="170" y2="85" stroke="#94a3b8" stroke-width="1.5" />
+    <line x1="230" y1="45" x2="280" y2="85" stroke="#fbbf24" stroke-width="1.5" />
+    <!-- c1 = 1 -->
+    <circle cx="170" cy="95" r="10" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.6" />
+    <text x="170" y="99" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">1</text>
+    <!-- c1 = tau -->
+    <circle cx="280" cy="95" r="10" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="1.5" />
+    <text x="280" y="99" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">&tau;</text>
+    <!-- Count -->
+    <text x="500" y="99" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="12"><tspan fill="#94a3b8">n=2:</tspan> 2 paths</text>
+  </g>
+
+  <!-- Add tau3 -->
+  <g class="tree-tau3" opacity="0">
+    <circle cx="360" cy="30" r="14" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="360" y="36" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">&tau;<tspan font-size="9" dy="4">3</tspan></text>
+  </g>
+
+  <!-- Level 2: fuse c1 with tau3 -->
+  <g class="tree-level-2" opacity="0">
+    <!-- From c1=1: 1 x tau = tau (only one branch) -->
+    <line x1="170" y1="105" x2="170" y2="155" stroke="#fbbf24" stroke-width="1.5" />
+    <circle cx="170" cy="165" r="10" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="1.5" />
+    <text x="170" y="169" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">&tau;</text>
+
+    <!-- From c1=tau: tau x tau = 1 + tau (two branches) -->
+    <line x1="280" y1="105" x2="250" y2="155" stroke="#94a3b8" stroke-width="1.5" />
+    <line x1="280" y1="105" x2="310" y2="155" stroke="#fbbf24" stroke-width="1.5" />
+    <circle cx="250" cy="165" r="10" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.6" />
+    <text x="250" y="169" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">1</text>
+    <circle cx="310" cy="165" r="10" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="1.5" />
+    <text x="310" y="169" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">&tau;</text>
+
+    <!-- Count -->
+    <text x="500" y="169" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="12"><tspan fill="#94a3b8">n=3:</tspan> 3 paths</text>
+  </g>
+
+  <!-- Add tau4 -->
+  <g class="tree-tau4" opacity="0">
+    <circle cx="430" cy="30" r="14" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="430" y="36" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">&tau;<tspan font-size="9" dy="4">4</tspan></text>
+  </g>
+
+  <!-- Level 3: fuse c2 with tau4 -->
+  <g class="tree-level-3" opacity="0">
+    <!-- From c2=tau (left): tau x tau = 1 + tau -->
+    <line x1="170" y1="175" x2="140" y2="225" stroke="#94a3b8" stroke-width="1.5" />
+    <line x1="170" y1="175" x2="195" y2="225" stroke="#fbbf24" stroke-width="1.5" />
+    <circle cx="140" cy="235" r="10" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.6" />
+    <text x="140" y="239" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">1</text>
+    <circle cx="195" cy="235" r="10" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="1.5" />
+    <text x="195" y="239" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">&tau;</text>
+
+    <!-- From c2=1 (middle): 1 x tau = tau -->
+    <line x1="250" y1="175" x2="250" y2="225" stroke="#fbbf24" stroke-width="1.5" />
+    <circle cx="250" cy="235" r="10" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="1.5" />
+    <text x="250" y="239" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">&tau;</text>
+
+    <!-- From c2=tau (right): tau x tau = 1 + tau -->
+    <line x1="310" y1="175" x2="285" y2="225" stroke="#94a3b8" stroke-width="1.5" />
+    <line x1="310" y1="175" x2="340" y2="225" stroke="#fbbf24" stroke-width="1.5" />
+    <circle cx="285" cy="235" r="10" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.6" />
+    <text x="285" y="239" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">1</text>
+    <circle cx="340" cy="235" r="10" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="1.5" />
+    <text x="340" y="239" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="13">&tau;</text>
+
+    <!-- Count -->
+    <text x="500" y="239" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="12"><tspan fill="#94a3b8">n=4:</tspan> 5 paths</text>
+  </g>
+
+  <!-- Fibonacci sequence display -->
+  <g class="tree-fib" opacity="0">
+    <rect x="100" y="290" width="350" height="50" rx="8" fill="var(--card)" stroke="#334155" stroke-width="1" />
+    <text x="275" y="310" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="12">Total paths (both charge sectors):</text>
+    <text x="275" y="332" text-anchor="middle" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16">
+      <tspan fill="#fbbf24">2</tspan><tspan fill="#475569">, </tspan>
+      <tspan fill="#fbbf24">3</tspan><tspan fill="#475569">, </tspan>
+      <tspan fill="#fbbf24">5</tspan><tspan fill="#475569">, </tspan>
+      <tspan fill="#fbbf24">8</tspan><tspan fill="#475569">, </tspan>
+      <tspan fill="#fbbf24">13</tspan><tspan fill="#475569">, </tspan>
+      <tspan fill="#fbbf24">21</tspan><tspan fill="#475569">, </tspan>
+      <tspan fill="#fbbf24">34</tspan><tspan fill="#475569">, ...</tspan>
+    </text>
+  </g>
+
+  <!-- Labels -->
+  <g class="tree-labels" opacity="0">
+    <text x="500" y="332" text-anchor="middle" fill="#fbbf24" font-family="system-ui" font-size="13" font-weight="bold">Fibonacci!</text>
+  </g>
+</svg>
+<button class="replay-btn" onclick="replaySection('sec3')">Replay</button>
+</div>
+
+<div class="insight">The Fibonacci sequence does not appear here by analogy. The fusion rule <span class="math">&tau; &times; &tau; = 1 + &tau;</span> generates the recurrence <span class="math">F(n) = F(n&minus;1) + F(n&minus;2)</span> directly. The branching structure of the fusion tree <em>is</em> the Fibonacci recurrence.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: The Fusion Space -->
+<!-- ============================================================ -->
+<div class="section" id="sec4">
+<p class="section-number">Section 4</p>
+<h2>The Fusion Space</h2>
+
+<p>Quantum information in a topological quantum computer is not stored in individual anyons. It is stored in the <em>fusion space</em> &mdash; the space of valid fusion paths through the tree.</p>
+
+<div class="definition">
+  <p class="definition-title">Definition: Fusion Space</p>
+  <p>The fusion space is a Hilbert space whose basis states are the valid fusion paths. A system of <span class="math">n</span> Fibonacci anyons with fixed total charge has a fusion space of dimension <span class="math">F</span>(<span class="math">n</span>&minus;1) for total charge <span class="math">1</span>, or <span class="math">F</span>(<span class="math">n</span>) for total charge <span class="math" style="color: var(--golden)">&tau;</span>, where <span class="math">F</span> is the Fibonacci sequence (with <span class="math">F</span>(1) = <span class="math">F</span>(2) = 1).</p>
+</div>
+
+<div class="svg-container" id="delocal-svg">
+<svg viewBox="0 0 500 140" width="500" height="140">
+  <defs>
+    <radialGradient id="tauGlowSmall" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(251,191,36,0.2)" />
+      <stop offset="100%" stop-color="rgba(251,191,36,0)" />
+    </radialGradient>
+  </defs>
+  <!-- Three anyons -->
+  <g class="deloc-anyons" opacity="0">
+    <circle cx="130" cy="60" r="30" fill="url(#tauGlowSmall)" />
+    <circle cx="130" cy="60" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="130" y="66" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16" font-weight="bold">&tau;</text>
+
+    <circle cx="250" cy="60" r="30" fill="url(#tauGlowSmall)" />
+    <circle cx="250" cy="60" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="250" y="66" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16" font-weight="bold">&tau;</text>
+
+    <circle cx="370" cy="60" r="30" fill="url(#tauGlowSmall)" />
+    <circle cx="370" cy="60" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text x="370" y="66" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="16" font-weight="bold">&tau;</text>
+  </g>
+  <!-- Question marks between pairs -->
+  <g class="deloc-questions" opacity="0">
+    <text x="190" y="50" text-anchor="middle" fill="#a855f7" font-size="22" font-weight="bold">?</text>
+    <text x="310" y="50" text-anchor="middle" fill="#a855f7" font-size="22" font-weight="bold">?</text>
+  </g>
+  <!-- Connecting arcs (dashed) -->
+  <g class="deloc-arcs" opacity="0">
+    <path d="M 146 55 Q 190 25 234 55" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6" />
+    <path d="M 266 55 Q 310 25 354 55" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6" />
+    <path d="M 146 68 Q 250 110 354 68" fill="none" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 3" opacity="0.3" />
+  </g>
+  <!-- Label -->
+  <g class="deloc-label" opacity="0">
+    <text x="250" y="125" text-anchor="middle" fill="#475569" font-size="13" font-style="italic">The information lives in the relationships, not the particles.</text>
+  </g>
+</svg>
+<button class="replay-btn" onclick="replaySection('sec4')">Replay</button>
+</div>
+
+<div class="insight">No measurement on any single anyon reveals which fusion path the system is on. This is <em>topological non-locality</em> &mdash; the qubit is encoded in the collective state of all the anyons, inaccessible to any local probe.</div>
+
+<table>
+  <tr><th>Anyons (<span class="math">n</span>)</th><th>Fusion space dim (total charge <span class="math" style="color: var(--golden)">&tau;</span>)</th><th>Qubits (approx)</th></tr>
+  <tr><td>3</td><td>2</td><td>1.0</td></tr>
+  <tr><td>5</td><td>5</td><td>2.3</td></tr>
+  <tr><td>7</td><td>13</td><td>3.7</td></tr>
+  <tr><td>10</td><td>55</td><td>5.8</td></tr>
+  <tr><td>20</td><td>6765</td><td>12.7</td></tr>
+</table>
+
+<p>The qubit count is <span class="math">log<sub>2</sub>(dim)</span>. The fusion space grows as <span class="math">&phi;<sup>n</sup>/&radic;5</span>, giving approximately <span class="math">n &middot; log<sub>2</sub>(&phi;)</span> &asymp; 0.694<span class="math">n</span> qubits for <span class="math">n</span> anyons.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: Braiding as Computation -->
+<!-- ============================================================ -->
+<div class="section" id="sec5">
+<p class="section-number">Section 5</p>
+<h2>Braiding as Computation</h2>
+
+<p>When you physically exchange two anyons &mdash; moving one around the other in the plane &mdash; this applies a unitary transformation to the fusion space. Different exchange sequences produce different quantum gates.</p>
+
+<p>In three dimensions, exchanging two identical particles twice returns the system to its original state. In two dimensions, the second exchange is <em>topologically distinct</em> from the first &mdash; the worldlines form a braid, and the braid group is infinite and non-abelian.</p>
+
+<div class="svg-container" id="braid-svg">
+<svg viewBox="0 0 500 220" width="500" height="220" id="braid-canvas">
+  <!-- Anyon positions (top) -->
+  <g class="braid-anyons">
+    <circle class="braid-a1" cx="150" cy="35" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text class="braid-a1-label" x="150" y="41" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">&tau;<tspan font-size="9" dy="3">1</tspan></text>
+
+    <circle class="braid-a2" cx="250" cy="35" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text class="braid-a2-label" x="250" y="41" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">&tau;<tspan font-size="9" dy="3">2</tspan></text>
+
+    <circle class="braid-a3" cx="350" cy="35" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
+    <text class="braid-a3-label" x="350" y="41" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">&tau;<tspan font-size="9" dy="3">3</tspan></text>
+  </g>
+
+  <!-- Braid diagram (static, shows after animation) -->
+  <g class="braid-diagram" opacity="0">
+    <!-- Labels -->
+    <text x="250" y="85" text-anchor="middle" fill="#475569" font-size="12">Braid diagram: &sigma;<tspan font-size="9" dy="2">1</tspan><tspan dy="-2"> (exchange &tau;</tspan><tspan font-size="9" dy="2">1</tspan><tspan dy="-2"> over &tau;</tspan><tspan font-size="9" dy="2">2</tspan><tspan dy="-2">)</tspan></text>
+
+    <!-- Three strands going down -->
+    <!-- Strand 1 (starts left, goes right) - overcrossing -->
+    <path d="M 150 100 C 150 130, 250 130, 250 160" stroke="#fbbf24" stroke-width="3" fill="none" />
+    <!-- Strand 2 (starts center, goes left) - undercrossing -->
+    <!-- Draw in two parts with gap for under-crossing effect -->
+    <path d="M 250 100 C 250 115, 220 120, 200 125" stroke="#94a3b8" stroke-width="3" fill="none" />
+    <path d="M 185 133 C 170 140, 150 145, 150 160" stroke="#94a3b8" stroke-width="3" fill="none" />
+    <!-- Strand 3 (straight through) -->
+    <line x1="350" y1="100" x2="350" y2="160" stroke="#fbbf24" stroke-width="2" stroke-dasharray="none" opacity="0.5" />
+
+    <!-- Labels at bottom -->
+    <text x="250" y="178" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="12">&tau;<tspan font-size="8" dy="2">1</tspan></text>
+    <text x="150" y="178" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="12">&tau;<tspan font-size="8" dy="2">2</tspan></text>
+    <text x="350" y="178" text-anchor="middle" fill="#fbbf24" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="12" opacity="0.5">&tau;<tspan font-size="8" dy="2">3</tspan></text>
+  </g>
+
+  <!-- Gate label -->
+  <g class="braid-gate" opacity="0">
+    <rect x="120" y="190" width="260" height="26" rx="4" fill="rgba(168,85,247,0.1)" stroke="rgba(168,85,247,0.3)" stroke-width="1" />
+    <text x="250" y="208" text-anchor="middle" fill="#a855f7" font-size="13">Each braid = a unitary gate on the fusion space</text>
+  </g>
+</svg>
+<button class="replay-btn" onclick="replaySection('sec5')">Replay</button>
+</div>
+
+<p>For three Fibonacci anyons with total charge <span class="math" style="color: var(--golden)">&tau;</span>, the fusion space is two-dimensional &mdash; a single qubit. The braid generators <span class="math">&sigma;<sub>1</sub></span> and <span class="math">&sigma;<sub>2</sub></span> act as 2&times;2 unitary matrices whose entries involve <span class="math">e<sup>4&pi;i/5</sup></span> and the golden ratio <span class="math">&phi;</span>.</p>
+
+<div class="theorem">
+  <p class="theorem-title">Theorem (Freedman, Larsen, Wang 2002)</p>
+  <p>The image of the braid group representation for Fibonacci anyons is <em>dense</em> in SU(2). That is, any single-qubit unitary transformation can be approximated to arbitrary precision by a finite sequence of braids. Combined with the ability to perform entangling gates between qubit pairs, braiding Fibonacci anyons is sufficient for <strong>universal quantum computation</strong>.</p>
+</div>
+
+<div class="insight">For Fibonacci anyons, braiding alone is sufficient for universal quantum computation. Any quantum algorithm can be compiled into a sequence of anyon exchanges. No additional error correction is needed &mdash; the topological nature of the encoding provides it intrinsically.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: Topological Protection -->
+<!-- ============================================================ -->
+<div class="section" id="sec6">
+<p class="section-number">Section 6</p>
+<h2>Topological Protection</h2>
+
+<p>The central promise of topological quantum computation is <em>fault tolerance by physics</em>. The quantum gates are determined by the topology of the anyon worldlines &mdash; which strands cross over which &mdash; not by the precise geometric path taken.</p>
+
+<div class="svg-container" id="topo-svg">
+<svg viewBox="0 0 520 200" width="520" height="200" id="topo-canvas">
+  <!-- Left panel: clean path -->
+  <g class="topo-clean" opacity="0">
+    <rect x="10" y="10" width="230" height="180" rx="8" fill="rgba(34,197,94,0.05)" stroke="rgba(34,197,94,0.2)" stroke-width="1" />
+    <text x="125" y="35" text-anchor="middle" fill="#22c55e" font-size="13" font-weight="bold">Clean path</text>
+
+    <!-- Two strands with crossing -->
+    <path d="M 60 55 C 60 100, 190 100, 190 150" stroke="#fbbf24" stroke-width="3" fill="none" />
+    <path d="M 190 55 C 190 80, 150 90, 125 95" stroke="#94a3b8" stroke-width="3" fill="none" />
+    <path d="M 105 105 C 80 112, 60 130, 60 150" stroke="#94a3b8" stroke-width="3" fill="none" />
+
+    <text x="125" y="175" text-anchor="middle" fill="#22c55e" font-size="12" font-style="italic">Same gate</text>
+  </g>
+
+  <!-- Right panel: wobbly path -->
+  <g class="topo-wobbly" opacity="0">
+    <rect x="280" y="10" width="230" height="180" rx="8" fill="rgba(34,197,94,0.05)" stroke="rgba(34,197,94,0.2)" stroke-width="1" />
+    <text x="395" y="35" text-anchor="middle" fill="#22c55e" font-size="13" font-weight="bold">Noisy path</text>
+
+    <!-- Same topology but wobbly -->
+    <path d="M 330 55 C 340 75, 370 80, 390 90 C 410 100, 440 110, 460 150" stroke="#fbbf24" stroke-width="3" fill="none" />
+    <path d="M 460 55 C 450 70, 430 80, 410 88" stroke="#94a3b8" stroke-width="3" fill="none" />
+    <path d="M 385 98 C 365 108, 345 125, 330 150" stroke="#94a3b8" stroke-width="3" fill="none" />
+
+    <text x="395" y="175" text-anchor="middle" fill="#22c55e" font-size="12" font-style="italic">Same gate</text>
+  </g>
+
+  <!-- Equals sign between -->
+  <g class="topo-eq" opacity="0">
+    <text x="260" y="105" text-anchor="middle" fill="#f1f5f9" font-size="24" font-weight="bold">=</text>
+  </g>
+</svg>
+<button class="replay-btn" onclick="replaySection('sec6')">Replay</button>
+</div>
+
+<p>Continuous deformations of the anyon paths &mdash; noise, vibration, imprecise control &mdash; do not change the topology. The gate is the same whether the path is smooth or jagged, fast or slow, as long as the same strands cross in the same order.</p>
+
+<p>The only errors that matter are <em>discrete topological errors</em>: an overcrossing mistakenly performed as an undercrossing, or a braid applied to the wrong pair of anyons. These are qualitatively different from the continuous noise that plagues conventional quantum computers.</p>
+
+<div class="insight">Topological computation is immune to continuous perturbations. Only discrete topological errors &mdash; wrong crossings &mdash; can cause mistakes. This is why topological quantum computing is inherently fault-tolerant: the physics provides error correction that conventional approaches must engineer.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 7: The Autocatalytic Connection -->
+<!-- ============================================================ -->
+<div class="section" id="sec7">
+<p class="section-number">Section 7</p>
+<h2>The Autocatalytic Connection</h2>
+
+<p>The Fibonacci anyon fusion algebra satisfies a structural pattern that appears throughout self-sustaining systems &mdash; Kauffman's three criteria for autocatalytic closure.</p>
+
+<div class="three-panel">
+  <div class="panel" style="border-top: 3px solid var(--green);">
+    <h4 style="color: var(--green);">Generation</h4>
+    <span class="math-block">&tau; &times; &tau; &rarr; &tau;</span>
+    <p style="font-size: 0.9rem; color: var(--text); margin: 0;">The system produces its own particle type from fusion. No external factory needed. Self-generating.</p>
+  </div>
+  <div class="panel" style="border-top: 3px solid var(--blue);">
+    <h4 style="color: var(--blue);">Transformation</h4>
+    <span class="math-block">Braiding transforms states</span>
+    <p style="font-size: 0.9rem; color: var(--text); margin: 0;">The fusion space states are transformed by the system's own dynamics &mdash; particle exchange. Self-transforming.</p>
+  </div>
+  <div class="panel" style="border-top: 3px solid var(--purple);">
+    <h4 style="color: var(--purple);">Closure</h4>
+    <span class="math-block">Every product &isin; {1, &tau;}</span>
+    <p style="font-size: 0.9rem; color: var(--text); margin: 0;">Every fusion outcome is already a member of the model. Nothing escapes the algebra. Self-contained.</p>
+  </div>
+</div>
+
+<div class="theorem">
+  <p class="theorem-title">Structural Identity</p>
+  <p>The Fibonacci anyon fusion algebra satisfies Kauffman's three closure criteria for autocatalytic sets. This is a structural identity &mdash; the same algebraic object described in two mathematical languages. (Structural analogy &mdash; Anchor 7)</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 8: Where to Find Them -->
+<!-- ============================================================ -->
+<div class="section" id="sec8">
+<p class="section-number">Section 8</p>
+<h2>Where to Find Them</h2>
+
+<p>Fibonacci anyons are predicted to exist as quasiparticle excitations in certain fractional quantum Hall states &mdash; specifically the <span class="math">&nu;</span> = 12/5 state, as described by the Read&ndash;Rezayi model (1999). They have not yet been experimentally confirmed.</p>
+
+<p>This is not a materials problem. The fractional quantum Hall effect occurs in GaAs heterostructures, graphene, ZnO, and Si/SiGe &mdash; the substrate does not define the phenomenon. What matters are the conditions: low temperature, strong magnetic field, high-mobility two-dimensional electron gas. The same topological order can emerge in any material that provides the right conditions. (Anchor 1: substrate independence.)</p>
+
+<p>Anyons are <em>collective excitations</em> &mdash; they are generated by the substrate, not imported into it. The two-dimensional electron system, under the right conditions, spontaneously organizes into a topologically ordered phase whose elementary excitations carry fractional charge and non-abelian braiding statistics. The substrate does not merely host the anyons; it generates them. (Anchor 2: substrate generativity.)</p>
+
+<p>The search continues. Recent experiments on the <span class="math">&nu;</span> = 5/2 state (which may host a simpler non-abelian anyon, the Ising anyon) have shown promising signatures. The <span class="math">&nu;</span> = 12/5 state, where Fibonacci anyons are expected, is more fragile and less studied &mdash; but the algebraic structure described in this tutorial is waiting to be found there.</p>
+
+<div class="callout">
+The simplest universal topological quantum computer requires exactly two particle types, one fusion rule, and the golden ratio.
+</div>
+
+<div class="contact">
+  <p>Contact: <a href="mailto:energyscholar@gmail.com">energyscholar@gmail.com</a></p>
+</div>
+</div>
+
+</div><!-- end container -->
+
+<script>
+// ============================================================
+// Intersection Observer — trigger animations on scroll
+// ============================================================
+const sectionAnimators = {};
+
+function setupObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        const id = entry.target.id;
+        if (sectionAnimators[id]) {
+          sectionAnimators[id]();
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
+}
+
+// ============================================================
+// Replay support
+// ============================================================
+function replaySection(id) {
+  if (sectionAnimators[id]) {
+    sectionAnimators[id]();
+  }
+}
+
+// ============================================================
+// Section 1: Particle reveal
+// ============================================================
+sectionAnimators['sec1'] = function() {
+  const vac = document.querySelector('.particle-vac');
+  const tau = document.querySelector('.particle-tau');
+  vac.style.transition = 'none';
+  tau.style.transition = 'none';
+  vac.style.opacity = '0';
+  tau.style.opacity = '0';
+  requestAnimationFrame(() => {
+    vac.style.transition = 'opacity 1s ease 0.3s';
+    tau.style.transition = 'opacity 1s ease 0.8s';
+    vac.style.opacity = '1';
+    tau.style.opacity = '1';
+  });
+};
+
+// ============================================================
+// Section 2: Fusion rule animations
+// ============================================================
+sectionAnimators['sec2'] = function() {
+  animateRule3();
+};
+
+function animateRule3() {
+  const left = document.querySelector('.r3-left');
+  const right = document.querySelector('.r3-right');
+  const flash = document.querySelector('.r3-flash');
+  const branchL = document.querySelector('.r3-branch-line-l');
+  const branchR = document.querySelector('.r3-branch-line-r');
+  const outVac = document.querySelector('.r3-out-vac');
+  const outTau = document.querySelector('.r3-out-tau');
+  const superpos = document.querySelector('.r3-superpos');
+
+  // Reset
+  left.style.transition = 'none';
+  right.style.transition = 'none';
+  left.style.transform = 'translateX(0)';
+  right.style.transform = 'translateX(0)';
+  left.style.opacity = '1';
+  right.style.opacity = '1';
+  flash.style.transition = 'none';
+  flash.setAttribute('r', '0');
+  flash.style.opacity = '0';
+  branchL.style.transition = 'none';
+  branchR.style.transition = 'none';
+  branchL.style.opacity = '0';
+  branchR.style.opacity = '0';
+  outVac.style.transition = 'none';
+  outTau.style.transition = 'none';
+  outVac.style.opacity = '0';
+  outTau.style.opacity = '0';
+  superpos.style.transition = 'none';
+  superpos.style.opacity = '0';
+
+  requestAnimationFrame(() => {
+    // Phase 1: approach (0-1s)
+    left.style.transition = 'transform 1s ease-in-out';
+    right.style.transition = 'transform 1s ease-in-out';
+    left.style.transform = 'translateX(150px)';
+    right.style.transform = 'translateX(-150px)';
+
+    // Phase 2: flash (1s-1.5s)
+    setTimeout(() => {
+      left.style.transition = 'opacity 0.2s';
+      right.style.transition = 'opacity 0.2s';
+      left.style.opacity = '0';
+      right.style.opacity = '0';
+
+      flash.style.transition = 'none';
+      flash.setAttribute('r', '0');
+      flash.style.opacity = '1';
+      requestAnimationFrame(() => {
+        flash.style.transition = 'r 0.25s ease-out';
+        flash.setAttribute('r', '40');
+        setTimeout(() => {
+          flash.style.transition = 'opacity 0.25s ease-in, r 0.25s ease-in';
+          flash.setAttribute('r', '5');
+          flash.style.opacity = '0';
+        }, 250);
+      });
+    }, 1000);
+
+    // Phase 3: branches (1.5s-2.5s)
+    setTimeout(() => {
+      branchL.style.transition = 'opacity 0.6s ease';
+      branchR.style.transition = 'opacity 0.6s ease';
+      branchL.style.opacity = '1';
+      branchR.style.opacity = '1';
+    }, 1500);
+
+    // Phase 4: outcomes (2s-3s)
+    setTimeout(() => {
+      outVac.style.transition = 'opacity 0.6s ease';
+      outTau.style.transition = 'opacity 0.6s ease';
+      outVac.style.opacity = '1';
+      outTau.style.opacity = '1';
+    }, 2000);
+
+    // Phase 5: superposition label
+    setTimeout(() => {
+      superpos.style.transition = 'opacity 0.5s ease';
+      superpos.style.opacity = '1';
+    }, 2800);
+  });
+}
+
+// ============================================================
+// Section 3: Fusion tree
+// ============================================================
+sectionAnimators['sec3'] = function() {
+  const levels = [
+    document.querySelector('.tree-level-1'),
+    document.querySelector('.tree-tau3'),
+    document.querySelector('.tree-level-2'),
+    document.querySelector('.tree-tau4'),
+    document.querySelector('.tree-level-3'),
+    document.querySelector('.tree-fib'),
+    document.querySelector('.tree-labels')
+  ];
+
+  // Reset
+  levels.forEach(l => {
+    l.style.transition = 'none';
+    l.style.opacity = '0';
+  });
+
+  const delays = [300, 800, 1300, 1800, 2300, 3000, 3300];
+
+  requestAnimationFrame(() => {
+    levels.forEach((l, i) => {
+      setTimeout(() => {
+        l.style.transition = 'opacity 0.6s ease';
+        l.style.opacity = '1';
+      }, delays[i]);
+    });
+  });
+};
+
+// ============================================================
+// Section 4: Delocalization
+// ============================================================
+sectionAnimators['sec4'] = function() {
+  const groups = [
+    document.querySelector('.deloc-anyons'),
+    document.querySelector('.deloc-arcs'),
+    document.querySelector('.deloc-questions'),
+    document.querySelector('.deloc-label')
+  ];
+
+  groups.forEach(g => {
+    g.style.transition = 'none';
+    g.style.opacity = '0';
+  });
+
+  const delays = [200, 700, 1200, 1800];
+
+  requestAnimationFrame(() => {
+    groups.forEach((g, i) => {
+      setTimeout(() => {
+        g.style.transition = 'opacity 0.6s ease';
+        g.style.opacity = '1';
+      }, delays[i]);
+    });
+  });
+};
+
+// ============================================================
+// Section 5: Braiding animation
+// ============================================================
+sectionAnimators['sec5'] = function() {
+  const a1 = document.querySelector('.braid-a1');
+  const a1Label = document.querySelector('.braid-a1-label');
+  const a2 = document.querySelector('.braid-a2');
+  const a2Label = document.querySelector('.braid-a2-label');
+  const diagram = document.querySelector('.braid-diagram');
+  const gate = document.querySelector('.braid-gate');
+
+  // Reset
+  a1.style.transition = 'none';
+  a1Label.style.transition = 'none';
+  a2.style.transition = 'none';
+  a2Label.style.transition = 'none';
+  a1.style.transform = 'translate(0, 0)';
+  a1Label.style.transform = 'translate(0, 0)';
+  a2.style.transform = 'translate(0, 0)';
+  a2Label.style.transform = 'translate(0, 0)';
+  diagram.style.transition = 'none';
+  diagram.style.opacity = '0';
+  gate.style.transition = 'none';
+  gate.style.opacity = '0';
+
+  requestAnimationFrame(() => {
+    // Animate a1 over a2 in an arc
+    const dur = '1.5s';
+    a1.style.transition = `transform ${dur} ease-in-out`;
+    a1Label.style.transition = `transform ${dur} ease-in-out`;
+    a2.style.transition = `transform ${dur} ease-in-out`;
+    a2Label.style.transition = `transform ${dur} ease-in-out`;
+
+    // a1 moves right by 100px (to position of a2)
+    a1.style.transform = 'translate(100px, 0)';
+    a1Label.style.transform = 'translate(100px, 0)';
+    // a2 moves left by 100px (to position of a1)
+    a2.style.transform = 'translate(-100px, 0)';
+    a2Label.style.transform = 'translate(-100px, 0)';
+
+    // Show braid diagram
+    setTimeout(() => {
+      diagram.style.transition = 'opacity 0.8s ease';
+      diagram.style.opacity = '1';
+    }, 1800);
+
+    // Show gate label
+    setTimeout(() => {
+      gate.style.transition = 'opacity 0.6s ease';
+      gate.style.opacity = '1';
+    }, 2500);
+  });
+};
+
+// ============================================================
+// Section 6: Topological protection
+// ============================================================
+sectionAnimators['sec6'] = function() {
+  const clean = document.querySelector('.topo-clean');
+  const wobbly = document.querySelector('.topo-wobbly');
+  const eq = document.querySelector('.topo-eq');
+
+  [clean, wobbly, eq].forEach(g => {
+    g.style.transition = 'none';
+    g.style.opacity = '0';
+  });
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      clean.style.transition = 'opacity 0.8s ease';
+      clean.style.opacity = '1';
+    }, 200);
+
+    setTimeout(() => {
+      wobbly.style.transition = 'opacity 0.8s ease';
+      wobbly.style.opacity = '1';
+    }, 800);
+
+    setTimeout(() => {
+      eq.style.transition = 'opacity 0.5s ease';
+      eq.style.opacity = '1';
+    }, 1400);
+  });
+};
+
+// ============================================================
+// Sections 7 and 8: no custom animation needed — fade-in via observer
+// ============================================================
+
+// ============================================================
+// SVG circle r attribute animation (flash effect workaround)
+// CSS can't animate SVG r attribute in all browsers, so use JS
+// ============================================================
+function animateFlash(el, fromR, toR, duration, callback) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    el.setAttribute('r', fromR + (toR - fromR) * eased);
+    if (t < 1) {
+      requestAnimationFrame(step);
+    } else if (callback) {
+      callback();
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// Override section 2 flash to use JS-based r animation
+const origSec2 = sectionAnimators['sec2'];
+sectionAnimators['sec2'] = function() {
+  const left = document.querySelector('.r3-left');
+  const right = document.querySelector('.r3-right');
+  const flash = document.querySelector('.r3-flash');
+  const branchL = document.querySelector('.r3-branch-line-l');
+  const branchR = document.querySelector('.r3-branch-line-r');
+  const outVac = document.querySelector('.r3-out-vac');
+  const outTau = document.querySelector('.r3-out-tau');
+  const superpos = document.querySelector('.r3-superpos');
+
+  // Reset all
+  left.style.transition = 'none';
+  right.style.transition = 'none';
+  left.style.transform = 'translateX(0)';
+  right.style.transform = 'translateX(0)';
+  left.style.opacity = '1';
+  right.style.opacity = '1';
+  flash.setAttribute('r', '0');
+  flash.style.opacity = '0';
+  branchL.style.opacity = '0';
+  branchR.style.opacity = '0';
+  outVac.style.opacity = '0';
+  outTau.style.opacity = '0';
+  superpos.style.opacity = '0';
+
+  requestAnimationFrame(() => {
+    // Phase 1: approach
+    left.style.transition = 'transform 1s ease-in-out';
+    right.style.transition = 'transform 1s ease-in-out';
+    left.style.transform = 'translateX(150px)';
+    right.style.transform = 'translateX(-150px)';
+
+    // Phase 2: flash
+    setTimeout(() => {
+      left.style.transition = 'opacity 0.15s';
+      right.style.transition = 'opacity 0.15s';
+      left.style.opacity = '0';
+      right.style.opacity = '0';
+
+      flash.style.opacity = '1';
+      animateFlash(flash, 0, 40, 300, () => {
+        animateFlash(flash, 40, 0, 300, () => {
+          flash.style.opacity = '0';
+        });
+      });
+    }, 1050);
+
+    // Phase 3: branches
+    setTimeout(() => {
+      branchL.style.transition = 'opacity 0.6s ease';
+      branchR.style.transition = 'opacity 0.6s ease';
+      branchL.style.opacity = '1';
+      branchR.style.opacity = '1';
+    }, 1700);
+
+    // Phase 4: outcomes
+    setTimeout(() => {
+      outVac.style.transition = 'opacity 0.6s ease';
+      outTau.style.transition = 'opacity 0.6s ease';
+      outVac.style.opacity = '1';
+      outTau.style.opacity = '1';
+    }, 2200);
+
+    // Phase 5: superposition label
+    setTimeout(() => {
+      superpos.style.transition = 'opacity 0.5s ease';
+      superpos.style.opacity = '1';
+    }, 3000);
+  });
+};
+
+// ============================================================
+// Init
+// ============================================================
+document.addEventListener('DOMContentLoaded', setupObserver);
+</script>
+</body>
+</html>

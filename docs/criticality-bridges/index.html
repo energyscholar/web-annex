@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criticality Bridges &mdash; Physical Systems Connecting Domains</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 2.6rem;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin: 3.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--muted);
+}
+
+h2 .section-number {
+  color: var(--blue);
+  font-size: 0.9em;
+  margin-right: 0.3em;
+}
+
+h3 {
+  font-size: 1.3rem;
+  margin: 1.8rem 0 0.8rem;
+  color: var(--line);
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 1.5rem 1.8rem;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.card.highlight {
+  border-left: 3px solid var(--golden);
+}
+
+.math {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  color: var(--heading);
+}
+
+.math-block {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  color: var(--heading);
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 1.1em;
+}
+
+em {
+  font-style: italic;
+  color: var(--line);
+}
+
+strong {
+  color: var(--heading);
+  font-weight: 600;
+}
+
+.svg-container {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.svg-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.replay-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--muted);
+  color: var(--line);
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: system-ui, sans-serif;
+  z-index: 10;
+  transition: all 0.2s;
+}
+.replay-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  color: var(--heading);
+  border-color: var(--line);
+}
+
+.bridge-label {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
+  margin-right: 0.3em;
+}
+.bridge-cb { background: rgba(251,191,36,0.15); color: var(--golden); }
+.bridge-bc { background: rgba(168,85,247,0.15); color: var(--purple); }
+.bridge-bd { background: rgba(59,130,246,0.15); color: var(--blue); }
+.bridge-cd { background: rgba(34,197,94,0.15); color: var(--green); }
+.bridge-ab { background: rgba(239,68,68,0.15); color: var(--red); }
+.bridge-ac { background: rgba(245,158,11,0.15); color: var(--amber); }
+
+.bridge-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2rem 0;
+  font-size: 0.95em;
+}
+
+.bridge-table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--muted);
+}
+
+.bridge-table td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+  vertical-align: top;
+}
+
+.bridge-table tr:last-child td {
+  border-bottom: none;
+}
+
+.status-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+.status-strong { background: rgba(34,197,94,0.15); color: var(--green); }
+.status-solid { background: rgba(59,130,246,0.15); color: var(--blue); }
+.status-emerging { background: rgba(251,191,36,0.15); color: var(--golden); }
+.status-candidate { background: rgba(168,85,247,0.15); color: var(--purple); }
+
+.citation {
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.system-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.3rem;
+}
+
+.system-header .system-name {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.15em;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+.system-header .bridge-tag {
+  font-size: 0.85em;
+}
+
+.domain-connect {
+  color: var(--muted);
+  font-size: 0.92em;
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--muted);
+}
+
+.closing-line {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.15em;
+  color: var(--heading);
+  text-align: center;
+  padding: 2.5rem 1rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.toc {
+  margin: 2rem 0;
+}
+
+.toc ol {
+  list-style: none;
+  counter-reset: toc-counter;
+}
+
+.toc li {
+  counter-increment: toc-counter;
+  margin: 0.4rem 0;
+}
+
+.toc li::before {
+  content: counter(toc-counter) ".";
+  color: var(--blue);
+  font-family: 'Times New Roman', Georgia, serif;
+  margin-right: 0.5em;
+}
+
+.toc a {
+  color: var(--text);
+  transition: color 0.2s;
+}
+.toc a:hover {
+  color: var(--heading);
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85em;
+  padding: 3rem 0 1rem;
+  border-top: 1px solid rgba(71,85,105,0.3);
+  margin-top: 3rem;
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.4rem; }
+  body { font-size: 16px; }
+  .container { padding: 1rem 1rem 3rem; }
+}
+</style>
+</head>
+<body>
+<nav style="background:#1e293b;padding:0.5rem 1rem;font-family:system-ui,sans-serif;font-size:0.85rem;border-bottom:1px solid #334155;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;">
+    <a href="../" style="color:#64748b;text-decoration:none;">&#8592; Web Annex</a>
+    <span style="color:#334155;">|</span>
+    <a href="../anyon-fusion/" style="color:#94a3b8;text-decoration:none;">Anyon Fusion</a>
+    <a href="../domain-convergence/" style="color:#94a3b8;text-decoration:none;">Domain Convergence</a>
+    <a href="../criticality-bridges/" style="color:#f1f5f9;text-decoration:none;font-weight:600;">Criticality Bridges</a>
+    <a href="../physical-systems-chart/" style="color:#94a3b8;text-decoration:none;">Physical Systems</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<h1>Criticality Bridges</h1>
+<p class="subtitle">Physical Systems Connecting Domains</p>
+
+<nav class="toc card">
+  <ol>
+    <li><a href="#intro">Criticality as a Bridge</a></li>
+    <li><a href="#grn">Gene Regulatory Networks</a></li>
+    <li><a href="#bz">The BZ Reaction</a></li>
+    <li><a href="#cortex">Cortical Neural Tissue</a></li>
+    <li><a href="#immune">The Immune System</a></li>
+    <li><a href="#skyrmion">Magnetic Skyrmions</a></li>
+    <li><a href="#magnetosphere">The Magnetosphere</a></li>
+    <li><a href="#pattern">The Pattern</a></li>
+  </ol>
+</nav>
+
+<!-- ======================================================================
+     SECTION 1: CRITICALITY AS A BRIDGE
+     ====================================================================== -->
+
+<h2 id="intro"><span class="section-number">1.</span> Criticality as a Bridge</h2>
+
+<p>At a critical point, the microscopic details of a physical system become irrelevant. Only symmetry and dimensionality matter. The correlation length diverges, fluctuations span all scales, and the system's behavior is governed entirely by a small set of universal quantities &mdash; the critical exponents.</p>
+
+<p>This has a remarkable consequence: systems from completely different scientific domains can share identical mathematical descriptions at their respective critical points. A ferromagnet near its Curie temperature, a binary fluid near its consolute point, and a lattice gas near its percolation threshold all belong to the same universality class. They share the same exponents, the same correlation functions, the same scaling relations &mdash; despite having nothing in common at the microscopic level.</p>
+
+<div class="card highlight">
+<p>This is not analogy. It is mathematical identity.</p>
+<p>Same universality class = same scaling exponents = same correlation functions = same renormalization group fixed point.</p>
+</div>
+
+<p>What follows are six physical systems where this principle demonstrably connects scientific domains that otherwise have no obvious relationship. In each case, a phase transition or critical point is the mechanism that couples the domains &mdash; the bridge across which mathematical structure flows.</p>
+
+<!-- ======================================================================
+     SECTION 2: GENE REGULATORY NETWORKS
+     ====================================================================== -->
+
+<h2 id="grn"><span class="section-number">2.</span> Gene Regulatory Networks</h2>
+
+<div class="card">
+  <div class="system-header">
+    <span class="system-name">Random Boolean Networks</span>
+    <span class="bridge-label bridge-cb">Bridge CB</span>
+  </div>
+  <div class="domain-connect">Autocatalysis (domain 7) &harr; Nonlinear dynamics / criticality (domain 6)</div>
+</div>
+
+<p>Stuart Kauffman's insight, developed across three decades of work, was to model a cell's gene regulation as a random Boolean network: <span class="math">N</span> genes, each receiving input from <span class="math">K</span> randomly chosen other genes, with a randomly chosen Boolean function determining the gene's next state.</p>
+
+<p>The parameter <span class="math">K</span> controls the system's qualitative behavior. At <span class="math">K</span> = 1, most genes freeze into fixed states &mdash; the network is ordered, insensitive, dead. At <span class="math">K</span> &ge; 3, the network is chaotic &mdash; small perturbations cascade unpredictably through the system, and attractors are exponentially numerous. At <span class="math">K</span> &asymp; 2, the network sits at the boundary between these phases: the <em>edge of chaos</em>.</p>
+
+<p>This boundary is a genuine phase transition. Derrida and Pomeau showed in 1986 that the annealed approximation of a random Boolean network maps exactly onto the directed percolation problem. The critical point at <span class="math">K</span> &asymp; 2 falls in the <strong>directed percolation universality class</strong> &mdash; the same class that governs forest fires, epidemic spreading, and catalytic surface reactions.</p>
+
+<p>The autocatalytic aspect is essential. Genes activate other genes' transcription, producing proteins that regulate still other genes. The regulatory network is a self-sustaining catalytic web &mdash; an autocatalytic set in Kauffman's own terminology (what he later formalized as RAF sets). The critical point at <span class="math">K</span> &asymp; 2 is precisely where the autocatalytic network spontaneously assembles into stable cell types (attractors) without being too rigid to respond or too volatile to persist.</p>
+
+<div class="svg-container" id="svg-grn">
+  <button class="replay-btn" onclick="replayGRN()">Replay</button>
+  <svg viewBox="0 0 860 440" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="glow-gold">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glow-soft">
+        <feGaussianBlur stdDeviation="2.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <g id="grn-scene"></g>
+  </svg>
+</div>
+
+<p class="citation">Kauffman, S. (1993). <em>The Origins of Order.</em> Oxford University Press. Derrida, B. &amp; Pomeau, Y. (1986). Random networks of automata. <em>Europhys. Lett.</em> 1, 45&ndash;49.</p>
+
+<!-- ======================================================================
+     SECTION 3: THE BZ REACTION
+     ====================================================================== -->
+
+<h2 id="bz"><span class="section-number">3.</span> The BZ Reaction</h2>
+
+<div class="card">
+  <div class="system-header">
+    <span class="system-name">The Belousov-Zhabotinsky Reaction</span>
+    <span class="bridge-label bridge-cb">Bridge CB</span>
+    <span class="bridge-label bridge-bc">Bridge BC</span>
+  </div>
+  <div class="domain-connect">Autocatalysis (7) &harr; Criticality (6) &harr; Solitons (5)</div>
+</div>
+
+<p>The Belousov-Zhabotinsky reaction is the most famous chemical oscillator: bromate oxidizes malonic acid, catalyzed by cerium or ferroin ions. In a thin layer of solution &mdash; effectively a two-dimensional medium &mdash; the reaction produces extraordinary spatial patterns: concentric target waves and, more dramatically, rotating spiral waves.</p>
+
+<p>This single physical system simultaneously demonstrates three phenomena from three different domains:</p>
+
+<div class="card">
+<p><strong>Autocatalysis.</strong> The reaction is self-catalyzing. The intermediate HBrO<sub>2</sub> catalyzes its own production from bromate: a positive feedback loop that drives the oscillation. The overall reaction scheme involves at least two coupled autocatalytic cycles (the Oregonator model captures these as two key intermediates).</p>
+
+<p><strong>Criticality.</strong> The oscillatory state emerges through a Hopf bifurcation &mdash; a continuous phase transition from a stable steady state to a limit cycle. Below the bifurcation parameter value, the system relaxes to equilibrium. Above it, stable oscillations appear. At the bifurcation point itself, the system has divergent susceptibility and critical slowing down.</p>
+
+<p><strong>Solitonic behavior.</strong> The spiral waves are dissipative solitons &mdash; coherent, localized structures that propagate without dispersing and interact with quasi-particle properties. They have a well-defined topological charge (the winding number of the spiral tip), they scatter off each other, and they can be annihilated only in pairs of opposite chirality.</p>
+</div>
+
+<p>The BZ reaction is therefore a physical system where an autocatalytic chemical network crosses a critical threshold and produces topologically characterized solitonic structures. It bridges three domains through a single piece of wet chemistry that can be observed in a petri dish.</p>
+
+<div class="svg-container" id="svg-bz">
+  <button class="replay-btn" onclick="replayBZ()">Replay</button>
+  <svg viewBox="0 0 860 440" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="bz-blur">
+        <feGaussianBlur stdDeviation="1.5"/>
+      </filter>
+    </defs>
+    <g id="bz-scene"></g>
+  </svg>
+</div>
+
+<p class="citation">Zhabotinsky, A. M. (1964). Periodic liquid-phase oxidation reactions. <em>Dokl. Akad. Nauk SSSR</em> 157, 392&ndash;395. Winfree, A. T. (1972). Spiral waves of chemical activity. <em>Science</em> 175, 634&ndash;636. FitzHugh, R. (1961). Impulses and physiological states in theoretical models of nerve membrane. <em>Biophys. J.</em> 1, 445&ndash;466.</p>
+
+<!-- ======================================================================
+     SECTION 4: CORTICAL NEURAL TISSUE
+     ====================================================================== -->
+
+<h2 id="cortex"><span class="section-number">4.</span> Cortical Neural Tissue</h2>
+
+<div class="card">
+  <div class="system-header">
+    <span class="system-name">Neuronal Avalanches</span>
+    <span class="bridge-label bridge-bd">Bridge BD</span>
+  </div>
+  <div class="domain-connect">Nonlinear dynamics (6) &harr; Parallel computation (10), plus Universality / CA (9)</div>
+</div>
+
+<p>In 2003, John Beggs and Dietmar Plenz placed multi-electrode arrays on slices of rat cortical tissue and measured spontaneous neural activity. They discovered that neural firing propagates in cascades &mdash; <em>neuronal avalanches</em> &mdash; whose sizes follow a power law with exponent &asymp; &minus;3/2. This is the signature of a system sitting at the critical point of the mean-field branching process universality class.</p>
+
+<p>The finding has since been replicated in vivo, across species, and using multiple measurement techniques (LFP, MEG, fMRI BOLD fluctuations). The cortex appears to operate at or very near a critical phase transition &mdash; the boundary between two regimes:</p>
+
+<div class="card">
+<p><strong>Subcritical (ordered).</strong> Activity dies out quickly. Small cascades, minimal information transfer. The pathological extreme: suppression under anesthesia.</p>
+
+<p><strong>Supercritical (disordered).</strong> Activity explodes. Every neuron fires, erasing information. The pathological extreme: epileptic seizure.</p>
+
+<p><strong>Critical.</strong> Cascades follow a power-law distribution. Some are small; some span the entire network. At this point, the cortex simultaneously maximizes dynamic range (sensitivity to stimuli), information transmission between layers, and computational capacity in the reservoir computing sense.</p>
+</div>
+
+<p>The neural network of the cortex is a massively parallel distributed computer &mdash; and it operates at the edge of a phase transition. This is not a coincidence. Theoretical work by Bertschinger and Natschl&auml;ger (2004) and by Haldeman and Beggs (2005) showed that generic recurrent neural networks maximize their computational power precisely at the critical point. The phase transition is where dynamics and computation become the same thing.</p>
+
+<div class="svg-container" id="svg-cortex">
+  <button class="replay-btn" onclick="replayCortex()">Replay</button>
+  <svg viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg">
+    <g id="cortex-scene"></g>
+  </svg>
+</div>
+
+<p class="citation">Beggs, J. M. &amp; Plenz, D. (2003). Neuronal avalanches in neocortical circuits. <em>J. Neurosci.</em> 23, 11167&ndash;11177. Shew, W. L. &amp; Plenz, D. (2013). The functional benefits of criticality in the cortex. <em>The Neuroscientist</em> 19, 88&ndash;100. Haldeman, C. &amp; Beggs, J. M. (2005). Critical branching captures activity in living neural networks. <em>Phys. Rev. Lett.</em> 94, 058101.</p>
+
+<!-- ======================================================================
+     SECTION 5: THE IMMUNE SYSTEM
+     ====================================================================== -->
+
+<h2 id="immune"><span class="section-number">5.</span> The Immune System</h2>
+
+<div class="card">
+  <div class="system-header">
+    <span class="system-name">Idiotypic Network Dynamics</span>
+    <span class="bridge-label bridge-cd">Bridge CD-a</span>
+  </div>
+  <div class="domain-connect">Autocatalysis (7) &harr; Universality / CA (9) &harr; Criticality (6)</div>
+</div>
+
+<p>Niels Jerne's idiotypic network theory, proposed in 1974, recognized that the adaptive immune system is not merely a collection of independent pathogen detectors but a self-referential network. Antibodies recognize antigens &mdash; but the variable regions of antibodies are themselves antigens to other antibodies. The immune system is a network of mutual recognition, where antibodies stimulate and suppress each other's production.</p>
+
+<p>This network is autocatalytic: antigen recognition triggers clonal expansion (proliferation of lymphocytes), which produces more antibodies, which stimulate more recognition events. It is also, in a precise sense, a cellular automaton: discrete immune cells follow local rules (encounter antigen &rarr; activate &rarr; proliferate &rarr; differentiate &rarr; die), and the collective behavior &mdash; immunity, tolerance, autoimmunity &mdash; emerges from these local interactions without central control.</p>
+
+<p>Perelson and Weisbuch (1997), building on earlier work by Perelson, De Boer, and others, showed that the dynamics of immune network models exhibit phase transitions between three qualitatively different states:</p>
+
+<div class="card">
+<p><strong>Dormant.</strong> Too few lymphocytes responding to a given antigen. Antibodies appear but the clone dies out &mdash; no persistent immune memory. The system is below the percolation threshold.</p>
+
+<p><strong>Memory.</strong> The clone reaches a critical threshold and self-sustains: a stable population of memory cells persists indefinitely, conferring long-term immunity. This transition from dormant to memory is a percolation-like phase transition. The autocatalytic feedback loop (antibody &rarr; activation &rarr; more antibody) crosses the threshold where it becomes self-sustaining.</p>
+
+<p><strong>Autoimmune.</strong> Runaway activation. The network overreacts, attacking the body's own tissue. The system is above the critical point, in the supercritical regime.</p>
+</div>
+
+<p>The immune system thus connects three domains through a single biological mechanism: an autocatalytic network (domain 7) operating as a cellular automaton (domain 9), with its functional regimes separated by critical phase transitions (domain 6).</p>
+
+<div class="svg-container" id="svg-immune">
+  <button class="replay-btn" onclick="replayImmune()">Replay</button>
+  <svg viewBox="0 0 860 400" xmlns="http://www.w3.org/2000/svg">
+    <g id="immune-scene"></g>
+  </svg>
+</div>
+
+<p class="citation">Jerne, N. K. (1974). Towards a network theory of the immune system. <em>Ann. Immunol. (Inst. Pasteur)</em> 125C, 373&ndash;389. Perelson, A. S. &amp; Weisbuch, G. (1997). Immunology for physicists. <em>Rev. Mod. Phys.</em> 69, 1219&ndash;1268. Bersini, H. &amp; Calenbuhr, V. (2006). <em>Bolyai Soc. Math. Stud.</em> 14.</p>
+
+<!-- ======================================================================
+     SECTION 6: MAGNETIC SKYRMIONS
+     ====================================================================== -->
+
+<h2 id="skyrmion"><span class="section-number">6.</span> Magnetic Skyrmions</h2>
+
+<div class="card">
+  <div class="system-header">
+    <span class="system-name">Chiral Magnets</span>
+    <span class="bridge-label bridge-ab">Bridge AB</span>
+  </div>
+  <div class="domain-connect">Topology (1) &harr; Solitons (5) &harr; Condensed matter (3)</div>
+</div>
+
+<p>A magnetic skyrmion is a swirling texture of magnetic moments in a thin film &mdash; a vortex where the spins rotate smoothly from pointing up at the boundary to pointing down at the center, winding around one full time. It is simultaneously three things:</p>
+
+<div class="card">
+<p><strong>A topological object.</strong> A skyrmion is characterized by a topological charge &mdash; an integer winding number computed by integrating the solid angle subtended by the magnetization over the two-dimensional plane. This charge is quantized: it cannot change by continuous deformation. A skyrmion cannot be unwound into the uniform ferromagnetic state without tearing the spin texture &mdash; it is topologically protected.</p>
+
+<p><strong>A soliton.</strong> A skyrmion is a localized, coherent structure that propagates without dispersing when driven by spin-transfer torque. It has particle-like properties: it has a well-defined position, velocity, and mass. Skyrmions scatter off each other and off defects. Under current drive, they move at angles to the current (the skyrmion Hall effect), precisely as predicted by their topological charge.</p>
+
+<p><strong>A condensed matter phenomenon.</strong> Skyrmions exist in real crystals. M&uuml;hlbauer et al. (2009) observed a skyrmion lattice phase in MnSi using small-angle neutron scattering. The skyrmion phase occupies a small pocket in the temperature-magnetic field phase diagram, nestled between the ferromagnetic and paramagnetic phases &mdash; at the critical boundary.</p>
+</div>
+
+<p>The skyrmion is a physical object whose existence requires topology (the winding number that protects it), whose dynamics are solitonic (coherent propagation), and whose phase of matter appears through a critical phase transition in a real material. It is a clean bridge between topology, soliton physics, and condensed matter &mdash; discovered because all three mathematical frameworks are needed to describe a single experimental observation.</p>
+
+<div class="svg-container" id="svg-skyrmion">
+  <button class="replay-btn" onclick="replaySkyrmion()">Replay</button>
+  <svg viewBox="0 0 860 440" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow-spin" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--line)"/>
+      </marker>
+    </defs>
+    <g id="skyrmion-scene"></g>
+  </svg>
+</div>
+
+<p class="citation">M&uuml;hlbauer, S. et al. (2009). Skyrmion lattice in a chiral magnet. <em>Science</em> 323, 915&ndash;919. Nagaosa, N. &amp; Tokura, Y. (2013). Topological properties and dynamics of magnetic skyrmions. <em>Nature Nanotech.</em> 8, 899&ndash;911.</p>
+
+<!-- ======================================================================
+     SECTION 7: THE MAGNETOSPHERE
+     ====================================================================== -->
+
+<h2 id="magnetosphere"><span class="section-number">7.</span> The Magnetosphere</h2>
+
+<div class="card">
+  <div class="system-header">
+    <span class="system-name">Earth's Magnetospheric Plasma Sheet</span>
+    <span class="bridge-label bridge-bd">Bridge BD</span>
+    <span class="bridge-label bridge-ac" style="opacity:0.7">Bridge AC (candidate)</span>
+  </div>
+  <div class="domain-connect">Nonlinear dynamics (6) &harr; Condensed matter (3) &harr; Topology (1, 2)</div>
+</div>
+
+<p>Earth's magnetosphere is a vast plasma system extending tens of Earth radii into space, shaped by the interaction of the solar wind with the geomagnetic field. The plasma sheet &mdash; a thin, hot layer of plasma in the magnetotail &mdash; is a natural laboratory for critical dynamics at scales unachievable in any terrestrial experiment.</p>
+
+<h3>Criticality</h3>
+
+<p>Substorm activity &mdash; sudden releases of energy stored in the magnetotail &mdash; follows power-law statistics. Uritsky et al. (2002) analyzed spatiotemporal patterns of auroral emission (a proxy for energy release in the plasma sheet) and showed that the size, duration, and energy distributions of auroral bright spots follow power laws consistent with self-organized criticality. Chang et al. (1992) had earlier proposed that the magnetosphere operates in a state of forced and self-organized criticality, driven by the solar wind.</p>
+
+<h3>Topological band structure</h3>
+
+<p>Fu and Qin (2021) demonstrated theoretically that magnetized plasmas possess non-trivial topological band structure &mdash; the same mathematical framework that describes topological insulators in condensed matter physics. The magnetized plasma supports surface waves (gaseous plasmon polaritons) analogous to the topologically protected edge states in quantum Hall systems. This is a recent theoretical finding, <strong>not yet experimentally confirmed in the magnetospheric context</strong>, but the mathematical correspondence is exact: the Chern number calculations carry over directly from condensed matter band theory to magnetohydrodynamic wave theory.</p>
+
+<h3>The collisionless advantage</h3>
+
+<p>The magnetosphere has a property that distinguishes it from most terrestrial systems: it is <em>collisionless</em>. The mean free path of particles in the magnetospheric plasma far exceeds the system size. This means the standard objection to coherent behavior in warm systems &mdash; that thermal collisions destroy correlations &mdash; does not apply. Coherence lengths in the magnetosphere are set by the Larmor radius and the Debye length, not by collisional mean free paths. Structures can persist over scales that would be thermalized in a collisional medium.</p>
+
+<p>The magnetosphere is therefore a candidate system where topological order and critical dynamics coexist &mdash; a plasma system exhibiting self-organized criticality (established) with non-trivial topological band structure (recently predicted) &mdash; without requiring cryogenic temperatures. If Fu and Qin's predictions are confirmed observationally, this system would bridge topology, condensed matter physics, and nonlinear dynamics in a single naturally occurring physical system.</p>
+
+<div class="svg-container" id="svg-magneto">
+  <button class="replay-btn" onclick="replayMagneto()">Replay</button>
+  <svg viewBox="0 0 860 440" xmlns="http://www.w3.org/2000/svg">
+    <g id="magneto-scene"></g>
+  </svg>
+</div>
+
+<p class="citation">Uritsky, V. M. et al. (2002). Structures in magnetohydrodynamic turbulence: detection and scaling. <em>Phys. Rev. E</em> 65, 046113. Fu, Y. &amp; Qin, H. (2021). Topological phases and bulk-edge correspondence of magnetized cold plasmas. <em>Nature Commun.</em> 12, 3924. Chang, T., Tam, S. W. Y. &amp; Wu, C.-C. (1992). Complexity induced anisotropic bimodal intermittent turbulence in space plasmas. <em>Phys. Plasmas</em> 11, 1287.</p>
+
+<!-- ======================================================================
+     SECTION 8: THE PATTERN
+     ====================================================================== -->
+
+<h2 id="pattern"><span class="section-number">8.</span> The Pattern</h2>
+
+<p>Six physical systems. Six independent literatures. Each discovered and studied within a single domain. The cross-domain connections became visible only when the same mathematical structures were recognized across different literatures.</p>
+
+<div class="svg-container" id="svg-pattern">
+  <button class="replay-btn" onclick="replayPattern()">Replay</button>
+  <svg viewBox="0 0 860 520" xmlns="http://www.w3.org/2000/svg">
+    <g id="pattern-scene"></g>
+  </svg>
+</div>
+
+<table class="bridge-table card">
+  <thead>
+    <tr>
+      <th>Physical System</th>
+      <th>Bridges Demonstrated</th>
+      <th>Strength</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Gene regulatory network</td>
+      <td><span class="bridge-label bridge-cb">CB</span> Autocatalysis &harr; Criticality</td>
+      <td><span class="status-tag status-strong">Strong</span></td>
+    </tr>
+    <tr>
+      <td>BZ reaction</td>
+      <td><span class="bridge-label bridge-cb">CB</span> + <span class="bridge-label bridge-bc">BC</span> Autocatalysis &harr; Criticality &harr; Solitons</td>
+      <td><span class="status-tag status-strong">Strong</span></td>
+    </tr>
+    <tr>
+      <td>Cortical neural tissue</td>
+      <td><span class="bridge-label bridge-bd">BD</span> Dynamics &harr; Computation</td>
+      <td><span class="status-tag status-strong">Strong</span></td>
+    </tr>
+    <tr>
+      <td>Immune system</td>
+      <td><span class="bridge-label bridge-cd">CD-a</span> Autocatalysis &harr; CA &harr; Criticality</td>
+      <td><span class="status-tag status-solid">Solid</span></td>
+    </tr>
+    <tr>
+      <td>Magnetic skyrmions</td>
+      <td><span class="bridge-label bridge-ab">AB</span> Topology &harr; Solitons</td>
+      <td><span class="status-tag status-strong">Strong</span></td>
+    </tr>
+    <tr>
+      <td>Magnetosphere</td>
+      <td><span class="bridge-label bridge-bd">BD</span> + <span class="bridge-label bridge-ac">AC</span> (candidate)</td>
+      <td><span class="status-tag status-candidate">Candidate</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In every case, a phase transition or critical point is the mechanism that couples domains. The critical point is where microscopic details wash out and universal behavior emerges &mdash; and it is precisely at this point that the mathematical structures of different domains become identical. Universality is not merely a convenience for physicists who want to ignore details. It is the mechanism by which separate scientific domains discover they are studying the same thing.</p>
+
+<p>The strongest bridges &mdash; CB, BD, AB &mdash; each have at least one concrete physical system demonstrating the connection with extensive experimental support. The weakest bridges &mdash; BC, CD-b, AC &mdash; lack clear physical demonstrators. They are where new work is needed.</p>
+
+<p class="closing-line">&ldquo;Each of these systems was discovered and studied within a single domain. The cross-domain connections became visible only when the same mathematical structures were recognized across different literatures.&rdquo;</p>
+
+<footer>
+  Companion to <a href="../domain-convergence/">Domain Convergence</a>
+</footer>
+
+</div><!-- .container -->
+
+<script>
+(function() {
+  'use strict';
+
+  // ---- SVG helper ----
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    return el;
+  }
+
+  function animateOpacity(el, delay, duration) {
+    el.style.opacity = '0';
+    el.style.transition = `opacity ${duration || 600}ms ease`;
+    setTimeout(() => { el.style.opacity = '1'; }, delay);
+  }
+
+  // ---- IntersectionObserver system ----
+  const observed = new Map();
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const fn = observed.get(id);
+        if (fn) {
+          fn();
+          observed.delete(id);
+          observer.unobserve(entry.target);
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+
+  function onVisible(id, fn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    observed.set(id, fn);
+    observer.observe(el);
+  }
+
+  // ---- Color constants ----
+  const COLORS = {
+    blue: '#3b82f6', green: '#22c55e', amber: '#f59e0b',
+    red: '#ef4444', golden: '#fbbf24', muted: '#475569',
+    line: '#94a3b8', purple: '#a855f7', heading: '#f1f5f9',
+    card: '#1e293b', bg: '#0f172a', text: '#cbd5e1'
+  };
+
+  // =================================================================
+  // ANIMATION 1: GENE REGULATORY NETWORK
+  // Random Boolean network with K sweep
+  // =================================================================
+
+  function drawGRN() {
+    const g = document.getElementById('grn-scene');
+    g.innerHTML = '';
+
+    // Network layout — 20 nodes in a roughly circular arrangement
+    const nodes = [];
+    const N = 20;
+    const cx = 300, cy = 220, rx = 180, ry = 150;
+    for (let i = 0; i < N; i++) {
+      const angle = (i / N) * Math.PI * 2 - Math.PI / 2;
+      const jitter = (Math.sin(i * 7.3) * 25);
+      nodes.push({
+        x: cx + (rx + jitter) * Math.cos(angle),
+        y: cy + (ry + jitter * 0.5) * Math.sin(angle),
+        state: 0,
+        connections: []
+      });
+    }
+
+    // Generate random connections (K=2 average)
+    const rng = (seed) => {
+      let s = seed;
+      return () => { s = (s * 16807 + 0) % 2147483647; return s / 2147483647; };
+    };
+    const rand = rng(42);
+    const edges = [];
+    for (let i = 0; i < N; i++) {
+      const k = 2;
+      for (let j = 0; j < k; j++) {
+        const target = Math.floor(rand() * N);
+        if (target !== i) {
+          edges.push({ from: i, to: target });
+          nodes[i].connections.push(target);
+        }
+      }
+    }
+
+    // Draw edges
+    const edgeGroup = svgEl('g', { id: 'grn-edges' });
+    edges.forEach(e => {
+      const line = svgEl('line', {
+        x1: nodes[e.from].x, y1: nodes[e.from].y,
+        x2: nodes[e.to].x, y2: nodes[e.to].y,
+        stroke: COLORS.muted, 'stroke-width': 0.8, opacity: 0.3
+      });
+      edgeGroup.appendChild(line);
+    });
+    g.appendChild(edgeGroup);
+
+    // Draw nodes
+    const nodeGroup = svgEl('g', { id: 'grn-nodes' });
+    nodes.forEach((n, i) => {
+      const circle = svgEl('circle', {
+        cx: n.x, cy: n.y, r: 10,
+        fill: COLORS.card, stroke: COLORS.muted, 'stroke-width': 1.5,
+        id: `grn-node-${i}`
+      });
+      nodeGroup.appendChild(circle);
+    });
+    g.appendChild(nodeGroup);
+
+    // Phase diagram inset (top right)
+    const inset = svgEl('g', { transform: 'translate(620, 30)' });
+
+    // Background
+    const insetBg = svgEl('rect', {
+      x: 0, y: 0, width: 210, height: 200,
+      rx: 8, fill: 'rgba(15,23,42,0.8)',
+      stroke: COLORS.muted, 'stroke-width': 0.5
+    });
+    inset.appendChild(insetBg);
+
+    // Title
+    const insetTitle = svgEl('text', {
+      x: 105, y: 25, fill: COLORS.line, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif'
+    });
+    insetTitle.textContent = 'Phase Diagram';
+    inset.appendChild(insetTitle);
+
+    // Axes
+    const axisLine = svgEl('line', {
+      x1: 30, y1: 175, x2: 195, y2: 175,
+      stroke: COLORS.muted, 'stroke-width': 1
+    });
+    inset.appendChild(axisLine);
+    const axisLabelK = svgEl('text', {
+      x: 112, y: 195, fill: COLORS.muted, 'font-size': '11',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    axisLabelK.textContent = 'K (connectivity)';
+    inset.appendChild(axisLabelK);
+
+    // Regions
+    const frozenRect = svgEl('rect', {
+      x: 30, y: 40, width: 55, height: 130,
+      fill: 'rgba(59,130,246,0.1)', rx: 4
+    });
+    inset.appendChild(frozenRect);
+    const frozenLabel = svgEl('text', {
+      x: 57, y: 110, fill: COLORS.blue, 'font-size': '10',
+      'text-anchor': 'middle', opacity: 0.8
+    });
+    frozenLabel.textContent = 'Frozen';
+    inset.appendChild(frozenLabel);
+
+    const chaoticRect = svgEl('rect', {
+      x: 130, y: 40, width: 65, height: 130,
+      fill: 'rgba(239,68,68,0.1)', rx: 4
+    });
+    inset.appendChild(chaoticRect);
+    const chaoticLabel = svgEl('text', {
+      x: 162, y: 110, fill: COLORS.red, 'font-size': '10',
+      'text-anchor': 'middle', opacity: 0.8
+    });
+    chaoticLabel.textContent = 'Chaotic';
+    inset.appendChild(chaoticLabel);
+
+    // Critical line
+    const critLine = svgEl('line', {
+      x1: 100, y1: 40, x2: 100, y2: 175,
+      stroke: COLORS.golden, 'stroke-width': 2, 'stroke-dasharray': '4,3',
+      id: 'grn-crit-line'
+    });
+    inset.appendChild(critLine);
+    const critLabel = svgEl('text', {
+      x: 100, y: 37, fill: COLORS.golden, 'font-size': '11',
+      'text-anchor': 'middle', 'font-weight': 'bold',
+      'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    critLabel.textContent = 'K ≈ 2';
+    inset.appendChild(critLabel);
+
+    // K indicator
+    const kIndicator = svgEl('circle', {
+      cx: 40, cy: 175, r: 5,
+      fill: COLORS.golden, id: 'grn-k-indicator'
+    });
+    inset.appendChild(kIndicator);
+
+    g.appendChild(inset);
+    animateOpacity(inset, 200, 600);
+
+    // K labels
+    const k1Label = svgEl('text', { x: 40, y: 190, fill: COLORS.muted, 'font-size': '9', 'text-anchor': 'middle' });
+    k1Label.textContent = '1';
+    inset.appendChild(k1Label);
+    const k2Label = svgEl('text', { x: 100, y: 190, fill: COLORS.muted, 'font-size': '9', 'text-anchor': 'middle' });
+    k2Label.textContent = '2';
+    inset.appendChild(k2Label);
+    const k3Label = svgEl('text', { x: 170, y: 190, fill: COLORS.muted, 'font-size': '9', 'text-anchor': 'middle' });
+    k3Label.textContent = '3';
+    inset.appendChild(k3Label);
+
+    // Phase labels
+    const phaseLabel = svgEl('text', {
+      x: 300, y: 415, fill: COLORS.muted, 'font-size': '13',
+      'text-anchor': 'middle', id: 'grn-phase-label',
+      'font-family': 'Georgia, serif'
+    });
+    phaseLabel.textContent = '';
+    g.appendChild(phaseLabel);
+
+    // Animate the K sweep
+    function animateKSweep() {
+      const totalDuration = 6000;
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / totalDuration, 1);
+
+        // K goes from 1 to 3
+        const K = 1 + t * 2;
+
+        // Move indicator
+        const indicatorX = 30 + (K - 0.5) * (165 / 2.5);
+        const indicator = document.getElementById('grn-k-indicator');
+        if (indicator) indicator.setAttribute('cx', Math.min(indicatorX, 195));
+
+        // Determine phase
+        let phase, activeProb;
+        if (K < 1.7) {
+          phase = 'frozen';
+          activeProb = 0.1 + (K - 1) * 0.1;
+        } else if (K < 2.3) {
+          phase = 'critical';
+          activeProb = 0.4 + Math.sin(elapsed / 200) * 0.2;
+        } else {
+          phase = 'chaotic';
+          activeProb = 0.5 + Math.sin(elapsed / 80) * 0.4;
+        }
+
+        // Update phase label
+        const label = document.getElementById('grn-phase-label');
+        if (label) {
+          if (phase === 'frozen') {
+            label.textContent = 'K ≈ ' + K.toFixed(1) + ' — Frozen: few genes active';
+            label.setAttribute('fill', COLORS.blue);
+          } else if (phase === 'critical') {
+            label.textContent = 'K ≈ ' + K.toFixed(1) + ' — Critical: activation cascades';
+            label.setAttribute('fill', COLORS.golden);
+          } else {
+            label.textContent = 'K ≈ ' + K.toFixed(1) + ' — Chaotic: unstable blinking';
+            label.setAttribute('fill', COLORS.red);
+          }
+        }
+
+        // Update node states — cascading activation
+        const seed = Math.floor(elapsed / 300);
+        const r2 = rng(seed + 17);
+        for (let i = 0; i < N; i++) {
+          const nodeEl = document.getElementById(`grn-node-${i}`);
+          if (!nodeEl) continue;
+
+          let active;
+          if (phase === 'critical') {
+            // Cascading waves
+            const wave = Math.sin(elapsed / 400 + i * 0.8) * 0.5 + 0.5;
+            active = wave > 0.45;
+          } else {
+            active = r2() < activeProb;
+          }
+
+          if (active) {
+            const color = phase === 'frozen' ? COLORS.blue :
+                         phase === 'critical' ? COLORS.golden : COLORS.red;
+            nodeEl.setAttribute('fill', color);
+            nodeEl.setAttribute('stroke', color);
+            if (phase === 'critical') {
+              nodeEl.setAttribute('filter', 'url(#glow-gold)');
+            } else {
+              nodeEl.removeAttribute('filter');
+            }
+          } else {
+            nodeEl.setAttribute('fill', COLORS.card);
+            nodeEl.setAttribute('stroke', COLORS.muted);
+            nodeEl.removeAttribute('filter');
+          }
+        }
+
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Start animation after fade-in
+    setTimeout(animateKSweep, 800);
+  }
+
+  function replayGRN() {
+    drawGRN();
+  }
+
+  // =================================================================
+  // ANIMATION 2: BZ REACTION
+  // Spiral waves in a 2D dish
+  // =================================================================
+
+  function drawBZ() {
+    const g = document.getElementById('bz-scene');
+    g.innerHTML = '';
+
+    // Reaction dish (main area)
+    const dishCx = 300, dishCy = 220, dishR = 180;
+
+    // Dish border
+    const dish = svgEl('circle', {
+      cx: dishCx, cy: dishCy, r: dishR,
+      fill: 'none', stroke: COLORS.muted, 'stroke-width': 1.5
+    });
+    g.appendChild(dish);
+
+    // Label
+    const dishLabel = svgEl('text', {
+      x: dishCx, y: dishCy + dishR + 25,
+      fill: COLORS.muted, 'font-size': '12', 'text-anchor': 'middle',
+      'font-family': 'Georgia, serif'
+    });
+    dishLabel.textContent = 'Reaction Dish (2D)';
+    g.appendChild(dishLabel);
+
+    // We'll draw spiral wave patterns using concentric arcs that transition to spirals
+    // Use a canvas-like approach with small rectangles in a grid clipped to the dish
+
+    const clipPath = svgEl('clipPath', { id: 'dish-clip' });
+    const clipCircle = svgEl('circle', { cx: dishCx, cy: dishCy, r: dishR - 2 });
+    clipPath.appendChild(clipCircle);
+    const defs = g.closest('svg').querySelector('defs') || svgEl('defs', {});
+    defs.appendChild(clipPath);
+    if (!g.closest('svg').querySelector('defs')) g.closest('svg').prepend(defs);
+
+    const waveGroup = svgEl('g', { 'clip-path': 'url(#dish-clip)', id: 'bz-waves' });
+    g.appendChild(waveGroup);
+
+    // Create grid of small cells
+    const cellSize = 8;
+    const cells = [];
+    const gridW = Math.ceil(dishR * 2 / cellSize);
+    for (let ix = 0; ix < gridW; ix++) {
+      for (let iy = 0; iy < gridW; iy++) {
+        const px = dishCx - dishR + ix * cellSize + cellSize / 2;
+        const py = dishCy - dishR + iy * cellSize + cellSize / 2;
+        const dx = px - dishCx, dy = py - dishCy;
+        if (dx * dx + dy * dy > dishR * dishR) continue;
+
+        const rect = svgEl('rect', {
+          x: px - cellSize / 2, y: py - cellSize / 2,
+          width: cellSize, height: cellSize,
+          fill: COLORS.bg
+        });
+        waveGroup.appendChild(rect);
+        cells.push({ el: rect, x: px, y: py, dx, dy });
+      }
+    }
+
+    // Hopf bifurcation inset (top right)
+    const inset = svgEl('g', { transform: 'translate(620, 30)' });
+    const insetBg = svgEl('rect', {
+      x: 0, y: 0, width: 210, height: 200,
+      rx: 8, fill: 'rgba(15,23,42,0.8)',
+      stroke: COLORS.muted, 'stroke-width': 0.5
+    });
+    inset.appendChild(insetBg);
+
+    const insetTitle = svgEl('text', {
+      x: 105, y: 25, fill: COLORS.line, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif'
+    });
+    insetTitle.textContent = 'Hopf Bifurcation';
+    inset.appendChild(insetTitle);
+
+    // Axes
+    inset.appendChild(svgEl('line', {
+      x1: 30, y1: 110, x2: 190, y2: 110,
+      stroke: COLORS.muted, 'stroke-width': 0.8
+    }));
+    inset.appendChild(svgEl('line', {
+      x1: 105, y1: 40, x2: 105, y2: 180,
+      stroke: COLORS.muted, 'stroke-width': 0.8
+    }));
+
+    // Labels
+    const muLabel = svgEl('text', {
+      x: 190, y: 125, fill: COLORS.muted, 'font-size': '11',
+      'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    muLabel.textContent = 'μ';
+    inset.appendChild(muLabel);
+
+    // Steady state line (before bifurcation)
+    const steadyLine = svgEl('line', {
+      x1: 30, y1: 110, x2: 105, y2: 110,
+      stroke: COLORS.blue, 'stroke-width': 2
+    });
+    inset.appendChild(steadyLine);
+
+    // Unstable equilibrium after bifurcation (dashed)
+    const unstableLine = svgEl('line', {
+      x1: 105, y1: 110, x2: 190, y2: 110,
+      stroke: COLORS.blue, 'stroke-width': 1.5, 'stroke-dasharray': '4,3'
+    });
+    inset.appendChild(unstableLine);
+
+    // Limit cycle branches (upper and lower)
+    const upperBranch = svgEl('path', {
+      d: 'M 105 110 Q 130 85, 150 70 Q 170 58, 190 50',
+      fill: 'none', stroke: COLORS.amber, 'stroke-width': 2
+    });
+    inset.appendChild(upperBranch);
+    const lowerBranch = svgEl('path', {
+      d: 'M 105 110 Q 130 135, 150 150 Q 170 162, 190 170',
+      fill: 'none', stroke: COLORS.amber, 'stroke-width': 2
+    });
+    inset.appendChild(lowerBranch);
+
+    // Critical point
+    const critDot = svgEl('circle', {
+      cx: 105, cy: 110, r: 5,
+      fill: COLORS.golden, filter: 'url(#glow-gold)'
+    });
+    inset.appendChild(critDot);
+
+    const critText = svgEl('text', {
+      x: 105, y: 100, fill: COLORS.golden, 'font-size': '10',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    critText.textContent = 'μ_c';
+    inset.appendChild(critText);
+
+    // Labels for regions
+    const ssLabel = svgEl('text', {
+      x: 60, y: 100, fill: COLORS.blue, 'font-size': '9',
+      'text-anchor': 'middle', opacity: 0.8
+    });
+    ssLabel.textContent = 'Steady state';
+    inset.appendChild(ssLabel);
+
+    const lcLabel = svgEl('text', {
+      x: 155, y: 80, fill: COLORS.amber, 'font-size': '9',
+      'text-anchor': 'middle', opacity: 0.8
+    });
+    lcLabel.textContent = 'Limit cycle';
+    inset.appendChild(lcLabel);
+
+    g.appendChild(inset);
+    animateOpacity(inset, 400, 800);
+
+    // Phase label
+    const phaseLabel = svgEl('text', {
+      x: 300, y: 420, fill: COLORS.muted, 'font-size': '13',
+      'text-anchor': 'middle', id: 'bz-phase-label',
+      'font-family': 'Georgia, serif'
+    });
+    g.appendChild(phaseLabel);
+
+    // Animation: concentric waves → spiral waves
+    function animateWaves() {
+      const totalDuration = 8000;
+      const startTime = performance.now();
+
+      // Spiral centers
+      const spirals = [
+        { cx: dishCx - 40, cy: dishCy - 20, chirality: 1 },
+        { cx: dishCx + 60, cy: dishCy + 40, chirality: -1 }
+      ];
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / totalDuration, 1);
+
+        // Phase transition at t=0.3 (concentric → spiral)
+        const spiralMix = Math.max(0, Math.min(1, (t - 0.2) / 0.15));
+
+        const label = document.getElementById('bz-phase-label');
+        if (label) {
+          if (t < 0.2) {
+            label.textContent = 'Concentric target waves';
+            label.setAttribute('fill', COLORS.blue);
+          } else if (t < 0.35) {
+            label.textContent = 'Hopf bifurcation — symmetry breaking';
+            label.setAttribute('fill', COLORS.golden);
+          } else {
+            label.textContent = 'Spiral waves — dissipative solitons';
+            label.setAttribute('fill', COLORS.amber);
+          }
+        }
+
+        cells.forEach(cell => {
+          const { dx, dy } = cell;
+          const r = Math.sqrt(dx * dx + dy * dy);
+          const theta = Math.atan2(dy, dx);
+
+          // Concentric wave component
+          const concentricPhase = (r / 30 - elapsed / 800) % (2 * Math.PI);
+          const concentricVal = Math.sin(concentricPhase) * 0.5 + 0.5;
+
+          // Spiral wave component (from two centers)
+          let spiralVal = 0;
+          spirals.forEach(sp => {
+            const sdx = cell.x - sp.cx, sdy = cell.y - sp.cy;
+            const sr = Math.sqrt(sdx * sdx + sdy * sdy);
+            const stheta = Math.atan2(sdy, sdx);
+            const spiralPhase = (sr / 25 + sp.chirality * stheta - elapsed / 600) % (2 * Math.PI);
+            spiralVal += Math.sin(spiralPhase) * 0.5 + 0.5;
+          });
+          spiralVal /= spirals.length;
+
+          // Mix
+          const val = concentricVal * (1 - spiralMix) + spiralVal * spiralMix;
+
+          // Color: blue ↔ amber (oxidized ↔ reduced)
+          const rr = Math.round(30 + val * 200);
+          const gg = Math.round(40 + val * 120);
+          const bb = Math.round(180 - val * 130);
+          cell.el.setAttribute('fill', `rgb(${rr},${gg},${bb})`);
+        });
+
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    setTimeout(animateWaves, 600);
+  }
+
+  function replayBZ() {
+    drawBZ();
+  }
+
+  // =================================================================
+  // ANIMATION 3: CORTICAL NEURAL TISSUE
+  // Three-regime avalanche comparison + power law inset
+  // =================================================================
+
+  function drawCortex() {
+    const g = document.getElementById('cortex-scene');
+    g.innerHTML = '';
+
+    const regimes = [
+      { label: 'Subcritical', color: COLORS.blue, x: 20, desc: 'Small cascades' },
+      { label: 'Critical', color: COLORS.golden, x: 295, desc: 'Power-law cascades' },
+      { label: 'Supercritical', color: COLORS.red, x: 570, desc: 'Everything fires' }
+    ];
+
+    const panelW = 240, panelH = 260;
+    const panels = [];
+
+    regimes.forEach((regime, ri) => {
+      const panel = svgEl('g', { transform: `translate(${regime.x}, 30)` });
+
+      // Panel background
+      panel.appendChild(svgEl('rect', {
+        x: 0, y: 0, width: panelW, height: panelH,
+        rx: 8, fill: 'rgba(15,23,42,0.5)',
+        stroke: regime.color, 'stroke-width': 1, opacity: 0.6
+      }));
+
+      // Label
+      const labelEl = svgEl('text', {
+        x: panelW / 2, y: -8, fill: regime.color, 'font-size': '13',
+        'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-weight': 'bold'
+      });
+      labelEl.textContent = regime.label;
+      panel.appendChild(labelEl);
+
+      const descEl = svgEl('text', {
+        x: panelW / 2, y: panelH + 18, fill: COLORS.muted, 'font-size': '11',
+        'text-anchor': 'middle'
+      });
+      descEl.textContent = regime.desc;
+      panel.appendChild(descEl);
+
+      // Create neural nodes
+      const nodes = [];
+      const nodeCount = 40;
+      const rng2 = (s) => { let v = s; return () => { v = (v * 16807) % 2147483647; return v / 2147483647; }; };
+      const rand = rng2(ri * 1000 + 42);
+
+      for (let i = 0; i < nodeCount; i++) {
+        const nx = 25 + rand() * (panelW - 50);
+        const ny = 25 + rand() * (panelH - 50);
+        nodes.push({ x: nx, y: ny, neighbors: [] });
+      }
+
+      // Connect nearby nodes
+      for (let i = 0; i < nodeCount; i++) {
+        for (let j = i + 1; j < nodeCount; j++) {
+          const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 55) {
+            nodes[i].neighbors.push(j);
+            nodes[j].neighbors.push(i);
+            panel.appendChild(svgEl('line', {
+              x1: nodes[i].x, y1: nodes[i].y,
+              x2: nodes[j].x, y2: nodes[j].y,
+              stroke: COLORS.muted, 'stroke-width': 0.5, opacity: 0.25
+            }));
+          }
+        }
+      }
+
+      // Node circles
+      nodes.forEach((n, i) => {
+        const circle = svgEl('circle', {
+          cx: n.x, cy: n.y, r: 5,
+          fill: COLORS.card, stroke: COLORS.muted, 'stroke-width': 1,
+          id: `cortex-${ri}-node-${i}`
+        });
+        panel.appendChild(circle);
+      });
+
+      panels.push({ panel, nodes, regime, ri });
+      g.appendChild(panel);
+      animateOpacity(panel, 200 + ri * 400, 600);
+    });
+
+    // Power-law inset (bottom right)
+    const inset = svgEl('g', { transform: 'translate(640, 300)' });
+    inset.appendChild(svgEl('rect', {
+      x: 0, y: 0, width: 190, height: 110,
+      rx: 6, fill: 'rgba(15,23,42,0.8)',
+      stroke: COLORS.muted, 'stroke-width': 0.5
+    }));
+
+    const insetTitle = svgEl('text', {
+      x: 95, y: 18, fill: COLORS.line, 'font-size': '10',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif'
+    });
+    insetTitle.textContent = 'Avalanche Size Distribution';
+    inset.appendChild(insetTitle);
+
+    // Log-log axes
+    inset.appendChild(svgEl('line', { x1: 30, y1: 95, x2: 175, y2: 95, stroke: COLORS.muted, 'stroke-width': 0.8 }));
+    inset.appendChild(svgEl('line', { x1: 30, y1: 25, x2: 30, y2: 95, stroke: COLORS.muted, 'stroke-width': 0.8 }));
+
+    const xLabel = svgEl('text', {
+      x: 105, y: 108, fill: COLORS.muted, 'font-size': '9',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    xLabel.textContent = 'log(size)';
+    inset.appendChild(xLabel);
+
+    const yLabel = svgEl('text', {
+      x: 15, y: 60, fill: COLORS.muted, 'font-size': '9',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic',
+      transform: 'rotate(-90, 15, 60)'
+    });
+    yLabel.textContent = 'log(P)';
+    inset.appendChild(yLabel);
+
+    // Power law line (slope -3/2)
+    const plLine = svgEl('line', {
+      x1: 35, y1: 30, x2: 170, y2: 90,
+      stroke: COLORS.golden, 'stroke-width': 1.5
+    });
+    inset.appendChild(plLine);
+
+    // Slope label
+    const slopeLabel = svgEl('text', {
+      x: 120, y: 50, fill: COLORS.golden, 'font-size': '10',
+      'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    slopeLabel.textContent = 'α ≈ −3/2';
+    inset.appendChild(slopeLabel);
+
+    g.appendChild(inset);
+    animateOpacity(inset, 1200, 800);
+
+    // Animate avalanches
+    function animateAvalanches() {
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const cycle = (elapsed / 2000) % 1; // 2-second cycles
+
+        panels.forEach(({ ri, nodes }) => {
+          const nodeCount = nodes.length;
+
+          // Determine which nodes fire based on regime
+          let firingSet = new Set();
+
+          if (ri === 0) {
+            // Subcritical: small cascades, 1-3 nodes
+            if (cycle < 0.2) {
+              const seed = Math.floor(elapsed / 2000) * 3 + 1;
+              firingSet.add(seed % nodeCount);
+              if (nodes[seed % nodeCount].neighbors.length > 0) {
+                firingSet.add(nodes[seed % nodeCount].neighbors[0]);
+              }
+            }
+          } else if (ri === 1) {
+            // Critical: power-law distributed cascades
+            const cascadeSize = Math.floor(Math.pow(Math.random() * 0.95 + 0.05, -1.5));
+            const realSize = Math.min(cascadeSize, nodeCount);
+            if (cycle < 0.6) {
+              // BFS from random start
+              const start = Math.floor((elapsed / 500) % nodeCount);
+              const queue = [start];
+              const visited = new Set([start]);
+              while (queue.length > 0 && visited.size < realSize) {
+                const curr = queue.shift();
+                for (const nb of nodes[curr].neighbors) {
+                  if (!visited.has(nb) && visited.size < realSize) {
+                    visited.add(nb);
+                    queue.push(nb);
+                  }
+                }
+              }
+              firingSet = visited;
+            }
+          } else {
+            // Supercritical: nearly everything fires
+            if (cycle < 0.7) {
+              for (let i = 0; i < nodeCount; i++) {
+                if (Math.random() < 0.8) firingSet.add(i);
+              }
+            }
+          }
+
+          for (let i = 0; i < nodeCount; i++) {
+            const el = document.getElementById(`cortex-${ri}-node-${i}`);
+            if (!el) continue;
+            if (firingSet.has(i)) {
+              const regime = panels[ri].regime;
+              el.setAttribute('fill', regime.color);
+              el.setAttribute('stroke', regime.color);
+              el.setAttribute('r', '6');
+            } else {
+              el.setAttribute('fill', COLORS.card);
+              el.setAttribute('stroke', COLORS.muted);
+              el.setAttribute('r', '5');
+            }
+          }
+        });
+
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    setTimeout(animateAvalanches, 1500);
+  }
+
+  function replayCortex() {
+    drawCortex();
+  }
+
+  // =================================================================
+  // ANIMATION 4: IMMUNE SYSTEM
+  // Three scenarios: dormant, memory, autoimmune
+  // =================================================================
+
+  function drawImmune() {
+    const g = document.getElementById('immune-scene');
+    g.innerHTML = '';
+
+    const scenarios = [
+      { label: 'Dormant', color: COLORS.blue, x: 20, desc: 'Below threshold' },
+      { label: 'Memory', color: COLORS.golden, x: 295, desc: 'At threshold — immunity' },
+      { label: 'Autoimmune', color: COLORS.red, x: 570, desc: 'Above threshold' }
+    ];
+
+    const panelW = 240, panelH = 250;
+
+    scenarios.forEach((sc, si) => {
+      const panel = svgEl('g', { transform: `translate(${sc.x}, 30)` });
+
+      panel.appendChild(svgEl('rect', {
+        x: 0, y: 0, width: panelW, height: panelH,
+        rx: 8, fill: 'rgba(15,23,42,0.5)',
+        stroke: sc.color, 'stroke-width': 1, opacity: 0.6
+      }));
+
+      const labelEl = svgEl('text', {
+        x: panelW / 2, y: -8, fill: sc.color, 'font-size': '13',
+        'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-weight': 'bold'
+      });
+      labelEl.textContent = sc.label;
+      panel.appendChild(labelEl);
+
+      const descEl = svgEl('text', {
+        x: panelW / 2, y: panelH + 18, fill: COLORS.muted, 'font-size': '11',
+        'text-anchor': 'middle'
+      });
+      descEl.textContent = sc.desc;
+      panel.appendChild(descEl);
+
+      // Antigens (red triangles) — scattered in each panel
+      const rng3 = (s) => { let v = s; return () => { v = (v * 16807) % 2147483647; return v / 2147483647; }; };
+      const rand = rng3(si * 777 + 31);
+
+      const antigenCount = 5;
+      for (let i = 0; i < antigenCount; i++) {
+        const ax = 30 + rand() * (panelW - 60);
+        const ay = 30 + rand() * (panelH - 60);
+        const tri = svgEl('polygon', {
+          points: `${ax},${ay - 7} ${ax - 6},${ay + 5} ${ax + 6},${ay + 5}`,
+          fill: 'none', stroke: COLORS.red, 'stroke-width': 1.5,
+          opacity: 0.7
+        });
+        panel.appendChild(tri);
+      }
+
+      // Immune cells (circles) — number depends on scenario
+      const cellCounts = [4, 12, 25];
+      const cellCount = cellCounts[si];
+
+      for (let i = 0; i < cellCount; i++) {
+        const cx = 20 + rand() * (panelW - 40);
+        const cy = 20 + rand() * (panelH - 40);
+        const r = 5 + rand() * 3;
+
+        let fillColor;
+        if (si === 0) {
+          fillColor = 'rgba(59,130,246,0.3)'; // fading
+        } else if (si === 1) {
+          // Some are memory cells (golden)
+          fillColor = i < 5 ? 'rgba(251,191,36,0.6)' : 'rgba(34,197,94,0.5)';
+        } else {
+          fillColor = 'rgba(239,68,68,0.5)'; // aggressive
+        }
+
+        const cell = svgEl('circle', {
+          cx, cy, r,
+          fill: fillColor,
+          stroke: sc.color, 'stroke-width': 1,
+          opacity: 0,
+          id: `immune-${si}-cell-${i}`
+        });
+        panel.appendChild(cell);
+
+        // Animate cells appearing
+        if (si === 0) {
+          // Dormant: cells appear then fade
+          animateOpacity(cell, 500 + i * 300, 400);
+          setTimeout(() => {
+            cell.style.transition = 'opacity 1500ms ease';
+            cell.style.opacity = '0.2';
+          }, 1500 + i * 300);
+        } else if (si === 1) {
+          // Memory: cells appear and stabilize, golden glow on memory cells
+          animateOpacity(cell, 500 + i * 200, 500);
+          if (i < 5) {
+            setTimeout(() => {
+              cell.setAttribute('filter', 'url(#glow-gold)');
+            }, 1500 + i * 200);
+          }
+        } else {
+          // Autoimmune: rapid proliferation, aggressive
+          animateOpacity(cell, 300 + i * 100, 300);
+        }
+      }
+
+      // Warning indicator for autoimmune
+      if (si === 2) {
+        const warning = svgEl('text', {
+          x: panelW / 2, y: panelH - 15,
+          fill: COLORS.red, 'font-size': '11', 'text-anchor': 'middle',
+          opacity: 0, id: 'immune-warning'
+        });
+        warning.textContent = 'Attacks self-tissue';
+        panel.appendChild(warning);
+        animateOpacity(warning, 3000, 800);
+      }
+
+      // Critical threshold indicator for memory
+      if (si === 1) {
+        const threshLine = svgEl('text', {
+          x: panelW / 2, y: panelH - 15,
+          fill: COLORS.golden, 'font-size': '11', 'text-anchor': 'middle',
+          opacity: 0, id: 'immune-thresh'
+        });
+        threshLine.textContent = 'Percolation threshold crossed';
+        panel.appendChild(threshLine);
+        animateOpacity(threshLine, 2500, 800);
+      }
+
+      g.appendChild(panel);
+      animateOpacity(panel, 200 + si * 400, 600);
+    });
+
+    // Transition arrow labels
+    const arrowY = 320;
+    [[180, '→ threshold'], [455, '→ runaway']].forEach(([x, text], i) => {
+      const arrow = svgEl('text', {
+        x, y: arrowY, fill: COLORS.muted, 'font-size': '11',
+        'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic',
+        opacity: 0
+      });
+      arrow.textContent = text;
+      g.appendChild(arrow);
+      animateOpacity(arrow, 2000 + i * 500, 600);
+    });
+
+    // Phase transition label
+    const ptLabel = svgEl('text', {
+      x: 430, y: 380, fill: COLORS.muted, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif',
+      opacity: 0
+    });
+    ptLabel.textContent = 'Increasing lymphocyte density →';
+    g.appendChild(ptLabel);
+    animateOpacity(ptLabel, 3000, 800);
+  }
+
+  function replayImmune() {
+    drawImmune();
+  }
+
+  // =================================================================
+  // ANIMATION 5: MAGNETIC SKYRMIONS
+  // Spin texture formation + phase diagram
+  // =================================================================
+
+  function drawSkyrmion() {
+    const g = document.getElementById('skyrmion-scene');
+    g.innerHTML = '';
+
+    // Spin grid
+    const gridCx = 280, gridCy = 220;
+    const gridSize = 15; // 15x15 grid
+    const spacing = 22;
+    const gridStartX = gridCx - (gridSize - 1) * spacing / 2;
+    const gridStartY = gridCy - (gridSize - 1) * spacing / 2;
+
+    // Skyrmion center
+    const skCx = gridCx, skCy = gridCy;
+    const skRadius = 5; // in grid units
+
+    // Draw arrows
+    const arrows = [];
+    for (let ix = 0; ix < gridSize; ix++) {
+      for (let iy = 0; iy < gridSize; iy++) {
+        const x = gridStartX + ix * spacing;
+        const y = gridStartY + iy * spacing;
+
+        const arrowG = svgEl('g', {
+          transform: `translate(${x}, ${y})`,
+          id: `sk-arrow-${ix}-${iy}`,
+          opacity: 0
+        });
+
+        // Arrow shaft + head (pointing up initially)
+        const shaft = svgEl('line', {
+          x1: 0, y1: 6, x2: 0, y2: -6,
+          stroke: COLORS.line, 'stroke-width': 1.5,
+          'stroke-linecap': 'round'
+        });
+        arrowG.appendChild(shaft);
+
+        const head = svgEl('polygon', {
+          points: '0,-8 -3,-4 3,-4',
+          fill: COLORS.line
+        });
+        arrowG.appendChild(head);
+
+        g.appendChild(arrowG);
+        arrows.push({ el: arrowG, shaft, head, ix, iy, x, y });
+      }
+    }
+
+    // Phase diagram inset (top right)
+    const inset = svgEl('g', { transform: 'translate(620, 30)' });
+    inset.appendChild(svgEl('rect', {
+      x: 0, y: 0, width: 210, height: 220,
+      rx: 8, fill: 'rgba(15,23,42,0.8)',
+      stroke: COLORS.muted, 'stroke-width': 0.5
+    }));
+
+    const insetTitle = svgEl('text', {
+      x: 105, y: 22, fill: COLORS.line, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif'
+    });
+    insetTitle.textContent = 'Phase Diagram (MnSi)';
+    inset.appendChild(insetTitle);
+
+    // Axes: T (horizontal), B (vertical)
+    inset.appendChild(svgEl('line', { x1: 30, y1: 190, x2: 190, y2: 190, stroke: COLORS.muted, 'stroke-width': 1 }));
+    inset.appendChild(svgEl('line', { x1: 30, y1: 35, x2: 30, y2: 190, stroke: COLORS.muted, 'stroke-width': 1 }));
+
+    const tLabel = svgEl('text', {
+      x: 112, y: 208, fill: COLORS.muted, 'font-size': '11',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    tLabel.textContent = 'T (temperature)';
+    inset.appendChild(tLabel);
+
+    const bLabel = svgEl('text', {
+      x: 12, y: 115, fill: COLORS.muted, 'font-size': '11',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic',
+      transform: 'rotate(-90, 12, 115)'
+    });
+    bLabel.textContent = 'B (field)';
+    inset.appendChild(bLabel);
+
+    // Ferromagnetic region (large)
+    const ferroRegion = svgEl('rect', {
+      x: 30, y: 100, width: 100, height: 90,
+      fill: 'rgba(59,130,246,0.08)', rx: 4
+    });
+    inset.appendChild(ferroRegion);
+    const ferroLabel = svgEl('text', {
+      x: 80, y: 155, fill: COLORS.blue, 'font-size': '10',
+      'text-anchor': 'middle', opacity: 0.7
+    });
+    ferroLabel.textContent = 'Ferromagnetic';
+    inset.appendChild(ferroLabel);
+
+    // Paramagnetic region
+    const paraRegion = svgEl('rect', {
+      x: 140, y: 40, width: 50, height: 150,
+      fill: 'rgba(148,163,184,0.05)', rx: 4
+    });
+    inset.appendChild(paraRegion);
+    const paraLabel = svgEl('text', {
+      x: 165, y: 120, fill: COLORS.muted, 'font-size': '10',
+      'text-anchor': 'middle', opacity: 0.7
+    });
+    paraLabel.textContent = 'Para';
+    inset.appendChild(paraLabel);
+
+    // Skyrmion pocket (small ellipse near phase boundary)
+    const skPocket = svgEl('ellipse', {
+      cx: 120, cy: 105, rx: 22, ry: 18,
+      fill: 'rgba(251,191,36,0.15)', stroke: COLORS.golden,
+      'stroke-width': 1.5, 'stroke-dasharray': '3,2'
+    });
+    inset.appendChild(skPocket);
+
+    const skPocketLabel = svgEl('text', {
+      x: 120, y: 100, fill: COLORS.golden, 'font-size': '9',
+      'text-anchor': 'middle', 'font-weight': 'bold'
+    });
+    skPocketLabel.textContent = 'Skyrmion';
+    inset.appendChild(skPocketLabel);
+    const skPocketLabel2 = svgEl('text', {
+      x: 120, y: 112, fill: COLORS.golden, 'font-size': '9',
+      'text-anchor': 'middle', 'font-weight': 'bold'
+    });
+    skPocketLabel2.textContent = 'lattice';
+    inset.appendChild(skPocketLabel2);
+
+    // Tc marker
+    const tcLine = svgEl('line', {
+      x1: 135, y1: 40, x2: 135, y2: 190,
+      stroke: COLORS.line, 'stroke-width': 1, 'stroke-dasharray': '3,3', opacity: 0.4
+    });
+    inset.appendChild(tcLine);
+    const tcLabel = svgEl('text', {
+      x: 135, y: 200, fill: COLORS.line, 'font-size': '9',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    tcLabel.textContent = 'T_c';
+    inset.appendChild(tcLabel);
+
+    g.appendChild(inset);
+    animateOpacity(inset, 400, 800);
+
+    // Winding number label
+    const windLabel = svgEl('text', {
+      x: 280, y: 415, fill: COLORS.golden, 'font-size': '13',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic',
+      opacity: 0, id: 'sk-winding-label'
+    });
+    windLabel.textContent = 'Topological charge Q = −1 (integer winding number)';
+    g.appendChild(windLabel);
+
+    // Animate skyrmion formation
+    function animateSkyrmion() {
+      const totalDuration = 4000;
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / totalDuration, 1);
+
+        // Skyrmion formation: uniform → skyrmion texture
+        const formation = Math.min(1, t / 0.6);
+
+        arrows.forEach(({ el, shaft, head, ix, iy }) => {
+          // Distance from center in grid units
+          const dx = ix - (gridSize - 1) / 2;
+          const dy = iy - (gridSize - 1) / 2;
+          const r = Math.sqrt(dx * dx + dy * dy);
+          const theta = Math.atan2(dy, dx);
+
+          // Neel-type skyrmion: spins tilt from "up" at the edge (polar angle 0)
+          // to "down" at the center (polar angle PI), pointing radially.
+          // The 2D projection: at the edge, arrow points up (0 deg rotation).
+          // Near the center, arrow points along the radial direction (toward center).
+          // At the very center, arrow points down (180 deg).
+
+          let rot = 0; // degrees, 0 = up
+          let mz = 1;  // z-component of spin
+
+          if (r < skRadius && r > 0.01) {
+            // Smooth profile: polar angle goes from PI at center to 0 at edge
+            const polarAngle = Math.PI * (1 - r / skRadius) * formation;
+            mz = Math.cos(polarAngle);
+
+            // The 2D rotation: the arrow tilts along the radial direction
+            // theta gives the direction from center to this point
+            // The arrow rotates by polarAngle in the direction of theta
+            // For a Neel skyrmion: spin lies in the plane containing z and r-hat
+            // 2D projection: rotate arrow toward the outward radial direction
+            // by an amount proportional to sin(polarAngle)
+            const tiltDeg = polarAngle * (180 / Math.PI);
+            // Rotate in the azimuthal direction of this spin
+            rot = (theta + Math.PI) * (180 / Math.PI) * Math.sin(polarAngle * 0.9);
+            // Add the tilt
+            rot = (theta * (180 / Math.PI) + 180) * (tiltDeg / 180);
+          } else if (r <= 0.01) {
+            // Center: points straight down
+            rot = 180 * formation;
+            mz = Math.cos(Math.PI * formation);
+          }
+
+          // Color by z-component: blue (up) -> golden (equator) -> red (down)
+          const color = mz > 0.3 ? COLORS.blue :
+                       mz < -0.3 ? COLORS.red : COLORS.golden;
+
+          shaft.setAttribute('stroke', color);
+          head.setAttribute('fill', color);
+
+          el.setAttribute('transform',
+            `translate(${gridStartX + ix * spacing}, ${gridStartY + iy * spacing}) rotate(${rot})`);
+
+          el.style.opacity = '1';
+          el.style.transition = 'opacity 300ms ease';
+        });
+
+        // Show winding number label
+        if (t > 0.7) {
+          const wl = document.getElementById('sk-winding-label');
+          if (wl && wl.style.opacity !== '1') {
+            animateOpacity(wl, 0, 800);
+          }
+        }
+
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Fade in arrows first
+    arrows.forEach(({ el }, i) => {
+      animateOpacity(el, 200 + Math.floor(i / gridSize) * 30, 400);
+    });
+
+    setTimeout(animateSkyrmion, 1500);
+  }
+
+  function replaySkyrmion() {
+    drawSkyrmion();
+  }
+
+  // =================================================================
+  // ANIMATION 6: MAGNETOSPHERE
+  // Earth + field lines + substorm avalanches + power-law inset
+  // =================================================================
+
+  function drawMagneto() {
+    const g = document.getElementById('magneto-scene');
+    g.innerHTML = '';
+
+    const earthCx = 250, earthCy = 220, earthR = 40;
+
+    // Earth
+    const earth = svgEl('circle', {
+      cx: earthCx, cy: earthCy, r: earthR,
+      fill: 'rgba(59,130,246,0.2)', stroke: COLORS.blue, 'stroke-width': 2
+    });
+    g.appendChild(earth);
+
+    const earthLabel = svgEl('text', {
+      x: earthCx, y: earthCy + 5, fill: COLORS.heading, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif'
+    });
+    earthLabel.textContent = 'Earth';
+    g.appendChild(earthLabel);
+
+    // Magnetic field lines (dipole-like on dayside, stretched on nightside)
+    const fieldLines = svgEl('g', { opacity: 0, id: 'magneto-field' });
+
+    // Dayside field lines (compressed)
+    const dayAngles = [-60, -30, 0, 30, 60];
+    dayAngles.forEach(angle => {
+      const rad = angle * Math.PI / 180;
+      const startX = earthCx + earthR * Math.cos(rad - Math.PI);
+      const startY = earthCy + earthR * Math.sin(rad - Math.PI);
+      const cp1x = earthCx - 120 - Math.abs(angle) * 0.8;
+      const cp1y = earthCy + angle * 2.5;
+      const endX = earthCx + earthR * Math.cos(rad - Math.PI + Math.PI);
+      const endY = earthCy - earthR * Math.sin(rad - Math.PI);
+
+      const d = `M ${startX} ${startY} Q ${cp1x} ${cp1y} ${endX} ${endY}`;
+      fieldLines.appendChild(svgEl('path', {
+        d, fill: 'none', stroke: COLORS.blue, 'stroke-width': 0.8, opacity: 0.4
+      }));
+    });
+
+    // Nightside field lines (stretched into tail)
+    const tailAngles = [-50, -25, 0, 25, 50];
+    tailAngles.forEach(angle => {
+      const rad = angle * Math.PI / 180;
+      const startX = earthCx + earthR * Math.cos(rad);
+      const startY = earthCy + earthR * Math.sin(rad);
+      const tailLen = 350;
+
+      // Stretched lines going to the right
+      const d = `M ${startX} ${startY} C ${earthCx + 100} ${startY + angle * 0.5} ${earthCx + 200} ${earthCy + angle * 0.3} ${earthCx + tailLen} ${earthCy + angle * 0.15}`;
+      fieldLines.appendChild(svgEl('path', {
+        d, fill: 'none', stroke: COLORS.blue, 'stroke-width': 0.8, opacity: 0.3
+      }));
+    });
+
+    g.appendChild(fieldLines);
+    animateOpacity(fieldLines, 300, 800);
+
+    // Plasma sheet (thin layer in the tail)
+    const sheetY = earthCy;
+    const sheetStartX = earthCx + earthR + 10;
+    const sheetEndX = earthCx + 340;
+    const sheet = svgEl('rect', {
+      x: sheetStartX, y: sheetY - 8, width: sheetEndX - sheetStartX, height: 16,
+      rx: 3, fill: 'rgba(251,191,36,0.1)', stroke: COLORS.golden,
+      'stroke-width': 0.8, 'stroke-dasharray': '4,3',
+      opacity: 0, id: 'magneto-sheet'
+    });
+    g.appendChild(sheet);
+    animateOpacity(sheet, 800, 600);
+
+    const sheetLabel = svgEl('text', {
+      x: (sheetStartX + sheetEndX) / 2, y: sheetY + 30,
+      fill: COLORS.golden, 'font-size': '11', 'text-anchor': 'middle',
+      'font-family': 'Georgia, serif', 'font-style': 'italic',
+      opacity: 0
+    });
+    sheetLabel.textContent = 'Plasma Sheet (thin current sheet)';
+    g.appendChild(sheetLabel);
+    animateOpacity(sheetLabel, 1200, 600);
+
+    // Solar wind arrows (from left)
+    const swGroup = svgEl('g', { opacity: 0, id: 'magneto-sw' });
+    for (let i = 0; i < 5; i++) {
+      const y = earthCy - 80 + i * 40;
+      swGroup.appendChild(svgEl('line', {
+        x1: 20, y1: y, x2: 80, y2: y,
+        stroke: COLORS.amber, 'stroke-width': 1, opacity: 0.5
+      }));
+      swGroup.appendChild(svgEl('polygon', {
+        points: `80,${y - 4} 88,${y} 80,${y + 4}`,
+        fill: COLORS.amber, opacity: 0.5
+      }));
+    }
+    const swLabel = svgEl('text', {
+      x: 50, y: earthCy - 100, fill: COLORS.amber, 'font-size': '10',
+      'text-anchor': 'middle'
+    });
+    swLabel.textContent = 'Solar wind';
+    swGroup.appendChild(swLabel);
+    g.appendChild(swGroup);
+    animateOpacity(swGroup, 500, 600);
+
+    // Substorm reconnection events (animated dots in plasma sheet)
+    const substormGroup = svgEl('g', { id: 'magneto-substorms' });
+    const substormDots = [];
+    for (let i = 0; i < 20; i++) {
+      const dot = svgEl('circle', {
+        cx: sheetStartX + 20 + Math.random() * (sheetEndX - sheetStartX - 40),
+        cy: sheetY + (Math.random() - 0.5) * 12,
+        r: 2 + Math.random() * 3,
+        fill: COLORS.golden, opacity: 0,
+        id: `substorm-dot-${i}`
+      });
+      substormGroup.appendChild(dot);
+      substormDots.push(dot);
+    }
+    g.appendChild(substormGroup);
+
+    // Power-law inset (bottom right)
+    const inset = svgEl('g', { transform: 'translate(620, 280)', opacity: 0 });
+
+    inset.appendChild(svgEl('rect', {
+      x: 0, y: 0, width: 200, height: 130,
+      rx: 6, fill: 'rgba(15,23,42,0.8)',
+      stroke: COLORS.muted, 'stroke-width': 0.5
+    }));
+
+    const insetTitle = svgEl('text', {
+      x: 100, y: 20, fill: COLORS.line, 'font-size': '10',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif'
+    });
+    insetTitle.textContent = 'Substorm Energy Distribution';
+    inset.appendChild(insetTitle);
+
+    // Log-log axes
+    inset.appendChild(svgEl('line', { x1: 30, y1: 110, x2: 180, y2: 110, stroke: COLORS.muted, 'stroke-width': 0.8 }));
+    inset.appendChild(svgEl('line', { x1: 30, y1: 30, x2: 30, y2: 110, stroke: COLORS.muted, 'stroke-width': 0.8 }));
+
+    const xL = svgEl('text', { x: 105, y: 125, fill: COLORS.muted, 'font-size': '9', 'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic' });
+    xL.textContent = 'log(energy)';
+    inset.appendChild(xL);
+
+    // Power law line
+    inset.appendChild(svgEl('line', {
+      x1: 35, y1: 35, x2: 175, y2: 105,
+      stroke: COLORS.golden, 'stroke-width': 1.5
+    }));
+
+    // Scatter points
+    const scatterPts = [[40,38],[50,42],[58,50],[65,55],[72,58],[80,62],[90,68],[100,72],[110,78],[125,85],[140,90],[155,95],[170,102]];
+    scatterPts.forEach(([px,py]) => {
+      inset.appendChild(svgEl('circle', {
+        cx: px + (Math.random()-0.5)*5, cy: py + (Math.random()-0.5)*5,
+        r: 2, fill: COLORS.golden, opacity: 0.7
+      }));
+    });
+
+    const plLabel = svgEl('text', {
+      x: 140, y: 50, fill: COLORS.golden, 'font-size': '10',
+      'font-family': 'Georgia, serif', 'font-style': 'italic'
+    });
+    plLabel.textContent = 'SOC';
+    inset.appendChild(plLabel);
+
+    g.appendChild(inset);
+    animateOpacity(inset, 2000, 800);
+
+    // Topological label (bottom)
+    const topoLabel = svgEl('text', {
+      x: 430, y: 420, fill: COLORS.purple, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic',
+      opacity: 0
+    });
+    topoLabel.textContent = 'Topological band structure (Fu & Qin 2021) — not yet confirmed observationally';
+    g.appendChild(topoLabel);
+    animateOpacity(topoLabel, 3000, 1000);
+
+    // Animate substorm avalanches
+    function animateSubstorms() {
+      function flash() {
+        // Random subset of dots flash
+        const count = 3 + Math.floor(Math.random() * 8);
+        const indices = [];
+        for (let i = 0; i < count; i++) {
+          indices.push(Math.floor(Math.random() * substormDots.length));
+        }
+
+        indices.forEach((idx, i) => {
+          const dot = substormDots[idx];
+          setTimeout(() => {
+            dot.setAttribute('opacity', '0.9');
+            dot.setAttribute('r', String(3 + Math.random() * 4));
+            dot.setAttribute('filter', 'url(#glow-soft)');
+
+            setTimeout(() => {
+              dot.setAttribute('opacity', '0');
+              dot.removeAttribute('filter');
+            }, 400 + Math.random() * 400);
+          }, i * 80);
+        });
+
+        setTimeout(flash, 800 + Math.random() * 1200);
+      }
+
+      setTimeout(flash, 1500);
+    }
+
+    animateSubstorms();
+  }
+
+  function replayMagneto() {
+    drawMagneto();
+  }
+
+  // =================================================================
+  // ANIMATION 7: THE PATTERN (synthesis)
+  // Six systems as nodes with bridges highlighted
+  // =================================================================
+
+  function drawPattern() {
+    const g = document.getElementById('pattern-scene');
+    g.innerHTML = '';
+
+    const systems = [
+      { name: 'Gene Regulatory\nNetwork', bridges: ['CB'], color: COLORS.golden, abbr: 'GRN' },
+      { name: 'BZ Reaction', bridges: ['CB', 'BC'], color: COLORS.amber, abbr: 'BZ' },
+      { name: 'Cortical Neural\nTissue', bridges: ['BD'], color: COLORS.blue, abbr: 'CNT' },
+      { name: 'Immune\nSystem', bridges: ['CD-a'], color: COLORS.green, abbr: 'IS' },
+      { name: 'Magnetic\nSkyrmions', bridges: ['AB'], color: COLORS.red, abbr: 'MS' },
+      { name: 'Magnetosphere', bridges: ['BD', 'AC'], color: COLORS.purple, abbr: 'MAG' }
+    ];
+
+    // Arrange in a hexagonal layout
+    const cx = 430, cy = 240, radius = 180;
+    systems.forEach((sys, i) => {
+      const angle = (i / 6) * Math.PI * 2 - Math.PI / 2;
+      sys.x = cx + radius * Math.cos(angle);
+      sys.y = cy + radius * Math.sin(angle);
+    });
+
+    // Draw connections between systems sharing bridge types
+    const bridgeConnections = [
+      { from: 0, to: 1, bridge: 'CB', color: COLORS.golden },  // GRN-BZ share CB
+      { from: 2, to: 5, bridge: 'BD', color: COLORS.blue },    // CNT-MAG share BD
+    ];
+
+    bridgeConnections.forEach(conn => {
+      const line = svgEl('line', {
+        x1: systems[conn.from].x, y1: systems[conn.from].y,
+        x2: systems[conn.to].x, y2: systems[conn.to].y,
+        stroke: conn.color, 'stroke-width': 1.5, opacity: 0,
+        'stroke-dasharray': '6,4'
+      });
+      g.appendChild(line);
+      animateOpacity(line, 2500, 800);
+    });
+
+    // Central "Criticality" node
+    const critNode = svgEl('g', { opacity: 0, id: 'pattern-crit' });
+    critNode.appendChild(svgEl('circle', {
+      cx, cy, r: 35,
+      fill: 'rgba(251,191,36,0.1)', stroke: COLORS.golden, 'stroke-width': 2
+    }));
+    const critText = svgEl('text', {
+      x: cx, y: cy - 5, fill: COLORS.golden, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-weight': 'bold'
+    });
+    critText.textContent = 'Critical';
+    critNode.appendChild(critText);
+    const critText2 = svgEl('text', {
+      x: cx, y: cy + 12, fill: COLORS.golden, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-weight': 'bold'
+    });
+    critText2.textContent = 'Point';
+    critNode.appendChild(critText2);
+    g.appendChild(critNode);
+    animateOpacity(critNode, 1800, 1000);
+
+    // Draw system nodes
+    systems.forEach((sys, i) => {
+      const nodeG = svgEl('g', { opacity: 0 });
+
+      // Connection to center
+      const connLine = svgEl('line', {
+        x1: sys.x, y1: sys.y, x2: cx, y2: cy,
+        stroke: sys.color, 'stroke-width': 1, opacity: 0.3
+      });
+      nodeG.appendChild(connLine);
+
+      // Node circle
+      nodeG.appendChild(svgEl('circle', {
+        cx: sys.x, cy: sys.y, r: 28,
+        fill: COLORS.card, stroke: sys.color, 'stroke-width': 2
+      }));
+
+      // System abbreviation
+      const abbr = svgEl('text', {
+        x: sys.x, y: sys.y + 5, fill: sys.color, 'font-size': '13',
+        'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-weight': 'bold'
+      });
+      abbr.textContent = sys.abbr;
+      nodeG.appendChild(abbr);
+
+      // Bridge labels (outside the circle)
+      const labelAngle = (i / 6) * Math.PI * 2 - Math.PI / 2;
+      const labelR = radius + 45;
+      const lx = cx + labelR * Math.cos(labelAngle);
+      const ly = cy + labelR * Math.sin(labelAngle);
+
+      // System name
+      const lines = sys.name.split('\n');
+      lines.forEach((line, li) => {
+        const nameEl = svgEl('text', {
+          x: lx, y: ly - (lines.length - 1) * 7 + li * 14,
+          fill: COLORS.text, 'font-size': '11', 'text-anchor': 'middle'
+        });
+        nameEl.textContent = line;
+        nodeG.appendChild(nameEl);
+      });
+
+      // Bridge tags
+      const bridgeY = ly + lines.length * 7 + 5;
+      sys.bridges.forEach((b, bi) => {
+        const tag = svgEl('text', {
+          x: lx + (bi - (sys.bridges.length - 1) / 2) * 35,
+          y: bridgeY,
+          fill: sys.color, 'font-size': '10', 'text-anchor': 'middle',
+          'font-weight': 'bold'
+        });
+        tag.textContent = b;
+        nodeG.appendChild(tag);
+      });
+
+      g.appendChild(nodeG);
+      animateOpacity(nodeG, 300 + i * 300, 600);
+    });
+
+    // Subtitle
+    const subtitleEl = svgEl('text', {
+      x: cx, y: 490, fill: COLORS.muted, 'font-size': '12',
+      'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-style': 'italic',
+      opacity: 0
+    });
+    subtitleEl.textContent = 'Every system connects through a phase transition or critical point';
+    g.appendChild(subtitleEl);
+    animateOpacity(subtitleEl, 3500, 1000);
+  }
+
+  function replayPattern() {
+    drawPattern();
+  }
+
+  // =================================================================
+  // WIRE UP IntersectionObserver
+  // =================================================================
+
+  onVisible('svg-grn', drawGRN);
+  onVisible('svg-bz', drawBZ);
+  onVisible('svg-cortex', drawCortex);
+  onVisible('svg-immune', drawImmune);
+  onVisible('svg-skyrmion', drawSkyrmion);
+  onVisible('svg-magneto', drawMagneto);
+  onVisible('svg-pattern', drawPattern);
+
+})();
+</script>
+
+</body>
+</html>
