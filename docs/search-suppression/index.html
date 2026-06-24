@@ -667,6 +667,20 @@ ul.plain li { margin-bottom: 0.5rem; }
 <h2 id="changelog">6. Change Log</h2>
 
 <div class="changelog">
+<strong>2026-06-24</strong> — Automated cross-engine verification from Bellingham, WA.
+<em>Brave Search (independent index):</em> T02 NOT FOUND. T03 NOT FOUND. C01 <span class="check">FOUND</span> (first result).
+Content-selective de-indexing confirmed on an independent search engine — not Google-specific.
+<em>Bing:</em> T01 NOT FOUND (10 unrelated results). T04 NOT FOUND. T02/T03/C01/C02 blocked by CAPTCHA.
+<em>robots.txt audit:</em> Cryptome now blocks Googlebot site-wide (User-agent: Googlebot*, Disallow: /).
+Slashdot blocks /comments.pl for all agents — T04 URL test method needs redesign (see note below).
+T01 also absent from Bing and Brave, whose crawlers are NOT blocked by Cryptome's robots.txt.
+<em>noindex audit:</em> All Substack pages (T02, T03, C01) show "noIndex":false in JS payload. No selective noindex.
+<em>HTTP status:</em> All six URLs return 200 (T01 redirects HTTP→HTTPS, then 200).
+<em>T04 note:</em> The comments.pl URL is robot-blocked, so the T04 URL-search test is poorly constructed.
+However, comments render on story pages (allowed by robots.txt). The real evidence is the temporal shift:
+0 results for site:slashdot.org "energyscholar" before June 2026, then 10+ overnight after this report
+was published — but T04's comment remains selectively excluded. Test method to be redesigned.
+
 <strong>2026-06-22</strong> — Added T04 (Slashdot Ghost Comment) and C02 (Slashdot EnergyScholar control).
 Note: prior to June 2026, site:slashdot.org "energyscholar" returned 0 results.
 As of this date, 10+ comments are indexed — but T04 remains selectively excluded.
