@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structure from Topology: Typed Operators on Multiple Topologies</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+h3 {
+  color: var(--heading);
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.definition, .theorem {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.definition { border-left: 4px solid var(--blue); }
+.theorem { border-left: 4px solid var(--purple); }
+
+.definition-title, .theorem-title {
+  font-weight: 700;
+  color: var(--heading);
+  margin-bottom: 0.5rem;
+}
+
+.definition-title { color: var(--blue); }
+.theorem-title { color: var(--purple); }
+
+.math {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-style: italic;
+  color: var(--heading);
+}
+
+.math-block {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-style: italic;
+  color: var(--heading);
+  display: block;
+  text-align: center;
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+code {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+  color: var(--green);
+}
+
+.svg-container {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  overflow: hidden;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.svg-container svg { max-width: 100%; height: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  background: #334155;
+  color: var(--heading);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #334155;
+}
+
+tr:hover { background: rgba(59, 130, 246, 0.05); }
+
+.insight {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.insight::before {
+  content: "Key insight: ";
+  color: var(--golden);
+  font-weight: 700;
+}
+
+.callout {
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  font-size: 1.15rem;
+  color: var(--heading);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.controls button:hover { background: #2563eb; }
+.controls button:disabled { background: var(--muted); cursor: not-allowed; }
+
+.step-display {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  min-height: 3rem;
+  color: var(--text);
+}
+
+ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.3rem; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Structure from Topology</h1>
+<p class="subtitle">How typed operators on multiple topologies reveal hidden coherence. A worked example from magnetospheric physics.</p>
+
+<!-- ======================================================= -->
+<h2>1. What Projections Throw Away</h2>
+
+<p>You know what a projection does to a vector space. Project &Ropf;<sup>3</sup> to &Ropf;<sup>2</sup> by dropping a coordinate and you lose everything the dropped coordinate carried. If coordinates are independent, no harm. If they correlate, the projection distorts the surviving structure.</p>
+
+<p>This is not unique to linear algebra. Any time your data has multiple natural structures and you analyze one at a time, you are projecting. Spatial analysis of a multi-energy dataset throws away spectral structure. Spectral analysis at a fixed location throws away spatial context. Temporal analysis at a fixed point discards everything about how the signal propagates.</p>
+
+<p>Standard practice treats this as acceptable: analyze each structure independently, combine the results. But some features exist <em>in the coupling between structures</em>. They are not hidden in any single projection&mdash;they are absent from it. No amount of spatial analysis at any resolution will find a feature that is defined by the relationship between spatial and spectral structure. The feature is not faint; it is structurally invisible to single-topology analysis.</p>
+
+<div class="callout">
+What you need is not a better projection. It is a way to compose the topologies.
+</div>
+
+<!-- ======================================================= -->
+<h2>2. Two Field Types</h2>
+
+<p>Consider a finite set of nodes connected by some adjacency relation&mdash;a graph. Data on this graph takes one of two forms, and this distinction is not a design choice. It is the minimum structure needed to separate <em>where something is</em> from <em>how things relate</em>.</p>
+
+<div class="definition">
+  <div class="definition-title">Definition (NodeField)</div>
+  <p>A <strong>NodeField</strong> assigns one scalar value to each node. It describes the state at a location. A NodeField has no inherent directionality&mdash;the value at node <span class="math">i</span> is just <span class="math">x<sub>i</sub></span>.</p>
+</div>
+
+<div class="definition">
+  <div class="definition-title">Definition (EdgeField)</div>
+  <p>An <strong>EdgeField</strong> assigns one scalar value to each directed pair of adjacent nodes. It describes the relationship between locations. An EdgeField is inherently directional: the value on edge (<span class="math">i</span>, <span class="math">j</span>) need not equal the value on edge (<span class="math">j</span>, <span class="math">i</span>).</p>
+</div>
+
+<p>These are the only two representation types. Every quantity in the framework is either a NodeField (one value per node) or an EdgeField (one value per directed adjacency pair). There is no third type.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 750 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NodeField vs EdgeField on a 4-node graph">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/>
+    </marker>
+  </defs>
+
+  <!-- Left: NodeField -->
+  <text x="170" y="22" text-anchor="middle" fill="var(--heading)" font-size="14" font-weight="700">NodeField</text>
+  <text x="170" y="40" text-anchor="middle" fill="var(--muted)" font-size="11">one value per node</text>
+
+  <circle cx="100" cy="90" r="24" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2"/>
+  <text x="100" y="96" text-anchor="middle" fill="var(--heading)" font-size="16" font-weight="600">3</text>
+
+  <circle cx="240" cy="90" r="24" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2"/>
+  <text x="240" y="96" text-anchor="middle" fill="var(--heading)" font-size="16" font-weight="600">7</text>
+
+  <circle cx="100" cy="190" r="24" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2"/>
+  <text x="100" y="196" text-anchor="middle" fill="var(--heading)" font-size="16" font-weight="600">5</text>
+
+  <circle cx="240" cy="190" r="24" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2"/>
+  <text x="240" y="196" text-anchor="middle" fill="var(--heading)" font-size="16" font-weight="600">1</text>
+
+  <!-- Edges (undirected, thin) -->
+  <line x1="124" y1="90" x2="216" y2="90" stroke="#334155" stroke-width="1"/>
+  <line x1="100" y1="114" x2="100" y2="166" stroke="#334155" stroke-width="1"/>
+  <line x1="240" y1="114" x2="240" y2="166" stroke="#334155" stroke-width="1"/>
+  <line x1="124" y1="190" x2="216" y2="190" stroke="#334155" stroke-width="1"/>
+  <line x1="120" y1="106" x2="220" y2="174" stroke="#334155" stroke-width="1"/>
+
+  <!-- Node labels -->
+  <text x="73" y="82" fill="var(--muted)" font-size="10">A</text>
+  <text x="268" y="82" fill="var(--muted)" font-size="10">B</text>
+  <text x="73" y="200" fill="var(--muted)" font-size="10">C</text>
+  <text x="268" y="200" fill="var(--muted)" font-size="10">D</text>
+
+  <!-- Divider -->
+  <line x1="370" y1="20" x2="370" y2="220" stroke="#334155" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <!-- Right: EdgeField -->
+  <text x="560" y="22" text-anchor="middle" fill="var(--heading)" font-size="14" font-weight="700">EdgeField</text>
+  <text x="560" y="40" text-anchor="middle" fill="var(--muted)" font-size="11">one value per directed pair</text>
+
+  <circle cx="490" cy="90" r="18" fill="var(--card)" stroke="#334155" stroke-width="1.5"/>
+  <text x="490" y="95" text-anchor="middle" fill="var(--muted)" font-size="12">A</text>
+
+  <circle cx="630" cy="90" r="18" fill="var(--card)" stroke="#334155" stroke-width="1.5"/>
+  <text x="630" y="95" text-anchor="middle" fill="var(--muted)" font-size="12">B</text>
+
+  <circle cx="490" cy="190" r="18" fill="var(--card)" stroke="#334155" stroke-width="1.5"/>
+  <text x="490" y="195" text-anchor="middle" fill="var(--muted)" font-size="12">C</text>
+
+  <circle cx="630" cy="190" r="18" fill="var(--card)" stroke="#334155" stroke-width="1.5"/>
+  <text x="630" y="195" text-anchor="middle" fill="var(--muted)" font-size="12">D</text>
+
+  <!-- Directed edges with values -->
+  <line x1="510" y1="85" x2="608" y2="85" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="558" y="78" text-anchor="middle" fill="var(--green)" font-size="13" font-weight="600">+4</text>
+
+  <line x1="608" y1="95" x2="510" y2="95" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="558" y="112" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="600">&minus;4</text>
+
+  <line x1="485" y1="110" x2="485" y2="168" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="468" y="143" text-anchor="middle" fill="var(--green)" font-size="13" font-weight="600">+2</text>
+
+  <line x1="495" y1="168" x2="495" y2="110" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="512" y="143" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="600">&minus;2</text>
+
+  <line x1="510" y1="185" x2="608" y2="185" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="558" y="178" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="600">&minus;4</text>
+
+  <line x1="508" y1="103" x2="614" y2="177" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="580" y="142" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="600">&minus;2</text>
+</svg>
+</div>
+
+<p>The left panel shows a NodeField: four nodes with scalar values {3, 7, 5, 1}. The right panel shows an EdgeField on the same graph: each directed edge carries a signed value. Notice that opposite directions carry opposite signs: the A&rarr;B edge reads +4 while B&rarr;A reads &minus;4. This antisymmetry is not imposed&mdash;it is a consequence of how the EdgeField was produced. We define that operator next.</p>
+
+<!-- ======================================================= -->
+<h2>3. The Unique Bridge</h2>
+
+<p>How do you move from a NodeField to an EdgeField? There is exactly one natural transition, and its uniqueness is forced by a single requirement: <strong>translational invariance</strong>.</p>
+
+<div class="definition">
+  <div class="definition-title">Definition (Operator A : NodeField &rarr; EdgeField)</div>
+  <p>For a NodeField <span class="math">x</span> and each directed edge (<span class="math">i</span>, <span class="math">j</span>):</p>
+  <span class="math-block">A(x)<sub>ij</sub> = x<sub>j</sub> &minus; x<sub>i</sub></span>
+  <p>A extracts the pairwise difference&mdash;the relational gradient between adjacent nodes.</p>
+</div>
+
+<p><strong>Why unique.</strong> Suppose we want a function <span class="math">F</span> : NodeField &rarr; EdgeField that respects one structural constraint: if you shift every node value by the same constant <span class="math">c</span>, the edge field should not change. Formally: <span class="math">F</span>(<span class="math">x</span> + <span class="math">c</span>) = <span class="math">F</span>(<span class="math">x</span>) for all constant shifts. This is translational invariance&mdash;the absolute level of node values carries no relational information; only differences do.</p>
+
+<p>For a single edge (<span class="math">i</span>, <span class="math">j</span>), the most general linear function of two node values is <span class="math">F<sub>ij</sub></span> = <span class="math">&alpha; x<sub>i</sub></span> + <span class="math">&beta; x<sub>j</sub></span>. Translational invariance requires <span class="math">&alpha;</span>(<span class="math">x<sub>i</sub></span> + <span class="math">c</span>) + <span class="math">&beta;</span>(<span class="math">x<sub>j</sub></span> + <span class="math">c</span>) = <span class="math">&alpha; x<sub>i</sub></span> + <span class="math">&beta; x<sub>j</sub></span> for all <span class="math">c</span>, which forces <span class="math">&alpha;</span> + <span class="math">&beta;</span> = 0. Up to a constant scale, the only solution is <span class="math">x<sub>j</sub></span> &minus; <span class="math">x<sub>i</sub></span>. There are no other options. A is the unique bridge from NodeField to EdgeField.</p>
+
+<div class="insight">A is symmetric in a precise sense: A(x)<sub>ij</sub> = &minus;A(x)<sub>ji</sub>. The antisymmetry of the edge field is inherited from the commutativity of subtraction. This symmetry propagates through subsequent operators and determines what structures can emerge at each stage.</div>
+
+<h3>Pre-A Admissibility</h3>
+
+<p>Because A computes pairwise differences, any transformation applied to the NodeField <em>before</em> A must preserve pairwise differences. Which transformations qualify?</p>
+
+<ul>
+  <li><strong>Translation:</strong> <span class="math">T</span>(<span class="math">x</span>) = <span class="math">x</span> + <span class="math">c</span>. Does not alter differences. Admissible.</li>
+  <li><strong>Normalization</strong> (subtract mean): Changes differences if applied non-uniformly across subsets. Inadmissible.</li>
+  <li><strong>Smoothing</strong> (local averaging): Replaces each value with a weighted sum of neighbors. Alters pairwise differences. Inadmissible.</li>
+  <li><strong>Interpolation:</strong> Introduces values at new nodes. Alters the adjacency structure. Inadmissible.</li>
+</ul>
+
+<p>This is not a rule imposed on the user. It is a consequence of what A does. If you smooth the NodeField before applying A, the edge field reflects the smoothing kernel, not the data. The constraint is a theorem about the operator, not a convention about the workflow.</p>
+
+<!-- ======================================================= -->
+<h2>4. The Composition Chain</h2>
+
+<p>A transforms NodeField to EdgeField. Two more operators complete the chain, and both operate within EdgeField. Their order is forced by their mathematical roles.</p>
+
+<div class="definition">
+  <div class="definition-title">Definition (Operator B : EdgeField &rarr; EdgeField)</div>
+  <p><strong>B</strong> performs local relational accumulation. For each edge (<span class="math">i</span>, <span class="math">j</span>), B sums the edge values involving nodes <span class="math">i</span> and <span class="math">j</span>&mdash;aggregating the local relational context of each edge. B preserves the symmetry established by A: if the input is antisymmetric, the output remains antisymmetric.</p>
+</div>
+
+<div class="definition">
+  <div class="definition-title">Definition (Operator R : EdgeField &times; &Ropf; &rarr; EdgeField)</div>
+  <p><strong>R</strong> introduces antisymmetric <strong>circulation</strong> with a bounded parameter &rho;. In a single-topology setting, R rotates the edge field, breaking the input symmetry in a controlled way. The parameter &rho; governs the strength of this circulation. R is the operator that breaks symmetry&mdash;and breaking symmetry is what creates structure.</p>
+</div>
+
+<div class="svg-container">
+<svg viewBox="0 0 750 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Type composition chain: NodeField to EdgeField through A, B, R">
+  <defs>
+    <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--golden)"/>
+    </marker>
+  </defs>
+
+  <!-- NodeField box -->
+  <rect x="20" y="35" width="140" height="55" rx="8" fill="var(--card)" stroke="var(--blue)" stroke-width="2"/>
+  <text x="90" y="58" text-anchor="middle" fill="var(--blue)" font-size="13" font-weight="700">NodeField</text>
+  <text x="90" y="76" text-anchor="middle" fill="var(--muted)" font-size="10">per node</text>
+
+  <!-- Arrow A -->
+  <line x1="165" y1="62" x2="225" y2="62" stroke="var(--golden)" stroke-width="2.5" marker-end="url(#arr2)"/>
+  <text x="195" y="50" text-anchor="middle" fill="var(--golden)" font-size="14" font-weight="700">A</text>
+
+  <!-- EdgeField box 1 -->
+  <rect x="230" y="35" width="140" height="55" rx="8" fill="var(--card)" stroke="var(--green)" stroke-width="2"/>
+  <text x="300" y="58" text-anchor="middle" fill="var(--green)" font-size="13" font-weight="700">EdgeField</text>
+  <text x="300" y="76" text-anchor="middle" fill="var(--muted)" font-size="10">per directed pair</text>
+
+  <!-- Arrow B -->
+  <line x1="375" y1="62" x2="435" y2="62" stroke="var(--golden)" stroke-width="2.5" marker-end="url(#arr2)"/>
+  <text x="405" y="50" text-anchor="middle" fill="var(--golden)" font-size="14" font-weight="700">B</text>
+
+  <!-- EdgeField box 2 -->
+  <rect x="440" y="35" width="140" height="55" rx="8" fill="var(--card)" stroke="var(--green)" stroke-width="2"/>
+  <text x="510" y="58" text-anchor="middle" fill="var(--green)" font-size="13" font-weight="700">EdgeField</text>
+  <text x="510" y="76" text-anchor="middle" fill="var(--muted)" font-size="10">accumulated</text>
+
+  <!-- Arrow R -->
+  <line x1="585" y1="62" x2="645" y2="62" stroke="var(--golden)" stroke-width="2.5" marker-end="url(#arr2)"/>
+  <text x="615" y="50" text-anchor="middle" fill="var(--golden)" font-size="14" font-weight="700">R</text>
+  <text x="615" y="82" text-anchor="middle" fill="var(--muted)" font-size="10">(+&rho;)</text>
+
+  <!-- EdgeField box 3 -->
+  <rect x="650" y="35" width="85" height="55" rx="8" fill="var(--card)" stroke="var(--amber)" stroke-width="2"/>
+  <text x="692" y="58" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="700">Edge</text>
+  <text x="692" y="76" text-anchor="middle" fill="var(--amber)" font-size="10">+ circulation</text>
+
+  <!-- Bottom: type-check annotation -->
+  <text x="375" y="118" text-anchor="middle" fill="var(--muted)" font-size="12" font-style="italic">Composition order A &rarr; B &rarr; R is the only order that type-checks.</text>
+</svg>
+</div>
+
+<p><strong>Why this order is forced.</strong> A is the only operator that accepts NodeField input&mdash;it must come first. B accumulates edge structure and must follow A (you cannot accumulate what has not been extracted). R introduces cross-edge circulation and operates on the accumulated field. Reversing B and R would apply circulation to un-accumulated gradients&mdash;a local rotation of raw differences, which is degenerate. The composition <span class="math">E</span>(<span class="math">x</span>, &rho;) = R(B(A(<span class="math">x</span>)), &rho;) is the only type-correct chain from NodeField to the final EdgeField.</p>
+
+<p>This is not "a good design choice." It is the unique composition that type-checks. If you try any other order, you either pass the wrong type to an operator or produce a mathematically degenerate output. The chain is determined by the types.</p>
+
+<!-- ======================================================= -->
+<h2>5. Multiple Topologies</h2>
+
+<p>Everything above operates on a single graph&mdash;a single topology. The crucial extension is this: <strong>the same set of nodes can carry multiple independent topologies, and the R operator couples them.</strong></p>
+
+<p>In magnetospheric physics, satellite data has three natural structures:</p>
+
+<table>
+  <tr>
+    <th>Topology</th>
+    <th>Nodes are...</th>
+    <th>Adjacency means...</th>
+    <th>Symbol</th>
+  </tr>
+  <tr>
+    <td><strong>Spatial</strong></td>
+    <td>Measurement locations</td>
+    <td>Nearby in physical space</td>
+    <td><span class="math">S</span></td>
+  </tr>
+  <tr>
+    <td><strong>Temporal</strong></td>
+    <td>Time steps</td>
+    <td>Adjacent in time</td>
+    <td><span class="math">&tau;</span></td>
+  </tr>
+  <tr>
+    <td><strong>Component</strong></td>
+    <td>Energy channels</td>
+    <td>Adjacent in the energy spectrum</td>
+    <td><span class="math">C</span></td>
+  </tr>
+</table>
+
+<p>Each topology has its own NodeField and EdgeField. A and B operate <em>within</em> each topology independently: spatial A extracts spatial gradients; spectral A extracts spectral gradients. Nothing couples them yet.</p>
+
+<p>The coupling comes from R. In the multi-topology extension, <strong>R passes edge-field structure from one topology to the next in a directed cycle</strong>:</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 650 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Multi-topology coupling cycle S to tau to C to S">
+  <defs>
+    <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--golden)"/>
+    </marker>
+  </defs>
+
+  <!-- S circle (top) -->
+  <circle cx="325" cy="75" r="60" fill="rgba(59, 130, 246, 0.1)" stroke="var(--blue)" stroke-width="2.5"/>
+  <text x="325" y="65" text-anchor="middle" fill="var(--heading)" font-size="18" font-weight="700">Spatial</text>
+  <text x="325" y="85" text-anchor="middle" fill="var(--blue)" font-size="13" font-style="italic">A &rarr; B</text>
+  <text x="325" y="25" text-anchor="middle" fill="var(--blue)" font-size="14" font-weight="600">S</text>
+
+  <!-- tau circle (bottom-left) -->
+  <circle cx="145" cy="280" r="60" fill="rgba(168, 85, 247, 0.1)" stroke="var(--purple)" stroke-width="2.5"/>
+  <text x="145" y="270" text-anchor="middle" fill="var(--heading)" font-size="18" font-weight="700">Temporal</text>
+  <text x="145" y="290" text-anchor="middle" fill="var(--purple)" font-size="13" font-style="italic">A &rarr; B</text>
+  <text x="85" y="235" text-anchor="middle" fill="var(--purple)" font-size="14" font-weight="600">&tau;</text>
+
+  <!-- C circle (bottom-right) -->
+  <circle cx="505" cy="280" r="60" fill="rgba(34, 197, 94, 0.1)" stroke="var(--green)" stroke-width="2.5"/>
+  <text x="505" y="270" text-anchor="middle" fill="var(--heading)" font-size="18" font-weight="700">Component</text>
+  <text x="505" y="290" text-anchor="middle" fill="var(--green)" font-size="13" font-style="italic">A &rarr; B</text>
+  <text x="565" y="235" text-anchor="middle" fill="var(--green)" font-size="14" font-weight="600">C</text>
+
+  <!-- R arrows: S → tau -->
+  <path d="M275,120 Q180,180 170,220" fill="none" stroke="var(--golden)" stroke-width="3" marker-end="url(#arr3)"/>
+  <text x="205" y="165" text-anchor="middle" fill="var(--golden)" font-size="16" font-weight="700">R</text>
+
+  <!-- R arrows: tau → C -->
+  <path d="M205,295 Q325,330 445,295" fill="none" stroke="var(--golden)" stroke-width="3" marker-end="url(#arr3)"/>
+  <text x="325" y="325" text-anchor="middle" fill="var(--golden)" font-size="16" font-weight="700">R</text>
+
+  <!-- R arrows: C → S -->
+  <path d="M480,220 Q470,180 375,120" fill="none" stroke="var(--golden)" stroke-width="3" marker-end="url(#arr3)"/>
+  <text x="445" y="165" text-anchor="middle" fill="var(--golden)" font-size="16" font-weight="700">R</text>
+
+  <!-- Cycle direction label -->
+  <text x="325" y="230" text-anchor="middle" fill="var(--golden)" font-size="12" font-style="italic">directed cycle</text>
+</svg>
+</div>
+
+<p>Read the arrows: spatial edge structure feeds into temporal circulation. Temporal edge structure feeds into component circulation. Component edge structure feeds back into spatial circulation. The cycle is directed&mdash;the order <span class="math">S</span> &rarr; <span class="math">&tau;</span> &rarr; <span class="math">C</span> &rarr; <span class="math">S</span> is fixed. Reversing it gives different results because R is antisymmetric. The cycle direction is part of the structure.</p>
+
+<p>Each topology runs its own A &rarr; B pipeline independently. R is the only inter-topology operator. It takes the accumulated edge field from one topology and contributes circulation to the next. The composite <span class="math">E</span>(<span class="math">x</span>, &rho;) = R(B(A(<span class="math">x</span>)), &rho;) now operates across all three topologies simultaneously.</p>
+
+<div class="insight">No single topology "sees" the others directly. The coupling is mediated entirely by R. This means the cross-topology structure that emerges is not injected by the analyst&mdash;it is produced by the coupling operator acting on independently-extracted gradients. If no cross-topology structure exists in the data, R produces none.</div>
+
+<!-- ======================================================= -->
+<h2>6. Step Through It</h2>
+
+<p>Apply the single-topology pipeline (A &rarr; B) to a four-node graph. The NodeField values are {3, 7, 5, 1} on a diamond graph (A&ndash;B, A&ndash;C, B&ndash;C, B&ndash;D, C&ndash;D).</p>
+
+<div class="controls">
+  <button id="pipe-next" onclick="pipeStep()">Next Step</button>
+  <button id="pipe-reset" onclick="pipeReset()">Reset</button>
+  <span id="pipe-counter">Ready</span>
+</div>
+
+<div class="step-display" id="pipe-display">Click "Next Step" to begin. We have four nodes A(3), B(7), C(5), D(1) and five edges.</div>
+
+<div class="svg-container" id="pipe-viz">
+<svg id="pipe-svg" viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/>
+    </marker>
+  </defs>
+
+  <!-- Nodes -->
+  <circle id="pn-a" cx="180" cy="50" r="28" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2"/>
+  <text id="pnl-a" x="180" y="56" text-anchor="middle" fill="var(--heading)" font-size="18" font-weight="600">3</text>
+  <text x="180" y="26" text-anchor="middle" fill="var(--muted)" font-size="11">A</text>
+
+  <circle id="pn-b" cx="520" cy="50" r="28" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2"/>
+  <text id="pnl-b" x="520" y="56" text-anchor="middle" fill="var(--heading)" font-size="18" font-weight="600">7</text>
+  <text x="520" y="26" text-anchor="middle" fill="var(--muted)" font-size="11">B</text>
+
+  <circle id="pn-c" cx="350" cy="140" r="28" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2"/>
+  <text id="pnl-c" x="350" y="146" text-anchor="middle" fill="var(--heading)" font-size="18" font-weight="600">5</text>
+  <text x="350" y="175" text-anchor="middle" fill="var(--muted)" font-size="11">C</text>
+
+  <circle id="pn-d" cx="350" cy="230" r="28" fill="#1e3a5f" stroke="var(--blue)" stroke-width="2"/>
+  <text id="pnl-d" x="350" y="236" text-anchor="middle" fill="var(--heading)" font-size="18" font-weight="600">1</text>
+  <text x="385" y="236" text-anchor="start" fill="var(--muted)" font-size="11">D</text>
+
+  <!-- Edges -->
+  <line x1="205" y1="58" x2="323" y2="132" stroke="#334155" stroke-width="1.5"/>
+  <line x1="210" y1="50" x2="490" y2="50" stroke="#334155" stroke-width="1.5"/>
+  <line x1="377" y1="132" x2="495" y2="58" stroke="#334155" stroke-width="1.5"/>
+  <line x1="350" y1="168" x2="350" y2="200" stroke="#334155" stroke-width="1.5"/>
+  <line x1="205" y1="68" x2="328" y2="218" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Edge labels (initially hidden) -->
+  <text id="pe-ab" x="350" y="40" text-anchor="middle" fill="var(--green)" font-size="14" font-weight="600" opacity="0"></text>
+  <text id="pe-ac" x="248" y="108" text-anchor="middle" fill="var(--green)" font-size="14" font-weight="600" opacity="0"></text>
+  <text id="pe-bc" x="452" y="108" text-anchor="middle" fill="var(--green)" font-size="14" font-weight="600" opacity="0"></text>
+  <text id="pe-cd" x="365" y="190" text-anchor="middle" fill="var(--green)" font-size="14" font-weight="600" opacity="0"></text>
+  <text id="pe-ad" x="248" y="160" text-anchor="middle" fill="var(--green)" font-size="14" font-weight="600" opacity="0"></text>
+</svg>
+</div>
+
+<script>
+(function() {
+  var step = 0;
+  var steps = [
+    { msg: "Apply A: compute pairwise differences for each edge. A→B: 7−3 = +4. A→C: 5−3 = +2. B→C: 5−7 = −2. C→D: 1−5 = −4. A→D: 1−3 = −2.",
+      edges: {ab:"+4", ac:"+2", bc:"−2", cd:"−4", ad:"−2"}, nodeOp: 0.4, edgeOp: 1, label: "After A" },
+    { msg: "Apply B: accumulate local context. For each edge, B sums the edge values at its endpoints. Edge A→B: edges at A (+4,+2,−2) sum to +4; edges at B (+4,−2) sum to +2. B combines these. Every edge now reflects its neighborhood’s relational pattern, not just the raw gradient.",
+      edges: {ab:"+6", ac:"+2", bc:"−6", cd:"−8", ad:"−4"}, nodeOp: 0.3, edgeOp: 1, label: "After B" },
+    { msg: "After B, the edge field is still symmetric (antisymmetric in both directions). B has amplified the dominant pattern: the B→D gradient chain (−6, −8) now dominates. This is the accumulated relational structure of the graph — ready for R to introduce circulation.",
+      edges: {ab:"+6", ac:"+2", bc:"−6", cd:"−8", ad:"−4"}, nodeOp: 0.3, edgeOp: 1, label: "B amplified", done: true }
+  ];
+
+  window.pipeStep = function() {
+    if (step >= steps.length) return;
+    var s = steps[step];
+    document.getElementById('pipe-display').textContent = s.msg;
+    document.getElementById('pipe-counter').textContent = s.label;
+
+    if (s.edges) {
+      var pairs = {ab:'pe-ab', ac:'pe-ac', bc:'pe-bc', cd:'pe-cd', ad:'pe-ad'};
+      for (var k in pairs) {
+        var el = document.getElementById(pairs[k]);
+        el.textContent = s.edges[k];
+        el.setAttribute('opacity', s.edgeOp);
+      }
+    }
+
+    ['pn-a','pn-b','pn-c','pn-d'].forEach(function(id) {
+      document.getElementById(id).setAttribute('opacity', s.nodeOp);
+    });
+    ['pnl-a','pnl-b','pnl-c','pnl-d'].forEach(function(id) {
+      document.getElementById(id).setAttribute('opacity', s.nodeOp);
+    });
+
+    if (s.done) document.getElementById('pipe-next').disabled = true;
+    step++;
+  };
+
+  window.pipeReset = function() {
+    step = 0;
+    document.getElementById('pipe-display').textContent = 'Click "Next Step" to begin. We have four nodes A(3), B(7), C(5), D(1) and five edges.';
+    document.getElementById('pipe-counter').textContent = 'Ready';
+    document.getElementById('pipe-next').disabled = false;
+    ['pe-ab','pe-ac','pe-bc','pe-cd','pe-ad'].forEach(function(id) {
+      document.getElementById(id).setAttribute('opacity', 0);
+    });
+    ['pn-a','pn-b','pn-c','pn-d','pnl-a','pnl-b','pnl-c','pnl-d'].forEach(function(id) {
+      document.getElementById(id).setAttribute('opacity', 1);
+    });
+  };
+})();
+</script>
+
+<!-- ======================================================= -->
+<h2>7. The Magnetospheric Case</h2>
+
+<p>Earth's magnetosphere is the region of space dominated by Earth's magnetic field, shaped by the solar wind into a compressed dayside and an elongated nightside tail. Satellites orbiting through this region measure particle flux across a range of energies at each point along their trajectory. The data is a function of three variables: where (spatial position), what (particle energy), and when (time).</p>
+
+<h3>What single-topology analysis sees</h3>
+
+<p><strong>Spatial analysis alone</strong> (kriging, interpolation, variograms): treats each energy channel independently. At any given energy, the spatial map shows gradients and trends. These are real but incomplete. A sharp spatial gradient at 10 keV might be part of an injection boundary or it might be a spatial artifact. Without spectral context, you cannot distinguish them.</p>
+
+<p><strong>Spectral analysis alone</strong> (energy spectra at fixed locations): shows the energy distribution at each point. A hardening spectrum (shift toward higher energies) at one location might indicate freshly injected plasma or an artifact of the satellite's orbit. Without spatial context, you cannot tell.</p>
+
+<p><strong>Temporal analysis alone</strong>: shows how values change at a fixed point. A sudden increase might be local or global, injection or compression. Without spatial and spectral context, you cannot resolve the ambiguity.</p>
+
+<h3>What the coupling reveals</h3>
+
+<p>Apply the multi-topology kernel. Each topology runs its own A &rarr; B pipeline. R couples them through the directed cycle <span class="math">S</span> &rarr; <span class="math">&tau;</span> &rarr; <span class="math">C</span> &rarr; <span class="math">S</span>.</p>
+
+<p>Two classes of structure emerge that were invisible in any single projection:</p>
+
+<div class="definition">
+  <div class="definition-title">Field-Aligned Currents</div>
+  <p>Electrical currents flowing along Earth's magnetic field lines. They are coherent across spatial AND spectral topologies: a specific spatial pattern of particle flux at specific energies, extending along specific field-line geometries. Single-topology spatial analysis sees blurred gradients because the spectral specificity is projected away. The multi-topology coupling resolves them because the spectral&ndash;spatial R coupling preserves exactly the cross-topology coherence that defines the current.</p>
+</div>
+
+<div class="definition">
+  <div class="definition-title">Injection Boundaries</div>
+  <p>Boundaries where plasma from the magnetotail is injected into the inner magnetosphere. An injection boundary is a simultaneous change in spatial gradient AND spectral gradient: the spectrum hardens (shifts to higher energies) at the same spatial boundary where flux increases. This feature exists IN the relationship between spatial and spectral structure. It is not a spatial feature with spectral consequences; it is a cross-topology feature. The R operator coupling <span class="math">C</span> &rarr; <span class="math">S</span> is what makes it visible.</p>
+</div>
+
+<div class="svg-container">
+<svg viewBox="0 0 750 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Single-topology vs coupled analysis comparison">
+  <!-- Left panel: single-topology -->
+  <rect x="15" y="10" width="340" height="260" rx="8" fill="none" stroke="var(--muted)" stroke-dasharray="6 3" stroke-width="1.5"/>
+  <text x="185" y="35" text-anchor="middle" fill="var(--heading)" font-size="14" font-weight="700">Single-Topology Analysis</text>
+
+  <!-- Spatial sub-panel -->
+  <rect x="30" y="50" width="150" height="90" rx="6" fill="var(--card)"/>
+  <text x="105" y="70" text-anchor="middle" fill="var(--blue)" font-size="11" font-weight="600">Spatial only</text>
+  <!-- Blurred gradient representation -->
+  <rect x="45" y="80" width="120" height="10" rx="3" fill="linear-gradient(90deg, #1e3a5f, #3b82f6)" opacity="0.6"/>
+  <rect x="45" y="95" width="120" height="10" rx="3" fill="linear-gradient(90deg, #1e3a5f, #2563eb)" opacity="0.4"/>
+  <rect x="45" y="110" width="120" height="10" rx="3" fill="linear-gradient(90deg, #1e3a5f, #1d4ed8)" opacity="0.3"/>
+  <text x="105" y="133" text-anchor="middle" fill="var(--muted)" font-size="9" font-style="italic">blurred gradients</text>
+
+  <!-- Spectral sub-panel -->
+  <rect x="195" y="50" width="150" height="90" rx="6" fill="var(--card)"/>
+  <text x="270" y="70" text-anchor="middle" fill="var(--green)" font-size="11" font-weight="600">Spectral only</text>
+  <!-- Flat spectra representation -->
+  <line x1="210" y1="120" x2="260" y2="90" stroke="var(--green)" stroke-width="1.5" opacity="0.5"/>
+  <line x1="260" y1="90" x2="330" y2="105" stroke="var(--green)" stroke-width="1.5" opacity="0.5"/>
+  <line x1="210" y1="110" x2="260" y2="85" stroke="var(--green)" stroke-width="1.5" opacity="0.3"/>
+  <line x1="260" y1="85" x2="330" y2="95" stroke="var(--green)" stroke-width="1.5" opacity="0.3"/>
+  <text x="270" y="133" text-anchor="middle" fill="var(--muted)" font-size="9" font-style="italic">ambiguous spectra</text>
+
+  <!-- "Missing" label -->
+  <text x="185" y="175" text-anchor="middle" fill="var(--red)" font-size="12" font-weight="600">Cross-topology features absent</text>
+  <text x="185" y="195" text-anchor="middle" fill="var(--muted)" font-size="10">FACs: blurred into spatial gradients</text>
+  <text x="185" y="212" text-anchor="middle" fill="var(--muted)" font-size="10">Injection boundaries: ambiguous</text>
+  <text x="185" y="255" text-anchor="middle" fill="var(--red)" font-size="32">&cross;</text>
+
+  <!-- Right panel: coupled -->
+  <rect x="385" y="10" width="350" height="260" rx="8" fill="none" stroke="var(--golden)" stroke-dasharray="6 3" stroke-width="1.5"/>
+  <text x="560" y="35" text-anchor="middle" fill="var(--heading)" font-size="14" font-weight="700">Multi-Topology Coupling</text>
+
+  <!-- Coupled spatial-spectral diagram -->
+  <rect x="400" y="50" width="320" height="130" rx="6" fill="var(--card)"/>
+  <text x="560" y="70" text-anchor="middle" fill="var(--golden)" font-size="11" font-weight="600">S &harr; &tau; &harr; C coupled</text>
+
+  <!-- Sharp injection boundary representation -->
+  <line x1="500" y1="85" x2="500" y2="160" stroke="var(--amber)" stroke-width="3"/>
+  <text x="485" y="82" text-anchor="end" fill="var(--muted)" font-size="9">inner</text>
+  <text x="515" y="82" text-anchor="start" fill="var(--muted)" font-size="9">injection</text>
+
+  <!-- Left of boundary: soft spectrum -->
+  <rect x="420" y="95" width="70" height="8" rx="2" fill="var(--blue)" opacity="0.7"/>
+  <rect x="420" y="108" width="55" height="8" rx="2" fill="var(--blue)" opacity="0.5"/>
+  <rect x="420" y="121" width="30" height="8" rx="2" fill="var(--blue)" opacity="0.3"/>
+  <text x="455" y="150" text-anchor="middle" fill="var(--muted)" font-size="9">soft spectrum</text>
+
+  <!-- Right of boundary: hard spectrum -->
+  <rect x="510" y="95" width="30" height="8" rx="2" fill="var(--green)" opacity="0.3"/>
+  <rect x="510" y="108" width="55" height="8" rx="2" fill="var(--green)" opacity="0.5"/>
+  <rect x="510" y="121" width="80" height="8" rx="2" fill="var(--green)" opacity="0.8"/>
+  <text x="555" y="150" text-anchor="middle" fill="var(--muted)" font-size="9">hard spectrum</text>
+
+  <!-- FAC representation -->
+  <path d="M640,90 Q660,125 640,160" fill="none" stroke="var(--purple)" stroke-width="2"/>
+  <path d="M660,90 Q680,125 660,160" fill="none" stroke="var(--purple)" stroke-width="2"/>
+  <text x="670" y="130" text-anchor="start" fill="var(--purple)" font-size="9">FAC</text>
+
+  <!-- "Visible" label -->
+  <text x="560" y="195" text-anchor="middle" fill="var(--green)" font-size="12" font-weight="600">Cross-topology features resolved</text>
+  <text x="560" y="212" text-anchor="middle" fill="var(--muted)" font-size="10">FACs: sharp, spectrally specific</text>
+  <text x="560" y="229" text-anchor="middle" fill="var(--muted)" font-size="10">Injection boundaries: spatial+spectral</text>
+  <text x="560" y="255" text-anchor="middle" fill="var(--green)" font-size="32">&check;</text>
+</svg>
+</div>
+
+<p>The comparison is not "sharper vs. blurrier." It is "present vs. absent." The injection boundary does not become <em>clearer</em> with coupling&mdash;it becomes <em>visible for the first time</em>. It is a cross-topology feature: defined by the simultaneous spatial and spectral gradient. No single-topology analysis at any resolution can detect it, because it does not live in any single topology.</p>
+
+<!-- ======================================================= -->
+<h2>8. No Optimization Required</h2>
+
+<p>Here is what the framework does <em>not</em> do:</p>
+
+<ul>
+  <li>No loss function. No cost to minimize.</li>
+  <li>No parameters to fit. (&rho; is bounded but not optimized.)</li>
+  <li>No training data. No validation set.</li>
+  <li>No model selection. No comparison of candidate models.</li>
+  <li>No specification of what to look for. No target features.</li>
+</ul>
+
+<p>The operators are defined by type constraints: A is the unique NodeField&rarr;EdgeField transition satisfying translational invariance. B is local accumulation. R is bounded antisymmetric circulation. The composition order is forced by type-checking. The multi-topology coupling cycle is determined by declaring which topologies exist.</p>
+
+<p>Everything that emerges&mdash;field-aligned currents, injection boundaries, coherence patterns&mdash;is determined by the topology and the data. The kernel does not look for structure. It reveals what the topology admits.</p>
+
+<div class="theorem">
+  <div class="theorem-title">The Structural Contrast</div>
+  <p><strong>Standard analysis:</strong> Specify a model (target structure) &rarr; Fit parameters to data &rarr; Evaluate goodness of fit &rarr; Select among candidate models.</p>
+  <p><strong>This framework:</strong> Declare topologies &rarr; Apply type-determined operators &rarr; Observe what emerges. The "model" is the topology itself. The operators are not chosen; they are derived. What appears is what the structure admits&mdash;nothing more, nothing less.</p>
+</div>
+
+<p>This is not anti-quantitative. The operators produce numerical edge fields that can be measured, compared, and tested against observations. The difference is where the structure comes from. In model fitting, structure is hypothesized and parameters are adjusted until data complies. Here, structure is a consequence of topology and type constraints. If no cross-topology coherence exists in the data, the kernel produces none. It cannot hallucinate structure that the topology does not support.</p>
+
+<!-- ======================================================= -->
+<h2>9. Coda</h2>
+
+<p>The pattern generalizes beyond magnetospheric physics. Any domain where data carries multiple independent structures&mdash;spatial and temporal, syntactic and semantic, physical and chemical&mdash;is a candidate for this approach:</p>
+
+<ol>
+  <li>Identify the natural topologies in the data.</li>
+  <li>Define NodeField and EdgeField on each topology.</li>
+  <li>Apply the type-determined chain A &rarr; B within each topology.</li>
+  <li>Couple the topologies through R and observe what emerges.</li>
+</ol>
+
+<p>The composition order is not a recommendation. It is forced by the types. The coupling cycle is not a parameter. It is declared by the analyst based on domain knowledge of which structures should interact. What emerges is what the topology admits.</p>
+
+<p>This is systems thinking in the precise sense: the system's behavior is determined by the structure of relationships between its parts, not by the properties of the parts themselves. The operators do not act on values; they act on <em>differences between values</em>. The framework is purely relational. And because it is purely relational, the mathematical structure transfers across domains without modification. Only the labels change.</p>
+
+<!-- ======================================================= -->
+<div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid #334155;color:var(--muted);font-size:0.85rem;">
+  <p style="margin-bottom:0.5rem;"><strong>References &amp; further reading.</strong></p>
+  <ul style="list-style: none; margin-left: 0; font-size: 0.85rem;">
+    <li>Invariant Relational Kernel V3 (ABRCE, single topology): <a href="https://github.com/Relational-Relativity-Corporation/Invariant_Relational_Kernel_ABRCE" style="color:var(--blue);">GitHub</a></li>
+    <li>Autocatalytic Closure for the Working Mathematician: <a href="../acs-closure-v2/" style="color:var(--blue);">Tutorial</a></li>
+  </ul>
+  <p style="margin-top:0.75rem;">Structure from Topology &mdash; B. Stephenson, 2026.</p>
+</div>
+
+</div>
+</body>
+</html>
