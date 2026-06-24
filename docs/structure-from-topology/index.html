@@ -217,6 +217,13 @@ li { margin-bottom: 0.3rem; }
 <h1>Structure from Topology</h1>
 <p class="subtitle">How typed operators on multiple topologies reveal hidden coherence. A worked example from magnetospheric physics.</p>
 
+<div class="definition" style="border-left-color: var(--amber);">
+  <div class="definition-title" style="color: var(--amber);">Abstract</div>
+  <p>When data carries multiple independent structures&mdash;spatial, spectral, temporal&mdash;standard practice analyzes each one separately, projecting away the others. Some features exist only in the coupling between structures and are invisible to any single-structure analysis, not because they are faint but because they are structurally absent from every projection.</p>
+  <p>We present a minimal framework for coupled multi-topology analysis built from two field types (NodeField, EdgeField) and three operators (A, B, R) whose composition order is forced by their type signatures, not chosen by the analyst. The first operator, A, is the unique NodeField&rarr;EdgeField transition satisfying translational invariance. A and B operate within each topology independently; R couples topologies through a directed cycle. No optimization target, loss function, or model selection is involved.</p>
+  <p style="margin-bottom:0;">Applied to magnetospheric satellite data with spatial, spectral, and temporal topologies, the coupled kernel resolves field-aligned currents and injection boundaries&mdash;cross-topology features that do not appear in any single-topology projection. The mathematical structure is purely relational and transfers across domains without modification.</p>
+</div>
+
 <!-- ======================================================= -->
 <h2>1. What Projections Throw Away</h2>
 
