@@ -366,10 +366,12 @@ What I needed was not a better projection. It was a way to compose the topologie
 
 <p>This is not a rule I imposed. It is a consequence of what A does. If you smooth the NodeField before applying A, the edge field reflects the smoothing kernel, not the data. The constraint is a theorem about the operator, not a convention about the workflow. This is the part I think is new: not A itself&mdash;which is d<sup>0</sup>&mdash;but the explicit characterization of what standard preprocessing steps do to the relational structure A extracts.</p>
 
+<p>One consequence of identifying A with d<sup>0</sup> deserves attention before we move on. The image of the coboundary map is the space of <strong>exact 1-cochains</strong>&mdash;edge fields that are pure gradients, with zero circulation around every cycle in the graph. Everything downstream of A starts in this gradient sector. The question for the next two operators is: which one stays there, and which one leaves?</p>
+
 <!-- ======================================================= -->
 <h2>4. The Composition Chain</h2>
 
-<p>A transforms NodeField to EdgeField. Two more operators complete the chain, and both operate within EdgeField. Their composition requires some care.</p>
+<p>A transforms NodeField to EdgeField. Two more operators complete the chain, and both operate within EdgeField. Their composition requires some care&mdash;because the two operators do fundamentally different things to the gradient structure that A established.</p>
 
 <h3>A comes first: a type constraint</h3>
 
@@ -379,23 +381,23 @@ What I needed was not a better projection. It was a way to compose the topologie
 
 <div class="definition">
   <div class="definition-title">Definition (Operator B : EdgeField &rarr; EdgeField)</div>
-  <p><strong>B</strong> accumulates local relational context. For each edge (<span class="math">i</span>, <span class="math">j</span>), B sums the edge values at the shared endpoints&mdash;aggregating contributions from neighboring edges along the same axis. Directional identity is preserved: gradients along one axis do not bleed into another.</p>
-  <p>B is symmetric: <span class="math">B(e)<sub>ij</sub></span> = <span class="math">&minus;B(e)<sub>ji</sub></span> when the input is antisymmetric. It amplifies existing relational patterns without breaking the symmetry that A established.</p>
+  <p><strong>B</strong> accumulates local relational context. For each directed edge (<span class="math">i</span>, <span class="math">j</span>), B adds to the edge value a contribution from the edges sharing its endpoints along the same axis, so that each edge comes to encode not just its own gradient but the gradient pattern of its neighborhood. Contributions are combined with the sign convention inherited from A, so that the accumulation respects edge direction: the value built up on (<span class="math">i</span>, <span class="math">j</span>) is the negation of the value built up on (<span class="math">j</span>, <span class="math">i</span>).</p>
+  <p><strong>B preserves antisymmetry.</strong> If the input edge field is antisymmetric&mdash;<span class="math">e</span>(<span class="math">i</span>,<span class="math">j</span>) = &minus;<span class="math">e</span>(<span class="math">j</span>,<span class="math">i</span>), as everything downstream of A is&mdash;then B&rsquo;s output is antisymmetric as well: <span class="math">B(e)</span>(<span class="math">i</span>,<span class="math">j</span>) = &minus;<span class="math">B(e)</span>(<span class="math">j</span>,<span class="math">i</span>). B does not create circulation or couple distinct axes; it amplifies and locally smooths the relational structure already present, leaving the field within the image of the coboundary map. In discrete-calculus terms, <strong>B keeps the field curl-free</strong>: it is still, up to the accumulation, a gradient.</p>
 </div>
 
 <h3>R: antisymmetric circulation</h3>
 
 <div class="definition">
   <div class="definition-title">Definition (Operator R : EdgeField &times; &Ropf; &rarr; EdgeField)</div>
-  <p><strong>R</strong> introduces <strong>circulation</strong>&mdash;the antisymmetric cross-term that symmetric accumulation cannot produce. It couples across axes, creating rotational structure from the accumulated gradients. The parameter &rho; &isin; &Ropf; controls coupling strength and is bounded.</p>
-  <p>R is antisymmetric: <span class="math">R(e)<sub>ij</sub></span> = <span class="math">&minus;R(e)<sub>ji</sub></span>. Circulation is the symmetry-breaking step&mdash;and breaking symmetry is what creates structure beyond what accumulation alone can produce.</p>
+  <p><strong>R</strong> introduces <strong>circulation</strong>&mdash;the component that local accumulation cannot produce. B builds up gradient structure but leaves the field curl-free: it remains, in discrete-calculus terms, the coboundary of some node field. A pure gradient has no circulation. R adds exactly the part B cannot: a rotational component that takes the field <em>out</em> of the image of the coboundary map. The parameter &rho; &isin; &Ropf; controls the strength of this added circulation and is bounded.</p>
+  <p><strong>What R breaks.</strong> Both B and R preserve edge antisymmetry&mdash;<span class="math">R(e)</span>(<span class="math">i</span>,<span class="math">j</span>) = &minus;<span class="math">R(e)</span>(<span class="math">j</span>,<span class="math">i</span>), same as B. So antisymmetry is <em>not</em> the symmetry that distinguishes them. The symmetry R breaks is the <strong>curl-free property</strong>: B&rsquo;s output is a gradient (zero circulation around every cycle); R&rsquo;s output is not. This is the precise sense in which R &ldquo;breaks symmetry and creates structure&rdquo;&mdash;it produces the rotational, non-gradient component of the edge field. In two or more dimensions, this is where perpendicular-axis coupling lives; in one dimension, it is the forward-backward directional bias that creates circulation around the ring. Accumulation alone can never produce it, because accumulation of gradients stays a gradient.</p>
 </div>
 
 <h3>Why B before R</h3>
 
 <p>After A, we are in EdgeField. Both B and R operate there&mdash;both accept EdgeField and return EdgeField. So the ordering B&rarr;R is <strong>not</strong> forced by types. It is forced by what the operators do.</p>
 
-<p>B accumulates local context, giving each edge information about its neighborhood. R introduces cross-axis coupling. Accumulating before coupling gives R structured input&mdash;edges that already encode local relational patterns. Coupling raw gradients (R before B) is mathematically well-defined but produces noise rather than structure: you are rotating differences that have no local context, which is degenerate.</p>
+<p>B keeps the field in the gradient sector&mdash;amplifying and extending the coboundary structure that A established. R then introduces the non-gradient component: circulation. Accumulating before coupling gives R structured input&mdash;edges that already encode local relational patterns. Coupling raw gradients (R before B) is mathematically well-defined but produces noise rather than structure: you are introducing circulation into differences that have no local context.</p>
 
 <p>This is an empirical finding, not a type-theoretic proof. I tested both orderings. B&rarr;R produces sustained, physically meaningful dynamics. R&rarr;B does not.</p>
 
