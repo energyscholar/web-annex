@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Structure from Topology: Typed Operators on Multiple Topologies</title>
+<title>Structure from Topology: A Systems-Thinking Worked Example</title>
 <style>
 :root {
   --bg: #0f172a;
@@ -215,13 +215,13 @@ li { margin-bottom: 0.3rem; }
 <div class="container">
 
 <h1>Structure from Topology</h1>
-<p class="subtitle">How typed operators on multiple topologies reveal hidden coherence. A worked example from magnetospheric physics.</p>
+<p class="subtitle">What coupled topologies revealed in magnetospheric data &mdash; a systems-thinking worked example.</p>
 
 <div class="definition" style="border-left-color: var(--amber);">
   <div class="definition-title" style="color: var(--amber);">Abstract</div>
-  <p>When data carries multiple independent structures&mdash;spatial, spectral, temporal&mdash;standard practice analyzes each one separately, projecting away the others. Some features exist only in the coupling between structures and are invisible to any single-structure analysis, not because they are faint but because they are structurally absent from every projection.</p>
-  <p>We present a minimal framework for coupled multi-topology analysis built from two field types (NodeField, EdgeField) and three operators (A, B, R) whose composition order is forced by their type signatures, not chosen by the analyst. The first operator, A, is the unique NodeField&rarr;EdgeField transition satisfying translational invariance. A and B operate within each topology independently; R couples topologies through a directed cycle. No optimization target, loss function, or model selection is involved.</p>
-  <p style="margin-bottom:0;">Applied to magnetospheric satellite data with spatial, spectral, and temporal topologies, the coupled kernel resolves field-aligned currents and injection boundaries&mdash;cross-topology features that do not appear in any single-topology projection. The mathematical structure is purely relational and transfers across domains without modification.</p>
+  <p>A colleague asked me to share my experience using systems thinking to solve problems. Here is one from magnetospheric physics&mdash;not because the domain matters, but because the structural pattern transfers.</p>
+  <p>I was analyzing satellite data that carried three independent structures: spatial, spectral, and temporal. Standard practice handles each one separately, projecting away the others. I kept finding features in the raw data that disappeared under single-structure analysis. So I built a minimal relational framework to couple the structures: two field types, three operators whose composition is constrained by their types and mathematical content, and a directed coupling cycle between topologies.</p>
+  <p style="margin-bottom:0;">The framework resolved cross-topology features&mdash;field-aligned currents, injection boundaries&mdash;that single-topology analysis could not cleanly isolate. No optimization target, loss function, or model selection was involved. This tutorial walks through the construction, the constraints that determine it, and what it revealed.</p>
 </div>
 
 <!-- ======================================================= -->
@@ -229,12 +229,12 @@ li { margin-bottom: 0.3rem; }
 
 <p>You know what a projection does to a vector space. Project &Ropf;<sup>3</sup> to &Ropf;<sup>2</sup> by dropping a coordinate and you lose everything the dropped coordinate carried. If coordinates are independent, no harm. If they correlate, the projection distorts the surviving structure.</p>
 
-<p>This is not unique to linear algebra. Any time your data has multiple natural structures and you analyze one at a time, you are projecting. Spatial analysis of a multi-energy dataset throws away spectral structure. Spectral analysis at a fixed location throws away spatial context. Temporal analysis at a fixed point discards everything about how the signal propagates.</p>
+<p>This is not unique to linear algebra. Any time data has multiple natural structures and you analyze one at a time, you are projecting. Spatial analysis of a multi-energy dataset throws away spectral structure. Spectral analysis at a fixed location throws away spatial context. Temporal analysis at a fixed point discards everything about how the signal propagates.</p>
 
-<p>Standard practice treats this as acceptable: analyze each structure independently, combine the results. But some features exist <em>in the coupling between structures</em>. They are not hidden in any single projection&mdash;they are absent from it. No amount of spatial analysis at any resolution will find a feature that is defined by the relationship between spatial and spectral structure. The feature is not faint; it is structurally invisible to single-topology analysis.</p>
+<p>Standard practice treats this as acceptable: analyze each structure independently, combine the results. But some features exist <em>in the coupling between structures</em>. They are not hidden in any single projection&mdash;they are absent from it. A spatial analysis at any resolution cannot find a feature that is defined by the relationship between spatial and spectral structure. The feature is not faint; it is structurally inaccessible to single-topology methods.</p>
 
 <div class="callout">
-What you need is not a better projection. It is a way to compose the topologies.
+What I needed was not a better projection. It was a way to compose the topologies.
 </div>
 
 <!-- ======================================================= -->
@@ -252,7 +252,7 @@ What you need is not a better projection. It is a way to compose the topologies.
   <p>An <strong>EdgeField</strong> assigns one scalar value to each directed pair of adjacent nodes. It describes the relationship between locations. An EdgeField is inherently directional: the value on edge (<span class="math">i</span>, <span class="math">j</span>) need not equal the value on edge (<span class="math">j</span>, <span class="math">i</span>).</p>
 </div>
 
-<p>These are the only two representation types. Every quantity in the framework is either a NodeField (one value per node) or an EdgeField (one value per directed adjacency pair). There is no third type.</p>
+<p>These are the only two representation types. Every quantity in the framework is either a NodeField (one value per node) or an EdgeField (one value per directed adjacency pair). Readers familiar with algebraic topology will recognize these as 0-cochains and 1-cochains on the graph.</p>
 
 <div class="svg-container">
 <svg viewBox="0 0 750 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NodeField vs EdgeField on a 4-node graph">
@@ -331,12 +331,12 @@ What you need is not a better projection. It is a way to compose the topologies.
 </svg>
 </div>
 
-<p>The left panel shows a NodeField: four nodes with scalar values {3, 7, 5, 1}. The right panel shows an EdgeField on the same graph: each directed edge carries a signed value. Notice that opposite directions carry opposite signs: the A&rarr;B edge reads +4 while B&rarr;A reads &minus;4. This antisymmetry is not imposed&mdash;it is a consequence of how the EdgeField was produced. We define that operator next.</p>
+<p>The left panel shows a NodeField: four nodes with scalar values {3, 7, 5, 1}. The right panel shows an EdgeField on the same graph: each directed edge carries a signed value. Notice that opposite directions carry opposite signs: the A&rarr;B edge reads +4 while B&rarr;A reads &minus;4. This antisymmetry is not imposed&mdash;it is a consequence of how the EdgeField was produced. I define that operator next.</p>
 
 <!-- ======================================================= -->
-<h2>3. The Unique Bridge</h2>
+<h2>3. The Bridge: A as Graph Coboundary</h2>
 
-<p>How do you move from a NodeField to an EdgeField? There is exactly one natural transition, and its uniqueness is forced by a single requirement: <strong>translational invariance</strong>.</p>
+<p>How do you move from a NodeField to an EdgeField? There is exactly one natural transition, and its uniqueness follows from a single requirement: <strong>translational invariance</strong>.</p>
 
 <div class="definition">
   <div class="definition-title">Definition (Operator A : NodeField &rarr; EdgeField)</div>
@@ -347,9 +347,11 @@ What you need is not a better projection. It is a way to compose the topologies.
 
 <p><strong>Why unique.</strong> Suppose we want a function <span class="math">F</span> : NodeField &rarr; EdgeField that respects one structural constraint: if you shift every node value by the same constant <span class="math">c</span>, the edge field should not change. Formally: <span class="math">F</span>(<span class="math">x</span> + <span class="math">c</span>) = <span class="math">F</span>(<span class="math">x</span>) for all constant shifts. This is translational invariance&mdash;the absolute level of node values carries no relational information; only differences do.</p>
 
-<p>For a single edge (<span class="math">i</span>, <span class="math">j</span>), the most general linear function of two node values is <span class="math">F<sub>ij</sub></span> = <span class="math">&alpha; x<sub>i</sub></span> + <span class="math">&beta; x<sub>j</sub></span>. Translational invariance requires <span class="math">&alpha;</span>(<span class="math">x<sub>i</sub></span> + <span class="math">c</span>) + <span class="math">&beta;</span>(<span class="math">x<sub>j</sub></span> + <span class="math">c</span>) = <span class="math">&alpha; x<sub>i</sub></span> + <span class="math">&beta; x<sub>j</sub></span> for all <span class="math">c</span>, which forces <span class="math">&alpha;</span> + <span class="math">&beta;</span> = 0. Up to a constant scale, the only solution is <span class="math">x<sub>j</sub></span> &minus; <span class="math">x<sub>i</sub></span>. There are no other options. A is the unique bridge from NodeField to EdgeField.</p>
+<p>For a single edge (<span class="math">i</span>, <span class="math">j</span>), the most general linear function of two node values is <span class="math">F<sub>ij</sub></span> = <span class="math">&alpha; x<sub>i</sub></span> + <span class="math">&beta; x<sub>j</sub></span>. Translational invariance requires <span class="math">&alpha;</span>(<span class="math">x<sub>i</sub></span> + <span class="math">c</span>) + <span class="math">&beta;</span>(<span class="math">x<sub>j</sub></span> + <span class="math">c</span>) = <span class="math">&alpha; x<sub>i</sub></span> + <span class="math">&beta; x<sub>j</sub></span> for all <span class="math">c</span>, which forces <span class="math">&alpha;</span> + <span class="math">&beta;</span> = 0. Up to a constant scale, the only solution is <span class="math">x<sub>j</sub></span> &minus; <span class="math">x<sub>i</sub></span>.</p>
 
-<div class="insight">A is symmetric in a precise sense: A(x)<sub>ij</sub> = &minus;A(x)<sub>ji</sub>. The antisymmetry of the edge field is inherited from the commutativity of subtraction. This symmetry propagates through subsequent operators and determines what structures can emerge at each stage.</div>
+<p>This is the <strong>graph coboundary operator</strong> <span class="math">d</span><sup>0</sup> from discrete exterior calculus&mdash;the same map from 0-cochains to 1-cochains that appears in simplicial cohomology. I arrived at it from a different starting point: the pre-A admissibility constraint below. The derivation itself recovers a classical construction; what I have not seen elsewhere is the observation about which preprocessing operations it rules out.</p>
+
+<div class="insight">A(x)<sub>ij</sub> = &minus;A(x)<sub>ji</sub>. The antisymmetry of the edge field is inherited from the commutativity of subtraction. This symmetry propagates through subsequent operators and constrains what structures can emerge at each stage.</div>
 
 <h3>Pre-A Admissibility</h3>
 
@@ -362,22 +364,40 @@ What you need is not a better projection. It is a way to compose the topologies.
   <li><strong>Interpolation:</strong> Introduces values at new nodes. Alters the adjacency structure. Inadmissible.</li>
 </ul>
 
-<p>This is not a rule imposed on the user. It is a consequence of what A does. If you smooth the NodeField before applying A, the edge field reflects the smoothing kernel, not the data. The constraint is a theorem about the operator, not a convention about the workflow.</p>
+<p>This is not a rule I imposed. It is a consequence of what A does. If you smooth the NodeField before applying A, the edge field reflects the smoothing kernel, not the data. The constraint is a theorem about the operator, not a convention about the workflow. This is the part I think is new: not A itself&mdash;which is d<sup>0</sup>&mdash;but the explicit characterization of what standard preprocessing steps do to the relational structure A extracts.</p>
 
 <!-- ======================================================= -->
 <h2>4. The Composition Chain</h2>
 
-<p>A transforms NodeField to EdgeField. Two more operators complete the chain, and both operate within EdgeField. Their order is forced by their mathematical roles.</p>
+<p>A transforms NodeField to EdgeField. Two more operators complete the chain, and both operate within EdgeField. Their composition requires some care.</p>
+
+<h3>A comes first: a type constraint</h3>
+
+<p>A is the only operator that accepts NodeField input. This is a genuine type constraint: there is no alternative starting point. The chain must begin with A.</p>
+
+<h3>B: local relational accumulation</h3>
 
 <div class="definition">
   <div class="definition-title">Definition (Operator B : EdgeField &rarr; EdgeField)</div>
-  <p><strong>B</strong> performs local relational accumulation. For each edge (<span class="math">i</span>, <span class="math">j</span>), B sums the edge values involving nodes <span class="math">i</span> and <span class="math">j</span>&mdash;aggregating the local relational context of each edge. B preserves the symmetry established by A: if the input is antisymmetric, the output remains antisymmetric.</p>
+  <p><strong>B</strong> accumulates local relational context. For each edge (<span class="math">i</span>, <span class="math">j</span>), B sums the edge values at the shared endpoints&mdash;aggregating contributions from neighboring edges along the same axis. Directional identity is preserved: gradients along one axis do not bleed into another.</p>
+  <p>B is symmetric: <span class="math">B(e)<sub>ij</sub></span> = <span class="math">&minus;B(e)<sub>ji</sub></span> when the input is antisymmetric. It amplifies existing relational patterns without breaking the symmetry that A established.</p>
 </div>
+
+<h3>R: antisymmetric circulation</h3>
 
 <div class="definition">
   <div class="definition-title">Definition (Operator R : EdgeField &times; &Ropf; &rarr; EdgeField)</div>
-  <p><strong>R</strong> introduces antisymmetric <strong>circulation</strong> with a bounded parameter &rho;. In a single-topology setting, R rotates the edge field, breaking the input symmetry in a controlled way. The parameter &rho; governs the strength of this circulation. R is the operator that breaks symmetry&mdash;and breaking symmetry is what creates structure.</p>
+  <p><strong>R</strong> introduces <strong>circulation</strong>&mdash;the antisymmetric cross-term that symmetric accumulation cannot produce. It couples across axes, creating rotational structure from the accumulated gradients. The parameter &rho; &isin; &Ropf; controls coupling strength and is bounded.</p>
+  <p>R is antisymmetric: <span class="math">R(e)<sub>ij</sub></span> = <span class="math">&minus;R(e)<sub>ji</sub></span>. Circulation is the symmetry-breaking step&mdash;and breaking symmetry is what creates structure beyond what accumulation alone can produce.</p>
 </div>
+
+<h3>Why B before R</h3>
+
+<p>After A, we are in EdgeField. Both B and R operate there&mdash;both accept EdgeField and return EdgeField. So the ordering B&rarr;R is <strong>not</strong> forced by types. It is forced by what the operators do.</p>
+
+<p>B accumulates local context, giving each edge information about its neighborhood. R introduces cross-axis coupling. Accumulating before coupling gives R structured input&mdash;edges that already encode local relational patterns. Coupling raw gradients (R before B) is mathematically well-defined but produces noise rather than structure: you are rotating differences that have no local context, which is degenerate.</p>
+
+<p>This is an empirical finding, not a type-theoretic proof. I tested both orderings. B&rarr;R produces sustained, physically meaningful dynamics. R&rarr;B does not.</p>
 
 <div class="svg-container">
 <svg viewBox="0 0 750 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Type composition chain: NodeField to EdgeField through A, B, R">
@@ -420,19 +440,24 @@ What you need is not a better projection. It is a way to compose the topologies.
   <text x="692" y="58" text-anchor="middle" fill="var(--amber)" font-size="13" font-weight="700">Edge</text>
   <text x="692" y="76" text-anchor="middle" fill="var(--amber)" font-size="10">+ circulation</text>
 
-  <!-- Bottom: type-check annotation -->
-  <text x="375" y="118" text-anchor="middle" fill="var(--muted)" font-size="12" font-style="italic">Composition order A &rarr; B &rarr; R is the only order that type-checks.</text>
+  <!-- Bottom: revised annotation -->
+  <text x="375" y="118" text-anchor="middle" fill="var(--muted)" font-size="12" font-style="italic">A first: forced by types. B before R: forced by content.</text>
 </svg>
 </div>
 
-<p><strong>Why this order is forced.</strong> A is the only operator that accepts NodeField input&mdash;it must come first. B accumulates edge structure and must follow A (you cannot accumulate what has not been extracted). R introduces cross-edge circulation and operates on the accumulated field. Reversing B and R would apply circulation to un-accumulated gradients&mdash;a local rotation of raw differences, which is degenerate. The composition <span class="math">E</span>(<span class="math">x</span>, &rho;) = R(B(A(<span class="math">x</span>)), &rho;) is the only type-correct chain from NodeField to the final EdgeField.</p>
+<h3>The full kernel: ABRCE</h3>
 
-<p>This is not "a good design choice." It is the unique composition that type-checks. If you try any other order, you either pass the wrong type to an operator or produce a mathematically degenerate output. The chain is determined by the types.</p>
+<p>The kernel is designated ABRCE after its five components. This tutorial focuses on A, B, and R&mdash;the core operator chain. The remaining two:</p>
+
+<ul>
+  <li><strong>C</strong> (bounded coherence): normalizes the edge field to (&minus;1, +1) per edge. In the single-topology version, C follows R. In the multi-topology extension, C exits the kernel and becomes a declared projection at the application layer&mdash;making ABR the kernel proper.</li>
+  <li><strong>E</strong> (composite): notation for the full pipeline. <span class="math">E</span>(<span class="math">x</span>, &rho;) = C(R(B(A(<span class="math">x</span>)), &rho;)) in the single-topology case, or <span class="math">E</span>(<span class="math">x</span>, &rho;) = R(B(A(<span class="math">x</span>)), &rho;) in the multi-topology case.</li>
+</ul>
 
 <!-- ======================================================= -->
 <h2>5. Multiple Topologies</h2>
 
-<p>Everything above operates on a single graph&mdash;a single topology. The crucial extension is this: <strong>the same set of nodes can carry multiple independent topologies, and the R operator couples them.</strong></p>
+<p>Everything above operates on a single graph&mdash;a single topology. The extension that made the difference for my work: <strong>the same set of nodes can carry multiple independent topologies, and R couples them.</strong></p>
 
 <p>In magnetospheric physics, satellite data has three natural structures:</p>
 
@@ -510,11 +535,11 @@ What you need is not a better projection. It is a way to compose the topologies.
 </svg>
 </div>
 
-<p>Read the arrows: spatial edge structure feeds into temporal circulation. Temporal edge structure feeds into component circulation. Component edge structure feeds back into spatial circulation. The cycle is directed&mdash;the order <span class="math">S</span> &rarr; <span class="math">&tau;</span> &rarr; <span class="math">C</span> &rarr; <span class="math">S</span> is fixed. Reversing it gives different results because R is antisymmetric. The cycle direction is part of the structure.</p>
+<p>Read the arrows: spatial edge structure feeds into temporal circulation. Temporal edge structure feeds into component circulation. Component edge structure feeds back into spatial circulation. The cycle is directed&mdash;the order <span class="math">S</span> &rarr; <span class="math">&tau;</span> &rarr; <span class="math">C</span> &rarr; <span class="math">S</span> is a structural commitment, not a derivation. Reversing it gives different results because R is antisymmetric. The direction reflects the physical reality that spatial structure constrains temporal evolution, which constrains spectral structure, which feeds back into spatial. I chose this cycle based on domain knowledge; the framework requires that a direction be declared.</p>
 
-<p>Each topology runs its own A &rarr; B pipeline independently. R is the only inter-topology operator. It takes the accumulated edge field from one topology and contributes circulation to the next. The composite <span class="math">E</span>(<span class="math">x</span>, &rho;) = R(B(A(<span class="math">x</span>)), &rho;) now operates across all three topologies simultaneously.</p>
+<p>Each topology runs its own A &rarr; B pipeline independently. R is the only inter-topology operator. It takes the accumulated edge field from one topology and contributes circulation to the next.</p>
 
-<div class="insight">No single topology "sees" the others directly. The coupling is mediated entirely by R. This means the cross-topology structure that emerges is not injected by the analyst&mdash;it is produced by the coupling operator acting on independently-extracted gradients. If no cross-topology structure exists in the data, R produces none.</div>
+<div class="insight">No single topology "sees" the others directly. The coupling is mediated entirely by R. The cross-topology structure that emerges is not injected by the analyst&mdash;it is produced by the coupling operator acting on independently-extracted gradients. If no cross-topology structure exists in the data, R produces none.</div>
 
 <!-- ======================================================= -->
 <h2>6. Step Through It</h2>
@@ -574,11 +599,11 @@ What you need is not a better projection. It is a way to compose the topologies.
 (function() {
   var step = 0;
   var steps = [
-    { msg: "Apply A: compute pairwise differences for each edge. A→B: 7−3 = +4. A→C: 5−3 = +2. B→C: 5−7 = −2. C→D: 1−5 = −4. A→D: 1−3 = −2.",
+    { msg: "Apply A (graph coboundary): compute pairwise differences for each edge. A→B: 7−3 = +4. A→C: 5−3 = +2. B→C: 5−7 = −2. C→D: 1−5 = −4. A→D: 1−3 = −2.",
       edges: {ab:"+4", ac:"+2", bc:"−2", cd:"−4", ad:"−2"}, nodeOp: 0.4, edgeOp: 1, label: "After A" },
-    { msg: "Apply B: accumulate local context. For each edge, B sums the edge values at its endpoints. Edge A→B: edges at A (+4,+2,−2) sum to +4; edges at B (+4,−2) sum to +2. B combines these. Every edge now reflects its neighborhood’s relational pattern, not just the raw gradient.",
+    { msg: "Apply B: accumulate local context. For each edge, B sums the edge values at its endpoints along the same axis. Edge A→B: edges at A (+4,+2,−2) sum to +4; edges at B (+4,−2) sum to +2. B combines these. Every edge now reflects its neighborhood's relational pattern, not just the raw gradient.",
       edges: {ab:"+6", ac:"+2", bc:"−6", cd:"−8", ad:"−4"}, nodeOp: 0.3, edgeOp: 1, label: "After B" },
-    { msg: "After B, the edge field is still symmetric (antisymmetric in both directions). B has amplified the dominant pattern: the B→D gradient chain (−6, −8) now dominates. This is the accumulated relational structure of the graph — ready for R to introduce circulation.",
+    { msg: "After B, the edge field is still antisymmetric (B preserves the symmetry A established). B has amplified the dominant pattern: the B→D gradient chain (−6, −8) now dominates. This is the accumulated relational structure of the graph — ready for R to introduce circulation.",
       edges: {ab:"+6", ac:"+2", bc:"−6", cd:"−8", ad:"−4"}, nodeOp: 0.3, edgeOp: 1, label: "B amplified", done: true }
   ];
 
@@ -640,16 +665,16 @@ What you need is not a better projection. It is a way to compose the topologies.
 
 <p>Apply the multi-topology kernel. Each topology runs its own A &rarr; B pipeline. R couples them through the directed cycle <span class="math">S</span> &rarr; <span class="math">&tau;</span> &rarr; <span class="math">C</span> &rarr; <span class="math">S</span>.</p>
 
-<p>Two classes of structure emerge that were invisible in any single projection:</p>
+<p>Two classes of structure become resolvable that single-topology methods struggle with:</p>
 
 <div class="definition">
   <div class="definition-title">Field-Aligned Currents</div>
-  <p>Electrical currents flowing along Earth's magnetic field lines. They are coherent across spatial AND spectral topologies: a specific spatial pattern of particle flux at specific energies, extending along specific field-line geometries. Single-topology spatial analysis sees blurred gradients because the spectral specificity is projected away. The multi-topology coupling resolves them because the spectral&ndash;spatial R coupling preserves exactly the cross-topology coherence that defines the current.</p>
+  <p>Electrical currents flowing along Earth's magnetic field lines. Field-aligned currents are detectable by single-spacecraft methods&mdash;the curl-B / Amp&egrave;re technique using magnetometer data is standard. What single-topology analysis struggles with is resolving <em>which particle populations carry the current at which energies</em>. The multi-topology coupling preserves the spectral&ndash;spatial correlation that single-instrument analysis projects away, resolving the current's spectral specificity alongside its spatial geometry.</p>
 </div>
 
 <div class="definition">
   <div class="definition-title">Injection Boundaries</div>
-  <p>Boundaries where plasma from the magnetotail is injected into the inner magnetosphere. An injection boundary is a simultaneous change in spatial gradient AND spectral gradient: the spectrum hardens (shifts to higher energies) at the same spatial boundary where flux increases. This feature exists IN the relationship between spatial and spectral structure. It is not a spatial feature with spectral consequences; it is a cross-topology feature. The R operator coupling <span class="math">C</span> &rarr; <span class="math">S</span> is what makes it visible.</p>
+  <p>Boundaries where plasma from the magnetotail is injected into the inner magnetosphere. Energy-time dispersions are the standard single-instrument signature. But the spatial extent and spectral profile of the boundary&mdash;features that require coupling between spatial and spectral topologies&mdash;are harder to resolve without the coupling. An injection boundary is a simultaneous change in spatial gradient AND spectral gradient: the spectrum hardens at the same spatial boundary where flux increases. This feature lives in the <em>relationship</em> between spatial and spectral structure. The R operator coupling <span class="math">C</span> &rarr; <span class="math">S</span> is what makes it cleanly resolvable.</p>
 </div>
 
 <div class="svg-container">
@@ -678,8 +703,8 @@ What you need is not a better projection. It is a way to compose the topologies.
   <text x="270" y="133" text-anchor="middle" fill="var(--muted)" font-size="9" font-style="italic">ambiguous spectra</text>
 
   <!-- "Missing" label -->
-  <text x="185" y="175" text-anchor="middle" fill="var(--red)" font-size="12" font-weight="600">Cross-topology features absent</text>
-  <text x="185" y="195" text-anchor="middle" fill="var(--muted)" font-size="10">FACs: blurred into spatial gradients</text>
+  <text x="185" y="175" text-anchor="middle" fill="var(--red)" font-size="12" font-weight="600">Cross-topology features hard to isolate</text>
+  <text x="185" y="195" text-anchor="middle" fill="var(--muted)" font-size="10">FACs: spatial gradients, no spectral context</text>
   <text x="185" y="212" text-anchor="middle" fill="var(--muted)" font-size="10">Injection boundaries: ambiguous</text>
   <text x="185" y="255" text-anchor="middle" fill="var(--red)" font-size="32">&cross;</text>
 
@@ -715,60 +740,39 @@ What you need is not a better projection. It is a way to compose the topologies.
 
   <!-- "Visible" label -->
   <text x="560" y="195" text-anchor="middle" fill="var(--green)" font-size="12" font-weight="600">Cross-topology features resolved</text>
-  <text x="560" y="212" text-anchor="middle" fill="var(--muted)" font-size="10">FACs: sharp, spectrally specific</text>
+  <text x="560" y="212" text-anchor="middle" fill="var(--muted)" font-size="10">FACs: spectrally specific, spatially sharp</text>
   <text x="560" y="229" text-anchor="middle" fill="var(--muted)" font-size="10">Injection boundaries: spatial+spectral</text>
   <text x="560" y="255" text-anchor="middle" fill="var(--green)" font-size="32">&check;</text>
 </svg>
 </div>
 
-<p>The comparison is not "sharper vs. blurrier." It is "present vs. absent." The injection boundary does not become <em>clearer</em> with coupling&mdash;it becomes <em>visible for the first time</em>. It is a cross-topology feature: defined by the simultaneous spatial and spectral gradient. No single-topology analysis at any resolution can detect it, because it does not live in any single topology.</p>
+<p>The comparison is not just "sharper vs. blurrier." The injection boundary does not become <em>clearer</em> with coupling&mdash;it becomes cleanly resolvable for the first time as a cross-topology feature: defined by the simultaneous spatial and spectral gradient. Single-topology methods can detect pieces of it&mdash;a spatial gradient here, a spectral shift there&mdash;but the cross-topology coherence that defines it as a single physical structure requires the coupling to resolve.</p>
 
 <!-- ======================================================= -->
-<h2>8. No Optimization Required</h2>
+<h2>8. What Struck Me About This</h2>
 
-<p>Here is what the framework does <em>not</em> do:</p>
+<p>What struck me about this approach is that I never specified what to look for. No optimization target, no loss function, no training data, no model selection, no specification of target features. The operators are determined by the type structure and the domain constraints. What emerges is what the topology admits.</p>
 
-<ul>
-  <li>No loss function. No cost to minimize.</li>
-  <li>No parameters to fit. (&rho; is bounded but not optimized.)</li>
-  <li>No training data. No validation set.</li>
-  <li>No model selection. No comparison of candidate models.</li>
-  <li>No specification of what to look for. No target features.</li>
-</ul>
+<p>This is different from goal-directed systems analysis, where you define a target state and compute paths to it&mdash;an approach that has its own strengths. The kernel is non-goal-directed: it reveals what the relational structure admits, without specifying what to find. Both approaches are valid; they answer different questions. Goal-directed analysis asks "how do I reach state X?" This framework asks "what structures does this topology support?"</p>
 
-<p>The operators are defined by type constraints: A is the unique NodeField&rarr;EdgeField transition satisfying translational invariance. B is local accumulation. R is bounded antisymmetric circulation. The composition order is forced by type-checking. The multi-topology coupling cycle is determined by declaring which topologies exist.</p>
+<p>The kernel is non-optimizing (no loss function), non-semantic (operators do not interpret), and non-goal-directed (no target). These are observations about what the operators do, not axioms I chose for aesthetic reasons. A is the graph coboundary&mdash;it computes differences. B accumulates local context. R introduces circulation. None of them specify what to find. The features that emerge&mdash;field-aligned currents, injection boundaries, coherence patterns&mdash;are consequences of the topology and the data.</p>
 
-<p>Everything that emerges&mdash;field-aligned currents, injection boundaries, coherence patterns&mdash;is determined by the topology and the data. The kernel does not look for structure. It reveals what the topology admits.</p>
-
-<div class="theorem">
-  <div class="theorem-title">The Structural Contrast</div>
-  <p><strong>Standard analysis:</strong> Specify a model (target structure) &rarr; Fit parameters to data &rarr; Evaluate goodness of fit &rarr; Select among candidate models.</p>
-  <p><strong>This framework:</strong> Declare topologies &rarr; Apply type-determined operators &rarr; Observe what emerges. The "model" is the topology itself. The operators are not chosen; they are derived. What appears is what the structure admits&mdash;nothing more, nothing less.</p>
-</div>
-
-<p>This is not anti-quantitative. The operators produce numerical edge fields that can be measured, compared, and tested against observations. The difference is where the structure comes from. In model fitting, structure is hypothesized and parameters are adjusted until data complies. Here, structure is a consequence of topology and type constraints. If no cross-topology coherence exists in the data, the kernel produces none. It cannot hallucinate structure that the topology does not support.</p>
+<p>If no cross-topology coherence exists in the data, the kernel produces none. It cannot hallucinate structure that the topology does not support.</p>
 
 <!-- ======================================================= -->
 <h2>9. Coda</h2>
 
-<p>The pattern generalizes beyond magnetospheric physics. Any domain where data carries multiple independent structures&mdash;spatial and temporal, syntactic and semantic, physical and chemical&mdash;is a candidate for this approach:</p>
+<p>Systems thinking, at its core, claims that structure determines behavior&mdash;that how parts relate matters more than what parts are. This framework makes that claim precise: declare the relational structure (the topologies and their adjacencies), apply the minimal type-constrained operators (the coboundary, accumulation, circulation coupling), and observe what emerges.</p>
 
-<ol>
-  <li>Identify the natural topologies in the data.</li>
-  <li>Define NodeField and EdgeField on each topology.</li>
-  <li>Apply the type-determined chain A &rarr; B within each topology.</li>
-  <li>Couple the topologies through R and observe what emerges.</li>
-</ol>
-
-<p>The composition order is not a recommendation. It is forced by the types. The coupling cycle is not a parameter. It is declared by the analyst based on domain knowledge of which structures should interact. What emerges is what the topology admits.</p>
-
-<p>This is systems thinking in the precise sense: the system's behavior is determined by the structure of relationships between its parts, not by the properties of the parts themselves. The operators do not act on values; they act on <em>differences between values</em>. The framework is purely relational. And because it is purely relational, the mathematical structure transfers across domains without modification. Only the labels change.</p>
+<p>The recipe is simple. The hard part was trusting that less specification would produce more structure.</p>
 
 <!-- ======================================================= -->
 <div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid #334155;color:var(--muted);font-size:0.85rem;">
   <p style="margin-bottom:0.5rem;"><strong>References &amp; further reading.</strong></p>
   <ul style="list-style: none; margin-left: 0; font-size: 0.85rem;">
     <li>Invariant Relational Kernel V3 (ABRCE, single topology): <a href="https://github.com/Relational-Relativity-Corporation/Invariant_Relational_Kernel_ABRCE" style="color:var(--blue);">GitHub</a></li>
+    <li>Grady &amp; Polimeni, <em>Discrete Calculus: Applied Analysis on Graphs for Computational Science</em> (Springer, 2010) &mdash; graph cohomology and the coboundary operator.</li>
+    <li>Desbrun, Kanso &amp; Tong, "Discrete Differential Forms for Computational Modeling" in <em>Discrete Differential Geometry</em> (Oberwolfach Seminars, 2008) &mdash; continuous analog (discrete exterior calculus).</li>
     <li>Autocatalytic Closure for the Working Mathematician: <a href="../acs-closure-v2/" style="color:var(--blue);">Tutorial</a></li>
   </ul>
   <p style="margin-top:0.75rem;">Structure from Topology &mdash; B. Stephenson, 2026.</p>
