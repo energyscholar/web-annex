@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadows of the Poised State</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.subtitle { text-align: center; color: var(--muted); font-size: 1.1rem; margin-bottom: 3rem; font-style: italic; font-family: Georgia, serif; }
+h2 { font-size: 1.8rem; margin: 3.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h2 .sn { color: var(--blue); font-size: 0.9em; margin-right: 0.3em; }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+
+.lead { font-size: 1.15rem; color: var(--line); font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem; }
+
+/* Navigation */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--dim);
+  display: flex; justify-content: center; gap: 0.3rem;
+  padding: 0.5rem 1rem; flex-wrap: wrap;
+}
+nav a {
+  color: var(--muted); text-decoration: none; font-size: 0.8rem;
+  padding: 0.25rem 0.6rem; border-radius: 4px; transition: all 0.2s;
+  white-space: nowrap;
+}
+nav a:hover, nav a.active { color: var(--heading); background: var(--dim); }
+
+/* Cards */
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+  transition: border-color 0.3s;
+}
+.card:hover { border-color: var(--blue); }
+.card h3 { margin-top: 0; }
+
+/* SVG containers */
+.viz { width: 100%; margin: 1.5rem 0; border-radius: 12px; overflow: hidden; background: var(--card); }
+.viz svg { width: 100%; display: block; }
+
+/* Feature grid */
+.feature-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem; margin: 1.5rem 0;
+}
+.feature-item {
+  background: var(--card); border-radius: 8px; padding: 1rem; text-align: center;
+  border: 1px solid var(--dim); transition: all 0.3s;
+}
+.feature-item:hover { border-color: var(--cyan); transform: translateY(-2px); }
+.feature-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
+.feature-label { font-size: 0.9rem; color: var(--heading); font-weight: 600; }
+.feature-desc { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+
+/* Scorecard table */
+.scorecard {
+  width: 100%; border-collapse: collapse; margin: 1.5rem 0;
+  font-size: 0.88rem;
+}
+.scorecard th {
+  background: var(--dim); color: var(--heading); padding: 0.6rem 0.5rem;
+  text-align: left; font-weight: 600; position: sticky; top: 40px;
+}
+.scorecard td { padding: 0.5rem; border-bottom: 1px solid var(--dim); }
+.scorecard tr:hover td { background: rgba(59, 130, 246, 0.05); }
+.scorecard .system-name { color: var(--heading); font-weight: 600; white-space: nowrap; }
+.score-strong { color: var(--green); font-weight: 700; }
+.score-plausible { color: var(--amber); }
+.score-absent { color: var(--muted); }
+.tier-header td { background: var(--dim); color: var(--cyan); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em; }
+
+/* Pattern cards */
+.pattern-card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border-left: 3px solid var(--purple);
+}
+.pattern-card h4 { color: var(--purple); margin-bottom: 0.5rem; font-size: 1.1rem; }
+.pattern-card .systems { color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* Prediction cards */
+.prediction {
+  background: var(--card); border-radius: 8px; padding: 1rem 1.2rem;
+  margin: 0.8rem 0; border-left: 3px solid var(--green);
+}
+.prediction .pred-num { color: var(--green); font-weight: 700; margin-right: 0.5rem; }
+
+/* Animation controls */
+.anim-controls {
+  display: flex; gap: 0.5rem; margin: 0.5rem 0; justify-content: center;
+}
+.anim-btn {
+  background: var(--dim); color: var(--line); border: none; border-radius: 6px;
+  padding: 0.4rem 1rem; cursor: pointer; font-size: 0.85rem; transition: all 0.2s;
+}
+.anim-btn:hover { background: var(--blue); color: white; }
+.anim-btn.active { background: var(--blue); color: white; }
+
+/* Fade-in on scroll */
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  .container { padding: 1rem; }
+  nav { gap: 0.15rem; }
+  nav a { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+}
+</style>
+</head>
+<body>
+
+<nav id="topnav">
+  <a href="#framework">Framework</a>
+  <a href="#survey">Survey</a>
+  <a href="#brain">Brain</a>
+  <a href="#cardiac">Cardiac</a>
+  <a href="#active">Active Matter</a>
+  <a href="#quasicrystal">Quasicrystals</a>
+  <a href="#glass">Glass</a>
+  <a href="#fmo">Photosynthesis</a>
+  <a href="#patterns">Patterns</a>
+  <a href="#kt">KT Hypothesis</a>
+  <a href="#predictions">Predictions</a>
+</nav>
+
+<div class="container" style="padding-top: 3.5rem;">
+
+<!-- ========== TITLE ========== -->
+<h1>Shadows of the Poised State</h1>
+<p class="subtitle">A survey of systems adjacent to topological criticality</p>
+
+<p class="lead">
+If the diamond node convergence is real &mdash; if topology, criticality, autocatalysis, and computation truly meet at a single organizing principle &mdash; then we should find its shadows. Systems that don&rsquo;t have all five features, but have enough of them to glow in the dark. Anomalous robustness where none should exist. Unexplained coherence. Suspiciously efficient self-organization.
+</p>
+<p class="lead">
+This survey examines twelve candidate systems, scores them against the five-feature framework, and finds six cross-cutting patterns that suggest the shadows are real.
+</p>
+
+<!-- ========== SECTION 1: FRAMEWORK ========== -->
+<h2 id="framework"><span class="sn">1.</span> The Five-Feature Framework</h2>
+
+<p>The diamond node predicts convergence of five features. Each is independently well-studied. Their co-occurrence is the signal.</p>
+
+<div class="feature-grid">
+  <div class="feature-item" style="border-color: var(--red);">
+    <span class="feature-icon" style="color: var(--red);">&#9763;</span>
+    <span class="feature-label">Criticality</span>
+    <span class="feature-desc">Power-law statistics, phase transitions, &sigma;&rarr;1</span>
+  </div>
+  <div class="feature-item" style="border-color: var(--blue);">
+    <span class="feature-icon" style="color: var(--blue);">&#9670;</span>
+    <span class="feature-label">Topology</span>
+    <span class="feature-desc">Defects, protected states, winding numbers</span>
+  </div>
+  <div class="feature-item" style="border-color: var(--green);">
+    <span class="feature-icon" style="color: var(--green);">&#8635;</span>
+    <span class="feature-label">Autocatalysis</span>
+    <span class="feature-desc">Self-sustaining reaction networks, RAF closure</span>
+  </div>
+  <div class="feature-item" style="border-color: var(--amber);">
+    <span class="feature-icon" style="color: var(--amber);">&#9881;</span>
+    <span class="feature-label">Computation</span>
+    <span class="feature-desc">Information processing at edge-of-chaos</span>
+  </div>
+  <div class="feature-item" style="border-color: var(--purple);">
+    <span class="feature-icon" style="color: var(--purple);">&#10006;</span>
+    <span class="feature-label">Braiding</span>
+    <span class="feature-desc">Non-trivial exchange, braid group statistics</span>
+  </div>
+</div>
+
+<p>A system with one or two features is interesting. A system with three or more is a candidate. A system where four or five converge without anyone having noticed the convergence &mdash; that&rsquo;s a shadow of the poised state.</p>
+
+<!-- ========== SECTION 2: RADAR CHART ========== -->
+<div class="viz fade-in">
+<svg id="radar" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="rg1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="#1e293b"/>
+</svg>
+</div>
+
+<!-- ========== SECTION 3: SCORECARD ========== -->
+<h2 id="survey"><span class="sn">2.</span> The Survey</h2>
+
+<p>Twelve systems scored against the five features. Strong evidence (<span class="score-strong">&bull;</span>), plausible (<span class="score-plausible">&bull;</span>), or absent (<span class="score-absent">&bull;</span>).</p>
+
+<div style="overflow-x: auto;">
+<table class="scorecard">
+<thead>
+<tr>
+  <th>System</th>
+  <th>Criticality</th>
+  <th>Topology</th>
+  <th>Autocatalysis</th>
+  <th>Computation</th>
+  <th>Braiding</th>
+  <th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="tier-header"><td colspan="7">TIER 1 &mdash; Three or more features with strong evidence</td></tr>
+<tr>
+  <td class="system-name"><a href="#brain" style="color:var(--heading)">Brain</a></td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-absent">&bull; absent</td>
+  <td><strong>2+2</strong></td>
+</tr>
+<tr>
+  <td class="system-name"><a href="#cardiac" style="color:var(--heading)">Cardiac Tissue</a></td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td><strong>3+2</strong></td>
+</tr>
+<tr>
+  <td class="system-name"><a href="#active" style="color:var(--heading)">Active Matter</a></td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-strong">&bull; strong</td>
+  <td><strong>3+2</strong></td>
+</tr>
+<tr>
+  <td class="system-name"><a href="#quasicrystal" style="color:var(--heading)">Quasicrystals</a></td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td><strong>2+3</strong></td>
+</tr>
+<tr>
+  <td class="system-name">Protein Folding</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-absent">&bull; absent</td>
+  <td><strong>2+2</strong></td>
+</tr>
+<tr>
+  <td class="system-name">Tokamak H-mode</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td><strong>3+2</strong></td>
+</tr>
+
+<tr>
+  <td class="system-name"><a href="#fmo" style="color:var(--heading)">FMO Complex</a></td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-absent">&bull; absent</td>
+  <td><strong>4+0</strong></td>
+</tr>
+
+<tr class="tier-header"><td colspan="7">TIER 2 &mdash; Shadow systems (anomalous robustness)</td></tr>
+<tr>
+  <td class="system-name"><a href="#glass" style="color:var(--heading)">Glass Transition</a></td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-absent">&bull; absent</td>
+  <td class="score-absent">&bull; absent</td>
+  <td class="score-absent">&bull; absent</td>
+  <td><strong>2+0</strong></td>
+</tr>
+<tr>
+  <td class="system-name">Avian Compass</td>
+  <td class="score-absent">&bull; absent</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-absent">&bull; absent</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-absent">&bull; absent</td>
+  <td><strong>1+1</strong></td>
+</tr>
+<tr>
+  <td class="system-name">Enzyme Catalysis</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-absent">&bull; absent</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-absent">&bull; absent</td>
+  <td><strong>1+2</strong></td>
+</tr>
+
+<tr class="tier-header"><td colspan="7">TIER 3 &mdash; Single-feature candidates</td></tr>
+<tr>
+  <td class="system-name">1/f Noise</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-absent">&bull; absent</td>
+  <td><strong>2+2</strong></td>
+</tr>
+<tr>
+  <td class="system-name">Vortex Knots</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-strong">&bull; strong</td>
+  <td class="score-absent">&bull; absent</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td class="score-plausible">&bull; plausible</td>
+  <td><strong>2+2</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="card" style="border-color: var(--amber); margin-top: 2rem;">
+<h4 style="color: var(--amber);">The Autocatalysis Gap</h4>
+<p>Across all twelve systems, autocatalytic closure is consistently the <em>weakest</em> feature &mdash; present at best as structural analogy. If the poised-state hypothesis requires all five features to converge, the theory <strong>predicts</strong> that genuine autocatalytic closure should be discoverable in quasicrystal growth, turbulent cascade dynamics, and the 1/f noise mechanism. Its absence is the sharpest test of the framework.</p>
+</div>
+
+<!-- ========== DEEP DIVES ========== -->
+<h2 id="brain"><span class="sn">3.</span> Brain: Neural Avalanches at Criticality</h2>
+
+<div class="viz fade-in">
+<svg id="brain-viz" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#1e293b"/>
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui">Neural Avalanche &mdash; click to trigger</text>
+</svg>
+</div>
+
+<p>The brain operates near a critical point where the branching ratio &sigma; approaches 1. Below criticality, signals die out. Above, they explode into seizure. At &sigma; = 1, avalanches follow power-law distributions with exponent &tau; &asymp; 1.60 (PNAS, 2025), maximizing dynamic range and information transmission.</p>
+
+<p>A 2025 PNAS study found <strong>genetic contributions</strong> to brain criticality, suggesting it is not an accident but selected for. The critical state is the computational sweet spot: maximum sensitivity to inputs, maximum information storage, maximum dynamic range. The brain doesn&rsquo;t merely <em>tolerate</em> criticality &mdash; it <em>maintains</em> itself there.</p>
+
+<div class="card">
+<h4 style="color: var(--cyan);">Missing Piece</h4>
+<p>Does autocatalytic closure in gene regulatory networks coincide with the onset of critical avalanche dynamics during brain development? If GRN closure and neural criticality emerge together, that&rsquo;s two diamond node features co-appearing at a specific developmental moment.</p>
+</div>
+
+<!-- ========== CARDIAC ========== -->
+<h2 id="cardiac"><span class="sn">4.</span> Cardiac Tissue: Where KT Physics Meets Biology</h2>
+
+<div class="viz fade-in">
+<svg id="cardiac-viz" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#1e293b"/>
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui">Spiral Waves &amp; the KT Transition &mdash; click to toggle state</text>
+</svg>
+</div>
+
+<p>A 2025 paper in <em>Frontiers in Network Physiology</em> made the connection explicit: <strong>atrial arrhythmias are topological states governed by Kosterlitz-Thouless physics</strong>. Sinus rhythm has no vortices. Atrial flutter = bound vortex-antivortex pairs. Atrial fibrillation = unbound vortices. The transition between arrhythmia types IS a topological phase transition.</p>
+
+<p>This is cardiac tissue scoring strong on <em>three</em> diamond node features simultaneously:</p>
+<ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+<li><strong>Criticality:</strong> Fibrillation onset shows critical slowing down, early warning signals</li>
+<li><strong>Topology:</strong> Phase singularities (spiral tips) with topological charge conservation; KT binding/unbinding</li>
+<li><strong>Autocatalysis:</strong> Ca<sup>2+</sup>-induced Ca<sup>2+</sup> release (CICR) is explicitly autocatalytic</li>
+</ul>
+
+<div class="card" style="border-color: var(--pink);">
+<h4 style="color: var(--pink);">The Braid Question</h4>
+<p>Spiral wave tips trace trajectories in 2+1D spacetime. These trajectories <em>braid</em>. Has anyone computed the braid group representation of spiral tip dynamics during the flutter&rarr;fibrillation transition? If the braiding statistics change at the KT transition, cardiac tissue is a classical system exhibiting non-trivial exchange statistics &mdash; a shadow of anyonic physics in living matter.</p>
+</div>
+
+<!-- ========== ACTIVE MATTER ========== -->
+<h2 id="active"><span class="sn">5.</span> Active Matter: Topological Defects That Build Bodies</h2>
+
+<div class="viz fade-in">
+<svg id="active-viz" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#1e293b"/>
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui">Active Nematic Field &mdash; +1/2 and -1/2 defects</text>
+</svg>
+</div>
+
+<p>In epithelial cell sheets, elongated cells form a nematic liquid crystal. This living crystal has topological defects: <strong>+1/2 defects</strong> (comets that self-propel) and <strong>&minus;1/2 defects</strong> (trefoils that sit still). These defects aren&rsquo;t incidental &mdash; they <em>organize</em> the tissue.</p>
+
+<p>In 2022, <em>Nature Materials</em> showed that integer topological defects organize stresses driving tissue morphogenesis in regenerating Hydra. Defects mark where cells die, where tissues fold, where organs form. Topology tells biology where to build.</p>
+
+<p>In 2025, Andersen et al. discovered an <strong>anti-hyperuniform critical state</strong> of topological defects in active nematics (<em>Reports on Progress in Physics</em>). Near a critical activity level, defect interactions become long-range, scaling with system size. Giant number fluctuations. The critical state IS defined by the defect statistics.</p>
+
+<div class="card" style="border-color: var(--green);">
+<h4 style="color: var(--green);">The Deepest Insight</h4>
+<p>The critical state and the topological order are not separate phenomena. They are <em>aspects of the same thing</em>. The critical state is what happens when topological defects reach a critical density. This is exactly what the diamond node predicts: criticality and topology co-emerge at the poised state.</p>
+</div>
+
+<!-- ========== QUASICRYSTALS ========== -->
+<h2 id="quasicrystal"><span class="sn">6.</span> Quasicrystals: The Fibonacci Bridge</h2>
+
+<div class="viz fade-in">
+<svg id="quasi-viz" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="500" fill="#1e293b"/>
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui">Penrose Tiling &mdash; aperiodic order from the golden ratio</text>
+</svg>
+</div>
+
+<p>Au<sub>51</sub>Al<sub>34</sub>Yb<sub>15</sub> sits at a <strong>quantum critical point without external tuning</strong> (Deguchi et al., <em>Nature Materials</em>, 2012). No magnetic field, no pressure, no doping &mdash; the material is critical purely because of its aperiodic structure. Divergent susceptibility (&chi;<sup>&minus;1</sup> ~ T<sup>0.51</sup>), logarithmically divergent specific heat. The effect vanishes in crystalline approximants of near-identical composition. Structure alone drives criticality.</p>
+
+<p>All electronic eigenstates in Fibonacci quasicrystals are critical &mdash; neither extended nor localized &mdash; with multifractal scaling. The energy spectrum is a self-similar Cantor set. A 2023 <em>Nature Physics</em> paper confirmed nested patterns of localized, delocalized, and multifractal states.</p>
+
+<div class="card" style="border-color: var(--purple);">
+<h4 style="color: var(--purple);">The Fibonacci Bridge</h4>
+<p>The golden ratio &phi; simultaneously governs:</p>
+<ul style="margin: 0.3rem 0 0 1.5rem; list-style: disc;">
+<li>Penrose tiling geometry (quasicrystal structure)</li>
+<li>Fibonacci anyon fusion rules (topological quantum computation)</li>
+<li>Multifractal critical wavefunctions (electronic criticality)</li>
+</ul>
+<p style="margin-top: 0.8rem;">This is not numerology. The same algebraic structure underlies aperiodic order, topological quantum computation, and critical electronic states. The quasicrystal is where topology, criticality, and computation share a common mathematical <em>root</em>.</p>
+</div>
+
+<!-- ========== GLASS TRANSITION ========== -->
+<h2 id="glass"><span class="sn">7.</span> Glass Transition: A Hidden Bicritical System?</h2>
+
+<div class="viz fade-in">
+<svg id="glass-viz" viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="350" fill="#1e293b"/>
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui">Two Specific Heat Peaks &mdash; two transitions, one system</text>
+</svg>
+</div>
+
+<p>Pettini et al. (<em>Entropy</em>, 2025) found two specific heat peaks in Lennard-Jones glass formers: a second-order transition and a weakly first-order transition. Both are accompanied by topological changes in the potential energy landscape &mdash; inflection points in mean curvature, principal curvature dispersion, and scalar curvature variance, connected to topology by the Pinkall and Overholt theorems.</p>
+
+<p>Simultaneously, the Gardner transition (glass &rarr; marginally stable subbasins) was shown in October 2024 to coincide with the emergence of jamming scalings. Two distinct ordering transitions with topological defects mediating both. If these interact at a codimension-two point &mdash; that is a <strong>bicritical system</strong>.</p>
+
+<div class="card" style="border-color: var(--amber);">
+<h4 style="color: var(--amber);">Strategic Value</h4>
+<p>Condensed matter, same domain as MnF<sub>2</sub>. If the glass transition is bicritical, it can serve as the <em>second</em> validation system in the methods paper &mdash; one where the result is genuinely novel, not just reproducing known exponents.</p>
+</div>
+
+<!-- ========== FMO ========== -->
+<h2 id="fmo"><span class="sn">8.</span> Photosynthesis: Noise as Resource</h2>
+
+<div class="viz fade-in">
+<svg id="fmo-viz" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#1e293b"/>
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui">Environment-Assisted Quantum Transport (ENAQT)</text>
+</svg>
+</div>
+
+<p>The FMO complex in green sulfur bacteria transfers absorbed light energy to the reaction center with ~99% efficiency at room temperature. The mechanism: <strong>environment-assisted quantum transport</strong> (ENAQT). Noise doesn&rsquo;t destroy quantum coherence &mdash; it <em>helps</em>. At the optimal dephasing strength, environmental fluctuations eliminate inefficient transport paths while opening new channels.</p>
+
+<p>This pattern &mdash; noise as resource, not obstacle &mdash; appears across multiple poised-state candidates:</p>
+<ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+<li><strong>Avian compass:</strong> Thermal fluctuations enhance magnetosensitivity (stochastic resonance)</li>
+<li><strong>Enzyme catalysis:</strong> Protein thermal motions access tunneling-competent conformations</li>
+<li><strong>Brain:</strong> Optimal information processing at the critical point (not quiet, not noisy)</li>
+<li><strong>1/f noise in dopant networks:</strong> Noise IS constitutive of computational capacity (2025)</li>
+</ul>
+
+<div class="card" style="border-color: var(--cyan);">
+<h4 style="color: var(--cyan);">The ENAQT Signature</h4>
+<p>In every case, the system sits at an exact point where environmental fluctuations <em>maximize</em> function. This is the hallmark shadow of poised-state operation. The system has organized itself to <strong>use</strong> noise rather than fight it.</p>
+</div>
+
+<!-- ========== CROSS-SYSTEM PATTERNS ========== -->
+<h2 id="patterns"><span class="sn">9.</span> Cross-System Patterns</h2>
+
+<p>Six patterns emerge across the twelve systems. Each is independently interesting. Their co-occurrence is the argument.</p>
+
+<div class="pattern-card fade-in">
+<h4>Pattern 1: Topological Defects as Organizing Principles</h4>
+<p>In active nematics, cardiac tissue, the glass transition, the brain, and the tokamak, topological defects aren&rsquo;t incidental features. They <em>organize the system</em>. The cardiac KT paper makes it explicit: the transition between arrhythmia types IS a topological phase transition. Defect binding/unbinding = the thing that happens.</p>
+<p class="systems">Systems: cardiac, active matter, glass, brain, tokamak, vortex knots</p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>Pattern 2: Criticality and Topology Co-Emerge</h4>
+<p>The active nematic result is the clearest: the critical state IS defined by defect statistics becoming anti-hyperuniform. The critical state and topological order are not separate phenomena &mdash; they&rsquo;re aspects of the same thing. This is exactly what the diamond node predicts.</p>
+<p class="systems">Systems: active matter, glass transition, brain, quasicrystals</p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>Pattern 3: Noise as Resource (ENAQT Pattern)</h4>
+<p>The system uses noise, not fights it. FMO: optimal transport at specific dephasing. Avian compass: quantum Zeno protects coherence while thermal noise enhances sensitivity. Enzyme catalysis: thermal fluctuations access tunneling conformations. Brain: optimal information at the critical point. 1/f noise in dopant networks: noise IS computational capacity.</p>
+<p class="systems">Systems: FMO, avian compass, enzyme, brain, 1/f noise</p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>Pattern 4: Helicity and Chirality Conservation</h4>
+<p>Topological invariants are conserved across scale transitions. Vortex knots: helicity flows from knotting to coiling (large&rarr;small scale) during reconnection. Avian compass: chirality-bolstered Zeno effect. Protein folding: topological knots constrain pathways. The system preserves topological information even as it transforms.</p>
+<p class="systems">Systems: vortex knots, avian compass, protein folding, quasicrystals</p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>Pattern 5: Multi-Critical Convergence</h4>
+<p>Protein folding simultaneously touches four phase-transition frameworks: thermodynamic critical point, jamming transition (&phi;<sub>c</sub> = 0.55, &delta; = 9/2), SOC (fractal scaling), and edge-of-chaos (IDPs). That four usually-separate phenomena converge in one system is either coincidence or evidence that biology preferentially occupies multi-critical points.</p>
+<p class="systems">Systems: protein folding (4 frameworks), glass transition (2), cardiac (3)</p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>Pattern 6: Three-Regime Universal Structure</h4>
+<p>Almost every system has: ordered &rarr; critical &rarr; disordered. The poised state operates in the middle. Active nematics: ordered &rarr; anti-hyperuniform &rarr; turbulent. Cardiac: sinus &rarr; flutter &rarr; fibrillation. Brain: subcritical &rarr; critical &rarr; seizure. Tokamak: L-mode &rarr; dithering &rarr; H-mode.</p>
+<p class="systems">Systems: active matter, cardiac, brain, tokamak, glass, quasicrystals</p>
+</div>
+
+<!-- ========== KT HYPOTHESIS ========== -->
+<h2 id="kt"><span class="sn">10.</span> The KT Hypothesis</h2>
+
+<div class="viz fade-in">
+<svg id="kt-viz" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="450" fill="#1e293b"/>
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="system-ui">Kosterlitz-Thouless Transition &mdash; defect unbinding</text>
+</svg>
+</div>
+
+<p>The Kosterlitz-Thouless transition is the unbinding of topological defect pairs. It was discovered in 2D superfluids (Nobel Prize, 2016). It is now appearing in:</p>
+
+<ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+<li><strong>Cardiac tissue</strong> (Frontiers, 2025) &mdash; AFL = bound pairs, AF = unbound</li>
+<li><strong>Active nematics</strong> (Reports on Progress in Physics, 2025) &mdash; defect binding at critical activity</li>
+<li>Potentially the <strong>glass transition</strong> &mdash; if two transitions involve defect binding</li>
+<li>The original contexts: 2D superfluids, superconductors, XY magnets</li>
+</ul>
+
+<p>The KT transition is:</p>
+<ol style="margin: 0.5rem 0 1rem 1.5rem;">
+<li>A <strong>phase transition</strong> (criticality)</li>
+<li><strong>Mediated by topological defects</strong> (topology)</li>
+<li><strong>Universal</strong> (independent of microscopic details)</li>
+<li>Native to <strong>2D systems</strong> (relevant to 2DEG physics)</li>
+</ol>
+
+<p>If the diamond node predicts a universal mechanism linking criticality and topology, the KT transition is the leading candidate. Wherever you find a KT-like transition, you are near a poised state.</p>
+
+<!-- ========== PREDICTIONS ========== -->
+<h2 id="predictions"><span class="sn">11.</span> Falsifiable Predictions</h2>
+
+<div class="prediction fade-in">
+<span class="pred-num">1.</span> <strong>Glass transition bicriticality.</strong> Apply the five-point framework to glass-forming systems. If the Gardner transition and glass transition interact at a codimension-two point with universality class change, that&rsquo;s a methods paper result. The topological markers identified by Pettini et al. provide the diagnostic.
+</div>
+
+<div class="prediction fade-in">
+<span class="pred-num">2.</span> <strong>Cardiac KT exponents.</strong> Measure fibrillation onset statistics &mdash; specifically the correlation length divergence and specific heat &mdash; and compare to KT universality predictions. If they match, cardiac tissue is a poised-state system with the same topological physics as superfluid helium.
+</div>
+
+<div class="prediction fade-in">
+<span class="pred-num">3.</span> <strong>Active matter defect braiding.</strong> Track nematic defect trajectories in 2+1D and compute braid group representations. Non-trivial braiding = anyonic statistics in a classical system. This would be the first demonstration of effective anyonic physics in living matter.
+</div>
+
+<div class="prediction fade-in">
+<span class="pred-num">4.</span> <strong>Quasicrystal Fibonacci bridge.</strong> The multifractal spectrum f(&alpha;) of electronic wavefunctions in Au-Al-Yb at the QCP should match Fibonacci model predictions. Information injected into phason degrees of freedom should propagate rather than dissipate. Vortices in quasicrystalline superconductors should exhibit statistics distinct from periodic superconductors.
+</div>
+
+<div class="prediction fade-in">
+<span class="pred-num">5.</span> <strong>Protein folding universality.</strong> The anomalous jamming exponent &delta; = 9/2 (unique universality class) should be universal across fold types. Mutations preserving knot invariant should maintain function; those altering knot type should be catastrophic even with preserved local structure.
+</div>
+
+<div class="prediction fade-in">
+<span class="pred-num">6.</span> <strong>Autocatalytic closure discovery.</strong> Genuine autocatalytic closure should be discoverable in quasicrystal growth, turbulent cascade dynamics, and the 1/f noise mechanism. Its current absence is the sharpest test: find it, and the framework gains a powerful confirmation; fail to find it after thorough search, and the five-feature model needs revision.
+</div>
+
+<div class="prediction fade-in">
+<span class="pred-num">7.</span> <strong>Neural topology &times; criticality.</strong> Connectome topology (Betti numbers, persistent homology) should predict critical exponents of neural avalanches. Topological structure determines the universality class of the critical state.
+</div>
+
+<p style="margin-top: 3rem; text-align: center; color: var(--muted); font-style: italic; font-family: Georgia, serif;">
+&mdash; The shadows point inward. &mdash;
+</p>
+
+</div><!-- container -->
+
+<script>
+// ========== SCROLL ANIMATIONS ==========
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ========== NAV HIGHLIGHTING ==========
+const sections = document.querySelectorAll('h2[id]');
+const navLinks = document.querySelectorAll('nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+// ========== RADAR CHART ==========
+(function() {
+  const svg = document.getElementById('radar');
+  const cx = 400, cy = 270, R = 180;
+  const labels = ['Criticality', 'Topology', 'Autocatalysis', 'Computation', 'Braiding'];
+  const angles = labels.map((_, i) => (i * 2 * Math.PI / 5) - Math.PI / 2);
+
+  function pt(angle, r) {
+    return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+  }
+
+  // Grid rings
+  [0.33, 0.66, 1].forEach(f => {
+    const points = angles.map(a => pt(a, R * f)).map(p => p.join(',')).join(' ');
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    poly.setAttribute('points', points);
+    poly.setAttribute('fill', 'none');
+    poly.setAttribute('stroke', '#334155');
+    poly.setAttribute('stroke-width', '1');
+    svg.appendChild(poly);
+  });
+
+  // Axis lines and labels
+  angles.forEach((a, i) => {
+    const [ex, ey] = pt(a, R + 10);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+    line.setAttribute('x2', ex); line.setAttribute('y2', ey);
+    line.setAttribute('stroke', '#334155'); line.setAttribute('stroke-width', '1');
+    svg.appendChild(line);
+
+    const [lx, ly] = pt(a, R + 30);
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', lx); text.setAttribute('y', ly);
+    text.setAttribute('text-anchor', 'middle'); text.setAttribute('fill', '#94a3b8');
+    text.setAttribute('font-size', '13'); text.setAttribute('font-family', 'system-ui');
+    text.textContent = labels[i];
+    svg.appendChild(text);
+  });
+
+  const systems = [
+    { name: 'Brain',         color: '#3b82f6', scores: [1, 0.5, 0.5, 1, 0] },
+    { name: 'Cardiac',       color: '#ef4444', scores: [1, 1, 1, 0.5, 0.5] },
+    { name: 'Active Matter', color: '#22c55e', scores: [1, 1, 0.5, 0.5, 0.5] },
+    { name: 'Quasicrystals', color: '#a855f7', scores: [1, 1, 0.5, 0.5, 0.5] },
+    { name: 'Protein',       color: '#f59e0b', scores: [1, 1, 0.5, 0.5, 0] },
+    { name: 'Glass',         color: '#06b6d4', scores: [1, 1, 0, 0, 0] },
+  ];
+
+  // Legend
+  const legendY = 45;
+  systems.forEach((s, i) => {
+    const lx = 80 + i * 115;
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', lx); rect.setAttribute('y', legendY);
+    rect.setAttribute('width', '10'); rect.setAttribute('height', '10');
+    rect.setAttribute('fill', s.color); rect.setAttribute('rx', '2');
+    svg.appendChild(rect);
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', lx + 15); t.setAttribute('y', legendY + 9);
+    t.setAttribute('fill', '#cbd5e1'); t.setAttribute('font-size', '11');
+    t.setAttribute('font-family', 'system-ui');
+    t.textContent = s.name;
+    svg.appendChild(t);
+  });
+
+  // Animate polygons
+  let currentIdx = -1;
+  function showSystem(idx) {
+    // Remove old
+    svg.querySelectorAll('.system-poly').forEach(p => p.remove());
+    if (idx < 0) return;
+    const s = systems[idx];
+    const points = angles.map((a, i) => pt(a, R * s.scores[i])).map(p => p.join(',')).join(' ');
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    poly.setAttribute('points', points);
+    poly.setAttribute('fill', s.color);
+    poly.setAttribute('fill-opacity', '0.2');
+    poly.setAttribute('stroke', s.color);
+    poly.setAttribute('stroke-width', '2');
+    poly.classList.add('system-poly');
+    poly.style.transition = 'all 0.5s ease';
+    svg.appendChild(poly);
+
+    // dots
+    angles.forEach((a, i) => {
+      if (s.scores[i] > 0) {
+        const [dx, dy] = pt(a, R * s.scores[i]);
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', dx); c.setAttribute('cy', dy);
+        c.setAttribute('r', '5'); c.setAttribute('fill', s.color);
+        c.classList.add('system-poly');
+        svg.appendChild(c);
+      }
+    });
+  }
+
+  // Auto-cycle
+  let interval;
+  function startCycle() {
+    interval = setInterval(() => {
+      currentIdx = (currentIdx + 1) % systems.length;
+      showSystem(currentIdx);
+    }, 2000);
+  }
+  startCycle();
+  svg.addEventListener('click', () => {
+    clearInterval(interval);
+    currentIdx = (currentIdx + 1) % systems.length;
+    showSystem(currentIdx);
+    startCycle();
+  });
+})();
+
+// ========== BRAIN: NEURAL AVALANCHE ==========
+(function() {
+  const svg = document.getElementById('brain-viz');
+  const cols = 20, rows = 10;
+  const sx = 60, sy = 60, sp = 35;
+  const neurons = [];
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const x = sx + c * sp + (r % 2) * sp/2;
+      const y = sy + r * sp;
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', x); circle.setAttribute('cy', y);
+      circle.setAttribute('r', '6'); circle.setAttribute('fill', '#334155');
+      circle.setAttribute('stroke', '#475569'); circle.setAttribute('stroke-width', '1');
+      svg.appendChild(circle);
+      neurons.push({ el: circle, x, y, active: false, col: c, row: r });
+    }
+  }
+
+  // Draw connections
+  neurons.forEach((n, i) => {
+    neurons.forEach((m, j) => {
+      if (i >= j) return;
+      const d = Math.hypot(n.x - m.x, n.y - m.y);
+      if (d < sp * 1.2) {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', n.x); line.setAttribute('y1', n.y);
+        line.setAttribute('x2', m.x); line.setAttribute('y2', m.y);
+        line.setAttribute('stroke', '#1e293b'); line.setAttribute('stroke-width', '0.5');
+        svg.insertBefore(line, svg.firstChild.nextSibling);
+      }
+    });
+  });
+
+  function neighbors(n) {
+    return neurons.filter(m => m !== n && Math.hypot(n.x - m.x, n.y - m.y) < sp * 1.2);
+  }
+
+  function fire(n, delay) {
+    if (n.active) return;
+    n.active = true;
+    setTimeout(() => {
+      n.el.setAttribute('fill', '#fbbf24');
+      n.el.setAttribute('r', '9');
+      setTimeout(() => {
+        n.el.setAttribute('fill', '#ef4444');
+        n.el.setAttribute('r', '7');
+        setTimeout(() => {
+          n.el.setAttribute('fill', '#334155');
+          n.el.setAttribute('r', '6');
+          n.active = false;
+        }, 600);
+      }, 200);
+      // Branching ratio ~1: each active neuron activates ~1 neighbor
+      const nb = neighbors(n).filter(m => !m.active);
+      const count = Math.random() < 0.7 ? 1 : (Math.random() < 0.5 ? 2 : 0);
+      for (let i = 0; i < Math.min(count, nb.length); i++) {
+        const target = nb[Math.floor(Math.random() * nb.length)];
+        fire(target, 80 + Math.random() * 120);
+      }
+    }, delay);
+  }
+
+  svg.addEventListener('click', (e) => {
+    const rect = svg.getBoundingClientRect();
+    const scaleX = 800 / rect.width;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * (400 / rect.height);
+    let closest = neurons[0], minD = Infinity;
+    neurons.forEach(n => {
+      const d = Math.hypot(n.x - mx, n.y - my);
+      if (d < minD) { minD = d; closest = n; }
+    });
+    fire(closest, 0);
+  });
+
+  // Auto-trigger
+  setInterval(() => {
+    const n = neurons[Math.floor(Math.random() * neurons.length)];
+    fire(n, 0);
+  }, 3000);
+})();
+
+// ========== CARDIAC: SPIRAL WAVES ==========
+(function() {
+  const svg = document.getElementById('cardiac-viz');
+  const W = 800, H = 400;
+  let state = 'bound'; // bound = flutter, unbound = fibrillation
+
+  // Create spiral wave visualization using animated paths
+  const spirals = [];
+  function createSpiral(cx, cy, dir, color) {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+    // Spiral arm
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', '2.5');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('opacity', '0.8');
+    g.appendChild(path);
+
+    // Core
+    const core = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    core.setAttribute('cx', cx); core.setAttribute('cy', cy);
+    core.setAttribute('r', '4'); core.setAttribute('fill', color);
+    g.appendChild(core);
+
+    // Charge label
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', cx); label.setAttribute('y', cy - 10);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('fill', color);
+    label.setAttribute('font-size', '14');
+    label.setAttribute('font-weight', 'bold');
+    label.setAttribute('font-family', 'system-ui');
+    label.textContent = dir > 0 ? '+' : '−';
+    g.appendChild(label);
+
+    svg.appendChild(g);
+    return { g, path, core, label, cx, cy, dir, origX: cx, origY: cy, angle: 0 };
+  }
+
+  // Bound pairs (flutter)
+  const pairs = [
+    [createSpiral(250, 200, 1, '#ef4444'), createSpiral(310, 200, -1, '#3b82f6')],
+    [createSpiral(500, 200, 1, '#ef4444'), createSpiral(560, 200, -1, '#3b82f6')],
+  ];
+  const allSpirals = pairs.flat();
+
+  // State label
+  const stateLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  stateLabel.setAttribute('x', 400); stateLabel.setAttribute('y', 385);
+  stateLabel.setAttribute('text-anchor', 'middle');
+  stateLabel.setAttribute('fill', '#94a3b8');
+  stateLabel.setAttribute('font-size', '13');
+  stateLabel.setAttribute('font-family', 'system-ui');
+  stateLabel.textContent = 'Atrial Flutter — bound vortex pairs (KT low-T phase)';
+  svg.appendChild(stateLabel);
+
+  let t = 0;
+  function animate() {
+    t += 0.02;
+
+    pairs.forEach(([a, b], pi) => {
+      const baseCX = (a.origX + b.origX) / 2;
+      const baseCY = (a.origY + b.origY) / 2;
+
+      if (state === 'bound') {
+        // Orbit around center
+        const orbitR = 35;
+        const aX = baseCX + orbitR * Math.cos(t * 2 + pi * Math.PI);
+        const aY = baseCY + orbitR * Math.sin(t * 2 + pi * Math.PI);
+        const bX = baseCX + orbitR * Math.cos(t * 2 + pi * Math.PI + Math.PI);
+        const bY = baseCY + orbitR * Math.sin(t * 2 + pi * Math.PI + Math.PI);
+
+        updateSpiral(a, aX, aY, t);
+        updateSpiral(b, bX, bY, t);
+      } else {
+        // Unbound — drift apart
+        const drift = Math.min((t - unboundStart) * 40, 150);
+        const wobX = 15 * Math.sin(t * 3 + pi);
+        const wobY = 15 * Math.cos(t * 2.7 + pi);
+        updateSpiral(a, a.origX - drift + wobX, a.origY + wobY, t);
+        updateSpiral(b, b.origX + drift + wobX, b.origY - wobY, t);
+      }
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  function updateSpiral(s, newCX, newCY, t) {
+    s.core.setAttribute('cx', newCX);
+    s.core.setAttribute('cy', newCY);
+    s.label.setAttribute('x', newCX);
+    s.label.setAttribute('y', newCY - 12);
+
+    // Draw spiral arms
+    let d = `M ${newCX} ${newCY}`;
+    for (let i = 0; i < 60; i++) {
+      const angle = t * 3 * s.dir + i * 0.15;
+      const r = 3 + i * 1.2;
+      d += ` L ${newCX + r * Math.cos(angle)} ${newCY + r * Math.sin(angle)}`;
+    }
+    s.path.setAttribute('d', d);
+  }
+
+  let unboundStart = 0;
+  svg.addEventListener('click', () => {
+    if (state === 'bound') {
+      state = 'unbound';
+      unboundStart = t;
+      stateLabel.textContent = 'Atrial Fibrillation — unbound vortices (KT high-T phase)';
+      stateLabel.setAttribute('fill', '#ef4444');
+    } else {
+      state = 'bound';
+      stateLabel.textContent = 'Atrial Flutter — bound vortex pairs (KT low-T phase)';
+      stateLabel.setAttribute('fill', '#94a3b8');
+    }
+  });
+
+  animate();
+})();
+
+// ========== ACTIVE MATTER: NEMATIC DEFECTS ==========
+(function() {
+  const svg = document.getElementById('active-viz');
+  const W = 800, H = 400;
+  const rods = [];
+  const defects = [];
+
+  // Create background nematic field
+  for (let x = 40; x < W - 20; x += 25) {
+    for (let y = 50; y < H - 20; y += 25) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      const angle = Math.sin(x * 0.01) * Math.cos(y * 0.015) * Math.PI;
+      const len = 9;
+      line.setAttribute('x1', x - len * Math.cos(angle));
+      line.setAttribute('y1', y - len * Math.sin(angle));
+      line.setAttribute('x2', x + len * Math.cos(angle));
+      line.setAttribute('y2', y + len * Math.sin(angle));
+      line.setAttribute('stroke', '#475569');
+      line.setAttribute('stroke-width', '1.5');
+      line.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(line);
+      rods.push({ el: line, x, y, baseAngle: angle });
+    }
+  }
+
+  // Create defects
+  function addDefect(x, y, charge, color) {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', x); circle.setAttribute('cy', y);
+    circle.setAttribute('r', '12');
+    circle.setAttribute('fill', color);
+    circle.setAttribute('fill-opacity', '0.3');
+    circle.setAttribute('stroke', color);
+    circle.setAttribute('stroke-width', '2');
+    g.appendChild(circle);
+
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', x); label.setAttribute('y', y + 5);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('fill', color);
+    label.setAttribute('font-size', '14');
+    label.setAttribute('font-weight', 'bold');
+    label.setAttribute('font-family', 'system-ui');
+    label.textContent = charge > 0 ? '+½' : '−½';
+    g.appendChild(label);
+
+    svg.appendChild(g);
+    defects.push({ g, circle, label, x, y, charge, vx: (Math.random()-0.5)*0.8, vy: (Math.random()-0.5)*0.8 });
+  }
+
+  // Create defect pairs
+  addDefect(150, 150, 1, '#ef4444');
+  addDefect(200, 180, -1, '#3b82f6');
+  addDefect(400, 120, 1, '#ef4444');
+  addDefect(450, 160, -1, '#3b82f6');
+  addDefect(600, 250, 1, '#ef4444');
+  addDefect(650, 220, -1, '#3b82f6');
+  addDefect(300, 300, 1, '#ef4444');
+  addDefect(350, 280, -1, '#3b82f6');
+
+  function animateDefects() {
+    defects.forEach(d => {
+      // +1/2 self-propel, -1/2 are passive
+      if (d.charge > 0) {
+        d.x += d.vx;
+        d.y += d.vy;
+        if (d.x < 30 || d.x > W - 30) d.vx *= -1;
+        if (d.y < 50 || d.y > H - 30) d.vy *= -1;
+        d.vx += (Math.random() - 0.5) * 0.1;
+        d.vy += (Math.random() - 0.5) * 0.1;
+      } else {
+        d.x += (Math.random() - 0.5) * 0.3;
+        d.y += (Math.random() - 0.5) * 0.3;
+      }
+      d.circle.setAttribute('cx', d.x);
+      d.circle.setAttribute('cy', d.y);
+      d.label.setAttribute('x', d.x);
+      d.label.setAttribute('y', d.y + 5);
+
+      // Distort nearby rods
+      rods.forEach(r => {
+        const dist = Math.hypot(r.x - d.x, r.y - d.y);
+        if (dist < 80) {
+          const angle = Math.atan2(r.y - d.y, r.x - d.x);
+          const influence = (1 - dist / 80) * d.charge * 0.5;
+          const newAngle = r.baseAngle + angle * influence;
+          const len = 9;
+          r.el.setAttribute('x1', r.x - len * Math.cos(newAngle));
+          r.el.setAttribute('y1', r.y - len * Math.sin(newAngle));
+          r.el.setAttribute('x2', r.x + len * Math.cos(newAngle));
+          r.el.setAttribute('y2', r.y + len * Math.sin(newAngle));
+          r.el.setAttribute('stroke', dist < 30 ? '#64748b' : '#475569');
+        }
+      });
+    });
+    requestAnimationFrame(animateDefects);
+  }
+  animateDefects();
+})();
+
+// ========== QUASICRYSTAL: PENROSE TILING ==========
+(function() {
+  const svg = document.getElementById('quasi-viz');
+  const W = 800, H = 500;
+  const cx = 400, cy = 260;
+
+  // Generate a simple Penrose-like pattern using golden ratio
+  const phi = (1 + Math.sqrt(5)) / 2;
+  const tiles = [];
+  const scale = 30;
+
+  // Create a radial pattern with 5-fold symmetry
+  for (let ring = 0; ring < 7; ring++) {
+    const n = ring === 0 ? 1 : ring * 10;
+    for (let i = 0; i < n; i++) {
+      const angle = (i / n) * 2 * Math.PI + ring * Math.PI / (5 * phi);
+      const r = ring * scale * (1 + 0.1 * Math.sin(i * phi));
+
+      // Thin and thick rhombs
+      const isThick = (i + ring) % 3 !== 0;
+      const tileAngle = angle + (isThick ? 0 : Math.PI / 5);
+      const w = isThick ? scale * 0.6 : scale * 0.4;
+      const h2 = isThick ? scale * 0.4 : scale * 0.6;
+
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+
+      if (x < 20 || x > W - 20 || y < 50 || y > H - 20) continue;
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const c = Math.cos(tileAngle), s = Math.sin(tileAngle);
+      const pts = [
+        [x + w*c, y + w*s],
+        [x + h2*(-s), y + h2*c],
+        [x - w*c, y - w*s],
+        [x - h2*(-s), y - h2*c]
+      ];
+      path.setAttribute('d', `M ${pts.map(p=>p.join(',')).join(' L ')} Z`);
+      path.setAttribute('fill', isThick ? 'rgba(139, 92, 246, 0.15)' : 'rgba(6, 182, 212, 0.12)');
+      path.setAttribute('stroke', isThick ? '#7c3aed' : '#0891b2');
+      path.setAttribute('stroke-width', '0.5');
+      svg.appendChild(path);
+      tiles.push({ el: path, x, y, ring, delay: ring * 200 + i * 20 });
+    }
+  }
+
+  // Golden ratio label
+  const phiLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  phiLabel.setAttribute('x', 700); phiLabel.setAttribute('y', 470);
+  phiLabel.setAttribute('text-anchor', 'middle');
+  phiLabel.setAttribute('fill', '#a855f7');
+  phiLabel.setAttribute('font-size', '20');
+  phiLabel.setAttribute('font-family', 'Georgia, serif');
+  phiLabel.setAttribute('font-style', 'italic');
+  phiLabel.innerHTML = '&#966; = (1+&#8730;5)/2';
+  svg.appendChild(phiLabel);
+
+  // Animate: pulse tiles from center outward
+  let t = 0;
+  function pulse() {
+    t += 0.015;
+    tiles.forEach(tile => {
+      const wave = Math.sin(t * 2 - tile.ring * 0.5);
+      const opacity = 0.5 + 0.3 * wave;
+      tile.el.setAttribute('opacity', opacity);
+    });
+    requestAnimationFrame(pulse);
+  }
+  pulse();
+})();
+
+// ========== GLASS TRANSITION ==========
+(function() {
+  const svg = document.getElementById('glass-viz');
+  const W = 800, H = 350;
+
+  // Specific heat curve with two peaks
+  const curvePoints = [];
+  for (let i = 0; i <= 100; i++) {
+    const x = 100 + i * 6;
+    const t = i / 100;
+    // Two peaks: one at t=0.35 (2nd order), one at t=0.7 (weakly 1st order)
+    const peak1 = 2.5 * Math.exp(-((t - 0.35) ** 2) / 0.005);
+    const peak2 = 1.8 * Math.exp(-((t - 0.7) ** 2) / 0.008);
+    const baseline = 0.5 + 0.3 * t;
+    const cv = baseline + peak1 + peak2;
+    const y = H - 60 - cv * 80;
+    curvePoints.push({ x, y, t, cv });
+  }
+
+  // Axes
+  const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  xAxis.setAttribute('x1', 100); xAxis.setAttribute('y1', H-55);
+  xAxis.setAttribute('x2', 710); xAxis.setAttribute('y2', H-55);
+  xAxis.setAttribute('stroke', '#475569'); xAxis.setAttribute('stroke-width', '1');
+  svg.appendChild(xAxis);
+
+  const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  yAxis.setAttribute('x1', 100); yAxis.setAttribute('y1', 40);
+  yAxis.setAttribute('x2', 100); yAxis.setAttribute('y2', H-55);
+  yAxis.setAttribute('stroke', '#475569'); yAxis.setAttribute('stroke-width', '1');
+  svg.appendChild(yAxis);
+
+  // Labels
+  const addLabel = (x, y, text, opts = {}) => {
+    const t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t2.setAttribute('x', x); t2.setAttribute('y', y);
+    t2.setAttribute('text-anchor', opts.anchor || 'middle');
+    t2.setAttribute('fill', opts.color || '#94a3b8');
+    t2.setAttribute('font-size', opts.size || '12');
+    t2.setAttribute('font-family', opts.font || 'system-ui');
+    if (opts.style) t2.setAttribute('font-style', opts.style);
+    t2.textContent = text;
+    svg.appendChild(t2);
+  };
+
+  addLabel(400, H - 30, 'Energy / Temperature', { size: '13' });
+  addLabel(60, 180, 'Cv', { size: '14', font: 'Georgia, serif', style: 'italic' });
+
+  // Draw curve
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  let d = `M ${curvePoints[0].x} ${curvePoints[0].y}`;
+  for (let i = 1; i < curvePoints.length; i++) {
+    d += ` L ${curvePoints[i].x} ${curvePoints[i].y}`;
+  }
+  path.setAttribute('d', d);
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', '#22c55e');
+  path.setAttribute('stroke-width', '2.5');
+  svg.appendChild(path);
+
+  // Fill under curve
+  const fillPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  fillPath.setAttribute('d', d + ` L ${curvePoints[curvePoints.length-1].x} ${H-55} L ${curvePoints[0].x} ${H-55} Z`);
+  fillPath.setAttribute('fill', 'rgba(34, 197, 94, 0.1)');
+  svg.insertBefore(fillPath, path);
+
+  // Peak markers
+  const peak1X = 100 + 35 * 6;
+  const peak2X = 100 + 70 * 6;
+
+  // Dashed lines at peaks
+  [peak1X, peak2X].forEach((px, i) => {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', px); line.setAttribute('y1', 45);
+    line.setAttribute('x2', px); line.setAttribute('y2', H-55);
+    line.setAttribute('stroke', i === 0 ? '#f59e0b' : '#ef4444');
+    line.setAttribute('stroke-width', '1');
+    line.setAttribute('stroke-dasharray', '4,4');
+    svg.appendChild(line);
+  });
+
+  addLabel(peak1X, 42, 'T₁ (2nd order)', { color: '#f59e0b', size: '11' });
+  addLabel(peak2X, 42, 'T₂ (weakly 1st)', { color: '#ef4444', size: '11' });
+
+  // Annotation
+  addLabel(550, 100, 'Two transitions', { color: '#cbd5e1', size: '14' });
+  addLabel(550, 118, 'Topological changes at both', { color: '#94a3b8', size: '12' });
+  addLabel(550, 136, 'Bicritical candidate?', { color: '#f59e0b', size: '13', style: 'italic' });
+
+  // Animate: scanning line
+  const scanLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  scanLine.setAttribute('y1', 50); scanLine.setAttribute('y2', H-55);
+  scanLine.setAttribute('stroke', '#3b82f6'); scanLine.setAttribute('stroke-width', '1.5');
+  scanLine.setAttribute('opacity', '0.5');
+  svg.appendChild(scanLine);
+
+  let scanX = 100;
+  function animScan() {
+    scanX += 0.5;
+    if (scanX > 710) scanX = 100;
+    scanLine.setAttribute('x1', scanX); scanLine.setAttribute('x2', scanX);
+    // Glow near peaks
+    const nearPeak = Math.min(Math.abs(scanX - peak1X), Math.abs(scanX - peak2X));
+    scanLine.setAttribute('opacity', nearPeak < 30 ? '0.9' : '0.3');
+    requestAnimationFrame(animScan);
+  }
+  animScan();
+})();
+
+// ========== FMO: ENAQT ==========
+(function() {
+  const svg = document.getElementById('fmo-viz');
+  const W = 800, H = 400;
+  const cx = 300, cy = 200;
+
+  // Chromophore network
+  const sites = [
+    { x: 300, y: 120, label: '1' },
+    { x: 220, y: 170, label: '2' },
+    { x: 380, y: 170, label: '3' },
+    { x: 250, y: 250, label: '4' },
+    { x: 350, y: 250, label: '5' },
+    { x: 200, y: 310, label: '6' },
+    { x: 400, y: 310, label: '7' },
+  ];
+
+  // Connections
+  const bonds = [
+    [0,1],[0,2],[1,3],[2,4],[3,5],[4,6],[1,2],[3,4],[0,4],[1,4]
+  ];
+
+  bonds.forEach(([a, b]) => {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', sites[a].x); line.setAttribute('y1', sites[a].y);
+    line.setAttribute('x2', sites[b].x); line.setAttribute('y2', sites[b].y);
+    line.setAttribute('stroke', '#334155'); line.setAttribute('stroke-width', '2');
+    svg.appendChild(line);
+  });
+
+  const siteElements = sites.map((s, i) => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', s.x); circle.setAttribute('cy', s.y);
+    circle.setAttribute('r', '18');
+    circle.setAttribute('fill', '#1e293b');
+    circle.setAttribute('stroke', '#22c55e');
+    circle.setAttribute('stroke-width', '2');
+    svg.appendChild(circle);
+
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', s.x); text.setAttribute('y', s.y + 5);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#94a3b8');
+    text.setAttribute('font-size', '12');
+    text.setAttribute('font-family', 'system-ui');
+    text.textContent = s.label;
+    svg.appendChild(text);
+
+    return circle;
+  });
+
+  // Energy packet (exciton)
+  const exciton = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  exciton.setAttribute('r', '8');
+  exciton.setAttribute('fill', '#fbbf24');
+  exciton.setAttribute('filter', 'url(#glow)');
+  svg.appendChild(exciton);
+
+  // Glow filter
+  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  defs.innerHTML = '<filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+  svg.insertBefore(defs, svg.firstChild.nextSibling);
+
+  // Efficiency curve on right side
+  const effPoints = [];
+  for (let i = 0; i <= 50; i++) {
+    const noise = i / 50;
+    const eff = 0.4 + 0.55 * Math.exp(-((noise - 0.35) ** 2) / 0.03) - 0.2 * noise;
+    effPoints.push({ x: 550 + i * 4, y: 350 - eff * 280 });
+  }
+
+  const effPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  let effD = `M ${effPoints[0].x} ${effPoints[0].y}`;
+  effPoints.forEach(p => effD += ` L ${p.x} ${p.y}`);
+  effPath.setAttribute('d', effD);
+  effPath.setAttribute('fill', 'none');
+  effPath.setAttribute('stroke', '#06b6d4');
+  effPath.setAttribute('stroke-width', '2');
+  svg.appendChild(effPath);
+
+  // Labels for efficiency curve
+  const addT = (x, y, text, opts = {}) => {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('text-anchor', opts.anchor || 'middle');
+    t.setAttribute('fill', opts.color || '#94a3b8');
+    t.setAttribute('font-size', opts.size || '11');
+    t.setAttribute('font-family', 'system-ui');
+    if (opts.style) t.setAttribute('font-style', opts.style);
+    t.textContent = text;
+    svg.appendChild(t);
+  };
+
+  addT(670, 385, 'Noise Strength', {});
+  addT(530, 130, 'Efficiency', { anchor: 'end', size: '12' });
+  addT(620, 65, 'Optimal', { color: '#22c55e', size: '12' });
+  addT(620, 80, 'noise', { color: '#22c55e', size: '11', style: 'italic' });
+
+  // Optimal noise marker
+  const optLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  optLine.setAttribute('x1', 620); optLine.setAttribute('y1', 85);
+  optLine.setAttribute('x2', 620); optLine.setAttribute('y2', 350);
+  optLine.setAttribute('stroke', '#22c55e'); optLine.setAttribute('stroke-width', '1');
+  optLine.setAttribute('stroke-dasharray', '3,3'); optLine.setAttribute('opacity', '0.5');
+  svg.appendChild(optLine);
+
+  // Animate exciton path
+  let pathIdx = 0;
+  const hoppingPath = [0, 1, 3, 4, 6]; // Energy flows through network to reaction center
+  let progress = 0;
+
+  function animExciton() {
+    progress += 0.015;
+    if (progress >= 1) {
+      progress = 0;
+      pathIdx = (pathIdx + 1) % (hoppingPath.length - 1);
+      // Sometimes take different path (noise-assisted)
+      if (Math.random() < 0.3 && pathIdx > 0) {
+        pathIdx = Math.floor(Math.random() * (hoppingPath.length - 1));
+      }
+    }
+
+    const from = sites[hoppingPath[pathIdx]];
+    const to = sites[hoppingPath[Math.min(pathIdx + 1, hoppingPath.length - 1)]];
+    const x = from.x + (to.x - from.x) * progress;
+    const y = from.y + (to.y - from.y) * progress;
+
+    // Add noise wobble
+    const wobble = 3 * Math.sin(progress * Math.PI * 4);
+    exciton.setAttribute('cx', x + wobble);
+    exciton.setAttribute('cy', y + wobble * 0.5);
+
+    // Highlight current and next sites
+    siteElements.forEach((el, i) => {
+      if (i === hoppingPath[pathIdx]) {
+        el.setAttribute('stroke', '#fbbf24');
+        el.setAttribute('stroke-width', '3');
+      } else if (i === hoppingPath[Math.min(pathIdx + 1, hoppingPath.length - 1)]) {
+        el.setAttribute('stroke', '#f59e0b');
+        el.setAttribute('stroke-width', '2.5');
+      } else {
+        el.setAttribute('stroke', '#22c55e');
+        el.setAttribute('stroke-width', '2');
+      }
+    });
+
+    requestAnimationFrame(animExciton);
+  }
+  animExciton();
+})();
+
+// ========== KT TRANSITION ==========
+(function() {
+  const svg = document.getElementById('kt-viz');
+  const W = 800, H = 450;
+
+  // Create vortex-antivortex pairs
+  const vortices = [];
+  const N = 8;
+
+  for (let i = 0; i < N; i++) {
+    const x = 100 + Math.random() * (W - 200);
+    const y = 80 + Math.random() * (H - 180);
+    const charge = i % 2 === 0 ? 1 : -1;
+    const color = charge > 0 ? '#ef4444' : '#3b82f6';
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+    // Swirl lines
+    for (let j = 0; j < 6; j++) {
+      const arm = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      arm.setAttribute('fill', 'none');
+      arm.setAttribute('stroke', color);
+      arm.setAttribute('stroke-width', '1.5');
+      arm.setAttribute('opacity', '0.4');
+      g.appendChild(arm);
+    }
+
+    const core = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    core.setAttribute('r', '6');
+    core.setAttribute('fill', color);
+    g.appendChild(core);
+
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('fill', 'white');
+    label.setAttribute('font-size', '10');
+    label.setAttribute('font-weight', 'bold');
+    label.setAttribute('font-family', 'system-ui');
+    label.textContent = charge > 0 ? '+' : '−';
+    g.appendChild(label);
+
+    svg.appendChild(g);
+
+    // Pair them
+    const partner = i % 2 === 0 ? i + 1 : i - 1;
+    vortices.push({
+      g, core, label, x, y, charge, color,
+      partner: partner < N ? partner : i,
+      vx: 0, vy: 0,
+      bound: true
+    });
+  }
+
+  // Temperature slider
+  let temperature = 0.3; // 0 = cold (bound), 1 = hot (unbound)
+  const tempLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  tempLabel.setAttribute('x', 400); tempLabel.setAttribute('y', H - 15);
+  tempLabel.setAttribute('text-anchor', 'middle');
+  tempLabel.setAttribute('fill', '#94a3b8');
+  tempLabel.setAttribute('font-size', '13');
+  tempLabel.setAttribute('font-family', 'system-ui');
+  svg.appendChild(tempLabel);
+
+  // Phase label
+  const phaseLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  phaseLabel.setAttribute('x', 400); phaseLabel.setAttribute('y', H - 35);
+  phaseLabel.setAttribute('text-anchor', 'middle');
+  phaseLabel.setAttribute('font-size', '14');
+  phaseLabel.setAttribute('font-weight', 'bold');
+  phaseLabel.setAttribute('font-family', 'system-ui');
+  svg.appendChild(phaseLabel);
+
+  let t = 0;
+  function animKT() {
+    t += 0.01;
+
+    // Slowly cycle temperature
+    temperature = 0.5 + 0.45 * Math.sin(t * 0.3);
+
+    const isBound = temperature < 0.5;
+    tempLabel.textContent = `T/T_KT = ${temperature.toFixed(2)}`;
+    if (isBound) {
+      phaseLabel.textContent = 'T < T_KT : Bound pairs (quasi-long-range order)';
+      phaseLabel.setAttribute('fill', '#3b82f6');
+    } else {
+      phaseLabel.textContent = 'T > T_KT : Free vortices (disordered)';
+      phaseLabel.setAttribute('fill', '#ef4444');
+    }
+
+    vortices.forEach((v, i) => {
+      if (i >= N) return;
+
+      if (isBound && i < N - 1 && i % 2 === 0) {
+        // Bound: orbit partner
+        const p = vortices[i + 1];
+        const midX = (v.x + p.x) / 2;
+        const midY = (v.y + p.y) / 2;
+        const orbR = 20 + temperature * 40;
+
+        v.x = midX + orbR * Math.cos(t * 2 + i);
+        v.y = midY + orbR * Math.sin(t * 2 + i);
+        p.x = midX + orbR * Math.cos(t * 2 + i + Math.PI);
+        p.y = midY + orbR * Math.sin(t * 2 + i + Math.PI);
+      } else if (!isBound) {
+        // Unbound: random walk
+        v.vx += (Math.random() - 0.5) * temperature * 2;
+        v.vy += (Math.random() - 0.5) * temperature * 2;
+        v.vx *= 0.95; v.vy *= 0.95;
+        v.x += v.vx;
+        v.y += v.vy;
+
+        // Bounce
+        if (v.x < 40 || v.x > W - 40) v.vx *= -1;
+        if (v.y < 60 || v.y > H - 70) v.vy *= -1;
+        v.x = Math.max(40, Math.min(W - 40, v.x));
+        v.y = Math.max(60, Math.min(H - 70, v.y));
+      }
+
+      v.core.setAttribute('cx', v.x);
+      v.core.setAttribute('cy', v.y);
+      v.label.setAttribute('x', v.x);
+      v.label.setAttribute('y', v.y + 4);
+
+      // Update swirl arms
+      const arms = v.g.querySelectorAll('path');
+      arms.forEach((arm, j) => {
+        let d = `M ${v.x} ${v.y}`;
+        for (let k = 0; k < 20; k++) {
+          const angle = t * 3 * v.charge + j * Math.PI / 3 + k * 0.2;
+          const r = 3 + k * 2;
+          d += ` L ${v.x + r * Math.cos(angle)} ${v.y + r * Math.sin(angle)}`;
+        }
+        arm.setAttribute('d', d);
+      });
+    });
+
+    requestAnimationFrame(animKT);
+  }
+  animKT();
+})();
+</script>
+
+</body>
+</html>
