@@ -299,6 +299,7 @@ a:hover { text-decoration: underline; }
       <circle cx="170" cy="155" r="0.7" fill="#94a3b8" opacity="0.12">
         <animate attributeName="opacity" values="0.08;0.2;0.08" dur="4.7s" repeatCount="indefinite"/>
       </circle>
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
     </g>
 
     <!-- Pattern unit 3 — identical, translated -->
@@ -599,5 +600,7 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
+<script src="../../js/annex-tracker.js"></script>
 </body>
 </html>
