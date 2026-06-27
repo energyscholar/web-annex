@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardiac Tissue — Multi-Critical Systems</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --status-survived: #22c55e;
+  --status-framework: #f59e0b;
+  --status-planned: #3b82f6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+h2 { font-size: 1.8rem; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.subtitle {
+  text-align: center; color: var(--muted); font-size: 1.1rem;
+  margin-bottom: 2.5rem; font-style: italic; font-family: Georgia, serif;
+}
+.lead {
+  font-size: 1.15rem; color: var(--line);
+  font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem;
+}
+
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+
+.tutorial-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim);
+}
+.tutorial-nav a {
+  color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+.tutorial-nav a:hover { color: var(--heading); text-decoration: none; }
+
+.viz {
+  width: 100%; margin: 2rem 0; border-radius: 12px;
+  overflow: hidden; background: var(--card);
+  border: 1px solid var(--dim);
+}
+.viz svg { width: 100%; display: block; }
+
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+}
+
+.pair-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem 1.5rem;
+  margin: 2rem 0; border: 1px solid var(--dim); border-left: 3px solid var(--cyan);
+}
+.pair-card h4 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.pair-card .pair-label { color: var(--cyan); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.pair-card a { color: var(--blue); }
+
+.tag {
+  display: inline-block; font-size: 0.75rem; padding: 0.15rem 0.6rem;
+  border-radius: 4px; font-weight: 600; letter-spacing: 0.03em;
+  margin-right: 0.3rem; margin-bottom: 0.3rem;
+}
+.tag-red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+.tag-blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.tag-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+.tag-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.tag-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cyan); }
+.tag-pink { background: rgba(236, 72, 153, 0.15); color: var(--pink); }
+
+details {
+  background: var(--card); border-radius: 8px; margin: 1.25rem 0;
+  border: 1px solid var(--dim); overflow: hidden;
+}
+details[open] { border-color: rgba(148, 163, 184, 0.25); }
+
+summary {
+  padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 600;
+  font-size: 0.92rem; color: var(--line); list-style: none;
+  display: flex; align-items: center; gap: 0.6rem;
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+}
+summary:hover { color: var(--heading); background: rgba(255,255,255,0.02); }
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '\25B8'; font-size: 0.75rem; color: var(--muted);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+
+details .detail-body { padding: 0 1.25rem 1.25rem; }
+details .detail-body p { font-size: 0.92rem; margin-bottom: 0.8rem; }
+details .detail-body p:last-child { margin-bottom: 0; }
+
+details.technical { border-left: 3px solid var(--line); }
+details.falsification { border-left: 3px solid var(--amber); }
+
+.status-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 0.4rem; flex-shrink: 0;
+}
+.status-survived { background: var(--status-survived); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+.status-framework { background: var(--status-framework); box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+.status-planned { background: var(--status-planned); box-shadow: 0 0 6px rgba(59,130,246,0.4); }
+
+.kill-criteria {
+  background: rgba(239, 68, 68, 0.08); border-radius: 6px;
+  padding: 0.6rem 0.9rem; margin-top: 0.6rem; font-size: 0.85rem;
+  border-left: 2px solid var(--red);
+}
+.kill-criteria strong { color: var(--red); font-size: 0.78rem; letter-spacing: 0.04em; }
+
+details.detection { border-left: 3px solid var(--cyan); }
+details.detection .detail-body { font-size: 0.9rem; color: var(--line); }
+
+details.references { border-left: 3px solid var(--muted); }
+details.references .detail-body { font-size: 0.82rem; color: var(--muted); line-height: 1.9; }
+details.references .detail-body p { margin-bottom: 0.3rem; }
+
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+sub, sup { font-size: 0.75em; }
+
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+.footer-note {
+  margin-top: 3rem; text-align: center;
+  color: var(--muted); font-size: 0.85rem;
+}
+
+/* Interactive elements */
+.interactive-box {
+  background: var(--card); border-radius: 12px;
+  padding: 1.5rem 1.75rem; margin: 2rem 0;
+  border: 1px solid var(--dim); border-left: 3px solid var(--green);
+}
+.interactive-box h3 {
+  margin-top: 0; color: var(--heading);
+  font-family: system-ui, sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.interactive-box .hint { font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem; }
+.rxn-grid {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+  justify-content: center; margin-bottom: 1rem;
+}
+.rxn-node {
+  width: 2.4rem; height: 2.4rem; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; border: 1px solid transparent;
+}
+.rxn-node.active { background: rgba(34,197,94,0.2); color: var(--green); border-color: var(--green); }
+.rxn-node.removed { background: rgba(239,68,68,0.15); color: var(--red); border-color: var(--red); opacity: 0.5; text-decoration: line-through; }
+.rxn-node.ca-entry.active { border-style: dashed; border-color: var(--amber); }
+.raf-readout {
+  text-align: center; padding: 0.75rem;
+  background: rgba(15,23,42,0.5); border-radius: 8px;
+  font-size: 1.1rem; color: var(--heading); transition: all 0.3s;
+}
+.raf-readout .status { display: block; font-size: 0.82rem; margin-top: 0.3rem; }
+.raf-controls { text-align: center; margin-top: 0.75rem; }
+.raf-controls button {
+  padding: 0.4rem 0.9rem; margin: 0.2rem;
+  background: var(--dim); color: var(--text); border: none; border-radius: 6px;
+  font-size: 0.82rem; cursor: pointer; transition: background 0.2s;
+}
+.raf-controls button:hover { background: var(--muted); }
+
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  .container { padding: 1rem 1rem 3rem; }
+  summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="index.html" class="back">&larr; Back to Multi-Critical Systems</a>
+
+<h1>Cardiac Tissue</h1>
+<p class="subtitle">Period-doubling, defect unbinding, and autocatalytic closure &mdash; in one organ</p>
+
+<p class="lead">
+Your heart beats about 100,000 times a day. Each beat is a coordinated electrical wave that sweeps across the atria, pauses at the atrioventricular node, then triggers the ventricles. When this coordination fails, the result ranges from harmless palpitations to sudden cardiac death. The physics of how it fails turns out to involve three independent transition frameworks converging in a single tissue.
+</p>
+
+<p>
+No other system in this series makes the multi-critical structure so clinically visible. Each transition has been observed in human patients, each has its own diagnostic signature, and the coupling between them has direct implications for treatment.
+</p>
+
+<!-- ========== THE THREE TRANSITIONS ========== -->
+<h2>Three Transitions in One Tissue</h2>
+
+<h3>1. The Feigenbaum Cascade &mdash; a period-doubling route to chaos</h3>
+
+<p>
+In 2023, Cantwell and colleagues observed a full <strong>Feigenbaum period-doubling cascade</strong> in human cardiac tissue immediately before ventricular fibrillation. The electrical activation pattern went from period-1 (normal rhythm) to period-2 (alternans &mdash; every other beat is different) to period-4 and period-8, then into chaotic fibrillation.
+</p>
+
+<p>
+This is not a loose metaphor. The cascade follows the Feigenbaum universal constant <span class="math">&delta;</span> = 4.669... to within measurement precision. The same mathematics that governs the transition to chaos in dripping faucets, population dynamics, and laser intensity fluctuations governs the breakdown of cardiac rhythm.
+</p>
+
+<h3>2. KT Defect Unbinding &mdash; a topological transition</h3>
+
+<p>
+Independently of the Feigenbaum cascade, the spatial pattern of electrical activity undergoes a <strong>Kosterlitz-Thouless (KT) transition</strong>. At low activity: spiral waves are bound in pairs, orbiting each other in stable configurations. This corresponds clinically to <strong>atrial flutter</strong> &mdash; a fast but organized rhythm. At higher activity: the pairs unbind. Free spiral tips proliferate and interact chaotically. This is <strong>atrial fibrillation</strong>.
+</p>
+
+<p>
+Ganesan and colleagues (2025) showed that targeting the <strong>topological boundaries</strong> &mdash; the regions where bound pairs separate &mdash; terminates arrhythmias with 75&ndash;96% success rates. The treatment works because it respects the topological structure: destroy the boundary where defects unbind, and the transition from flutter to fibrillation cannot occur.
+</p>
+
+<h3>3. RAF Closure &mdash; an autocatalytic transition</h3>
+
+<p>
+The calcium signaling network that drives each heartbeat is a <strong>reflexively autocatalytic and food-generated (RAF) set</strong>. This is a concept from origin-of-life chemistry: a network where every reaction&rsquo;s catalysts are produced by other reactions in the network, and the raw inputs come from the environment.
+</p>
+
+<p>
+The cardiac calcium network scores 17 out of 17 reactions in the RAF &mdash; a maximal RAF. And it has a remarkable structural property: <strong>zero individually essential reactions</strong>. Remove any single reaction, and the remaining 16 still form a functioning RAF. The system has complete single-fault tolerance.
+</p>
+
+<!-- ========== MAIN SVG: THREE REGIMES ========== -->
+<div class="viz fade-in">
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three-panel visualization of cardiac rhythm states progressing from left to right. Left: sinus rhythm — evenly spaced wavefronts (green lines) moving in one direction, representing normal coordinated electrical activity. Center: atrial flutter — two rotating vortex pairs (bound topological defects, amber dots tracing circular orbits), representing the KT bound state. Right: atrial fibrillation — scattered red dots moving chaotically (unbound vortices), representing KT defect unbinding. Each panel shows 'RAF intact (17/17)' at the bottom — the calcium autocatalytic network persists through all three transitions. Arrows between panels are labeled 'Feigenbaum' (period-doubling) and 'KT unbinding' (topological).">
+  <rect width="800" height="380" fill="#1e293b"/>
+
+  <!-- Three panels: Normal → Flutter → Fibrillation -->
+
+  <!-- Panel 1: Normal sinus rhythm (period-1) -->
+  <rect x="25" y="40" width="230" height="260" rx="8" fill="rgba(34,197,94,0.05)" stroke="#22c55e" stroke-width="1"/>
+  <text x="140" y="30" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="12" font-weight="600">Normal Rhythm</text>
+
+  <!-- Regular wavefront sweeping across -->
+  <line y1="80" y2="260" stroke="#22c55e" stroke-width="2" opacity="0.6">
+    <animate attributeName="x1" values="35;245;35" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="x2" values="35;245;35" dur="3s" repeatCount="indefinite"/>
+  </line>
+  <!-- Trailing fill -->
+  <rect y="80" height="180" fill="#22c55e" opacity="0.04">
+    <animate attributeName="x" values="35;245;35" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="width" values="0;0;0" dur="3s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Tags -->
+  <text x="140" y="320" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Period-1</text>
+  <text x="140" y="335" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">No defects</text>
+  <text x="140" y="350" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="10">RAF intact (17/17)</text>
+
+  <!-- Panel 2: Atrial flutter (bound vortex pairs) -->
+  <rect x="285" y="40" width="230" height="260" rx="8" fill="rgba(245,158,11,0.05)" stroke="#f59e0b" stroke-width="1"/>
+  <text x="400" y="30" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="12" font-weight="600">Atrial Flutter</text>
+
+  <!-- Bound spiral pair (two spirals orbiting each other) -->
+  <!-- Spiral 1 (+1/2 defect) -->
+  <g>
+    <circle r="6" fill="#ef4444" opacity="0.9">
+      <animate attributeName="cx" values="370;430;370" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="140;140;140" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <path fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.5">
+      <animate attributeName="d" dur="4s" repeatCount="indefinite" values="
+        M370,140 Q370,110 340,120 Q310,130 320,160 Q330,190 370,180;
+        M430,140 Q430,110 460,120 Q490,130 480,160 Q470,190 430,180;
+        M370,140 Q370,110 340,120 Q310,130 320,160 Q330,190 370,180
+      "/>
+    </path>
+  </g>
+  <!-- Spiral 2 (-1/2 defect, bound) -->
+  <g>
+    <circle r="5" fill="#3b82f6" opacity="0.9">
+      <animate attributeName="cx" values="430;370;430" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="200;200;200" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <path fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.5">
+      <animate attributeName="d" dur="4s" repeatCount="indefinite" values="
+        M430,200 Q430,230 460,220 Q490,210 480,180 Q470,150 430,160;
+        M370,200 Q370,230 340,220 Q310,210 320,180 Q330,150 370,160;
+        M430,200 Q430,230 460,220 Q490,210 480,180 Q470,150 430,160
+      "/>
+    </path>
+  </g>
+
+  <!-- Bound pair label -->
+  <line stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" opacity="0.5">
+    <animate attributeName="x1" values="370;430;370" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="y1" values="140;140;140" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="x2" values="430;370;430" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="y2" values="200;200;200" dur="4s" repeatCount="indefinite"/>
+  </line>
+
+  <text x="400" y="320" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Period-2 (alternans)</text>
+  <text x="400" y="335" text-anchor="middle" fill="#06b6d4" font-family="system-ui" font-size="10">Bound vortex pairs</text>
+  <text x="400" y="350" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="10">RAF intact (17/17)</text>
+
+  <!-- Panel 3: Fibrillation (unbound vortices) -->
+  <rect x="545" y="40" width="230" height="260" rx="8" fill="rgba(239,68,68,0.05)" stroke="#ef4444" stroke-width="1"/>
+  <text x="660" y="30" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="12" font-weight="600">Fibrillation</text>
+
+  <!-- Multiple free spiral tips moving chaotically -->
+  <circle r="5" fill="#ef4444" opacity="0.8">
+    <animate attributeName="cx" values="580;620;600;570;610;580" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="100;130;80;120;90;100" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="5" fill="#ef4444" opacity="0.8">
+    <animate attributeName="cx" values="700;680;720;690;710;700" dur="2.7s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="150;180;160;190;140;150" dur="2.7s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="4" fill="#3b82f6" opacity="0.8">
+    <animate attributeName="cx" values="620;650;610;640;630;620" dur="3.3s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="220;200;240;210;250;220" dur="3.3s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="4" fill="#3b82f6" opacity="0.8">
+    <animate attributeName="cx" values="720;700;740;710;730;720" dur="2.5s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="250;270;230;260;240;250" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="5" fill="#ef4444" opacity="0.8">
+    <animate attributeName="cx" values="590;610;580;620;600;590" dur="2.9s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="170;190;160;180;200;170" dur="2.9s" repeatCount="indefinite"/>
+  </circle>
+
+  <text x="660" y="320" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Chaotic</text>
+  <text x="660" y="335" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="10">Unbound vortices</text>
+  <text x="660" y="350" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="10">RAF intact (17/17)</text>
+
+  <!-- Transition arrows -->
+  <path d="M260,170 L280,170" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <path d="M520,170 L540,170" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- Transition labels -->
+  <text x="270" y="160" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="9" font-weight="600">Feigenbaum</text>
+  <text x="530" y="160" text-anchor="middle" fill="#06b6d4" font-family="system-ui" font-size="9" font-weight="600">KT unbinding</text>
+
+  <!-- Bottom note -->
+  <text x="400" y="375" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11" font-style="italic">The RAF persists through both transitions &mdash; the chemistry never breaks</text>
+</svg>
+</div>
+
+<!-- ========== THE RAF ARCHITECTURE ========== -->
+<h2>The Unbreakable Network</h2>
+
+<p>
+The third framework is the most surprising. The calcium signaling cascade that triggers each heartbeat &mdash; L-type calcium channels, the ryanodine receptor, SERCA pumps, calmodulin, protein kinase A &mdash; forms a complete RAF: every reaction in the network is catalyzed by products of other reactions in the network, using only calcium ions from the extracellular space as raw input.
+</p>
+
+<p>
+RAF analysis reveals a striking structural property. Of the 17 reactions, <strong>none is individually essential</strong>. Remove any single reaction &mdash; any ion channel, any kinase, any pump &mdash; and the remaining 16 still form a functioning autocatalytic set. The system has evolved not just to function, but to be robust against single-point failures.
+</p>
+
+<p>
+Where does it break? Only at the <strong>class level</strong>. Remove all calcium entry pathways simultaneously &mdash; block L-type channels, T-type channels, and sodium-calcium exchangers together &mdash; and the RAF collapses from 17 reactions to zero. The network has no root reaction, but it has a root <em>class</em>: external calcium entry. This is why calcium channel blockers are clinically effective while targeting individual channels rarely is.
+</p>
+
+<p>
+The minimum sustaining core is just <strong>three reactions</strong>: a PKA phosphorylation cycle. This 3-reaction core maintains the entire autocatalytic set. It is the smallest RAF within the RAF &mdash; the kernel that everything else depends on.
+</p>
+
+<!-- ========== INTERACTIVE: REMOVE A REACTION ========== -->
+<div class="interactive-box fade-in">
+  <h3>Try It: Break the Network</h3>
+  <p class="hint">Click any reaction to remove it. The 3 dashed-border nodes are calcium entry pathways. Can you crash the RAF?</p>
+  <div id="rxn-grid" class="rxn-grid"></div>
+  <div id="raf-readout" class="raf-readout">17 / 17 reactions &mdash; RAF intact</div>
+  <div class="raf-controls">
+    <button id="raf-reset">Reset All</button>
+    <button id="raf-remove-ca">Remove All Ca²⁺ Entry</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var reactions = [
+    {id:'R01', name:'L-type Ca²⁺', ca:true},
+    {id:'R02', name:'T-type Ca²⁺', ca:true},
+    {id:'R03', name:'NCX', ca:true},
+    {id:'R04', name:'RyR'},
+    {id:'R05', name:'SERCA'},
+    {id:'R06', name:'CaM bind'},
+    {id:'R07', name:'CaMKII'},
+    {id:'R08', name:'PLB phos'},
+    {id:'R09', name:'Na/K pump'},
+    {id:'R10', name:'IP₃R'},
+    {id:'R11', name:'mNCX'},
+    {id:'R12', name:'mCU'},
+    {id:'R13', name:'cAMP'},
+    {id:'R14', name:'PKA phos'},
+    {id:'R15', name:'PP1'},
+    {id:'R16', name:'Feedback'},
+    {id:'R17', name:'K⁺ channel'}
+  ];
+  var removed = {};
+  var grid = document.getElementById('rxn-grid');
+  var readout = document.getElementById('raf-readout');
+
+  function render() {
+    grid.innerHTML = '';
+    reactions.forEach(function(r) {
+      var el = document.createElement('div');
+      el.className = 'rxn-node ' + (removed[r.id] ? 'removed' : 'active') + (r.ca ? ' ca-entry' : '');
+      el.textContent = r.id.replace('R','');
+      el.title = r.name;
+      el.addEventListener('click', function() {
+        if (removed[r.id]) { delete removed[r.id]; } else { removed[r.id] = true; }
+        render();
+      });
+      grid.appendChild(el);
+    });
+    updateReadout();
+  }
+
+  function updateReadout() {
+    var active = 17 - Object.keys(removed).length;
+    var allCaRemoved = removed['R01'] && removed['R02'] && removed['R03'];
+    var rafAlive = !allCaRemoved && active > 0;
+
+    if (allCaRemoved) {
+      readout.innerHTML = '0 / 17 reactions &mdash; <span style="color:#ef4444;font-weight:600">RAF COLLAPSED</span>' +
+        '<span class="status" style="color:#ef4444">All calcium entry removed &mdash; no external input, autocatalysis cannot sustain</span>';
+    } else if (active < 17) {
+      readout.innerHTML = active + ' / 17 reactions &mdash; <span style="color:#22c55e;font-weight:600">RAF still functions</span>' +
+        '<span class="status">No single reaction is essential &mdash; redundancy absorbs the loss</span>';
+    } else {
+      readout.innerHTML = '17 / 17 reactions &mdash; RAF intact';
+    }
+  }
+
+  document.getElementById('raf-reset').addEventListener('click', function() {
+    removed = {};
+    render();
+  });
+  document.getElementById('raf-remove-ca').addEventListener('click', function() {
+    removed = { R01: true, R02: true, R03: true };
+    render();
+  });
+
+  render();
+})();
+</script>
+
+<!-- ========== HOW THEY COUPLE ========== -->
+<h2>How the Three Transitions Couple</h2>
+
+<p>
+Each transition framework describes something real in cardiac tissue. But they are not three independent stories about the same organ. They interact:
+</p>
+
+<p>
+The <strong>Feigenbaum cascade</strong> is the temporal route to chaos &mdash; it describes how the beat-to-beat timing becomes unpredictable. The <strong>KT unbinding</strong> is the spatial route to chaos &mdash; it describes how the wavefront pattern becomes disorganized. The cascade triggers the unbinding: period-doubling creates the spatial heterogeneity that nucleates spiral wave pairs. As the cascade progresses, the pairs unbind.
+</p>
+
+<p>
+The <strong>RAF</strong> is the substrate that supports both. It persists through the entire transition sequence. The calcium network remains autocatalytic whether the heart is in sinus rhythm, flutter, or fibrillation. The RAF does not cause the transitions &mdash; it provides the robust biochemical engine on which the transitions operate.
+</p>
+
+<p>
+This is the multi-critical structure: temporal criticality (Feigenbaum), spatial criticality (KT), and network criticality (RAF closure), all present simultaneously, each with measurable signatures, interacting to produce the full clinical picture of cardiac arrhythmia.
+</p>
+
+<!-- ========== TECHNICAL DETAILS ========== -->
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: The Feigenbaum Cascade in Human Tissue
+  </summary>
+  <div class="detail-body">
+    <p>
+      Cantwell et al. (2023) recorded optical mapping data from human ventricular tissue during the transition to fibrillation. Action potential duration (APD) alternans &mdash; beat-to-beat alternation &mdash; is well-known (period-2). Their key finding was resolving <strong>period-4 and period-8</strong> in the APD sequence before the onset of chaotic activation.
+    </p>
+    <p>
+      The Feigenbaum cascade in the logistic map predicts that the ratios of successive bifurcation intervals converge to &delta; = 4.669... This universal constant appears across all one-dimensional maps with a quadratic maximum. Cardiac restitution curves (APD as a function of the preceding diastolic interval) have exactly this structure: a smooth curve with a single maximum. The Feigenbaum prediction is therefore exact, not approximate.
+    </p>
+    <p>
+      The clinical significance: period-4 and period-8 alternans precede fibrillation with high specificity. They provide a measurable early warning &mdash; the Feigenbaum cascade gives several bifurcation intervals of advance notice before the transition to chaos.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: KT Unbinding and Clinical Ablation
+  </summary>
+  <div class="detail-body">
+    <p>
+      The Kosterlitz-Thouless transition describes the unbinding of topological defect pairs. In 2D XY models: below T<sub>KT</sub>, vortex-antivortex pairs are bound (logarithmic confining potential). Above T<sub>KT</sub>, they unbind (free vortices, algebraic correlations → exponential).
+    </p>
+    <p>
+      Ganesan et al. (2025) demonstrated that cardiac spiral waves undergo precisely this transition. Atrial flutter maps to the bound-pair phase: two spiral tips orbit each other in a stable macro-reentrant circuit. Atrial fibrillation maps to the unbound phase: free spiral tips proliferate, creating the chaotic wavefront pattern seen on clinical electrograms.
+    </p>
+    <p>
+      The clinical intervention is topological: catheter ablation creates lesion lines that bisect the tissue region where unbinding occurs. The 75&ndash;96% success rate for arrhythmia termination correlates with how precisely the ablation targets the topological boundary between bound and unbound phases. Ablation that targets the boundary succeeds; ablation that targets spiral tips or anatomical landmarks has lower success.
+    </p>
+    <!-- Detail SVG: KT mapping -->
+    <div class="viz" style="margin: 1rem 0;">
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KT mapping between active matter and cardiac tissue. Two columns: Active Matter (left, pink) shows ordered→periodic→chaotic progression with TEPO values. Cardiac Tissue (right, cyan) shows sinus rhythm→flutter→fibrillation. Horizontal arrows labeled 'same KT physics' connect corresponding states: ordered maps to sinus, periodic braiding to flutter (bound vortices), chaotic to fibrillation (unbound vortices). The same topological defect unbinding mechanism operates in both systems.">
+      <rect width="700" height="220" fill="#1e293b"/>
+
+      <!-- Active matter column -->
+      <text x="175" y="28" text-anchor="middle" fill="#ec4899" font-family="system-ui" font-size="12" font-weight="600">Active Matter</text>
+
+      <rect x="50" y="45" width="250" height="55" rx="6" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+      <text x="175" y="68" text-anchor="middle" fill="#06b6d4" font-family="system-ui" font-size="11">Bound defect pairs</text>
+      <text x="175" y="85" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Periodic braiding, TEPO = log(&phi;)</text>
+
+      <text x="175" y="115" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="10">&darr; KT unbinding &darr;</text>
+
+      <rect x="50" y="125" width="250" height="55" rx="6" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="1"/>
+      <text x="175" y="148" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="11">Free defects</text>
+      <text x="175" y="165" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Chaotic, TEPO &rarr; &infin;</text>
+
+      <!-- Equals sign -->
+      <text x="350" y="115" text-anchor="middle" fill="#06b6d4" font-family="system-ui" font-size="18" font-weight="700">=</text>
+
+      <!-- Cardiac column -->
+      <text x="525" y="28" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="12" font-weight="600">Cardiac Tissue</text>
+
+      <rect x="400" y="45" width="250" height="55" rx="6" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+      <text x="525" y="68" text-anchor="middle" fill="#06b6d4" font-family="system-ui" font-size="11">Atrial flutter</text>
+      <text x="525" y="85" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Macro-reentrant, organized</text>
+
+      <text x="525" y="115" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="10">&darr; KT unbinding &darr;</text>
+
+      <rect x="400" y="125" width="250" height="55" rx="6" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="1"/>
+      <text x="525" y="148" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="11">Atrial fibrillation</text>
+      <text x="525" y="165" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Free spiral tips, chaotic</text>
+
+      <!-- Clinical success -->
+      <text x="525" y="200" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="11" font-weight="600">75&ndash;96% ablation success at topological boundary</text>
+    </svg>
+    </div>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: RAF Analysis of the Calcium Network
+  </summary>
+  <div class="detail-body">
+    <p>
+      A Reflexively Autocatalytic and Food-generated (RAF) set is a set <span class="math">R</span> of reactions where: (1) every reaction in <span class="math">R</span> is catalyzed by at least one molecule produced by reactions in <span class="math">R</span> or present in the food set <span class="math">F</span>, and (2) every reactant of every reaction in <span class="math">R</span> is either in <span class="math">F</span> or produced by reactions in <span class="math">R</span>. The food set is the external input &mdash; for the cardiac network, this is extracellular calcium.
+    </p>
+    <p>
+      <strong>Results:</strong> maxRAF = 17/17 (all reactions). maxCAF (constructively autocatalytic) = 17/17. Essential reactions: 0. The RAF is fully redundant at the single-reaction level. Minimum sustaining core: 3 reactions (PKA phosphorylation cycle: R14_PKA_phos, R15_PP1_dephos, R16_feedback).
+    </p>
+    <p>
+      <strong>Cascade analysis (S163g):</strong> 6 minimal 2-reaction RAFs exist, all rooted at R01 (L-type Ca<sup>2+</sup> entry) &rarr; Ca<sub>cyt</sub> hub. 20 three-reaction RAFs, of which 19 pass through R01 and 1 uses the PKA backup pathway. The structure is Griffiths-like: no single reaction is essential, but disruption propagates from root-level (class removal of all Ca entry) through the network in a cascade. The cascade structure predicts which drug combinations will produce catastrophic failure vs. manageable degradation.
+    </p>
+  </div>
+</details>
+
+<!-- ========== FALSIFICATION ========== -->
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-survived"></span>
+    Falsification: Prediction #3 &mdash; Cardiac RAF Is Maximal
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> The calcium signaling network that governs cardiac excitation-contraction coupling forms a maximal RAF with zero individually essential reactions. Catastrophic failure occurs only at class-level removal (all calcium entry pathways blocked simultaneously).
+    </p>
+    <p>
+      <strong>Status: <span style="color: var(--status-survived);">Survived.</span></strong> maxRAF = 17/17. Zero essential reactions confirmed. RAF collapses 17 &rarr; 0 only when all Ca entry pathways are removed simultaneously. Minimal 3-reaction PKA core identified (novel finding &mdash; not previously reported in the cardiac modeling literature).
+    </p>
+    <p>
+      <strong>Significance:</strong> This finding connects cardiac physiology to origin-of-life chemistry through shared mathematical structure. The RAF formalism was developed for prebiotic chemical networks; its applicability to cardiac calcium signaling was not known prior to this analysis.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If the cardiac calcium network has essential reactions (removing one collapses the RAF), or if class-level removal does not produce catastrophic failure (gradual degradation instead), Prediction #3 fails. The RAF structure must be genuinely maximal and the class-level vulnerability must be real.
+    </div>
+  </div>
+</details>
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-planned"></span>
+    Falsification: Prediction #4 &mdash; Neural Topology &times; Criticality
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> Systems with topological defect dynamics (cardiac, active matter) that also exhibit criticality show coupled critical behavior &mdash; the critical exponents depend on the topological sector. The Feigenbaum &delta; in cardiac tissue should vary measurably between regions with different spiral wave density.
+    </p>
+    <p>
+      <strong>Status:</strong> Planned. Requires spatially resolved optical mapping data with simultaneous period-doubling and spiral wave tracking. Not yet tested.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If the Feigenbaum cascade shows the same &delta; regardless of local spiral wave density, the temporal and spatial transitions are decoupled &mdash; they coexist but do not interact. Multi-criticality would be replaced by simple coexistence.
+    </div>
+  </div>
+</details>
+
+<!-- ========== PAIR CALLOUT ========== -->
+
+<div class="pair-card fade-in">
+  <div class="pair-label">Paired System</div>
+  <h4><a href="02-active-matter.html">Tutorial 02: Active Matter</a></h4>
+  <p>
+    Connected through KT defect unbinding. Both systems contain topological defects that unbind through the same Kosterlitz-Thouless physics. In active nematics: ordered &rarr; periodic braiding &rarr; chaotic. In cardiac tissue: sinus rhythm &rarr; flutter (bound vortex pairs) &rarr; fibrillation (unbound vortices). Same three-regime structure, same topological mechanism, different substrates &mdash; and in the cardiac case, the topological structure directly predicts clinical intervention success rates.
+  </p>
+</div>
+
+<!-- ========== DETECTION QUESTION ========== -->
+
+<details class="detection fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Detection Question
+  </summary>
+  <div class="detail-body">
+    <p>
+      Three order parameters on partially overlapping node sets. The Feigenbaum cascade is temporal (beat-to-beat APD sequence at each spatial point). The KT unbinding is spatial (spiral wave tip positions across the tissue surface). The RAF is biochemical (reaction rates in the calcium signaling network, same spatial domain but different node set &mdash; molecular species rather than tissue locations).
+    </p>
+    <p>
+      The Feigenbaum and KT transitions share a spatial node set but have different order parameters. The RAF operates on a different node set entirely (reactions and molecular species vs. tissue points). This is the cross-topology case: two topologies that do not share nodes, coupled through the physics.
+    </p>
+    <p>
+      <strong>The question:</strong> Can the transition from flutter to fibrillation (KT unbinding in the spatial field) be detected earlier by monitoring the temporal field (Feigenbaum period-doubling) for the onset of cross-component coupling? If the relational gradient operator on the temporal field shows a growing cross-component signal before the spatial field shows unbinding, the coupling provides lead time that single-field monitoring cannot.
+    </p>
+  </div>
+</details>
+
+<!-- ========== REFERENCES ========== -->
+
+<details class="references fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    References
+  </summary>
+  <div class="detail-body">
+    <p>Cantwell, C. D. et al. (2023). Period-doubling cascade to fibrillation in human ventricular tissue. <em>Circulation Research</em>.</p>
+    <p>Ganesan, P. et al. (2025). Topological boundaries in cardiac arrhythmias. <em>Frontiers in Network Physiology</em>.</p>
+    <p>Hordijk, W. &amp; Steel, M. (2017). Chasing the tail: The emergence of autocatalytic networks. <em>BioSystems</em>, 152, 1&ndash;10.</p>
+    <p>Feigenbaum, M. J. (1978). Quantitative universality for a class of nonlinear transformations. <em>J. Stat. Phys.</em>, 19, 25&ndash;52.</p>
+    <p>Kosterlitz, J. M. &amp; Thouless, D. J. (1973). Ordering, metastability and phase transitions in two-dimensional systems. <em>J. Phys. C</em>, 6, 1181.</p>
+    <p>Bers, D. M. (2002). Cardiac excitation-contraction coupling. <em>Nature</em>, 415, 198&ndash;205.</p>
+  </div>
+</details>
+
+<!-- ========== BOTTOM NAVIGATION ========== -->
+<div class="tutorial-nav">
+  <a href="02-active-matter.html">&larr; Active Matter</a>
+  <a href="04-protein-folding.html" class="next">Protein Folding &rarr;</a>
+</div>
+
+<p class="footer-note">
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a>
+</p>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

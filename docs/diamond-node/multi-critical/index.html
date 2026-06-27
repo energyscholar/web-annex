@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Critical Systems</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+
+h1, h2, h3 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.subtitle { text-align: center; color: var(--muted); font-size: 1.1rem; margin-bottom: 3rem; font-style: italic; font-family: Georgia, serif; }
+h2 { font-size: 1.8rem; margin: 3.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h2 .sn { color: var(--blue); font-size: 0.9em; margin-right: 0.3em; }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+
+.lead { font-size: 1.15rem; color: var(--line); font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem; }
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* System cards */
+.system-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.system-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--dim);
+  transition: border-color 0.3s, transform 0.2s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.system-card:hover { border-color: var(--blue); transform: translateY(-2px); text-decoration: none; }
+
+.system-card .card-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+.system-card .card-num {
+  color: var(--blue);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  min-width: 1.5rem;
+}
+.system-card .card-title {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.3rem;
+  color: var(--heading);
+  font-weight: 600;
+}
+.system-card .card-transitions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+  margin-left: 2.25rem;
+}
+.system-card .tag {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.system-card .card-desc {
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-left: 2.25rem;
+  line-height: 1.6;
+}
+.system-card .card-pair {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 0.6rem;
+  margin-left: 2.25rem;
+  font-style: italic;
+}
+
+/* Tag colors per transition type */
+.tag-critical { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+.tag-topological { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.tag-autocatalytic { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.tag-jamming { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+.tag-soc { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.tag-chaos { background: rgba(236, 72, 153, 0.15); color: var(--pink); }
+.tag-kt { background: rgba(6, 182, 212, 0.15); color: var(--cyan); }
+.tag-feigenbaum { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+.tag-griffiths { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.tag-braid { background: rgba(236, 72, 153, 0.15); color: var(--pink); }
+.tag-manna { background: rgba(6, 182, 212, 0.15); color: var(--cyan); }
+
+/* SVG container */
+.viz { width: 100%; margin: 2rem 0; border-radius: 12px; overflow: hidden; background: var(--card); }
+.viz svg { width: 100%; display: block; }
+
+/* Pairs section */
+.pair-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.pair-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.2rem;
+  border-left: 3px solid var(--purple);
+}
+.pair-card h3 { margin-top: 0; color: var(--heading); font-size: 1.05rem; }
+.pair-card .pair-link { color: var(--muted); font-size: 0.85rem; }
+
+/* Back link */
+.back { display: inline-block; margin-bottom: 2rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); }
+
+/* Fade-in */
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Decorative braid pattern */
+.container { position: relative; }
+.hero-pattern {
+  position: absolute;
+  top: -1rem; right: -1rem;
+  width: 260px; height: 520px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-pattern svg {
+  width: 260px; height: 780px;
+  animation: hero-flow 20s linear infinite;
+}
+.hero-pattern::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to right, var(--bg) 0%, transparent 45%),
+    linear-gradient(to top, var(--bg) 0%, transparent 20%),
+    linear-gradient(to bottom, var(--bg) 0%, transparent 15%);
+  pointer-events: none;
+}
+@keyframes hero-flow {
+  from { transform: translateY(0); }
+  to { transform: translateY(-260px); }
+}
+
+/* Keep content above pattern */
+.back, h1, .subtitle, .lead, p, h2, h3, .viz,
+.system-grid, .pair-grid, .footer-note { position: relative; z-index: 1; }
+
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  .container { padding: 1rem 1rem 4rem; }
+  .system-card .card-title { font-size: 1.1rem; }
+  .hero-pattern { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Decorative flowing braid pattern — hints at coupled systems -->
+<div class="hero-pattern" aria-hidden="true">
+<svg viewBox="0 0 260 780" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <!-- Pattern unit 1 of 3 (each 260px tall) -->
+    <g>
+      <!-- Background orbital arcs -->
+      <ellipse cx="130" cy="130" rx="100" ry="60" fill="none" stroke="#334155" stroke-width="0.5" opacity="0.15" transform="rotate(-18 130 130)"/>
+      <ellipse cx="140" cy="200" rx="75" ry="95" fill="none" stroke="#334155" stroke-width="0.4" opacity="0.1" transform="rotate(8 140 200)"/>
+
+      <!-- Strand A: pink — sweeps left to right to left -->
+      <path d="M60,0 C60,43 200,87 200,130 C200,173 60,217 60,260" fill="none" stroke="#ec4899" stroke-width="1.5" opacity="0.3"/>
+      <!-- Strand B: blue — opposite phase -->
+      <path d="M200,0 C200,43 60,87 60,130 C60,173 200,217 200,260" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.3"/>
+      <!-- Strand C: green — subtler, smaller amplitude -->
+      <path d="M130,0 C160,43 100,87 130,130 C160,173 100,217 130,260" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.2"/>
+      <!-- Strand D: amber — very faint, different period -->
+      <path d="M90,0 C140,65 80,130 130,195 C180,260 110,260 90,260" fill="none" stroke="#f59e0b" stroke-width="0.7" opacity="0.12"/>
+
+      <!-- Crossing nodes — where strands intersect -->
+      <circle cx="130" cy="65" r="2.5" fill="#a855f7" opacity="0.35">
+        <animate attributeName="r" values="2;3.5;2" dur="3.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.25;0.55;0.25" dur="3.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="130" cy="195" r="2.5" fill="#06b6d4" opacity="0.35">
+        <animate attributeName="r" values="2;3.5;2" dur="4.1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.25;0.55;0.25" dur="4.1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="145" cy="130" r="2" fill="#f59e0b" opacity="0.3">
+        <animate attributeName="r" values="1.5;3;1.5" dur="5.3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.2;0.45;0.2" dur="5.3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Radial whiskers from crossings -->
+      <line x1="130" y1="65" x2="155" y2="45" stroke="#a855f7" stroke-width="0.4" opacity="0.15"/>
+      <line x1="130" y1="65" x2="105" y2="50" stroke="#a855f7" stroke-width="0.4" opacity="0.12"/>
+      <line x1="130" y1="195" x2="160" y2="210" stroke="#06b6d4" stroke-width="0.4" opacity="0.15"/>
+      <line x1="130" y1="195" x2="108" y2="215" stroke="#06b6d4" stroke-width="0.4" opacity="0.12"/>
+
+      <!-- Dust particles -->
+      <circle cx="45" cy="40" r="1" fill="#475569" opacity="0.18"/>
+      <circle cx="210" cy="95" r="1.2" fill="#475569" opacity="0.14"/>
+      <circle cx="85" cy="165" r="0.8" fill="#475569" opacity="0.2"/>
+      <circle cx="185" cy="230" r="1" fill="#475569" opacity="0.16"/>
+      <circle cx="55" cy="250" r="0.9" fill="#475569" opacity="0.12"/>
+      <circle cx="230" cy="30" r="1.1" fill="#475569" opacity="0.1">
+        <animate attributeName="opacity" values="0.05;0.2;0.05" dur="6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="170" cy="155" r="0.7" fill="#94a3b8" opacity="0.12">
+        <animate attributeName="opacity" values="0.08;0.2;0.08" dur="4.7s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Pattern unit 2 — identical, translated -->
+    <g transform="translate(0,260)">
+      <ellipse cx="130" cy="130" rx="100" ry="60" fill="none" stroke="#334155" stroke-width="0.5" opacity="0.15" transform="rotate(-18 130 130)"/>
+      <ellipse cx="140" cy="200" rx="75" ry="95" fill="none" stroke="#334155" stroke-width="0.4" opacity="0.1" transform="rotate(8 140 200)"/>
+      <path d="M60,0 C60,43 200,87 200,130 C200,173 60,217 60,260" fill="none" stroke="#ec4899" stroke-width="1.5" opacity="0.3"/>
+      <path d="M200,0 C200,43 60,87 60,130 C60,173 200,217 200,260" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.3"/>
+      <path d="M130,0 C160,43 100,87 130,130 C160,173 100,217 130,260" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.2"/>
+      <path d="M90,0 C140,65 80,130 130,195 C180,260 110,260 90,260" fill="none" stroke="#f59e0b" stroke-width="0.7" opacity="0.12"/>
+      <circle cx="130" cy="65" r="2.5" fill="#a855f7" opacity="0.35">
+        <animate attributeName="r" values="2;3.5;2" dur="3.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.25;0.55;0.25" dur="3.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="130" cy="195" r="2.5" fill="#06b6d4" opacity="0.35">
+        <animate attributeName="r" values="2;3.5;2" dur="4.1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.25;0.55;0.25" dur="4.1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="145" cy="130" r="2" fill="#f59e0b" opacity="0.3">
+        <animate attributeName="r" values="1.5;3;1.5" dur="5.3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.2;0.45;0.2" dur="5.3s" repeatCount="indefinite"/>
+      </circle>
+      <line x1="130" y1="65" x2="155" y2="45" stroke="#a855f7" stroke-width="0.4" opacity="0.15"/>
+      <line x1="130" y1="65" x2="105" y2="50" stroke="#a855f7" stroke-width="0.4" opacity="0.12"/>
+      <line x1="130" y1="195" x2="160" y2="210" stroke="#06b6d4" stroke-width="0.4" opacity="0.15"/>
+      <line x1="130" y1="195" x2="108" y2="215" stroke="#06b6d4" stroke-width="0.4" opacity="0.12"/>
+      <circle cx="45" cy="40" r="1" fill="#475569" opacity="0.18"/>
+      <circle cx="210" cy="95" r="1.2" fill="#475569" opacity="0.14"/>
+      <circle cx="85" cy="165" r="0.8" fill="#475569" opacity="0.2"/>
+      <circle cx="185" cy="230" r="1" fill="#475569" opacity="0.16"/>
+      <circle cx="55" cy="250" r="0.9" fill="#475569" opacity="0.12"/>
+      <circle cx="230" cy="30" r="1.1" fill="#475569" opacity="0.1">
+        <animate attributeName="opacity" values="0.05;0.2;0.05" dur="6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="170" cy="155" r="0.7" fill="#94a3b8" opacity="0.12">
+        <animate attributeName="opacity" values="0.08;0.2;0.08" dur="4.7s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Pattern unit 3 — identical, translated -->
+    <g transform="translate(0,520)">
+      <ellipse cx="130" cy="130" rx="100" ry="60" fill="none" stroke="#334155" stroke-width="0.5" opacity="0.15" transform="rotate(-18 130 130)"/>
+      <ellipse cx="140" cy="200" rx="75" ry="95" fill="none" stroke="#334155" stroke-width="0.4" opacity="0.1" transform="rotate(8 140 200)"/>
+      <path d="M60,0 C60,43 200,87 200,130 C200,173 60,217 60,260" fill="none" stroke="#ec4899" stroke-width="1.5" opacity="0.3"/>
+      <path d="M200,0 C200,43 60,87 60,130 C60,173 200,217 200,260" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.3"/>
+      <path d="M130,0 C160,43 100,87 130,130 C160,173 100,217 130,260" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.2"/>
+      <path d="M90,0 C140,65 80,130 130,195 C180,260 110,260 90,260" fill="none" stroke="#f59e0b" stroke-width="0.7" opacity="0.12"/>
+      <circle cx="130" cy="65" r="2.5" fill="#a855f7" opacity="0.35">
+        <animate attributeName="r" values="2;3.5;2" dur="3.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.25;0.55;0.25" dur="3.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="130" cy="195" r="2.5" fill="#06b6d4" opacity="0.35">
+        <animate attributeName="r" values="2;3.5;2" dur="4.1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.25;0.55;0.25" dur="4.1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="145" cy="130" r="2" fill="#f59e0b" opacity="0.3">
+        <animate attributeName="r" values="1.5;3;1.5" dur="5.3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.2;0.45;0.2" dur="5.3s" repeatCount="indefinite"/>
+      </circle>
+      <line x1="130" y1="65" x2="155" y2="45" stroke="#a855f7" stroke-width="0.4" opacity="0.15"/>
+      <line x1="130" y1="65" x2="105" y2="50" stroke="#a855f7" stroke-width="0.4" opacity="0.12"/>
+      <line x1="130" y1="195" x2="160" y2="210" stroke="#06b6d4" stroke-width="0.4" opacity="0.15"/>
+      <line x1="130" y1="195" x2="108" y2="215" stroke="#06b6d4" stroke-width="0.4" opacity="0.12"/>
+      <circle cx="45" cy="40" r="1" fill="#475569" opacity="0.18"/>
+      <circle cx="210" cy="95" r="1.2" fill="#475569" opacity="0.14"/>
+      <circle cx="85" cy="165" r="0.8" fill="#475569" opacity="0.2"/>
+      <circle cx="185" cy="230" r="1" fill="#475569" opacity="0.16"/>
+      <circle cx="55" cy="250" r="0.9" fill="#475569" opacity="0.12"/>
+    </g>
+  </g>
+</svg>
+</div>
+
+<a href="../index.html" class="back">&larr; Domain Convergence Research</a>
+
+<h1>Multi-Critical Systems</h1>
+<p class="subtitle">Six physical systems where independent phase transitions converge</p>
+
+<p class="lead">
+This is a series of six interactive tutorials examining a pattern that appears across condensed matter, biophysics, neuroscience, and plasma physics: <strong>multiple independent phase transitions converging in a single physical system</strong>. At the convergence point, the transitions couple, the universality class changes, and new structure emerges that no single transition contains.
+</p>
+
+<p>
+A single critical transition is a point in parameter space where one order parameter diverges &mdash; the system reorganizes. This is well understood. A <strong>multi-critical point</strong> is where two or more independent transitions converge. At the coupling point, the physics changes qualitatively: the coupled system produces correlations, failure modes, and early-warning signals that exist only in the interaction between transitions, not in either one alone.
+</p>
+
+<p>
+Each tutorial below teaches one physical system, starting from plain language and building to the multi-critical structure. Technical detail, falsification criteria, and citations are available in expandable sections for readers who want depth. The tutorials are ordered from simplest (two transitions, one coupling parameter) to most complex (four independent frameworks converging), and form three natural pairs connected by shared physical mechanisms.
+</p>
+
+<p>
+The central question: <em>why do multiple independent transitions converge in the same physical system &mdash; and what does the coupling produce that no single transition contains?</em>
+</p>
+
+<!-- ========== MAP SVG ========== -->
+<div class="viz fade-in">
+<svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="System map: six physical systems arranged in three pairs. Top row: Glass Transition (2 transitions, left) paired with Protein Folding (4 transitions, right) via the Gardner/jamming chain. Middle row: Active Matter (3 transitions, left) paired with Cardiac Tissue (3 transitions, right) via KT defect unbinding. Bottom row: Brain (3+ Griffiths transitions, left) paired with Tokamak (3 transitions, right) via Griffiths phase architecture. Animated dashed lines connect each pair, showing the shared physical mechanism that crosses domain boundaries.">
+  <rect width="800" height="420" fill="#1e293b"/>
+
+  <!-- Pair connection lines (drawn first, behind nodes) -->
+  <!-- Glass <-> Protein (Gardner/jamming chain) -->
+  <line x1="200" y1="100" x2="600" y2="100" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4">
+    <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3s" repeatCount="indefinite"/>
+  </line>
+  <text x="400" y="85" text-anchor="middle" fill="#a855f7" font-size="11" opacity="0.6">Gardner / jamming chain</text>
+
+  <!-- Active matter <-> Cardiac (KT defect unbinding) -->
+  <line x1="200" y1="220" x2="600" y2="220" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4">
+    <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3s" repeatCount="indefinite"/>
+  </line>
+  <text x="400" y="205" text-anchor="middle" fill="#06b6d4" font-size="11" opacity="0.6">KT defect unbinding</text>
+
+  <!-- Brain <-> Tokamak (Griffiths architecture) -->
+  <line x1="200" y1="340" x2="600" y2="340" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4">
+    <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="3s" repeatCount="indefinite"/>
+  </line>
+  <text x="400" y="325" text-anchor="middle" fill="#22c55e" font-size="11" opacity="0.6">Griffiths phase architecture</text>
+
+  <!-- System nodes -->
+  <!-- Row 1: Glass (left) <-> Protein (right) -->
+  <g>
+    <circle cx="200" cy="100" r="36" fill="#1e293b" stroke="#3b82f6" stroke-width="2">
+      <animate attributeName="r" values="36;38;36" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <text x="200" y="96" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="600">Glass</text>
+    <text x="200" y="112" text-anchor="middle" fill="#475569" font-size="10">2 transitions</text>
+  </g>
+  <g>
+    <circle cx="600" cy="100" r="36" fill="#1e293b" stroke="#f59e0b" stroke-width="2">
+      <animate attributeName="r" values="36;38;36" dur="4.3s" repeatCount="indefinite"/>
+    </circle>
+    <text x="600" y="96" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="600">Protein</text>
+    <text x="600" y="112" text-anchor="middle" fill="#475569" font-size="10">4 transitions</text>
+  </g>
+
+  <!-- Row 2: Active matter (left) <-> Cardiac (right) -->
+  <g>
+    <circle cx="200" cy="220" r="36" fill="#1e293b" stroke="#ec4899" stroke-width="2">
+      <animate attributeName="r" values="36;38;36" dur="3.7s" repeatCount="indefinite"/>
+    </circle>
+    <text x="200" y="216" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">Active</text>
+    <text x="200" y="230" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="600">Matter</text>
+    <text x="200" y="246" text-anchor="middle" fill="#475569" font-size="10">3 transitions</text>
+  </g>
+  <g>
+    <circle cx="600" cy="220" r="36" fill="#1e293b" stroke="#ef4444" stroke-width="2">
+      <animate attributeName="r" values="36;38;36" dur="4.1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="600" y="216" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="600">Cardiac</text>
+    <text x="600" y="232" text-anchor="middle" fill="#475569" font-size="10">3 transitions</text>
+  </g>
+
+  <!-- Row 3: Brain (left) <-> Tokamak (right) -->
+  <g>
+    <circle cx="200" cy="340" r="36" fill="#1e293b" stroke="#22c55e" stroke-width="2">
+      <animate attributeName="r" values="36;38;36" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+    <text x="200" y="336" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="600">Brain</text>
+    <text x="200" y="352" text-anchor="middle" fill="#475569" font-size="10">3 + Griffiths</text>
+  </g>
+  <g>
+    <circle cx="600" cy="340" r="36" fill="#1e293b" stroke="#f59e0b" stroke-width="2">
+      <animate attributeName="r" values="36;38;36" dur="3.9s" repeatCount="indefinite"/>
+    </circle>
+    <text x="600" y="336" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="600">Tokamak</text>
+    <text x="600" y="352" text-anchor="middle" fill="#475569" font-size="10">3 transitions</text>
+  </g>
+
+  <!-- Tutorial numbers -->
+  <text x="155" y="70" fill="#3b82f6" font-size="14" font-weight="700" font-family="monospace">01</text>
+  <text x="555" y="70" fill="#3b82f6" font-size="14" font-weight="700" font-family="monospace">04</text>
+  <text x="155" y="190" fill="#3b82f6" font-size="14" font-weight="700" font-family="monospace">02</text>
+  <text x="555" y="190" fill="#3b82f6" font-size="14" font-weight="700" font-family="monospace">03</text>
+  <text x="155" y="310" fill="#3b82f6" font-size="14" font-weight="700" font-family="monospace">05</text>
+  <text x="555" y="310" fill="#3b82f6" font-size="14" font-weight="700" font-family="monospace">06</text>
+
+  <!-- Legend -->
+  <text x="400" y="400" text-anchor="middle" fill="#475569" font-size="12" font-style="italic">Three pairs, connected by shared physical mechanisms</text>
+</svg>
+</div>
+
+<!-- ========== TUTORIAL CARDS ========== -->
+<h2><span class="sn">1.</span> The Tutorials</h2>
+
+<div class="system-grid">
+
+  <a href="01-glass-transition.html" class="system-card fade-in">
+    <div class="card-header">
+      <span class="card-num">01</span>
+      <span class="card-title">Glass Transition</span>
+    </div>
+    <div class="card-transitions">
+      <span class="tag tag-critical">T<sub>MCT</sub> dynamic</span>
+      <span class="tag tag-topological">T<sub>K</sub> thermodynamic</span>
+    </div>
+    <div class="card-desc">
+      The cleanest bicritical case. Two transitions &mdash; one weakly first-order, one second-order &mdash; resolved as distinct specific heat peaks with independent topological signatures. In strong glass formers, they nearly merge. Fragility measures distance from the codimension-two point where they meet.
+    </div>
+    <div class="card-pair">Paired with: Protein Folding &mdash; connected through the Gardner/jamming chain</div>
+  </a>
+
+  <a href="02-active-matter.html" class="system-card fade-in">
+    <div class="card-header">
+      <span class="card-num">02</span>
+      <span class="card-title">Active Matter</span>
+    </div>
+    <div class="card-transitions">
+      <span class="tag tag-manna">Manna onset</span>
+      <span class="tag tag-braid">braid selection</span>
+      <span class="tag tag-critical">novel &eta;=1.04</span>
+    </div>
+    <div class="card-desc">
+      Three critical phenomena with independent exponents. Defect onset follows Manna universality on closed surfaces and directed percolation on open ones &mdash; boundary topology selects the universality class. Confinement geometry selects braid class: golden braid in confinement, trivial braids on flat torus. A novel universality class at the periodic-to-chaotic boundary.
+    </div>
+    <div class="card-pair">Paired with: Cardiac Tissue &mdash; connected through KT defect unbinding</div>
+  </a>
+
+  <a href="03-cardiac-tissue.html" class="system-card fade-in">
+    <div class="card-header">
+      <span class="card-num">03</span>
+      <span class="card-title">Cardiac Tissue</span>
+    </div>
+    <div class="card-transitions">
+      <span class="tag tag-feigenbaum">Feigenbaum cascade</span>
+      <span class="tag tag-kt">KT unbinding</span>
+      <span class="tag tag-autocatalytic">RAF closure</span>
+    </div>
+    <div class="card-desc">
+      Three transition frameworks in one tissue. Full period-doubling cascade before fibrillation. Kosterlitz-Thouless defect unbinding maps flutter to bound vortex pairs and fibrillation to unbound. The calcium signaling network is a maximal autocatalytic set &mdash; 17 of 17 reactions, zero individually essential, catastrophic only at class-level removal.
+    </div>
+    <div class="card-pair">Paired with: Active Matter &mdash; connected through KT defect unbinding</div>
+  </a>
+
+  <a href="04-protein-folding.html" class="system-card fade-in">
+    <div class="card-header">
+      <span class="card-num">04</span>
+      <span class="card-title">Protein Folding</span>
+    </div>
+    <div class="card-transitions">
+      <span class="tag tag-critical">thermodynamic</span>
+      <span class="tag tag-jamming">jamming &delta;=9/2</span>
+      <span class="tag tag-soc">SOC kinetics</span>
+      <span class="tag tag-chaos">edge-of-chaos</span>
+    </div>
+    <div class="card-desc">
+      Four independent phase-transition frameworks converge in one system. Cooperative two-state folding. Jamming at &phi;<sub>c</sub>&nbsp;&asymp;&nbsp;0.55 with an anomalous exponent found nowhere else. Power-law folding kinetics across three universality classes. Edge-of-chaos dynamics in disordered proteins. Four frameworks that normally describe unrelated physics, meeting here.
+    </div>
+    <div class="card-pair">Paired with: Glass Transition &mdash; connected through the Gardner/jamming chain</div>
+  </a>
+
+  <a href="05-brain.html" class="system-card fade-in">
+    <div class="card-header">
+      <span class="card-num">05</span>
+      <span class="card-title">Brain</span>
+    </div>
+    <div class="card-transitions">
+      <span class="tag tag-critical">avalanche criticality</span>
+      <span class="tag tag-griffiths">Griffiths phase</span>
+      <span class="tag tag-topological">spiral defects</span>
+    </div>
+    <div class="card-desc">
+      Near-consensus on avalanche criticality from 140 datasets. Modular-hierarchical cortical architecture stretches the critical point into a Griffiths phase &mdash; no fine-tuning. Cortical spiral waves carry conserved topological charge. The architecture that produces the Griffiths phase is the same architecture that supports topological defect dynamics.
+    </div>
+    <div class="card-pair">Paired with: Tokamak &mdash; connected through Griffiths phase architecture</div>
+  </a>
+
+  <a href="06-tokamak.html" class="system-card fade-in">
+    <div class="card-header">
+      <span class="card-num">06</span>
+      <span class="card-title">Tokamak H-Mode Pedestal</span>
+    </div>
+    <div class="card-transitions">
+      <span class="tag tag-soc">SOC avalanches</span>
+      <span class="tag tag-topological">magnetic topology</span>
+      <span class="tag tag-autocatalytic">predator-prey loop</span>
+    </div>
+    <div class="card-desc">
+      The non-biological case. SOC sandpile dynamics produce the pedestal and ELMs. Magnetic islands mediate ELM suppression. A closed autocatalytic loop &mdash; gradients drive turbulence, turbulence generates zonal flows, zonal flows suppress turbulence, suppression steepens gradients &mdash; self-sustains at the edge of chaos. Multi-criticality is not biology-specific.
+    </div>
+    <div class="card-pair">Paired with: Brain &mdash; connected through Griffiths phase architecture</div>
+  </a>
+
+</div>
+
+<!-- ========== CROSS-LINKS ========== -->
+<h2><span class="sn">2.</span> Three Pairs</h2>
+
+<p>
+The six systems form three natural pairs, each connected by a shared physical mechanism that crosses domain boundaries. These are not analogies. In each pair, the same mathematical structure appears in both systems with measurable, quantitatively comparable signatures.
+</p>
+
+<div class="pair-grid">
+  <div class="pair-card fade-in">
+    <h3>Glass &harr; Protein</h3>
+    <p>The Gardner transition sits below the Kauzmann temperature. Gardner produces jamming scalings. Jamming sets the protein packing fraction &phi;<sub>c</sub>&nbsp;&asymp;&nbsp;0.55. The chain runs: glass bicriticality &rarr; Gardner &rarr; jamming &rarr; protein packing. Two systems, one causal chain through three transitions.</p>
+    <div class="pair-link">Tutorials 01 &amp; 04</div>
+  </div>
+  <div class="pair-card fade-in">
+    <h3>Active Matter &harr; Cardiac</h3>
+    <p>Both systems contain topological defects that unbind through Kosterlitz-Thouless physics. In active nematics: ordered &rarr; periodic braiding &rarr; chaotic. In cardiac tissue: sinus rhythm &rarr; flutter (bound vortices) &rarr; fibrillation (unbound). Same three-regime structure, same topological mechanism, different substrates.</p>
+    <div class="pair-link">Tutorials 02 &amp; 03</div>
+  </div>
+  <div class="pair-card fade-in">
+    <h3>Brain &harr; Tokamak</h3>
+    <p>Both are modular-hierarchical systems where the architecture stretches a critical point into a Griffiths phase. In the brain: cortical modules create an extended critical phase without fine-tuning. In the tokamak: nested transport barriers create a self-sustaining critical region. Same architectural principle, same consequence &mdash; robust criticality from structure, not parameter tuning.</p>
+    <div class="pair-link">Tutorials 05 &amp; 06</div>
+  </div>
+</div>
+
+<!-- ========== THE QUESTION ========== -->
+<h2><span class="sn">3.</span> The Question</h2>
+
+<p>
+Each of these systems is well-studied within its home domain. Cardiac electrophysiologists know the Feigenbaum cascade. Active matter physicists know the golden braid. Glass physicists know the two transitions. Plasma physicists know the SOC pedestal.
+</p>
+
+<p>
+What none of these communities has asked is: <strong>why do multiple independent transitions converge in the same physical system?</strong> And what does the coupling between transitions produce that no single transition contains?
+</p>
+
+<p>
+That is what these tutorials examine.
+</p>
+
+<p style="margin-top: 2rem; color: var(--muted); font-size: 0.85rem; text-align: center;">
+Part of <a href="../index.html">Domain Convergence Research</a>
+</p>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

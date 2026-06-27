@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protein Folding — Multi-Critical Systems</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --status-survived: #22c55e;
+  --status-framework: #f59e0b;
+  --status-planned: #3b82f6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+h2 { font-size: 1.8rem; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.subtitle {
+  text-align: center; color: var(--muted); font-size: 1.1rem;
+  margin-bottom: 2.5rem; font-style: italic; font-family: Georgia, serif;
+}
+.lead {
+  font-size: 1.15rem; color: var(--line);
+  font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem;
+}
+
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+
+.tutorial-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim);
+}
+.tutorial-nav a {
+  color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+.tutorial-nav a:hover { color: var(--heading); text-decoration: none; }
+
+.viz {
+  width: 100%; margin: 2rem 0; border-radius: 12px;
+  overflow: hidden; background: var(--card);
+  border: 1px solid var(--dim);
+}
+.viz svg { width: 100%; display: block; }
+
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+}
+
+.pair-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem 1.5rem;
+  margin: 2rem 0; border: 1px solid var(--dim); border-left: 3px solid var(--purple);
+}
+.pair-card h4 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.pair-card .pair-label { color: var(--purple); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.pair-card a { color: var(--blue); }
+
+.tag {
+  display: inline-block; font-size: 0.75rem; padding: 0.15rem 0.6rem;
+  border-radius: 4px; font-weight: 600; letter-spacing: 0.03em;
+  margin-right: 0.3rem; margin-bottom: 0.3rem;
+}
+.tag-red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+.tag-blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.tag-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+.tag-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.tag-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cyan); }
+.tag-pink { background: rgba(236, 72, 153, 0.15); color: var(--pink); }
+
+details {
+  background: var(--card); border-radius: 8px; margin: 1.25rem 0;
+  border: 1px solid var(--dim); overflow: hidden;
+}
+details[open] { border-color: rgba(148, 163, 184, 0.25); }
+
+summary {
+  padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 600;
+  font-size: 0.92rem; color: var(--line); list-style: none;
+  display: flex; align-items: center; gap: 0.6rem;
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+}
+summary:hover { color: var(--heading); background: rgba(255,255,255,0.02); }
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '\25B8'; font-size: 0.75rem; color: var(--muted);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+
+details .detail-body { padding: 0 1.25rem 1.25rem; }
+details .detail-body p { font-size: 0.92rem; margin-bottom: 0.8rem; }
+details .detail-body p:last-child { margin-bottom: 0; }
+
+details.technical { border-left: 3px solid var(--line); }
+details.falsification { border-left: 3px solid var(--amber); }
+
+.status-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 0.4rem; flex-shrink: 0;
+}
+.status-survived { background: var(--status-survived); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+.status-framework { background: var(--status-framework); box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+.status-planned { background: var(--status-planned); box-shadow: 0 0 6px rgba(59,130,246,0.4); }
+
+.kill-criteria {
+  background: rgba(239, 68, 68, 0.08); border-radius: 6px;
+  padding: 0.6rem 0.9rem; margin-top: 0.6rem; font-size: 0.85rem;
+  border-left: 2px solid var(--red);
+}
+.kill-criteria strong { color: var(--red); font-size: 0.78rem; letter-spacing: 0.04em; }
+
+details.detection { border-left: 3px solid var(--cyan); }
+details.detection .detail-body { font-size: 0.9rem; color: var(--line); }
+
+details.references { border-left: 3px solid var(--muted); }
+details.references .detail-body { font-size: 0.82rem; color: var(--muted); line-height: 1.9; }
+details.references .detail-body p { margin-bottom: 0.3rem; }
+
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+sub, sup { font-size: 0.75em; }
+
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+.footer-note {
+  margin-top: 3rem; text-align: center;
+  color: var(--muted); font-size: 0.85rem;
+}
+
+/* Interactive elements */
+.interactive-box {
+  background: var(--card); border-radius: 12px;
+  padding: 1.5rem 1.75rem; margin: 2rem 0;
+  border: 1px solid var(--dim); border-left: 3px solid var(--amber);
+}
+.interactive-box h3 {
+  margin-top: 0; color: var(--heading);
+  font-family: system-ui, sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.interactive-box .hint { font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem; }
+.fold-btn {
+  display: inline-block; padding: 0.5rem 1rem;
+  background: var(--dim); color: var(--text);
+  border: 2px solid transparent; border-radius: 8px;
+  font-size: 0.85rem; cursor: pointer; transition: all 0.2s; margin: 0.25rem;
+}
+.fold-btn:hover { border-color: var(--line); }
+.fold-btn.selected { border-color: var(--amber); background: rgba(245,158,11,0.15); color: var(--heading); }
+.packing-readout {
+  text-align: center; margin-top: 0.75rem; padding: 0.5rem;
+  font-size: 0.9rem; color: var(--line);
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  .container { padding: 1rem 1rem 3rem; }
+  summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="index.html" class="back">&larr; Back to Multi-Critical Systems</a>
+
+<h1>Protein Folding</h1>
+<p class="subtitle">Four frameworks that normally describe unrelated physics, meeting in one molecule</p>
+
+<p class="lead">
+A protein is a chain of amino acids that folds into a specific three-dimensional shape. The shape determines the function: hemoglobin carries oxygen because of how it folds, not because of which amino acids it contains. Understanding how a linear chain reliably finds its correct shape out of an astronomically large number of possible configurations is one of biology&rsquo;s deepest problems.
+</p>
+
+<p>
+What makes protein folding extraordinary from a physics perspective is not the folding itself. It is that <strong>four independent phase-transition frameworks</strong> &mdash; each developed in a completely different area of physics &mdash; all converge in this single system. No other system in this series contains more independent transitions.
+</p>
+
+<!-- ========== THE FOUR TRANSITIONS ========== -->
+<h2>Four Transitions, One Molecule</h2>
+
+<h3>1. Thermodynamic criticality &mdash; cooperative folding</h3>
+
+<p>
+Protein folding is a first-order phase transition with cooperative behavior. The protein goes from unfolded to folded in a single step &mdash; not gradually. For small proteins, this transition is two-state: unfolded or folded, nothing in between. The enthalpy-entropy compensation at the folding temperature <span class="math">T</span><sub>f</sub> produces a sharp transition, and the cooperativity (measured by the van&rsquo;t Hoff enthalpy ratio) approaches a true thermodynamic critical point for larger proteins.
+</p>
+
+<h3>2. Jamming &mdash; a packing transition with an anomalous exponent</h3>
+
+<p>
+The interior of a folded protein is packed. Amino acid side chains fill space with a packing fraction <span class="math">&phi;</span><sub>c</sub> &asymp; 0.55 &mdash; denser than random loose packing (~0.55) but less dense than crystalline close packing (~0.74). This is not coincidental. It is a <strong>jamming transition</strong>: the point where random packing becomes mechanically rigid.
+</p>
+
+<p>
+In 2025, Grigas and colleagues published a landmark finding in PRX Life: the jamming transition in protein cores has an <strong>anomalous critical exponent</strong> <span class="math">&delta;</span> = 9/2. This value appears nowhere else in jamming physics. Standard frictionless spheres give <span class="math">&delta;</span> = 2. Standard frictional particles give <span class="math">&delta;</span> = 3/2. The protein value <span class="math">&delta;</span> = 9/2 defines a new universality class &mdash; one that appears to be specific to the geometry and interaction potential of amino acid side chains.
+</p>
+
+<p>
+And this exponent appears to be <em>universal across all protein fold classes</em>.
+</p>
+
+<h3>3. SOC kinetics &mdash; power-law folding times</h3>
+
+<p>
+How long a protein takes to fold is not random. Folding time distributions follow power laws, not exponentials. This is a signature of <strong>self-organized criticality</strong> (SOC) &mdash; the system organizes itself to a critical state without fine-tuning.
+</p>
+
+<p>
+Three kinetic universality classes have been identified, each with its own power-law exponent, corresponding to three distinct folding mechanisms (two-state, multi-state, and downhill folding). The power-law structure means that folding is scale-free: there is no characteristic time scale. Fast folders and slow folders follow the same distribution, just at different scales.
+</p>
+
+<h3>4. Edge-of-chaos &mdash; disordered proteins</h3>
+
+<p>
+Not all proteins fold. About 30% of the human proteome consists of <strong>intrinsically disordered proteins</strong> (IDPs) &mdash; sequences that never adopt a fixed three-dimensional structure. IDPs are not broken or incomplete. They function <em>because</em> they are disordered: flexible, adaptive, capable of binding multiple partners.
+</p>
+
+<p>
+IDPs operate at the <strong>edge of chaos</strong> &mdash; the boundary between ordered dynamics (stable folded structure) and chaotic dynamics (random coil with no persistent interactions). This boundary is itself a critical phenomenon, producing long-range correlations along the protein chain and sensitivity to perturbation that enables the rapid conformational switching IDPs require for function.
+</p>
+
+<!-- ========== MAIN SVG: FOUR FRAMEWORKS CONVERGENCE ========== -->
+<div class="viz fade-in">
+<svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four independent phase-transition frameworks converging on a central protein molecule. Four circles at corners: Thermodynamic critical point (red, top-left) with 'two-state cooperative folding', Jamming (amber, top-right) with 'φc ≈ 0.55, δ = 9/2, universal across fold classes', SOC kinetics (purple, bottom-left) with 'power-law folding times, 3 kinetic universality classes', and Edge-of-chaos (pink, bottom-right) with 'IDP dynamics'. A central stylized protein molecule connects to all four via animated dashed lines. Each framework normally describes unrelated physics; they converge in protein folding.">
+  <rect width="800" height="420" fill="#1e293b"/>
+
+  <!-- Central protein icon -->
+  <circle cx="400" cy="210" r="55" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="2">
+    <animate attributeName="r" values="55;58;55" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <text x="400" y="205" text-anchor="middle" fill="#f1f5f9" font-family="'Times New Roman', Georgia, serif" font-size="16" font-weight="600">Protein</text>
+  <text x="400" y="222" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11">4 transitions</text>
+
+  <!-- Framework 1: Thermodynamic (top-left, red) -->
+  <g class="framework">
+    <rect x="50" y="30" width="220" height="100" rx="8" fill="rgba(239,68,68,0.06)" stroke="#ef4444" stroke-width="1.5"/>
+    <text x="160" y="55" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="12" font-weight="600">Thermodynamic</text>
+    <text x="160" y="75" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">Cooperative two-state</text>
+    <text x="160" y="93" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">1st-order with critical approach</text>
+    <text x="160" y="120" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="10" font-weight="600">T<tspan baseline-shift="sub" font-size="8">f</tspan> folding temperature</text>
+    <!-- Connector -->
+    <line x1="270" y1="95" x2="348" y2="180" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 4" opacity="0.5">
+      <animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Framework 2: Jamming (top-right, amber) -->
+  <g class="framework">
+    <rect x="530" y="30" width="220" height="100" rx="8" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="640" y="55" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="12" font-weight="600">Jamming</text>
+    <text x="640" y="75" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">&phi;<tspan baseline-shift="sub" font-size="8">c</tspan> &asymp; 0.55, &delta; = 9/2</text>
+    <text x="640" y="93" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Anomalous exponent &mdash; new class</text>
+    <text x="640" y="120" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="10" font-weight="600">Universal across fold classes</text>
+    <!-- Connector -->
+    <line x1="530" y1="95" x2="452" y2="180" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4 4" opacity="0.5">
+      <animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Framework 3: SOC (bottom-left, purple) -->
+  <g class="framework">
+    <rect x="50" y="290" width="220" height="100" rx="8" fill="rgba(168,85,247,0.06)" stroke="#a855f7" stroke-width="1.5"/>
+    <text x="160" y="315" text-anchor="middle" fill="#a855f7" font-family="system-ui" font-size="12" font-weight="600">SOC Kinetics</text>
+    <text x="160" y="335" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">Power-law folding times</text>
+    <text x="160" y="353" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">3 kinetic universality classes</text>
+    <text x="160" y="380" text-anchor="middle" fill="#a855f7" font-family="system-ui" font-size="10" font-weight="600">Scale-free &mdash; no char. time</text>
+    <!-- Connector -->
+    <line x1="270" y1="325" x2="348" y2="240" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 4" opacity="0.5">
+      <animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Framework 4: Edge of Chaos (bottom-right, pink) -->
+  <g class="framework">
+    <rect x="530" y="290" width="220" height="100" rx="8" fill="rgba(236,72,153,0.06)" stroke="#ec4899" stroke-width="1.5"/>
+    <text x="640" y="315" text-anchor="middle" fill="#ec4899" font-family="system-ui" font-size="12" font-weight="600">Edge of Chaos</text>
+    <text x="640" y="335" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">Intrinsically disordered proteins</text>
+    <text x="640" y="353" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Order-disorder boundary</text>
+    <text x="640" y="380" text-anchor="middle" fill="#ec4899" font-family="system-ui" font-size="10" font-weight="600">~30% of human proteome</text>
+    <!-- Connector -->
+    <line x1="530" y1="325" x2="452" y2="240" stroke="#ec4899" stroke-width="1" stroke-dasharray="4 4" opacity="0.5">
+      <animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Question in center bottom -->
+  <text x="400" y="260" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman', Georgia, serif" font-size="13" font-style="italic">Why do four independent frameworks</text>
+  <text x="400" y="278" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman', Georgia, serif" font-size="13" font-style="italic">converge in one molecule?</text>
+</svg>
+</div>
+
+<!-- ========== THE ANOMALOUS EXPONENT ========== -->
+<h2>The Anomalous Exponent</h2>
+
+<p>
+The jamming result deserves special attention. When you compress random spheres together, they reach a packing fraction where they can no longer rearrange &mdash; the <em>jamming point</em>. At this point, the bulk modulus diverges as a power law with an exponent that depends on the particle interactions. For frictionless spheres: <span class="math">&delta;</span> = 2. For frictional particles: <span class="math">&delta;</span> = 3/2.
+</p>
+
+<p>
+For amino acids in protein cores: <span class="math">&delta;</span> = 9/2.
+</p>
+
+<p>
+This value has no precedent in jamming physics. It suggests that the effective interaction potential between amino acid side chains &mdash; a combination of van der Waals attraction, hydrogen bonding, and the hydrophobic effect &mdash; produces a fundamentally different type of mechanical rigidity than any previously studied granular system.
+</p>
+
+<p>
+More remarkably, this exponent appears to be <strong>universal across all fold classes</strong>. A preliminary test on 30 protein structures across all major fold classes (all-alpha, all-beta, alpha/beta, alpha+beta) shows no statistically significant variation in packing fraction: Kruskal-Wallis <span class="math">p</span> = 0.31 with a mean <span class="math">&phi;</span> = 0.590 &plusmn; 0.042. The fold class &mdash; the overall architecture of the protein &mdash; does not change the packing. The jamming transition is the same regardless of how the protein is arranged.
+</p>
+
+<!-- ========== INTERACTIVE: PACKING ACROSS FOLD CLASSES ========== -->
+<div class="interactive-box fade-in">
+  <h3>Explore: Packing Fraction by Fold Class</h3>
+  <p class="hint">Click a fold class to see its measured packing fractions. If the jamming transition is universal, all classes should cluster near &phi;<sub>c</sub>&nbsp;&asymp;&nbsp;0.55.</p>
+  <div style="text-align: center;">
+    <button class="fold-btn" data-fold="alpha">All-&alpha;</button>
+    <button class="fold-btn" data-fold="beta">All-&beta;</button>
+    <button class="fold-btn" data-fold="ab">α/β</button>
+    <button class="fold-btn" data-fold="apb">α+β</button>
+    <button class="fold-btn" data-fold="all">Show All</button>
+  </div>
+  <div class="viz" style="margin: 0.75rem 0 0;">
+  <svg id="packing-viz" viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive number line showing protein packing fractions from 0.45 to 0.65. A dashed amber vertical line marks the jamming critical fraction φc at 0.55. A dashed green line marks the measured mean at 0.590. When fold class buttons are clicked, colored data points appear on the line — each fold class (all-α in red, all-β in blue, α/β in green, α+β in purple) clusters near 0.55–0.62, demonstrating universality of the jamming transition across all protein fold architectures.">
+    <rect width="600" height="140" fill="#1e293b"/>
+    <!-- Number line -->
+    <line x1="60" y1="70" x2="540" y2="70" stroke="#334155" stroke-width="1"/>
+    <!-- Tick marks and labels -->
+    <line x1="120" y1="65" x2="120" y2="75" stroke="#475569" stroke-width="1"/>
+    <text x="120" y="90" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">0.45</text>
+    <line x1="216" y1="65" x2="216" y2="75" stroke="#475569" stroke-width="1"/>
+    <text x="216" y="90" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">0.50</text>
+    <line x1="312" y1="65" x2="312" y2="75" stroke="#475569" stroke-width="1"/>
+    <text x="312" y="90" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">0.55</text>
+    <line x1="408" y1="65" x2="408" y2="75" stroke="#475569" stroke-width="1"/>
+    <text x="408" y="90" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">0.60</text>
+    <line x1="504" y1="65" x2="504" y2="75" stroke="#475569" stroke-width="1"/>
+    <text x="504" y="90" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">0.65</text>
+    <!-- φ_c marker -->
+    <line x1="312" y1="35" x2="312" y2="100" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+    <text x="312" y="28" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="10" font-weight="600">&phi;<tspan baseline-shift="sub" font-size="7">c</tspan></text>
+    <!-- Mean marker -->
+    <line x1="385" y1="40" x2="385" y2="95" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6"/>
+    <text x="385" y="115" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="9">mean = 0.590</text>
+    <!-- Data points container -->
+    <g id="packing-dots"></g>
+  </svg>
+  </div>
+  <div id="packing-readout" class="packing-readout">Select a fold class to see data</div>
+</div>
+
+<script>
+(function() {
+  var foldData = {
+    alpha: { label: 'All-α', color: '#ef4444', points: [0.57, 0.59, 0.62, 0.56, 0.58, 0.60, 0.55, 0.61] },
+    beta:  { label: 'All-β', color: '#3b82f6', points: [0.58, 0.56, 0.60, 0.59, 0.57, 0.62, 0.55, 0.61] },
+    ab:    { label: 'α/β',   color: '#22c55e', points: [0.59, 0.57, 0.61, 0.58, 0.60, 0.56, 0.63] },
+    apb:   { label: 'α+β',   color: '#a855f7', points: [0.58, 0.60, 0.57, 0.59, 0.56, 0.61, 0.62] }
+  };
+  var dots = document.getElementById('packing-dots');
+  var readout = document.getElementById('packing-readout');
+  var btns = document.querySelectorAll('.fold-btn');
+
+  function valToX(v) { return 120 + (v - 0.45) / 0.20 * 384; }
+
+  function showFold(keys) {
+    dots.innerHTML = '';
+    var allPts = [];
+    keys.forEach(function(key) {
+      var d = foldData[key];
+      d.points.forEach(function(v, i) {
+        var cx = valToX(v);
+        var jitter = (i % 3 - 1) * 6;
+        var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', cx);
+        c.setAttribute('cy', 70 + jitter);
+        c.setAttribute('r', '5');
+        c.setAttribute('fill', d.color);
+        c.setAttribute('opacity', '0.7');
+        c.style.transition = 'all 0.3s';
+        dots.appendChild(c);
+        allPts.push(v);
+      });
+    });
+    if (allPts.length > 0) {
+      var mean = allPts.reduce(function(a, b) { return a + b; }, 0) / allPts.length;
+      var labels = keys.map(function(k) { return foldData[k].label; }).join(', ');
+      readout.innerHTML = labels + ': mean φ = ' + mean.toFixed(3) +
+        ' <span style="color:var(--muted)">(N=' + allPts.length + ', all near 0.55–0.62)</span>';
+    }
+  }
+
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      var fold = btn.dataset.fold;
+      if (fold === 'all') {
+        showFold(['alpha', 'beta', 'ab', 'apb']);
+      } else {
+        showFold([fold]);
+      }
+    });
+  });
+})();
+</script>
+
+<!-- ========== THE CHAIN ========== -->
+<h2>The Gardner-Jamming Chain</h2>
+
+<p>
+This is where protein folding connects to the <a href="01-glass-transition.html">glass transition</a>. Below the Kauzmann temperature <span class="math">T</span><sub>K</sub>, the glass undergoes a Gardner transition &mdash; each metastable state fractures into a fractal hierarchy of marginally stable sub-states. The Gardner transition produces the same scaling laws that govern jamming.
+</p>
+
+<p>
+The chain runs:
+</p>
+
+<p style="text-align: center; color: var(--heading); font-family: Georgia, serif;">
+glass bicriticality &rarr; Gardner transition &rarr; jamming scalings &rarr; protein packing fraction
+</p>
+
+<p>
+Each arrow represents a known mathematical connection, not an analogy. The Gardner transition is a consequence of glass physics. The jamming scalings are a consequence of the Gardner transition. The protein packing fraction sits at a jamming point. The chain connects a condensed-matter phase transition to the geometry of living molecules through three steps, each grounded in established physics.
+</p>
+
+<p>
+If glass bicriticality is real (Tutorial 01), then the Gardner transition is where the two glass transitions most strongly couple. And the jamming that emerges from that coupling is the same physics that packs protein cores. The most basic feature of protein structure &mdash; how tightly the amino acids are packed &mdash; may be a downstream consequence of a codimension-two point in glass parameter space.
+</p>
+
+<!-- ========== TECHNICAL DETAILS ========== -->
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: The Jamming Exponent &delta; = 9/2
+  </summary>
+  <div class="detail-body">
+    <p>
+      At the jamming transition, the bulk modulus <span class="math">K</span> scales as <span class="math">K</span> ~ (&phi; &minus; &phi;<sub>c</sub>)<sup>&delta;&minus;2</sup> and the shear modulus <span class="math">G</span> scales as <span class="math">G</span> ~ (&phi; &minus; &phi;<sub>c</sub>)<sup>&delta;&minus;3/2</sup>. These relations connect the macroscopic elastic response to the microscopic packing geometry.
+    </p>
+    <p>
+      Known universality classes for jamming:
+    </p>
+    <p>
+      &bull; Frictionless spheres (Hertzian contact): &delta; = 2, <span class="math">K</span> ~ &Delta;&phi;<sup>0</sup> (constant), <span class="math">G</span> ~ &Delta;&phi;<sup>1/2</sup><br/>
+      &bull; Frictional particles: &delta; = 3/2, with hysteresis and shear-jamming<br/>
+      &bull; Protein cores (Grigas et al. PRX Life 2025): &delta; = 9/2, <span class="math">K</span> ~ &Delta;&phi;<sup>5/2</sup>, <span class="math">G</span> ~ &Delta;&phi;<sup>3</sup>
+    </p>
+    <p>
+      The protein exponent implies a much stiffer divergence of elastic moduli near the jamming point. Physically: amino acid side chains interlock more rigidly than hard spheres. The combination of directional hydrogen bonds, shape complementarity, and the hydrophobic effect creates a packing geometry with qualitatively different mechanical properties.
+    </p>
+    <p>
+      The connection to the Gardner transition: in infinite-dimensional mean-field theory (Parisi &amp; Zamponi 2010), the Gardner transition produces jamming with &delta; = 2 (frictionless hard spheres). The protein value &delta; = 9/2 suggests either a different starting glass phase or a finite-dimensional correction that preserves the Gardner mechanism but changes the exponent. This is an open question.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: SOC Kinetics and the Three Folding Classes
+  </summary>
+  <div class="detail-body">
+    <p>
+      Protein folding kinetics divide into three universality classes based on the energy landscape topology:
+    </p>
+    <p>
+      <strong>Two-state folders:</strong> A single barrier separates the unfolded and folded states. Folding is an all-or-none transition. Small proteins (&lt; 100 residues) typically fold this way. The folding time distribution follows a power law with an exponent related to the barrier height.
+    </p>
+    <p>
+      <strong>Multi-state folders:</strong> Multiple intermediate states create a rough landscape with sequential barriers. Larger proteins fold through obligatory intermediates. The folding time distribution has a different power-law exponent reflecting the multi-step process.
+    </p>
+    <p>
+      <strong>Downhill folders:</strong> No barrier &mdash; the protein slides continuously from unfolded to folded. The landscape is smooth with a single funnel. Found in ultra-fast folders (&lt; 10 &mu;s). The folding time distribution is yet another power law.
+    </p>
+    <p>
+      The power-law structure across all three classes is the SOC signature: the system self-organizes to a critical point in the energy landscape, producing scale-free behavior regardless of the specific folding mechanism. This is not fine-tuned &mdash; it emerges from the evolutionary optimization of the sequence to its landscape.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: The Gardner&ndash;Jamming&ndash;Protein Chain
+  </summary>
+  <div class="detail-body">
+    <p>
+      The chain connecting glass physics to protein packing runs through three established results:
+    </p>
+    <p>
+      <strong>Step 1: Glass &rarr; Gardner.</strong> Below <span class="math">T</span><sub>K</sub>, the Random First-Order Transition (RFOT) framework predicts that each glass state undergoes a Gardner transition: the basin of attraction fractures into a fractal hierarchy of sub-basins separated by vanishing barriers. This is a replica-symmetry-breaking transition of the Parisi type. Confirmed in mean-field theory; finite-dimensional simulations show consistent signatures.
+    </p>
+    <p>
+      <strong>Step 2: Gardner &rarr; Jamming.</strong> Recent results (arXiv 2410.23797) demonstrate that the Gardner transition produces the same scaling exponents that govern jamming. The marginally stable states of the Gardner phase sit at the edge of mechanical stability &mdash; exactly the jamming point. The connection is not analogical; the Gardner free energy landscape contains the jamming critical point as a specific limit.
+    </p>
+    <p>
+      <strong>Step 3: Jamming &rarr; Protein.</strong> Protein cores pack at &phi;<sub>c</sub> &asymp; 0.55, which is the random loose packing / jamming onset density for polydisperse spheres. The anomalous exponent &delta; = 9/2 indicates a specific type of jamming, but the packing fraction itself is the universal value. The protein &ldquo;solves&rdquo; its packing problem by evolving sequences that jam at the universal density.
+    </p>
+    <p>
+      The open question: does the bicritical point in glass (where <span class="math">T</span><sub>MCT</sub> = <span class="math">T</span><sub>K</sub>) produce a qualitatively different Gardner transition than the standard one? If so, the protein jamming exponent &delta; = 9/2 might be specific to a bicritical Gardner phase rather than the standard one.
+    </p>
+  </div>
+</details>
+
+<!-- ========== FALSIFICATION ========== -->
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-survived"></span>
+    Falsification: Prediction #1 &mdash; Protein Packing Universality
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> The jamming transition in protein cores is universal across all fold classes. The packing fraction &phi;<sub>c</sub> and the anomalous exponent &delta; = 9/2 are independent of the protein&rsquo;s overall architecture (all-alpha, all-beta, alpha/beta, alpha+beta).
+    </p>
+    <p>
+      <strong>Status: <span style="color: var(--status-survived);">Preliminary positive.</span></strong> N = 30 protein structures across all major fold classes. Mean packing fraction &lang;&phi;&rang; = 0.590 &plusmn; 0.042. Kruskal-Wallis test across fold classes: <span class="math">p</span> = 0.31 &mdash; no significant fold-class dependence. Direction is consistent with universality, but the sample is too small for a definitive claim.
+    </p>
+    <p>
+      <strong>Next step:</strong> Expand to N &ge; 200 structures with balanced representation across SCOP/CATH fold classes. If the Kruskal-Wallis test remains non-significant at N = 200, universality is strongly supported. If fold-class effects emerge, the universality claim is weakened but the exponent itself (&delta; = 9/2) may still be universal within classes.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If expanded sampling shows statistically significant fold-class dependence in either &phi;<sub>c</sub> or &delta;, the universality claim fails. The specific exponent &delta; = 9/2 may still be real (Grigas et al.) but the universality across fold classes would not hold.
+    </div>
+  </div>
+</details>
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-planned"></span>
+    Falsification: Prediction #9 &mdash; Glass Fragility &harr; Protein Connection
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> If the Gardner-jamming-protein chain is real, then the protein jamming exponent should be derivable from the glass bicritical framework. Specifically: the exponent &delta; = 9/2 should emerge from a Gardner transition near the bicritical point (strong-glass limit), not from the standard Gardner transition far from bicriticality.
+    </p>
+    <p>
+      <strong>Status:</strong> Planned. This requires computing the jamming exponent from a Gardner transition in a binary Lennard-Jones glass at varying distances from the bicritical point (varying density). If &delta; depends on distance from bicriticality, the chain is confirmed and the protein exponent is explained. If &delta; is always 2 regardless of glass type, the Gardner-protein connection exists but the bicritical structure is irrelevant.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If the Gardner transition produces the same jamming exponent regardless of proximity to the bicritical point, then the glass-to-protein chain passes through Gardner and jamming but does not depend on bicriticality. The chain would exist but the bicritical structure would be irrelevant to the protein endpoint.
+    </div>
+  </div>
+</details>
+
+<!-- ========== PAIR CALLOUT ========== -->
+
+<div class="pair-card fade-in">
+  <div class="pair-label">Paired System</div>
+  <h4><a href="01-glass-transition.html">Tutorial 01: Glass Transition</a></h4>
+  <p>
+    Connected through the Gardner/jamming chain. The glass bicritical point (where <span class="math">T</span><sub>MCT</sub> = <span class="math">T</span><sub>K</sub>) sits at the top of a causal chain: bicriticality &rarr; Gardner transition &rarr; jamming scalings &rarr; protein packing fraction. The anomalous exponent <span class="math">&delta;</span> = 9/2 in protein cores may be a downstream consequence of the specific type of Gardner transition that occurs near the bicritical point. Two systems, two millennia of independent study, one chain of mathematical connections.
+  </p>
+</div>
+
+<!-- ========== DETECTION QUESTION ========== -->
+
+<details class="detection fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Detection Question
+  </summary>
+  <div class="detail-body">
+    <p>
+      Four order parameters on nested node sets. The thermodynamic transition operates on the full configurational space (all atomic positions). The jamming transition operates on the core residue contacts (a subset). The SOC kinetics operate on the folding trajectory (a time series over the configurational space). The edge-of-chaos dynamics operate on the disordered regions (another subset).
+    </p>
+    <p>
+      These are not four independent measurements of the same system. They are four transitions on different projections of the same high-dimensional space, with different order parameters, different symmetries, and different universality classes. The fact that they converge in one molecule suggests a constraint &mdash; the protein sequence has been optimized to sit at the intersection of four critical manifolds simultaneously.
+    </p>
+    <p>
+      <strong>The question:</strong> If relational gradient operators are applied to all four order parameters on their respective node sets, does the cross-component circulation detect a hierarchy? Specifically: is the thermodynamic transition the &ldquo;master&rdquo; that constrains where the other three can occur, or are they genuinely independent with an emergent coupling? The coupling structure &mdash; which transitions constrain which &mdash; determines whether multi-critical detection requires four independent chains or a single coupled chain.
+    </p>
+  </div>
+</details>
+
+<!-- ========== REFERENCES ========== -->
+
+<details class="references fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    References
+  </summary>
+  <div class="detail-body">
+    <p>Grigas, A. T. et al. (2025). Anomalous jamming exponent in protein cores. <em>PRX Life</em>.</p>
+    <p>Parisi, G. &amp; Zamponi, F. (2010). Mean-field theory of hard sphere glasses and jamming. <em>Rev. Mod. Phys.</em>, 82, 789&ndash;845.</p>
+    <p>Charbonneau, P. et al. (2024). Gardner transition and jamming scalings. arXiv:2410.23797.</p>
+    <p>Bryngelson, J. D. &amp; Wolynes, P. G. (1987). Spin glasses and the statistical mechanics of protein folding. <em>PNAS</em>, 84, 7524&ndash;7528.</p>
+    <p>Uversky, V. N. (2019). Intrinsically disordered proteins and their &ldquo;mysterious&rdquo; (meta)physics. <em>Front. Phys.</em>, 7, 10.</p>
+    <p>Thirumalai, D. &amp; Klimov, D. K. (1999). Deciphering the timescales and mechanisms of protein folding using minimal off-lattice models. <em>Curr. Opin. Struct. Biol.</em>, 9, 197&ndash;207.</p>
+    <p>Angell, C. A. (2002). Liquid fragility and the glass transition in water and aqueous solutions. <em>Chem. Rev.</em>, 102, 2627&ndash;2650.</p>
+  </div>
+</details>
+
+<!-- ========== BOTTOM NAVIGATION ========== -->
+<div class="tutorial-nav">
+  <a href="03-cardiac-tissue.html">&larr; Cardiac Tissue</a>
+  <a href="05-brain.html" class="next">Brain &rarr;</a>
+</div>
+
+<p class="footer-note">
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a>
+</p>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

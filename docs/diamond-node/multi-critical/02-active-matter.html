@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Matter — Multi-Critical Systems</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --status-survived: #22c55e;
+  --status-framework: #f59e0b;
+  --status-planned: #3b82f6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+h2 { font-size: 1.8rem; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.subtitle {
+  text-align: center; color: var(--muted); font-size: 1.1rem;
+  margin-bottom: 2.5rem; font-style: italic; font-family: Georgia, serif;
+}
+.lead {
+  font-size: 1.15rem; color: var(--line);
+  font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem;
+}
+
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+
+.tutorial-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim);
+}
+.tutorial-nav a {
+  color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+.tutorial-nav a:hover { color: var(--heading); text-decoration: none; }
+
+.viz {
+  width: 100%; margin: 2rem 0; border-radius: 12px;
+  overflow: hidden; background: var(--card);
+  border: 1px solid var(--dim);
+}
+.viz svg { width: 100%; display: block; }
+
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+}
+
+.pair-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem 1.5rem;
+  margin: 2rem 0; border: 1px solid var(--dim); border-left: 3px solid var(--cyan);
+}
+.pair-card h4 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.pair-card .pair-label { color: var(--cyan); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.pair-card a { color: var(--blue); }
+
+.tag {
+  display: inline-block; font-size: 0.75rem; padding: 0.15rem 0.6rem;
+  border-radius: 4px; font-weight: 600; letter-spacing: 0.03em;
+  margin-right: 0.3rem; margin-bottom: 0.3rem;
+}
+.tag-red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+.tag-blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.tag-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+.tag-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.tag-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cyan); }
+.tag-pink { background: rgba(236, 72, 153, 0.15); color: var(--pink); }
+
+details {
+  background: var(--card); border-radius: 8px; margin: 1.25rem 0;
+  border: 1px solid var(--dim); overflow: hidden;
+}
+details[open] { border-color: rgba(148, 163, 184, 0.25); }
+
+summary {
+  padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 600;
+  font-size: 0.92rem; color: var(--line); list-style: none;
+  display: flex; align-items: center; gap: 0.6rem;
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+}
+summary:hover { color: var(--heading); background: rgba(255,255,255,0.02); }
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '\25B8'; font-size: 0.75rem; color: var(--muted);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+
+details .detail-body { padding: 0 1.25rem 1.25rem; }
+details .detail-body p { font-size: 0.92rem; margin-bottom: 0.8rem; }
+details .detail-body p:last-child { margin-bottom: 0; }
+
+details.technical { border-left: 3px solid var(--line); }
+details.technical summary .detail-icon { color: var(--line); }
+
+details.falsification { border-left: 3px solid var(--amber); }
+details.falsification summary .detail-icon { color: var(--amber); }
+
+.status-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 0.4rem; flex-shrink: 0;
+}
+.status-survived { background: var(--status-survived); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+.status-framework { background: var(--status-framework); box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+.status-planned { background: var(--status-planned); box-shadow: 0 0 6px rgba(59,130,246,0.4); }
+
+.kill-criteria {
+  background: rgba(239, 68, 68, 0.08); border-radius: 6px;
+  padding: 0.6rem 0.9rem; margin-top: 0.6rem; font-size: 0.85rem;
+  border-left: 2px solid var(--red);
+}
+.kill-criteria strong { color: var(--red); font-size: 0.78rem; letter-spacing: 0.04em; }
+
+details.detection { border-left: 3px solid var(--cyan); }
+details.detection summary .detail-icon { color: var(--cyan); }
+details.detection .detail-body { font-size: 0.9rem; color: var(--line); }
+
+details.references { border-left: 3px solid var(--muted); }
+details.references summary .detail-icon { color: var(--muted); }
+details.references .detail-body { font-size: 0.82rem; color: var(--muted); line-height: 1.9; }
+details.references .detail-body p { margin-bottom: 0.3rem; }
+
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+sub, sup { font-size: 0.75em; }
+
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+.footer-note {
+  margin-top: 3rem; text-align: center;
+  color: var(--muted); font-size: 0.85rem;
+}
+
+/* Interactive elements */
+.interactive-box {
+  background: var(--card); border-radius: 12px;
+  padding: 1.5rem 1.75rem; margin: 2rem 0;
+  border: 1px solid var(--dim); border-left: 3px solid var(--purple);
+}
+.interactive-box h3 {
+  margin-top: 0; color: var(--heading);
+  font-family: system-ui, sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.interactive-box .hint { font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem; }
+.geo-btn {
+  display: inline-block; padding: 0.6rem 1.2rem;
+  background: var(--dim); color: var(--text);
+  border: 2px solid transparent; border-radius: 8px;
+  font-family: system-ui, sans-serif; font-size: 0.9rem;
+  cursor: pointer; transition: all 0.2s; margin: 0.3rem;
+}
+.geo-btn:hover { border-color: var(--line); }
+.geo-btn.selected { border-color: var(--purple); background: rgba(168,85,247,0.15); color: var(--heading); }
+.tepo-result {
+  text-align: center; margin-top: 1rem; padding: 1rem;
+  background: rgba(15,23,42,0.5); border-radius: 8px;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.3rem; color: var(--heading);
+  min-height: 3.5rem; transition: all 0.3s;
+}
+.tepo-result .braid-type {
+  display: block; font-size: 0.85rem; color: var(--muted);
+  font-family: system-ui, sans-serif; margin-top: 0.3rem;
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  .container { padding: 1rem 1rem 3rem; }
+  summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="index.html" class="back">&larr; Back to Multi-Critical Systems</a>
+
+<h1>Active Matter</h1>
+<p class="subtitle">Three critical phenomena, geometry as the selector</p>
+
+<p class="lead">
+Active matter is material made of components that consume energy and move themselves. Bacteria swimming. Molecular motors crawling along filaments. Cells migrating through tissue. Unlike ordinary fluids, where energy enters at the boundary and cascades to small scales, active matter is driven at every point &mdash; each particle is its own engine.
+</p>
+
+<p>
+This local energy injection creates a new kind of physics. Active matter forms <strong>topological defects</strong> &mdash; points where the local alignment of particles is undefined, like the crown of your head where hair whorls in every direction. In nematic liquid crystals, these defects come in two types: +1/2 defects (comet-shaped, self-propelled) and &minus;1/2 defects (trefoil-shaped, passive). The +1/2 defects are the actors. They move, interact, pair up, and dance.
+</p>
+
+<p>
+What makes active matter a multi-critical system is that the defect dance is governed by <strong>three independent critical phenomena</strong>, each with its own measurable exponents &mdash; and those exponents depend on the geometry of the surface the matter lives on.
+</p>
+
+<!-- ========== THE THREE TRANSITIONS ========== -->
+<h2>Three Independent Transitions</h2>
+
+<h3>1. Defect density onset &mdash; a counting transition</h3>
+
+<p>
+As you increase the activity (the energy each particle injects), defects begin to appear. Below a critical activity, the system is ordered: no defects, uniform alignment. Above it, defects proliferate. The transition from zero defects to a finite density of defects is a continuous phase transition with a well-defined critical exponent.
+</p>
+
+<p>
+The surprise: the exponent depends on the <strong>topology of the surface</strong>. On a closed surface (a sphere), defect onset follows <strong>Manna universality</strong> with &beta; &asymp; 0.639. On an open channel, it follows standard <strong>directed percolation</strong> with &beta; &asymp; 0.583. These are genuinely different universality classes. The boundary conditions &mdash; whether the surface closes on itself &mdash; select which class governs the transition.
+</p>
+
+<h3>2. Braid selection &mdash; a topological transition</h3>
+
+<p>
+Once defects appear, they move. On a confined surface (like a droplet or a cell), three +1/2 defects trace out trajectories in space-time that braid around each other. Braids are topological objects: they record which strand passes over which, and this pattern cannot be changed by smooth deformations.
+</p>
+
+<p>
+The system selects a specific braid &mdash; and geometry determines which one. In confinement (on a disk or sphere), defects trace the <strong>golden braid</strong>: the minimum-entropy pseudo-Anosov braid with topological entropy TEPO = log(&phi;), where &phi; = (1+&radic;5)/2 is the golden ratio. With four defects: the <strong>silver braid</strong> at TEPO = log(1+&radic;2).
+</p>
+
+<p>
+On a flat torus with periodic boundaries: <strong>TEPO = 0</strong> at all activity levels. The braids are finite-order &mdash; they repeat after a fixed number of exchanges, never growing in complexity. The same physics, the same equations, the same parameters &mdash; but the geometry of the container selects a completely different topological class of defect dynamics.
+</p>
+
+<h3>3. Novel criticality &mdash; an unknown class</h3>
+
+<p>
+At the boundary between periodic and chaotic defect motion, a third critical phenomenon appears with the exponent <span class="math">&eta;</span> = 1.04. This exponent does not match any known universality class &mdash; not Ising, not XY, not percolation, not any classification in the standard taxonomy. It is genuinely novel.
+</p>
+
+<!-- ========== MAIN SVG: GEOMETRY SELECTS BRAIDS ========== -->
+<div class="viz fade-in">
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Side-by-side comparison of defect dynamics in two geometries. Left panel: a confined disk showing three +1/2 defects (pink, cyan, amber strands) tracing animated braiding trajectories — the pseudo-Anosov golden braid with TEPO = log(φ) ≈ 0.481. The strands weave over and under each other continuously. Right panel: a flat torus with periodic boundaries showing three defects as colored dots drifting without braiding — TEPO = 0, trivial finite-order exchanges. A vertical divider between panels reads 'same physics, different geometry'. The confinement geometry selects the braid class; the flat torus produces no topological complexity regardless of activity level.">
+  <defs>
+    <clipPath id="disk-clip"><circle cx="200" cy="200" r="140"/></clipPath>
+    <clipPath id="torus-clip"><rect x="460" y="60" width="280" height="280" rx="12"/></clipPath>
+  </defs>
+
+  <rect width="800" height="400" fill="#1e293b"/>
+
+  <!-- Left panel: Confined disk — golden braid -->
+  <circle cx="200" cy="200" r="140" fill="none" stroke="#334155" stroke-width="2"/>
+  <text x="200" y="370" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="12" font-weight="600">Confinement</text>
+
+  <!-- Three defect trajectories braiding (animated paths) -->
+  <!-- Strand 1 (pink) -->
+  <path fill="none" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" opacity="0.8" clip-path="url(#disk-clip)">
+    <animate attributeName="d" dur="6s" repeatCount="indefinite" values="
+      M120,120 Q150,180 200,200 Q250,180 260,140 Q270,100 230,90 Q190,80 150,120 Q120,160 140,210 Q160,260 200,280;
+      M260,140 Q270,100 230,90 Q190,80 150,120 Q120,160 140,210 Q160,260 200,280 Q240,300 280,260 Q300,220 280,180;
+      M150,120 Q120,160 140,210 Q160,260 200,280 Q240,300 280,260 Q300,220 280,180 Q260,140 200,120;
+      M120,120 Q150,180 200,200 Q250,180 260,140 Q270,100 230,90 Q190,80 150,120 Q120,160 140,210 Q160,260 200,280
+    "/>
+  </path>
+  <!-- Strand 2 (cyan) -->
+  <path fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round" opacity="0.8" clip-path="url(#disk-clip)">
+    <animate attributeName="d" dur="6s" repeatCount="indefinite" values="
+      M280,180 Q260,240 220,260 Q180,280 140,250 Q100,220 120,170 Q140,130 180,110 Q220,90 260,120 Q290,150 280,200;
+      M140,250 Q100,220 120,170 Q140,130 180,110 Q220,90 260,120 Q290,150 280,200 Q270,240 230,270 Q190,290 150,270;
+      M260,120 Q290,150 280,200 Q270,240 230,270 Q190,290 150,270 Q120,250 110,210 Q100,170 130,140;
+      M280,180 Q260,240 220,260 Q180,280 140,250 Q100,220 120,170 Q140,130 180,110 Q220,90 260,120 Q290,150 280,200
+    "/>
+  </path>
+  <!-- Strand 3 (amber) -->
+  <path fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" opacity="0.8" clip-path="url(#disk-clip)">
+    <animate attributeName="d" dur="6s" repeatCount="indefinite" values="
+      M180,300 Q140,280 130,240 Q120,200 150,160 Q180,130 220,140 Q260,160 280,200 Q290,240 260,270 Q230,300 190,310;
+      M130,240 Q120,200 150,160 Q180,130 220,140 Q260,160 280,200 Q290,240 260,270 Q230,300 190,310 Q150,310 120,280;
+      M220,140 Q260,160 280,200 Q290,240 260,270 Q230,300 190,310 Q150,310 120,280 Q100,250 110,210;
+      M180,300 Q140,280 130,240 Q120,200 150,160 Q180,130 220,140 Q260,160 280,200 Q290,240 260,270 Q230,300 190,310
+    "/>
+  </path>
+
+  <!-- TEPO label -->
+  <rect x="130" y="56" width="140" height="28" rx="4" fill="rgba(236,72,153,0.15)" stroke="#ec4899" stroke-width="1"/>
+  <text x="200" y="75" text-anchor="middle" fill="#ec4899" font-family="'Times New Roman', Georgia, serif" font-size="14" font-weight="600">
+    TEPO = log(&phi;)
+  </text>
+  <text x="200" y="395" text-anchor="middle" fill="#ec4899" font-family="system-ui" font-size="11">Golden braid &mdash; pseudo-Anosov</text>
+
+  <!-- Divider -->
+  <line x1="400" y1="50" x2="400" y2="370" stroke="#334155" stroke-width="1" stroke-dasharray="4 6"/>
+  <text x="400" y="395" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11" font-style="italic">same physics, different geometry</text>
+
+  <!-- Right panel: Flat torus — trivial braids -->
+  <rect x="460" y="60" width="280" height="280" rx="12" fill="none" stroke="#334155" stroke-width="2"/>
+  <!-- Periodic boundary arrows -->
+  <text x="600" y="52" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">&harr; periodic</text>
+  <text x="445" y="200" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10" transform="rotate(-90 445 200)">&harr; periodic</text>
+  <text x="600" y="370" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="12" font-weight="600">Flat Torus</text>
+
+  <!-- Three defects drifting in parallel (not braiding) -->
+  <circle r="6" fill="#ec4899" opacity="0.8">
+    <animate attributeName="cx" values="510;530;540;520;510" dur="8s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="150;170;200;180;150" dur="8s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="6" fill="#06b6d4" opacity="0.8">
+    <animate attributeName="cx" values="600;610;620;590;600" dur="8s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="200;220;210;190;200" dur="8s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="6" fill="#f59e0b" opacity="0.8">
+    <animate attributeName="cx" values="680;670;660;690;680" dur="8s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="260;250;270;280;260" dur="8s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Drift trails (faint) -->
+  <path fill="none" stroke="#ec4899" stroke-width="1" opacity="0.2" stroke-dasharray="2 4">
+    <animate attributeName="d" dur="8s" repeatCount="indefinite" values="
+      M510,150 L520,160 L530,170;
+      M530,170 L535,185 L540,200;
+      M540,200 L530,190 L520,180;
+      M520,180 L515,165 L510,150
+    "/>
+  </path>
+  <path fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.2" stroke-dasharray="2 4">
+    <animate attributeName="d" dur="8s" repeatCount="indefinite" values="
+      M600,200 L605,210 L610,220;
+      M610,220 L615,215 L620,210;
+      M620,210 L605,200 L590,190;
+      M590,190 L595,195 L600,200
+    "/>
+  </path>
+
+  <!-- TEPO label -->
+  <rect x="530" y="88" width="140" height="28" rx="4" fill="rgba(148,163,184,0.1)" stroke="#94a3b8" stroke-width="1"/>
+  <text x="600" y="107" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman', Georgia, serif" font-size="14" font-weight="600">
+    TEPO = 0
+  </text>
+  <text x="600" y="325" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">Finite-order &mdash; no complexity growth</text>
+</svg>
+</div>
+
+<!-- ========== WHY GEOMETRY MATTERS ========== -->
+<h2>Geometry as Selector</h2>
+
+<p>
+The three critical phenomena are not independent. They are linked by a single organizing principle: <strong>geometry selects the universality class</strong>.
+</p>
+
+<p>
+A closed surface (positive Euler characteristic) forces topological charge conservation &mdash; the total defect charge must equal the Euler characteristic of the surface. This constraint selects Manna universality for the onset transition and pseudo-Anosov braids for the topological dynamics. An open surface lifts the topological constraint: defects can enter and exit at the boundary, selecting directed percolation for onset and simpler braids for dynamics.
+</p>
+
+<p>
+A flat torus (zero Euler characteristic) has periodic boundaries and zero curvature. No topological constraint forces defect creation. The result: TEPO = 0. The braids are trivial. The system never generates genuine topological complexity, no matter how active it becomes.
+</p>
+
+<p>
+This is not a parameter effect &mdash; the equations of motion are identical in all three geometries. The initial conditions are drawn from the same distribution. Only the boundary conditions differ. <strong>The container determines the physics.</strong>
+</p>
+
+<!-- ========== INTERACTIVE: GEOMETRY QUIZ ========== -->
+<div class="interactive-box fade-in">
+  <h3>Try It: Geometry Selects the Braid</h3>
+  <p class="hint">Click a geometry to see what braid class &mdash; and what topological entropy &mdash; the system selects. Same equations, same parameters, different container.</p>
+  <div style="text-align: center;">
+    <button class="geo-btn" data-geo="disk">Confined Disk (&chi; = 2)</button>
+    <button class="geo-btn" data-geo="sphere">Sphere (&chi; = 2)</button>
+    <button class="geo-btn" data-geo="torus">Flat Torus (&chi; = 0)</button>
+    <button class="geo-btn" data-geo="open">Open Channel</button>
+  </div>
+  <div id="tepo-result" class="tepo-result" style="opacity: 0.4; color: var(--muted); font-size: 1rem;">
+    Select a geometry above
+  </div>
+</div>
+
+<script>
+(function() {
+  var data = {
+    disk:   { tepo: 'TEPO = log(φ) ≈ 0.481', type: 'Golden braid — pseudo-Anosov (irreversible mixing)', color: '#ec4899' },
+    sphere: { tepo: 'TEPO = log(φ) ≈ 0.481', type: 'Same golden braid — Euler characteristic selects, not curvature', color: '#ec4899' },
+    torus:  { tepo: 'TEPO = 0', type: 'Trivial braids — finite-order exchanges, no complexity growth', color: '#3b82f6' },
+    open:   { tepo: 'β ≈ 0.583 (DP onset)', type: 'Directed percolation — boundary breaks topological conservation', color: '#f59e0b' }
+  };
+  var result = document.getElementById('tepo-result');
+  var btns = document.querySelectorAll('.geo-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      var d = data[btn.dataset.geo];
+      result.style.opacity = '1';
+      result.style.color = d.color;
+      result.innerHTML = d.tepo + '<span class="braid-type">' + d.type + '</span>';
+    });
+  });
+})();
+</script>
+
+<!-- ========== THE GOLDEN RATIO ========== -->
+<h2>The Golden Braid</h2>
+
+<p>
+On a confined surface with three +1/2 defects, the system selects the minimum-entropy pseudo-Anosov braid. This is the simplest braid that grows exponentially under iteration &mdash; it stretches material lines by a factor of &phi; = (1+&radic;5)/2 per braid operation, where &phi; is the golden ratio.
+</p>
+
+<p>
+The topological entropy is exactly TEPO = log(&phi;) &asymp; 0.481. This is not approximate &mdash; it is the algebraic minimum. No pseudo-Anosov braid on three strands has lower entropy. The system selects the simplest irreversible motion possible: the edge of topological chaos.
+</p>
+
+<p>
+With four defects, the system selects TEPO = log(1+&radic;2) &asymp; 0.881 &mdash; the silver ratio, the next algebraic number in the sequence. Each additional defect raises the braid complexity by a predictable algebraic amount.
+</p>
+
+<p>
+This connects active matter to an entirely different part of physics. In the <a href="03-cardiac-tissue.html">next tutorial</a>, we see the same topological defect unbinding &mdash; the same KT physics &mdash; in cardiac tissue, where bound vortex pairs correspond to atrial flutter and unbound vortices to fibrillation.
+</p>
+
+<!-- ========== TECHNICAL DETAILS ========== -->
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: Manna vs. Directed Percolation
+  </summary>
+  <div class="detail-body">
+    <p>
+      Directed percolation (DP) is the default universality class for absorbing-state transitions in systems with a single scalar order parameter. The Janssen-Grassberger conjecture states that any continuous transition from an active to an absorbing state, with a single-component order parameter and no extra symmetry or conservation law, belongs to the DP class.
+    </p>
+    <p>
+      Manna universality (conserved directed percolation, C-DP) is the corresponding class when the total number of particles is <em>conserved</em>. On a closed surface, the total topological charge is fixed by the Gauss-Bonnet theorem: &Sigma; <span class="math">q</span><sub>i</sub> = &chi;, where &chi; is the Euler characteristic. This conservation law shifts the system from DP (&beta; &asymp; 0.583 in 2D) to Manna (&beta; &asymp; 0.639).
+    </p>
+    <p>
+      The measured defect onset exponent in confined active nematics: &nu; &asymp; 0.648, R&sup2; = 0.93. Consistent with Manna &beta; &asymp; 0.639 in 2D. On open channels (Doostmohammadi et al. 2017): &beta; &asymp; 0.583, consistent with standard DP. The surface topology acts as a selection rule between universality classes.
+    </p>
+    <p>
+      Independent confirmation: PNAS 2025 &ldquo;Hidden order in active nematic defects&rdquo; finds hyperuniform defect distributions on closed surfaces &mdash; a hallmark of conserved-density universality classes. The connection to Manna was identified independently.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: Topological Entropy and the Burau Matrix
+  </summary>
+  <div class="detail-body">
+    <p>
+      Topological entropy (TEPO) of a braid &beta; is defined as TEPO(&beta;) = lim<sub>n&rarr;&infin;</sub> (1/n) log ||&beta;<sup>n</sup>||, where ||&middot;|| is any submultiplicative matrix norm. For computational purposes, TEPO is bounded below by the logarithm of the spectral radius of the reduced Burau matrix evaluated at <span class="math">t</span> = &minus;1.
+    </p>
+    <p>
+      For the golden braid &sigma;<sub>1</sub>&sigma;<sub>2</sub><sup>&minus;1</sup> on three strands, the Burau matrix at <span class="math">t</span> = &minus;1 has eigenvalues &phi; and 1/&phi;, giving TEPO = log(&phi;) exactly. This is the minimum nonzero TEPO on B<sub>3</sub>.
+    </p>
+    <p>
+      The braid spectrum for higher strand counts (computed via Burau lower bounds):
+    </p>
+    <p>
+      B<sub>3</sub>: TEPO<sub>min</sub> = 0.481 = log(&phi;) &bull;
+      B<sub>4</sub>: TEPO<sub>min</sub> &ge; 0.439 &bull;
+      B<sub>5</sub>: TEPO<sub>min</sub> &ge; 0.370 &bull;
+      B<sub>6</sub>: TEPO<sub>min</sub> &ge; 0.313 &bull;
+      B<sub>9</sub>: TEPO<sub>min</sub> &ge; 0.210
+    </p>
+    <p>
+      Asymptotic pattern: TEPO<sub>min</sub> &times; n &rarr; ~1.89. The minimum entropy decreases with strand count, but the product TEPO &times; n converges &mdash; suggesting a universal packing limit for topological complexity per strand.
+    </p>
+    <!-- Detail SVG: Braid diagram -->
+    <div class="viz" style="margin: 1rem 0;">
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Braid diagrams comparing the golden braid σ₁σ₂⁻¹ (left, 3 strands, TEPO = log(φ) ≈ 0.481) with the silver braid σ₁σ₂⁻¹σ₃σ₂⁻¹ (right, 4 strands, TEPO = log(1+√2) ≈ 0.881). Each shows colored strands crossing over and under each other. Below: a table of minimum TEPO values by strand count: B₃ = 0.481, B₄ ≥ 0.439, B₅ ≥ 0.370, B₆ ≥ 0.313, B₉ ≥ 0.210 (Burau lower bounds). The product TEPO×n converges to approximately 1.89, suggesting a universal packing limit for topological complexity per strand.">
+      <rect width="700" height="300" fill="#1e293b"/>
+
+      <!-- Three-strand golden braid σ₁σ₂⁻¹ -->
+      <text x="180" y="35" text-anchor="middle" fill="#ec4899" font-family="'Times New Roman', Georgia, serif" font-size="14" font-weight="600">&sigma;&#x2081;&sigma;&#x2082;&#x207B;&#xB9; (golden braid)</text>
+
+      <!-- Strand positions: x = 100, 180, 260 -->
+      <!-- First crossing: σ₁ — strand 1 over strand 2 -->
+      <line x1="100" y1="60" x2="180" y2="140" stroke="#ec4899" stroke-width="3"/>
+      <line x1="180" y1="60" x2="140" y2="100" stroke="#06b6d4" stroke-width="3"/>
+      <line x1="140" y1="104" x2="100" y2="140" stroke="#06b6d4" stroke-width="3"/>
+      <line x1="260" y1="60" x2="260" y2="140" stroke="#f59e0b" stroke-width="3"/>
+
+      <!-- Second crossing: σ₂⁻¹ — strand 3 over strand 2 -->
+      <line x1="180" y1="140" x2="180" y2="220" stroke="#ec4899" stroke-width="3"/>
+      <line x1="260" y1="140" x2="100" y2="220" stroke="#f59e0b" stroke-width="3"/>
+      <line x1="100" y1="140" x2="160" y2="180" stroke="#06b6d4" stroke-width="3"/>
+      <line x1="200" y1="180" x2="260" y2="220" stroke="#06b6d4" stroke-width="3"/>
+
+      <!-- Repeat marker -->
+      <text x="180" y="250" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11">&hellip; repeats &times; n &hellip;</text>
+      <text x="180" y="275" text-anchor="middle" fill="#ec4899" font-family="system-ui" font-size="11">stretches by &phi;<sup>n</sup></text>
+
+      <!-- Labels -->
+      <circle cx="100" cy="52" r="4" fill="#ec4899"/>
+      <circle cx="180" cy="52" r="4" fill="#06b6d4"/>
+      <circle cx="260" cy="52" r="4" fill="#f59e0b"/>
+
+      <!-- Right side: TEPO comparison chart -->
+      <text x="520" y="35" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="13" font-weight="600">TEPO by geometry</text>
+
+      <!-- Bars -->
+      <rect x="400" y="60" width="200" height="30" rx="4" fill="rgba(236,72,153,0.2)" stroke="#ec4899" stroke-width="1"/>
+      <text x="410" y="80" fill="#ec4899" font-family="system-ui" font-size="11" font-weight="600">Disk / sphere</text>
+      <text x="590" y="80" text-anchor="end" fill="#ec4899" font-family="'Times New Roman', Georgia, serif" font-size="12">log(&phi;) = 0.481</text>
+
+      <rect x="400" y="100" width="200" height="30" rx="4" fill="rgba(168,85,247,0.2)" stroke="#a855f7" stroke-width="1"/>
+      <text x="410" y="120" fill="#a855f7" font-family="system-ui" font-size="11" font-weight="600">4 defects</text>
+      <text x="590" y="120" text-anchor="end" fill="#a855f7" font-family="'Times New Roman', Georgia, serif" font-size="12">log(1+&radic;2) = 0.881</text>
+
+      <rect x="400" y="150" width="200" height="30" rx="4" fill="rgba(148,163,184,0.1)" stroke="#94a3b8" stroke-width="1"/>
+      <text x="410" y="170" fill="#94a3b8" font-family="system-ui" font-size="11" font-weight="600">Flat torus</text>
+      <text x="590" y="170" text-anchor="end" fill="#94a3b8" font-family="'Times New Roman', Georgia, serif" font-size="12">0</text>
+
+      <!-- Annotation -->
+      <text x="520" y="215" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11" font-style="italic">Same equations of motion</text>
+      <text x="520" y="232" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11" font-style="italic">Same parameters</text>
+      <text x="520" y="249" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11" font-weight="600">Only geometry differs</text>
+    </svg>
+    </div>
+    <p>
+      Null hypothesis test: random walks on the same geometries produce TEPO = 0 in <em>both</em> confined and periodic geometries (20 trials each). The golden braid requires active dynamics: geometry is necessary but not sufficient.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: The Novel &eta; = 1.04 Exponent
+  </summary>
+  <div class="detail-body">
+    <p>
+      At the boundary between periodic and chaotic defect dynamics, Reports on Progress in Physics (2025) reports a critical exponent &eta; = 1.04 that falls outside all standard universality classes. For comparison: 2D Ising &eta; = 0.25, 2D XY &eta; = 0.25, 2D percolation &eta; = 5/24, 3D Ising &eta; &asymp; 0.036.
+    </p>
+    <p>
+      The value &eta; = 1.04 is anomalously large. It suggests a new type of critical behavior specific to the periodic-to-chaotic transition in active nematic defect dynamics &mdash; a transition that involves simultaneous symmetry breaking (translational order of defect lattice) and topological change (onset of pseudo-Anosov braiding).
+    </p>
+    <p>
+      This is the multi-critical signal: the coupling between the symmetry-breaking transition and the topological transition produces a universality class that neither contains individually. A single-transition theory cannot produce &eta; = 1.04 &mdash; it is an emergent property of the coupling.
+    </p>
+  </div>
+</details>
+
+<!-- ========== FALSIFICATION ========== -->
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-survived"></span>
+    Falsification: Prediction #5 &mdash; Geometry Selects Braid Class
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> Confinement geometry selects which braid class active nematic defects realize. Confined surfaces produce pseudo-Anosov braids with TEPO = log(&phi;). Flat tori produce finite-order braids with TEPO = 0.
+    </p>
+    <p>
+      <strong>Status: <span style="color: var(--status-survived);">Survived.</span></strong> Volterra-nematic simulation confirms geometry selects braid class. Flat torus: TEPO = 0 across all activity levels. Confined geometries: TEPO = log(&phi;) for three defects. Random walk null produces TEPO = 0 in both geometries (20 trials each), confirming that active dynamics are required &mdash; geometry is necessary but not sufficient.
+    </p>
+    <p>
+      <strong>Independent support:</strong> Klein et al. (arXiv 2503.10880, March 2025) independently find golden and silver braid orbits in confined active nematics. Memarian et al. (PRL 2024) confirm the golden braid in contractile active nematics. Hillebrand &amp; Alert (Nature Communications) show a discontinuous transition without confinement.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If confined geometries produce TEPO &ne; log(&phi;), or flat tori produce nonzero TEPO, or random walks produce the same braids as active dynamics, Prediction #5 fails.
+    </div>
+  </div>
+</details>
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-survived"></span>
+    Falsification: Prediction #12 &mdash; Manna Universality
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> Defect density onset on closed surfaces follows Manna/conserved-DP universality (&beta; &asymp; 0.639), while open surfaces follow standard DP (&beta; &asymp; 0.583). The surface topology acts as a selection rule between universality classes.
+    </p>
+    <p>
+      <strong>Status: <span style="color: var(--status-survived);">Survived.</span></strong> Measured defect onset exponent &nu; &asymp; 0.648 matches Manna &beta; &asymp; 0.639 in 2D (R&sup2; = 0.93). Physical mechanism: topological charge conservation on closed surfaces provides the conserved quantity required for C-DP universality.
+    </p>
+    <p>
+      <strong>Independent support:</strong> PNAS 2025 &ldquo;Hidden order in active nematic defects&rdquo; independently identifies hyperuniform defect distributions on closed surfaces, a signature of conserved-density universality classes. Doostmohammadi et al. (2017) report &beta; &asymp; 0.583 for open channels, consistent with standard DP.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If closed-surface onset exponents match standard DP rather than Manna/C-DP, or if open-boundary systems show Manna exponents, Prediction #12 fails. The topology-dependent selection rule would be wrong.
+    </div>
+  </div>
+</details>
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-planned"></span>
+    Falsification: Prediction #6 &mdash; Euler Characteristic Selects Braid Class
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> The Euler characteristic &chi; of the surface determines the accessible braid class. &chi; &gt; 0 (sphere): pseudo-Anosov. &chi; = 0 (torus): finite-order. &chi; &lt; 0 (higher-genus surfaces): untested &mdash; predicted to produce a third class.
+    </p>
+    <p>
+      <strong>Status:</strong> Framework. &chi; &gt; 0 and &chi; = 0 cases verified via Prediction #5. The discriminating test is higher-genus surfaces (&chi; &lt; 0), which have never been simulated with active nematics.
+    </p>
+    <p>
+      <strong>Critical test:</strong> An annulus (cylinder with both ends capped) has &chi; = 0 but is confined. If confinement alone selects pseudo-Anosov braids, annulus should show TEPO &gt; 0. If Euler characteristic is the selector, annulus should show TEPO = 0. This experiment discriminates between geometry-as-confinement and geometry-as-topology.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If the annulus test shows TEPO = log(&phi;) (confinement matters, not &chi;), then the selection rule is geometric confinement, not topological. Prediction #6 fails as stated but refines to a confinement hypothesis. If genus-2 surfaces show no new braid class, the &chi; dependence is not monotonic.
+    </div>
+  </div>
+</details>
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-planned"></span>
+    Falsification: Prediction #7 &mdash; Braid Rank Hierarchy
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> Active systems with N defects on confined surfaces select braids from the minimum-entropy pseudo-Anosov family in B<sub>N</sub>. The TEPO values form a hierarchy: log(&phi;), log(1+&radic;2), &hellip; approaching the asymptotic limit TEPO &times; N &rarr; ~1.89.
+    </p>
+    <p>
+      <strong>Status:</strong> Framework. N = 3 confirmed (golden braid). N = 4 reported (silver braid). Higher N untested experimentally.
+    </p>
+    <p>
+      <strong>Next step:</strong> Simulate N = 5, 6, 7 defects on a sphere. Measure TEPO. If the hierarchy holds, each N selects the minimum-entropy pseudo-Anosov from the corresponding braid group.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If N = 5+ systems select non-minimum-entropy braids, or if TEPO does not decrease systematically with N, the hierarchy prediction fails.
+    </div>
+  </div>
+</details>
+
+<!-- ========== PAIR CALLOUT ========== -->
+
+<div class="pair-card fade-in">
+  <div class="pair-label">Paired System</div>
+  <h4><a href="03-cardiac-tissue.html">Tutorial 03: Cardiac Tissue</a></h4>
+  <p>
+    Connected through Kosterlitz-Thouless defect unbinding. In active matter, defects unbind from periodic braids into chaotic motion at a KT-type transition. In cardiac tissue, the same physics maps directly: atrial flutter = bound vortex pairs, atrial fibrillation = unbound vortices. Clinical validation &mdash; 75&ndash;96% arrhythmia termination rates by targeting topological boundaries &mdash; confirms the mapping is not just analogy.
+  </p>
+</div>
+
+<!-- ========== DETECTION QUESTION ========== -->
+
+<details class="detection fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Detection Question
+  </summary>
+  <div class="detail-body">
+    <p>
+      Three order parameters on the same node set &mdash; defect density, braid class (topological entropy), and defect lattice order &mdash; each undergoing an independent transition as activity increases. The nodes are spatial positions on the surface; the edges are declared between neighboring cells.
+    </p>
+    <p>
+      The geometry dependence suggests that the relational structure between nodes (which encodes the surface topology through boundary conditions) fundamentally shapes which transitions are accessible. A relational gradient operator on a flat torus sees different edge structure than on a confined disk, even though the local physics is identical.
+    </p>
+    <p>
+      <strong>The question:</strong> Can the shift from standard DP to Manna universality be detected as a structural change in the edge field when boundary conditions switch from open to closed? If so, the topological charge conservation that selects Manna class should appear as a constraint in the relational structure &mdash; a global invariant visible in the field that is invisible to any local measurement.
+    </p>
+  </div>
+</details>
+
+<!-- ========== REFERENCES ========== -->
+
+<details class="references fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    References
+  </summary>
+  <div class="detail-body">
+    <p>Memarian, F. et al. (2024). Minimum topological entropy of braids in active nematics. <em>Phys. Rev. Lett.</em></p>
+    <p>Klein, S. et al. (2025). Golden and silver braid orbits in confined active nematics. arXiv:2503.10880.</p>
+    <p>Hillebrand, M. &amp; Alert, R. (2025). Discontinuous defect unbinding transition in active nematics. <em>Nature Communications</em>.</p>
+    <p>Doostmohammadi, A. et al. (2017). Onset of meso-scale turbulence in active nematics. <em>Nature Communications</em>, 8, 15326.</p>
+    <p>Reports on Progress in Physics (2025). Novel universality class in active nematic defect dynamics. [&eta; = 1.04 measurement].</p>
+    <p>PNAS (2025). Hidden order in active nematic defects. [Hyperuniform defect distributions on closed surfaces].</p>
+    <p>Manna, S. S. (1991). Two-state model of self-organized criticality. <em>J. Phys. A</em>, 24, L363.</p>
+    <p>Hinrichsen, H. (2000). Non-equilibrium critical phenomena and phase transitions into absorbing states. <em>Adv. Phys.</em>, 49, 815&ndash;958.</p>
+    <p>Ganesan, P. et al. (2025). Topological boundaries in cardiac arrhythmias. <em>Frontiers in Network Physiology</em>.</p>
+  </div>
+</details>
+
+<!-- ========== BOTTOM NAVIGATION ========== -->
+<div class="tutorial-nav">
+  <a href="01-glass-transition.html">&larr; Glass Transition</a>
+  <a href="03-cardiac-tissue.html" class="next">Cardiac Tissue &rarr;</a>
+</div>
+
+<p class="footer-note">
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a>
+</p>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

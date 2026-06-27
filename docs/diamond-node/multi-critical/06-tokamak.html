@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tokamak H-Mode Pedestal — Multi-Critical Systems</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --status-survived: #22c55e;
+  --status-framework: #f59e0b;
+  --status-planned: #3b82f6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+h2 { font-size: 1.8rem; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.subtitle {
+  text-align: center; color: var(--muted); font-size: 1.1rem;
+  margin-bottom: 2.5rem; font-style: italic; font-family: Georgia, serif;
+}
+.lead {
+  font-size: 1.15rem; color: var(--line);
+  font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem;
+}
+
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+
+.tutorial-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim);
+}
+.tutorial-nav a {
+  color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+.tutorial-nav a:hover { color: var(--heading); text-decoration: none; }
+
+.viz {
+  width: 100%; margin: 2rem 0; border-radius: 12px;
+  overflow: hidden; background: var(--card);
+  border: 1px solid var(--dim);
+}
+.viz svg { width: 100%; display: block; }
+
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+}
+
+.pair-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem 1.5rem;
+  margin: 2rem 0; border: 1px solid var(--dim); border-left: 3px solid var(--green);
+}
+.pair-card h4 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.pair-card .pair-label { color: var(--green); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.pair-card a { color: var(--blue); }
+
+.tag {
+  display: inline-block; font-size: 0.75rem; padding: 0.15rem 0.6rem;
+  border-radius: 4px; font-weight: 600; letter-spacing: 0.03em;
+  margin-right: 0.3rem; margin-bottom: 0.3rem;
+}
+.tag-red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+.tag-blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.tag-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+.tag-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.tag-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cyan); }
+.tag-pink { background: rgba(236, 72, 153, 0.15); color: var(--pink); }
+
+details {
+  background: var(--card); border-radius: 8px; margin: 1.25rem 0;
+  border: 1px solid var(--dim); overflow: hidden;
+}
+details[open] { border-color: rgba(148, 163, 184, 0.25); }
+
+summary {
+  padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 600;
+  font-size: 0.92rem; color: var(--line); list-style: none;
+  display: flex; align-items: center; gap: 0.6rem;
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+}
+summary:hover { color: var(--heading); background: rgba(255,255,255,0.02); }
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '\25B8'; font-size: 0.75rem; color: var(--muted);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+
+details .detail-body { padding: 0 1.25rem 1.25rem; }
+details .detail-body p { font-size: 0.92rem; margin-bottom: 0.8rem; }
+details .detail-body p:last-child { margin-bottom: 0; }
+
+details.technical { border-left: 3px solid var(--line); }
+details.falsification { border-left: 3px solid var(--amber); }
+
+.status-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 0.4rem; flex-shrink: 0;
+}
+.status-survived { background: var(--status-survived); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+.status-framework { background: var(--status-framework); box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+.status-planned { background: var(--status-planned); box-shadow: 0 0 6px rgba(59,130,246,0.4); }
+
+.kill-criteria {
+  background: rgba(239, 68, 68, 0.08); border-radius: 6px;
+  padding: 0.6rem 0.9rem; margin-top: 0.6rem; font-size: 0.85rem;
+  border-left: 2px solid var(--red);
+}
+.kill-criteria strong { color: var(--red); font-size: 0.78rem; letter-spacing: 0.04em; }
+
+details.detection { border-left: 3px solid var(--cyan); }
+details.detection .detail-body { font-size: 0.9rem; color: var(--line); }
+
+details.references { border-left: 3px solid var(--muted); }
+details.references .detail-body { font-size: 0.82rem; color: var(--muted); line-height: 1.9; }
+details.references .detail-body p { margin-bottom: 0.3rem; }
+
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+sub, sup { font-size: 0.75em; }
+
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+.footer-note {
+  margin-top: 3rem; text-align: center;
+  color: var(--muted); font-size: 0.85rem;
+}
+
+/* Interactive elements */
+.interactive-box {
+  background: var(--card); border-radius: 12px;
+  padding: 1.5rem 1.75rem; margin: 2rem 0;
+  border: 1px solid var(--dim); border-left: 3px solid var(--amber);
+}
+.interactive-box h3 {
+  margin-top: 0; color: var(--heading);
+  font-family: system-ui, sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.interactive-box .hint { font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem; }
+.slider-labels {
+  display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem;
+}
+.slider-labels span { font-size: 0.82rem; white-space: nowrap; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px;
+  background: var(--dim); border-radius: 3px; outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--amber); cursor: pointer; border: 2px solid var(--heading);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--amber); cursor: pointer; border: 2px solid var(--heading);
+}
+.noise-readout {
+  text-align: center; margin-top: 0.5rem; padding: 0.75rem;
+  background: rgba(15,23,42,0.5); border-radius: 8px;
+  font-size: 1rem; color: var(--heading); transition: all 0.3s;
+}
+.noise-readout .detail { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; }
+
+@media (max-width: 600px) {
+  h1 { font-size: 1.8rem; }
+  .container { padding: 1rem 1rem 3rem; }
+  summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="index.html" class="back">&larr; Back to Multi-Critical Systems</a>
+
+<h1>Tokamak H-Mode Pedestal</h1>
+<p class="subtitle">Self-organized criticality, magnetic islands, and a self-sustaining loop</p>
+
+<p class="lead">
+A tokamak confines plasma &mdash; ionized gas at 150 million degrees &mdash; inside a doughnut-shaped magnetic field. The goal is controlled nuclear fusion. The obstacle is turbulence: the hot plasma generates turbulent fluctuations that carry heat outward, eroding confinement. In the late 1980s, physicists discovered that above a threshold heating power, the plasma spontaneously enters a state of dramatically improved confinement called <strong>H-mode</strong>. No one designed it. The plasma organized itself.
+</p>
+
+<p>
+The key structure in H-mode is the <strong>pedestal</strong>: a narrow region at the plasma edge where the pressure profile steepens dramatically, forming a transport barrier. The pedestal is not static. It builds up, releases its energy in violent bursts called <strong>edge-localized modes (ELMs)</strong>, rebuilds, and bursts again. This cycle is governed by three independent critical phenomena converging in a single region of plasma.
+</p>
+
+<p>
+The tokamak is the only non-biological system in this series. Its inclusion demonstrates that multi-criticality is not a special property of living matter. It is a property of systems where multiple independent transitions converge &mdash; regardless of substrate.
+</p>
+
+<!-- ========== THE THREE TRANSITIONS ========== -->
+<h2>Three Transitions in the Pedestal</h2>
+
+<h3>1. SOC avalanches &mdash; the sandpile pedestal</h3>
+
+<p>
+Chapman, Dendy, and Hnat (PRL 2001) demonstrated that the pedestal operates as a <strong>self-organized critical (SOC) sandpile</strong>. The pressure gradient is the slope of the pile. Turbulent transport events are the avalanches. When the gradient exceeds a local threshold, a transport event fires, reducing the gradient locally &mdash; like sand sliding down an oversteep slope. The system self-organizes to maintain the gradient near the critical threshold.
+</p>
+
+<p>
+ELMs are the large avalanches. The pedestal builds until the entire edge region exceeds the stability limit, then releases its stored energy in a single catastrophic event. Between ELMs, smaller avalanches continually redistribute energy, maintaining the critical gradient. The avalanche size distribution follows a power law &mdash; the signature of SOC.
+</p>
+
+<h3>2. Magnetic topology &mdash; islands mediate control</h3>
+
+<p>
+In 2024, Park and colleagues published a landmark result in <em>Nature Physics</em>: direct observation of <strong>magnetic islands</strong> forming during ELM suppression. Magnetic islands are topological structures &mdash; regions where the magnetic field lines close on themselves, creating islands of trapped plasma within the otherwise nested flux surfaces.
+</p>
+
+<p>
+When external magnetic perturbations (resonant magnetic perturbations, or RMPs) are applied to suppress ELMs, they work not by smoothly modifying the pressure profile, but by creating magnetic islands at rational flux surfaces. The islands break the nested topology of the magnetic field, introducing new pathways for particle and energy transport. This is a <strong>topological phase transition</strong> in the magnetic field structure: from nested, intact flux surfaces to an island-containing topology with fundamentally different transport properties.
+</p>
+
+<h3>3. The predator-prey loop &mdash; autocatalytic self-maintenance</h3>
+
+<p>
+The transport barrier does not just exist &mdash; it <strong>creates the conditions for its own existence</strong>. The mechanism is a closed autocatalytic loop:
+</p>
+
+<p>
+Steep pressure gradients drive turbulence. Turbulence generates Reynolds stress. Reynolds stress produces <strong>zonal flows</strong> &mdash; sheared plasma flows that run around the torus. Zonal flows suppress the turbulence that created them. Suppressed turbulence allows the pressure gradient to steepen further. The steeper gradient drives more turbulence, completing the cycle.
+</p>
+
+<p>
+McMillan and colleagues (2018) identified a self-sustaining quasi-traveling-wave at the plasma edge that exists at the <strong>edge of chaos</strong> &mdash; a structure that propagates only because it continuously creates the conditions for its own propagation. Remarkably, Huang et al. (2025) showed this cycle requires <strong>stochastic noise exceeding 100% signal-to-noise ratio</strong> to sustain itself. The transport barrier is noise-stabilized: it cannot exist in a perfectly deterministic system.
+</p>
+
+<!-- ========== MAIN SVG: THE AUTOCATALYTIC LOOP ========== -->
+<div class="viz fade-in">
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Circular autocatalytic loop diagram showing the self-sustaining transport barrier mechanism. Four labeled nodes arranged in a cycle: Pressure Gradient (red, top) drives Turbulence (amber, right), which generates Zonal Flows (blue, bottom), which suppresses further turbulence (green, left), and suppression steepens the pressure gradient — completing the loop. Animated arrows flow clockwise between nodes with labels 'drives', 'generates', 'suppresses', 'steepens'. A pulsing purple circle at center reads 'Edge of Chaos'. Bottom annotation: 'Requires stochastic noise > 100% SNR to sustain' and 'The loop is noise-stabilized — it cannot exist without randomness'.">
+  <rect width="800" height="400" fill="#1e293b"/>
+
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="13" font-weight="600">The Self-Sustaining Loop</text>
+
+  <!-- Circular loop with four nodes -->
+  <!-- Node 1: Pressure gradient (top) -->
+  <rect x="300" y="50" width="200" height="50" rx="8" fill="rgba(239,68,68,0.08)" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="400" y="72" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="12" font-weight="600">Pressure Gradient</text>
+  <text x="400" y="90" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">steepens when turbulence suppressed</text>
+
+  <!-- Node 2: Turbulence (right) -->
+  <rect x="560" y="165" width="200" height="50" rx="8" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="660" y="187" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="12" font-weight="600">Turbulence</text>
+  <text x="660" y="205" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">driven by steep gradients</text>
+
+  <!-- Node 3: Zonal Flows (bottom) -->
+  <rect x="300" y="290" width="200" height="50" rx="8" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="400" y="312" text-anchor="middle" fill="#3b82f6" font-family="system-ui" font-size="12" font-weight="600">Zonal Flows</text>
+  <text x="400" y="330" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">generated by Reynolds stress</text>
+
+  <!-- Node 4: Suppression (left) -->
+  <rect x="40" y="165" width="200" height="50" rx="8" fill="rgba(34,197,94,0.08)" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="140" y="187" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="12" font-weight="600">Turbulence Suppression</text>
+  <text x="140" y="205" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">sheared flows decorrelate eddies</text>
+
+  <!-- Arrows connecting the loop (animated) -->
+  <!-- Gradient → Turbulence -->
+  <path d="M500,85 Q550,100 560,165" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowR)">
+    <animate attributeName="stroke-dashoffset" from="0" to="-40" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <text x="540" y="120" fill="#ef4444" font-family="system-ui" font-size="10" font-style="italic">drives</text>
+
+  <!-- Turbulence → Zonal Flows -->
+  <path d="M620,215 Q600,260 500,300" fill="none" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrowR)">
+    <animate attributeName="stroke-dashoffset" from="0" to="-40" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <text x="575" y="270" fill="#f59e0b" font-family="system-ui" font-size="10" font-style="italic">generates</text>
+
+  <!-- Zonal Flows → Suppression -->
+  <path d="M300,310 Q250,290 240,215" fill="none" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrowR)">
+    <animate attributeName="stroke-dashoffset" from="0" to="-40" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <text x="250" y="270" fill="#3b82f6" font-family="system-ui" font-size="10" font-style="italic" text-anchor="end">suppresses</text>
+
+  <!-- Suppression → Gradient -->
+  <path d="M180,165 Q200,120 300,85" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrowR)">
+    <animate attributeName="stroke-dashoffset" from="0" to="-40" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <text x="220" y="120" fill="#22c55e" font-family="system-ui" font-size="10" font-style="italic">steepens</text>
+
+  <defs>
+    <marker id="arrowR" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- Center annotation -->
+  <circle cx="400" cy="200" r="40" fill="none" stroke="#a855f7" stroke-width="1" stroke-dasharray="4 4" opacity="0.4">
+    <animate attributeName="r" values="38;42;38" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="400" y="196" text-anchor="middle" fill="#a855f7" font-family="system-ui" font-size="11" font-weight="600">Edge of</text>
+  <text x="400" y="212" text-anchor="middle" fill="#a855f7" font-family="system-ui" font-size="11" font-weight="600">Chaos</text>
+
+  <!-- Noise requirement -->
+  <text x="400" y="378" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11" font-style="italic">Requires stochastic noise &gt; 100% SNR to sustain</text>
+  <text x="400" y="395" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">The loop is noise-stabilized &mdash; it cannot exist without randomness</text>
+</svg>
+</div>
+
+<!-- ========== INTERACTIVE: NOISE LEVEL ========== -->
+<div class="interactive-box fade-in">
+  <h3>Explore: Noise-Stabilized Barrier</h3>
+  <p class="hint">Drag the slider to change the stochastic noise level. The transport barrier exists only above a threshold &mdash; it is stabilized by noise, not destroyed by it.</p>
+  <div class="viz" style="margin: 0 0 0.5rem;">
+  <svg id="noise-viz" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive slider-controlled visualization of the noise-stabilized transport barrier. A red pressure profile curve plotted against plasma radius. At low noise (0% SNR, deterministic), the profile declines gradually from core to edge — no pedestal. As the slider increases noise past 100% SNR, a sharp step (transport barrier) forms at the plasma edge, marked by an amber 'Transport Barrier' label. Scattered amber dots represent stochastic fluctuations, increasing in density with the slider. An SNR readout shows the current noise level. The counterintuitive result: the barrier requires noise to exist.">
+    <rect width="600" height="180" fill="#1e293b"/>
+    <!-- Pressure profile -->
+    <text x="25" y="90" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="9" transform="rotate(-90 25 90)">Pressure</text>
+    <text x="300" y="175" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Plasma radius &rarr;</text>
+    <line x1="50" y1="155" x2="560" y2="155" stroke="#334155" stroke-width="1"/>
+    <!-- Core pressure (always high) -->
+    <path id="noise-profile" fill="none" stroke="#ef4444" stroke-width="2.5"/>
+    <path id="noise-fill" fill="rgba(239,68,68,0.08)"/>
+    <!-- Pedestal marker -->
+    <g id="pedestal-marker" opacity="0">
+      <rect x="380" y="20" width="100" height="20" rx="4" fill="rgba(245,158,11,0.15)"/>
+      <text x="430" y="34" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="10" font-weight="600">Transport Barrier</text>
+      <line x1="430" y1="42" x2="430" y2="80" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+    </g>
+    <!-- Noise visualization: random dots -->
+    <g id="noise-dots"></g>
+    <!-- SNR readout -->
+    <text id="snr-label" x="540" y="25" text-anchor="end" fill="#475569" font-family="system-ui" font-size="11"></text>
+  </svg>
+  </div>
+  <div class="slider-labels">
+    <span style="color: var(--muted);">0% noise (deterministic)</span>
+    <input type="range" id="noise-slider" min="0" max="200" value="40">
+    <span style="color: var(--amber);">200% SNR</span>
+  </div>
+  <div id="noise-readout" class="noise-readout"></div>
+</div>
+
+<script>
+(function() {
+  var slider = document.getElementById('noise-slider');
+  var readout = document.getElementById('noise-readout');
+  var marker = document.getElementById('pedestal-marker');
+  var snrLabel = document.getElementById('snr-label');
+  var dotsG = document.getElementById('noise-dots');
+  var seed = 42;
+
+  function pseudoRand() { seed = (seed * 16807 + 0) % 2147483647; return seed / 2147483647; }
+
+  function update() {
+    var snr = parseInt(slider.value);
+    var hasBarrier = snr > 100;
+    var base = 155;
+
+    var pts = [];
+    for (var x = 50; x <= 560; x += 3) {
+      var r = (x - 50) / 510;
+      var core = 120 * (1 - r * r * 0.3);
+      var pedestal = hasBarrier ? 60 * Math.exp(-Math.pow((r - 0.75) / 0.08, 2)) : 0;
+      var y = base - core + (hasBarrier ? 0 : r * 60) - pedestal;
+      if (y < 15) y = 15;
+      pts.push(x + ',' + y);
+    }
+
+    document.getElementById('noise-profile').setAttribute('d', 'M' + pts.join(' L'));
+    document.getElementById('noise-fill').setAttribute('d',
+      'M' + pts.join(' L') + ' L560,' + base + ' L50,' + base + ' Z');
+
+    marker.setAttribute('opacity', hasBarrier ? '1' : '0');
+
+    seed = 42;
+    dotsG.innerHTML = '';
+    var nDots = Math.floor(snr / 5);
+    for (var i = 0; i < nDots && i < 60; i++) {
+      var dx = 80 + pseudoRand() * 440;
+      var dy = 40 + pseudoRand() * 100;
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', dx);
+      c.setAttribute('cy', dy);
+      c.setAttribute('r', '1.5');
+      c.setAttribute('fill', '#f59e0b');
+      c.setAttribute('opacity', String(0.15 + pseudoRand() * 0.3));
+      dotsG.appendChild(c);
+    }
+
+    snrLabel.textContent = 'SNR: ' + snr + '%';
+
+    if (snr < 20) {
+      readout.innerHTML = '<span style="color:var(--red)">No barrier</span>' +
+        '<span class="detail">Deterministic system &mdash; the quasi-traveling-wave cannot self-sustain without noise</span>';
+    } else if (snr <= 100) {
+      readout.innerHTML = '<span style="color:var(--line)">Insufficient noise</span>' +
+        '<span class="detail">Noise present but below threshold &mdash; turbulence seeds too weak to sustain the autocatalytic loop</span>';
+    } else {
+      readout.innerHTML = '<span style="color:#f59e0b;font-weight:600">Transport barrier formed!</span>' +
+        '<span class="detail">Noise exceeds 100% SNR &mdash; stochastic fluctuations seed turbulence that the wave needs as fuel</span>';
+    }
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<!-- ========== THE MULTI-CRITICAL STRUCTURE ========== -->
+<h2>How They Couple</h2>
+
+<p>
+The three transitions are not three independent descriptions of the same plasma. They interact in a specific hierarchy:
+</p>
+
+<p>
+The <strong>autocatalytic loop</strong> creates the transport barrier &mdash; the steep gradient that defines the pedestal. Without the loop, no pedestal exists. The <strong>SOC dynamics</strong> govern how the pedestal releases stored energy: small avalanches between ELMs, large avalanches during ELMs. The SOC system sits <em>on top of</em> the autocatalytic structure. The <strong>magnetic topology</strong> provides the control mechanism: magnetic islands can break the loop by short-circuiting the transport barrier, which is how ELM suppression works.
+</p>
+
+<p>
+This creates a three-layer structure: autocatalysis builds the barrier, SOC governs its release dynamics, and topology provides the intervention point. The three layers interact. Magnetic islands modify the gradient profile, which changes the SOC dynamics, which alters the autocatalytic loop&rsquo;s operating point. The coupling produces behavior &mdash; like the noise-stabilized quasi-traveling-wave &mdash; that no single layer predicts.
+</p>
+
+<!-- ========== THE NON-BIOLOGICAL CASE ========== -->
+<h2>Why a Plasma?</h2>
+
+<p>
+The first five tutorials describe biological or soft-matter systems. The tokamak pedestal demonstrates that multi-criticality is not a property of biological matter. It is a property of systems with multiple independent transitions that couple.
+</p>
+
+<p>
+The key parallel is with the <a href="05-brain.html">brain</a>. Both systems are modular-hierarchical: the brain has cortical modules with heterogeneous dynamics; the tokamak has nested flux surfaces with radially varying profiles. Both produce robust criticality without fine-tuning: the brain through Griffiths phases; the tokamak through the predator-prey loop&rsquo;s self-regulation. Both contain topological structures that organize transport: cortical spirals in the brain; magnetic islands in the tokamak.
+</p>
+
+<p>
+The substrates could not be more different &mdash; neurons at 37&deg;C versus hydrogen plasma at 150 million degrees. But the mathematical structure of the multi-critical coupling is the same: architecture produces robustness, topology provides control, and the coupling between them generates emergent dynamics that single-transition physics cannot predict.
+</p>
+
+<!-- ========== TECHNICAL DETAILS ========== -->
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: SOC Sandpile Model of the Pedestal
+  </summary>
+  <div class="detail-body">
+    <p>
+      Chapman, Dendy &amp; Hnat (PRL 2001) constructed a running sandpile model of the tokamak edge where: (1) the local variable is the pressure gradient at each radial position, (2) a threshold gradient exists at each position (the ideal MHD stability limit), (3) when the local gradient exceeds the threshold, a transport event fires that redistributes pressure to neighboring cells, (4) external heating continuously steepens the gradient at the inner boundary.
+    </p>
+    <p>
+      The model reproduces the key phenomenology: a pedestal forms naturally (the average gradient profile steepens to near the threshold), ELM-like events occur when a cascade reaches the system boundary (full-width avalanche), and the inter-ELM period is set by the competition between heating rate and avalanche transport. The avalanche size distribution follows a power law with a cutoff at the system size &mdash; SOC with finite-size effects.
+    </p>
+    <p>
+      Crucially, the SOC model does not require the predator-prey loop as input. The loop creates the conditions for SOC (the steep gradient), but the SOC dynamics are self-organizing once the gradient exists. This is the layered structure: the loop creates the pedestal, SOC governs its fluctuations.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: Magnetic Islands and ELM Suppression
+  </summary>
+  <div class="detail-body">
+    <p>
+      Park et al. (<em>Nature Physics</em>, 2024) used electron cyclotron emission imaging to directly observe magnetic islands forming at rational flux surfaces (q = m/n) during RMP-driven ELM suppression. The islands have measurable widths, positions, and rotation frequencies. Their formation coincides with the loss of the pedestal&rsquo;s steep gradient &mdash; the islands break the transport barrier by connecting inner and outer flux surfaces.
+    </p>
+    <p>
+      This is a topological transition: the magnetic field topology changes from nested, closed flux surfaces (topologically equivalent to nested tori) to a topology containing O-points and X-points (islands). The transition is discrete &mdash; you either have an island or you don&rsquo;t &mdash; and it produces a qualitative change in transport: from the ambipolar, neoclassical transport of intact surfaces to the streaming transport along the island&rsquo;s separatrix.
+    </p>
+    <p>
+      The practical significance: ITER (the international fusion experiment under construction) plans to use RMPs for ELM control. Understanding the topological mechanism &mdash; that ELM suppression works by creating magnetic islands, not by smooth gradient modification &mdash; is essential for predicting RMP effectiveness.
+    </p>
+    <!-- Detail SVG: Magnetic topology change -->
+    <div class="viz" style="margin: 1rem 0;">
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two-panel comparison of magnetic topology. Left: intact flux surfaces — nested concentric ellipses (blue) representing the normal closed magnetic field geometry of a tokamak. The gradient region is steep and continuous. Right: magnetic islands — the same flux surfaces now broken by O-shaped island chains (amber) at rational flux surfaces. An arrow connects the panels, labeled 'RMP application'. The islands short-circuit the transport barrier by connecting inner and outer flux surfaces, which is how ELM suppression works. Based on Park et al., Nature Physics 2024.">
+      <rect width="700" height="200" fill="#1e293b"/>
+
+      <!-- Left: nested flux surfaces (no islands) -->
+      <text x="175" y="25" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11" font-weight="600">Intact Flux Surfaces</text>
+
+      <!-- Concentric ellipses -->
+      <ellipse cx="175" cy="110" rx="120" ry="65" fill="none" stroke="#334155" stroke-width="1"/>
+      <ellipse cx="175" cy="110" rx="95" ry="50" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.6"/>
+      <ellipse cx="175" cy="110" rx="70" ry="38" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.6"/>
+      <ellipse cx="175" cy="110" rx="45" ry="25" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.6"/>
+      <ellipse cx="175" cy="110" rx="20" ry="12" fill="none" stroke="#ef4444" stroke-width="2"/>
+
+      <text x="175" y="185" text-anchor="middle" fill="#3b82f6" font-family="system-ui" font-size="10">Nested tori &mdash; good confinement</text>
+
+      <!-- Arrow -->
+      <text x="350" y="115" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="22">&rarr;</text>
+      <text x="350" y="140" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="10">RMP applied</text>
+
+      <!-- Right: magnetic islands -->
+      <text x="525" y="25" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11" font-weight="600">Island Topology</text>
+
+      <ellipse cx="525" cy="110" rx="120" ry="65" fill="none" stroke="#334155" stroke-width="1"/>
+      <ellipse cx="525" cy="110" rx="95" ry="50" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.6"/>
+      <!-- Island chain (4 islands on one rational surface) -->
+      <ellipse cx="480" cy="82" rx="18" ry="10" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5" transform="rotate(-15 480 82)"/>
+      <ellipse cx="570" cy="82" rx="18" ry="10" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5" transform="rotate(15 570 82)"/>
+      <ellipse cx="480" cy="138" rx="18" ry="10" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5" transform="rotate(15 480 138)"/>
+      <ellipse cx="570" cy="138" rx="18" ry="10" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="1.5" transform="rotate(-15 570 138)"/>
+      <ellipse cx="525" cy="110" rx="45" ry="25" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.6"/>
+      <ellipse cx="525" cy="110" rx="20" ry="12" fill="none" stroke="#ef4444" stroke-width="2"/>
+
+      <text x="525" y="185" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="10">Islands break barrier &mdash; ELMs suppressed</text>
+    </svg>
+    </div>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: The Noise-Stabilized Quasi-Traveling-Wave
+  </summary>
+  <div class="detail-body">
+    <p>
+      McMillan et al. (2018) identified a coherent structure at the plasma edge &mdash; a quasi-traveling-wave (QTW) &mdash; that exists at the edge of chaos: the boundary between laminar and turbulent flow. The QTW propagates poloidally around the tokamak, maintaining the transport barrier as it travels.
+    </p>
+    <p>
+      The QTW is self-sustaining in the sense described by the predator-prey loop: it generates the zonal flow shear that suppresses the turbulence behind it, while the turbulence ahead of it (driven by the steep gradient) provides the energy that sustains the wave. It propagates only because it continuously creates the conditions for its own propagation.
+    </p>
+    <p>
+      Huang et al. (2025) showed that this structure cannot exist in deterministic simulations. It requires stochastic fluctuations exceeding 100% of the mean signal. The noise provides two essential functions: (1) it seeds the turbulence ahead of the wave that the wave needs as fuel, and (2) it prevents the wave from locking into a fixed spatial pattern and decaying. The transport barrier is stabilized by noise &mdash; a counterintuitive result that echoes the role of thermal fluctuations in biological systems at the edge of chaos.
+    </p>
+  </div>
+</details>
+
+<!-- ========== FALSIFICATION ========== -->
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-planned"></span>
+    Falsification: Prediction #11 &mdash; Cross-System Exponent Similarity
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> If the brain&ndash;tokamak pairing is real (both are modular-hierarchical systems producing Griffiths-phase criticality), then the avalanche scaling exponents in both systems should belong to the same universality class or show systematic correspondence. The modular-hierarchical architecture should impose the same statistical structure on avalanches regardless of substrate.
+    </p>
+    <p>
+      <strong>Status:</strong> Planned. Requires comparison of ELM size distributions from tokamak experiments with neural avalanche distributions from cortical recordings, using the same statistical framework (crackling-noise scaling relations). The comparison is non-trivial because the systems operate at different scales and the &ldquo;avalanche&rdquo; definition differs.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If ELM scaling exponents and neural avalanche exponents belong to clearly different universality classes with no systematic correspondence, the architectural pairing is coincidental rather than structural. The Griffiths phase argument would still hold for each system independently, but the cross-system prediction would fail.
+    </div>
+  </div>
+</details>
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-framework"></span>
+    Falsification: Autocatalytic Closure in the Transport Barrier
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> The predator-prey loop (gradient &rarr; turbulence &rarr; Reynolds stress &rarr; zonal flow &rarr; suppression &rarr; steeper gradient) satisfies the formal criteria for a Reflexively Autocatalytic and Food-generated (RAF) set, where the &ldquo;food&rdquo; is external heating and the &ldquo;reactions&rdquo; are the physical processes in the loop.
+    </p>
+    <p>
+      <strong>Status:</strong> Framework. The loop is qualitatively autocatalytic (each step produces the conditions for the next). Formal RAF analysis requires defining the reaction network precisely: what are the molecular species (physical fields), reactions (transport processes), catalysis relations (which process enables which), and food set (external drives). This analysis has not been performed.
+    </p>
+    <p>
+      If the loop is formally an RAF, it connects the tokamak to the cardiac calcium network (Tutorial 03) through shared RAF structure &mdash; two autocatalytic networks in completely different physical systems.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If formal RAF analysis shows the loop is NOT reflexively autocatalytic (e.g., one step does not catalyze but merely enables the next, violating the RAF closure criterion), the autocatalytic label is informal and the cardiac connection is weakened.
+    </div>
+  </div>
+</details>
+
+<!-- ========== PAIR CALLOUT ========== -->
+
+<div class="pair-card fade-in">
+  <div class="pair-label">Paired System</div>
+  <h4><a href="05-brain.html">Tutorial 05: Brain</a></h4>
+  <p>
+    Connected through Griffiths phase architecture. Both systems have modular-hierarchical structure that produces robust criticality without parameter fine-tuning. The brain&rsquo;s cortical modules create a Griffiths phase for neural avalanches. The tokamak&rsquo;s nested transport barriers create a self-sustaining critical region for plasma avalanches. The mathematical mechanism is the same: heterogeneous modules stretch a critical point into a critical phase. Neurons at 37&deg;C and hydrogen plasma at 150 million degrees, coupled by architecture.
+  </p>
+</div>
+
+<!-- ========== DETECTION QUESTION ========== -->
+
+<details class="detection fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Detection Question
+  </summary>
+  <div class="detail-body">
+    <p>
+      Three order parameters on distinct but coupled topologies. The SOC avalanche dynamics operate on the radial pressure profile (1D chain of radial positions). The magnetic topology operates on the poloidal cross-section (2D field of magnetic flux). The predator-prey loop operates on the azimuthal structure (zonal flows are toroidally symmetric).
+    </p>
+    <p>
+      These are three different topologies coupled through the physics: the radial pressure drives the turbulence (SOC → loop), the turbulence modifies the magnetic topology (loop → topology), and the magnetic islands modify the radial gradient (topology → SOC). The coupling is cyclic.
+    </p>
+    <p>
+      <strong>The question:</strong> The noise-stabilized QTW is an emergent structure that exists only because all three transitions are coupled. Can a relational operator on the combined multi-topology field detect the QTW as a cross-component circulation signal &mdash; a persistent nonzero coupling between the three order parameters that has a specific spatial structure (the traveling wave)? If so, the QTW provides a concrete example of a multi-critical detection target: a structure invisible to any single-field measurement that appears only in the cross-field coupling.
+    </p>
+  </div>
+</details>
+
+<!-- ========== REFERENCES ========== -->
+
+<details class="references fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    References
+  </summary>
+  <div class="detail-body">
+    <p>Chapman, S. C., Dendy, R. O. &amp; Hnat, B. (2001). A sandpile model with tokamak-like properties. <em>Phys. Rev. Lett.</em>, 86, 2814.</p>
+    <p>Park, J.-K. et al. (2024). Direct observation of magnetic islands during ELM suppression. <em>Nature Physics</em>.</p>
+    <p>McMillan, B. F. et al. (2018). Self-sustaining quasi-traveling-wave at the tokamak edge. <em>Phys. Plasmas</em>.</p>
+    <p>Huang, Z. et al. (2025). Noise-sustained transport barrier in tokamak edge. [SNR &gt; 100% requirement].</p>
+    <p>Diamond, P. H. et al. (2005). Zonal flows in plasma &mdash; a review. <em>Plasma Phys. Control. Fusion</em>, 47, R35.</p>
+    <p>Wagner, F. et al. (1982). Regime of improved confinement and high beta in neutral-beam-heated divertor discharges of the ASDEX tokamak. <em>Phys. Rev. Lett.</em>, 49, 1408.</p>
+    <p>Moretti, P. &amp; Mu&ntilde;oz, M. A. (2013). Griffiths phases and the stretching of criticality in brain networks. <em>Nature Communications</em>, 4, 2521.</p>
+  </div>
+</details>
+
+<!-- ========== SERIES CONCLUSION ========== -->
+<h2>Where the Six Tutorials Lead</h2>
+
+<p>
+This series has examined six systems &mdash; from glass to plasma, from protein to brain &mdash; where multiple independent phase transitions converge. In each case, the coupling between transitions produces observables that no single transition contains: new universality classes (glass bicriticality, active matter &eta; = 1.04), structural robustness (cardiac RAF, brain Griffiths phase), and emergent dynamics (tokamak QTW, protein folding kinetics).
+</p>
+
+<p>
+The systems form three pairs, each connected by a shared physical mechanism: Gardner/jamming (Glass &harr; Protein), KT defect unbinding (Active Matter &harr; Cardiac), and Griffiths architecture (Brain &harr; Tokamak). These cross-system connections are not analogies. They are the same mathematics appearing in different substrates.
+</p>
+
+<p>
+The question that opens from here: <strong>can multi-critical coupling be detected in advance?</strong> Single-critical detection &mdash; measuring the approach to one transition &mdash; provides early warning of one type of failure. Multi-critical detection &mdash; measuring the coupling between transitions &mdash; would detect the emergent structure that single-critical monitoring cannot see: the class-level vulnerability (cardiac), the geometry-dependent braiding (active matter), the noise-stabilized self-sustaining wave (tokamak), and the bicritical point where two glass transitions merge.
+</p>
+
+<p>
+That is the research program these tutorials motivate.
+</p>
+
+<!-- ========== BOTTOM NAVIGATION ========== -->
+<div class="tutorial-nav">
+  <a href="05-brain.html">&larr; Brain</a>
+  <a href="index.html" class="next">Back to Index &rarr;</a>
+</div>
+
+<p class="footer-note">
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a>
+</p>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

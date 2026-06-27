@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glass Transition — Multi-Critical Systems</title>
+<style>
+/* ============================================================
+   MULTI-CRITICAL SYSTEMS — SHARED CSS TEMPLATE
+   All 6 tutorials use identical CSS variables & component styles.
+   ============================================================ */
+:root {
+  /* Base palette (matches web-annex dark theme) */
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+
+  /* Transition-type colors — consistent across all tutorials */
+  --red: #ef4444;       /* Criticality transitions */
+  --blue: #3b82f6;      /* Topological transitions */
+  --green: #22c55e;     /* Autocatalytic closure */
+  --amber: #f59e0b;     /* Jamming / edge-of-chaos */
+  --purple: #a855f7;    /* Braid / exchange */
+  --cyan: #06b6d4;      /* KT transitions (cross-system) */
+  --pink: #ec4899;      /* Griffiths architecture (cross-system) */
+
+  /* Falsification status */
+  --status-survived: #22c55e;
+  --status-framework: #f59e0b;
+  --status-planned: #3b82f6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+h2 { font-size: 1.8rem; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.subtitle {
+  text-align: center; color: var(--muted); font-size: 1.1rem;
+  margin-bottom: 2.5rem; font-style: italic; font-family: Georgia, serif;
+}
+.lead {
+  font-size: 1.15rem; color: var(--line);
+  font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem;
+}
+
+/* Back / nav links */
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+
+.tutorial-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim);
+}
+.tutorial-nav a {
+  color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+.tutorial-nav a:hover { color: var(--heading); text-decoration: none; }
+.tutorial-nav .next { margin-left: auto; }
+
+/* SVG containers */
+.viz {
+  width: 100%; margin: 2rem 0; border-radius: 12px;
+  overflow: hidden; background: var(--card);
+  border: 1px solid var(--dim);
+}
+.viz svg { width: 100%; display: block; }
+
+/* Cards */
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+}
+
+/* Pair callout card */
+.pair-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem 1.5rem;
+  margin: 2rem 0; border-left: 3px solid var(--purple);
+  border: 1px solid var(--dim); border-left: 3px solid var(--purple);
+}
+.pair-card h4 {
+  font-size: 1.05rem; margin-bottom: 0.5rem;
+}
+.pair-card .pair-label { color: var(--purple); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.pair-card a { color: var(--blue); }
+
+/* Transition tags */
+.tag {
+  display: inline-block; font-size: 0.75rem; padding: 0.15rem 0.6rem;
+  border-radius: 4px; font-weight: 600; letter-spacing: 0.03em;
+  margin-right: 0.3rem; margin-bottom: 0.3rem;
+}
+.tag-red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+.tag-blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.tag-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+.tag-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.tag-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cyan); }
+.tag-pink { background: rgba(236, 72, 153, 0.15); color: var(--pink); }
+
+/* ============================================================
+   PROGRESSIVE DISCLOSURE — <details> styling
+   Three types: technical, falsification, detection, references
+   ============================================================ */
+details {
+  background: var(--card); border-radius: 8px; margin: 1.25rem 0;
+  border: 1px solid var(--dim); overflow: hidden;
+}
+details[open] { border-color: rgba(148, 163, 184, 0.25); }
+
+summary {
+  padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 600;
+  font-size: 0.92rem; color: var(--line); list-style: none;
+  display: flex; align-items: center; gap: 0.6rem;
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+}
+summary:hover { color: var(--heading); background: rgba(255,255,255,0.02); }
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '\25B8'; font-size: 0.75rem; color: var(--muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+
+details .detail-body { padding: 0 1.25rem 1.25rem; }
+details .detail-body p { font-size: 0.92rem; margin-bottom: 0.8rem; }
+details .detail-body p:last-child { margin-bottom: 0; }
+
+/* Technical detail */
+details.technical { border-left: 3px solid var(--line); }
+details.technical summary .detail-icon { color: var(--line); }
+
+/* Falsification */
+details.falsification { border-left: 3px solid var(--amber); }
+details.falsification summary .detail-icon { color: var(--amber); }
+
+.status-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 0.4rem; flex-shrink: 0;
+}
+.status-survived { background: var(--status-survived); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+.status-framework { background: var(--status-framework); box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+.status-planned { background: var(--status-planned); box-shadow: 0 0 6px rgba(59,130,246,0.4); }
+
+.kill-criteria {
+  background: rgba(239, 68, 68, 0.08); border-radius: 6px;
+  padding: 0.6rem 0.9rem; margin-top: 0.6rem; font-size: 0.85rem;
+  border-left: 2px solid var(--red);
+}
+.kill-criteria strong { color: var(--red); font-size: 0.78rem; letter-spacing: 0.04em; }
+
+/* Detection question */
+details.detection { border-left: 3px solid var(--cyan); }
+details.detection summary .detail-icon { color: var(--cyan); }
+details.detection .detail-body { font-size: 0.9rem; color: var(--line); }
+
+/* References */
+details.references { border-left: 3px solid var(--muted); }
+details.references summary .detail-icon { color: var(--muted); }
+details.references .detail-body { font-size: 0.82rem; color: var(--muted); line-height: 1.9; }
+details.references .detail-body p { margin-bottom: 0.3rem; }
+
+/* Inline math styling */
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+sub, sup { font-size: 0.75em; }
+
+/* Fade-in on scroll */
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Footer */
+.footer-note {
+  margin-top: 3rem; text-align: center;
+  color: var(--muted); font-size: 0.85rem;
+}
+
+/* Interactive elements */
+.interactive-box {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  margin: 2rem 0;
+  border: 1px solid var(--dim);
+  border-left: 3px solid var(--purple);
+}
+.interactive-box h3 {
+  margin-top: 0; color: var(--heading);
+  font-family: system-ui, sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.interactive-box .hint {
+  font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem;
+}
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px;
+  background: var(--dim); border-radius: 3px; outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--purple); cursor: pointer;
+  border: 2px solid var(--heading);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--purple); cursor: pointer;
+  border: 2px solid var(--heading);
+}
+.slider-labels {
+  display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem;
+}
+.slider-labels span { font-size: 0.82rem; white-space: nowrap; }
+.slider-readout {
+  text-align: center; margin-top: 0.5rem;
+  font-size: 0.9rem; color: var(--line);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  .container { padding: 1rem 1rem 3rem; }
+  summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== NAVIGATION ========== -->
+<a href="index.html" class="back">&larr; Back to Multi-Critical Systems</a>
+
+<!-- ========== HEADER ========== -->
+<h1>Glass Transition</h1>
+<p class="subtitle">Two transitions, one bicritical point</p>
+
+<!-- ========== OPENING ========== -->
+<p class="lead">
+A glass is a liquid that forgot to crystallize. Cool a liquid fast enough, and it never finds its crystal. Instead, it thickens, slows, and eventually stops flowing &mdash; trapped in a disordered state that looks like a solid but has the structure of a liquid. For a century, the nature of this transition has been one of the deepest open problems in condensed matter physics.
+</p>
+
+<p>
+The reason it stayed open is that everyone was looking for <strong>one</strong> transition. There are two.
+</p>
+
+<!-- ========== THE TWO TRANSITIONS ========== -->
+<h2>Two Peaks, Not One</h2>
+
+<p>
+In 2025, Pettini and colleagues published a landmark study that resolved the glass transition into two distinct events, each with its own thermodynamic signature and its own topological fingerprint in the energy landscape.
+</p>
+
+<p>
+The first is a <strong>dynamic transition</strong>. At a temperature physicists call <span class="math">T</span><sub>MCT</sub> (the mode-coupling temperature), the liquid&rsquo;s molecular rearrangements slow catastrophically. Molecules can still vibrate in their cages, but they can no longer escape them. The system loses <em>ergodicity</em> &mdash; its ability to explore all of its possible configurations. This transition is weakly first-order: there is a small but measurable discontinuity, like a tiny jump.
+</p>
+
+<p>
+The second is a <strong>thermodynamic transition</strong>. At a lower temperature called <span class="math">T</span><sub>K</sub> (the Kauzmann temperature), the number of distinct configurations available to the glass drops toward zero. The configurational entropy &mdash; a measure of how many ways the molecules could rearrange &mdash; vanishes. This transition is second-order: continuous, with a diverging correlation length.
+</p>
+
+<p>
+Each transition has its own order parameter. Each produces its own peak in the specific heat. Each leaves its own topological mark on the geometry of the energy landscape. They are not two views of one event. They are two events.
+</p>
+
+<!-- ========== MAIN SVG: TWO PEAKS MERGING ========== -->
+<div class="viz fade-in">
+<svg id="peaks-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated visualization of two specific heat peaks converging. The blue peak (TK, thermodynamic transition) and red peak (TMCT, dynamic transition) oscillate between separated positions (fragile glass former regime) and merged positions (bicritical point). When the peaks merge, a purple glow and 'Bicritical Point' label appear. A dashed line between peaks shows fragility — the distance between transitions. The animation cycles: separated peaks with individual labels, convergence, merge with purple highlight, then separation again over 14 seconds.">
+  <defs>
+    <linearGradient id="grad-red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="grad-blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="grad-merged" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="400" fill="#1e293b"/>
+
+  <!-- Subtle grid -->
+  <line x1="100" y1="320" x2="720" y2="320" stroke="#334155" stroke-width="1"/>
+  <line x1="100" y1="320" x2="100" y2="50" stroke="#334155" stroke-width="1"/>
+  <line x1="100" y1="240" x2="720" y2="240" stroke="#334155" stroke-width="0.5" stroke-dasharray="4 6" opacity="0.4"/>
+  <line x1="100" y1="160" x2="720" y2="160" stroke="#334155" stroke-width="0.5" stroke-dasharray="4 6" opacity="0.4"/>
+  <line x1="100" y1="80" x2="720" y2="80" stroke="#334155" stroke-width="0.5" stroke-dasharray="4 6" opacity="0.4"/>
+
+  <!-- Axis labels -->
+  <text x="410" y="355" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="13">Temperature</text>
+  <text x="55" y="190" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="13" transform="rotate(-90 55 190)">Specific Heat</text>
+
+  <!-- Phase label: Fragile glass former (peaks far apart) -->
+  <g id="state-label">
+    <text x="710" y="75" text-anchor="end" fill="#475569" font-family="system-ui" font-size="12" font-style="italic">
+      <animate attributeName="opacity" values="1;1;0;0;1;1" dur="14s" repeatCount="indefinite"/>
+      Fragile glass former
+    </text>
+    <text x="710" y="75" text-anchor="end" fill="#a855f7" font-family="system-ui" font-size="12" font-weight="600">
+      <animate attributeName="opacity" values="0;0;1;1;0;0" dur="14s" repeatCount="indefinite"/>
+      Bicritical point
+    </text>
+  </g>
+
+  <!-- T_K peak (blue, thermodynamic, left) -->
+  <g id="peak-tk">
+    <!-- Fill area -->
+    <path fill="url(#grad-blue)">
+      <animate attributeName="d" dur="14s" repeatCount="indefinite" values="
+        M200,320 Q230,320 250,280 Q270,180 290,130 Q310,180 330,280 Q350,320 380,320 Z;
+        M280,320 Q310,320 330,280 Q350,180 370,120 Q390,180 410,280 Q430,320 460,320 Z;
+        M280,320 Q310,320 330,280 Q350,180 370,120 Q390,180 410,280 Q430,320 460,320 Z;
+        M200,320 Q230,320 250,280 Q270,180 290,130 Q310,180 330,280 Q350,320 380,320 Z
+      " keyTimes="0;0.4;0.6;1"/>
+    </path>
+    <!-- Stroke -->
+    <path fill="none" stroke="#3b82f6" stroke-width="2.5">
+      <animate attributeName="d" dur="14s" repeatCount="indefinite" values="
+        M200,320 Q230,320 250,280 Q270,180 290,130 Q310,180 330,280 Q350,320 380,320;
+        M280,320 Q310,320 330,280 Q350,180 370,120 Q390,180 410,280 Q430,320 460,320;
+        M280,320 Q310,320 330,280 Q350,180 370,120 Q390,180 410,280 Q430,320 460,320;
+        M200,320 Q230,320 250,280 Q270,180 290,130 Q310,180 330,280 Q350,320 380,320
+      " keyTimes="0;0.4;0.6;1"/>
+    </path>
+    <!-- Peak label -->
+    <g>
+      <text text-anchor="middle" fill="#3b82f6" font-family="system-ui" font-size="11" font-weight="600">
+        <animate attributeName="x" values="290;370;370;290" dur="14s" repeatCount="indefinite" keyTimes="0;0.4;0.6;1"/>
+        <animate attributeName="y" values="118;108;108;118" dur="14s" repeatCount="indefinite" keyTimes="0;0.4;0.6;1"/>
+        <animate attributeName="opacity" values="1;0;0;1" dur="14s" repeatCount="indefinite" keyTimes="0;0.35;0.65;1"/>
+        T&#x2096; (thermodynamic)
+      </text>
+    </g>
+  </g>
+
+  <!-- T_MCT peak (red, dynamic, right) -->
+  <g id="peak-tmct">
+    <!-- Fill area -->
+    <path fill="url(#grad-red)">
+      <animate attributeName="d" dur="14s" repeatCount="indefinite" values="
+        M420,320 Q450,320 470,285 Q490,200 510,155 Q530,200 550,285 Q570,320 600,320 Z;
+        M340,320 Q370,320 390,275 Q400,180 410,110 Q420,180 430,275 Q450,320 480,320 Z;
+        M340,320 Q370,320 390,275 Q400,180 410,110 Q420,180 430,275 Q450,320 480,320 Z;
+        M420,320 Q450,320 470,285 Q490,200 510,155 Q530,200 550,285 Q570,320 600,320 Z
+      " keyTimes="0;0.4;0.6;1"/>
+    </path>
+    <!-- Stroke -->
+    <path fill="none" stroke="#ef4444" stroke-width="2.5">
+      <animate attributeName="d" dur="14s" repeatCount="indefinite" values="
+        M420,320 Q450,320 470,285 Q490,200 510,155 Q530,200 550,285 Q570,320 600,320;
+        M340,320 Q370,320 390,275 Q400,180 410,110 Q420,180 430,275 Q450,320 480,320;
+        M340,320 Q370,320 390,275 Q400,180 410,110 Q420,180 430,275 Q450,320 480,320;
+        M420,320 Q450,320 470,285 Q490,200 510,155 Q530,200 550,285 Q570,320 600,320
+      " keyTimes="0;0.4;0.6;1"/>
+    </path>
+    <!-- Peak label -->
+    <g>
+      <text text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="11" font-weight="600">
+        <animate attributeName="x" values="510;410;410;510" dur="14s" repeatCount="indefinite" keyTimes="0;0.4;0.6;1"/>
+        <animate attributeName="y" values="143;98;98;143" dur="14s" repeatCount="indefinite" keyTimes="0;0.4;0.6;1"/>
+        <animate attributeName="opacity" values="1;0;0;1" dur="14s" repeatCount="indefinite" keyTimes="0;0.35;0.65;1"/>
+        T&#x2098;&#x1d04;&#x1d1b; (dynamic)
+      </text>
+    </g>
+  </g>
+
+  <!-- Merged peak label (appears at bicritical) -->
+  <g>
+    <text x="400" y="88" text-anchor="middle" fill="#a855f7" font-family="'Times New Roman', Georgia, serif" font-size="15" font-weight="700">
+      <animate attributeName="opacity" values="0;0;1;1;0;0" dur="14s" repeatCount="indefinite" keyTimes="0;0.35;0.42;0.58;0.65;1"/>
+      Bicritical Point
+    </text>
+    <!-- Glow ring at merge -->
+    <circle cx="400" cy="115" r="20" fill="none" stroke="#a855f7" stroke-width="1">
+      <animate attributeName="opacity" values="0;0;0.6;0.6;0;0" dur="14s" repeatCount="indefinite" keyTimes="0;0.35;0.42;0.58;0.65;1"/>
+      <animate attributeName="r" values="15;15;25;30;25;15" dur="14s" repeatCount="indefinite" keyTimes="0;0.35;0.42;0.58;0.65;1"/>
+    </circle>
+  </g>
+
+  <!-- Annotation: distance arrow between peaks -->
+  <g>
+    <line stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3">
+      <animate attributeName="x1" values="290;370;370;290" dur="14s" repeatCount="indefinite" keyTimes="0;0.4;0.6;1"/>
+      <animate attributeName="x2" values="510;410;410;510" dur="14s" repeatCount="indefinite" keyTimes="0;0.4;0.6;1"/>
+      <animate attributeName="y1" values="335;335;335;335" dur="14s" repeatCount="indefinite"/>
+      <animate attributeName="y2" values="335;335;335;335" dur="14s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0;0.6" dur="14s" repeatCount="indefinite" keyTimes="0;0.35;0.65;1"/>
+    </line>
+    <text text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="10">
+      <animate attributeName="x" values="400;390;390;400" dur="14s" repeatCount="indefinite" keyTimes="0;0.4;0.6;1"/>
+      <animate attributeName="y" values="348;348;348;348" dur="14s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0;0.6" dur="14s" repeatCount="indefinite" keyTimes="0;0.35;0.65;1"/>
+      fragility
+    </text>
+  </g>
+</svg>
+</div>
+
+<!-- ========== THE BICRITICAL INSIGHT ========== -->
+<h2>Distance as the Meaningful Quantity</h2>
+
+<p>
+Here is where the story turns. Glass-forming liquids come in two broad varieties. <strong>Strong</strong> glass formers &mdash; like silica (SiO<sub>2</sub>) and boron trioxide (B<sub>2</sub>O<sub>3</sub>) &mdash; have their two transitions close together. <strong>Fragile</strong> glass formers &mdash; like ortho-terphenyl (OTP) and toluene &mdash; have them far apart. Physicists have measured this distance for decades. It is called <em>fragility</em>, and it is one of the most useful empirical quantities in glass science.
+</p>
+
+<p>
+But what if fragility is not just a useful number? What if the distance between the two transitions is the distance from a <strong>bicritical point</strong> &mdash; a special location in parameter space where the two transitions merge?
+</p>
+
+<p>
+At a bicritical point, two independent phase transitions converge. Their order parameters couple. The universality class changes. New physics emerges from the coupling that neither transition produces alone.
+</p>
+
+<p>
+The strong-glass limit &mdash; where <span class="math">T</span><sub>MCT</sub> equals <span class="math">T</span><sub>K</sub> &mdash; is exactly this point. Strong glass formers are <em>near</em> the bicritical point. Fragile glass formers are <em>far</em> from it. <strong>Fragility is distance from bicriticality.</strong>
+</p>
+
+<p>
+This reframing turns an empirical classification (strong vs. fragile) into a structural prediction: systems near the bicritical point should show coupled critical behavior with a new universality class &mdash; and systems far from it should show two independent transitions with their individual universality classes.
+</p>
+
+<!-- ========== INTERACTIVE: EXPLORE FRAGILITY ========== -->
+<div class="interactive-box fade-in">
+  <h3>Explore: Fragility as Distance</h3>
+  <p class="hint">Drag the slider to change how fragile the glass former is. Watch the two specific heat peaks &mdash; and see what happens when they meet.</p>
+  <div class="viz" style="margin: 0 0 0.5rem;">
+  <svg id="interactive-peaks" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive slider-controlled visualization. Two Gaussian peaks on a specific heat vs temperature plot — blue (TK) and red (TMCT) — move closer or farther apart as the user drags a fragility slider. At the 'Strong' end (SiO2), peaks merge and a purple 'Bicritical Point' label appears. At the 'Fragile' end (OTP), peaks are widely separated. A readout shows the TMCT/TK ratio, ranging from 1.0 (merged) to 1.9 (separated).">
+    <rect width="600" height="220" fill="#1e293b"/>
+    <line x1="60" y1="180" x2="540" y2="180" stroke="#334155" stroke-width="1"/>
+    <line x1="60" y1="180" x2="60" y2="30" stroke="#334155" stroke-width="1"/>
+    <text x="300" y="205" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11">Temperature &rarr;</text>
+    <text x="25" y="105" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10" transform="rotate(-90 25 105)">C&#x209a;</text>
+    <path id="ipeak-blue-fill" fill="rgba(59,130,246,0.12)"/>
+    <path id="ipeak-blue" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+    <text id="ilabel-tk" text-anchor="middle" fill="#3b82f6" font-family="system-ui" font-size="10" font-weight="600">T&#x2096;</text>
+    <path id="ipeak-red-fill" fill="rgba(239,68,68,0.12)"/>
+    <path id="ipeak-red" fill="none" stroke="#ef4444" stroke-width="2.5"/>
+    <text id="ilabel-tmct" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="10" font-weight="600">T&#x2098;&#x1d04;&#x1d1b;</text>
+    <g id="ibicritical" opacity="0">
+      <text x="300" y="28" text-anchor="middle" fill="#a855f7" font-family="'Times New Roman', Georgia, serif" font-size="14" font-weight="700">Bicritical Point</text>
+      <circle id="ibicritical-ring" cx="300" cy="48" r="8" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.7"/>
+    </g>
+    <text id="imaterial" x="530" y="28" text-anchor="end" fill="#475569" font-family="system-ui" font-size="11" font-style="italic"></text>
+  </svg>
+  </div>
+  <div class="slider-labels">
+    <span style="color: var(--blue);">Strong (SiO&#x2082;)</span>
+    <input type="range" id="fragility-slider" min="0" max="100" value="70">
+    <span style="color: var(--red);">Fragile (OTP)</span>
+  </div>
+  <div id="fragility-readout" class="slider-readout"></div>
+</div>
+
+<script>
+(function() {
+  var slider = document.getElementById('fragility-slider');
+  var readout = document.getElementById('fragility-readout');
+  var bicritical = document.getElementById('ibicritical');
+  var ring = document.getElementById('ibicritical-ring');
+  var material = document.getElementById('imaterial');
+
+  function gauss(cx, w, h, base) {
+    var pts = [];
+    for (var x = cx - w * 3; x <= cx + w * 3; x += 2) {
+      var d = (x - cx) / w;
+      pts.push(x + ',' + (base - h * Math.exp(-0.5 * d * d)));
+    }
+    return pts;
+  }
+
+  function update() {
+    var v = slider.value / 100;
+    var sep = v * 200;
+    var cx = 300;
+    var bx = cx - sep / 2;
+    var rx = cx + sep / 2;
+    var base = 180;
+    var bh = 130 - v * 30;
+    var rh = 110 - v * 20;
+    var w = 32;
+
+    var bp = gauss(bx, w, bh, base);
+    var rp = gauss(rx, w, rh, base);
+
+    document.getElementById('ipeak-blue').setAttribute('d', 'M' + bp.join(' L'));
+    document.getElementById('ipeak-red').setAttribute('d', 'M' + rp.join(' L'));
+
+    var bf = bp[0].split(','), bl = bp[bp.length-1].split(',');
+    document.getElementById('ipeak-blue-fill').setAttribute('d',
+      'M' + bp.join(' L') + ' L' + bl[0] + ',' + base + ' L' + bf[0] + ',' + base + ' Z');
+    var rf = rp[0].split(','), rl = rp[rp.length-1].split(',');
+    document.getElementById('ipeak-red-fill').setAttribute('d',
+      'M' + rp.join(' L') + ' L' + rl[0] + ',' + base + ' L' + rf[0] + ',' + base + ' Z');
+
+    document.getElementById('ilabel-tk').setAttribute('x', bx);
+    document.getElementById('ilabel-tk').setAttribute('y', base - bh - 8);
+    document.getElementById('ilabel-tmct').setAttribute('x', rx);
+    document.getElementById('ilabel-tmct').setAttribute('y', base - rh - 8);
+
+    var ratio = 1.0 + v * 0.9;
+    var merge = v < 0.12;
+    readout.innerHTML = 'T<sub>MCT</sub> / T<sub>K</sub> = ' + ratio.toFixed(2) +
+      (merge ? ' &mdash; <span style="color:#a855f7;font-weight:600">transitions merging!</span>' : '');
+
+    bicritical.setAttribute('opacity', v < 0.15 ? String(Math.max(0, 1 - v / 0.15)) : '0');
+    if (ring) ring.setAttribute('r', String(8 + Math.max(0, 1 - v / 0.15) * 14));
+
+    material.textContent = v < 0.15 ? '' : v < 0.35 ? 'SiO₂ region' : v < 0.65 ? '' : 'OTP region';
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<!-- ========== THE GARDNER CONNECTION ========== -->
+<h2>A Third Transition Below</h2>
+
+<p>
+Below <span class="math">T</span><sub>K</sub>, a third transition appears. Called the <strong>Gardner transition</strong>, it splits each glass state into a fractal hierarchy of sub-states &mdash; marginally stable configurations separated by vanishing barriers. The Gardner transition produces the scaling laws that govern <em>jamming</em>: the physics of tightly packed disordered particles.
+</p>
+
+<p>
+This creates a chain that connects the glass transition to an entirely different physical system. The chain runs: <em>glass bicriticality &rarr; Gardner transition &rarr; jamming scalings &rarr; protein core packing</em>. We follow this chain in <a href="04-protein-folding.html">Tutorial 04</a>.
+</p>
+
+<p>
+The glass transition is the simplest system in this series: two transitions, one coupling parameter, one codimension-two point. It introduces the core idea &mdash; that the <em>coupling</em> between transitions matters, not just the transitions themselves &mdash; in the most stripped-down setting possible. In the next tutorial, we add a third transition.
+</p>
+
+<!-- ========== TECHNICAL DETAILS ========== -->
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: The Two Order Parameters
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Dynamic transition (<span class="math">T</span><sub>MCT</sub>):</strong>
+      The order parameter is the Edwards-Anderson overlap <span class="math">q</span><sub>EA</sub>, defined as the long-time limit of the density autocorrelation function. Below <span class="math">T</span><sub>MCT</sub>, <span class="math">q</span><sub>EA</sub> &gt; 0: the system remembers its configuration. Above, <span class="math">q</span><sub>EA</sub> = 0: full ergodicity. In mean-field theory (infinite dimensions), this transition is sharp. In finite dimensions, it becomes a crossover, but the underlying singularity shapes the dynamics.
+    </p>
+    <p>
+      <strong>Thermodynamic transition (<span class="math">T</span><sub>K</sub>):</strong>
+      The order parameter is the configurational entropy <span class="math">S</span><sub>c</sub>, measuring the logarithm of the number of distinct amorphous packings. In the Random First-Order Transition (RFOT) framework, <span class="math">S</span><sub>c</sub> &rarr; 0 at <span class="math">T</span><sub>K</sub>: the system runs out of configurations. This is a genuine second-order transition with a diverging point-to-set correlation length.
+    </p>
+    <p>
+      Pettini et al. detected both transitions through independent topological signatures in the energy landscape geometry: inflection in the mean curvature of energy level sets at <span class="math">T</span><sub>MCT</sub>, and a peak in scalar curvature variance at <span class="math">T</span><sub>K</sub>. The transitions leave distinct geometric fingerprints, confirming they are independent events with different topological character.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: Fragility as Distance from Bicriticality
+  </summary>
+  <div class="detail-body">
+    <p>
+      The <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> ratio correlates with the Angell fragility index <span class="math">m</span>. For strong glass formers (SiO<sub>2</sub>): <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> &asymp; 1.1&ndash;1.2, <span class="math">m</span> &asymp; 20. For fragile glass formers (OTP): <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> &asymp; 1.5&ndash;2.0, <span class="math">m</span> &asymp; 80&ndash;200.
+    </p>
+    <p>
+      In the bicritical framework, the ratio <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> &minus; 1 measures distance from the codimension-two point. A Ginzburg-Landau analysis with two coupled order parameters (<span class="math">q</span><sub>EA</sub> and <span class="math">S</span><sub>c</sub>) predicts O(2)/XY universality at the bicritical point &mdash; the same symmetry class as the Kosterlitz-Thouless transition. If confirmed, the bicritical point is where topological defect physics enters the glass problem.
+    </p>
+    <!-- Detail SVG: Phase diagram -->
+    <div class="viz" style="margin: 1rem 0;">
+    <svg viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Phase diagram with fragility on the vertical axis and temperature/Tg on the horizontal axis. Three curves: TK (blue, solid) and TMCT (red, dashed) diverge upward from a bicritical point at the strong-glass (bottom) end. The Gardner transition (amber, dotted) lies below TK. SiO2 is marked near the bicritical convergence point; OTP is marked in the high-fragility region. The shaded purple area between TK and TMCT widens with fragility. A distance arrow between the curves is labeled 'fragility'. Preliminary correlation: r=0.56, p=0.09 over N=10 glass formers.">
+      <rect width="700" height="380" fill="#1e293b"/>
+
+      <!-- Grid -->
+      <line x1="80" y1="310" x2="620" y2="310" stroke="#334155" stroke-width="1"/>
+      <line x1="80" y1="310" x2="80" y2="40" stroke="#334155" stroke-width="1"/>
+
+      <!-- Axis labels -->
+      <text x="350" y="345" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="12">Temperature / T<tspan baseline-shift="sub" font-size="9">g</tspan></text>
+      <text x="35" y="175" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="12" transform="rotate(-90 35 175)">Fragility</text>
+
+      <!-- Fragility axis annotations -->
+      <text x="72" y="80" text-anchor="end" fill="#475569" font-family="system-ui" font-size="10">Fragile</text>
+      <text x="72" y="295" text-anchor="end" fill="#475569" font-family="system-ui" font-size="10">Strong</text>
+
+      <!-- T_K line (blue, solid) — curves from bottom-left to upper-right -->
+      <path d="M120,290 Q200,280 300,220 Q400,150 550,75" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+      <text x="555" y="68" fill="#3b82f6" font-family="system-ui" font-size="11" font-weight="600">T&#x2096;</text>
+
+      <!-- T_MCT line (red, dashed) — starts close to T_K at bottom, diverges upward -->
+      <path d="M140,290 Q230,270 340,195 Q430,120 570,55" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="8 4"/>
+      <text x="575" y="48" fill="#ef4444" font-family="system-ui" font-size="11" font-weight="600">T&#x2098;&#x1d04;&#x1d1b;</text>
+
+      <!-- Gardner line (amber, dotted) — below T_K -->
+      <path d="M100,295 Q190,288 280,240 Q360,185 500,115" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 5"/>
+      <text x="505" y="108" fill="#f59e0b" font-family="system-ui" font-size="10">T&#x262;&#x2091;</text>
+      <text x="505" y="122" fill="#f59e0b" font-family="system-ui" font-size="10">(Gardner)</text>
+
+      <!-- Bicritical approach zone (shaded between T_K and T_MCT) -->
+      <path d="M120,290 Q200,280 300,220 Q400,150 550,75 L570,55 Q430,120 340,195 Q230,270 140,290 Z"
+            fill="#a855f7" opacity="0.08"/>
+
+      <!-- Bicritical point (where lines converge at bottom = strong glass) -->
+      <circle cx="125" cy="290" r="6" fill="#a855f7" stroke="#a855f7" stroke-width="1.5" opacity="0.9">
+        <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.9;0.5;0.9" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <text x="135" y="306" fill="#a855f7" font-family="system-ui" font-size="10" font-weight="600">Bicritical point</text>
+
+      <!-- Distance arrow -->
+      <line x1="420" y1="158" x2="420" y2="120" stroke="#94a3b8" stroke-width="1" marker-start="url(#arr)" marker-end="url(#arr)"/>
+      <text x="435" y="143" fill="#94a3b8" font-family="system-ui" font-size="9" font-style="italic">fragility</text>
+
+      <!-- Material annotations -->
+      <circle cx="145" cy="282" r="3" fill="#3b82f6"/>
+      <text x="155" y="280" fill="#475569" font-family="system-ui" font-size="9">SiO&#x2082;</text>
+
+      <circle cx="450" cy="140" r="3" fill="#ef4444"/>
+      <text x="460" y="138" fill="#475569" font-family="system-ui" font-size="9">OTP</text>
+    </svg>
+    </div>
+    <p>
+      Preliminary correlation: <span class="math">r</span> = 0.56, <span class="math">p</span> = 0.09 (N = 10 glass formers). Suggestive but not significant. Needs careful <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> compilation for 20+ systems with well-characterized fragility values.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: The Gardner Connection
+  </summary>
+  <div class="detail-body">
+    <p>
+      The Gardner transition occurs within the glass phase, below <span class="math">T</span><sub>K</sub>. Predicted by mean-field theory for all glass formers, it marks the onset of marginal stability &mdash; each metastable glass basin shatters into a fractal hierarchy of sub-basins. The signature: full replica symmetry breaking of the Parisi type.
+    </p>
+    <p>
+      In October 2024, new results (arXiv 2410.23797) demonstrated that the Gardner transition produces the same scaling exponents that govern jamming &mdash; the physics of maximally dense random packings. The connection is: glass &rarr; Gardner &rarr; jamming scalings &rarr; protein packing fraction.
+    </p>
+    <p>
+      If glass bicriticality is real, then strong glass formers are where the Gardner transition should be <em>most clearly resolved</em> (closest to bicritical = strongest coupling). This is the <strong>opposite</strong> of current research focus, which studies Gardner in fragile hard-sphere-like systems.
+    </p>
+  </div>
+</details>
+
+<!-- ========== FALSIFICATION ========== -->
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-framework"></span>
+    Falsification: Prediction #2 &mdash; Glass Bicriticality
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> The two transitions identified by Pettini et al. interact at a codimension-two point in parameter space, making the glass transition a bicritical system. The universality class at the bicritical point is O(2)/XY.
+    </p>
+    <p>
+      <strong>Status:</strong> Theoretical framework complete. Five-point bicriticality framework applied. Ginzburg-Landau free energy with two coupled order parameters constructed. Predicts crossover exponent &phi;<sub>T</sub> &ne; 1 at the bicritical point.
+    </p>
+    <p>
+      <strong>Test:</strong> Simulate a binary Lennard-Jones mixture at multiple densities. If the two specific heat peaks merge at some critical density &rho;<sub>c</sub> with a universality class change, bicriticality is confirmed. If they remain independent at all densities, bicriticality is ruled out.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If varying density shows the two transitions are always independent &mdash; never merging, never interacting &mdash; bicriticality is ruled out and Prediction #2 fails.
+    </div>
+  </div>
+</details>
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-framework"></span>
+    Falsification: Prediction #9 &mdash; Fragility-Exponent Correlation
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> Fragility <span class="math">m</span> scales as (<span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> &minus; 1)<sup>&gamma;</sup> for some exponent &gamma;. If true, fragility is not an independent material property &mdash; it is a derived quantity measuring distance from bicriticality.
+    </p>
+    <p>
+      <strong>Status:</strong> Preliminary. <span class="math">r</span> = 0.56, <span class="math">p</span> = 0.09 (N = 10 glass formers). Direction is correct (higher ratio = higher fragility) but sample is too small for significance.
+    </p>
+    <p>
+      <strong>Next step:</strong> Compile <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> ratios for 20+ glass formers with well-characterized Angell fragility values. If the correlation strengthens, it supports the bicritical interpretation. If it vanishes, fragility and the <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> ratio are measuring different things.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If no significant correlation exists between fragility and T<sub>MCT</sub>/T<sub>K</sub> ratio across 20+ systems, Prediction #9 fails.
+    </div>
+  </div>
+</details>
+
+<!-- ========== PAIR CALLOUT ========== -->
+
+<div class="pair-card fade-in">
+  <div class="pair-label">Paired System</div>
+  <h4><a href="04-protein-folding.html">Tutorial 04: Protein Folding</a></h4>
+  <p>
+    Connected through the Gardner/jamming chain. The Gardner transition below <span class="math">T</span><sub>K</sub> produces the scaling laws that govern jamming &mdash; which in turn sets the universal packing fraction (&phi;<sub>c</sub> &asymp; 0.55) found in protein cores. The glass bicritical point sits at the top of a causal chain that ends in the geometry of living molecules.
+  </p>
+</div>
+
+<!-- ========== DETECTION QUESTION ========== -->
+
+<details class="detection fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Detection Question
+  </summary>
+  <div class="detail-body">
+    <p>
+      Two order parameters (<span class="math">q</span><sub>EA</sub> and <span class="math">S</span><sub>c</sub>) on the same node set &mdash; molecular configurations in phase space. A relational gradient operator extracts differences for each order parameter independently along declared edges.
+    </p>
+    <p>
+      If the transitions are decoupled, antisymmetric circulation across components should produce zero cross-component contribution &mdash; no coupling signal. As the system approaches bicriticality (the strong-glass limit where <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> &rarr; 1), the physical coupling between transitions grows.
+    </p>
+    <p>
+      <strong>The question:</strong> Does the cross-component circulation signal grow monotonically as <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> &rarr; 1? If so, it measures what fragility measures &mdash; distance from the codimension-two point &mdash; but detects it through relational field structure rather than through viscosity curves.
+    </p>
+  </div>
+</details>
+
+<!-- ========== REFERENCES ========== -->
+
+<details class="references fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    References
+  </summary>
+  <div class="detail-body">
+    <p>Pettini, M., Gori, M., Clementi, C., &amp; Pettini, G. (2025). The glass transition: A topological perspective. <em>Entropy</em>, 27(3), 258.</p>
+    <p>Berthier, L. &amp; Biroli, G. (2011). Theoretical perspective on the glass transition and amorphous materials. <em>Rev. Mod. Phys.</em>, 83, 587&ndash;645.</p>
+    <p>Angell, C. A. (1995). Formation of glasses from liquids and biopolymers. <em>Science</em>, 267, 1924&ndash;1935.</p>
+    <p>Charbonneau, P. et al. (2024). Gardner transition and jamming scalings. arXiv:2410.23797.</p>
+    <p>Parisi, G. &amp; Zamponi, F. (2010). Mean-field theory of hard sphere glasses and jamming. <em>Rev. Mod. Phys.</em>, 82, 789&ndash;845.</p>
+    <p>Kirkpatrick, T. R. &amp; Thirumalai, D. (2015). Colloquium: Random first order transition theory concepts in biology and physics. <em>Rev. Mod. Phys.</em>, 87, 183.</p>
+  </div>
+</details>
+
+<!-- ========== BOTTOM NAVIGATION ========== -->
+<div class="tutorial-nav">
+  <span></span>
+  <a href="02-active-matter.html" class="next">Active Matter &rarr;</a>
+</div>
+
+<p class="footer-note">
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a>
+</p>
+
+</div>
+
+<!-- ========== SCROLL ANIMATION ========== -->
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

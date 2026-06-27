@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain — Multi-Critical Systems</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --status-survived: #22c55e;
+  --status-framework: #f59e0b;
+  --status-planned: #3b82f6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+h2 { font-size: 1.8rem; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.subtitle {
+  text-align: center; color: var(--muted); font-size: 1.1rem;
+  margin-bottom: 2.5rem; font-style: italic; font-family: Georgia, serif;
+}
+.lead {
+  font-size: 1.15rem; color: var(--line);
+  font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem;
+}
+
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+
+.tutorial-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim);
+}
+.tutorial-nav a {
+  color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+.tutorial-nav a:hover { color: var(--heading); text-decoration: none; }
+
+.viz {
+  width: 100%; margin: 2rem 0; border-radius: 12px;
+  overflow: hidden; background: var(--card);
+  border: 1px solid var(--dim);
+}
+.viz svg { width: 100%; display: block; }
+
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+}
+
+.pair-card {
+  background: var(--card); border-radius: 12px; padding: 1.25rem 1.5rem;
+  margin: 2rem 0; border: 1px solid var(--dim); border-left: 3px solid var(--green);
+}
+.pair-card h4 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.pair-card .pair-label { color: var(--green); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.pair-card a { color: var(--blue); }
+
+.tag {
+  display: inline-block; font-size: 0.75rem; padding: 0.15rem 0.6rem;
+  border-radius: 4px; font-weight: 600; letter-spacing: 0.03em;
+  margin-right: 0.3rem; margin-bottom: 0.3rem;
+}
+.tag-red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+.tag-blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.tag-amber { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+.tag-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.tag-cyan { background: rgba(6, 182, 212, 0.15); color: var(--cyan); }
+.tag-pink { background: rgba(236, 72, 153, 0.15); color: var(--pink); }
+
+details {
+  background: var(--card); border-radius: 8px; margin: 1.25rem 0;
+  border: 1px solid var(--dim); overflow: hidden;
+}
+details[open] { border-color: rgba(148, 163, 184, 0.25); }
+
+summary {
+  padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 600;
+  font-size: 0.92rem; color: var(--line); list-style: none;
+  display: flex; align-items: center; gap: 0.6rem;
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+}
+summary:hover { color: var(--heading); background: rgba(255,255,255,0.02); }
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '\25B8'; font-size: 0.75rem; color: var(--muted);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+
+details .detail-body { padding: 0 1.25rem 1.25rem; }
+details .detail-body p { font-size: 0.92rem; margin-bottom: 0.8rem; }
+details .detail-body p:last-child { margin-bottom: 0; }
+
+details.technical { border-left: 3px solid var(--line); }
+details.falsification { border-left: 3px solid var(--amber); }
+
+.status-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 0.4rem; flex-shrink: 0;
+}
+.status-survived { background: var(--status-survived); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+.status-framework { background: var(--status-framework); box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+.status-planned { background: var(--status-planned); box-shadow: 0 0 6px rgba(59,130,246,0.4); }
+
+.kill-criteria {
+  background: rgba(239, 68, 68, 0.08); border-radius: 6px;
+  padding: 0.6rem 0.9rem; margin-top: 0.6rem; font-size: 0.85rem;
+  border-left: 2px solid var(--red);
+}
+.kill-criteria strong { color: var(--red); font-size: 0.78rem; letter-spacing: 0.04em; }
+
+details.detection { border-left: 3px solid var(--cyan); }
+details.detection .detail-body { font-size: 0.9rem; color: var(--line); }
+
+details.references { border-left: 3px solid var(--muted); }
+details.references .detail-body { font-size: 0.82rem; color: var(--muted); line-height: 1.9; }
+details.references .detail-body p { margin-bottom: 0.3rem; }
+
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+sub, sup { font-size: 0.75em; }
+
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+.footer-note {
+  margin-top: 3rem; text-align: center;
+  color: var(--muted); font-size: 0.85rem;
+}
+
+/* Interactive elements */
+.interactive-box {
+  background: var(--card); border-radius: 12px;
+  padding: 1.5rem 1.75rem; margin: 2rem 0;
+  border: 1px solid var(--dim); border-left: 3px solid var(--green);
+}
+.interactive-box h3 {
+  margin-top: 0; color: var(--heading);
+  font-family: system-ui, sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.interactive-box .hint { font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem; }
+.slider-labels {
+  display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem;
+}
+.slider-labels span { font-size: 0.82rem; white-space: nowrap; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px;
+  background: var(--dim); border-radius: 3px; outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--green); cursor: pointer; border: 2px solid var(--heading);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--green); cursor: pointer; border: 2px solid var(--heading);
+}
+.regime-readout {
+  text-align: center; margin-top: 0.5rem; padding: 0.75rem;
+  background: rgba(15,23,42,0.5); border-radius: 8px;
+  font-size: 1rem; color: var(--heading); transition: all 0.3s;
+}
+.regime-readout .detail { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; }
+
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  .container { padding: 1rem 1rem 3rem; }
+  summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="index.html" class="back">&larr; Back to Multi-Critical Systems</a>
+
+<h1>Brain</h1>
+<p class="subtitle">Criticality without fine-tuning, spirals with conserved charge</p>
+
+<p class="lead">
+The brain is the most controversial system in this series. For twenty years, neuroscientists have debated whether neural activity is critical &mdash; poised at the boundary between order and disorder. The debate has been fierce because the implications are large: if the brain is critical, then much of neural computation derives not from specific circuits but from the universal properties of the critical state itself.
+</p>
+
+<p>
+In 2025, that debate shifted. A 140-dataset meta-analysis by Hengen and Shew in <em>Neuron</em> established near-consensus that the brain <em>is</em> near criticality. But the brain is not near a single critical point. It contains <strong>three independent critical phenomena</strong> &mdash; and a structural mechanism that makes criticality robust without requiring precise parameter tuning.
+</p>
+
+<!-- ========== THE THREE PHENOMENA ========== -->
+<h2>Three Critical Phenomena</h2>
+
+<h3>1. Avalanche criticality &mdash; neural cascades</h3>
+
+<p>
+When one neuron fires, it can trigger its neighbors to fire, which trigger their neighbors, and so on. These cascading events are called <strong>neuronal avalanches</strong>. At criticality, avalanche sizes follow a power law: most are small (a few neurons), but occasionally a cascade sweeps across an entire cortical region. There is no characteristic size &mdash; the distribution is scale-free.
+</p>
+
+<p>
+The 140-dataset meta-analysis consolidated evidence from EEG, MEG, two-photon imaging, and multi-electrode arrays across species (human, monkey, mouse, rat, zebrafish) and preparation types (in vivo, in vitro, awake, anesthetized). The conclusion: neural avalanche statistics are consistent with criticality across measurement modalities, species, and brain states.
+</p>
+
+<p>
+More remarkable: genes that push the brain toward criticality are under <strong>positive selection</strong>. And proximity to criticality correlates with <strong>fluid intelligence</strong> (PNAS 2025). Evolution has optimized the brain not for a particular circuit pattern, but for a particular distance from a phase transition.
+</p>
+
+<h3>2. Griffiths phases &mdash; extended criticality from architecture</h3>
+
+<p>
+The standard objection to brain criticality has always been the <strong>fine-tuning problem</strong>: a critical point is a single point in parameter space. Why would billions of neurons be tuned to exactly that point? The slightest perturbation should push the system away from criticality.
+</p>
+
+<p>
+The answer is <strong>Griffiths phases</strong>. In a modular-hierarchical network &mdash; which is precisely the architecture of the cerebral cortex &mdash; the critical <em>point</em> is stretched into a critical <em>phase</em>. Over a finite range of parameters, the system shows power-law scaling, long-range correlations, and the other signatures of criticality. No fine-tuning required.
+</p>
+
+<p>
+The mechanism is elegant: individual modules can be locally supercritical or subcritical, but the coupling between modules produces collective behavior that is critical over the entire range of module parameters. Moretti and Mu&ntilde;oz (Nature Communications) demonstrated this explicitly. The modular-hierarchical architecture of the cortex is not an accident of development &mdash; it is the structural feature that makes robust criticality possible.
+</p>
+
+<h3>3. Topological defects &mdash; cortical spiral waves</h3>
+
+<p>
+Independently of the avalanche and Griffiths phenomena, the brain&rsquo;s electrical activity contains <strong>spiral waves</strong> &mdash; rotating patterns of neural activity visible in EEG and MEG recordings. Xu and colleagues (Nature Human Behaviour, 2023) showed that these spirals are genuine <strong>topological defects</strong> with conserved topological charge that annihilate in pairs, exactly like the defects in <a href="02-active-matter.html">active matter</a> and <a href="03-cardiac-tissue.html">cardiac tissue</a>.
+</p>
+
+<p>
+The cortical spirals are not epiphenomena. They organize information flow: the rotation direction determines the direction of signal propagation, and spiral interactions gate the communication between cortical regions. The topological charge conservation means that spirals cannot simply appear or disappear &mdash; they must be created and destroyed in pairs, imposing a global constraint on the dynamics.
+</p>
+
+<!-- ========== MAIN SVG: GRIFFITHS ARCHITECTURE ========== -->
+<div class="viz fade-in">
+<svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two-panel comparison of critical behavior. Left panel: Standard critical point — a tall, narrow susceptibility peak at a single precise parameter value, requiring fine-tuning. An arrow at the base reads 'fine-tuning required'. Right panel: Griffiths phase — a wide, flat susceptibility plateau extending over a broad parameter range, labeled 'Griffiths phase'. Below the plateau, a schematic modular-hierarchical network shows four interconnected modules (blue circles containing smaller dots), with inter-module connections drawn as lines. Arrow between panels reads 'add modular hierarchy'. Bottom text: 'No fine-tuning needed'. The modular architecture stretches the critical point into an extended critical phase.">
+  <rect width="800" height="420" fill="#1e293b"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="13" font-weight="600">Modular-Hierarchical Architecture &rarr; Griffiths Phase</text>
+
+  <!-- Left panel: Standard critical point (fine-tuning needed) -->
+  <rect x="30" y="50" width="340" height="320" rx="8" fill="rgba(239,68,68,0.03)" stroke="#334155" stroke-width="1"/>
+  <text x="200" y="75" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="12" font-weight="600">Standard Critical Point</text>
+
+  <!-- Parameter axis -->
+  <line x1="80" y1="300" x2="320" y2="300" stroke="#334155" stroke-width="1"/>
+  <text x="200" y="320" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Control parameter</text>
+
+  <!-- Narrow peak at critical point -->
+  <path d="M100,290 Q130,290 160,280 Q180,250 200,120 Q220,250 240,280 Q270,290 300,290" fill="none" stroke="#ef4444" stroke-width="2"/>
+  <path d="M100,290 Q130,290 160,280 Q180,250 200,120 Q220,250 240,280 Q270,290 300,290 L300,300 L100,300 Z" fill="url(#grad-narrow)" opacity="0.3"/>
+  <defs>
+    <linearGradient id="grad-narrow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="grad-wide" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Labels -->
+  <text x="200" y="108" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="10" font-weight="600">Critical point</text>
+  <line x1="200" y1="112" x2="200" y2="120" stroke="#ef4444" stroke-width="1"/>
+
+  <!-- Arrow showing fine-tuning -->
+  <text x="200" y="345" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10" font-style="italic">Requires exact parameter tuning</text>
+  <text x="200" y="360" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="10">&larr; too ordered | too disordered &rarr;</text>
+
+  <!-- Right panel: Griffiths phase (extended criticality) -->
+  <rect x="430" y="50" width="340" height="320" rx="8" fill="rgba(34,197,94,0.03)" stroke="#334155" stroke-width="1"/>
+  <text x="600" y="75" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="12" font-weight="600">Griffiths Phase</text>
+
+  <!-- Parameter axis -->
+  <line x1="480" y1="300" x2="720" y2="300" stroke="#334155" stroke-width="1"/>
+  <text x="600" y="320" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Control parameter</text>
+
+  <!-- Wide plateau at critical region -->
+  <path d="M500,290 Q520,285 540,260 Q560,180 580,160 Q600,155 620,160 Q640,180 660,260 Q680,285 700,290" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+  <path d="M500,290 Q520,285 540,260 Q560,180 580,160 Q600,155 620,160 Q640,180 660,260 Q680,285 700,290 L700,300 L500,300 Z" fill="url(#grad-wide)" opacity="0.3"/>
+
+  <!-- Labels -->
+  <rect x="560" y="138" width="80" height="18" rx="4" fill="rgba(34,197,94,0.15)"/>
+  <text x="600" y="152" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="10" font-weight="600">Griffiths phase</text>
+
+  <!-- Width markers -->
+  <line x1="545" y1="168" x2="655" y2="168" stroke="#22c55e" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+
+  <!-- Modular network schematic (bottom right) -->
+  <!-- Module 1 -->
+  <circle cx="530" cy="240" r="18" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="524" cy="234" r="3" fill="#3b82f6" opacity="0.7"/>
+  <circle cx="536" cy="234" r="3" fill="#3b82f6" opacity="0.7"/>
+  <circle cx="530" cy="246" r="3" fill="#3b82f6" opacity="0.7"/>
+  <!-- Module 2 -->
+  <circle cx="600" cy="230" r="18" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="594" cy="224" r="3" fill="#a855f7" opacity="0.7"/>
+  <circle cx="606" cy="224" r="3" fill="#a855f7" opacity="0.7"/>
+  <circle cx="600" cy="236" r="3" fill="#a855f7" opacity="0.7"/>
+  <!-- Module 3 -->
+  <circle cx="670" cy="240" r="18" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="664" cy="234" r="3" fill="#f59e0b" opacity="0.7"/>
+  <circle cx="676" cy="234" r="3" fill="#f59e0b" opacity="0.7"/>
+  <circle cx="670" cy="246" r="3" fill="#f59e0b" opacity="0.7"/>
+  <!-- Inter-module connections -->
+  <line x1="548" y1="238" x2="582" y2="232" stroke="#94a3b8" stroke-width="0.8" opacity="0.4"/>
+  <line x1="618" y1="232" x2="652" y2="238" stroke="#94a3b8" stroke-width="0.8" opacity="0.4"/>
+
+  <text x="600" y="345" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10" font-style="italic">Modular architecture stretches the point</text>
+  <text x="600" y="360" text-anchor="middle" fill="#22c55e" font-family="system-ui" font-size="10">No fine-tuning needed</text>
+
+  <!-- Arrow between panels -->
+  <text x="400" y="210" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="24">&rarr;</text>
+  <text x="400" y="235" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">add modular</text>
+  <text x="400" y="248" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">hierarchy</text>
+
+  <!-- Susceptibility label -->
+  <text x="55" y="200" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10" transform="rotate(-90 55 200)">Susceptibility</text>
+  <text x="455" y="200" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10" transform="rotate(-90 455 200)">Susceptibility</text>
+</svg>
+</div>
+
+<!-- ========== INTERACTIVE: GRIFFITHS PHASE SLIDER ========== -->
+<div class="interactive-box fade-in">
+  <h3>Explore: From Point to Phase</h3>
+  <p class="hint">Drag the slider to change the inter-module coupling strength. Watch how modular architecture stretches a critical <em>point</em> into a critical <em>phase</em>.</p>
+  <div class="viz" style="margin: 0 0 0.5rem;">
+  <svg id="griffiths-viz" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive slider-controlled visualization. A green Gaussian susceptibility curve on a control parameter axis. At low coupling (uniform network), the curve is a tall narrow peak — a standard critical point requiring fine-tuning. As the slider moves toward 'modular-hierarchical', the peak broadens into a wide plateau — the Griffiths phase. Labels change from 'Critical Point' to 'Griffiths Phase Emerging' to 'Extended Griffiths Phase'. The x-axis marks 'subcritical' (left, blue) and 'supercritical' (right, red) regions.">
+    <rect width="600" height="180" fill="#1e293b"/>
+    <line x1="60" y1="150" x2="540" y2="150" stroke="#334155" stroke-width="1"/>
+    <text x="300" y="175" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Control parameter</text>
+    <text x="25" y="90" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="9" transform="rotate(-90 25 90)">Susceptibility</text>
+    <!-- Subcritical label -->
+    <text id="g-sub" x="140" y="140" text-anchor="middle" fill="#3b82f6" font-family="system-ui" font-size="10" opacity="0.5">subcritical</text>
+    <!-- Supercritical label -->
+    <text id="g-sup" x="460" y="140" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="10" opacity="0.5">supercritical</text>
+    <!-- Critical response curve -->
+    <path id="g-curve" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+    <path id="g-fill" fill="rgba(34,197,94,0.1)"/>
+    <!-- Regime label -->
+    <text id="g-label" x="300" y="22" text-anchor="middle" fill="#22c55e" font-family="'Times New Roman', Georgia, serif" font-size="13" font-weight="600"></text>
+  </svg>
+  </div>
+  <div class="slider-labels">
+    <span style="color: var(--muted);">Uniform (no modules)</span>
+    <input type="range" id="griffiths-slider" min="0" max="100" value="20">
+    <span style="color: var(--green);">Modular-hierarchical</span>
+  </div>
+  <div id="griffiths-readout" class="regime-readout"></div>
+</div>
+
+<script>
+(function() {
+  var slider = document.getElementById('griffiths-slider');
+  var readout = document.getElementById('griffiths-readout');
+  var label = document.getElementById('g-label');
+
+  function update() {
+    var v = slider.value / 100;
+    var cx = 300;
+    var base = 150;
+    var peakH = 120;
+    var width = 20 + v * 80;
+
+    var pts = [];
+    for (var x = 60; x <= 540; x += 2) {
+      var d = (x - cx) / width;
+      var y = base - peakH * Math.exp(-0.5 * d * d);
+      pts.push(x + ',' + y);
+    }
+
+    document.getElementById('g-curve').setAttribute('d', 'M' + pts.join(' L'));
+    document.getElementById('g-fill').setAttribute('d',
+      'M' + pts.join(' L') + ' L540,' + base + ' L60,' + base + ' Z');
+
+    if (v < 0.2) {
+      label.textContent = 'Critical Point';
+      label.setAttribute('fill', '#94a3b8');
+      readout.innerHTML = '<span style="color:var(--line)">Sharp critical point</span>' +
+        '<span class="detail">Requires fine-tuning &mdash; any perturbation pushes away from criticality</span>';
+    } else if (v < 0.7) {
+      label.textContent = 'Griffiths Phase Emerging';
+      label.setAttribute('fill', '#22c55e');
+      readout.innerHTML = '<span style="color:#22c55e">Griffiths phase widening</span>' +
+        '<span class="detail">Modular heterogeneity stretches the critical region &mdash; power-law scaling over a range</span>';
+    } else {
+      label.textContent = 'Extended Griffiths Phase';
+      label.setAttribute('fill', '#22c55e');
+      readout.innerHTML = '<span style="color:#22c55e;font-weight:600">Robust criticality</span>' +
+        '<span class="detail">No fine-tuning needed &mdash; the architecture maintains criticality across a wide parameter range</span>';
+    }
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<!-- ========== THE COUPLING ========== -->
+<h2>Architecture as the Common Cause</h2>
+
+<p>
+The key insight is that the same structural feature &mdash; modular-hierarchical cortical architecture &mdash; produces <strong>both</strong> the Griffiths phase and the organized topological defect dynamics. This is not a coincidence. It is a consequence of what modularity does to a dynamical system.
+</p>
+
+<p>
+Modularity creates regions with different local dynamics. Some cortical modules may be slightly supercritical (tendency toward activation cascades), others slightly subcritical (tendency toward quiescence). The Griffiths phase arises because the supercritical modules create long-lived avalanches even when the global average is subcritical &mdash; the heterogeneity stretches the critical point into a phase.
+</p>
+
+<p>
+Simultaneously, the boundaries between modules create the conditions for spiral wave formation and interaction. Spirals nucleate at module boundaries, rotate within modules, and interact when they reach the next boundary. The modular architecture organizes the topological defects the same way it organizes the avalanche dynamics.
+</p>
+
+<p>
+This is a different type of multi-criticality from the previous tutorials. In the glass transition, two transitions couple at a bicritical point. In active matter, geometry selects between transition types. In the brain, a single architectural feature produces multiple critical phenomena simultaneously. The coupling is not between transitions &mdash; it is between the <em>mechanisms</em> that make each transition possible.
+</p>
+
+<!-- ========== TECHNICAL DETAILS ========== -->
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: The 140-Dataset Meta-Analysis
+  </summary>
+  <div class="detail-body">
+    <p>
+      Hengen &amp; Shew (<em>Neuron</em>, 2025) synthesized results from 140 datasets spanning:
+    </p>
+    <p>
+      <strong>Species:</strong> human, non-human primate, mouse, rat, cat, turtle, zebrafish, <em>in vitro</em> cortical cultures<br/>
+      <strong>Modalities:</strong> multi-electrode arrays, two-photon calcium imaging, EEG, MEG, ECoG, voltage-sensitive dye imaging<br/>
+      <strong>States:</strong> awake resting, task-engaged, anesthetized, sleeping
+    </p>
+    <p>
+      The meta-analysis evaluated evidence for three signatures of criticality: (1) power-law avalanche size distributions, (2) power-law avalanche duration distributions, (3) the crackling-noise scaling relation between the size and duration exponents (&tau;, &alpha;, and 1/&sigma;&nu;z). All three were consistently observed across datasets, with the scaling relation providing the strongest evidence &mdash; it is a prediction specific to criticality that alternative mechanisms (e.g., oscillations, bistability) do not produce.
+    </p>
+    <p>
+      The strongest counterarguments &mdash; that subsampling artifacts can produce power laws from non-critical systems (Touboul &amp; Destexhe) &mdash; were addressed through complete-system simulations and coarse-graining analyses. The scaling relation survives subsampling; spurious power laws from oscillatory dynamics do not satisfy it.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: Griffiths Phases in Neural Networks
+  </summary>
+  <div class="detail-body">
+    <p>
+      In a homogeneous network, the critical point is a single value of the control parameter (e.g., excitatory coupling strength). In a modular-hierarchical network, different modules have different effective coupling strengths. Moretti &amp; Mu&ntilde;oz showed that this creates a Griffiths phase: a finite interval of the global control parameter where:
+    </p>
+    <p>
+      &bull; Power-law distributions persist (with continuously varying exponents)<br/>
+      &bull; Susceptibility diverges (anomalously slow relaxation)<br/>
+      &bull; Correlation lengths are long but finite<br/>
+      &bull; The system responds to perturbations as if critical
+    </p>
+    <p>
+      The width of the Griffiths phase depends on the heterogeneity of the modular structure. More heterogeneous modules &rarr; wider Griffiths phase &rarr; more robust criticality. The cortex is extremely heterogeneous (area V1 differs from prefrontal cortex in cytoarchitecture, connectivity density, layer thickness, neurotransmitter balance), which predicts a wide Griffiths phase.
+    </p>
+    <p>
+      Key distinction from standard criticality: in a Griffiths phase, the exponents are <em>non-universal</em>. They depend continuously on the global control parameter. This explains why different studies measuring avalanche exponents get slightly different values &mdash; they may be sampling different points within the Griffiths phase, not measuring the same critical point with noise.
+    </p>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: Cortical Spiral Waves as Topological Defects
+  </summary>
+  <div class="detail-body">
+    <p>
+      Xu et al. (<em>Nature Human Behaviour</em>, 2023) identified spiral wave patterns in human EEG/MEG data that satisfy the mathematical criteria for topological defects: (1) the phase field has a winding number of &plusmn;1 around each spiral center, (2) spiral centers carry conserved topological charge (total charge is constant except when pairs are created or annihilated), (3) spirals of opposite charge annihilate on contact.
+    </p>
+    <p>
+      The spirals are large-scale structures spanning centimeters of cortex. They rotate at frequencies in the theta (4&ndash;8 Hz) and alpha (8&ndash;13 Hz) bands. The rotation direction determines the direction of information flow: clockwise spirals propagate signals inward (toward the center), counterclockwise spirals propagate signals outward. This creates a natural mechanism for gating information between cortical regions &mdash; two regions can communicate only when their spiral rotation directions are compatible.
+    </p>
+    <p>
+      The connection to active matter (Tutorial 02) is direct: both systems contain +1/2 and &minus;1/2 topological defects that interact through the same mathematical framework. The difference is substrate (neurons vs. molecular rods) and scale (centimeters vs. micrometers). The question of whether the KT unbinding transition also applies to cortical spirals &mdash; whether there is a bound-to-unbound transition in the brain analogous to flutter-to-fibrillation in the heart &mdash; is open and testable.
+    </p>
+    <!-- Detail SVG: spiral charge conservation -->
+    <div class="viz" style="margin: 1rem 0;">
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spiral wave topological charge conservation diagram. Three panels: Left — pair creation event showing two counter-rotating spirals (red +1 and blue −1 charges) emerging together, net charge = 0. Center — propagation showing the two spirals separated and moving independently across cortical tissue. Right — pair annihilation showing the +1 and −1 spirals meeting and canceling, restoring the tissue to the uniform state. Total topological charge is conserved throughout: spirals always create and annihilate in charge-conjugate pairs, exactly like vortex-antivortex pairs in active matter.">
+      <rect width="700" height="200" fill="#1e293b"/>
+
+      <!-- Creation event -->
+      <text x="120" y="25" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11" font-weight="600">Pair creation</text>
+      <circle cx="90" cy="100" r="20" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="90" y="105" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="14" font-weight="700">+1</text>
+      <circle cx="150" cy="100" r="20" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="150" y="105" text-anchor="middle" fill="#3b82f6" font-family="system-ui" font-size="14" font-weight="700">&minus;1</text>
+      <text x="120" y="145" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Total charge: 0</text>
+
+      <!-- Propagation -->
+      <text x="350" y="25" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11" font-weight="600">Propagation</text>
+      <circle cx="290" cy="100" r="20" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="290" y="105" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="14" font-weight="700">+1</text>
+      <path d="M290,80 Q290,60 310,60 Q330,60 330,80" fill="none" stroke="#ef4444" stroke-width="1" opacity="0.5">
+        <animateTransform attributeName="transform" type="rotate" from="0 290 100" to="360 290 100" dur="3s" repeatCount="indefinite"/>
+      </path>
+
+      <circle cx="410" cy="100" r="20" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="410" y="105" text-anchor="middle" fill="#3b82f6" font-family="system-ui" font-size="14" font-weight="700">&minus;1</text>
+      <path d="M410,80 Q410,60 430,60 Q450,60 450,80" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.5">
+        <animateTransform attributeName="transform" type="rotate" from="360 410 100" to="0 410 100" dur="3s" repeatCount="indefinite"/>
+      </path>
+
+      <text x="350" y="145" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Total charge: 0 (conserved)</text>
+
+      <!-- Annihilation -->
+      <text x="580" y="25" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11" font-weight="600">Pair annihilation</text>
+      <circle cx="580" cy="100" r="22" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="3 3">
+        <animate attributeName="r" values="22;28;22" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <text x="580" y="96" text-anchor="middle" fill="#ef4444" font-family="system-ui" font-size="11" font-weight="700">+1</text>
+      <text x="580" y="112" text-anchor="middle" fill="#3b82f6" font-family="system-ui" font-size="11" font-weight="700">&minus;1</text>
+      <text x="580" y="145" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="10">Total charge: 0</text>
+
+      <text x="350" y="180" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11" font-style="italic">Topological charge is conserved through all dynamics</text>
+    </svg>
+    </div>
+  </div>
+</details>
+
+<details class="technical fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Technical Detail: Genetic Basis of Criticality
+  </summary>
+  <div class="detail-body">
+    <p>
+      PNAS (2025) reported two findings linking brain criticality to genetics: (1) genes whose expression patterns correlate with proximity to criticality (measured by avalanche scaling exponents across cortical regions) are enriched for positive selection signals in the human lineage, and (2) individual variation in proximity to criticality correlates with fluid intelligence scores.
+    </p>
+    <p>
+      The gene set includes ion channel subunits, synaptic plasticity mediators, and &mdash; notably &mdash; genes involved in cortical laminar organization and modular connectivity. This is consistent with the Griffiths phase mechanism: the genes that evolution selected are not those that tune a single parameter to a critical value, but those that build the modular-hierarchical architecture that produces the Griffiths phase. Evolution optimized the architecture, and criticality followed as a consequence of the architecture.
+    </p>
+  </div>
+</details>
+
+<!-- ========== FALSIFICATION ========== -->
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-planned"></span>
+    Falsification: Prediction #8 &mdash; Network Topology Governs Criticality Class
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> The universality class of the avalanche transition depends on the network topology. Modular-hierarchical networks produce Griffiths phases with non-universal exponents. Small-world networks without modularity produce standard mean-field criticality. Scale-free networks produce a different class entirely. The brain&rsquo;s specific exponents are a consequence of its modular-hierarchical architecture, not of neural dynamics per se.
+    </p>
+    <p>
+      <strong>Status:</strong> Framework. Sun et al. (<em>Nature Physics</em>, 2025) independently showed that network topology governs criticality class in cytoskeletal networks &mdash; consistent with this prediction in a non-neural system.
+    </p>
+    <p>
+      <strong>Test:</strong> Simulate identical neural dynamics on three network topologies: modular-hierarchical (cortical), Erd&ouml;s-R&eacute;nyi (random), and Barab&aacute;si-Albert (scale-free). If the avalanche exponents differ systematically between topologies, the network determines the universality class. If they are the same, the dynamics dominate and topology is secondary.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If identical dynamics on different topologies produce the same avalanche exponents, network topology is not the selector. Prediction #8 fails.
+    </div>
+  </div>
+</details>
+
+<details class="falsification fade-in">
+  <summary>
+    <span class="status-dot status-planned"></span>
+    Falsification: Prediction #10 &mdash; Developmental Criticality Coincidence
+  </summary>
+  <div class="detail-body">
+    <p>
+      <strong>Claim:</strong> The onset of cortical modularity during development coincides with the onset of critical avalanche statistics. Before modular architecture is established, the developing brain should not show Griffiths-phase criticality. After modules form, criticality should appear without any change in the single-neuron dynamics.
+    </p>
+    <p>
+      <strong>Status:</strong> Planned. Requires longitudinal avalanche measurements during cortical development. Zebrafish and organoid models are the most tractable systems for this test.
+    </p>
+    <div class="kill-criteria">
+      <strong>KILL CRITERIA:</strong> If critical avalanche statistics appear before modular architecture is established, or if modules form without criticality emerging, the developmental coincidence fails.
+    </div>
+  </div>
+</details>
+
+<!-- ========== PAIR CALLOUT ========== -->
+
+<div class="pair-card fade-in">
+  <div class="pair-label">Paired System</div>
+  <h4><a href="06-tokamak.html">Tutorial 06: Tokamak H-Mode Pedestal</a></h4>
+  <p>
+    Connected through Griffiths phase architecture. Both the brain and the tokamak are modular-hierarchical systems where the architecture produces robust criticality without fine-tuning. In the brain: cortical modules with heterogeneous dynamics. In the tokamak: nested transport barriers with heterogeneous radial profiles. The same mathematical mechanism &mdash; heterogeneity stretching a critical point into a critical phase &mdash; produces robust criticality in both, despite the substrates (neurons vs. plasma) having nothing else in common.
+  </p>
+</div>
+
+<!-- ========== DETECTION QUESTION ========== -->
+
+<details class="detection fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    Detection Question
+  </summary>
+  <div class="detail-body">
+    <p>
+      Three order parameters on nested node sets. Avalanche criticality operates on the full cortical network. The Griffiths phase arises from the modular structure &mdash; a coarse-grained view where nodes are cortical modules rather than individual neurons. Topological defects operate on the cortical surface (a 2D manifold embedded in 3D space).
+    </p>
+    <p>
+      The Griffiths phase is unusual from a detection perspective: the exponents vary continuously with the control parameter. This means a relational gradient operator measuring the avalanche field would see different gradient statistics at different points within the Griffiths phase &mdash; not the fixed universality of a standard critical point.
+    </p>
+    <p>
+      <strong>The question:</strong> Can a relational operator distinguish between a system at a true critical point (fixed exponents, one universality class) and a system in a Griffiths phase (continuously varying exponents, extended critical region)? If so, the operator would detect not just proximity to criticality, but the <em>type</em> of criticality &mdash; whether it arises from parameter tuning or from architectural robustness. This distinction has direct clinical relevance: a brain that is critical because of Griffiths phases is robust; a brain that is critical because of fine-tuning is fragile.
+    </p>
+  </div>
+</details>
+
+<!-- ========== REFERENCES ========== -->
+
+<details class="references fade-in">
+  <summary>
+    <span class="detail-icon">&#9670;</span>
+    References
+  </summary>
+  <div class="detail-body">
+    <p>Hengen, K. B. &amp; Shew, W. L. (2025). Neural criticality: A comprehensive meta-analysis. <em>Neuron</em>.</p>
+    <p>Moretti, P. &amp; Mu&ntilde;oz, M. A. (2013). Griffiths phases and the stretching of criticality in brain networks. <em>Nature Communications</em>, 4, 2521.</p>
+    <p>Xu, Y. et al. (2023). Cortical spiral waves as topological defects. <em>Nature Human Behaviour</em>.</p>
+    <p>PNAS (2025). Genetic basis of proximity to criticality in the human brain. [Positive selection + fluid intelligence correlation].</p>
+    <p>Sun, M. et al. (2025). Network topology governs cytoskeletal criticality. <em>Nature Physics</em>.</p>
+    <p>Beggs, J. M. &amp; Plenz, D. (2003). Neuronal avalanches in neocortical circuits. <em>J. Neurosci.</em>, 23, 11167&ndash;11177.</p>
+    <p>Touboul, J. &amp; Destexhe, A. (2017). Power-law statistics and universal scaling in the absence of criticality. <em>Phys. Rev. E</em>, 95, 012413.</p>
+  </div>
+</details>
+
+<!-- ========== BOTTOM NAVIGATION ========== -->
+<div class="tutorial-nav">
+  <a href="04-protein-folding.html">&larr; Protein Folding</a>
+  <a href="06-tokamak.html" class="next">Tokamak &rarr;</a>
+</div>
+
+<p class="footer-note">
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a>
+</p>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
