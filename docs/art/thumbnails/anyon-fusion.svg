@@ -1,0 +1,15 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+  <text x="50" y="30" text-anchor="middle" fill="#fbbf24" font-size="14" font-family="Georgia, serif" font-style="italic">&tau;</text>
+  <text x="75" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="Georgia, serif">&times;</text>
+  <text x="100" y="30" text-anchor="middle" fill="#fbbf24" font-size="14" font-family="Georgia, serif" font-style="italic">&tau;</text>
+  <text x="130" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="Georgia, serif">=</text>
+  <text x="160" y="30" text-anchor="middle" fill="#3b82f6" font-size="14" font-family="Georgia, serif" font-style="italic">1</text>
+  <text x="185" y="30" text-anchor="middle" fill="#94a3b8" font-size="14" font-family="Georgia, serif">+</text>
+  <text x="210" y="30" text-anchor="middle" fill="#fbbf24" font-size="14" font-family="Georgia, serif" font-style="italic">&tau;</text>
+  <path d="M 60 45 Q 80 70, 100 45" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.6"/>
+  <path d="M 100 45 Q 120 70, 140 45" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.6"/>
+  <path d="M 140 45 Q 160 70, 180 45" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.4"/>
+  <path d="M 180 45 Q 200 70, 220 45" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.3"/>
+  <text x="140" y="72" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui" font-style="italic">1, 1, 2, 3, 5, 8, 13 &hellip;</text>
+</svg>

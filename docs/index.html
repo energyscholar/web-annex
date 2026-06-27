@@ -113,6 +113,18 @@ h2 {
   transform: translateY(-1px);
 }
 
+.card-thumb {
+  margin-bottom: 0.8rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.card-thumb img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .card-title {
   color: var(--heading);
   font-family: 'Times New Roman', Georgia, serif;
@@ -267,91 +279,121 @@ footer {
   - Check the math. It is derivable from the cited sources.
   - Check the falsification criteria. Cranks never specify what
     would kill their theory. We do.
+
+  PROGRESSIVE REVEAL LEVELS (visit = scrolling past 50% of a tutorial):
+    L0 (0 visits):  4 single-domain tutorials — first impression
+    L1 (1 visit):   +2 tutorials
+    L2 (2 visits):  +2 tutorials
+    L3 (3 visits):  +2 tutorials (mild cross-domain)
+    L4 (4 visits):  +2 tutorials (explicit cross-domain)
+    hub (6 visits): +2 aggregation hub pages
+    nav (#nav/CLI): full manifest including personal content
 -->
 
 <!-- ============================================================ -->
-<h2 data-level="0">Science Tutorials</h2>
+<h2 data-level="0">Tutorials</h2>
 <!-- ============================================================ -->
 
 <div class="card-grid">
 
-<a class="card" data-level="0" href="anyon-fusion/">
-  <div class="card-title">Fibonacci Anyon Fusion Algebra <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Animated introduction to the Fibonacci anyon model. Covers fusion rules (&tau;&times;&tau; = 1+&tau;), the Fibonacci dimension sequence, fusion trees, braiding as quantum gates, and the connection to topological quantum computation. Eight sections with replay-able SVG animations.</div>
-</a>
-
-<a class="card" data-level="0" href="acs-closure-v2/">
-  <div class="card-title">Autocatalytic Closure for the Working Mathematician <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">Kauffman's autocatalytic sets presented as formal mathematics. Covers RAF theory (reflexively autocatalytic, food-generated sets), closure properties, the percolation phase transition in random catalytic networks, and the connection to origin-of-life chemistry. Revised edition.</div>
-</a>
-
-<a class="card" data-level="0" href="topology-closure/">
-  <div class="card-title">Where the Topology Lives <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">How topological order emerges in two-dimensional systems. Covers the quantum Hall effect, anyonic statistics, braiding, and why topology provides error protection. Bridges abstract mathematics to the physical systems where these phenomena appear.</div>
-</a>
+<!-- === L0: Seed set (always visible) === -->
 
 <a class="card" data-level="0" href="miller-tutorial/">
+  <div class="card-thumb"><img src="art/thumbnails/miller-tutorial.svg" alt="" loading="lazy"></div>
   <div class="card-title">Coevolving Machines and the Social Threshold <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
   <div class="card-desc">Interactive evolutionary game theory simulation based on John H. Miller's research. Explores how simple adaptive agents produce complex cooperative dynamics, phase transitions in social systems, and the emergence of collective behavior from individual strategy.</div>
   <div class="card-meta">Includes live simulation engine, replication studies, and test suite</div>
 </a>
 
-<a class="card" data-level="1" href="domain-convergence/">
-  <div class="card-title">Domain Convergence &mdash; An Animated Introduction <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">How eleven scientific fields independently discovered different faces of the same physical phenomenon. Covers domain clusters, seven bridges, scale invariance as stitching mechanism, the AC bridge structural identity, and the emergent property stack. Interactive SVGs with tooltips.</div>
+<a class="card" data-level="0" href="anyon-fusion/">
+  <div class="card-thumb"><img src="art/thumbnails/anyon-fusion.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Fibonacci Anyon Fusion Algebra <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Animated introduction to the Fibonacci anyon model. Covers fusion rules (&tau;&times;&tau; = 1+&tau;), the Fibonacci dimension sequence, fusion trees, braiding as quantum gates, and the connection to topological quantum computation. Eight sections with replay-able SVG animations.</div>
 </a>
 
-<a class="card" data-level="1" href="criticality-bridges/">
-  <div class="card-title">Criticality Bridges &mdash; Physical Systems <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Six concrete physical systems where critical phenomena demonstrably couple scientific domains. Gene regulatory networks, BZ reaction, cortical neural tissue, immune system, magnetic skyrmions, and Earth's magnetosphere. Each with animated visualizations.</div>
+<a class="card" data-level="0" href="topology-closure/">
+  <div class="card-thumb"><img src="art/thumbnails/topology-closure.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Where the Topology Lives <span class="card-tag tag-tutorial">Tutorial</span></div>
+  <div class="card-desc">How topological order emerges in two-dimensional systems. Covers the quantum Hall effect, anyonic statistics, braiding, and why topology provides error protection. Bridges abstract mathematics to the physical systems where these phenomena appear.</div>
 </a>
 
-<a class="card" data-level="1" href="physical-systems-chart/">
-  <div class="card-title">Physical Systems &times; Domain Bridge Chart <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Interactive working document mapping ten physical systems against five domain clusters. Clickable matrix, bridge coverage diagram, endpoint characterization, gap analysis, mechanism taxonomy, and research targets.</div>
-</a>
-
-<a class="card" data-level="1" href="acs-closure/">
-  <div class="card-title">Autocatalytic Closure (Original) <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">First edition of the autocatalytic closure tutorial. Superseded by the revised v2, retained for reference.</div>
-</a>
-
-<a class="card" data-level="1" href="search-suppression/">
-  <div class="card-title">Content-Selective Search De-Indexing <span class="card-tag tag-research">Report</span></div>
-  <div class="card-desc">Reproducibility report documenting content-selective removal of specific pages from search engine indices. Four test cases and two controls across Cryptome, Substack, and Slashdot, with methodology for independent verification. Includes temporal sensitivity analysis.</div>
-  <div class="card-meta">Published June 2026</div>
-</a>
-
-<a class="card" data-level="1" href="magnetospheric-tomography/">
-  <div class="card-title">Four-Way Satellite Convergence <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">SKT/STF boundary diagnosis using four independent satellite datasets. Cross-validation of magnetospheric tomography techniques with RBSP, Swarm, and IMAGE data.</div>
-</a>
-
-<a class="card" data-level="1" href="structure-from-topology/">
+<a class="card" data-level="0" href="structure-from-topology/">
+  <div class="card-thumb"><img src="art/thumbnails/structure-from-topology.svg" alt="" loading="lazy"></div>
   <div class="card-title">Structure from Topology <span class="card-tag tag-tutorial">Tutorial</span></div>
   <div class="card-desc">A systems-thinking worked example: how topological invariants constrain and predict the structure of physical systems. From abstract invariants to concrete observable consequences.</div>
 </a>
 
-<a class="card" data-level="1" href="poised-state-survey/">
+<!-- === L1: First return (+2) === -->
+
+<a class="card" data-level="1" href="acs-closure-v2/">
+  <div class="card-thumb"><img src="art/thumbnails/acs-closure-v2.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Autocatalytic Closure for the Working Mathematician <span class="card-tag tag-tutorial">Tutorial</span></div>
+  <div class="card-desc">Kauffman's autocatalytic sets presented as formal mathematics. Covers RAF theory (reflexively autocatalytic, food-generated sets), closure properties, the percolation phase transition in random catalytic networks, and the connection to origin-of-life chemistry. Revised edition.</div>
+</a>
+
+<a class="card" data-level="1" href="search-suppression/">
+  <div class="card-thumb"><img src="art/thumbnails/search-suppression.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Content-Selective Search De-Indexing <span class="card-tag tag-research">Report</span></div>
+  <div class="card-desc">Reproducibility report documenting content-selective removal of specific pages from search engine indices. Four test cases and two controls across Cryptome, Substack, and Slashdot, with methodology for independent verification.</div>
+  <div class="card-meta">Published June 2026</div>
+</a>
+
+<!-- === L2: Second return (+2) === -->
+
+<a class="card" data-level="2" href="magnetospheric-tomography/">
+  <div class="card-thumb"><img src="art/thumbnails/magnetospheric-tomography.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Four-Way Satellite Convergence <span class="card-tag tag-tutorial">Tutorial</span></div>
+  <div class="card-desc">SKT/STF boundary diagnosis using four independent satellite datasets. Cross-validation of magnetospheric tomography techniques with RBSP, Swarm, and IMAGE data.</div>
+</a>
+
+<a class="card" data-level="2" href="acs-closure/">
+  <div class="card-title">Autocatalytic Closure (Original) <span class="card-tag tag-tutorial">Tutorial</span></div>
+  <div class="card-desc">First edition of the autocatalytic closure tutorial. Superseded by the revised v2, retained for reference.</div>
+</a>
+
+<!-- === L3: Third return (+2, mild cross-domain) === -->
+
+<a class="card" data-level="3" href="poised-state-survey/">
+  <div class="card-thumb"><img src="art/thumbnails/poised-state-survey.svg" alt="" loading="lazy"></div>
   <div class="card-title">Shadows of the Poised State <span class="card-tag tag-research">Research</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Survey of twelve candidate systems scored against the five-feature convergence framework. Six cross-cutting patterns, twelve falsifiable predictions with specific failure conditions, and a scorecard.</div>
+  <div class="card-desc">Survey of twelve candidate systems scored against a five-feature framework. Six cross-cutting patterns, twelve falsifiable predictions with specific failure conditions, and a scorecard.</div>
+</a>
+
+<a class="card" data-level="3" href="physical-systems-chart/">
+  <div class="card-thumb"><img src="art/thumbnails/physical-systems-chart.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Physical Systems &times; Feature Chart <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Interactive working document mapping ten physical systems against five feature clusters. Clickable matrix, coverage diagram, endpoint characterization, gap analysis, and research targets.</div>
+</a>
+
+<!-- === L4: Fourth return (+2, explicit cross-domain) === -->
+
+<a class="card" data-level="4" href="domain-convergence/">
+  <div class="card-thumb"><img src="art/thumbnails/domain-convergence.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Domain Convergence &mdash; An Animated Introduction <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">How eleven scientific fields independently discovered different faces of the same physical phenomenon. Covers domain clusters, seven bridges, scale invariance as stitching mechanism, the AC bridge structural identity, and the emergent property stack.</div>
+</a>
+
+<a class="card" data-level="4" href="criticality-bridges/">
+  <div class="card-thumb"><img src="art/thumbnails/criticality-bridges.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Criticality Bridges &mdash; Physical Systems <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Six concrete physical systems where critical phenomena demonstrably couple scientific domains. Gene regulatory networks, BZ reaction, cortical neural tissue, immune system, magnetic skyrmions, and Earth's magnetosphere.</div>
 </a>
 
 </div>
 
 <!-- ============================================================ -->
-<h2 data-level="2">Research</h2>
+<h2 data-level="hub">Research</h2>
 <!-- ============================================================ -->
 
 <div class="card-grid">
 
-<a class="card" data-level="2" href="diamond-node/">
+<a class="card" data-level="hub" href="diamond-node/">
   <div class="card-title">Domain Convergence Research <span class="card-tag tag-research">Research</span> <span class="card-tag tag-interactive">Interactive</span></div>
   <div class="card-desc">Systematic investigation into structural relationships between eleven scientific domains. Interactive tutorials, computational experiments (NKS braiding search, lattice dynamics, anyon family sweep), and key findings on cross-domain bridges.</div>
   <div class="card-meta">Includes 6 interactive tutorials and 3 computational research reports</div>
 </a>
 
-<a class="card" data-level="2" href="diamond-node/multi-critical/">
+<a class="card" data-level="hub" href="diamond-node/multi-critical/">
   <div class="card-title">Multi-Critical Systems <span class="card-tag tag-research">Research</span> <span class="card-tag tag-interactive">Interactive</span></div>
   <div class="card-desc">Six physical systems where critical phenomena, topological order, and autocatalytic closure co-occur: glass transition, active matter, cardiac tissue, protein folding, brain, and tokamak H-mode pedestal.</div>
   <div class="card-meta">Six interactive tutorials with inline citations</div>
@@ -415,14 +457,16 @@ footer {
 <!--
   CLI IMPLEMENTATION
   See source comments at top for commands. The progressive reveal levels:
-    L0 (0-2 visits): 4 single-domain tutorials — first impression
-    L1 (3-4 visits): all leaf tutorials — returning visitor
-    L2 (5+ visits):  aggregation hub pages — engaged visitor
-    nav:             full manifest including personal content
+    L0 (0 visits):  4 single-domain tutorials — first impression
+    L1 (1 visit):   +2 tutorials — first return
+    L2 (2 visits):  +2 tutorials — second return
+    L3 (3 visits):  +2 tutorials — mild cross-domain signals
+    L4 (4 visits):  +2 tutorials — explicit cross-domain
+    hub (6 visits): +2 aggregation hub pages
+    nav:            full manifest including personal content
 
   A "visit" = scrolling past 50% of a tutorial page (IntersectionObserver).
-  First-time visitors see impressive single-domain work.
-  Returning visitors see more, proportional to demonstrated interest.
+  Each return visit reveals a small increment (+2 tutorials).
   The breadth reveals itself; we never claim it.
 
   EXTENSIBILITY: The CLI input/output architecture (text input → command
@@ -448,22 +492,25 @@ footer {
 
 <script>
 (function(){
-  var LEVELS = {0: 2, 1: 4, 2: Infinity};
+  // Graduated reveal: each visit adds ~2 tutorials
+  // L0=0, L1=1, L2=2, L3=3, L4=4, hub=6
+  var THRESHOLDS = {0:0, 1:1, 2:2, 3:3, 4:4, hub:6};
+
   var MANIFEST = [
-    {level:0, path:'anyon-fusion/', title:'Fibonacci Anyon Fusion Algebra', tags:'tutorial, interactive'},
-    {level:0, path:'acs-closure-v2/', title:'Autocatalytic Closure v2', tags:'tutorial'},
-    {level:0, path:'topology-closure/', title:'Where the Topology Lives', tags:'tutorial'},
     {level:0, path:'miller-tutorial/', title:'Coevolving Machines / Miller Tutorial', tags:'tutorial, interactive'},
-    {level:1, path:'domain-convergence/', title:'Domain Convergence — Animated Introduction', tags:'tutorial, interactive'},
-    {level:1, path:'criticality-bridges/', title:'Criticality Bridges — Physical Systems', tags:'tutorial, interactive'},
-    {level:1, path:'physical-systems-chart/', title:'Physical Systems × Domain Bridge Chart', tags:'interactive'},
-    {level:1, path:'acs-closure/', title:'Autocatalytic Closure (Original)', tags:'tutorial'},
+    {level:0, path:'anyon-fusion/', title:'Fibonacci Anyon Fusion Algebra', tags:'tutorial, interactive'},
+    {level:0, path:'topology-closure/', title:'Where the Topology Lives', tags:'tutorial'},
+    {level:0, path:'structure-from-topology/', title:'Structure from Topology', tags:'tutorial'},
+    {level:1, path:'acs-closure-v2/', title:'Autocatalytic Closure v2', tags:'tutorial'},
     {level:1, path:'search-suppression/', title:'Content-Selective Search De-Indexing', tags:'report'},
-    {level:1, path:'magnetospheric-tomography/', title:'Four-Way Satellite Convergence', tags:'tutorial'},
-    {level:1, path:'structure-from-topology/', title:'Structure from Topology', tags:'tutorial'},
-    {level:1, path:'poised-state-survey/', title:'Shadows of the Poised State', tags:'research, interactive'},
-    {level:2, path:'diamond-node/', title:'Domain Convergence Research', tags:'research hub'},
-    {level:2, path:'diamond-node/multi-critical/', title:'Multi-Critical Systems', tags:'research hub'},
+    {level:2, path:'magnetospheric-tomography/', title:'Four-Way Satellite Convergence', tags:'tutorial'},
+    {level:2, path:'acs-closure/', title:'Autocatalytic Closure (Original)', tags:'tutorial'},
+    {level:3, path:'poised-state-survey/', title:'Shadows of the Poised State', tags:'research, interactive'},
+    {level:3, path:'physical-systems-chart/', title:'Physical Systems × Feature Chart', tags:'interactive'},
+    {level:4, path:'domain-convergence/', title:'Domain Convergence — Animated Introduction', tags:'tutorial, interactive'},
+    {level:4, path:'criticality-bridges/', title:'Criticality Bridges — Physical Systems', tags:'tutorial, interactive'},
+    {level:'hub', path:'diamond-node/', title:'Domain Convergence Research', tags:'research hub'},
+    {level:'hub', path:'diamond-node/multi-critical/', title:'Multi-Critical Systems', tags:'research hub'},
     {level:'nav', path:'diamond-node/multi-critical/01-glass-transition.html', title:'Glass Transition', tags:'tutorial'},
     {level:'nav', path:'diamond-node/multi-critical/02-active-matter.html', title:'Active Matter', tags:'tutorial'},
     {level:'nav', path:'diamond-node/multi-critical/03-cardiac-tissue.html', title:'Cardiac Tissue', tags:'tutorial'},
@@ -493,17 +540,22 @@ footer {
     if (stored) data = JSON.parse(stored);
   } catch(e) {}
 
-  function getLevel() {
+  function getLevelName() {
     if (navMode) return 'nav';
-    if (data.count >= 5) return 2;
-    if (data.count >= 3) return 1;
+    if (data.count >= 6) return 'hub';
+    if (data.count >= 4) return 4;
+    if (data.count >= 3) return 3;
+    if (data.count >= 2) return 2;
+    if (data.count >= 1) return 1;
     return 0;
   }
 
   function shouldShow(elLevel) {
     if (navMode) return true;
-    var cl = getLevel();
     if (elLevel === 'nav') return false;
+    var cl = getLevelName();
+    if (elLevel === 'hub') return cl === 'hub';
+    if (cl === 'hub') return true;
     return parseInt(elLevel) <= cl;
   }
 
@@ -518,6 +570,7 @@ footer {
         el.classList.add('hidden');
       }
     }
+    // Hide section headers when all their cards are hidden
     var sections = document.querySelectorAll('h2[data-level]');
     for (var j = 0; j < sections.length; j++) {
       var sec = sections[j];
@@ -545,7 +598,7 @@ footer {
     var vc = document.getElementById('visit-count');
     var vl = document.getElementById('visit-level');
     if (vc) vc.textContent = data.count;
-    if (vl) vl.textContent = getLevel();
+    if (vl) vl.textContent = getLevelName();
   }
 
   if (location.hash === '#nav') navMode = true;
@@ -600,10 +653,11 @@ footer {
         break;
 
       case 'status':
-        var lv = getLevel();
+        var lv = getLevelName();
         var pages = Object.keys(data.pages);
-        cliPrint('Level: ' + (lv === 'nav' ? 'nav (full)' : 'L' + lv));
+        cliPrint('Level: ' + (lv === 'nav' ? 'nav (full)' : lv === 'hub' ? 'hub (6+)' : 'L' + lv));
         cliPrint('Visit count: ' + data.count);
+        cliPrint('Tutorials visible: ' + (4 + Math.min(data.count, 4) * 2 + (data.count >= 6 ? 2 : 0)));
         if (pages.length > 0) {
           cliPrint('Pages visited:');
           for (var i = 0; i < pages.length; i++) {
@@ -615,13 +669,11 @@ footer {
         break;
 
       case 'ls':
-        var cl = getLevel();
         var visible = MANIFEST.filter(function(m) {
           if (navMode) return true;
-          if (m.level === 'nav') return false;
-          return m.level <= cl;
+          return shouldShow(m.level);
         });
-        cliPrint('Visible tutorials (' + visible.length + '):');
+        cliPrint('Visible (' + visible.length + '):');
         for (var i = 0; i < visible.length; i++) {
           var m = visible[i];
           cliPrint('  ' + m.path + ' — ' + m.title);
@@ -631,13 +683,21 @@ footer {
       case 'manifest':
         cliPrint('Complete site manifest (' + MANIFEST.length + ' pages):');
         cliPrint('');
-        var levels = ['L0 (first visit)', 'L1 (3+ visits)', 'L2 (5+ visits)', 'nav (full index)'];
-        var lvKeys = [0, 1, 2, 'nav'];
-        for (var li = 0; li < lvKeys.length; li++) {
-          var lk = lvKeys[li];
+        var levelNames = [
+          [0, 'L0 (first visit — 4 tutorials)'],
+          [1, 'L1 (+1 visit)'],
+          [2, 'L2 (+2 visits)'],
+          [3, 'L3 (+3 visits)'],
+          [4, 'L4 (+4 visits)'],
+          ['hub', 'Hub (6+ visits)'],
+          ['nav', 'Nav (full index)']
+        ];
+        for (var li = 0; li < levelNames.length; li++) {
+          var lk = levelNames[li][0];
+          var ln = levelNames[li][1];
           var items = MANIFEST.filter(function(m){ return m.level === lk; });
           if (items.length > 0) {
-            cliPrint('— ' + levels[li] + ' —');
+            cliPrint('— ' + ln + ' —');
             for (var i = 0; i < items.length; i++) {
               cliPrint('  ' + items[i].path);
               cliPrint('    ' + items[i].title + ' [' + items[i].tags + ']');

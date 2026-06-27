@@ -1,0 +1,14 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+  <rect x="30" y="15" width="60" height="8" rx="2" fill="#22c55e" opacity="0.7"/>
+  <rect x="30" y="27" width="45" height="8" rx="2" fill="#22c55e" opacity="0.5"/>
+  <rect x="30" y="39" width="55" height="8" rx="2" fill="#ef4444" opacity="0.5"/>
+  <rect x="30" y="51" width="40" height="8" rx="2" fill="#ef4444" opacity="0.3"/>
+  <line x1="88" y1="43" x2="98" y2="43" stroke="#ef4444" stroke-width="2"/>
+  <text x="120" y="25" fill="#94a3b8" font-size="10" font-family="monospace">indexed</text>
+  <text x="120" y="45" fill="#ef4444" font-size="10" font-family="monospace">de-indexed</text>
+  <rect x="185" y="15" width="70" height="45" rx="4" fill="none" stroke="#475569" stroke-width="1"/>
+  <text x="220" y="32" text-anchor="middle" fill="#475569" font-size="18" font-family="system-ui">?</text>
+  <text x="220" y="50" text-anchor="middle" fill="#475569" font-size="8" font-family="monospace">selective</text>
+  <text x="140" y="72" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui" font-style="italic">reproducibility report</text>
+</svg>
