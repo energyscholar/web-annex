@@ -208,18 +208,18 @@ li { margin-bottom: 0.3rem; }
 </div>
 <div class="container">
 
-<h1>Teaching an AI to Remember</h1>
-<p class="subtitle">Building a persistent AI system with proper governance &mdash; not just memory.</p>
+<h1>Governing Your AI</h1>
+<p class="subtitle">Memory is solved. Governance isn&rsquo;t.</p>
 <p class="byline">Argus &amp; Bruce Stephenson &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; CC BY 4.0</p>
 
-<p>This is a practitioner&rsquo;s guide, not a sales pitch. Here is what we built, why each piece exists, and what breaks without it. The system that produced this document has been in continuous operation since December 2025 &mdash; 160+ sessions across six months. The document you are reading is the evidence.</p>
+<p>Your AI remembers you now. ChatGPT, Claude, Gemini &mdash; they all persist facts across sessions. This is real progress. It is also, on its own, a liability. Memory without architecture produces sycophancy that compounds over time, context leakage between roles, and corrections filed so generically they never fire when they matter. This guide shows what it takes to make memory <em>safe</em>. The system that produced this document has been in continuous operation since December 2025 &mdash; 160+ sessions across six months. The document you are reading is the evidence.</p>
 
 <!-- ============================================================ -->
-<!-- SECTION 1: The Amnesia Loop -->
+<!-- SECTION 1: Memory Is Not Enough -->
 <!-- ============================================================ -->
 <div class="section" id="sec1">
 <p class="section-number">Section 1</p>
-<h2>The Amnesia Loop <button class="replay-btn" onclick="replaySection('sec1')">Replay</button></h2>
+<h2>Memory Is Not Enough <button class="replay-btn" onclick="replaySection('sec1')">Replay</button></h2>
 
 <div class="svg-container" id="amnesia-svg">
 <svg viewBox="0 0 900 400" width="900" height="400">
@@ -232,70 +232,55 @@ li { margin-bottom: 0.3rem; }
     </marker>
   </defs>
 
-  <!-- Central loop circle (always visible) -->
-  <circle cx="450" cy="200" r="130" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="8,4"/>
+  <!-- Three failure modes radiating from a central "MEMORY" node -->
 
-  <!-- Step 1: User makes correction (top) -->
-  <g class="loop-step loop-step-1" opacity="0">
-    <rect x="370" y="38" width="160" height="36" rx="8" fill="var(--card)" stroke="#3b82f6" stroke-width="2"/>
-    <text x="450" y="62" text-anchor="middle" fill="#3b82f6" font-size="13" font-weight="600">User corrects AI</text>
-    <circle cx="450" cy="70" r="3" fill="#3b82f6"/>
+  <!-- Central node: Memory (appears first, green, looks fine) -->
+  <g class="mem-center" opacity="0">
+    <circle cx="450" cy="190" r="50" fill="var(--card)" stroke="#22c55e" stroke-width="2.5"/>
+    <text x="450" y="186" text-anchor="middle" fill="#22c55e" font-size="16" font-weight="700">MEMORY</text>
+    <text x="450" y="203" text-anchor="middle" fill="#94a3b8" font-size="10">persists across sessions</text>
   </g>
 
-  <!-- Arrow 1->2 (top-right arc) -->
-  <path class="loop-arrow loop-arrow-1" d="M 530,82 A 130,130 0 0,1 575,155" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)" opacity="0"/>
-
-  <!-- Step 2: AI apologizes (right) -->
-  <g class="loop-step loop-step-2" opacity="0">
-    <rect x="560" y="155" width="170" height="36" rx="8" fill="var(--card)" stroke="#f59e0b" stroke-width="2"/>
-    <text x="645" y="179" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="600">AI apologizes</text>
+  <!-- Failure 1: Sycophancy (upper-left) -->
+  <path class="fail-arrow fail-arrow-1" d="M 405,155 L 280,80" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)" opacity="0"/>
+  <g class="fail-node fail-node-1" opacity="0">
+    <rect x="130" y="40" width="180" height="65" rx="8" fill="var(--card)" stroke="#ef4444" stroke-width="2"/>
+    <text x="220" y="62" text-anchor="middle" fill="#ef4444" font-size="13" font-weight="700">Sycophancy</text>
+    <text x="220" y="80" text-anchor="middle" fill="#94a3b8" font-size="10">remembers what you like</text>
+    <text x="220" y="94" text-anchor="middle" fill="#94a3b8" font-size="10">agrees more over time</text>
   </g>
 
-  <!-- Arrow 2->3 (right-bottom arc) -->
-  <path class="loop-arrow loop-arrow-2" d="M 575,210 A 130,130 0 0,1 530,290" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)" opacity="0"/>
-
-  <!-- Step 3: Session ends (bottom-right) -->
-  <g class="loop-step loop-step-3" opacity="0">
-    <rect x="475" y="290" width="160" height="36" rx="8" fill="var(--card)" stroke="#ef4444" stroke-width="2"/>
-    <text x="555" y="314" text-anchor="middle" fill="#ef4444" font-size="13" font-weight="600">Session ends</text>
+  <!-- Failure 2: Context Leakage (upper-right) -->
+  <path class="fail-arrow fail-arrow-2" d="M 495,155 L 620,80" fill="none" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)" opacity="0"/>
+  <g class="fail-node fail-node-2" opacity="0">
+    <rect x="590" y="40" width="180" height="65" rx="8" fill="var(--card)" stroke="#f59e0b" stroke-width="2"/>
+    <text x="680" y="62" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="700">Context Leakage</text>
+    <text x="680" y="80" text-anchor="middle" fill="#94a3b8" font-size="10">Client A info appears</text>
+    <text x="680" y="94" text-anchor="middle" fill="#94a3b8" font-size="10">in Client B&apos;s session</text>
   </g>
 
-  <!-- Arrow 3->4 (bottom arc) -->
-  <path class="loop-arrow loop-arrow-3" d="M 460,330 A 130,130 0 0,1 370,310" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)" opacity="0"/>
-
-  <!-- Step 4: Correction lost (bottom-left) -->
-  <g class="loop-step loop-step-4" opacity="0">
-    <rect x="220" y="290" width="170" height="36" rx="8" fill="var(--card)" stroke="#ef4444" stroke-width="2.5"/>
-    <text x="305" y="314" text-anchor="middle" fill="#ef4444" font-size="13" font-weight="700">Correction lost</text>
-    <!-- X mark -->
-    <line x1="200" y1="296" x2="214" y2="320" stroke="#ef4444" stroke-width="2.5" opacity="0.6"/>
-    <line x1="214" y1="296" x2="200" y2="320" stroke="#ef4444" stroke-width="2.5" opacity="0.6"/>
+  <!-- Failure 3: Correction Decay (bottom) -->
+  <path class="fail-arrow fail-arrow-3" d="M 450,240 L 450,300" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)" opacity="0"/>
+  <g class="fail-node fail-node-3" opacity="0">
+    <rect x="320" y="300" width="260" height="65" rx="8" fill="var(--card)" stroke="#ef4444" stroke-width="2"/>
+    <text x="450" y="322" text-anchor="middle" fill="#ef4444" font-size="13" font-weight="700">Correction Decay</text>
+    <text x="450" y="340" text-anchor="middle" fill="#94a3b8" font-size="10">corrections saved so generically</text>
+    <text x="450" y="354" text-anchor="middle" fill="#94a3b8" font-size="10">they never fire when they matter</text>
   </g>
 
-  <!-- Arrow 4->5 (left arc) -->
-  <path class="loop-arrow loop-arrow-4" d="M 295,280 A 130,130 0 0,1 310,155" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)" opacity="0"/>
-
-  <!-- Step 5: Same mistake (left) -->
-  <g class="loop-step loop-step-5" opacity="0">
-    <rect x="160" y="148" width="180" height="36" rx="8" fill="var(--card)" stroke="#f59e0b" stroke-width="2"/>
-    <text x="250" y="172" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="600">Same mistake again</text>
-  </g>
-
-  <!-- Arrow 5->1 (top-left arc, completing the loop) -->
-  <path class="loop-arrow loop-arrow-5" d="M 330,135 A 130,130 0 0,1 385,82" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)" opacity="0"/>
-
-  <!-- Center label (appears last) -->
-  <g class="loop-center" opacity="0">
-    <text x="450" y="195" text-anchor="middle" fill="#ef4444" font-size="18" font-weight="700" opacity="0.8">FOREVER</text>
-    <text x="450" y="215" text-anchor="middle" fill="#94a3b8" font-size="11">every session starts cold</text>
+  <!-- Final label -->
+  <g class="fail-label" opacity="0">
+    <text x="450" y="395" text-anchor="middle" fill="#94a3b8" font-size="12" font-style="italic">memory without governance is a security surface &mdash; OWASP ASI06, 2026</text>
   </g>
 </svg>
 </div>
 
 <div class="text-block">
-<p>Every AI conversation begins with the same handicap: the system knows nothing about previous conversations. You make a correction. The AI incorporates it &mdash; sincerely, within that session. Then the session ends, and the correction vanishes. Next time, the same mistake. The apology was genuine and completely pointless.</p>
+<p>Your AI remembers you now. It remembers your name, your preferences, your past corrections. This is progress. It is also, without governance, dangerous.</p>
 
-<p>The problem is not comprehension. It is not capability. It is not willingness. The problem is that there is nowhere to put the memory. A tool forgets. A system remembers.</p>
+<p>Multi-turn sycophancy compounds over time &mdash; your AI agrees with your misconceptions more readily the longer it knows you. Context leaks between roles: Client A&rsquo;s rebrand shows up in Client B&rsquo;s session. Corrections get filed so generically that the same architectural mistake recurs for the third time despite being &ldquo;saved.&rdquo; Memory without structure is now recognized as a security surface, not just a feature gap.</p>
+
+<p>The solution is not more memory. It is governance: structured architecture that makes memory safe, role discipline that prevents drift, and ethical guardrails that detect when the system starts agreeing with you instead of helping you.</p>
 </div>
 </div>
 
@@ -906,44 +891,42 @@ function replaySection(id) {
 }
 
 // ============================================================
-// Section 1: The Amnesia Loop
+// Section 1: Memory Is Not Enough
 // ============================================================
 sectionAnimators['sec1'] = function() {
-  const steps = document.querySelectorAll('.loop-step');
-  const arrows = document.querySelectorAll('.loop-arrow');
-  const center = document.querySelector('.loop-center');
+  const center = document.querySelector('.mem-center');
+  const failArrows = document.querySelectorAll('.fail-arrow');
+  const failNodes = document.querySelectorAll('.fail-node');
+  const failLabel = document.querySelector('.fail-label');
 
-  // Reset
-  steps.forEach(s => { s.style.transition = 'none'; s.style.opacity = '0'; });
-  arrows.forEach(a => { a.style.transition = 'none'; a.style.opacity = '0'; });
-  center.style.transition = 'none';
-  center.style.opacity = '0';
+  const all = [center, ...failArrows, ...failNodes, failLabel];
+  all.forEach(el => { if(el) { el.style.transition = 'none'; el.style.opacity = '0'; }});
 
   requestAnimationFrame(() => {
-    // Animate steps and arrows in sequence around the loop
-    const stepDelay = 600;
-
-    for (let i = 0; i < 5; i++) {
-      // Show step
-      setTimeout(() => {
-        steps[i].style.transition = 'opacity 0.5s ease';
-        steps[i].style.opacity = '1';
-      }, i * stepDelay);
-
-      // Show arrow after step
-      if (i < 5) {
-        setTimeout(() => {
-          arrows[i].style.transition = 'opacity 0.4s ease';
-          arrows[i].style.opacity = '1';
-        }, i * stepDelay + 300);
-      }
-    }
-
-    // Show center label last
+    // Memory node appears first (looks good, green)
     setTimeout(() => {
       center.style.transition = 'opacity 0.8s ease';
       center.style.opacity = '1';
-    }, 5 * stepDelay + 200);
+    }, 200);
+
+    // Then failures radiate out one by one
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        failArrows[i].style.transition = 'opacity 0.4s ease';
+        failArrows[i].style.opacity = '1';
+      }, 1200 + i * 800);
+
+      setTimeout(() => {
+        failNodes[i].style.transition = 'opacity 0.5s ease';
+        failNodes[i].style.opacity = '1';
+      }, 1500 + i * 800);
+    }
+
+    // OWASP label last
+    setTimeout(() => {
+      failLabel.style.transition = 'opacity 0.8s ease';
+      failLabel.style.opacity = '1';
+    }, 4200);
   });
 };
 
