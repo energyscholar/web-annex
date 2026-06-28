@@ -494,7 +494,6 @@
     <td>Trough</td>
     <td>1.239 <span class="dim">(gen 18)</span></td>
     <td>—</td>
-<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
     <td><span class="verdict match">MATCH</span> <span class="dim">deepest, latest</span></td>
   </tr>
   <tr>
@@ -680,6 +679,8 @@
   <p>Before we fixed the mutation operator, 2-state mutation was only 65% effective (0.483 actual mutations vs 0.74 expected) because <code>randInt(0, 1)</code> has a 50% chance of picking the same value. This created artificially noisy populations where Grim's harshness was advantageous — an <em>artifact of the bug</em>, not a property of the model. After fixing to guaranteed-different-value selection, the TFT/Grim ratio reversed from Grim-favoring to the 4:1 TFT dominance reported above.</p>
 </div>
 </section>
+
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
 <!-- ============================================================ -->
 <section id="mutation">

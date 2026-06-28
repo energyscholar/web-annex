@@ -66,6 +66,7 @@
 
 <h1>Miller Engine -- Test Suite</h1>
 <div id="summary" class="summary">Running...</div>
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 <div id="results"></div>
 
 <script src="miller-engine.js"></script>
@@ -655,7 +656,6 @@
     typeof statResult51.census.tf2t === 'number' && typeof statResult51.census.other === 'number');
   assertEq(51, '_computeStats: census.allC=1', statResult51.census.allC, 1);
   assertEq(51, '_computeStats: census.allD=1', statResult51.census.allD, 1);
-<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
   assertEq(51, '_computeStats: census.tft=1', statResult51.census.tft, 1);
   assertEq(51, '_computeStats: census.other=0', statResult51.census.other, 0);
 

@@ -870,6 +870,8 @@
       </div>
     </div>
 
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
+
     <!-- Saved Runs Panel -->
     <div class="saved-runs-panel" id="saved-runs-panel">
       <div class="saved-runs-header">
@@ -1489,7 +1491,6 @@
     // Normalize census to fractions
     var fractions = [];
     for (var i = 0; i < data.length; i++) {
-<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
       var c = data[i].census;
       if (!c) { fractions.push(null); continue; }
       var total = 0;
