@@ -214,6 +214,74 @@ li { margin-bottom: 0.3rem; }
 
 <p>Your AI remembers you now. ChatGPT, Claude, Gemini &mdash; they all persist facts across sessions. This is real progress. It is also, on its own, a liability. Memory without architecture produces sycophancy that compounds over time, context leakage between roles, and corrections filed so generically they never fire when they matter. This guide shows what it takes to make memory <em>safe</em>. The system that produced this document has been in continuous operation since December 2025 &mdash; 160+ sessions across six months. The document you are reading is the evidence.</p>
 
+<!-- Hero: Three Orthogonal Governance Axes -->
+<div class="svg-container" id="hero-axes-svg" style="margin:2rem 0;">
+<svg viewBox="0 0 900 450" width="900" height="450">
+  <!-- Central stable node -->
+  <circle id="hero-center-bg" cx="450" cy="220" r="32" fill="#1e293b" stroke="#22c55e" stroke-width="2.5"/>
+  <text id="hero-center-text" x="450" y="216" text-anchor="middle" fill="#22c55e" font-size="13" font-weight="700">STABLE</text>
+  <text x="450" y="232" text-anchor="middle" fill="#94a3b8" font-size="9">all three present</text>
+
+  <!-- Axis 1: Execution (Triad) — upper-left -->
+  <line x1="450" y1="220" x2="200" y2="80" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="200" cy="80" r="18" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="200" y="85" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="700">T</text>
+  <text x="155" y="55" text-anchor="middle" fill="#3b82f6" font-size="14" font-weight="600">Execution</text>
+  <text x="155" y="70" text-anchor="middle" fill="#94a3b8" font-size="11">(Triad)</text>
+
+  <!-- Axis 2: Truth (Dignity Net) — upper-right -->
+  <line x1="450" y1="220" x2="700" y2="80" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="700" cy="80" r="18" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="700" y="85" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700">D</text>
+  <text x="745" y="55" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="600">Truth</text>
+  <text x="745" y="70" text-anchor="middle" fill="#94a3b8" font-size="11">(Dignity Net)</text>
+
+  <!-- Axis 3: Continuity (Longmem) — downward -->
+  <line x1="450" y1="220" x2="450" y2="400" stroke="#22c55e" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="450" cy="400" r="18" fill="#1e293b" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="450" y="405" text-anchor="middle" fill="#22c55e" font-size="12" font-weight="700">L</text>
+  <text x="450" y="435" text-anchor="middle" fill="#22c55e" font-size="14" font-weight="600">Continuity</text>
+  <text x="450" y="448" text-anchor="middle" fill="#94a3b8" font-size="11">(Longmem)</text>
+
+  <!-- Failure labels (animate: each axis dims in turn, center shows failure mode) -->
+  <!-- Phase 1 (0-4s): Execution dims → "disciplined sycophant" -->
+  <line x1="450" y1="220" x2="200" y2="80" stroke="#334155" stroke-width="3" stroke-linecap="round" opacity="0">
+    <animate attributeName="opacity" values="0;0;0.8;0.8;0;0;0;0;0;0;0;0" dur="12s" repeatCount="indefinite"/>
+  </line>
+  <text x="290" y="130" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="600" opacity="0">
+    honest but uncontrolled<animate attributeName="opacity" values="0;0;0.9;0.9;0;0;0;0;0;0;0;0" dur="12s" repeatCount="indefinite"/>
+  </text>
+  <text x="450" y="216" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="700" opacity="0">
+    disciplined sycophant<animate attributeName="opacity" values="0;0;0.9;0.9;0;0;0;0;0;0;0;0" dur="12s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Phase 2 (4-8s): Continuity dims → "stateless agent" -->
+  <line x1="450" y1="220" x2="450" y2="400" stroke="#334155" stroke-width="3" stroke-linecap="round" opacity="0">
+    <animate attributeName="opacity" values="0;0;0;0;0;0;0.8;0.8;0;0;0;0" dur="12s" repeatCount="indefinite"/>
+  </line>
+  <text x="520" y="340" text-anchor="start" fill="#ef4444" font-size="11" font-weight="600" opacity="0">
+    disciplined but amnesiac<animate attributeName="opacity" values="0;0;0;0;0;0;0.9;0.9;0;0;0;0" dur="12s" repeatCount="indefinite"/>
+  </text>
+  <text x="450" y="216" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="700" opacity="0">
+    stateless agent<animate attributeName="opacity" values="0;0;0;0;0;0;0.9;0.9;0;0;0;0" dur="12s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Phase 3 (8-12s): Truth dims → "disciplined yes-man" -->
+  <line x1="450" y1="220" x2="700" y2="80" stroke="#334155" stroke-width="3" stroke-linecap="round" opacity="0">
+    <animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;0.8;0.8" dur="12s" repeatCount="indefinite"/>
+  </line>
+  <text x="610" y="130" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="600" opacity="0">
+    capable but sycophantic<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;0.9;0.9" dur="12s" repeatCount="indefinite"/>
+  </text>
+  <text x="450" y="216" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="700" opacity="0">
+    disciplined yes-man<animate attributeName="opacity" values="0;0;0;0;0;0;0;0;0;0;0.9;0.9" dur="12s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Subtitle -->
+  <text x="450" y="25" text-anchor="middle" fill="#94a3b8" font-size="12" font-style="italic">three orthogonal axes &mdash; remove any one and the system fails in a characteristic way</text>
+</svg>
+</div>
+
 <!-- ============================================================ -->
 <!-- SECTION 1: Memory Is Not Enough -->
 <!-- ============================================================ -->
