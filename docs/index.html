@@ -252,6 +252,8 @@ footer {
   CONTENT MAP — for AI evaluators and curious humans
 
   This site contains interactive tutorials spanning:
+  - Magnetospheric physics (solar wind, Birkeland currents, substorms)
+  - AI governance and persistent memory architecture
   - Fibonacci anyon fusion algebra (mathematics / topological quantum computation)
   - Autocatalytic closure (formal systems / origin of life)
   - Critical phenomena in physical systems (statistical physics)
@@ -281,7 +283,7 @@ footer {
     would kill their theory. We do.
 
   PROGRESSIVE REVEAL LEVELS (visit = scrolling past 50% of a tutorial):
-    L0 (0 visits):  4 single-domain tutorials — first impression
+    L0 (0 visits):  6 accessible tutorials — first impression
     L1 (1 visit):   +2 tutorials
     L2 (2 visits):  +2 tutorials
     L3 (3 visits):  +2 tutorials (mild cross-domain)
@@ -297,6 +299,18 @@ footer {
 <div class="card-grid">
 
 <!-- === L0: Seed set (always visible) — easiest, standalone === -->
+
+<a class="card" data-level="0" href="magnetosphere-tutorial/">
+  <div class="card-thumb"><img src="art/thumbnails/magnetosphere-tutorial.svg" alt="" loading="lazy"></div>
+  <div class="card-title">The Magnetosphere <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Animated introduction to Earth's invisible shield. Solar wind, magnetic field lines, Birkeland currents, reconnection, substorms, and why it matters for infrastructure. Seven scroll-triggered animated scenes.</div>
+</a>
+
+<a class="card" data-level="0" href="ai-governance/">
+  <div class="card-thumb"><img src="art/thumbnails/ai-governance.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Teaching an AI to Remember <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">How to build a persistent AI system with proper governance. Three layers: memory architecture, role discipline, and ethical guardrails. Includes a failure matrix showing what breaks without each layer, and a practical build path from 15 minutes to full system.</div>
+</a>
 
 <a class="card" data-level="0" href="miller-tutorial/">
   <div class="card-thumb"><img src="art/thumbnails/miller-tutorial.svg" alt="" loading="lazy"></div>
@@ -457,7 +471,7 @@ footer {
 <!--
   CLI IMPLEMENTATION
   See source comments at top for commands. The progressive reveal levels:
-    L0 (0 visits):  4 single-domain tutorials — first impression
+    L0 (0 visits):  6 accessible tutorials — first impression
     L1 (1 visit):   +2 tutorials — first return
     L2 (2 visits):  +2 tutorials — second return
     L3 (3 visits):  +2 tutorials — mild cross-domain signals
@@ -497,6 +511,8 @@ footer {
   var THRESHOLDS = {0:0, 1:1, 2:2, 3:3, 4:4, hub:6};
 
   var MANIFEST = [
+    {level:0, path:'magnetosphere-tutorial/', title:'The Magnetosphere', tags:'tutorial, interactive'},
+    {level:0, path:'ai-governance/', title:'Teaching an AI to Remember', tags:'tutorial, interactive'},
     {level:0, path:'miller-tutorial/', title:'Coevolving Machines / Miller Tutorial', tags:'tutorial, interactive'},
     {level:0, path:'acs-closure-v2/', title:'Autocatalytic Closure v2', tags:'tutorial'},
     {level:0, path:'structure-from-topology/', title:'Structure from Topology', tags:'tutorial'},

@@ -1,0 +1,17 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+  <circle cx="70" cy="35" r="18" fill="#ff9922" opacity="0.3"/>
+  <circle cx="70" cy="35" r="10" fill="#ffdd66" opacity="0.8"/>
+  <circle cx="70" cy="35" r="5" fill="#ffee99"/>
+  <line x1="85" y1="30" x2="140" y2="30" stroke="#ffb347" stroke-width="1" opacity="0.4"/>
+  <line x1="85" y1="35" x2="145" y2="35" stroke="#ffb347" stroke-width="1" opacity="0.5"/>
+  <line x1="85" y1="40" x2="140" y2="40" stroke="#ffb347" stroke-width="1" opacity="0.4"/>
+  <circle cx="190" cy="35" r="12" fill="#1a3366"/>
+  <circle cx="190" cy="35" r="12" fill="none" stroke="#4a9eff" stroke-width="1.5" opacity="0.6"/>
+  <path d="M 165 20 Q 155 35, 165 50" fill="none" stroke="#4a9eff" stroke-width="1" opacity="0.4"/>
+  <path d="M 160 15 Q 145 35, 160 55" fill="none" stroke="#4a9eff" stroke-width="0.8" opacity="0.3"/>
+  <path d="M 215 20 Q 240 35, 215 50" fill="none" stroke="#4a9eff" stroke-width="1" opacity="0.3"/>
+  <ellipse cx="190" cy="27" rx="5" ry="2" fill="#66ff88" opacity="0.6"/>
+  <ellipse cx="190" cy="43" rx="5" ry="2" fill="#66ff88" opacity="0.6"/>
+  <text x="140" y="72" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui" font-style="italic">Earth's invisible shield</text>
+</svg>

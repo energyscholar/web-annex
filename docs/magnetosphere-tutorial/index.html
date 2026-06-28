@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Magnetosphere: Earth's Invisible Shield</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+  --solar: #ffb347;
+  --solar-bright: #ffdd66;
+  --corona: #ff9922;
+  --earth-blue: #4a9eff;
+  --earth-glow: #00e5ff;
+  --field-closed: #66ff88;
+  --field-open: #ff4466;
+  --current-birkeland: #ffdd44;
+  --current-pedersen: #00e5ff;
+  --plasma: #ff8844;
+  --bowshock: #886600;
+  --aurora: #66ff88;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.svg-wrap {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.svg-wrap svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+
+.text-block { margin: 1rem 0 2rem; }
+
+.callout {
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.callout-warn {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.callout-gold {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.stat {
+  display: inline-block;
+  color: var(--heading);
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
+.stat-solar { color: var(--solar); }
+.stat-earth { color: var(--earth-blue); }
+.stat-field { color: var(--field-closed); }
+.stat-warn { color: var(--red); }
+
+.replay-btn {
+  background: var(--card);
+  color: var(--muted);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin-left: auto;
+}
+
+.replay-btn:hover {
+  color: var(--heading);
+  border-color: var(--blue);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-number {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.contact {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #334155;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.3rem; }
+  body { padding: 1rem 0.5rem; }
+  .svg-wrap { padding: 0.5rem; }
+}
+</style>
+</head>
+<body>
+<div style="max-width:900px;margin:0 auto;padding:1rem 1.5rem 0;">
+  <a href="../" style="color:#64748b;text-decoration:none;font-size:0.85rem;">&#8592; Web Annex</a>
+</div>
+<div class="container">
+
+<h1>The Magnetosphere</h1>
+<p class="subtitle">Earth's invisible shield -- and the $2 trillion risk it guards against.</p>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: The Sun -->
+<!-- ============================================================ -->
+<div class="section" id="sec1">
+<p class="section-number">Section 1</p>
+<h2>The Sun <button class="replay-btn" onclick="replaySection('sec1')">Replay</button></h2>
+<div class="svg-wrap">
+<svg viewBox="0 0 900 500" id="svg-sun">
+  <defs>
+    <radialGradient id="sun-core" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fffbe8"/>
+      <stop offset="25%" stop-color="#ffdd66"/>
+      <stop offset="60%" stop-color="#ff9922"/>
+      <stop offset="100%" stop-color="#cc6600" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sun-corona" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="rgba(255,200,80,0.35)"/>
+      <stop offset="40%" stop-color="rgba(255,153,34,0.15)"/>
+      <stop offset="100%" stop-color="rgba(255,153,34,0)"/>
+    </radialGradient>
+    <filter id="glow-soft">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-wide">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Rule-of-thirds grid lines (invisible, for reference) -->
+  <!-- Key positions: (300,167), (600,167), (300,333), (600,333) -->
+
+  <!-- Corona at left-third -->
+  <circle class="s1-corona" cx="300" cy="250" r="160" fill="url(#sun-corona)" opacity="0"/>
+  <!-- Sun disc at left-third intersection -->
+  <circle class="s1-sun" cx="300" cy="250" r="70" fill="url(#sun-core)" filter="url(#glow-soft)" opacity="0"/>
+  <circle class="s1-sun-inner" cx="300" cy="250" r="28" fill="#ffee99" opacity="0"/>
+
+  <!-- Coronal streamers -->
+  <g class="s1-streamers" opacity="0">
+    <line x1="300" y1="250" x2="300" y2="50" stroke="#ffcc44" stroke-width="1.2" opacity="0.25"/>
+    <line x1="300" y1="250" x2="300" y2="450" stroke="#ffcc44" stroke-width="1.2" opacity="0.25"/>
+    <line x1="300" y1="250" x2="500" y2="167" stroke="#ffcc44" stroke-width="1" opacity="0.2"/>
+    <line x1="300" y1="250" x2="500" y2="333" stroke="#ffcc44" stroke-width="1" opacity="0.2"/>
+    <line x1="300" y1="250" x2="520" y2="200" stroke="#ffcc44" stroke-width="0.7" opacity="0.15"/>
+    <line x1="300" y1="250" x2="520" y2="300" stroke="#ffcc44" stroke-width="0.7" opacity="0.15"/>
+  </g>
+
+  <!-- Particle stream flowing rightward -->
+  <g class="s1-particles" opacity="0">
+    <!-- Batch of particles will be animated via JS -->
+  </g>
+
+  <!-- Scale callout at right-third -->
+  <g class="s1-callout" opacity="0">
+    <text x="660" y="155" fill="#ffb347" font-size="14" font-family="system-ui" font-weight="600">4.5 billion years old</text>
+    <text x="660" y="180" fill="#cbd5e1" font-size="12" font-family="system-ui">1 million tonnes of plasma</text>
+    <text x="660" y="200" fill="#cbd5e1" font-size="12" font-family="system-ui">ejected every second</text>
+    <line x1="640" y1="145" x2="640" y2="210" stroke="#ffb347" stroke-width="2" opacity="0.5"/>
+  </g>
+
+  <!-- Sun label -->
+  <text class="s1-label" x="300" y="365" text-anchor="middle" fill="#ffdd88" font-size="13" font-family="system-ui" opacity="0">The Sun</text>
+</svg>
+</div>
+<div class="text-block">
+  <p>One hundred and fifty million kilometres away, the Sun exhales. It has been doing this for <span class="stat stat-solar">four and a half billion years</span> -- longer than life has existed on Earth.</p>
+  <p>Every second, the Sun ejects <span class="stat stat-solar">a million tonnes</span> of charged plasma into space. Protons, electrons, alpha particles -- a supersonic wind of ionized gas streaming outward in every direction at <span class="stat stat-solar">400 km/s</span>.</p>
+  <p>This is the solar wind. It fills the entire solar system. And it never stops.</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: The Wind -->
+<!-- ============================================================ -->
+<div class="section" id="sec2">
+<p class="section-number">Section 2</p>
+<h2>The Wind <button class="replay-btn" onclick="replaySection('sec2')">Replay</button></h2>
+<div class="svg-wrap">
+<svg viewBox="0 0 900 500" id="svg-wind">
+  <defs>
+    <linearGradient id="wind-fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffb347" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffb347" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- IMF wavy field lines spanning the scene -->
+  <g class="s2-imf" opacity="0">
+    <path d="M 0,130 Q 150,100 300,130 Q 450,160 600,130 Q 750,100 900,130" fill="none" stroke="#ff4466" stroke-width="1.5" opacity="0.5" stroke-dasharray="6,4"/>
+    <path d="M 0,210 Q 150,180 300,210 Q 450,240 600,210 Q 750,180 900,210" fill="none" stroke="#ff4466" stroke-width="1.5" opacity="0.4" stroke-dasharray="6,4"/>
+    <path d="M 0,290 Q 150,260 300,290 Q 450,320 600,290 Q 750,260 900,290" fill="none" stroke="#ff4466" stroke-width="1.5" opacity="0.4" stroke-dasharray="6,4"/>
+    <path d="M 0,370 Q 150,340 300,370 Q 450,400 600,370 Q 750,340 900,370" fill="none" stroke="#ff4466" stroke-width="1.5" opacity="0.5" stroke-dasharray="6,4"/>
+  </g>
+
+  <!-- Particle stream (animated via JS) -->
+  <g class="s2-particles" opacity="0"></g>
+
+  <!-- Speed callout at upper-right third intersection -->
+  <g class="s2-speed" opacity="0">
+    <rect x="560" y="140" width="200" height="50" rx="6" fill="rgba(30,41,59,0.9)" stroke="#ff4466" stroke-width="1"/>
+    <text x="660" y="162" text-anchor="middle" fill="#ff4466" font-size="20" font-family="system-ui" font-weight="700">400 km/s</text>
+    <text x="660" y="180" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="system-ui">supersonic plasma wind</text>
+  </g>
+
+  <!-- IMF label at left-third -->
+  <g class="s2-imf-label" opacity="0">
+    <text x="150" y="430" fill="#ff4466" font-size="13" font-family="system-ui" font-weight="600">Interplanetary Magnetic Field</text>
+    <text x="150" y="450" fill="#94a3b8" font-size="11" font-family="system-ui">Frozen into the plasma flow</text>
+  </g>
+
+  <!-- Direction arrows -->
+  <g class="s2-arrows" opacity="0">
+    <polygon points="870,245 890,250 870,255" fill="#ffb347" opacity="0.6"/>
+    <polygon points="820,245 840,250 820,255" fill="#ffb347" opacity="0.4"/>
+    <polygon points="770,245 790,250 770,255" fill="#ffb347" opacity="0.3"/>
+  </g>
+</svg>
+</div>
+<div class="text-block">
+  <p>The solar wind carries the Sun's magnetic field with it -- the <span class="stat" style="color:var(--field-open)">interplanetary magnetic field</span> (IMF). The plasma is so conductive that the magnetic field is frozen into the flow, dragged outward like taffy.</p>
+  <p>At Earth's orbit, the wind is supersonic -- faster than any wave can propagate through it. When it meets an obstacle, it cannot slow down gradually. It must form a shock.</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: The Shield -->
+<!-- ============================================================ -->
+<div class="section" id="sec3">
+<p class="section-number">Section 3</p>
+<h2>The Shield <button class="replay-btn" onclick="replaySection('sec3')">Replay</button></h2>
+<div class="svg-wrap">
+<svg viewBox="0 0 900 500" id="svg-shield">
+  <defs>
+    <radialGradient id="earth-grad" cx="0.4" cy="0.35" r="0.55">
+      <stop offset="0%" stop-color="#5588dd"/>
+      <stop offset="60%" stop-color="#3366aa"/>
+      <stop offset="100%" stop-color="#1a3366"/>
+    </radialGradient>
+    <radialGradient id="atmo-grad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="80%" stop-color="transparent"/>
+      <stop offset="95%" stop-color="rgba(0,229,255,0.12)"/>
+      <stop offset="100%" stop-color="rgba(0,229,255,0)"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Bow shock (dashed arc ahead of magnetopause) -->
+  <path class="s3-bowshock" d="" fill="none" stroke="#886600" stroke-width="1.5" stroke-dasharray="5,4" opacity="0"/>
+
+  <!-- Magnetopause boundary (Shue model shape) -->
+  <path class="s3-magnetopause" d="" fill="none" stroke="#4a9eff" stroke-width="2" opacity="0"/>
+
+  <!-- Plasma sheet (tail region) -->
+  <line class="s3-plasma-top" x1="0" y1="0" x2="0" y2="0" stroke="#ff8844" stroke-width="2.5" opacity="0"/>
+  <line class="s3-plasma-bot" x1="0" y1="0" x2="0" y2="0" stroke="#ff8844" stroke-width="2.5" opacity="0"/>
+
+  <!-- Closed dipole field lines -->
+  <g class="s3-fieldlines" opacity="0"></g>
+
+  <!-- Earth at right-third -->
+  <circle class="s3-earth" cx="600" cy="250" r="22" fill="url(#earth-grad)" opacity="0"/>
+  <circle class="s3-atmo" cx="600" cy="250" r="25" fill="url(#atmo-grad)" opacity="0"/>
+
+  <!-- Cusps -->
+  <g class="s3-cusps" opacity="0">
+    <text x="505" y="120" fill="#94a3b8" font-size="11" font-family="system-ui" text-anchor="middle">Cusp</text>
+    <line x1="505" y1="125" x2="530" y2="160" stroke="#94a3b8" stroke-width="0.5" opacity="0.5"/>
+    <text x="505" y="400" fill="#94a3b8" font-size="11" font-family="system-ui" text-anchor="middle">Cusp</text>
+    <line x1="505" y1="390" x2="530" y2="355" stroke="#94a3b8" stroke-width="0.5" opacity="0.5"/>
+  </g>
+
+  <!-- Labels at composition points -->
+  <g class="s3-labels" opacity="0">
+    <text x="340" y="250" fill="#886600" font-size="12" font-family="system-ui" text-anchor="middle">Bow shock</text>
+    <text x="410" y="355" fill="#4a9eff" font-size="12" font-family="system-ui" text-anchor="middle">Magnetopause</text>
+    <text x="820" y="265" fill="#ff8844" font-size="11" font-family="system-ui" text-anchor="middle">Plasma sheet</text>
+    <text x="600" y="300" fill="#f1f5f9" font-size="11" font-family="system-ui" text-anchor="middle">Earth</text>
+  </g>
+
+  <!-- Solar wind arrows approaching from left -->
+  <g class="s3-wind" opacity="0">
+    <line x1="30" y1="167" x2="80" y2="167" stroke="#ffb347" stroke-width="1" opacity="0.4" marker-end="none"/>
+    <polygon points="80,163 90,167 80,171" fill="#ffb347" opacity="0.4"/>
+    <line x1="30" y1="250" x2="80" y2="250" stroke="#ffb347" stroke-width="1" opacity="0.4"/>
+    <polygon points="80,246 90,250 80,254" fill="#ffb347" opacity="0.4"/>
+    <line x1="30" y1="333" x2="80" y2="333" stroke="#ffb347" stroke-width="1" opacity="0.4"/>
+    <polygon points="80,329 90,333 80,337" fill="#ffb347" opacity="0.4"/>
+    <text x="50" y="155" fill="#ffb347" font-size="11" font-family="system-ui">Solar wind</text>
+  </g>
+</svg>
+</div>
+<div class="text-block">
+  <p>Earth stands in the way. Deep inside the planet, a core of liquid iron has been convecting for four and a half billion years. That churning metal generates a magnetic field that inflates an enormous cavity in the solar wind -- the <span class="stat stat-earth">magnetosphere</span>.</p>
+  <p>The <span class="stat stat-earth">magnetopause</span> is the outer boundary of this cavity, shaped by the balance between solar wind pressure and magnetic pressure. Ahead of it stands the <span class="stat" style="color:var(--bowshock)">bow shock</span> -- where the supersonic wind slams to a halt, heating and slowing before it flows around the obstacle.</p>
+  <p>The magnetosphere extends <span class="stat stat-earth">10 Earth radii</span> sunward and stretches hundreds of Earth radii downwind into a long magnetotail. The Moon passes through it once every orbit.</p>
+  <div class="callout">
+    <strong>The Shue model</strong> describes the magnetopause shape: <em>r = r<sub>0</sub>(2/(1 + cos&theta;))<sup>&alpha;</sup></em>, where r<sub>0</sub> is the standoff distance and &alpha; controls the tail flaring. The shape you see above is computed from this equation.
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: The Circuit -->
+<!-- ============================================================ -->
+<div class="section" id="sec4">
+<p class="section-number">Section 4</p>
+<h2>The Circuit <button class="replay-btn" onclick="replaySection('sec4')">Replay</button></h2>
+<div class="svg-wrap">
+<svg viewBox="0 0 900 500" id="svg-circuit">
+  <defs>
+    <radialGradient id="earth-cutaway" cx="0.4" cy="0.35" r="0.55">
+      <stop offset="0%" stop-color="#5588dd"/>
+      <stop offset="60%" stop-color="#3366aa"/>
+      <stop offset="100%" stop-color="#1a3366"/>
+    </radialGradient>
+    <radialGradient id="outer-core" cx="0.45" cy="0.4" r="0.55">
+      <stop offset="0%" stop-color="#cc4400"/>
+      <stop offset="70%" stop-color="#882200"/>
+      <stop offset="100%" stop-color="#551100"/>
+    </radialGradient>
+    <radialGradient id="inner-core" cx="0.4" cy="0.35" r="0.5">
+      <stop offset="0%" stop-color="#ffcc44"/>
+      <stop offset="50%" stop-color="#ff8800"/>
+      <stop offset="100%" stop-color="#cc5500"/>
+    </radialGradient>
+    <clipPath id="cutaway-clip">
+      <rect x="240" y="195" width="60" height="140"/>
+    </clipPath>
+    <filter id="aurora-glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Earth at left-third with cutaway -->
+  <circle class="s4-earth" cx="300" cy="265" r="45" fill="url(#earth-cutaway)" opacity="0"/>
+  <!-- Internal cutaway (left half) -->
+  <g class="s4-cutaway" opacity="0">
+    <g clip-path="url(#cutaway-clip)">
+      <circle cx="300" cy="265" r="45" fill="#5a6b4a" opacity="0.9"/>
+      <circle cx="300" cy="265" r="42" fill="#4a2210"/>
+      <circle cx="300" cy="265" r="24" fill="url(#outer-core)"/>
+      <circle cx="300" cy="265" r="10" fill="url(#inner-core)" filter="url(#glow-soft)"/>
+    </g>
+    <line x1="300" y1="220" x2="300" y2="310" stroke="rgba(200,200,200,0.3)" stroke-width="0.5"/>
+  </g>
+  <circle class="s4-atmo" cx="300" cy="265" r="48" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="1" opacity="0"/>
+
+  <!-- Cutaway labels -->
+  <g class="s4-core-labels" opacity="0">
+    <text x="225" y="240" fill="#ff8844" font-size="10" font-family="system-ui" text-anchor="end">Liquid iron core</text>
+    <line x1="228" y1="237" x2="276" y2="255" stroke="#ff8844" stroke-width="0.5" opacity="0.5"/>
+    <text x="225" y="258" fill="#ffcc44" font-size="10" font-family="system-ui" text-anchor="end">Solid inner core</text>
+    <line x1="228" y1="255" x2="291" y2="262" stroke="#ffcc44" stroke-width="0.5" opacity="0.5"/>
+    <text x="225" y="295" fill="#aaa" font-size="9" font-family="system-ui" text-anchor="end">The dynamo</text>
+  </g>
+
+  <!-- Birkeland current paths (field-aligned) -->
+  <!-- Downward current (Region 1, high latitude, dawnside) -->
+  <path class="s4-birk-down" d="M 600,100 C 550,120 400,140 320,220" fill="none" stroke="#ffdd44" stroke-width="2" opacity="0"/>
+  <!-- Pedersen current (ionospheric, horizontal) -->
+  <path class="s4-pedersen" d="M 320,220 C 310,215 305,210 310,205 C 315,195 325,192 335,200 C 340,204 338,210 330,216 C 322,222 310,225 305,230" fill="none" stroke="#00e5ff" stroke-width="1.5" opacity="0" stroke-dasharray="4,3"/>
+  <!-- Upward current (Region 2, lower latitude) -->
+  <path class="s4-birk-up" d="M 305,230 C 380,310 520,330 600,380" fill="none" stroke="#ffdd44" stroke-width="2" opacity="0"/>
+
+  <!-- Aurora glow at poles -->
+  <ellipse class="s4-aurora-n" cx="315" cy="222" rx="12" ry="5" fill="#66ff88" opacity="0" filter="url(#aurora-glow)"/>
+  <ellipse class="s4-aurora-s" cx="310" cy="308" rx="10" ry="4" fill="#66ff88" opacity="0" filter="url(#aurora-glow)"/>
+
+  <!-- Current flow dots (animated) -->
+  <g class="s4-dots"></g>
+
+  <!-- Labels -->
+  <g class="s4-labels" opacity="0">
+    <text x="620" y="90" fill="#ffdd44" font-size="13" font-family="system-ui">Birkeland current</text>
+    <text x="620" y="106" fill="#94a3b8" font-size="10" font-family="system-ui">(field-aligned, downward)</text>
+    <text x="395" y="185" fill="#00e5ff" font-size="11" font-family="system-ui">Pedersen current</text>
+    <text x="395" y="198" fill="#94a3b8" font-size="10" font-family="system-ui">(ionospheric)</text>
+    <text x="620" y="395" fill="#ffdd44" font-size="13" font-family="system-ui">Birkeland current</text>
+    <text x="620" y="411" fill="#94a3b8" font-size="10" font-family="system-ui">(field-aligned, upward)</text>
+    <text x="340" y="218" fill="#66ff88" font-size="11" font-family="system-ui" filter="url(#aurora-glow)">Aurora</text>
+  </g>
+
+  <!-- Historical note -->
+  <g class="s4-history" opacity="0">
+    <rect x="530" y="200" width="320" height="75" rx="6" fill="rgba(30,41,59,0.95)" stroke="#334155" stroke-width="1"/>
+    <text x="545" y="222" fill="#f1f5f9" font-size="12" font-family="system-ui" font-weight="600">Kristian Birkeland, 1908</text>
+    <text x="545" y="240" fill="#cbd5e1" font-size="11" font-family="system-ui">Proposed this circuit from laboratory</text>
+    <text x="545" y="255" fill="#cbd5e1" font-size="11" font-family="system-ui">experiments and Arctic expeditions.</text>
+    <text x="545" y="270" fill="#94a3b8" font-size="10" font-family="system-ui" font-style="italic">Confirmed by satellites 60 years later.</text>
+  </g>
+</svg>
+</div>
+<div class="text-block">
+  <p>Kristian Birkeland proposed this circuit in <span class="stat">1908</span>. It took sixty years for satellites to prove him right.</p>
+  <p>The <span class="stat" style="color:var(--current-birkeland)">Birkeland currents</span> flow along magnetic field lines -- descending from the magnetosphere into the polar ionosphere, crossing the ionosphere as <span class="stat" style="color:var(--current-pedersen)">Pedersen currents</span>, rising back up on the other side, and closing through the magnetosphere. Where the current enters the atmosphere, atoms glow: the <span class="stat stat-field">aurora</span>.</p>
+  <p>The energy source is the solar wind. The generator is magnetic reconnection at the magnetopause. The load is the ionosphere. This is a real electrical circuit -- complete with a power supply, transmission lines, and a resistive load -- operating on a planetary scale.</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: The Gate -->
+<!-- ============================================================ -->
+<div class="section" id="sec5">
+<p class="section-number">Section 5</p>
+<h2>The Gate <button class="replay-btn" onclick="replaySection('sec5')">Replay</button></h2>
+<div class="svg-wrap">
+<svg viewBox="0 0 900 500" id="svg-gate">
+  <defs>
+    <filter id="flash-filter">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Magnetopause boundary (vertical current sheet at center-third) -->
+  <rect class="s5-sheet" x="440" y="20" width="20" height="460" fill="rgba(74,158,255,0.08)" opacity="0"/>
+  <line class="s5-sheet-line" x1="450" y1="20" x2="450" y2="480" stroke="rgba(74,158,255,0.3)" stroke-width="1.5" opacity="0"/>
+
+  <!-- IMF field lines (left side, pointing DOWN = southward) -->
+  <g class="s5-imf" opacity="0">
+    <line x1="100" y1="100" x2="100" y2="400" stroke="#ff4466" stroke-width="2"/>
+    <polygon points="96,390 100,405 104,390" fill="#ff4466"/>
+    <line x1="200" y1="100" x2="200" y2="400" stroke="#ff4466" stroke-width="2"/>
+    <polygon points="196,390 200,405 204,390" fill="#ff4466"/>
+    <line x1="300" y1="100" x2="300" y2="400" stroke="#ff4466" stroke-width="2"/>
+    <polygon points="296,390 300,405 304,390" fill="#ff4466"/>
+    <line x1="400" y1="100" x2="400" y2="400" stroke="#ff4466" stroke-width="1.5" opacity="0.7"/>
+    <polygon points="396,390 400,405 404,390" fill="#ff4466" opacity="0.7"/>
+  </g>
+
+  <!-- Geomagnetic field lines (right side, pointing UP = northward) -->
+  <g class="s5-geo" opacity="0">
+    <line x1="500" y1="400" x2="500" y2="100" stroke="#66ff88" stroke-width="1.5" opacity="0.7"/>
+    <polygon points="496,110 500,95 504,110" fill="#66ff88" opacity="0.7"/>
+    <line x1="600" y1="400" x2="600" y2="100" stroke="#66ff88" stroke-width="2"/>
+    <polygon points="596,110 600,95 604,110" fill="#66ff88"/>
+    <line x1="700" y1="400" x2="700" y2="100" stroke="#66ff88" stroke-width="2"/>
+    <polygon points="696,110 700,95 704,110" fill="#66ff88"/>
+    <line x1="800" y1="400" x2="800" y2="100" stroke="#66ff88" stroke-width="2"/>
+    <polygon points="796,110 800,95 804,110" fill="#66ff88"/>
+  </g>
+
+  <!-- X-line (reconnection point) -->
+  <g class="s5-xline" opacity="0">
+    <line x1="430" y1="230" x2="470" y2="270" stroke="#ffdd44" stroke-width="3"/>
+    <line x1="430" y1="270" x2="470" y2="230" stroke="#ffdd44" stroke-width="3"/>
+  </g>
+
+  <!-- Energy flash expanding ring -->
+  <circle class="s5-flash" cx="450" cy="250" r="0" fill="none" stroke="#ffdd44" stroke-width="2.5" opacity="0" filter="url(#flash-filter)"/>
+
+  <!-- Merged/open field lines (appear after reconnection) -->
+  <g class="s5-merged" opacity="0">
+    <!-- Field line draped over north: from left, curves up and right -->
+    <path d="M 100,250 C 200,250 350,200 450,100 C 500,40 600,40 700,100" fill="none" stroke="#ffdd44" stroke-width="2"/>
+    <polygon points="690,96 705,95 695,106" fill="#ffdd44"/>
+    <!-- Field line draped over south: from left, curves down and right -->
+    <path d="M 100,250 C 200,250 350,300 450,400 C 500,460 600,460 700,400" fill="none" stroke="#ffdd44" stroke-width="2"/>
+    <polygon points="690,404 705,405 695,394" fill="#ffdd44"/>
+  </g>
+
+  <!-- Labels -->
+  <g class="s5-label-imf" opacity="0">
+    <text x="150" y="80" fill="#ff4466" font-size="14" font-family="system-ui" font-weight="600">IMF (southward)</text>
+  </g>
+  <g class="s5-label-geo" opacity="0">
+    <text x="650" y="80" fill="#66ff88" font-size="14" font-family="system-ui" font-weight="600">Earth's field (northward)</text>
+  </g>
+  <g class="s5-label-x" opacity="0">
+    <text x="480" y="245" fill="#ffdd44" font-size="13" font-family="system-ui" font-weight="600">X-line</text>
+    <text x="480" y="262" fill="#94a3b8" font-size="10" font-family="system-ui">Reconnection site</text>
+  </g>
+  <g class="s5-label-open" opacity="0">
+    <text x="450" y="470" text-anchor="middle" fill="#ffdd44" font-size="13" font-family="system-ui" font-weight="600">The shield is breached. Energy pours through.</text>
+  </g>
+</svg>
+</div>
+<div class="text-block">
+  <p>The magnetopause normally holds. Solar wind deflects around it -- nothing gets through. But there is a weak point.</p>
+  <p>When the IMF turns <span class="stat" style="color:var(--field-open)">southward</span> -- antiparallel to Earth's northward field -- opposing field lines meet at the magnetopause. They <span class="stat" style="color:var(--current-birkeland)">reconnect</span>: the magnetic topology rearranges, breaking the shield open and allowing solar wind energy to pour directly into the magnetosphere.</p>
+  <p>This is <em>magnetic reconnection</em> -- the same process that drives solar flares. At the magnetopause, it creates an X-shaped diffusion region where field lines from the Sun merge with field lines from Earth, forming new "open" field lines draped over the poles.</p>
+  <div class="callout callout-gold">
+    <strong>The gate keeper:</strong> When the IMF points northward (parallel to Earth's field), the magnetosphere is sealed. When it turns southward, the gate opens. The orientation of an invisible magnetic field 150 million kilometres away controls whether Earth's shield holds or breaks.
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: The Storm -->
+<!-- ============================================================ -->
+<div class="section" id="sec6">
+<p class="section-number">Section 6</p>
+<h2>The Storm <button class="replay-btn" onclick="replaySection('sec6')">Replay</button></h2>
+<div class="svg-wrap">
+<svg viewBox="0 0 900 500" id="svg-storm">
+  <defs>
+    <radialGradient id="storm-earth" cx="0.4" cy="0.35" r="0.55">
+      <stop offset="0%" stop-color="#5588dd"/>
+      <stop offset="60%" stop-color="#3366aa"/>
+      <stop offset="100%" stop-color="#1a3366"/>
+    </radialGradient>
+    <filter id="storm-glow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Earth at left-third -->
+  <circle class="s6-earth" cx="200" cy="250" r="18" fill="url(#storm-earth)" opacity="0"/>
+  <circle class="s6-atmo" cx="200" cy="250" r="21" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="1" opacity="0"/>
+
+  <!-- Magnetopause (animated shape) -->
+  <path class="s6-mp" d="" fill="none" stroke="#4a9eff" stroke-width="1.5" opacity="0"/>
+
+  <!-- Plasma sheet -->
+  <line class="s6-ps-top" x1="0" y1="0" x2="0" y2="0" stroke="#ff8844" stroke-width="3" opacity="0"/>
+  <line class="s6-ps-bot" x1="0" y1="0" x2="0" y2="0" stroke="#ff8844" stroke-width="3" opacity="0"/>
+
+  <!-- Stretched field lines (tail) -->
+  <g class="s6-tail-field" opacity="0"></g>
+
+  <!-- Reconnection point in tail -->
+  <circle class="s6-nenl" cx="550" cy="250" r="0" fill="#ff6644" opacity="0" filter="url(#storm-glow)"/>
+
+  <!-- Earthward flow arrows -->
+  <g class="s6-flow" opacity="0"></g>
+
+  <!-- Aurora brightening -->
+  <ellipse class="s6-aurora-n" cx="205" cy="234" rx="10" ry="4" fill="#66ff88" opacity="0" filter="url(#storm-glow)"/>
+  <ellipse class="s6-aurora-s" cx="205" cy="266" rx="10" ry="4" fill="#66ff88" opacity="0" filter="url(#storm-glow)"/>
+
+  <!-- Phase indicator -->
+  <g class="s6-phase" opacity="0">
+    <rect x="590" y="60" width="260" height="105" rx="8" fill="rgba(30,41,59,0.95)" stroke="#334155" stroke-width="1"/>
+    <text class="s6-phase-title" x="605" y="84" fill="#f1f5f9" font-size="15" font-family="system-ui" font-weight="700">Loading</text>
+    <text class="s6-phase-desc" x="605" y="104" fill="#cbd5e1" font-size="11" font-family="system-ui">Energy from the solar wind</text>
+    <text class="s6-phase-desc2" x="605" y="120" fill="#cbd5e1" font-size="11" font-family="system-ui">accumulates in the magnetotail.</text>
+    <text class="s6-phase-desc3" x="605" y="140" fill="#cbd5e1" font-size="11" font-family="system-ui">The tail stretches and thins.</text>
+    <text class="s6-phase-desc4" x="605" y="156" fill="#94a3b8" font-size="10" font-family="system-ui" font-style="italic"></text>
+  </g>
+</svg>
+</div>
+<div class="text-block">
+  <p>A substorm is the magnetosphere's way of releasing accumulated energy. It unfolds in three phases:</p>
+  <p><span class="stat" style="color:var(--plasma)">Growth phase:</span> Energy from the solar wind loads into the magnetotail. The tail stretches, the plasma sheet thins, and magnetic energy accumulates like a spring being wound.</p>
+  <p><span class="stat stat-warn">Onset:</span> The stretched tail becomes unstable. A new reconnection point forms in the tail (the "near-Earth neutral line"), and the magnetic field snaps -- releasing stored energy in minutes.</p>
+  <p><span class="stat stat-field">Recovery:</span> Hot plasma surges earthward. The magnetic field dipolarizes -- snapping back toward its original shape. The aurora flares across the sky. The cycle begins again.</p>
+  <div class="callout">
+    This cycle repeats every <strong>2-4 hours</strong> during active conditions. The magnetosphere is not a static shield -- it breathes, loads, and discharges continuously.
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 7: Why It Matters -->
+<!-- ============================================================ -->
+<div class="section" id="sec7">
+<p class="section-number">Section 7</p>
+<h2>Why It Matters <button class="replay-btn" onclick="replaySection('sec7')">Replay</button></h2>
+<div class="svg-wrap">
+<svg viewBox="0 0 900 500" id="svg-matters">
+  <!-- Earth surface (curved horizon) -->
+  <path class="s7-horizon" d="M 0,350 Q 450,300 900,350 L 900,500 L 0,500 Z" fill="#1a2332" opacity="0"/>
+  <path class="s7-horizon-line" d="M 0,350 Q 450,300 900,350" fill="none" stroke="#334155" stroke-width="1.5" opacity="0"/>
+
+  <!-- Night sky gradient -->
+  <rect class="s7-sky" x="0" y="0" width="900" height="350" fill="#0f172a" opacity="0"/>
+
+  <!-- Aurora in the sky -->
+  <g class="s7-aurora" opacity="0">
+    <path d="M 200,80 Q 300,40 400,90 Q 500,60 600,100 Q 700,50 800,80" fill="none" stroke="#66ff88" stroke-width="40" opacity="0.08" filter="url(#glow-wide)"/>
+    <path d="M 150,120 Q 300,70 450,130 Q 550,80 700,120" fill="none" stroke="#66ff88" stroke-width="20" opacity="0.12" filter="url(#glow-wide)"/>
+    <path d="M 250,100 Q 350,55 500,110 Q 600,70 750,95" fill="none" stroke="#44dd66" stroke-width="8" opacity="0.15" filter="url(#glow-wide)"/>
+  </g>
+
+  <!-- Power grid (transmission towers and lines) -->
+  <g class="s7-grid" opacity="0">
+    <!-- Tower 1 at left-third -->
+    <g>
+      <line x1="200" y1="350" x2="200" y2="310" stroke="#667" stroke-width="3"/>
+      <line x1="190" y1="320" x2="210" y2="320" stroke="#667" stroke-width="2"/>
+      <line x1="185" y1="330" x2="215" y2="330" stroke="#667" stroke-width="2"/>
+      <line x1="192" y1="350" x2="200" y2="310" stroke="#667" stroke-width="1.5"/>
+      <line x1="208" y1="350" x2="200" y2="310" stroke="#667" stroke-width="1.5"/>
+    </g>
+    <!-- Tower 2 -->
+    <g>
+      <line x1="400" y1="335" x2="400" y2="295" stroke="#667" stroke-width="3"/>
+      <line x1="390" y1="305" x2="410" y2="305" stroke="#667" stroke-width="2"/>
+      <line x1="385" y1="315" x2="415" y2="315" stroke="#667" stroke-width="2"/>
+      <line x1="392" y1="335" x2="400" y2="295" stroke="#667" stroke-width="1.5"/>
+      <line x1="408" y1="335" x2="400" y2="295" stroke="#667" stroke-width="1.5"/>
+    </g>
+    <!-- Tower 3 at right-third -->
+    <g>
+      <line x1="650" y1="340" x2="650" y2="300" stroke="#667" stroke-width="3"/>
+      <line x1="640" y1="310" x2="660" y2="310" stroke="#667" stroke-width="2"/>
+      <line x1="635" y1="320" x2="665" y2="320" stroke="#667" stroke-width="2"/>
+      <line x1="642" y1="340" x2="650" y2="300" stroke="#667" stroke-width="1.5"/>
+      <line x1="658" y1="340" x2="650" y2="300" stroke="#667" stroke-width="1.5"/>
+    </g>
+
+    <!-- Transmission lines between towers -->
+    <path d="M 210,320 Q 305,310 390,305" fill="none" stroke="#556" stroke-width="1"/>
+    <path d="M 210,330 Q 305,322 390,315" fill="none" stroke="#556" stroke-width="1"/>
+    <path d="M 410,305 Q 525,298 640,310" fill="none" stroke="#556" stroke-width="1"/>
+    <path d="M 410,315 Q 525,310 640,320" fill="none" stroke="#556" stroke-width="1"/>
+
+    <!-- Pipeline (underground, shown as dashed) -->
+    <path d="M 50,420 L 850,400" fill="none" stroke="#555" stroke-width="4" stroke-dasharray="8,6" opacity="0.5"/>
+    <text x="100" y="445" fill="#555" font-size="10" font-family="system-ui">Pipeline</text>
+  </g>
+
+  <!-- GIC current flow (animated dots along grid lines) -->
+  <g class="s7-gic-dots"></g>
+
+  <!-- GIC label -->
+  <g class="s7-gic-label" opacity="0">
+    <rect x="280" y="365" width="340" height="55" rx="6" fill="rgba(239,68,68,0.1)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+    <text x="450" y="385" text-anchor="middle" fill="#ef4444" font-size="13" font-family="system-ui" font-weight="700">Geomagnetically Induced Currents (GIC)</text>
+    <text x="450" y="402" text-anchor="middle" fill="#cbd5e1" font-size="11" font-family="system-ui">Flow through power grids and pipelines</text>
+    <text x="450" y="416" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="system-ui">during geomagnetic storms</text>
+  </g>
+
+  <!-- "This is what we measure" -->
+  <g class="s7-measure" opacity="0">
+    <text x="450" y="475" text-anchor="middle" fill="#f1f5f9" font-size="15" font-family="system-ui" font-style="italic">This is what we measure.</text>
+  </g>
+</svg>
+</div>
+<div class="text-block">
+  <p>When the gate opens and substorms fire, the changing magnetic field induces electric currents in every long conductor on Earth's surface. Power lines. Pipelines. Railway tracks. Submarine cables.</p>
+  <p>These <span class="stat stat-warn">geomagnetically induced currents</span> (GICs) can saturate power transformers, causing voltage collapse and permanent damage. The 1989 Quebec blackout left six million people without power for nine hours -- caused by a geomagnetic storm.</p>
+  <div class="callout callout-warn">
+    <strong>This is not a toy.</strong> A Carrington-class event (1859) today would cause an estimated <span class="stat stat-warn">$2 trillion</span> in damage to global infrastructure. The magnetosphere is the shield that stands between civilization and the Sun's output -- and it has a door that opens regularly.
+  </div>
+  <p>This is happening right now, above your head, whether anyone is watching or not.</p>
+</div>
+</div>
+
+<div class="contact">
+  <p>Contact: <a href="mailto:energyscholar@gmail.com">energyscholar@gmail.com</a></p>
+</div>
+
+</div><!-- end container -->
+
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
+
+<script>
+// ============================================================
+// Intersection Observer -- trigger animations on scroll
+// ============================================================
+const sectionAnimators = {};
+
+function setupObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        const id = entry.target.id;
+        if (sectionAnimators[id]) {
+          sectionAnimators[id]();
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
+}
+
+function replaySection(id) {
+  if (sectionAnimators[id]) {
+    sectionAnimators[id]();
+  }
+}
+
+// ============================================================
+// SVG helper
+// ============================================================
+const SVG_NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs, parent) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(el);
+  return el;
+}
+
+// ============================================================
+// Shue model boundary points
+// Earth at (cx, cy), sunward = left (negative x direction)
+// ============================================================
+function shuePoints(r0, alpha, nPts, cx, cy, scale, tailLen) {
+  const pts = [];
+  const thetaMax = Math.PI * 0.82;
+  for (let i = 0; i <= nPts; i++) {
+    const theta = -thetaMax + (2 * thetaMax) * (i / nPts);
+    const r = r0 * Math.pow(2 / (1 + Math.cos(theta)), alpha);
+    const wx = -r * Math.cos(theta);
+    const wy = r * Math.sin(theta);
+    pts.push([cx + wx * scale, cy - wy * scale]);
+  }
+  if (tailLen) {
+    const lastTop = pts[pts.length - 1];
+    const lastBot = pts[0];
+    pts.push([cx + tailLen * scale, lastTop[1]]);
+    pts.unshift([cx + tailLen * scale, lastBot[1]]);
+  }
+  return 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L');
+}
+
+// ============================================================
+// Dipole field line path
+// ============================================================
+function dipolePath(L, cx, cy, scale, nPts) {
+  const pts = [];
+  for (let i = 0; i <= nPts; i++) {
+    const lam = (-Math.PI / 2.2) + (Math.PI / 1.1) * (i / nPts);
+    const r = L * Math.cos(lam) * Math.cos(lam);
+    const wx = -r * Math.cos(lam);
+    const wy = r * Math.sin(lam);
+    pts.push([cx + wx * scale, cy - wy * scale]);
+  }
+  return 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L');
+}
+
+// ============================================================
+// Fade helper
+// ============================================================
+function fadeIn(el, duration, delay) {
+  if (typeof el === 'string') el = document.querySelector(el);
+  if (!el) return;
+  el.style.transition = 'none';
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.style.transition = 'opacity ' + duration + 'ms ease';
+    el.style.opacity = '1';
+  }, delay || 0);
+}
+
+function fadeInAttr(el, duration, delay) {
+  if (typeof el === 'string') el = document.querySelector(el);
+  if (!el) return;
+  el.setAttribute('opacity', '0');
+  setTimeout(() => {
+    el.style.transition = 'opacity ' + duration + 'ms ease';
+    el.setAttribute('opacity', '1');
+  }, delay || 0);
+}
+
+// ============================================================
+// Section 1: The Sun
+// ============================================================
+sectionAnimators['sec1'] = function() {
+  const corona = document.querySelector('.s1-corona');
+  const sun = document.querySelector('.s1-sun');
+  const inner = document.querySelector('.s1-sun-inner');
+  const streamers = document.querySelector('.s1-streamers');
+  const particles = document.querySelector('.s1-particles');
+  const callout = document.querySelector('.s1-callout');
+  const label = document.querySelector('.s1-label');
+
+  // Reset
+  [corona, sun, inner, streamers, callout, label].forEach(el => {
+    el.style.transition = 'none';
+    el.setAttribute('opacity', '0');
+  });
+  particles.style.transition = 'none';
+  particles.setAttribute('opacity', '0');
+  // Clear old particles
+  while (particles.firstChild) particles.removeChild(particles.firstChild);
+
+  requestAnimationFrame(() => {
+    // Phase 1: Sun appears (0-800ms)
+    setTimeout(() => {
+      corona.style.transition = 'opacity 1.2s ease';
+      corona.setAttribute('opacity', '1');
+    }, 100);
+    setTimeout(() => {
+      sun.style.transition = 'opacity 0.8s ease';
+      sun.setAttribute('opacity', '1');
+    }, 300);
+    setTimeout(() => {
+      inner.style.transition = 'opacity 0.6s ease';
+      inner.setAttribute('opacity', '1');
+    }, 500);
+
+    // Phase 2: Streamers (800ms)
+    setTimeout(() => {
+      streamers.style.transition = 'opacity 1s ease';
+      streamers.setAttribute('opacity', '1');
+    }, 800);
+
+    // Phase 3: Particle stream (1200ms)
+    setTimeout(() => {
+      particles.setAttribute('opacity', '1');
+      // Create particles
+      for (let i = 0; i < 40; i++) {
+        const isSmall = i > 25;
+        const r = isSmall ? 1.2 : 2;
+        const fill = isSmall ? '#ffdd66' : '#ffb347';
+        const y = 120 + Math.random() * 260;
+        const x = 380 + Math.random() * 500;
+        svgEl('circle', {
+          cx: x, cy: y, r: r,
+          fill: fill, opacity: (0.3 + Math.random() * 0.4).toFixed(2)
+        }, particles);
+      }
+    }, 1200);
+
+    // Phase 4: Callout (2000ms)
+    setTimeout(() => {
+      callout.style.transition = 'opacity 0.8s ease';
+      callout.setAttribute('opacity', '1');
+    }, 2000);
+
+    // Phase 5: Label (2500ms)
+    setTimeout(() => {
+      label.style.transition = 'opacity 0.6s ease';
+      label.setAttribute('opacity', '1');
+    }, 2500);
+  });
+};
+
+// ============================================================
+// Section 2: The Wind
+// ============================================================
+sectionAnimators['sec2'] = function() {
+  const imf = document.querySelector('.s2-imf');
+  const particles = document.querySelector('.s2-particles');
+  const speed = document.querySelector('.s2-speed');
+  const imfLabel = document.querySelector('.s2-imf-label');
+  const arrows = document.querySelector('.s2-arrows');
+
+  [imf, speed, imfLabel, arrows].forEach(el => {
+    el.style.transition = 'none';
+    el.setAttribute('opacity', '0');
+  });
+  particles.setAttribute('opacity', '0');
+  while (particles.firstChild) particles.removeChild(particles.firstChild);
+
+  requestAnimationFrame(() => {
+    // Phase 1: IMF lines sweep in
+    setTimeout(() => {
+      imf.style.transition = 'opacity 1s ease';
+      imf.setAttribute('opacity', '1');
+    }, 200);
+
+    // Phase 2: Particles appear
+    setTimeout(() => {
+      particles.setAttribute('opacity', '1');
+      for (let i = 0; i < 60; i++) {
+        const y = 100 + Math.random() * 300;
+        const x = Math.random() * 900;
+        const r = 1 + Math.random() * 2;
+        svgEl('circle', {
+          cx: x, cy: y, r: r,
+          fill: '#ffb347', opacity: (0.2 + Math.random() * 0.4).toFixed(2)
+        }, particles);
+      }
+    }, 800);
+
+    // Phase 3: Speed callout
+    setTimeout(() => {
+      speed.style.transition = 'opacity 0.8s ease';
+      speed.setAttribute('opacity', '1');
+    }, 1500);
+
+    // Phase 4: Arrows
+    setTimeout(() => {
+      arrows.style.transition = 'opacity 0.6s ease';
+      arrows.setAttribute('opacity', '1');
+    }, 2000);
+
+    // Phase 5: IMF label
+    setTimeout(() => {
+      imfLabel.style.transition = 'opacity 0.8s ease';
+      imfLabel.setAttribute('opacity', '1');
+    }, 2500);
+  });
+};
+
+// ============================================================
+// Section 3: The Shield
+// ============================================================
+sectionAnimators['sec3'] = function() {
+  const EX = 600, EY = 250, SC = 12;
+
+  const bowshock = document.querySelector('.s3-bowshock');
+  const mp = document.querySelector('.s3-magnetopause');
+  const earth = document.querySelector('.s3-earth');
+  const atmo = document.querySelector('.s3-atmo');
+  const fieldG = document.querySelector('.s3-fieldlines');
+  const labels = document.querySelector('.s3-labels');
+  const cusps = document.querySelector('.s3-cusps');
+  const wind = document.querySelector('.s3-wind');
+  const psTop = document.querySelector('.s3-plasma-top');
+  const psBot = document.querySelector('.s3-plasma-bot');
+
+  // Set Shue model paths
+  mp.setAttribute('d', shuePoints(10, 0.5, 50, EX, EY, SC, 30));
+  bowshock.setAttribute('d', shuePoints(14, 0.6, 50, EX, EY, SC));
+
+  // Plasma sheet
+  psTop.setAttribute('x1', EX + 6 * SC); psTop.setAttribute('y1', EY - 1.5 * SC);
+  psTop.setAttribute('x2', EX + 30 * SC); psTop.setAttribute('y2', EY - 2 * SC);
+  psBot.setAttribute('x1', EX + 6 * SC); psBot.setAttribute('y1', EY + 1.5 * SC);
+  psBot.setAttribute('x2', EX + 30 * SC); psBot.setAttribute('y2', EY + 2 * SC);
+
+  // Field lines
+  while (fieldG.firstChild) fieldG.removeChild(fieldG.firstChild);
+  [2.5, 4, 5.5, 7].forEach(L => {
+    svgEl('path', {
+      d: dipolePath(L, EX, EY, SC, 40),
+      fill: 'none', stroke: '#66ff88', 'stroke-width': '1.5', opacity: '0.5'
+    }, fieldG);
+  });
+
+  // Reset all
+  [bowshock, mp, earth, atmo, labels, cusps, wind, psTop, psBot].forEach(el => {
+    el.style.transition = 'none';
+    el.setAttribute('opacity', '0');
+  });
+  fieldG.style.transition = 'none';
+  fieldG.setAttribute('opacity', '0');
+
+  requestAnimationFrame(() => {
+    // Phase 1: Earth appears
+    setTimeout(() => {
+      earth.style.transition = 'opacity 0.8s ease';
+      earth.setAttribute('opacity', '1');
+      atmo.style.transition = 'opacity 1s ease';
+      atmo.setAttribute('opacity', '1');
+    }, 200);
+
+    // Phase 2: Field lines
+    setTimeout(() => {
+      fieldG.style.transition = 'opacity 1s ease';
+      fieldG.setAttribute('opacity', '1');
+    }, 700);
+
+    // Phase 3: Magnetopause
+    setTimeout(() => {
+      mp.style.transition = 'opacity 1s ease';
+      mp.setAttribute('opacity', '1');
+    }, 1200);
+
+    // Phase 4: Bow shock
+    setTimeout(() => {
+      bowshock.style.transition = 'opacity 0.8s ease';
+      bowshock.setAttribute('opacity', '1');
+    }, 1700);
+
+    // Phase 5: Plasma sheet
+    setTimeout(() => {
+      psTop.style.transition = 'opacity 0.8s ease';
+      psTop.setAttribute('opacity', '0.5');
+      psBot.style.transition = 'opacity 0.8s ease';
+      psBot.setAttribute('opacity', '0.5');
+    }, 2000);
+
+    // Phase 6: Solar wind, cusps, labels
+    setTimeout(() => {
+      wind.style.transition = 'opacity 0.8s ease';
+      wind.setAttribute('opacity', '1');
+    }, 2300);
+    setTimeout(() => {
+      cusps.style.transition = 'opacity 0.8s ease';
+      cusps.setAttribute('opacity', '1');
+    }, 2600);
+    setTimeout(() => {
+      labels.style.transition = 'opacity 0.8s ease';
+      labels.setAttribute('opacity', '1');
+    }, 2800);
+  });
+};
+
+// ============================================================
+// Section 4: The Circuit
+// ============================================================
+sectionAnimators['sec4'] = function() {
+  const earth = document.querySelector('.s4-earth');
+  const cutaway = document.querySelector('.s4-cutaway');
+  const atmo = document.querySelector('.s4-atmo');
+  const coreLabels = document.querySelector('.s4-core-labels');
+  const birkDown = document.querySelector('.s4-birk-down');
+  const pedersen = document.querySelector('.s4-pedersen');
+  const birkUp = document.querySelector('.s4-birk-up');
+  const auroraN = document.querySelector('.s4-aurora-n');
+  const auroraS = document.querySelector('.s4-aurora-s');
+  const labels = document.querySelector('.s4-labels');
+  const history = document.querySelector('.s4-history');
+  const dotsG = document.querySelector('.s4-dots');
+
+  // Clear dots
+  while (dotsG.firstChild) dotsG.removeChild(dotsG.firstChild);
+
+  // Reset
+  [earth, cutaway, atmo, coreLabels, birkDown, pedersen, birkUp, auroraN, auroraS, labels, history].forEach(el => {
+    el.style.transition = 'none';
+    el.setAttribute('opacity', '0');
+  });
+
+  requestAnimationFrame(() => {
+    // Phase 1: Earth + cutaway
+    setTimeout(() => {
+      earth.style.transition = 'opacity 0.8s ease';
+      earth.setAttribute('opacity', '1');
+    }, 200);
+    setTimeout(() => {
+      cutaway.style.transition = 'opacity 1s ease';
+      cutaway.setAttribute('opacity', '1');
+      atmo.style.transition = 'opacity 0.8s ease';
+      atmo.setAttribute('opacity', '1');
+    }, 600);
+    setTimeout(() => {
+      coreLabels.style.transition = 'opacity 0.8s ease';
+      coreLabels.setAttribute('opacity', '1');
+    }, 1200);
+
+    // Phase 2: Birkeland current paths
+    setTimeout(() => {
+      birkDown.style.transition = 'opacity 0.8s ease';
+      birkDown.setAttribute('opacity', '0.8');
+    }, 1600);
+    setTimeout(() => {
+      pedersen.style.transition = 'opacity 0.8s ease';
+      pedersen.setAttribute('opacity', '0.7');
+    }, 2000);
+    setTimeout(() => {
+      birkUp.style.transition = 'opacity 0.8s ease';
+      birkUp.setAttribute('opacity', '0.8');
+    }, 2400);
+
+    // Phase 3: Aurora
+    setTimeout(() => {
+      auroraN.style.transition = 'opacity 0.6s ease';
+      auroraN.setAttribute('opacity', '0.6');
+      auroraS.style.transition = 'opacity 0.6s ease';
+      auroraS.setAttribute('opacity', '0.4');
+    }, 2800);
+
+    // Phase 4: Labels
+    setTimeout(() => {
+      labels.style.transition = 'opacity 0.8s ease';
+      labels.setAttribute('opacity', '1');
+    }, 3200);
+
+    // Phase 5: Animated flow dots
+    setTimeout(() => {
+      // Create dots along the current path
+      for (let i = 0; i < 6; i++) {
+        const dot = svgEl('circle', {
+          r: '3', fill: '#ffdd44', opacity: '0.8'
+        }, dotsG);
+        animateDotAlongPath(dot, birkDown, 2000, i * 350);
+      }
+    }, 2000);
+
+    // Phase 6: History note
+    setTimeout(() => {
+      history.style.transition = 'opacity 0.8s ease';
+      history.setAttribute('opacity', '1');
+    }, 3800);
+  });
+};
+
+// Animate a dot along an SVG path element
+function animateDotAlongPath(dot, pathEl, duration, delay) {
+  const path = pathEl;
+  const len = path.getTotalLength();
+  let start = null;
+  let cancelled = false;
+
+  function step(ts) {
+    if (cancelled) return;
+    if (!start) start = ts;
+    const elapsed = ts - start - delay;
+    if (elapsed < 0) { requestAnimationFrame(step); return; }
+    const t = (elapsed % duration) / duration;
+    const pt = path.getPointAtLength(t * len);
+    dot.setAttribute('cx', pt.x.toFixed(1));
+    dot.setAttribute('cy', pt.y.toFixed(1));
+    dot.setAttribute('opacity', (0.4 + 0.5 * Math.sin(t * Math.PI)).toFixed(2));
+    requestAnimationFrame(step);
+  }
+
+  // Store cancel function on dot element
+  dot._cancel = () => { cancelled = true; };
+  requestAnimationFrame(step);
+}
+
+// ============================================================
+// Section 5: The Gate
+// ============================================================
+sectionAnimators['sec5'] = function() {
+  const sheet = document.querySelector('.s5-sheet');
+  const sheetLine = document.querySelector('.s5-sheet-line');
+  const imf = document.querySelector('.s5-imf');
+  const geo = document.querySelector('.s5-geo');
+  const xline = document.querySelector('.s5-xline');
+  const flash = document.querySelector('.s5-flash');
+  const merged = document.querySelector('.s5-merged');
+  const lblImf = document.querySelector('.s5-label-imf');
+  const lblGeo = document.querySelector('.s5-label-geo');
+  const lblX = document.querySelector('.s5-label-x');
+  const lblOpen = document.querySelector('.s5-label-open');
+
+  // Reset
+  [sheet, sheetLine, imf, geo, xline, merged, lblImf, lblGeo, lblX, lblOpen].forEach(el => {
+    el.style.transition = 'none';
+    el.setAttribute('opacity', '0');
+  });
+  flash.setAttribute('r', '0');
+  flash.setAttribute('opacity', '0');
+
+  requestAnimationFrame(() => {
+    // Phase 1: Current sheet appears
+    setTimeout(() => {
+      sheet.style.transition = 'opacity 0.8s ease';
+      sheet.setAttribute('opacity', '1');
+      sheetLine.style.transition = 'opacity 0.8s ease';
+      sheetLine.setAttribute('opacity', '1');
+    }, 200);
+
+    // Phase 2: IMF (southward) on left
+    setTimeout(() => {
+      imf.style.transition = 'opacity 1s ease';
+      imf.setAttribute('opacity', '1');
+      lblImf.style.transition = 'opacity 0.8s ease';
+      lblImf.setAttribute('opacity', '1');
+    }, 600);
+
+    // Phase 3: Geomagnetic (northward) on right
+    setTimeout(() => {
+      geo.style.transition = 'opacity 1s ease';
+      geo.setAttribute('opacity', '1');
+      lblGeo.style.transition = 'opacity 0.8s ease';
+      lblGeo.setAttribute('opacity', '1');
+    }, 1200);
+
+    // Phase 4: X-line appears
+    setTimeout(() => {
+      xline.style.transition = 'opacity 0.5s ease';
+      xline.setAttribute('opacity', '1');
+      lblX.style.transition = 'opacity 0.6s ease';
+      lblX.setAttribute('opacity', '1');
+    }, 2000);
+
+    // Phase 5: Flash + reconnection
+    setTimeout(() => {
+      flash.setAttribute('opacity', '0.9');
+      animateFlashRadius(flash, 0, 80, 400, () => {
+        animateFlashRadius(flash, 80, 0, 600, () => {
+          flash.setAttribute('opacity', '0');
+        });
+      });
+    }, 2800);
+
+    // Phase 6: Original field lines fade, merged appear
+    setTimeout(() => {
+      imf.style.transition = 'opacity 1s ease';
+      imf.setAttribute('opacity', '0.15');
+      geo.style.transition = 'opacity 1s ease';
+      geo.setAttribute('opacity', '0.15');
+    }, 3200);
+
+    setTimeout(() => {
+      merged.style.transition = 'opacity 1s ease';
+      merged.setAttribute('opacity', '1');
+    }, 3500);
+
+    // Phase 7: "Shield breached" label
+    setTimeout(() => {
+      lblOpen.style.transition = 'opacity 0.8s ease';
+      lblOpen.setAttribute('opacity', '1');
+    }, 4200);
+  });
+};
+
+function animateFlashRadius(el, fromR, toR, duration, callback) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    el.setAttribute('r', (fromR + (toR - fromR) * eased).toFixed(1));
+    if (t < 1) {
+      requestAnimationFrame(step);
+    } else if (callback) {
+      callback();
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// ============================================================
+// Section 6: The Storm (substorm cycle animation)
+// ============================================================
+sectionAnimators['sec6'] = function() {
+  const EX = 200, EY = 250, SC = 7;
+
+  const earth = document.querySelector('.s6-earth');
+  const atmo = document.querySelector('.s6-atmo');
+  const mp = document.querySelector('.s6-mp');
+  const psTop = document.querySelector('.s6-ps-top');
+  const psBot = document.querySelector('.s6-ps-bot');
+  const tailField = document.querySelector('.s6-tail-field');
+  const nenl = document.querySelector('.s6-nenl');
+  const flow = document.querySelector('.s6-flow');
+  const auroraN = document.querySelector('.s6-aurora-n');
+  const auroraS = document.querySelector('.s6-aurora-s');
+  const phase = document.querySelector('.s6-phase');
+
+  // Reset
+  [earth, atmo, mp, psTop, psBot, auroraN, auroraS, phase].forEach(el => {
+    el.style.transition = 'none';
+    el.setAttribute('opacity', '0');
+  });
+  nenl.setAttribute('opacity', '0');
+  nenl.setAttribute('r', '0');
+  tailField.setAttribute('opacity', '0');
+  flow.setAttribute('opacity', '0');
+  while (tailField.firstChild) tailField.removeChild(tailField.firstChild);
+  while (flow.firstChild) flow.removeChild(flow.firstChild);
+
+  // Build stretched tail field lines
+  function buildTailLines(stretch) {
+    while (tailField.firstChild) tailField.removeChild(tailField.firstChild);
+    for (let i = 0; i < 5; i++) {
+      const L = 2.5 + i * 1.8;
+      svgEl('path', {
+        d: dipolePath(L * (1 + stretch * 0.3), EX, EY, SC, 40),
+        fill: 'none', stroke: '#66ff88', 'stroke-width': '1.3', opacity: '0.45'
+      }, tailField);
+    }
+  }
+
+  // Set initial MP
+  mp.setAttribute('d', shuePoints(10, 0.5, 50, EX, EY, SC, 80));
+
+  requestAnimationFrame(() => {
+    // Phase 1: Static elements appear
+    setTimeout(() => {
+      earth.style.transition = 'opacity 0.6s ease';
+      earth.setAttribute('opacity', '1');
+      atmo.style.transition = 'opacity 0.6s ease';
+      atmo.setAttribute('opacity', '1');
+    }, 100);
+
+    setTimeout(() => {
+      mp.style.transition = 'opacity 0.8s ease';
+      mp.setAttribute('opacity', '1');
+      buildTailLines(0);
+      tailField.style.transition = 'opacity 0.8s ease';
+      tailField.setAttribute('opacity', '1');
+      psTop.setAttribute('x1', EX + 5 * SC); psTop.setAttribute('y1', EY - 1.5 * SC);
+      psTop.setAttribute('x2', EX + 80 * SC); psTop.setAttribute('y2', EY - 2 * SC);
+      psBot.setAttribute('x1', EX + 5 * SC); psBot.setAttribute('y1', EY + 1.5 * SC);
+      psBot.setAttribute('x2', EX + 80 * SC); psBot.setAttribute('y2', EY + 2 * SC);
+      psTop.style.transition = 'opacity 0.8s ease';
+      psTop.setAttribute('opacity', '0.5');
+      psBot.style.transition = 'opacity 0.8s ease';
+      psBot.setAttribute('opacity', '0.5');
+    }, 500);
+
+    // Phase 2: Animated substorm cycle
+    const phaseTitle = document.querySelector('.s6-phase-title');
+    const phaseDesc = document.querySelector('.s6-phase-desc');
+    const phaseDesc2 = document.querySelector('.s6-phase-desc2');
+    const phaseDesc3 = document.querySelector('.s6-phase-desc3');
+    const phaseDesc4 = document.querySelector('.s6-phase-desc4');
+
+    setTimeout(() => {
+      phase.style.transition = 'opacity 0.6s ease';
+      phase.setAttribute('opacity', '1');
+
+      // GROWTH PHASE (0-3s)
+      phaseTitle.textContent = 'Growth Phase';
+      phaseTitle.setAttribute('fill', '#ff8844');
+      phaseDesc.textContent = 'Energy from the solar wind';
+      phaseDesc2.textContent = 'accumulates in the magnetotail.';
+      phaseDesc3.textContent = 'The tail stretches and thins.';
+      phaseDesc4.textContent = '';
+
+      let growthFrame = 0;
+      const growthDur = 3000;
+      const growthStart = performance.now();
+
+      function growthStep(now) {
+        const t = Math.min((now - growthStart) / growthDur, 1);
+        // Stretch tail
+        const stretch = t;
+        buildTailLines(stretch);
+        tailField.setAttribute('opacity', '1');
+        mp.setAttribute('d', shuePoints(10, 0.5, 50, EX, EY, SC, 80 + stretch * 20));
+        // Thin plasma sheet
+        const gap = 1.5 - t * 0.8;
+        psTop.setAttribute('y1', EY - gap * SC);
+        psBot.setAttribute('y1', EY + gap * SC);
+        // Brighten plasma sheet (energy loading)
+        psTop.setAttribute('stroke', `rgba(255,136,68,${(0.3 + t * 0.5).toFixed(2)})`);
+        psBot.setAttribute('stroke', `rgba(255,136,68,${(0.3 + t * 0.5).toFixed(2)})`);
+
+        if (t < 1) requestAnimationFrame(growthStep);
+        else startOnset();
+      }
+      requestAnimationFrame(growthStep);
+
+      // ONSET (3s-4.5s)
+      function startOnset() {
+        phaseTitle.textContent = 'Onset';
+        phaseTitle.setAttribute('fill', '#ef4444');
+        phaseDesc.textContent = 'The stretched tail becomes unstable.';
+        phaseDesc2.textContent = 'Reconnection ignites in the tail.';
+        phaseDesc3.textContent = 'Stored energy releases in minutes.';
+        phaseDesc4.textContent = '';
+
+        // NENL flash
+        nenl.setAttribute('cx', EX + 40 * SC);
+        nenl.setAttribute('cy', EY);
+        nenl.setAttribute('opacity', '0');
+        nenl.setAttribute('r', '0');
+
+        animateFlashRadius(nenl, 0, 12, 500, () => {
+          nenl.setAttribute('opacity', '0.8');
+        });
+        setTimeout(() => { nenl.setAttribute('opacity', '0.8'); }, 100);
+
+        setTimeout(startRecovery, 1500);
+      }
+
+      // RECOVERY (4.5s-7s)
+      function startRecovery() {
+        phaseTitle.textContent = 'Recovery';
+        phaseTitle.setAttribute('fill', '#66ff88');
+        phaseDesc.textContent = 'Hot plasma surges earthward.';
+        phaseDesc2.textContent = 'The field dipolarizes.';
+        phaseDesc3.textContent = 'Aurora flares across the sky.';
+        phaseDesc4.textContent = 'The cycle begins again.';
+
+        // Aurora brightens
+        auroraN.style.transition = 'opacity 0.8s ease';
+        auroraN.setAttribute('opacity', '0.7');
+        auroraS.style.transition = 'opacity 0.8s ease';
+        auroraS.setAttribute('opacity', '0.5');
+
+        // Earthward flow particles
+        flow.setAttribute('opacity', '1');
+        for (let i = 0; i < 5; i++) {
+          const dot = svgEl('circle', {
+            cx: EX + 40 * SC - i * 15,
+            cy: EY + (i - 2) * 6,
+            r: '4', fill: '#ffcc44', opacity: '0.7'
+          }, flow);
+          // Animate earthward
+          animateFlowDot(dot, EX + 40 * SC - i * 15, EY + (i - 2) * 6, EX + 5 * SC, EY, 1500, i * 150);
+        }
+
+        // Dipolarize (un-stretch)
+        const recovStart = performance.now();
+        const recovDur = 2500;
+        function recovStep(now) {
+          const t = Math.min((now - recovStart) / recovDur, 1);
+          const stretch = 1 - t;
+          buildTailLines(stretch);
+          tailField.setAttribute('opacity', '1');
+          mp.setAttribute('d', shuePoints(10, 0.5, 50, EX, EY, SC, 80 + stretch * 20));
+          const gap = 0.7 + t * 0.8;
+          psTop.setAttribute('y1', EY - gap * SC);
+          psBot.setAttribute('y1', EY + gap * SC);
+          psTop.setAttribute('stroke', `rgba(255,136,68,${(0.8 - t * 0.5).toFixed(2)})`);
+          psBot.setAttribute('stroke', `rgba(255,136,68,${(0.8 - t * 0.5).toFixed(2)})`);
+          if (t < 1) requestAnimationFrame(recovStep);
+        }
+        requestAnimationFrame(recovStep);
+
+        // Fade NENL
+        setTimeout(() => {
+          nenl.style.transition = 'opacity 1s ease';
+          nenl.setAttribute('opacity', '0');
+        }, 1000);
+
+        // Fade aurora after peak
+        setTimeout(() => {
+          auroraN.style.transition = 'opacity 1.5s ease';
+          auroraN.setAttribute('opacity', '0.1');
+          auroraS.style.transition = 'opacity 1.5s ease';
+          auroraS.setAttribute('opacity', '0.05');
+        }, 2000);
+      }
+    }, 1200);
+  });
+};
+
+function animateFlowDot(dot, startX, startY, endX, endY, duration, delay) {
+  const start = performance.now();
+  function step(now) {
+    const elapsed = now - start - delay;
+    if (elapsed < 0) { requestAnimationFrame(step); return; }
+    const t = Math.min(elapsed / duration, 1);
+    const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    dot.setAttribute('cx', (startX + (endX - startX) * eased).toFixed(1));
+    dot.setAttribute('cy', (startY + (endY - startY) * eased).toFixed(1));
+    dot.setAttribute('opacity', (0.8 * (1 - t * 0.5)).toFixed(2));
+    if (t < 1) requestAnimationFrame(step);
+    else dot.setAttribute('opacity', '0');
+  }
+  requestAnimationFrame(step);
+}
+
+// ============================================================
+// Section 7: Why It Matters
+// ============================================================
+sectionAnimators['sec7'] = function() {
+  const horizon = document.querySelector('.s7-horizon');
+  const horizonLine = document.querySelector('.s7-horizon-line');
+  const sky = document.querySelector('.s7-sky');
+  const aurora = document.querySelector('.s7-aurora');
+  const grid = document.querySelector('.s7-grid');
+  const gicLabel = document.querySelector('.s7-gic-label');
+  const gicDots = document.querySelector('.s7-gic-dots');
+  const measure = document.querySelector('.s7-measure');
+
+  // Clear GIC dots
+  while (gicDots.firstChild) gicDots.removeChild(gicDots.firstChild);
+
+  [horizon, horizonLine, sky, aurora, grid, gicLabel, measure].forEach(el => {
+    el.style.transition = 'none';
+    el.setAttribute('opacity', '0');
+  });
+
+  requestAnimationFrame(() => {
+    // Phase 1: Night sky + horizon
+    setTimeout(() => {
+      sky.style.transition = 'opacity 1s ease';
+      sky.setAttribute('opacity', '1');
+      horizon.style.transition = 'opacity 1s ease';
+      horizon.setAttribute('opacity', '1');
+      horizonLine.style.transition = 'opacity 1s ease';
+      horizonLine.setAttribute('opacity', '1');
+    }, 200);
+
+    // Phase 2: Aurora
+    setTimeout(() => {
+      aurora.style.transition = 'opacity 1.5s ease';
+      aurora.setAttribute('opacity', '1');
+    }, 800);
+
+    // Phase 3: Power grid
+    setTimeout(() => {
+      grid.style.transition = 'opacity 1s ease';
+      grid.setAttribute('opacity', '1');
+    }, 1600);
+
+    // Phase 4: GIC dots flowing along lines
+    setTimeout(() => {
+      // Create animated dots along transmission lines
+      const linePoints = [
+        {x1: 210, y1: 325, x2: 390, y2: 310},
+        {x1: 410, y1: 310, x2: 640, y2: 315},
+        {x1: 50, y1: 420, x2: 850, y2: 400}
+      ];
+
+      linePoints.forEach((line, li) => {
+        for (let i = 0; i < 4; i++) {
+          const dot = svgEl('circle', {
+            r: li === 2 ? '2.5' : '2',
+            fill: li === 2 ? '#ff4466' : '#ef4444',
+            opacity: '0'
+          }, gicDots);
+          animateGICDot(dot, line.x1, line.y1, line.x2, line.y2, 1500 + li * 300, i * 400);
+        }
+      });
+    }, 2200);
+
+    // Phase 5: GIC label
+    setTimeout(() => {
+      gicLabel.style.transition = 'opacity 0.8s ease';
+      gicLabel.setAttribute('opacity', '1');
+    }, 2800);
+
+    // Phase 6: "This is what we measure"
+    setTimeout(() => {
+      measure.style.transition = 'opacity 1s ease';
+      measure.setAttribute('opacity', '1');
+    }, 3800);
+  });
+};
+
+function animateGICDot(dot, x1, y1, x2, y2, duration, delay) {
+  const start = performance.now();
+  let cancelled = false;
+
+  function step(now) {
+    if (cancelled) return;
+    const elapsed = now - start - delay;
+    if (elapsed < 0) { requestAnimationFrame(step); return; }
+    const t = (elapsed % duration) / duration;
+    const x = x1 + (x2 - x1) * t;
+    const y = y1 + (y2 - y1) * t;
+    dot.setAttribute('cx', x.toFixed(1));
+    dot.setAttribute('cy', y.toFixed(1));
+    // Pulse opacity
+    const op = 0.3 + 0.6 * Math.sin(t * Math.PI);
+    dot.setAttribute('opacity', op.toFixed(2));
+    requestAnimationFrame(step);
+  }
+
+  dot._cancel = () => { cancelled = true; };
+  requestAnimationFrame(step);
+}
+
+// ============================================================
+// Init
+// ============================================================
+document.addEventListener('DOMContentLoaded', setupObserver);
+</script>
+<script src="../js/annex-tracker.js"></script>
+</body>
+</html>
