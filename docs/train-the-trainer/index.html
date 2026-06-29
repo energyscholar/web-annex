@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Train-the-Trainer — Bruce Stephenson</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  color: var(--heading);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  color: var(--heading);
+  font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+h3 {
+  color: var(--heading);
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.definition {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid var(--blue);
+}
+
+.definition-title {
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 0.5rem;
+}
+
+.insight {
+  background: rgba(251,191,36,0.08);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.insight::before {
+  content: "Key insight: ";
+  color: var(--golden);
+  font-weight: 700;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.stat-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--blue);
+  display: block;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+.curriculum-item {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0;
+  border-left: 4px solid var(--green);
+}
+
+.curriculum-item h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--green);
+  font-size: 1.05rem;
+}
+
+.curriculum-item p {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.pricing-table th {
+  background: #334155;
+  color: var(--heading);
+  padding: 0.8rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.pricing-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.pricing-table tr:hover td {
+  background: rgba(59,130,246,0.05);
+}
+
+.credential-list {
+  list-style: none;
+  margin: 1rem 0;
+}
+
+.credential-list li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.credential-list li::before {
+  content: "\2713";
+  color: var(--green);
+  font-weight: 700;
+  position: absolute;
+  left: 0;
+}
+
+.contact-box {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+  border: 1px solid #334155;
+}
+
+.contact-box a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.contact-box a:hover {
+  text-decoration: underline;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+  color: var(--green);
+}
+
+.hero-svg {
+  width: 100%;
+  max-height: 280px;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<svg class="hero-svg" viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Pulse glow filter -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-strong">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <!-- Gradient for edges -->
+    <linearGradient id="edge-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.3"/>
+    </linearGradient>
+    <!-- Radial for central node -->
+    <radialGradient id="center-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background with subtle grid -->
+  <rect width="900" height="280" fill="#0f172a"/>
+  <g stroke="#1e293b" stroke-width="0.5" opacity="0.5">
+    <line x1="0" y1="40" x2="900" y2="40"/><line x1="0" y1="80" x2="900" y2="80"/>
+    <line x1="0" y1="120" x2="900" y2="120"/><line x1="0" y1="160" x2="900" y2="160"/>
+    <line x1="0" y1="200" x2="900" y2="200"/><line x1="0" y1="240" x2="900" y2="240"/>
+    <line x1="100" y1="0" x2="100" y2="280"/><line x1="200" y1="0" x2="200" y2="280"/>
+    <line x1="300" y1="0" x2="300" y2="280"/><line x1="400" y1="0" x2="400" y2="280"/>
+    <line x1="500" y1="0" x2="500" y2="280"/><line x1="600" y1="0" x2="600" y2="280"/>
+    <line x1="700" y1="0" x2="700" y2="280"/><line x1="800" y1="0" x2="800" y2="280"/>
+  </g>
+
+  <!-- LAYER 3: Outer network — tertiary nodes (the workforce) -->
+  <g class="layer3" opacity="0.35">
+    <!-- Scattered small nodes -->
+    <circle cx="60" cy="50" r="3" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="7s" begin="4.2s" repeatCount="indefinite"/></circle>
+    <circle cx="140" cy="35" r="2.5" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="4.8s" repeatCount="indefinite"/></circle>
+    <circle cx="95" cy="245" r="3" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="8s" begin="5.1s" repeatCount="indefinite"/></circle>
+    <circle cx="200" cy="260" r="2.5" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="7s" begin="4.5s" repeatCount="indefinite"/></circle>
+    <circle cx="760" cy="45" r="3" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="6.5s" begin="5.3s" repeatCount="indefinite"/></circle>
+    <circle cx="830" cy="70" r="2.5" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="7.5s" begin="4.1s" repeatCount="indefinite"/></circle>
+    <circle cx="820" cy="230" r="3" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="5.6s" repeatCount="indefinite"/></circle>
+    <circle cx="720" cy="255" r="2.5" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="8s" begin="4.9s" repeatCount="indefinite"/></circle>
+    <circle cx="30" cy="140" r="2.5" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="7s" begin="5.4s" repeatCount="indefinite"/></circle>
+    <circle cx="870" cy="140" r="2.5" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="6.5s" begin="4.3s" repeatCount="indefinite"/></circle>
+    <circle cx="170" cy="70" r="2" fill="#94a3b8"><animate attributeName="opacity" values="0.2;0.5;0.2" dur="9s" begin="5.8s" repeatCount="indefinite"/></circle>
+    <circle cx="680" cy="60" r="2" fill="#94a3b8"><animate attributeName="opacity" values="0.2;0.5;0.2" dur="8s" begin="5.0s" repeatCount="indefinite"/></circle>
+    <circle cx="50" cy="200" r="2" fill="#94a3b8"><animate attributeName="opacity" values="0.2;0.5;0.2" dur="7s" begin="5.5s" repeatCount="indefinite"/></circle>
+    <circle cx="860" cy="190" r="2" fill="#94a3b8"><animate attributeName="opacity" values="0.2;0.5;0.2" dur="9s" begin="4.7s" repeatCount="indefinite"/></circle>
+    <circle cx="300" cy="30" r="2.5" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.6;0.3" dur="7s" begin="5.2s" repeatCount="indefinite"/></circle>
+    <circle cx="600" cy="25" r="2" fill="#94a3b8"><animate attributeName="opacity" values="0.2;0.5;0.2" dur="8s" begin="4.6s" repeatCount="indefinite"/></circle>
+    <circle cx="350" cy="258" r="2.5" fill="#94a3b8"><animate attributeName="opacity" values="0.3;0.6;0.3" dur="6s" begin="5.7s" repeatCount="indefinite"/></circle>
+    <circle cx="560" cy="265" r="2" fill="#94a3b8"><animate attributeName="opacity" values="0.2;0.5;0.2" dur="7.5s" begin="4.4s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- LAYER 2: Edges from trainers to tertiary nodes (faint) -->
+  <g class="layer2-edges" stroke="#334155" stroke-width="0.5" opacity="0">
+    <line x1="160" y1="100" x2="60" y2="50"/><line x1="160" y1="100" x2="140" y2="35"/>
+    <line x1="160" y1="100" x2="170" y2="70"/>
+    <line x1="250" y1="200" x2="95" y2="245"/><line x1="250" y1="200" x2="200" y2="260"/>
+    <line x1="350" y1="80" x2="300" y2="30"/>
+    <line x1="550" y1="80" x2="600" y2="25"/>
+    <line x1="740" y1="100" x2="760" y2="45"/><line x1="740" y1="100" x2="830" y2="70"/>
+    <line x1="740" y1="100" x2="870" y2="140"/>
+    <line x1="650" y1="200" x2="720" y2="255"/><line x1="650" y1="200" x2="820" y2="230"/>
+    <line x1="350" y1="210" x2="350" y2="258"/>
+    <line x1="550" y1="210" x2="560" y2="265"/>
+    <animate attributeName="opacity" values="0;0.4;0.4" dur="3s" begin="3s" fill="freeze"/>
+  </g>
+
+  <!-- LAYER 2: Edges from center to trainer nodes -->
+  <g class="layer1-edges" stroke-width="1.5" opacity="0">
+    <!-- Left cluster -->
+    <line x1="450" y1="140" x2="160" y2="100" stroke="#3b82f6" stroke-opacity="0.4"/>
+    <line x1="450" y1="140" x2="250" y2="200" stroke="#3b82f6" stroke-opacity="0.4"/>
+    <line x1="450" y1="140" x2="350" y2="80" stroke="#3b82f6" stroke-opacity="0.4"/>
+    <line x1="450" y1="140" x2="350" y2="210" stroke="#3b82f6" stroke-opacity="0.4"/>
+    <!-- Right cluster -->
+    <line x1="450" y1="140" x2="740" y2="100" stroke="#3b82f6" stroke-opacity="0.4"/>
+    <line x1="450" y1="140" x2="650" y2="200" stroke="#3b82f6" stroke-opacity="0.4"/>
+    <line x1="450" y1="140" x2="550" y2="80" stroke="#3b82f6" stroke-opacity="0.4"/>
+    <line x1="450" y1="140" x2="550" y2="210" stroke="#3b82f6" stroke-opacity="0.4"/>
+    <animate attributeName="opacity" values="0;1;1" dur="2s" begin="1s" fill="freeze"/>
+  </g>
+
+  <!-- Pulse particles along edges (center → trainers) -->
+  <g filter="url(#glow)">
+    <circle r="3" fill="#3b82f6" opacity="0">
+      <animateMotion dur="2s" begin="2s" repeatCount="indefinite" path="M450,140 L160,100"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="2s" begin="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#3b82f6" opacity="0">
+      <animateMotion dur="2.3s" begin="2.4s" repeatCount="indefinite" path="M450,140 L250,200"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="2.3s" begin="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#3b82f6" opacity="0">
+      <animateMotion dur="1.8s" begin="2.1s" repeatCount="indefinite" path="M450,140 L350,80"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="1.8s" begin="2.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#3b82f6" opacity="0">
+      <animateMotion dur="2.1s" begin="2.6s" repeatCount="indefinite" path="M450,140 L740,100"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="2.1s" begin="2.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#3b82f6" opacity="0">
+      <animateMotion dur="2.4s" begin="2.2s" repeatCount="indefinite" path="M450,140 L650,200"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="2.4s" begin="2.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#3b82f6" opacity="0">
+      <animateMotion dur="1.9s" begin="2.8s" repeatCount="indefinite" path="M450,140 L550,80"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="1.9s" begin="2.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#3b82f6" opacity="0">
+      <animateMotion dur="2.2s" begin="2.5s" repeatCount="indefinite" path="M450,140 L350,210"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="2.2s" begin="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#3b82f6" opacity="0">
+      <animateMotion dur="2s" begin="2.3s" repeatCount="indefinite" path="M450,140 L550,210"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="2s" begin="2.3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Pulse particles from trainers → tertiary (green, delayed) -->
+  <g filter="url(#glow)">
+    <circle r="2" fill="#22c55e" opacity="0">
+      <animateMotion dur="2.5s" begin="4s" repeatCount="indefinite" path="M160,100 L60,50"/>
+      <animate attributeName="opacity" values="0;0.6;0" dur="2.5s" begin="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="2" fill="#22c55e" opacity="0">
+      <animateMotion dur="2.2s" begin="4.3s" repeatCount="indefinite" path="M160,100 L140,35"/>
+      <animate attributeName="opacity" values="0;0.6;0" dur="2.2s" begin="4.3s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="2" fill="#22c55e" opacity="0">
+      <animateMotion dur="2.8s" begin="4.5s" repeatCount="indefinite" path="M740,100 L830,70"/>
+      <animate attributeName="opacity" values="0;0.6;0" dur="2.8s" begin="4.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="2" fill="#22c55e" opacity="0">
+      <animateMotion dur="2.3s" begin="4.7s" repeatCount="indefinite" path="M250,200 L95,245"/>
+      <animate attributeName="opacity" values="0;0.6;0" dur="2.3s" begin="4.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="2" fill="#22c55e" opacity="0">
+      <animateMotion dur="2.6s" begin="4.1s" repeatCount="indefinite" path="M650,200 L820,230"/>
+      <animate attributeName="opacity" values="0;0.6;0" dur="2.6s" begin="4.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="2" fill="#22c55e" opacity="0">
+      <animateMotion dur="2.4s" begin="4.9s" repeatCount="indefinite" path="M740,100 L760,45"/>
+      <animate attributeName="opacity" values="0;0.6;0" dur="2.4s" begin="4.9s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- LAYER 1: Trainer nodes (medium, green) -->
+  <g class="trainer-nodes" opacity="0">
+    <circle cx="160" cy="100" r="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="250" cy="200" r="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="350" cy="80" r="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="350" cy="210" r="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="550" cy="80" r="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="550" cy="210" r="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="650" cy="200" r="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <circle cx="740" cy="100" r="7" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+    <animate attributeName="opacity" values="0;1;1" dur="1.5s" begin="1.5s" fill="freeze"/>
+  </g>
+
+  <!-- Central node (trainer-of-trainers) with breathing pulse -->
+  <circle cx="450" cy="140" r="40" fill="url(#center-glow)">
+    <animate attributeName="r" values="35;45;35" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.5;0.8;0.5" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="450" cy="140" r="14" fill="#1e293b" stroke="#3b82f6" stroke-width="3" filter="url(#glow)">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="450" cy="140" r="5" fill="#3b82f6" opacity="0.8">
+    <animate attributeName="opacity" values="0.6;1;0.6" dur="4s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Concentric rings emanating from center -->
+  <circle cx="450" cy="140" r="20" fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0">
+    <animate attributeName="r" values="20;120" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0" dur="5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="450" cy="140" r="20" fill="none" stroke="#3b82f6" stroke-width="0.5" opacity="0">
+    <animate attributeName="r" values="20;120" dur="5s" begin="2.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0" dur="5s" begin="2.5s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Trainer-to-trainer cross-links (peer network) -->
+  <g stroke="#22c55e" stroke-width="0.5" stroke-dasharray="3,4" opacity="0">
+    <line x1="160" y1="100" x2="350" y2="80"/>
+    <line x1="350" y1="80" x2="550" y2="80"/>
+    <line x1="550" y1="80" x2="740" y2="100"/>
+    <line x1="740" y1="100" x2="650" y2="200"/>
+    <line x1="650" y1="200" x2="550" y2="210"/>
+    <line x1="550" y1="210" x2="350" y2="210"/>
+    <line x1="350" y1="210" x2="250" y2="200"/>
+    <line x1="250" y1="200" x2="160" y2="100"/>
+    <animate attributeName="opacity" values="0;0.3;0.3" dur="2s" begin="3.5s" fill="freeze"/>
+  </g>
+</svg>
+
+<h1>Claude Code Train-the-Trainer</h1>
+<p class="subtitle">Intensive hands-on workshops, cohorts of 10. Your people become expert-level Claude Code trainers. They train everyone else.</p>
+
+<h2>1. The Problem</h2>
+
+<p>Enterprise AI rollouts follow a predictable pattern: deploy the tools, commit the budget, then watch adoption stall. The infrastructure works. The models work. But the last mile &mdash; getting the workforce from "tool deployed" to "tool productive" &mdash; is where the investment breaks down. Recent industry research puts a number on it: among employees who received structured AI training, 64% reported productivity gains of 20% or more. Among those with no training, 36%. That's a 28-point gap, and it isn't coming from better models or faster infrastructure.</p>
+
+<p>Most organizations know this. Over 60% of executives have formally linked AI spending to ROI targets. But the same discipline hasn't reached training: 61% rely on workers to learn on the job, fewer than half provide dedicated time for that learning, and over half of employees are seeking training from outside sources at their own expense. More speed shouldn't mean more problems &mdash; but without structured skilling, that's exactly what happens.</p>
+
+<p>This is not going to happen organically. Workforce AI competency requires the same deliberate design that the AI systems themselves required. The metric that matters is time-to-competency &mdash; not how many hours of training were delivered, but how fast your people reach the point where the tool pays for itself.</p>
+
+<div class="insight">The bottleneck in enterprise AI is the last mile: the gap between deploying a tool and having a workforce that can use it at the level that justifies the investment.</div>
+
+<h2>2. What Your Trainers Will Learn</h2>
+
+<p>This is not a lecture series. It's engineering, not magic &mdash; every session is hands-on: short concept introduction, then exercises that your trainers work through in real time with real projects. Learning happens in the flow of work, not in a separate classroom. By the end of each day, they've <em>done</em> the thing, not just heard about it.</p>
+
+<div class="curriculum-item">
+<h3>Day 1: Foundation &mdash; Architecture and Configuration</h3>
+<p><strong>Exercise:</strong> Each trainer configures a <code>CLAUDE.md</code> for an actual project &mdash; encoding coding standards, cost rules, and domain-specific instructions. They set up permission systems, governance boundaries, and observability. They run sessions with and without configuration and measure the difference. By end of day, every trainer has a strong foundation: a working project config they built themselves.</p>
+</div>
+
+<div class="curriculum-item">
+<h3>Day 2: Optimize and Transform &mdash; Cost and Efficiency</h3>
+<p><strong>Exercise:</strong> Trainers take the same coding task and complete it two ways: naive and optimized. Token management, model routing, grep-before-read, parallel tool calls, session chunking. They see 75% cost reduction in their own usage, not a slide deck claiming it. The goal: throughput, quality, and consistency &mdash; not just speed. Techniques become muscle memory through repetition.</p>
+</div>
+
+<div class="curriculum-item">
+<h3>Day 3: Role Separation Architecture</h3>
+<p><strong>Exercise:</strong> Trainers run the Triad pattern live &mdash; separate Claude instances for coding and auditing, directional information flow, neither seeing the other's raw output. They experience the failure mode first (single agent self-validates, misses drift) then the fix. This is a deliberate design discipline, not a productivity hack &mdash; the pattern clicks when you've watched it catch something you missed.</p>
+</div>
+
+<div class="curriculum-item">
+<h3>Day 4: Advanced Patterns</h3>
+<p><strong>Exercise:</strong> Multi-agent orchestration on a real codebase. Automated workflows, specification-driven development, structural debugging. Trainers design a workflow, run it, break it, diagnose why it broke, and fix it &mdash; all in the session. They learn the real strengths and weaknesses of the tool, not the marketing version. Context hygiene for long sessions: they'll hit the wall and learn to manage it.</p>
+</div>
+
+<div class="curriculum-item">
+<h3>Day 5: Teaching Practice</h3>
+<p><strong>Exercise:</strong> Each trainer designs and delivers a 30-minute teaching segment to the cohort, covering one pattern from Days 1&ndash;4. Peer review and instructor feedback. They leave with a living curriculum &mdash; a tested lesson plan they've already delivered once, built to evolve as the tool does. Not notes they hope to turn into a class later. Measurable impact: can your trainer teach it cold on Monday morning?</p>
+</div>
+
+<h2>3. Why Me</h2>
+
+<p>I've used Claude Code as my primary development tool since its launch &mdash; daily, across production systems, for over a year. Not demos. Not prototypes. Shipping work.</p>
+
+<ul class="credential-list">
+<li>Multi-domain production systems: real-time web applications, scientific data pipelines, security research automation, AI-assisted research workflows</li>
+<li>Documented 75% reduction in token costs through configuration and workflow optimization</li>
+<li>Published interactive tutorials demonstrating these patterns (<a href="../">see this site</a>)</li>
+<li>Fortune 500 technology training background &mdash; I've designed and delivered Train-the-Trainer programs before, multiple times</li>
+<li>Built and refined the role-separation architecture through hundreds of production sessions</li>
+</ul>
+
+<div class="insight">Of 370,000 employees at a typical enterprise, the number who are both more skilled with Claude Code than I am <em>and</em> have the ability and inclination to teach it is approximately zero. That intersection is the value proposition.</div>
+
+<p><strong>Don't take my word for it.</strong> Before we discuss scope, pricing, or scheduling &mdash; test me. Give me a coding problem, a configuration challenge, a workflow design question, whatever your best people would find hard. I welcome any evaluation you want to run, no commitment required. Claims are cheap; demonstrated capability isn't.</p>
+
+<h2>4. Program Structure</h2>
+
+<div class="stat-grid">
+<div class="stat-card">
+  <span class="stat-number">10</span>
+  <div class="stat-label">Max per cohort (hands-on)</div>
+</div>
+<div class="stat-card">
+  <span class="stat-number">5</span>
+  <div class="stat-label">Days, intensive workshop</div>
+</div>
+<div class="stat-card">
+  <span class="stat-number">30</span>
+  <div class="stat-label">Days follow-up support</div>
+</div>
+</div>
+
+<table class="pricing-table">
+<tr>
+  <th>Delivery</th>
+  <th>Rate</th>
+  <th>Details</th>
+</tr>
+<tr>
+  <td>Remote</td>
+  <td>$5,000 / day</td>
+  <td>Live sessions via video. Full curriculum. Timezone-flexible scheduling. Significant expenses additional.</td>
+</tr>
+<tr>
+  <td>On-site</td>
+  <td>$10,000 / day</td>
+  <td>In-person delivery at your location. All travel, accommodation, and significant expenses additional.</td>
+</tr>
+<tr>
+  <td>Follow-up support</td>
+  <td>$250 / hour</td>
+  <td>Live consultation, curriculum review, troubleshooting. 30-day window per cohort. Routine email questions included at no charge.</td>
+</tr>
+</table>
+
+<p><strong>The model:</strong> Cohorts of 10 &mdash; small enough that every trainer gets individual attention, works exercises at their own pace, and gets direct feedback. This is a hands-on workshop, not a webinar. To train 50 people, run 5 cohorts.</p>
+
+<p><strong>Why 10:</strong> Hands-on AI training fails at scale. When someone is stuck on a configuration problem or a workflow that isn't clicking, they need the instructor's attention <em>now</em>, not after 49 other people. The exercises are the point; the class size protects them.</p>
+
+<p><strong>Adjustable scope:</strong> The 5-day structure is a baseline. Programs can be compressed to 3 days (essentials only) or extended with role-specific tracks (security, DevOps, data science) for enterprise-scale workforce transformation. My objective is that your trainers <em>succeed</em> &mdash; quick email questions are always welcome; substantive follow-up work is billed hourly.</p>
+
+<h2>5. Contact</h2>
+
+<div class="contact-box">
+<p style="font-size:1.2rem;color:var(--heading);margin-bottom:0.5rem;"><strong>Bruce Stephenson</strong></p>
+<p style="margin-bottom:0.5rem;"><a href="mailto:energyscholar@gmail.com">energyscholar@gmail.com</a></p>
+<p><a href="https://www.linkedin.com/in/bruce-stephenson-1a7a2830/">LinkedIn</a></p>
+</div>
+
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
+
+</div>
+
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem">
+  <a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a>
+</div>
+
+<script src="../js/annex-tracker.js"></script>
+</body>
+</html>
