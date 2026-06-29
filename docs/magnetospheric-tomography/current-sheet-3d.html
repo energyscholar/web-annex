@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<title>3D Current Sheet Structure — Halloween 2003</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Courier New', monospace; background: #060612; color: #b0b0c8; overflow-y: auto; }
+.container { max-width: 1400px; margin: 0 auto; padding: 6px; }
+h1 { font-size: 14px; color: #6688cc; padding: 4px 0; }
+.sub { font-size: 10px; color: #445; margin-bottom: 6px; }
+.row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.panel { background: #0c0c22; border: 1px solid #1a1a3a; border-radius: 3px; padding: 6px; }
+.panel h2 { font-size: 11px; color: #5577aa; margin-bottom: 3px; }
+.controls { display: flex; align-items: center; gap: 6px; padding: 4px 0; }
+button { background: #1a1a3a; color: #6688cc; border: 1px solid #2a2a4a;
+  padding: 3px 8px; cursor: pointer; font-family: inherit; font-size: 10px; border-radius: 2px; }
+button:hover { background: #2a2a5a; }
+.time { color: #ffcc44; font-size: 14px; font-weight: bold; }
+.metric { display: inline-block; margin-right: 8px; font-size: 10px; }
+.metric .v { color: #88aaff; }
+.info { font-size: 9px; color: #334; line-height: 1.3; margin-top: 3px; }
+svg { display: block; }
+</style>
+</head><body>
+<div class="container">
+<h1>Magnetospheric Current Sheet: 3D Coherence Structure</h1>
+<div class="sub">Halloween 2003 — Latitude-resolved Moran's I mapped to equatorial L-shells + altitude decomposition</div>
+
+<div class="controls">
+<button onclick="togglePlay()" id="playBtn">&#9654;</button>
+<button onclick="step(-1)">&#9664;</button>
+<button onclick="step(1)">&#9654;</button>
+<input type="range" min="0" id="sl" oninput="setE(+this.value)" style="width:300px; accent-color:#6688cc;">
+<span class="time" id="utL"></span>
+<span id="mets" style="margin-left:auto;"></span>
+</div>
+
+<div class="row">
+<div class="panel" style="flex:0 0 380px;">
+<h2>Latitude / L-Shell Coherence Profile</h2>
+<svg id="svgLat" width="360" height="320" viewBox="0 0 360 320"></svg>
+<div class="info">
+Bar height = Moran's I at that latitude band<br>
+Color: green=electrojet-dominated, blue=FAC-dominated<br>
+Right axis: L-shell mapping (dipole)
+</div>
+</div>
+
+<div class="panel" style="flex:0 0 280px;">
+<h2>Altitude Profile + Phase Space</h2>
+<svg id="svgAlt" width="260" height="320" viewBox="0 0 260 320"></svg>
+<div class="info">
+Left: I vs altitude (2-layer Chapman)<br>
+Blue band: F-region (300km) / Red band: precipitation (120km)
+</div>
+</div>
+
+<div class="panel" style="flex:1 1 400px;">
+<h2>Time Series: Multi-Observable</h2>
+<svg id="svgTime" width="100%" height="320" viewBox="0 0 500 320"></svg>
+<div class="info">
+Blue solid: I_N (ground) — Orange dash: Δ(120-300) — Green: coupling %<br>
+Gray bars: RMS (log scale) — Anomaly markers: * = multi-observable coincidence
+</div>
+</div>
+</div>
+
+<div class="panel">
+<h2>Meridional Cross-Section: L-shell × Altitude</h2>
+<svg id="svgMerid" width="100%" height="180" viewBox="0 0 700 180"></svg>
+<div class="info">
+Horizontal: L-shell (equatorial distance). Vertical: altitude. Color intensity = coherence at that (L, alt) cell.
+Green = high Moran's I. The current sheet thickness appears as the width of the coherent band.
+</div>
+</div>
+
+</div>
+
+<script>
+const D = [{"ut": 0.0, "rms": 311, "I_N": 0.566, "I_E": 0.078, "coupling": 0.9, "I_120": 0.251, "I_300": 0.207, "delta": 0.044, "lat_I": {"55": 0.027, "57": 0.252, "59": 0.082, "61": 0.04, "63": 0.213, "65": 0.567, "67": 0.476, "69": 0.476, "71": 0.313, "73": 0.559}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.567}, {"ut": 0.5, "rms": 231, "I_N": 0.515, "I_E": 0.16, "coupling": -6.9, "I_120": 0.274, "I_300": 0.216, "delta": 0.057, "lat_I": {"55": -0.062, "57": 0.181, "59": 0.167, "61": 0.079, "63": 0.251, "65": 0.539, "67": 0.429, "69": 0.4, "71": 0.229, "73": 0.508}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.539}, {"ut": 1.0, "rms": 178, "I_N": 0.476, "I_E": 0.323, "coupling": -11.1, "I_120": 0.274, "I_300": 0.218, "delta": 0.056, "lat_I": {"55": 0.018, "57": 0.234, "59": 0.249, "61": 0.051, "63": 0.15, "65": 0.434, "67": 0.372, "69": 0.3, "71": 0.316, "73": 0.426}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.434}, {"ut": 1.5, "rms": 147, "I_N": 0.512, "I_E": 0.325, "coupling": -16.0, "I_120": 0.274, "I_300": 0.219, "delta": 0.055, "lat_I": {"55": 0.001, "57": 0.263, "59": 0.24, "61": 0.048, "63": 0.17, "65": 0.491, "67": 0.46, "69": 0.461, "71": 0.338, "73": 0.339}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.491}, {"ut": 2.0, "rms": 109, "I_N": 0.505, "I_E": 0.297, "coupling": -18.8, "I_120": 0.241, "I_300": 0.262, "delta": -0.021, "lat_I": {"55": -0.083, "57": 0.037, "59": 0.027, "61": -0.009, "63": 0.151, "65": 0.483, "67": 0.453, "69": 0.443, "71": 0.304, "73": 0.478}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.483}, {"ut": 2.5, "rms": 100, "I_N": 0.347, "I_E": 0.283, "coupling": 2.9, "I_120": 0.241, "I_300": 0.262, "delta": -0.021, "lat_I": {"55": 0.272, "57": 0.272, "59": 0.015, "61": 0.247, "63": 0.394, "65": 0.53, "67": 0.454, "69": 0.372, "71": 0.349, "73": 0.523}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.53}, {"ut": 3.0, "rms": 68, "I_N": 0.267, "I_E": 0.303, "coupling": -6.8, "I_120": 0.217, "I_300": 0.256, "delta": -0.039, "lat_I": {"55": -0.095, "57": 0.259, "59": 0.062, "61": 0.075, "63": 0.168, "65": 0.264, "67": 0.375, "69": 0.214, "71": 0.26, "73": 0.527}, "best_lat": 73.0, "best_L": 11.7, "best_I": 0.527}, {"ut": 3.5, "rms": 81, "I_N": 0.117, "I_E": 0.087, "coupling": 3.3, "I_120": 0.217, "I_300": 0.256, "delta": -0.039, "lat_I": {"55": -0.067, "57": 0.222, "59": 0.046, "61": -0.052, "63": 0.099, "65": 0.179, "67": 0.338, "69": 0.467, "71": -0.01, "73": 0.236}, "best_lat": 69.0, "best_L": 7.8, "best_I": 0.467}, {"ut": 4.0, "rms": 63, "I_N": 0.085, "I_E": -0.027, "coupling": 0.9, "I_120": 0.51, "I_300": 0.541, "delta": -0.031, "lat_I": {"55": -0.128, "57": 0.115, "59": 0.002, "61": -0.082, "63": 0.002, "65": 0.188, "67": 0.411, "69": 0.537, "71": 0.031, "73": 0.124}, "best_lat": 69.0, "best_L": 7.8, "best_I": 0.537}, {"ut": 4.5, "rms": 87, "I_N": 0.327, "I_E": 0.131, "coupling": 4.9, "I_120": 0.51, "I_300": 0.535, "delta": -0.025, "lat_I": {"55": -0.278, "57": -0.114, "59": -0.106, "61": 0.252, "63": 0.283, "65": 0.419, "67": 0.435, "69": 0.317, "71": 0.292, "73": 0.515}, "best_lat": 73.0, "best_L": 11.7, "best_I": 0.515}, {"ut": 5.0, "rms": 103, "I_N": 0.124, "I_E": 0.11, "coupling": -4.3, "I_120": 0.51, "I_300": 0.531, "delta": -0.021, "lat_I": {"55": -0.052, "57": -0.019, "59": 0.004, "61": 0.227, "63": 0.237, "65": 0.321, "67": 0.377, "69": 0.443, "71": -0.004, "73": 0.066}, "best_lat": 69.0, "best_L": 7.8, "best_I": 0.443}, {"ut": 5.5, "rms": 114, "I_N": 0.155, "I_E": 0.063, "coupling": 8.0, "I_120": 0.509, "I_300": 0.528, "delta": -0.018, "lat_I": {"55": 0.085, "57": 0.081, "59": 0.04, "61": 0.306, "63": 0.29, "65": 0.372, "67": 0.402, "69": 0.478, "71": -0.002, "73": 0.077}, "best_lat": 69.0, "best_L": 7.8, "best_I": 0.478}, {"ut": 6.0, "rms": 275, "I_N": 0.099, "I_E": 0.154, "coupling": 31.9, "I_120": 0.585, "I_300": 0.549, "delta": 0.035, "lat_I": {"55": 0.051, "57": 0.086, "59": -0.009, "61": 0.164, "63": 0.11, "65": 0.127, "67": 0.241, "69": 0.205, "71": 0.209, "73": -0.01}, "best_lat": 67.0, "best_L": 6.6, "best_I": 0.241}, {"ut": 6.5, "rms": 939, "I_N": 0.078, "I_E": 0.203, "coupling": 15.0, "I_120": 0.585, "I_300": 0.181, "delta": 0.403, "lat_I": {"55": 0.161, "57": 0.177, "59": 0.081, "61": -0.123, "63": -0.109, "65": 0.034, "67": -0.123, "69": -0.02, "71": -0.043, "73": -0.027}, "best_lat": 57.0, "best_L": 3.4, "best_I": 0.177}, {"ut": 7.0, "rms": 730, "I_N": 0.262, "I_E": 0.415, "coupling": 11.8, "I_120": 0.585, "I_300": 0.322, "delta": 0.263, "lat_I": {"55": 0.075, "57": 0.313, "59": 0.397, "61": 0.312, "63": 0.318, "65": 0.425, "67": 0.361, "69": 0.377, "71": 0.084, "73": 0.419}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.425}, {"ut": 7.5, "rms": 298, "I_N": 0.395, "I_E": 0.335, "coupling": 29.2, "I_120": 0.58, "I_300": 0.539, "delta": 0.041, "lat_I": {"55": -0.101, "57": 0.147, "59": 0.317, "61": 0.392, "63": 0.235, "65": 0.454, "67": 0.174, "69": 0.182, "71": 0.165, "73": 0.362}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.454}, {"ut": 8.0, "rms": 288, "I_N": 0.084, "I_E": 0.364, "coupling": -0.9, "I_120": 0.533, "I_300": 0.338, "delta": 0.195, "lat_I": {"55": -0.055, "57": -0.016, "59": -0.042, "61": -0.025, "63": 0.089, "65": 0.099, "67": 0.098, "69": 0.082, "71": 0.103, "73": -0.04}, "best_lat": 71.0, "best_L": 9.4, "best_I": 0.103}, {"ut": 8.5, "rms": 439, "I_N": 0.112, "I_E": 0.464, "coupling": 3.9, "I_120": 0.54, "I_300": 0.263, "delta": 0.277, "lat_I": {"55": -0.003, "57": 0.034, "59": -0.084, "61": 0.19, "63": 0.125, "65": 0.257, "67": 0.342, "69": 0.493, "71": 0.003, "73": -0.092}, "best_lat": 69.0, "best_L": 7.8, "best_I": 0.493}, {"ut": 9.0, "rms": 523, "I_N": 0.267, "I_E": 0.254, "coupling": 17.1, "I_120": 0.533, "I_300": 0.199, "delta": 0.334, "lat_I": {"55": -0.001, "57": 0.254, "59": 0.042, "61": 0.099, "63": 0.229, "65": 0.436, "67": 0.451, "69": 0.427, "71": 0.152, "73": -0.002}, "best_lat": 67.0, "best_L": 6.6, "best_I": 0.451}, {"ut": 9.5, "rms": 503, "I_N": 0.335, "I_E": 0.151, "coupling": 5.4, "I_120": 0.533, "I_300": 0.212, "delta": 0.321, "lat_I": {"55": -0.028, "57": 0.207, "59": 0.15, "61": 0.284, "63": 0.168, "65": 0.57, "67": 0.475, "69": 0.492, "71": -0.026, "73": -0.123}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.57}, {"ut": 10.0, "rms": 263, "I_N": 0.344, "I_E": 0.207, "coupling": 14.4, "I_120": 0.392, "I_300": 0.024, "delta": 0.368, "lat_I": {"55": 0.126, "57": 0.197, "59": 0.191, "61": 0.481, "63": 0.545, "65": 0.709, "67": 0.5, "69": 0.559, "71": -0.001, "73": -0.077}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.709}, {"ut": 10.5, "rms": 414, "I_N": 0.31, "I_E": 0.094, "coupling": -4.1, "I_120": 0.392, "I_300": 0.009, "delta": 0.384, "lat_I": {"55": -0.03, "57": 0.163, "59": 0.198, "61": 0.254, "63": 0.237, "65": 0.537, "67": 0.524, "69": 0.545, "71": 0.03, "73": -0.096}, "best_lat": 69.0, "best_L": 7.8, "best_I": 0.545}, {"ut": 11.0, "rms": 226, "I_N": 0.123, "I_E": 0.152, "coupling": -4.5, "I_120": 0.381, "I_300": 0.03, "delta": 0.351, "lat_I": {"55": -0.082, "57": -0.08, "59": 0.05, "61": 0.086, "63": 0.169, "65": 0.426, "67": 0.359, "69": 0.375, "71": 0.053, "73": 0.071}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.426}, {"ut": 11.5, "rms": 418, "I_N": 0.364, "I_E": 0.182, "coupling": 10.3, "I_120": 0.392, "I_300": 0.008, "delta": 0.384, "lat_I": {"55": -0.115, "57": -0.052, "59": 0.18, "61": 0.355, "63": 0.445, "65": 0.55, "67": 0.356, "69": 0.441, "71": 0.206, "73": 0.414}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.55}, {"ut": 12.0, "rms": 260, "I_N": 0.404, "I_E": 0.125, "coupling": 1.0, "I_120": 0.424, "I_300": 0.133, "delta": 0.291, "lat_I": {"55": -0.091, "57": 0.043, "59": 0.154, "61": 0.381, "63": 0.453, "65": 0.556, "67": 0.342, "69": 0.072, "71": 0.024, "73": 0.148}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.556}, {"ut": 12.5, "rms": 200, "I_N": 0.402, "I_E": 0.188, "coupling": -1.3, "I_120": 0.424, "I_300": 0.148, "delta": 0.276, "lat_I": {"55": -0.048, "57": 0.028, "59": 0.196, "61": 0.388, "63": 0.476, "65": 0.581, "67": 0.365, "69": 0.245, "71": 0.156, "73": 0.31}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.581}, {"ut": 13.0, "rms": 302, "I_N": 0.488, "I_E": 0.224, "coupling": -4.8, "I_120": 0.424, "I_300": 0.125, "delta": 0.299, "lat_I": {"55": -0.1, "57": 0.157, "59": 0.248, "61": 0.471, "63": 0.559, "65": 0.663, "67": 0.453, "69": 0.372, "71": 0.225, "73": 0.297}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.663}, {"ut": 13.5, "rms": 299, "I_N": 0.49, "I_E": 0.18, "coupling": -2.4, "I_120": 0.424, "I_300": 0.126, "delta": 0.298, "lat_I": {"55": -0.092, "57": 0.207, "59": 0.336, "61": 0.515, "63": 0.605, "65": 0.683, "67": 0.43, "69": 0.303, "71": 0.205, "73": 0.191}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.683}, {"ut": 14.0, "rms": 263, "I_N": 0.438, "I_E": 0.231, "coupling": -10.8, "I_120": 0.333, "I_300": 0.254, "delta": 0.079, "lat_I": {"55": -0.15, "57": 0.248, "59": 0.468, "61": 0.508, "63": 0.472, "65": 0.591, "67": 0.446, "69": 0.426, "71": 0.114, "73": 0.033}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.591}, {"ut": 14.5, "rms": 303, "I_N": 0.256, "I_E": 0.218, "coupling": -0.9, "I_120": 0.333, "I_300": 0.261, "delta": 0.073, "lat_I": {"55": -0.101, "57": 0.257, "59": 0.509, "61": 0.578, "63": 0.516, "65": 0.409, "67": 0.202, "69": 0.313, "71": 0.225, "73": -0.035}, "best_lat": 61.0, "best_L": 4.3, "best_I": 0.578}, {"ut": 15.0, "rms": 407, "I_N": 0.294, "I_E": 0.193, "coupling": -8.5, "I_120": 0.333, "I_300": 0.277, "delta": 0.056, "lat_I": {"55": -0.11, "57": 0.168, "59": 0.354, "61": 0.529, "63": 0.51, "65": 0.465, "67": 0.416, "69": 0.479, "71": 0.087, "73": -0.088}, "best_lat": 61.0, "best_L": 4.3, "best_I": 0.529}, {"ut": 15.5, "rms": 469, "I_N": 0.214, "I_E": 0.19, "coupling": -12.1, "I_120": 0.333, "I_300": 0.287, "delta": 0.046, "lat_I": {"55": -0.1, "57": 0.185, "59": 0.225, "61": 0.419, "63": 0.465, "65": 0.414, "67": 0.38, "69": 0.509, "71": 0.022, "73": -0.025}, "best_lat": 69.0, "best_L": 7.8, "best_I": 0.509}, {"ut": 16.0, "rms": 370, "I_N": 0.158, "I_E": 0.177, "coupling": -9.0, "I_120": 0.33, "I_300": 0.19, "delta": 0.141, "lat_I": {"55": -0.302, "57": -0.04, "59": 0.2, "61": 0.405, "63": 0.455, "65": 0.351, "67": 0.351, "69": 0.393, "71": 0.026, "73": -0.237}, "best_lat": 63.0, "best_L": 4.9, "best_I": 0.455}, {"ut": 16.5, "rms": 324, "I_N": 0.283, "I_E": 0.143, "coupling": -14.9, "I_120": 0.33, "I_300": 0.184, "delta": 0.146, "lat_I": {"55": -0.093, "57": 0.275, "59": 0.536, "61": 0.632, "63": 0.618, "65": 0.482, "67": 0.337, "69": 0.388, "71": 0.101, "73": 0.386}, "best_lat": 61.0, "best_L": 4.3, "best_I": 0.632}, {"ut": 17.0, "rms": 479, "I_N": 0.177, "I_E": 0.398, "coupling": -27.2, "I_120": 0.33, "I_300": 0.203, "delta": 0.128, "lat_I": {"55": -0.157, "57": 0.184, "59": 0.401, "61": 0.395, "63": 0.427, "65": 0.387, "67": 0.309, "69": 0.352, "71": 0.128, "73": 0.508}, "best_lat": 73.0, "best_L": 11.7, "best_I": 0.508}, {"ut": 17.5, "rms": 367, "I_N": 0.12, "I_E": 0.484, "coupling": 0.5, "I_120": 0.33, "I_300": 0.189, "delta": 0.141, "lat_I": {"55": -0.105, "57": -0.004, "59": 0.118, "61": 0.309, "63": 0.358, "65": 0.293, "67": 0.415, "69": 0.23, "71": 0.104, "73": -0.234}, "best_lat": 67.0, "best_L": 6.6, "best_I": 0.415}, {"ut": 18.0, "rms": 486, "I_N": 0.238, "I_E": 0.296, "coupling": -18.6, "I_120": 0.264, "I_300": 0.235, "delta": 0.028, "lat_I": {"55": -0.159, "57": 0.138, "59": 0.403, "61": 0.603, "63": 0.648, "65": 0.569, "67": 0.34, "69": 0.006, "71": -0.017, "73": 0.044}, "best_lat": 63.0, "best_L": 4.9, "best_I": 0.648}, {"ut": 18.5, "rms": 309, "I_N": 0.034, "I_E": 0.36, "coupling": 30.1, "I_120": 0.264, "I_300": 0.225, "delta": 0.039, "lat_I": {"55": -0.065, "57": 0.075, "59": 0.109, "61": -0.04, "63": -0.069, "65": 0.081, "67": 0.222, "69": 0.112, "71": 0.037, "73": -0.197}, "best_lat": 67.0, "best_L": 6.6, "best_I": 0.222}, {"ut": 19.0, "rms": 399, "I_N": 0.124, "I_E": 0.316, "coupling": 36.7, "I_120": 0.264, "I_300": 0.231, "delta": 0.033, "lat_I": {"55": 0.094, "57": 0.02, "59": -0.048, "61": -0.011, "63": 0.044, "65": 0.507, "67": 0.298, "69": 0.057, "71": -0.079, "73": -0.048}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.507}, {"ut": 19.5, "rms": 710, "I_N": 0.166, "I_E": 0.304, "coupling": 22.0, "I_120": 0.264, "I_300": 0.247, "delta": 0.017, "lat_I": {"55": 0.168, "57": 0.029, "59": 0.19, "61": 0.34, "63": 0.388, "65": 0.53, "67": 0.143, "69": 0.111, "71": -0.023, "73": 0.157}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.53}, {"ut": 20.0, "rms": 1033, "I_N": 0.352, "I_E": 0.17, "coupling": 10.0, "I_120": -0.017, "I_300": 0.364, "delta": -0.381, "lat_I": {"55": 0.313, "57": 0.041, "59": 0.354, "61": 0.551, "63": 0.537, "65": 0.681, "67": 0.344, "69": 0.301, "71": -0.026, "73": 0.082}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.681}, {"ut": 20.5, "rms": 529, "I_N": 0.346, "I_E": 0.195, "coupling": 27.6, "I_120": -0.017, "I_300": 0.384, "delta": -0.401, "lat_I": {"55": 0.12, "57": -0.073, "59": 0.185, "61": 0.495, "63": 0.529, "65": 0.648, "67": 0.282, "69": 0.266, "71": 0.033, "73": -0.187}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.648}, {"ut": 21.0, "rms": 460, "I_N": 0.22, "I_E": 0.196, "coupling": 11.2, "I_120": -0.022, "I_300": 0.418, "delta": -0.44, "lat_I": {"55": 0.034, "57": -0.028, "59": 0.351, "61": 0.593, "63": 0.587, "65": 0.446, "67": 0.238, "69": 0.122, "71": -0.006, "73": -0.163}, "best_lat": 61.0, "best_L": 4.3, "best_I": 0.593}, {"ut": 21.5, "rms": 415, "I_N": 0.31, "I_E": 0.147, "coupling": 8.3, "I_120": -0.017, "I_300": 0.385, "delta": -0.402, "lat_I": {"55": -0.073, "57": 0.139, "59": 0.358, "61": 0.556, "63": 0.605, "65": 0.633, "67": 0.295, "69": 0.176, "71": -0.084, "73": -0.159}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.633}, {"ut": 22.0, "rms": 384, "I_N": 0.198, "I_E": 0.168, "coupling": 11.8, "I_120": 0.066, "I_300": 0.367, "delta": -0.301, "lat_I": {"55": -0.077, "57": 0.238, "59": 0.351, "61": 0.506, "63": 0.511, "65": 0.49, "67": 0.179, "69": 0.21, "71": 0.045, "73": 0.035}, "best_lat": 63.0, "best_L": 4.9, "best_I": 0.511}, {"ut": 22.5, "rms": 979, "I_N": 0.522, "I_E": 0.212, "coupling": 24.7, "I_120": 0.088, "I_300": 0.395, "delta": -0.306, "lat_I": {"55": 0.002, "57": -0.125, "59": 0.226, "61": 0.49, "63": 0.532, "65": 0.713, "67": 0.545, "69": 0.519, "71": 0.229, "73": 0.433}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.713}, {"ut": 23.0, "rms": 829, "I_N": 0.467, "I_E": 0.374, "coupling": -13.3, "I_120": 0.088, "I_300": 0.403, "delta": -0.315, "lat_I": {"55": -0.001, "57": -0.099, "59": 0.067, "61": 0.347, "63": 0.438, "65": 0.713, "67": 0.551, "69": 0.52, "71": 0.17, "73": 0.497}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.713}, {"ut": 23.5, "rms": 560, "I_N": 0.398, "I_E": 0.346, "coupling": -12.4, "I_120": 0.088, "I_300": 0.386, "delta": -0.298, "lat_I": {"55": -0.019, "57": -0.08, "59": 0.351, "61": 0.591, "63": 0.657, "65": 0.719, "67": 0.482, "69": 0.445, "71": 0.147, "73": 0.314}, "best_lat": 65.0, "best_L": 5.6, "best_I": 0.719}];
+const N = D.length;
+let cur = 0, playing = false, timer = null;
+
+document.getElementById('sl').max = N-1;
+
+const LAT_BINS = [55,57,59,61,63,65,67,69,71,73,75,77];
+const L_SHELLS = LAT_BINS.map(l => 1/Math.cos(l*Math.PI/180)**2);
+const ALTS = [100,120,150,200,300,400,500];
+
+function I2color(I, alpha) {
+    if (I > 0.3) return `rgba(68,200,68,${alpha})`;
+    if (I > 0.1) return `rgba(68,150,220,${alpha})`;
+    if (I > -0.1) return `rgba(80,80,100,${alpha})`;
+    return `rgba(200,80,80,${alpha})`;
+}
+
+function drawLat() {
+    const e = D[cur], s = document.getElementById('svgLat');
+    const W=360, H=320, ml=40, mr=50, mt=15, mb=35;
+    const pw=W-ml-mr, ph=H-mt-mb;
+    let svg = `<rect width="${W}" height="${H}" fill="#0a0a1e"/>`;
+    
+    // Axes
+    svg += `<line x1="${ml}" y1="${H-mb}" x2="${W-mr}" y2="${H-mb}" stroke="#223"/>`;
+    svg += `<line x1="${ml}" y1="${mt}" x2="${ml}" y2="${H-mb}" stroke="#223"/>`;
+    svg += `<text x="${(ml+W-mr)/2}" y="${H-5}" fill="#556" font-size="9" text-anchor="middle">Geomagnetic Latitude (°)</text>`;
+    svg += `<text x="10" y="${H/2}" fill="#556" font-size="9" text-anchor="middle" transform="rotate(-90,10,${H/2})">Moran's I</text>`;
+    
+    // Y-axis grid
+    for (let v = -0.4; v <= 0.8; v += 0.2) {
+        const y = H-mb-(v+0.4)/1.2*ph;
+        svg += `<line x1="${ml}" y1="${y}" x2="${W-mr}" y2="${y}" stroke="#111828" stroke-width="0.5"/>`;
+        svg += `<text x="${ml-3}" y="${y+3}" fill="#445" font-size="7" text-anchor="end">${v.toFixed(1)}</text>`;
+    }
+    // Zero line
+    const y0 = H-mb-0.4/1.2*ph;
+    svg += `<line x1="${ml}" y1="${y0}" x2="${W-mr}" y2="${y0}" stroke="#334" stroke-dasharray="3"/>`;
+    
+    // Bars
+    const bw = pw / LAT_BINS.length * 0.7;
+    const gap = pw / LAT_BINS.length;
+    
+    for (let i = 0; i < LAT_BINS.length; i++) {
+        const lat = LAT_BINS[i];
+        const x = ml + (i + 0.5) * gap;
+        const I_val = e.lat_I ? (e.lat_I[String(lat)] || 0) : 0;
+        const barH = Math.abs(I_val) / 1.2 * ph;
+        const barY = I_val > 0 ? y0 - barH : y0;
+        const col = I2color(I_val, 0.7);
+        
+        svg += `<rect x="${x-bw/2}" y="${barY}" width="${bw}" height="${barH}" fill="${col}" rx="1"/>`;
+        
+        // Latitude label
+        if (i % 2 === 0) {
+            svg += `<text x="${x}" y="${H-mb+12}" fill="#445" font-size="7" text-anchor="middle">${lat}°</text>`;
+        }
+        
+        // L-shell on right axis
+        if (lat <= 75 && i % 2 === 0) {
+            const L = (1/Math.cos(lat*Math.PI/180)**2).toFixed(1);
+            const yR = H-mb-(I_val+0.4)/1.2*ph;
+            svg += `<text x="${W-mr+3}" y="${H-mb+12 - i*12}" fill="#884" font-size="7">L=${L}</text>`;
+        }
+    }
+    
+    // Best band marker
+    if (e.best_lat) {
+        const bi = LAT_BINS.indexOf(e.best_lat) >= 0 ? LAT_BINS.indexOf(e.best_lat) : 
+                   LAT_BINS.reduce((best, l, i) => Math.abs(l-e.best_lat) < Math.abs(LAT_BINS[best]-e.best_lat) ? i : best, 0);
+        const bx = ml + (bi + 0.5) * gap;
+        svg += `<text x="${bx}" y="${mt+10}" fill="#ffcc44" font-size="9" text-anchor="middle">▼ L=${e.best_L}</text>`;
+    }
+    
+    s.innerHTML = svg;
+}
+
+function drawAlt() {
+    const e = D[cur], s = document.getElementById('svgAlt');
+    const W=260, H=320, ml=30, mr=130, mt=15, mb=25;
+    const pw=(W-mr-ml), ph=H-mt-mb;
+    let svg = `<rect width="${W}" height="${H}" fill="#0a0a1e"/>`;
+    
+    // Left panel: altitude profile
+    if (e.I_120 !== undefined) {
+        const pts = [
+            {alt:120, I:e.I_120}, {alt:300, I:e.I_300}
+        ];
+        
+        // Axes
+        svg += `<line x1="${ml}" y1="${H-mb}" x2="${ml+pw}" y2="${H-mb}" stroke="#223"/>`;
+        svg += `<line x1="${ml}" y1="${mt}" x2="${ml}" y2="${H-mb}" stroke="#223"/>`;
+        
+        // Altitude bands
+        for (const {alt, I} of pts) {
+            const y = H-mb-(alt-50)/500*ph;
+            const col = alt === 120 ? '#ff444415' : '#4488ff15';
+            svg += `<rect x="${ml}" y="${y-15}" width="${pw}" height="30" fill="${col}"/>`;
+            svg += `<text x="${ml-2}" y="${y+3}" fill="#556" font-size="7" text-anchor="end">${alt}km</text>`;
+            
+            // Value bar
+            const barW = Math.abs(I) / 0.7 * pw;
+            const barX = I > 0 ? ml + pw*0.3/0.7 : ml + pw*0.3/0.7 - Math.abs(I)/0.7*pw;
+            const fillCol = alt === 120 ? '#ff6644' : '#4488ff';
+            svg += `<rect x="${barX}" y="${y-6}" width="${barW}" height="12" fill="${fillCol}" opacity="0.6" rx="2"/>`;
+            svg += `<text x="${ml+pw+3}" y="${y+3}" fill="${fillCol}" font-size="8">${I > 0 ? '+' : ''}${I.toFixed(3)}</text>`;
+        }
+        
+        // Delta indicator
+        const delta = e.delta || 0;
+        const dCol = delta > 0 ? '#ff6644' : '#4488ff';
+        const dLabel = delta > 0 ? 'Precipitation↑' : 'F-region↑';
+        svg += `<text x="${ml+pw/2}" y="${H-mb+15}" fill="${dCol}" font-size="8" text-anchor="middle">Δ=${delta>0?'+':''}${delta.toFixed(3)} ${dLabel}</text>`;
+    }
+    
+    // Right panel: phase space (I_120 vs I_300)
+    const px = W-120, py = mt+10, psW = 110, psH = 110;
+    svg += `<rect x="${px}" y="${py}" width="${psW}" height="${psH}" fill="#08081a" stroke="#1a1a3a"/>`;
+    svg += `<text x="${px+psW/2}" y="${py-2}" fill="#556" font-size="7" text-anchor="middle">Phase Space</text>`;
+    svg += `<line x1="${px}" y1="${py+psH}" x2="${px+psW}" y2="${py}" stroke="#222" stroke-width="0.5" stroke-dasharray="2"/>`;
+    
+    // Trail
+    for (let i = 0; i <= cur && i < N; i++) {
+        const d = D[i];
+        if (d.I_120 === undefined) continue;
+        const cx = px + (d.I_120+0.1)/0.8*psW;
+        const cy = py + psH - (d.I_300+0.1)/0.8*psH;
+        const op = i === cur ? 1 : Math.max(0.1, 1-(cur-i)/20);
+        const r = i === cur ? 4 : 2;
+        const col = d.delta > 0 ? '#ff6644' : '#4488ff';
+        svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${col}" opacity="${op}"/>`;
+    }
+    
+    svg += `<text x="${px+psW/2}" y="${py+psH+12}" fill="#445" font-size="7" text-anchor="middle">I(120km) →</text>`;
+    svg += `<text x="${px-2}" y="${py+psH/2}" fill="#445" font-size="7" text-anchor="end" transform="rotate(-90,${px-2},${py+psH/2})">I(300km) →</text>`;
+    
+    // Below phase space: regime classification
+    const regY = py + psH + 25;
+    let regime = "mixed";
+    if (e.I_N > (e.I_E||0) && (e.delta||0) > 0.1) regime = "EJ + precip";
+    else if ((e.I_E||0) > e.I_N && (e.delta||0) > 0.1) regime = "FAC + precip";
+    else if (e.I_N > (e.I_E||0) && (e.delta||0) < -0.1) regime = "EJ + F-reg";
+    else if ((e.I_E||0) > e.I_N && (e.delta||0) < -0.1) regime = "FAC + F-reg";
+    
+    const regCol = regime.includes('precip') ? '#ff664433' : regime.includes('F-reg') ? '#4488ff33' : '#33333333';
+    svg += `<rect x="${px}" y="${regY}" width="${psW}" height="18" fill="${regCol}" rx="3"/>`;
+    svg += `<text x="${px+psW/2}" y="${regY+13}" fill="#aab" font-size="9" text-anchor="middle">${regime}</text>`;
+    
+    // Current sheet width
+    if (e.best_lat) {
+        svg += `<text x="${px+psW/2}" y="${regY+35}" fill="#884" font-size="8" text-anchor="middle">Sheet @ L=${e.best_L}</text>`;
+    }
+    
+    s.innerHTML = svg;
+}
+
+function drawTime() {
+    const s = document.getElementById('svgTime');
+    const W=500, H=320, ml=35, mr=35, mt=15, mb=25;
+    const pw=W-ml-mr, ph=H-mt-mb;
+    let svg = `<rect width="${W}" height="${H}" fill="#0a0a1e"/>`;
+    
+    svg += `<line x1="${ml}" y1="${H-mb}" x2="${W-mr}" y2="${H-mb}" stroke="#223"/>`;
+    svg += `<line x1="${ml}" y1="${mt}" x2="${ml}" y2="${H-mb}" stroke="#223"/>`;
+    
+    const y0 = mt + ph * 0.5/1.1;
+    svg += `<line x1="${ml}" y1="${y0}" x2="${W-mr}" y2="${y0}" stroke="#332" stroke-dasharray="3"/>`;
+    
+    for (let h = 0; h <= 24; h += 4) {
+        const x = ml + h/24*pw;
+        svg += `<line x1="${x}" y1="${mt}" x2="${x}" y2="${H-mb}" stroke="#111828"/>`;
+        svg += `<text x="${x}" y="${H-mb+12}" fill="#445" font-size="7" text-anchor="middle">${h}h</text>`;
+    }
+    
+    // RMS bars (background, log scale)
+    for (const d of D) {
+        const x = ml + d.ut/24*pw;
+        const bw = 0.5/24*pw;
+        const logRms = d.rms > 0 ? Math.log10(d.rms)/3.5 : 0;
+        const barH = logRms * ph * 0.3;
+        svg += `<rect x="${x}" y="${H-mb-barH}" width="${bw}" height="${barH}" fill="#ffffff05"/>`;
+    }
+    
+    // I_N line
+    let pts_I = [], pts_D = [], pts_C = [];
+    for (const d of D) {
+        const x = ml + d.ut/24*pw;
+        pts_I.push(`${x},${mt + (0.5-d.I_N)/1.1*ph}`);
+        if (d.delta !== undefined) pts_D.push(`${x},${mt + (0.5-d.delta)/1.1*ph}`);
+        pts_C.push(`${x},${mt + (0.5-d.coupling/100)/1.1*ph}`);
+    }
+    svg += `<polyline points="${pts_I.join(' ')}" fill="none" stroke="#88aaff" stroke-width="1.5"/>`;
+    if (pts_D.length) svg += `<polyline points="${pts_D.join(' ')}" fill="none" stroke="#ff8844" stroke-width="1" stroke-dasharray="4" opacity="0.6"/>`;
+    svg += `<polyline points="${pts_C.join(' ')}" fill="none" stroke="#44cc44" stroke-width="0.8" opacity="0.4"/>`;
+    
+    // Current time
+    const xc = ml + D[cur].ut/24*pw;
+    svg += `<line x1="${xc}" y1="${mt}" x2="${xc}" y2="${H-mb}" stroke="#ffcc44" stroke-width="1" opacity="0.4"/>`;
+    
+    // Labels
+    svg += `<text x="${W-mr+3}" y="${mt+10}" fill="#88aaff" font-size="7">I_N</text>`;
+    svg += `<text x="${W-mr+3}" y="${mt+20}" fill="#ff8844" font-size="7">Δ</text>`;
+    svg += `<text x="${W-mr+3}" y="${mt+30}" fill="#44cc44" font-size="7">Γ%</text>`;
+    
+    s.innerHTML = svg;
+}
+
+function drawMerid() {
+    const s = document.getElementById('svgMerid');
+    const W=700, H=180, ml=50, mr=30, mt=20, mb=30;
+    const pw=W-ml-mr, ph=H-mt-mb;
+    let svg = `<rect width="${W}" height="${H}" fill="#0a0a1e"/>`;
+    
+    const e = D[cur];
+    
+    // L-shell axis (horizontal, log scale from L=3 to L=20)
+    const L_min = 3, L_max = 20;
+    function L2x(L) { return ml + (Math.log(L/L_min)/Math.log(L_max/L_min))*pw; }
+    
+    svg += `<line x1="${ml}" y1="${H-mb}" x2="${W-mr}" y2="${H-mb}" stroke="#223"/>`;
+    svg += `<line x1="${ml}" y1="${mt}" x2="${ml}" y2="${H-mb}" stroke="#223"/>`;
+    svg += `<text x="${(ml+W-mr)/2}" y="${H-5}" fill="#556" font-size="9" text-anchor="middle">L-shell (Earth radii, equatorial)</text>`;
+    svg += `<text x="10" y="${H/2}" fill="#556" font-size="9" text-anchor="middle" transform="rotate(-90,10,${H/2})">Alt (km)</text>`;
+    
+    for (const L of [4, 5, 6, 8, 10, 15]) {
+        const x = L2x(L);
+        svg += `<line x1="${x}" y1="${mt}" x2="${x}" y2="${H-mb}" stroke="#111828"/>`;
+        svg += `<text x="${x}" y="${H-mb+12}" fill="#445" font-size="7" text-anchor="middle">${L}</text>`;
+    }
+    
+    // Altitude axis
+    for (const a of [100, 200, 300, 400, 500]) {
+        const y = H-mb-(a-50)/500*ph;
+        svg += `<text x="${ml-3}" y="${y+3}" fill="#445" font-size="7" text-anchor="end">${a}</text>`;
+    }
+    
+    // For each latitude bin, draw coherence at 120km and 300km altitude
+    if (e.lat_I && e.I_120 !== undefined) {
+        for (const latStr of Object.keys(e.lat_I)) {
+            const lat = parseFloat(latStr);
+            if (lat < 55 || lat > 77) continue;
+            const L = 1/Math.cos(lat*Math.PI/180)**2;
+            if (L < L_min || L > L_max) continue;
+            
+            const I_ground = e.lat_I[latStr];
+            const x = L2x(L);
+            
+            // Ground level (ionospheric, ~110 km)
+            const y110 = H-mb-(110-50)/500*ph;
+            const r = Math.abs(I_ground) * 20 + 2;
+            const col = I2color(I_ground, 0.8);
+            svg += `<circle cx="${x}" cy="${y110}" r="${r}" fill="${col}" stroke="none"/>`;
+            
+            // 120 km altitude — scale by latitude contribution
+            const y120 = H-mb-(120-50)/500*ph;
+            const r120 = Math.abs(e.I_120) * 15 + 1;
+            svg += `<circle cx="${x}" cy="${y120}" r="${r120}" fill="#ff664466" stroke="none"/>`;
+            
+            // 300 km altitude
+            const y300 = H-mb-(300-50)/500*ph;
+            const r300 = Math.abs(e.I_300) * 15 + 1;
+            svg += `<circle cx="${x}" cy="${y300}" r="${r300}" fill="#4488ff66" stroke="none"/>`;
+        }
+    }
+    
+    // Best L-shell marker
+    if (e.best_L && e.best_L >= L_min && e.best_L <= L_max) {
+        const xL = L2x(e.best_L);
+        svg += `<line x1="${xL}" y1="${mt}" x2="${xL}" y2="${H-mb}" stroke="#ffcc44" stroke-width="1" stroke-dasharray="3" opacity="0.5"/>`;
+        svg += `<text x="${xL}" y="${mt-3}" fill="#ffcc44" font-size="8" text-anchor="middle">L=${e.best_L}</text>`;
+    }
+    
+    // Earth sketch (left side)
+    svg += `<circle cx="${ml-5}" cy="${(mt+H-mb)/2}" r="8" fill="none" stroke="#334" stroke-width="0.5"/>`;
+    
+    s.innerHTML = svg;
+}
+
+function render() {
+    drawLat(); drawAlt(); drawTime(); drawMerid();
+    const e = D[cur];
+    const h = Math.floor(e.ut), mn = Math.round((e.ut-h)*60);
+    document.getElementById('utL').textContent = `${String(h).padStart(2,'0')}:${String(mn).padStart(2,'0')} UT`;
+    document.getElementById('sl').value = cur;
+    
+    document.getElementById('mets').innerHTML =
+        `<span class="metric">RMS: <span class="v">${e.rms}nT</span></span>` +
+        `<span class="metric">I_N: <span class="v">${e.I_N}</span></span>` +
+        `<span class="metric">Γ: <span class="v">${e.coupling}%</span></span>` +
+        (e.best_L ? `<span class="metric">Sheet: <span class="v">L=${e.best_L}</span></span>` : '');
+}
+
+function setE(n) { cur = Math.max(0, Math.min(N-1, n)); render(); }
+function step(d) { setE(cur + d); }
+function togglePlay() {
+    playing = !playing;
+    document.getElementById('playBtn').textContent = playing ? '\u23F8' : '\u25B6';
+    if (playing) timer = setInterval(() => { cur = (cur+1)%N; render(); }, 800);
+    else clearInterval(timer);
+}
+
+render();
+</script>
+</body></html>
