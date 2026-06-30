@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S14 NPCs — Quick Reference</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --teal: #14b8a6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  padding: 0;
+}
+
+.layout { display: flex; min-height: 100vh; }
+
+nav {
+  width: 220px;
+  background: #0b1120;
+  border-right: 1px solid #1e293b;
+  padding: 1.5rem 0;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 10;
+}
+nav .nav-title {
+  color: var(--amber);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+nav .nav-section {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 1rem 0.25rem;
+}
+nav a {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.3rem 1rem;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+nav a:hover { background: rgba(59,130,246,0.1); color: var(--blue); }
+nav a.back { color: var(--amber); font-weight: 600; margin-bottom: 0.5rem; }
+
+.main {
+  margin-left: 220px;
+  max-width: 860px;
+  padding: 2rem 2rem 4rem;
+}
+
+h1 { color: var(--heading); font-size: 1.8rem; margin-bottom: 0.2rem; }
+h2 { color: var(--heading); font-size: 1.3rem; margin-top: 2.5rem; margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid #334155; }
+
+.subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+.npc-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+}
+.npc-card-blue   { border-left: 4px solid var(--blue); }
+.npc-card-amber  { border-left: 4px solid var(--amber); }
+.npc-card-green  { border-left: 4px solid var(--green); }
+.npc-card-cyan   { border-left: 4px solid var(--cyan); }
+.npc-card-purple { border-left: 4px solid var(--purple); }
+.npc-card-teal   { border-left: 4px solid var(--teal); }
+
+.npc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+}
+.npc-name { font-weight: 700; color: var(--heading); font-size: 1.1rem; }
+.npc-role { color: var(--muted); font-size: 0.8rem; }
+
+.voice-tag {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(168,85,247,0.15);
+  color: var(--purple);
+  margin-bottom: 0.6rem;
+}
+
+.sample-lines {
+  margin: 0.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+.sample-lines li {
+  padding: 0.3rem 0 0.3rem 1rem;
+  border-left: 2px solid #334155;
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  color: var(--heading);
+}
+
+.npc-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  margin-top: 0.6rem;
+}
+.npc-meta dt { color: var(--muted); font-weight: 600; }
+.npc-meta dd { margin: 0; }
+
+.disposition {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.recurring {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 0.6rem 0;
+  display: flex;
+  gap: 1.5rem;
+  align-items: baseline;
+  font-size: 0.88rem;
+}
+.recurring .r-name { font-weight: 700; color: var(--heading); min-width: 130px; }
+.recurring .r-note { color: var(--muted); }
+
+@media (max-width: 900px) {
+  nav { display: none; }
+  .main { margin-left: 0; padding: 1rem; }
+  .npc-meta { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <div class="nav-title">S14 NPCs</div>
+  <a href="index.html" class="back">&larr; Dashboard</a>
+  <div class="nav-section">New NPCs</div>
+  <a href="#koss">Senator Koss</a>
+  <a href="#elara">Dr. Elara Holt</a>
+  <a href="#torin">Torin Sable</a>
+  <a href="#meera">Dr. Meera Vasant</a>
+  <a href="#reese">PO1 Reese</a>
+  <div class="nav-section">Ship Crew</div>
+  <a href="#recurring">Recurring NPCs</a>
+</nav>
+
+<div class="main">
+  <h1>NPC Quick Reference</h1>
+  <p class="subtitle">S14 — "Heroes of Raschev" &bull; New + recurring NPCs</p>
+
+  <h2>New NPCs</h2>
+
+  <!-- Senator Koss -->
+  <div class="npc-card npc-card-amber" id="koss">
+    <div class="npc-header">
+      <span class="npc-name">Senator Adama Koss</span>
+      <span class="npc-role">Act 1 &bull; Pro-Imperial Assembly Leader</span>
+    </div>
+    <span class="voice-tag">Smooth, avuncular, enjoying himself</span>
+    <ul class="sample-lines">
+      <li>"I've been in politics on this world for thirty years. I have never seen the Senate fumble this badly."</li>
+      <li>"Your ship registration is... technically irregular. We can fix that with paperwork."</li>
+      <li>"The senators who authorized this are scrambling. Two have already publicly distanced themselves."</li>
+    </ul>
+    <div class="npc-meta">
+      <dt>Knows</dt><dd>Collace politics (expert), arrest was anti-Imperial orchestration, fan protest = political gift</dd>
+      <dt>Doesn't know</dt><dd>Full CCF pipeline intel, Voronov's escape, AD's true military specs</dd>
+    </div>
+    <div class="disposition">Delighted. Riding the political wave. Genuine help &amp; calculated gain in equal measure.</div>
+  </div>
+
+  <!-- Dr. Elara Holt -->
+  <div class="npc-card npc-card-cyan" id="elara">
+    <div class="npc-header">
+      <span class="npc-name">Dr. Elara Holt</span>
+      <span class="npc-role">Acts 3–4 &bull; Xenobiologist / ARS Science Lead</span>
+    </div>
+    <span class="voice-tag">Precise, unhurried, questions as arguments</span>
+    <ul class="sample-lines">
+      <li>"That's an interesting interpretation. Have you considered what happens if you're wrong?"</li>
+      <li>"The data doesn't care about our expectations. It shows what it shows."</li>
+      <li>"I designed the protocols to detect what we expect. But I also added modes for what we don't."</li>
+    </ul>
+    <div class="npc-meta">
+      <dt>Knows</dt><dd>Extremophile ecology, biosignature detection, Cassian's political work, Max's accusations</dd>
+      <dt>Doesn't know</dt><dd>AD military details, psionic capabilities, Drakon intelligence</dd>
+    </div>
+    <div class="disposition">Quietly excited. Watching Max — nobody argues he <em>didn't</em> do the things he's accused of.</div>
+  </div>
+
+  <!-- Torin Sable -->
+  <div class="npc-card npc-card-blue" id="torin">
+    <div class="npc-header">
+      <span class="npc-name">Torin Sable</span>
+      <span class="npc-role">Acts 3–4 &bull; ARS Lead Engineer, 30s</span>
+    </div>
+    <span class="voice-tag">Nervous, precise, quieter under stress</span>
+    <ul class="sample-lines">
+      <li>"Please be careful with Unit Two. The mining drone bay door sticks if you torque it."</li>
+      <li>"All autonomics nominal. Phase two in three... two... one."</li>
+      <li>"She's running at 99.4% efficiency. I can get that to 99.6 if I adjust the thermal cycling."</li>
+    </ul>
+    <div class="npc-meta">
+      <dt>Knows</dt><dd>ARS systems inside and out (he designed them), fuel processing chemistry</dd>
+      <dt>Doesn't know</dt><dd>AD military capability, alien life, Collace politics</dd>
+    </div>
+    <div class="disposition">Terrified and thrilled. ARS prototypes = his professional reputation in physical form.</div>
+  </div>
+
+  <!-- Dr. Meera Vasant -->
+  <div class="npc-card npc-card-green" id="meera">
+    <div class="npc-header">
+      <span class="npc-name">Dr. Meera Vasant</span>
+      <span class="npc-role">Acts 3–4 &bull; ARS Systems Integration, 40s, ex-Navy</span>
+    </div>
+    <span class="voice-tag">Calm, matter-of-fact, dry humor</span>
+    <ul class="sample-lines">
+      <li>"They're test systems, Torin. If they can't survive a loading operation, they won't survive deployment."</li>
+      <li>"Of course it works. We built it."</li>
+      <li>"I've deployed equipment on eleven worlds. This is the first one where there's no sky."</li>
+    </ul>
+    <div class="npc-meta">
+      <dt>Knows</dt><dd>Harsh-environment deployment, ARS integration, when to sacrifice equipment for data</dd>
+      <dt>Doesn't know</dt><dd>AD true capability, alien life, Cassian's intel background</dd>
+    </div>
+    <div class="disposition">Professionally engaged. The steady hand to Torin's anxiety. Will sacrifice an ARS for data without flinching.</div>
+  </div>
+
+  <!-- PO1 Reese -->
+  <div class="npc-card npc-card-purple" id="reese">
+    <div class="npc-header">
+      <span class="npc-name">PO1 Yannick Reese (ret.)</span>
+      <span class="npc-role">Act 2 &bull; James's fan, one-scene NPC</span>
+    </div>
+    <span class="voice-tag">Crisp, military, reverent</span>
+    <ul class="sample-lines">
+      <li>"Commander Delleron, sir. Petty Officer First Class Yannick Reese, retired. It's an honor, sir."</li>
+    </ul>
+    <div class="disposition">Dozen ex-military types behind him. Treats James like a flag officer. The irony: he secretly <em>is</em> one.</div>
+  </div>
+
+  <h2 id="recurring">Recurring Ship NPCs</h2>
+
+  <div class="recurring">
+    <span class="r-name">Jeri Tallux</span>
+    <span>Computer 4. Sensor station. Writes custom pattern-matching algorithms for the upgraded sensors.</span>
+  </div>
+  <div class="recurring">
+    <span class="r-name">Hardpoint</span>
+    <span>Ship AI. Helm. "Course laid in. Jump in five."</span>
+  </div>
+  <div class="recurring">
+    <span class="r-name">Cassian Holt</span>
+    <span class="r-note">NPC'd tonight (John absent). Background only — Imperial complaint filed, testimony coached. Pre-recorded mission briefing plays in Act 3.</span>
+  </div>
+  <div class="recurring">
+    <span class="r-name">Vera Khaldun</span>
+    <span>Von Sydo's partner. Squeezes his arm during the telepath-fan scene. Lets him go EVA without questions.</span>
+  </div>
+
+</div>
+</div>
+</body>
+</html>

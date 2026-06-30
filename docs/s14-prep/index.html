@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S14 — Heroes of Raschev — GM Dashboard</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --cherry: #dd8877;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
+
+.layout { display: flex; min-height: 100vh; }
+
+nav {
+  width: 200px; background: #0b1120; border-right: 1px solid #1e293b;
+  padding: 1rem 0; position: fixed; top: 0; left: 0; height: 100vh;
+  overflow-y: auto; z-index: 10; font-size: 0.82rem;
+}
+nav .t { color: var(--amber); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0 0.8rem; margin-bottom: 0.8rem; font-size: 0.8rem; }
+nav .s { color: var(--muted); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.6rem 0.8rem 0.15rem; }
+nav a { display: block; color: var(--text); text-decoration: none; padding: 0.25rem 0.8rem; transition: background 0.15s; }
+nav a:hover { background: rgba(59,130,246,0.1); color: var(--blue); }
+nav a.scene-link { color: var(--green); font-size: 0.78rem; }
+nav .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+main { margin-left: 200px; max-width: 860px; padding: 1.5rem 2rem 4rem; }
+
+h1 { color: var(--heading); font-size: 1.6rem; margin-bottom: 0.2rem; }
+.sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.2rem; }
+
+/* Confab + meta strip */
+.strip { background: var(--card); border-radius: 6px; padding: 0.6rem 1rem; margin-bottom: 0.8rem; font-size: 0.82rem; }
+.strip-red { border-left: 3px solid var(--red); }
+.strip-amber { border-left: 3px solid var(--amber); }
+.strip-green { border-left: 3px solid var(--green); }
+.strip b { color: var(--heading); }
+.strip .warn { color: var(--red); font-weight: 600; }
+
+/* Scene manifest */
+.scenes-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.scene-card {
+  background: var(--card); border-radius: 6px; padding: 0.6rem 0.8rem;
+  border-top: 2px solid var(--green); text-align: center; font-size: 0.82rem;
+}
+.scene-card .trigger { color: var(--amber); font-weight: 700; font-size: 0.9rem; }
+.scene-card .label { color: var(--muted); font-size: 0.72rem; margin-top: 0.2rem; }
+.scene-card a { color: var(--green); text-decoration: none; font-weight: 600; }
+.scene-card a:hover { text-decoration: underline; }
+
+/* Act accordion */
+details.act {
+  background: var(--card); border-radius: 8px; margin-bottom: 0.6rem;
+  border-left: 3px solid var(--blue);
+}
+details.act > summary {
+  cursor: pointer; padding: 0.7rem 1rem; font-weight: 700; font-size: 1rem;
+  color: var(--heading); list-style: none; display: flex; align-items: center; gap: 0.5rem;
+}
+details.act > summary::before { content: "▶"; font-size: 0.7rem; color: var(--muted); transition: transform 0.15s; }
+details.act[open] > summary::before { transform: rotate(90deg); }
+details.act > summary::-webkit-details-marker { display: none; }
+details.act > .act-body { padding: 0 1rem 0.8rem; }
+.act-time { color: var(--muted); font-size: 0.78rem; font-weight: 400; margin-left: auto; }
+.act-scene { font-size: 0.78rem; color: var(--green); font-weight: 600; }
+
+/* Beat accordion */
+details.beat {
+  background: rgba(15,23,42,0.5); border-radius: 6px; margin-bottom: 0.4rem;
+  border-left: 2px solid #334155;
+}
+details.beat > summary {
+  cursor: pointer; padding: 0.5rem 0.8rem; font-size: 0.88rem;
+  color: var(--text); list-style: none; display: flex; align-items: center; gap: 0.4rem;
+}
+details.beat > summary::before { content: "▸"; font-size: 0.65rem; color: var(--muted); transition: transform 0.15s; }
+details.beat[open] > summary::before { transform: rotate(90deg); }
+details.beat > summary::-webkit-details-marker { display: none; }
+details.beat > .beat-body { padding: 0.3rem 0.8rem 0.6rem; font-size: 0.85rem; }
+.beat-num { color: var(--muted); font-weight: 700; font-size: 0.75rem; min-width: 2rem; }
+.beat-title { font-weight: 600; color: var(--heading); }
+.beat-time { color: var(--muted); font-size: 0.72rem; margin-left: auto; }
+
+/* Read-aloud box */
+.ra {
+  background: #0e1629; border-left: 3px solid var(--cyan); border-radius: 0 6px 6px 0;
+  padding: 0.7rem 1rem; margin: 0.5rem 0; font-family: Georgia, serif;
+  font-size: 0.88rem; line-height: 1.7; color: #94a3b8;
+}
+.ra-label { color: var(--cyan); font-family: system-ui; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+
+/* NPC dialogue */
+.npc-line {
+  background: #0e1629; border-radius: 4px; padding: 0.4rem 0.7rem;
+  margin: 0.3rem 0; font-size: 0.83rem;
+}
+.npc-name { color: var(--amber); font-weight: 700; font-size: 0.78rem; }
+
+/* Player choice */
+.choice { color: var(--purple); font-weight: 600; font-size: 0.82rem; margin-top: 0.4rem; }
+.choice::before { content: "⟐ "; }
+
+/* PC spotlight tags */
+.pc { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: 700; }
+.pc-james { background: rgba(59,130,246,0.2); color: var(--blue); }
+.pc-marina { background: rgba(245,158,11,0.2); color: var(--amber); }
+.pc-asao { background: rgba(34,197,94,0.2); color: var(--green); }
+.pc-max { background: rgba(239,68,68,0.2); color: var(--red); }
+.pc-von { background: rgba(168,85,247,0.2); color: var(--purple); }
+
+/* Nested detail (extra info) */
+details.extra > summary {
+  cursor: pointer; color: var(--muted); font-size: 0.75rem; padding: 0.2rem 0; list-style: none;
+}
+details.extra > summary::before { content: "ℹ "; }
+details.extra > summary::-webkit-details-marker { display: none; }
+details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0; }
+
+/* Future sessions */
+.future { background: rgba(30,41,59,0.5); border-radius: 6px; padding: 0.5rem 0.8rem; margin-bottom: 0.4rem; font-size: 0.82rem; }
+.future-title { color: var(--heading); font-weight: 600; }
+.future-desc { color: var(--muted); }
+
+/* Buttons */
+.btn-row { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; }
+.btn { background: var(--card); border: 1px solid #334155; color: var(--muted); border-radius: 4px; padding: 0.25rem 0.6rem; font-size: 0.7rem; cursor: pointer; }
+.btn:hover { background: #334155; color: var(--text); }
+
+@media (max-width: 900px) {
+  nav { display: none; }
+  main { margin-left: 0; padding: 1rem; }
+  .scenes-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <div class="t">S14 Dashboard</div>
+  <div class="s">Tonight</div>
+  <a href="#act1"><span class="dot" style="background:var(--blue)"></span>Act 1 — Rescue</a>
+  <a href="#act2"><span class="dot" style="background:var(--amber)"></span>Act 2 — Fans</a>
+  <a href="#act3"><span class="dot" style="background:var(--green)"></span>Act 3 — Departure</a>
+  <a href="#act4"><span class="dot" style="background:var(--cherry)"></span>Act 4 — Jump</a>
+  <div class="s">Reference</div>
+  <a href="npcs.html">NPCs &rarr;</a>
+  <div class="s">Presenter Scenes</div>
+  <a href="scenes/fan-signs.html" class="scene-link">Fan Signs &rarr;</a>
+  <a href="scenes/route-briefing.html" class="scene-link">Route Map &rarr;</a>
+  <a href="scenes/arabus-arrival.html" class="scene-link">Arabus Reveal &rarr;</a>
+  <div class="s">Arc</div>
+  <a href="#future">S15-S17 &rarr;</a>
+</nav>
+
+<main>
+<h1>S14 — "Heroes of Raschev"</h1>
+<p class="sub">Collace victory lap + deep space departure + Arabus arrival cliffhanger</p>
+
+<div class="strip strip-amber">
+  <b>John ABSENT.</b> Cassian is NPC'd — background only, already contributed (Imperial complaint, testimony coaching).
+  Tone: <b>Comedy &rarr; Competence &rarr; Cliffhanger.</b>
+</div>
+
+<div class="strip strip-red">
+  <span class="warn">ANTI-CONFAB:</span>
+  Anemone=HUMAN &bull; AD=600t &bull; NO FTL COMMS &bull; PP=300 (zero margin) &bull; J-4=EXPERIMENTAL &bull; Asao charges=FALSE &bull; Drop tanks at DEPARTURE not destination
+</div>
+
+<!-- Scene Manifest — copy/paste these to Argus to trigger -->
+<p style="font-size:0.72rem; color:var(--muted); margin-bottom:0.4rem;">Copy/paste a trigger phrase to Argus chat, or say it aloud (Craig listening). Click scene name to preview.</p>
+<div class="scenes-grid">
+  <div class="scene-card">
+    <div class="trigger" title="Copy this" style="cursor:copy;" onclick="navigator.clipboard.writeText('Show fan signs')">Show fan signs</div>
+    <a href="scenes/fan-signs.html" target="_blank">Fan Protest Signs</a>
+    <div class="label">Act 2 opening</div>
+  </div>
+  <div class="scene-card">
+    <div class="trigger" title="Copy this" style="cursor:copy;" onclick="navigator.clipboard.writeText('Show route map')">Show route map</div>
+    <a href="scenes/route-briefing.html" target="_blank">Route Map Briefing</a>
+    <div class="label">Act 3 briefing</div>
+  </div>
+  <div class="scene-card">
+    <div class="trigger" title="Copy this" style="cursor:copy;" onclick="navigator.clipboard.writeText('Show Arabus')">Show Arabus</div>
+    <a href="scenes/arabus-arrival.html" target="_blank">Arabus System Reveal</a>
+    <div class="label">Act 4 cliffhanger</div>
+  </div>
+</div>
+
+<div class="btn-row">
+  <button class="btn" onclick="document.querySelectorAll('details.act').forEach(d=>d.open=true)">Expand All Acts</button>
+  <button class="btn" onclick="document.querySelectorAll('details.act').forEach(d=>d.open=false)">Collapse All</button>
+  <button class="btn" onclick="document.querySelectorAll('details.beat').forEach(d=>d.open=false)">Collapse Beats</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ACT 1 — THE RESCUE                             -->
+<!-- ═══════════════════════════════════════════════ -->
+<details class="act" open id="act1">
+<summary>Act 1 — The Rescue <span class="act-time">~20 min</span></summary>
+<div class="act-body">
+
+<details class="beat" open>
+<summary>
+  <span class="beat-num">1.1</span>
+  <span class="beat-title">Detention &amp; Crowd</span>
+  <span class="beat-time">10 min</span>
+</summary>
+<div class="beat-body">
+  <p>PCs in VIP holding suite, Day 2. Cassian's complaint working through channels. Then — sound from outside. Chanting, growing.</p>
+
+  <div class="ra">
+    <div class="ra-label">Read Aloud</div>
+    The first thing you notice is sound. Not the Senate building's usual hum of environmental systems and muffled footsteps — this is <em>outside</em> sound. Chanting. Rhythmic, growing. Von Sydo's enhanced hearing picks it up first, then everyone hears it. Through the narrow window of the holding suite, you can see movement in the plaza below. People. A lot of people. And they're carrying signs.
+  </div>
+
+  <details class="extra"><summary>Crowd growth &amp; signs</summary><div class="extra-body">
+    Morning: ~200 dedicated fans. Midday: ~2,000 (media drones arrive). Afternoon: ~10,000+ (political movement — "FREE THE HEROES"). Collace pop 4B, TL-13, Acceptance D — feeds amplify fast.<br><br>
+    Signs: "DELLERON FOR CONSUL" &bull; Hand-painted Marina portrait (wrong stats) &bull; Kids in Aslan manes: "ASAO FIGHTS FOR US" &bull; "SCIENCE DOESN'T NEED YOUR PERMISSION" &bull; "IS VON SYDO A TELEPATH? 👁️" &bull; "WHO ARRESTS THEIR OWN HEROES?"
+  </div></details>
+</div>
+</details>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">1.2</span>
+  <span class="beat-title">Senator Koss</span>
+  <span class="beat-time">10 min</span>
+</summary>
+<div class="beat-body">
+  <p>Pro-Imperial senator arrives. Barely containing a grin. He's riding the political wave — the anti-Imperials arrested pop-culture heroes on camera.</p>
+
+  <div class="npc-line">
+    <div class="npc-name">KOSS</div>
+    "I've been in politics on this world for thirty years. I have never seen the Senate fumble this badly."
+  </div>
+  <div class="npc-line">
+    <div class="npc-name">KOSS</div>
+    "Your Q-ship registration is... technically irregular. We can fix that with paperwork. The other charges won't survive a committee vote now that the feeds are running your faces."
+  </div>
+  <div class="npc-line">
+    <div class="npc-name">KOSS</div>
+    "I do need to ask — Ambassador Holt mentioned you have evidence regarding certain... economic irregularities. Would you be willing to share that with the appropriate committee?"
+  </div>
+
+  <p class="choice">Share CCF/Drakon evidence with Koss? (starts exposure arc)</p>
+  <p class="choice">Ask about Voronov? (Koss knows he's involved, not that he fled)</p>
+
+  <details class="extra"><summary>Resolution</summary><div class="extra-body">
+    Released by late afternoon. Formal Senate vote, political pressure too great. Q-ship reclassified as "armed merchant with JSI patrol contract" — cover officially legitimate. One dissenting vote from the orchestrating senator, now politically wounded.
+  </div></details>
+</div>
+</details>
+
+</div>
+</details>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ACT 2 — MEET YOUR FANS                         -->
+<!-- ═══════════════════════════════════════════════ -->
+<details class="act" id="act2">
+<summary>Act 2 — Meet Your Fans <span class="act-scene">SCENE: "show the signs"</span> <span class="act-time">~25 min</span></summary>
+<div class="act-body">
+
+<p style="font-size:0.85rem; color:var(--muted); margin-bottom:0.6rem;">PCs exit Senate into plaza. Crowd ROARS. Media drones. Senator Koss right behind them, smiling for cameras. <b style="color:var(--amber)">Play for laughs.</b> Deploy 3-4 fan beats, save others.</p>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">2.1</span>
+  <span class="pc pc-james">JAMES</span>
+  <span class="beat-title">Competence Worshippers</span>
+  <span class="beat-time">5 min</span>
+</summary>
+<div class="beat-body">
+  <p>Ex-Navy PO1 pushes through crowd, snaps to attention. Dozen ex-military behind him. They treat James like a flag officer. Which he secretly is.</p>
+  <div class="npc-line">
+    <div class="npc-name">PO1 REESE</div>
+    "Commander Delleron, sir. Petty Officer First Class Yannick Reese, retired. It's an honor, sir."
+  </div>
+  <p style="color:var(--muted); font-size:0.8rem;">Comedy: James accepts military honors from fans while maintaining merchant captain cover. Irony visible only to crew.</p>
+</div>
+</details>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">2.2</span>
+  <span class="pc pc-marina">MARINA</span>
+  <span class="beat-title">The Action Figure</span>
+  <span class="beat-time">5 min</span>
+</summary>
+<div class="beat-body">
+  <p>Engineering student (20s) with hand-made "Marina DeVeillter" action figure. 3D-printed, wrong-color hair. Box stats: <b>Gunner 4, Tactics 3</b> (overstated).</p>
+  <div class="npc-line">
+    <div class="npc-name">FAN</div>
+    "I 3D-printed it myself! You're the reason I went into weapons engineering!"
+  </div>
+</div>
+</details>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">2.3</span>
+  <span class="pc pc-asao">ASAO</span>
+  <span class="beat-title">The Mane Kids</span>
+  <span class="beat-time">5 min</span>
+</summary>
+<div class="beat-body">
+  <p>8-12 year olds in homemade Aslan manes rush past security. Bad Trokh phrases. Foam <i>oistekhokh</i>. One recites mangled <i>fteirle</i> oath.</p>
+  <p>Behind them: genuine xenophile society members (respectful), parents on field trip, a few uncomfortably intense types.</p>
+  <p style="color:var(--muted); font-size:0.8rem;">Comedy + heart: kids adorable and wrong about everything. Asao — landless warrior with false charges — venerated by children.</p>
+</div>
+</details>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">2.4</span>
+  <span class="pc pc-max">MAX</span>
+  <span class="beat-title">The Kriegers</span>
+  <span class="beat-time">5 min</span>
+</summary>
+<div class="beat-body">
+  <p>Intense 20-somethings. Signs: "SCIENCE DOESN'T NEED YOUR PERMISSION" and "PLANCK WAS RIGHT." They know the dramatized Otarri research. One has a tattoo of Max's molecular diagram.</p>
+  <p>Max is <b>DELIGHTED.</b> These people GET him. (They don't, exactly.)</p>
+  <details class="extra"><summary>Elara seed</summary><div class="extra-body">
+    Dr. Elara Holt watches from the AD viewport as Max's fans celebrate research she finds ethically questionable. She says nothing yet. But she notices: not one defender argued Max <em>didn't do</em> those things.
+  </div></details>
+</div>
+</details>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">2.5</span>
+  <span class="pc pc-von">VON SYDO</span>
+  <span class="beat-title">The Conspiracy Theorists</span>
+  <span class="beat-time">5 min</span>
+</summary>
+<div class="beat-body">
+  <p>Quieter fans at crowd edge. Neat signs: "WE KNOW THE TRUTH ABOUT VON SYDO" and "IS VON SYDO A TELEPATH? 👁️" — presented as affectionate fan-theory memes. Smiling.</p>
+  <p><b style="color:var(--purple)">Von Sydo does not think it's funny.</b></p>
+  <p>The joke is so close to the truth he has to physically control his reaction. Vera squeezes his arm. Cover now has a cultural leak — the "joke" is in public consciousness.</p>
+</div>
+</details>
+
+</div>
+</details>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ACT 3 — DEPARTURE PREP                         -->
+<!-- ═══════════════════════════════════════════════ -->
+<details class="act" id="act3">
+<summary>Act 3 — Departure Prep <span class="act-scene">SCENE: "show the route"</span> <span class="act-time">~20 min</span></summary>
+<div class="act-body">
+
+<p style="font-size:0.85rem; color:var(--muted); margin-bottom:0.6rem;">Transition from comedy to competence. A-class starport, Berth 7. <b style="color:var(--heading)">Getting back to work.</b></p>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">3.1</span>
+  <span class="beat-title">Sensor Upgrade</span>
+  <span class="beat-time">5 min</span>
+</summary>
+<div class="beat-body">
+  <p>TL-13 survey-grade EM spectrum upgrade, integrated with existing TL-15 military sensors. Cassian's project budget. Max + Jeri supervise (2 days, already underway during detention).</p>
+  <div class="npc-line">
+    <div class="npc-name">MAX</div>
+    "The universe just got louder."
+  </div>
+  <p style="color:var(--green); font-size:0.8rem; font-weight:600;">CHEKHOV'S GUN: These sensors find what the Navy missed at Arabus.</p>
+</div>
+</details>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">3.2</span>
+  <span class="beat-title">ARS Loading &amp; Boarding</span>
+  <span class="beat-time">5 min</span>
+</summary>
+<div class="beat-body">
+  <p>Two 100t ARS prototypes into jump net. Drop tanks mounted (tender arranged for 95% recovery at Collace).</p>
+
+  <div class="npc-line">
+    <div class="npc-name">TORIN</div>
+    "Please be careful with Unit Two. The mining drone bay door sticks if you torque it."
+  </div>
+  <div class="npc-line">
+    <div class="npc-name">MEERA</div>
+    "They're test systems, Torin. If they can't survive a loading operation, they won't survive deployment."
+  </div>
+
+  <p style="font-size:0.82rem;">Boarding: Torin + Meera with gear. <b>Dr. Elara Holt</b> boards quietly — small kit, crate of science equipment. Greets captain formally, talks sensors with Max. Cassian boards, brief, professional.</p>
+</div>
+</details>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">3.3</span>
+  <span class="beat-title">Mission Briefing</span>
+  <span class="act-scene">SCENE: route map</span>
+  <span class="beat-time">5 min</span>
+</summary>
+<div class="beat-body">
+  <p>Cassian's <b>pre-recorded briefing</b> in wardroom (John absent — this is the in-fiction reason):</p>
+  <ul style="font-size:0.83rem; padding-left:1.2rem; margin:0.4rem 0;">
+    <li>Two rogue planets: Arabus (sub-brown dwarf, gas skimming) and Nyrthus (ice, ARS deployment)</li>
+    <li>A scout was sent 11 years ago. It disappeared. Navy follow-up found nothing.</li>
+    <li>Route: Collace &rarr; Arabus (J-2) &rarr; Nyrthus (J-2) &rarr; Squallia &rarr; Flammarion</li>
+    <li>Mission: 6-8 weeks</li>
+  </ul>
+  <p style="color:var(--green); font-weight:600; font-size:0.85rem;">PRESENTER: Show route map now.</p>
+</div>
+</details>
+
+</div>
+</details>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ACT 4 — THE JUMP                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<details class="act" id="act4">
+<summary>Act 4 — The Jump <span class="act-scene">SCENE: "show arabus"</span> <span class="act-time">~10 min</span></summary>
+<div class="act-body">
+
+<details class="beat">
+<summary>
+  <span class="beat-num">4.1</span>
+  <span class="beat-title">Departure</span>
+  <span class="beat-time">3 min</span>
+</summary>
+<div class="beat-body">
+  <p>Quick montage. Drop tanks mounted. Tender crew waves. Each PC gets one line about what they're thinking. Hardpoint: "Course laid in. Jump in five." Flash. Seven days.</p>
+</div>
+</details>
+
+<details class="beat">
+<summary>
+  <span class="beat-num">4.2</span>
+  <span class="beat-title">Jump Week</span>
+  <span class="beat-time">3 min</span>
+</summary>
+<div class="beat-body">
+  <p>Two quick beats:</p>
+  <ul style="font-size:0.83rem; padding-left:1.2rem; margin:0.3rem 0;">
+    <li><span class="pc pc-max">MAX</span> Reviews Navy survey data with upgraded sensors. Notes "unusual EM activity" at magnetopause. Interesting, not alarming.</li>
+    <li><span class="pc pc-von">VON SYDO</span> Alone in quarters, practicing substrate awareness. Vera sits with him. What will he find at Arabus?</li>
+  </ul>
+  <details class="extra"><summary>Elara beat (optional)</summary><div class="extra-body">
+    Elara reviews biosignature protocols. Adds non-standard detection modes: EM pattern analysis, organized field structures. Hunting for life in unexpected substrates.
+  </div></details>
+</div>
+</details>
+
+<details class="beat" open>
+<summary>
+  <span class="beat-num">4.3</span>
+  <span class="beat-title" style="color:var(--cherry)">ARABUS ARRIVAL</span>
+  <span class="act-scene">SCENE: Arabus reveal</span>
+  <span class="beat-time">4 min</span>
+</summary>
+<div class="beat-body">
+  <p style="color:var(--cherry); font-weight:700;">THE CLIFFHANGER. Show Arabus system map. Read this. End session.</p>
+
+  <div class="ra">
+    <div class="ra-label">Read Aloud — Session Closer</div>
+    The jump bubble collapses. Stars return — but one of them is wrong. Low on the viewscreen, below the familiar constellations that Von Sydo uses for orientation, there's a point of light that shouldn't be there. It's faint, but it's not a star. Stars are white, or blue, or yellow. This one is red. Cherry red. The color of cooling iron.
+    <br><br>
+    "Contact," says Jeri from the sensor station. "Bearing zero-one-five, mark minus twelve. Range... working." A pause. "Range four hundred thousand kilometers. Massive gravitational return. That's not a planet. That's almost a star."
+    <br><br>
+    On the main display, the enhanced sensors paint their first picture of Arabus. A dark sphere, self-glowing, banded with currents of dull heat. No sun illuminates it. It makes its own light. And it fills more sky than anything has a right to, out here in the absolute black between stars.
+    <br><br>
+    Max, at the engineering station, reads the numbers as they come in. Eight Jupiter masses. Cloud-top temperature four hundred and fifty Kelvin. Magnetic field... enormous. Extending in every direction, uncompressed, unconfined.
+    <br><br>
+    "There's a moon," Jeri adds. "Active. Volcanic. In close orbit."
+    <br><br>
+    The cherry-red light fills the bridge. No one speaks for a moment.
+  </div>
+
+  <p style="color:var(--red); font-weight:700; font-size:0.85rem;">END SESSION. Do not add anything after the read-aloud.</p>
+</div>
+</details>
+
+</div>
+</details>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- S15-S17 ARC OVERVIEW                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<details class="act" id="future" style="border-left-color: var(--muted);">
+<summary>Arc Overview: S15-S17 <span class="act-time">future sessions</span></summary>
+<div class="act-body">
+
+<div class="future">
+  <div class="future-title">S15 — "The Dragon's World" — Arabus Survey</div>
+  <div class="future-desc">
+    First survey. Probe deployment. Probe Alpha lost. Navy's old data vs new sensors. Elara spots periodicity.
+    Sandoval's probe recovered (upgraded sensors find what Navy missed). Four audio logs played for crew.
+    Optional: scout "museum" discovery. <b>EM patterns = suspicion only, NOT confirmation.</b>
+  </div>
+</div>
+
+<div class="future">
+  <div class="future-title">S16 — "The Shepherd's Response" — Arabus Crisis</div>
+  <div class="future-desc">
+    Max/Elara confirm biological patterns. Approach interaction zone. Weavers reshape magnetic field around AD.
+    <b>THE BEAM fires.</b> Warning shot (miss), then escalation. Marina's sandcaster moment — magnetic sand scatters beam (1D/canister).
+    Three outcomes: Failure (lose ARS, gain data), Tie (quiet hemisphere skimming), Win (first contact détente via Marina+Von Sydo+Cassian).
+    <b>Beam: 4D electronics + 2D power plant.</b> PP=300, zero margin.
+  </div>
+</div>
+
+<div class="future">
+  <div class="future-title">S17 — "Ice and Silence" — Nyrthus Deployment</div>
+  <div class="future-desc">
+    Arrival at pale ice world. ARS deployment — the WIN. 6 procedural beats, Torin's moment ("It works. It actually works.").
+    Von Sydo's deep signal: third substrate (silicon/plasma/water). Senses intelligence in subsurface ocean.
+    Max vs Elara tension if Von Sydo shares. Player choice: who does Von Sydo tell?
+    Departure for Squallia/Flammarion.
+  </div>
+</div>
+
+<details class="extra"><summary>Three substrates arc (Von Sydo through-line)</summary><div class="extra-body">
+  S11: The Flat (silicon) — crystalline, precise, first psionic non-bio contact.<br>
+  S15-16: The Dragon (plasma) — vast, diffuse, planetary-scale intelligence.<br>
+  S17: The Deep (water) — biological in lightless ocean, most familiar substrate, most alien context.<br>
+  Building toward: at a major starport, Von Sydo scans and realizes EVERYTHING at TL-9+ is alive in the Flat. The ethical crisis of Phase 4.
+</div></details>
+
+<details class="extra"><summary>Outcome consequences flowing to S17</summary><div class="extra-body">
+  <b>Failure:</b> AD took damage, repairs ongoing during jump week. Ship shows wounds. One ARS remaining — Torin terrified it MUST work.<br>
+  <b>Tie:</b> Ship in good shape, morale high. Both ARS intact — deploy one at Nyrthus, reserve one.<br>
+  <b>Win:</b> Ship in good shape. Standing agreement with ecosystem. Career-defining for Cassian. Both ARS intact.
+</div></details>
+
+</div>
+</details>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- QUICK MECHANICS REF                            -->
+<!-- ═══════════════════════════════════════════════ -->
+<details class="act" style="border-left-color: var(--muted);">
+<summary>Quick Mechanics Reference <span class="act-time">S15-S17</span></summary>
+<div class="act-body">
+  <div class="strip strip-amber" style="font-size:0.8rem;">
+    <b>Drop tanks:</b> Jettisoned at DEPARTURE (Collace), NOT destination. 8+ on 2D to survive jettison. Tender recovers.
+  </div>
+  <div class="strip strip-red" style="font-size:0.8rem;">
+    <b>Coherent beam:</b> Warning = miss (EM pulse). Hit 1 = 4D electronics + 2D power plant. Hit 2 = 8D + 4D. Magnetic sandcaster = 1D reduction per canister.
+  </div>
+  <div class="strip strip-green" style="font-size:0.8rem;">
+    <b>Jump zones:</b> Edge DM-2 / misjump 2-3. Mid DM-4 / 2-5. Deep DM-6 / 2-8.
+  </div>
+  <div class="strip" style="font-size:0.8rem; border-left-color:var(--purple);">
+    <b>Win requires:</b> Someone suggests communication + Marina connects sandcasters to ecosystem perception + Von Sydo reads psionic response + Cassian/James frames diplomatic intent. If any missing &rarr; Tie (which is still GOOD).
+  </div>
+</div>
+</details>
+
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collace — Senate Plaza</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0f1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: 'Segoe UI', Helvetica, sans-serif;
+}
+.header {
+  color: #556677;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+svg {
+  max-width: 100%;
+  width: 1000px;
+  height: auto;
+}
+</style>
+</head>
+<body>
+<div class="header">Collace &mdash; Senate Plaza</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="'Segoe UI', Helvetica, sans-serif">
+  <defs>
+    <filter id="flash1" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8"/>
+    </filter>
+    <filter id="flash2" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5"/>
+    </filter>
+    <filter id="sign-shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Night sky background -->
+  <rect width="1000" height="600" fill="#0a0f1a"/>
+
+  <!-- Senate building silhouette (background) -->
+  <path d="M 0 200 L 100 200 L 100 120 L 150 80 L 200 120 L 200 200 L 350 200 L 350 150 L 380 130 L 410 130 L 440 130 L 470 150 L 470 110 L 500 80 L 530 110 L 530 150 L 560 130 L 590 130 L 620 130 L 650 150 L 650 200 L 800 200 L 800 120 L 850 80 L 900 120 L 900 200 L 1000 200 L 1000 0 L 0 0 Z" fill="#080c16" stroke="#111825" stroke-width="1"/>
+
+  <!-- Windows (dim lights in building) -->
+  <rect x="120" y="140" width="8" height="10" fill="#223344" opacity="0.5" rx="1"/>
+  <rect x="145" y="140" width="8" height="10" fill="#223344" opacity="0.4" rx="1"/>
+  <rect x="170" y="140" width="8" height="10" fill="#223344" opacity="0.6" rx="1"/>
+  <rect x="370" y="155" width="8" height="10" fill="#223344" opacity="0.5" rx="1"/>
+  <rect x="395" y="155" width="8" height="10" fill="#223344" opacity="0.4" rx="1"/>
+  <rect x="420" y="155" width="8" height="10" fill="#223344" opacity="0.5" rx="1"/>
+  <rect x="445" y="155" width="8" height="10" fill="#223344" opacity="0.3" rx="1"/>
+  <rect x="580" y="155" width="8" height="10" fill="#334455" opacity="0.6" rx="1"/>
+  <rect x="605" y="155" width="8" height="10" fill="#223344" opacity="0.4" rx="1"/>
+  <rect x="630" y="155" width="8" height="10" fill="#223344" opacity="0.5" rx="1"/>
+  <rect x="820" y="140" width="8" height="10" fill="#223344" opacity="0.4" rx="1"/>
+  <rect x="845" y="140" width="8" height="10" fill="#334455" opacity="0.5" rx="1"/>
+  <rect x="870" y="140" width="8" height="10" fill="#223344" opacity="0.3" rx="1"/>
+
+  <!-- Camera flashes -->
+  <circle cx="150" cy="420" r="15" fill="#ffffff" opacity="0.06" filter="url(#flash1)"/>
+  <circle cx="780" cy="390" r="12" fill="#ffffff" opacity="0.05" filter="url(#flash2)"/>
+  <circle cx="500" cy="440" r="10" fill="#ffffff" opacity="0.04" filter="url(#flash2)"/>
+
+  <!-- ==================== PROTEST SIGNS ==================== -->
+
+  <!-- Sign 7 (back): FREE THE HEROES OF RASCHEV — largest, center -->
+  <g transform="translate(380, 170) rotate(-2)" filter="url(#sign-shadow)">
+    <rect x="0" y="0" width="260" height="70" rx="3" fill="#ccccdd" stroke="#aaaabb" stroke-width="1"/>
+    <text x="130" y="30" text-anchor="middle" fill="#1a1a2e" font-size="16" font-weight="bold">FREE THE HEROES</text>
+    <text x="130" y="52" text-anchor="middle" fill="#1a1a2e" font-size="16" font-weight="bold">OF RASCHEV</text>
+    <!-- Stick -->
+    <rect x="125" y="70" width="10" height="80" fill="#8b7355" rx="2"/>
+  </g>
+
+  <!-- Sign 1: DELLERON FOR CONSUL — blue -->
+  <g transform="translate(60, 195) rotate(-6)" filter="url(#sign-shadow)">
+    <rect x="0" y="0" width="200" height="55" rx="3" fill="#2255aa"/>
+    <text x="100" y="22" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">DELLERON</text>
+    <text x="100" y="42" text-anchor="middle" fill="#ddddff" font-size="12">FOR CONSUL</text>
+    <rect x="95" y="55" width="10" height="75" fill="#8b7355" rx="2"/>
+  </g>
+
+  <!-- Sign 2: Marina wrong stats — amber -->
+  <g transform="translate(200, 210) rotate(5)" filter="url(#sign-shadow)">
+    <rect x="0" y="0" width="160" height="65" rx="3" fill="#cc8822"/>
+    <text x="80" y="20" text-anchor="middle" fill="#ffffff" font-size="9">Marina DeVeillter</text>
+    <text x="80" y="40" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="bold">GUNNER-4</text>
+    <text x="80" y="56" text-anchor="middle" fill="#ffeecc" font-size="11">TACTICS-3</text>
+    <rect x="75" y="65" width="10" height="70" fill="#8b7355" rx="2"/>
+  </g>
+
+  <!-- Sign 3: ASAO FIGHTS FOR US — green with manes -->
+  <g transform="translate(680, 200) rotate(4)" filter="url(#sign-shadow)">
+    <rect x="0" y="0" width="190" height="55" rx="3" fill="#228844"/>
+    <!-- Crude Aslan mane shapes on top -->
+    <path d="M 30 0 L 15 -20 L 45 -8 Z" fill="#cc9944" opacity="0.8"/>
+    <path d="M 90 0 L 75 -25 L 105 -8 Z" fill="#cc9944" opacity="0.8"/>
+    <path d="M 150 0 L 135 -20 L 165 -8 Z" fill="#cc9944" opacity="0.8"/>
+    <text x="95" y="22" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">ASAO FIGHTS</text>
+    <text x="95" y="42" text-anchor="middle" fill="#ddffdd" font-size="13" font-weight="bold">FOR US</text>
+    <rect x="90" y="55" width="10" height="75" fill="#8b7355" rx="2"/>
+  </g>
+
+  <!-- Sign 4: SCIENCE DOESN'T NEED YOUR PERMISSION — red -->
+  <g transform="translate(100, 250) rotate(3)" filter="url(#sign-shadow)">
+    <rect x="0" y="0" width="240" height="50" rx="3" fill="#aa2222"/>
+    <text x="120" y="20" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">SCIENCE DOESN'T NEED</text>
+    <text x="120" y="38" text-anchor="middle" fill="#ffcccc" font-size="12" font-weight="bold">YOUR PERMISSION</text>
+    <rect x="115" y="50" width="10" height="70" fill="#8b7355" rx="2"/>
+  </g>
+
+  <!-- Sign 5: IS VON SYDO A TELEPATH? — purple -->
+  <g transform="translate(550, 245) rotate(-7)" filter="url(#sign-shadow)">
+    <rect x="0" y="0" width="220" height="50" rx="3" fill="#6633aa"/>
+    <text x="100" y="21" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">IS VON SYDO</text>
+    <text x="100" y="40" text-anchor="middle" fill="#ddccff" font-size="12" font-weight="bold">A TELEPATH?</text>
+    <!-- Eye symbol -->
+    <ellipse cx="195" cy="25" rx="10" ry="7" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+    <circle cx="195" cy="25" r="3.5" fill="#ffffff" opacity="0.8"/>
+    <rect x="105" y="50" width="10" height="70" fill="#8b7355" rx="2"/>
+  </g>
+
+  <!-- Sign 6: WHO ARRESTS THEIR OWN HEROES? — teal -->
+  <g transform="translate(370, 275) rotate(2)" filter="url(#sign-shadow)">
+    <rect x="0" y="0" width="230" height="45" rx="3" fill="#227788"/>
+    <text x="115" y="18" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">WHO ARRESTS THEIR</text>
+    <text x="115" y="36" text-anchor="middle" fill="#ccffff" font-size="12" font-weight="bold">OWN HEROES?</text>
+    <rect x="110" y="45" width="10" height="65" fill="#8b7355" rx="2"/>
+  </g>
+
+  <!-- ==================== CROWD SILHOUETTES ==================== -->
+  <!-- Row of heads/shoulders at various heights, very dark -->
+  <path d="M 0 600 L 0 440
+    Q 20 435 30 440 Q 40 420 50 440 Q 55 438 60 440
+    Q 70 425 80 440 Q 90 430 100 440 Q 108 435 115 440
+    Q 125 420 135 440 Q 142 432 150 440 Q 158 428 165 440
+    Q 175 418 185 440 Q 192 435 200 440 Q 210 422 220 440
+    Q 228 430 235 440 Q 245 425 255 440 Q 262 432 270 440
+    Q 278 415 288 440 Q 295 428 305 440 Q 312 435 320 440
+    Q 330 420 340 440 Q 348 430 355 440 Q 365 422 375 440
+    Q 382 418 390 440 Q 398 432 405 440 Q 415 425 425 440
+    Q 432 420 440 440 Q 448 428 455 440 Q 465 435 475 440
+    Q 482 418 492 440 Q 500 425 510 440 Q 518 430 525 440
+    Q 535 422 545 440 Q 552 435 560 440 Q 570 420 580 440
+    Q 588 428 595 440 Q 605 418 615 440 Q 622 432 630 440
+    Q 640 425 650 440 Q 658 430 665 440 Q 675 422 685 440
+    Q 692 435 700 440 Q 710 420 720 440 Q 728 428 735 440
+    Q 745 425 755 440 Q 762 432 770 440 Q 780 418 790 440
+    Q 798 430 805 440 Q 815 422 825 440 Q 832 435 840 440
+    Q 850 425 860 440 Q 868 430 875 440 Q 885 420 895 440
+    Q 902 428 910 440 Q 920 432 930 440 Q 938 425 948 440
+    Q 958 418 968 440 Q 975 430 985 440 Q 992 435 1000 440
+    L 1000 600 Z" fill="#0c1222"/>
+
+  <!-- Second row (closer, slightly taller, darker) -->
+  <path d="M 0 600 L 0 470
+    Q 15 462 30 470 Q 45 455 60 470 Q 75 460 90 470
+    Q 105 452 120 470 Q 135 458 150 470 Q 165 450 180 470
+    Q 195 460 210 470 Q 225 455 240 470 Q 255 462 270 470
+    Q 285 452 300 470 Q 315 458 330 470 Q 345 450 360 470
+    Q 375 462 390 470 Q 405 455 420 470 Q 435 460 450 470
+    Q 465 452 480 470 Q 495 458 510 470 Q 525 450 540 470
+    Q 555 462 570 470 Q 585 455 600 470 Q 615 460 630 470
+    Q 645 452 660 470 Q 675 458 690 470 Q 705 450 720 470
+    Q 735 462 750 470 Q 765 455 780 470 Q 795 460 810 470
+    Q 825 452 840 470 Q 855 458 870 470 Q 885 450 900 470
+    Q 915 462 930 470 Q 945 455 960 470 Q 975 460 1000 470
+    L 1000 600 Z" fill="#0a0e1a"/>
+
+  <!-- Foreground crowd (closest) -->
+  <path d="M 0 600 L 0 510
+    Q 25 498 50 510 Q 75 495 100 510 Q 125 500 150 510
+    Q 175 492 200 510 Q 225 498 250 510 Q 275 495 300 510
+    Q 325 500 350 510 Q 375 492 400 510 Q 425 498 450 510
+    Q 475 495 500 510 Q 525 500 550 510 Q 575 492 600 510
+    Q 625 498 650 510 Q 675 495 700 510 Q 725 500 750 510
+    Q 775 492 800 510 Q 825 498 850 510 Q 875 495 900 510
+    Q 925 500 950 510 Q 975 495 1000 510
+    L 1000 600 Z" fill="#080b15"/>
+</svg>
+</body>
+</html>
