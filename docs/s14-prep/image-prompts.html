@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S14-S17 Image Prompts — ChatGPT/DALL-E</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --amber: #f59e0b;
+  --green: #22c55e;
+  --muted: #475569;
+  --blue: #3b82f6;
+  --red: #ef4444;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --cherry: #dd8877;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; line-height: 1.6; padding: 2rem; max-width: 900px; margin: 0 auto; }
+h1 { color: var(--heading); font-size: 1.5rem; margin-bottom: 0.3rem; }
+.sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+
+.prompt-card {
+  background: var(--card); border-radius: 8px; margin-bottom: 1rem;
+  border-left: 3px solid var(--blue); overflow: hidden;
+}
+.prompt-header {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.7rem 1rem; cursor: pointer;
+}
+.prompt-header:hover { background: rgba(59,130,246,0.05); }
+.prompt-num { color: var(--muted); font-weight: 700; font-size: 0.75rem; min-width: 1.5rem; }
+.prompt-title { color: var(--heading); font-weight: 600; font-size: 0.95rem; }
+.prompt-session { color: var(--muted); font-size: 0.72rem; margin-left: auto; }
+.prompt-use { font-size: 0.72rem; padding: 0.1rem 0.4rem; border-radius: 3px; font-weight: 600; }
+.use-tonight { background: rgba(239,68,68,0.2); color: var(--red); }
+.use-future { background: rgba(168,85,247,0.2); color: var(--purple); }
+
+.status { font-size: 0.72rem; padding: 0.1rem 0.4rem; border-radius: 3px; font-weight: 600; margin-left: 0.3rem; }
+.status-pending { background: rgba(245,158,11,0.2); color: var(--amber); }
+.status-done { background: rgba(34,197,94,0.2); color: var(--green); }
+
+.prompt-body { padding: 0 1rem 1rem; display: none; }
+.prompt-card.open .prompt-body { display: block; }
+
+.prompt-text {
+  background: #0b1120; border: 1px solid #334155; border-radius: 6px;
+  padding: 0.8rem 1rem; font-family: Georgia, serif; font-size: 0.88rem;
+  line-height: 1.7; color: #94a3b8; position: relative; cursor: text;
+  user-select: all; margin-bottom: 0.5rem;
+}
+.prompt-text:hover { border-color: var(--blue); }
+
+.copy-btn {
+  background: var(--blue); color: white; border: none; border-radius: 4px;
+  padding: 0.3rem 0.8rem; font-size: 0.75rem; cursor: pointer; font-weight: 600;
+}
+.copy-btn:hover { opacity: 0.85; }
+.copy-btn.copied { background: var(--green); }
+
+.notes { font-size: 0.78rem; color: var(--muted); margin-top: 0.4rem; }
+.notes b { color: var(--text); }
+
+.checklist { margin-top: 1rem; }
+.checklist-item { display: flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0; font-size: 0.82rem; }
+.checklist-item input { accent-color: var(--green); }
+
+.divider { border: none; border-top: 1px solid #1e293b; margin: 1.5rem 0; }
+</style>
+<script>
+function toggle(el) {
+  el.closest('.prompt-card').classList.toggle('open');
+}
+function copyPrompt(btn) {
+  const text = btn.parentElement.querySelector('.prompt-text').textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy Prompt'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function markDone(btn, num) {
+  const card = btn.closest('.prompt-card');
+  const status = card.querySelector('.status');
+  if (status) { status.textContent = 'DONE'; status.className = 'status status-done'; }
+  btn.textContent = '✓ Done';
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+}
+</script>
+</head>
+<body>
+
+<h1>Image Prompts — S14-S17 Arc</h1>
+<p class="sub">Click to expand. Copy prompt to ChatGPT. Mark done when generated. All prompts target DALL-E 3 (ChatGPT).</p>
+
+<div style="display:flex; gap:0.4rem; margin-bottom:1rem; flex-wrap:wrap;">
+  <button class="copy-btn" style="background:var(--card); color:var(--text); border:1px solid #334155;" onclick="document.querySelectorAll('.prompt-card').forEach(c=>c.classList.add('open'))">Expand All</button>
+  <button class="copy-btn" style="background:var(--card); color:var(--text); border:1px solid #334155;" onclick="document.querySelectorAll('.prompt-card').forEach(c=>c.classList.remove('open'))">Collapse All</button>
+</div>
+
+<!-- ════════════════════════════════ -->
+<!-- S14 — TONIGHT                   -->
+<!-- ════════════════════════════════ -->
+
+<h2 style="color:var(--red); font-size:1rem; margin-bottom:0.6rem;">S14 — Tonight</h2>
+
+<!-- 1. Fan Protest -->
+<div class="prompt-card open">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">1</span>
+    <span class="prompt-title">Fan Protest at Senate Plaza</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 2</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A cinematic wide shot of a large protest crowd gathered in a futuristic government plaza at dusk. Thousands of people fill the plaza in front of a sleek, imposing Senate building with tall columns and glowing blue accent lighting. The crowd holds colorful hand-painted protest signs above their heads. Visible signs read slogans supporting arrested heroes. Several children in the front wear crude homemade animal mane costumes. Camera drones hover above the crowd, their lights visible. The mood is energetic and celebratory, not angry. Warm golden street lighting contrasts with the cool blue of the Senate building. Style: photorealistic science fiction, cinematic lighting, wide-angle lens, 16:9 aspect ratio, reminiscent of Blade Runner 2049's outdoor scenes.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 1)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Display when PCs exit Senate building (Act 2 opening). Post in Discord or push via presenter.<br><b>Note:</b> Do NOT put readable text on the signs — DALL-E mangles text. The SVG fan-signs scene handles the actual sign text. This image sets the ATMOSPHERE.</div>
+  </div>
+</div>
+
+<!-- 2. James Fans — Competence Worshippers -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">2</span>
+    <span class="prompt-title">James Fans — Competence Worshippers</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 2.1</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A candid photograph at a futuristic city rally. A retired military petty officer in his 50s, wearing a neat but civilian version of a naval dress uniform with campaign ribbons on his chest, stands at crisp attention. Behind him, a group of a dozen older ex-military types stand in a rough formation — some in partial uniforms, some in civilian clothes with military bearing. They all face one direction with profound respect, some saluting. The mood is reverent, not rowdy — these are competence worshippers who admire professional excellence. Background shows a futuristic government building with a larger celebratory crowd behind them. Golden hour lighting. Style: photorealistic, candid event photography, warm color grading, focus on the dignified petty officer, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 2)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> James's fan beat (2.1). PO1 Reese salutes. Comedy: James accepts military honors while maintaining merchant captain cover.<br><b>PC:</b> <span class="pc pc-james">JAMES</span></div>
+  </div>
+</div>
+
+<!-- 3. Marina Fans — Action Figure -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">3</span>
+    <span class="prompt-title">Marina Fans — The Action Figure</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 2.2</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A close-up photograph of a young woman in her 20s, an engineering student, excitedly holding out a homemade cardboard box containing a 3D-printed action figure. The figure is roughly 6 inches tall, a woman in a futuristic military uniform with slightly wrong proportions and visible layer lines from the 3D printer. The figure holds a tiny turret weapon. The hair color on the figure is noticeably wrong. The cardboard box has enthusiastic hand-drawn art in colored markers showing the character in an action pose. The young woman is beaming with pride. Behind her, a futuristic city plaza with a crowd. The whole image captures the charming imperfection of fan devotion. Style: candid portrait photography, shallow depth of field, warm lighting, the action figure box is in sharp focus, 4:3 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 3)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Marina's fan beat (2.2). "I 3D-printed it myself! You're the reason I went into weapons engineering!" Stats on the box are hilariously wrong.<br><b>PC:</b> <span class="pc pc-marina">MARINA</span></div>
+  </div>
+</div>
+
+<!-- 3b. Asao Fans — Mane Kids -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">3b</span>
+    <span class="prompt-title">Asao Fans — The Mane Kids</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 2.3</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A heartwarming and funny photograph of a group of excited children aged 8-12 at a futuristic city rally, rushing past a security barrier. Each child wears a crude homemade lion-like mane costume — brown and tawny faux fur wrapped around their heads and shoulders, clearly handmade with love but endearingly rough. One child brandishes a foam sword with great seriousness. Another has tiger-stripe face paint. A smaller child attempts to roar. They are running toward someone off-camera with expressions of pure hero worship. Behind them, bemused parents follow at a jog. Further back, adults from a xenophile cultural society watch with genuine appreciation. The futuristic plaza setting has warm golden lighting. Style: photorealistic, candid event photography, shallow depth of field focusing on the running children, warm color grading, joy and chaos, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, '3b')">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Asao's fan beat (2.3). Kids in Aslan manes rushing past cordon. Comedy + heart: adorable AND wrong about everything. Asao — landless warrior venerated by children.<br><b>PC:</b> <span class="pc pc-asao">ASAO</span></div>
+  </div>
+</div>
+
+<!-- 3c. Max Fans — The Kriegers -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">3c</span>
+    <span class="prompt-title">Max Fans — The Kriegers</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 2.4</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A photograph of a cluster of intense young adults in their 20s at a futuristic city protest, holding hand-painted signs with great fervor. They look like graduate students or young scientists — some wear lab coats over casual clothes, others have chemistry-themed t-shirts. Their expressions are passionate and slightly unhinged in that endearing fan way. They hold up hand-painted signs aggressively. One person in the front has a visible tattoo of a molecular diagram on their forearm. Another wears safety goggles pushed up on their forehead like a fashion accessory. The mood is intense intellectual fandom — they think they're supporting a persecuted genius. Futuristic city plaza background with golden hour lighting. Style: photorealistic, candid rally photography, capturing the fervor of superfans, slightly comedic energy, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, '3c')">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Max's fan beat (2.4). The Kriegers: "SCIENCE DOESN'T NEED YOUR PERMISSION." Max is DELIGHTED. Archer "mad scientist" archetype.<br><b>PC:</b> <span class="pc pc-max">MAX</span></div>
+  </div>
+</div>
+
+<!-- 3d. Von Sydo Fans — Conspiracy Theorists -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">3d</span>
+    <span class="prompt-title">Von Sydo Fans — Conspiracy Theorists</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 2.5</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A photograph at the quiet edge of a futuristic city rally. A small group of 6-8 people stand apart from the main crowd, calmer and more deliberate than the boisterous fans nearby. They hold small, neatly made signs with clean lettering and an eye symbol design. Their expressions are knowing smiles — not aggressive, not joking, just... aware. One woman holds a sign close to her chest like she's protecting a secret. A man in a turtleneck sweater regards the camera with an enigmatic half-smile. They look like philosophy students or quiet intellectuals — the conspiracy theorists who think they've figured out something true, and they're right, and they think it's funny. The mood is unsettling in its calm certainty. Background shows the louder main rally at a distance. Twilight lighting, cooler tones than the main crowd. Style: photorealistic, candid photography, slightly eerie mood, shallow depth of field, cool color grading contrasting with the warm rally behind them, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, '3d')">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Von Sydo's fan beat (2.5). "IS VON SYDO A TELEPATH?" Presented as meme, not accusation. They're smiling. He's sweating. The joke is TRUE and that's the horror.<br><b>PC:</b> <span class="pc pc-von">VON SYDO</span></div>
+  </div>
+</div>
+
+<!-- 4. AD at Starport -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">4</span>
+    <span class="prompt-title">Astral Dawn at Starport — Departure</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 3</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A dramatic low-angle view of a large interstellar spacecraft docked at a futuristic A-class starport. The ship is 600 tons, roughly 80 meters long, with a utilitarian military-converted-merchant design — angular hull plating, sensor arrays, visible weapon turrets partially concealed. External cargo is being loaded via cables and cranes: two large boxy autonomous stations (each about a third the ship's size) are secured beneath the hull in a cargo net arrangement. Ground crew in reflective suits work around the ship. The starport has massive overhead gantry structures, blue-white floodlights, and a twilight sky beyond the hangar. A small shuttle hovers nearby. Style: cinematic science fiction, industrial realism, muted color palette with blue-white accent lighting, reminiscent of The Expanse's practical spacecraft aesthetic, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 4)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Departure prep (Act 3). Sets the expedition tone.<br><b>Note:</b> AD is 600t, jump net carries two 100t ARS units externally. Traveller aesthetic = grounded, industrial, not sleek space-opera.</div>
+  </div>
+</div>
+
+<!-- 5. Arabus Reveal -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">5</span>
+    <span class="prompt-title">Arabus — First Sight (The Reveal)</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 4</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A breathtaking view from a spacecraft bridge window looking out at an enormous dark red celestial body hanging in the absolute blackness of interstellar space. The object is a sub-brown dwarf — almost a star but not quite — glowing with its own deep cherry-red light. It is banded like Jupiter but in shades of dark crimson, maroon, and black. No sun illuminates it; it makes its own light from internal heat. A faint reddish glow extends around it like a halo. Near it, a tiny bright volcanic moon is visible, with orange plumes erupting from its surface. The foreground shows the edge of the bridge viewport frame, instrument panels with blue readouts, and the silhouettes of two crew members staring at the sight. Stars are visible around the object but none are as bright as its cherry glow. Style: cinematic science fiction, awe-inspiring, dark palette dominated by deep reds and blacks, photorealistic, 21:9 ultrawide aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 5)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> THE session-ending image. Display alongside the read-aloud text (Act 4.3). This is the WOW moment.<br><b>Note:</b> Arabus is 8 Jupiter masses, self-luminous at 450K. Cherry-red. Volcanic moon is Typhon. No parent star — deep interstellar void.</div>
+  </div>
+</div>
+
+<!-- 6. Arabus — Space View -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">6</span>
+    <span class="prompt-title">Arabus — External Space View</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 4 alt</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A stunning astronomical photograph of a rogue sub-brown dwarf floating in deep interstellar space. The object glows deep cherry-red from internal heat, with dark banded cloud structures visible across its surface like a massive dark Jupiter lit from within. A faint reddish thermal halo extends around it. A small volcanic moon orbits close, visibly erupting with bright orange volcanic plumes. The background is pure black void with scattered distant stars. No sun is visible — this world makes its own light. The overall composition suggests immense scale and profound isolation. Style: astronomical visualization, photorealistic, deep space photography aesthetic, dark background with the red object as the sole light source, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 6)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Alternative to #5 — external view without bridge framing. Good for Discord header image or Roll20 splash.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════ -->
+<!-- S15 — THE DRAGON'S WORLD        -->
+<!-- ════════════════════════════════ -->
+
+<h2 style="color:var(--amber); font-size:1rem; margin-bottom:0.6rem;">S15 — The Dragon's World</h2>
+
+<!-- 7. Arabus Magnetosphere -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">7</span>
+    <span class="prompt-title">Arabus Magnetosphere — Plasma Structures</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-future">S15</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A science fiction visualization of a complex magnetosphere around a glowing red sub-brown dwarf. Visible magnetic field lines arc gracefully outward from the red sphere, rendered as faintly glowing blue-white curves. Between the red planet and a small volcanic moon, an interaction zone glows with purple and violet plasma structures — organized, almost organic-looking patterns of luminous plasma flowing along the magnetic field lines. Some structures look like living things: flowing ribbons, spiral formations, clusters that move in coordinated groups. A faint plasma torus (ring of ionized gas) encircles the planet at an angle. The overall impression is that the magnetosphere is not empty space but a living environment. Style: scientific visualization meets science fiction art, deep space blacks with vivid plasma colors (purple, violet, blue-white against cherry-red), high detail, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 7)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> When players first survey the interaction zone. The moment they realize the magnetosphere isn't empty.<br><b>Note:</b> The plasma structures ARE the ecosystem — 6 tiers from drift to leviathans. Don't label them; let the visual suggest living organization.</div>
+  </div>
+</div>
+
+<!-- 8. Sandoval's Probe -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">8</span>
+    <span class="prompt-title">Sandoval's Probe — Ensnared in Plasma</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-future">S15</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A small cylindrical space probe, roughly 2 meters long, floating in a void surrounded by strange luminous plasma filaments. The probe is old and weathered — its surface pitted and discolored from years of exposure. Delicate purple-blue plasma tendrils wrap around it gently, not crushing but holding, almost cradling. The plasma structures have an organic quality, like bioluminescent deep-sea tendrils. The probe's antenna dish is intact but tilted. A faint blinking green light suggests the probe is still transmitting, weakly. The background is dark with a distant cherry-red glow. The overall mood is eerie and beautiful — something alien has been keeping this probe safe, or studying it, for eleven years. Style: cinematic science fiction, underwater-in-space feeling, bioluminescent color palette (purple, blue, green against black), intimate scale, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 8)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> When the crew locates and recovers Lt. Sandoval's probe. The moment they realize the ecosystem has been <em>holding</em> it.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════ -->
+<!-- S16 — THE SHEPHERD'S RESPONSE   -->
+<!-- ════════════════════════════════ -->
+
+<h2 style="color:var(--red); font-size:1rem; margin-bottom:0.6rem;">S16 — The Shepherd's Response</h2>
+
+<!-- 9. The Beam -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">9</span>
+    <span class="prompt-title">The Beam — Warning Shot</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-future">S16</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A dramatic space scene showing a perfectly straight, intensely bright cherry-red beam of coherent energy cutting across the void, passing dangerously close to a spacecraft. The beam originates not from any visible weapon but from the space itself — as if the magnetic field focused ambient energy into a laser. The spacecraft, a 600-ton angular vessel, is caught in the near-miss: its running lights flicker, electrical discharges crawl across its hull. The background shows the massive red glow of a sub-brown dwarf planet. The beam is impossibly straight and bright against the dark, like a line drawn with a ruler in cherry-red light. The moment captures the instant of the near-miss — terrifying power, deliberate restraint. Style: dramatic cinematic science fiction, high contrast, the red beam as the dominant visual element against black space, motion blur on electrical effects, 21:9 ultrawide aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 9)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> THE crisis moment. "A line of light draws itself across the void." The beam deliberately misses. Von Sydo: "It didn't miss. It chose to miss."</div>
+  </div>
+</div>
+
+<!-- 10. Sandcaster Defense -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">10</span>
+    <span class="prompt-title">Sandcaster Defense — Magnetic Sand Cloud</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-future">S16</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A spacecraft in space deploying a defensive cloud of metallic particles from turret-mounted launchers. The particles are iron-nickel magnetic sand, forming an expanding silvery cloud that glitters and swirls in magnetic field lines visible as faint blue curves. A bright cherry-red energy beam approaching from the left is visibly scattering and diffracting as it hits the particle cloud — the beam breaks apart into rays like light through a prism. Tiny luminous purple organisms (plasma creatures) are swarming toward the sand cloud with evident curiosity, investigating the magnetic structures the sand creates. The ship is industrial and angular, 600 tons, with visible turrets. The overall moment captures defense becoming communication — the sand cloud is both shield and message. Style: cinematic science fiction, dynamic action, silver-metallic sand cloud contrasting with cherry-red beam and purple bioluminescent organisms, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 10)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Marina's defining moment. "If they can read magnetic fields, then I can write in them." Defense becomes first contact.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════ -->
+<!-- S17 — ICE AND SILENCE           -->
+<!-- ════════════════════════════════ -->
+
+<h2 style="color:var(--cyan); font-size:1rem; margin-bottom:0.6rem;">S17 — Ice and Silence</h2>
+
+<!-- 11. Nyrthus -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">11</span>
+    <span class="prompt-title">Nyrthus — Pale Ice World</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-future">S17</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A pale white ice world floating in absolute darkness. The planet is small, roughly Earth-sized, with a surface of pristine water ice showing faint crack patterns and subtle blue-gray variations. There is no sun — the world is a rogue planet drifting through interstellar space. The only illumination is starlight, making the ice surface glow with a ghostly pale luminescence. In a few spots, faint wisps of nitrogen gas vent from cryovolcanic fissures, catching the light. The background is pure black void with scattered distant stars. The overall impression is profound stillness and cold — the opposite of the cherry-red Arabus. Beautiful in its bleakness. Style: astronomical visualization, photorealistic, minimal color palette (whites, pale blues, grays against black), serene and austere, evokes isolation, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 11)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Arrival at Nyrthus. After Arabus's cherry-red intensity, this is the visual palate cleanser. "After Arabus, Nyrthus is almost a relief."</div>
+  </div>
+</div>
+
+<!-- 12. ARS on Ice -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">12</span>
+    <span class="prompt-title">ARS Deployment on Ice Surface</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-future">S17</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A futuristic automated mining station sitting on the surface of an ice world. The station is a large modular structure, roughly 100 tons, that has self-erected from a compact transport configuration into a working facility. Solar panels (useless here — deployed by default) extend from the top. A small fusion reactor module glows faintly blue at its core. Six autonomous mining drones spread across the ice surface around it, their heated cutting heads sending fountains of ice chips arcing lazily upward in the low gravity — the chips drift slowly, catching light before settling. Two figures in bulky vacuum suits stand nearby, dwarfed by the station. The sky above is absolutely black — no stars visible through the helmet visors. The ice stretches to a close horizon (small world). The scene captures industrial accomplishment in an alien environment. Style: hard science fiction, industrial realism, cold color palette (ice whites and blues with warm machinery glow), practical space photography aesthetic, 16:9 aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 12)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> The deployment sequence — the WIN. "It works. It actually works." Torin's moment. Meera: "Of course it works. We built it."</div>
+  </div>
+</div>
+
+<!-- 13. Von Sydo on Ice -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">13</span>
+    <span class="prompt-title">Von Sydo Alone on the Ice</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-future">S17</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A solitary figure in a vacuum suit standing on a vast plain of white ice, seen from behind. The figure stands perfectly still, helmet tilted slightly downward as if concentrating on something beneath the surface. The ice stretches in every direction to a close horizon — this is a small world. The sky above is absolute blackness, no stars, no light source, just void. The ice surface has a faint luminous quality, reflecting starlight. The figure casts no shadow. In the far distance, a tiny structure (the mining station) and its warm glow is the only other feature. The composition emphasizes solitude and scale: one person, standing on ice, above an ocean they cannot see, reaching down with senses no one else possesses. The mood is contemplative, heavy, beautiful. Style: cinematic science fiction, Kubrick-inspired composition, minimal color palette (white ice, black sky, single figure), emotional isolation, wide shot, 21:9 ultrawide aspect ratio.</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, 13)">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> THE emotional beat. Von Sydo reaches down with psionic awareness. Sixty kilometers of ice. Then water. Then life. Three substrates. The session's quiet climax.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════ -->
+<!-- CHECKLIST                       -->
+<!-- ════════════════════════════════ -->
+
+<h2 style="color:var(--heading); font-size:1rem; margin-bottom:0.6rem;">Generation Checklist</h2>
+<div style="background:var(--card); border-radius:8px; padding:1rem;">
+<p style="font-size:0.78rem; color:var(--muted); margin-bottom:0.6rem;">Priority: Arabus reveal first (session-ender), then fan images (Act 2 comedy), then departure. Generate in ChatGPT, save images, add to presenter.</p>
+<div class="checklist">
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">5.</span> Arabus Reveal — Bridge View (Act 4 cliffhanger — THE image)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">1.</span> Fan Protest Wide Shot (Act 2 establishing)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">2.</span> James — Competence Worshippers (ex-military salute)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">3.</span> Marina — Action Figure (3D-printed figurine)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">3b.</span> Asao — Mane Kids (children rushing cordon)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">3c.</span> Max — Kriegers (intense science fans)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">3d.</span> Von Sydo — Conspiracy Theorists (quiet knowing smiles)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">4.</span> AD at Starport (Act 3 departure)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--amber); font-weight:600;">6.</span> Arabus External (alternate/Discord splash)</div>
+  <div class="checklist-item" style="color:var(--muted);"><input type="checkbox"> 7-13: Future sessions (generate anytime)</div>
+</div>
+</div>
+
+</body>
+</html>
