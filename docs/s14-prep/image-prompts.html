@@ -128,6 +128,25 @@ function markDone(btn, num) {
   </div>
 </div>
 
+<!-- 1b. Heroes of Raschev — Heroic Fan Poster -->
+<div class="prompt-card">
+  <div class="prompt-header" onclick="toggle(this)">
+    <span class="prompt-num">1b</span>
+    <span class="prompt-title">Heroes of Raschev — Heroic Fan Poster</span>
+    <span class="status status-pending">PENDING</span>
+    <span class="prompt-use use-tonight">TONIGHT</span>
+    <span class="prompt-session">Act 2 prop</span>
+  </div>
+  <div class="prompt-body">
+    <div class="prompt-text">A dramatic heroic poster artwork in the style of in-universe fan art — slightly idealized and over-dramatized, like a movie poster painted by an enthusiastic fan. The scene depicts a chaotic alien first-contact battle on an open landing field. Center foreground: a large man in heavy powered rescue armor is on his back on the ground, overwhelmed by a swarm of small hostile alien creatures — crab-like arthropods with acid-dripping mandibles and drill-tipped limbs, crawling over his suit, boring into joints, spattering corrosive fluid. His armored arms are raised trying to fight them off. Just behind him, a tall muscular lion-maned alien warrior charges forward into the swarm, sword raised. A grenade explosion blooms between them — a shockwave ring of fire and debris killing dozens of the creatures but clearly also battering the armored man through his suit. Above and to the right, a small open-topped hover vehicle (air raft) descends rapidly with a determined figure at the controls, coming in for rescue. In the sky to the left, a military combat drone swoops down trailing cables, one mechanical claw gripping the armored man's leg, hauling him bodily upward out of the pile of dead and dying creatures. In the background: a landed alien spacecraft — a smooth, disc-shaped flying saucer with an organic Orion design, its ramp still open, more creatures visible inside. Terrified civilians flee in all directions across the field. The poster has a slightly painterly, heroic quality — the kind of art that makes everyone look 20% more heroic than they actually were. Bold dramatic lighting, explosions, action poses. Style: heroic action movie poster art, painterly but detailed, warm dramatic lighting with explosion glow and dust, composition reads left-to-right as rescue sequence, 2:3 portrait aspect ratio (poster format).</div>
+    <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      <button class="copy-btn" style="background:var(--card); border:1px solid #334155; color:var(--text);" onclick="markDone(this, '1b')">Mark Done</button>
+    </div>
+    <div class="notes"><b>Use:</b> Visible as fan art in the crowd / held up as a poster — this is the Raschev incident as the public remembers it. Heroic, dramatized, slightly inaccurate in the way fan art always is. The crew sees themselves depicted as action heroes. Only ~1 year ago game-time — fresh celebrity.<br><b>Scene:</b> Max (heavy armor) swarmed by Camax, Asao (Aslan warrior) charging in with grenade, Von Sydo (air raft rescue descent), Marina's combat drone hauling Max out by the leg. Orion flying saucer in background. Civilians fleeing.<br><b>All PCs:</b> <span class="pc">ALL</span></div>
+  </div>
+</div>
+
 <!-- 2. James Fans — Competence Worshippers -->
 <div class="prompt-card">
   <div class="prompt-header" onclick="toggle(this)">
@@ -441,6 +460,7 @@ function markDone(btn, num) {
 <p style="font-size:0.78rem; color:var(--muted); margin-bottom:0.6rem;">Priority: Arabus reveal first (session-ender), then fan images (Act 2 comedy), then departure. Generate in ChatGPT, save images, add to presenter.</p>
 <div class="checklist">
   <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">5.</span> Arabus Reveal — Bridge View (Act 4 cliffhanger — THE image)</div>
+  <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">1b.</span> Heroes of Raschev Poster (fan art in crowd)</div>
   <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">1.</span> Fan Protest Wide Shot (Act 2 establishing)</div>
   <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">2.</span> James — Competence Worshippers (ex-military salute)</div>
   <div class="checklist-item"><input type="checkbox"> <span style="color:var(--red); font-weight:600;">3.</span> Marina — Action Figure (3D-printed figurine)</div>
