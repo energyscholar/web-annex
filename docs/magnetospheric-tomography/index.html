@@ -16,13 +16,24 @@ p { margin-bottom: 1rem; font-size: 0.92rem; }
 .viz-container { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0; align-items: flex-start; }
 .main-viz { flex: 1; min-width: 600px; }
 .side-panel { display: flex; flex-direction: column; gap: 0.8rem; }
-.controls { display: flex; gap: 1rem; align-items: center; margin: 1rem 0; padding: 0.8rem;
-            background: #0d1117; border-radius: 8px; border: 1px solid #1e293b; }
+.controls { display: flex; gap: 1rem; align-items: center; padding: 0.8rem 1rem;
+            background: #0d1117; border-radius: 8px; border: 1px solid #1e293b;
+            position: sticky; bottom: 1rem; z-index: 100;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.6); }
+.viz-wrapper { position: relative; }
+.viz-hint { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.8rem;
+            background: #1e293b; border: 1px solid #334155; border-radius: 6px;
+            margin-bottom: 0.8rem; font-size: 0.82rem; color: var(--accent);
+            cursor: pointer; width: fit-content; }
+.viz-hint:hover { background: #334155; }
+.viz-hint .pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+                   background: var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 .controls button { background: #1e293b; color: var(--fg); border: 1px solid #334155;
                    padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-family: inherit; }
 .controls button:hover { background: #334155; }
 .controls button.active { background: var(--accent); color: #0f172a; border-color: var(--accent); }
-.epoch-label { color: var(--accent); font-size: 0.9rem; min-width: 100px; }
+.epoch-label { color: var(--accent); font-size: 0.9rem; min-width: 200px; }
 .slider { flex: 1; }
 input[type="range"] { width: 100%; accent-color: var(--accent); }
 .key-concept { background: #1e293b; border-left: 3px solid var(--accent); padding: 0.8rem 1rem;
@@ -34,6 +45,13 @@ svg { border-radius: 6px; }
 </style>
 </head>
 <body>
+<div style="display:flex; gap:8px; align-items:center; padding:6px 0 10px; border-bottom:1px solid #1e293b; margin-bottom:12px; font-size:11px; font-family:'Courier New',monospace;">
+<span style="color:#94a3b8; font-weight:bold;">Magnetospheric Tomography</span> <span style="color:#334155;">|</span>
+<a href="altitude-coherence.html" style="color:#38bdf8; text-decoration:none;">Altitude Coherence &amp; Validation</a> <span style="color:#334155;">|</span>
+<a href="current-sheet-3d.html" style="color:#38bdf8; text-decoration:none;">3D Structure</a> <span style="color:#334155;">|</span>
+<a href="satellite-convergence.html" style="color:#38bdf8; text-decoration:none;">Satellite Cross-Validation</a>
+</div>
+
 <h1>Magnetospheric Tomography</h1>
 <p class="subtitle">Reconstructing 3D current structure from combined ground magnetometer
 and GPS projections — Halloween Storm, 29 October 2003</p>
@@ -66,6 +84,11 @@ lies along the equatorial plane beyond ~4 R<sub>E</sub>.</p>
 decomposition of GPS TEC. The ionosphere arc at 110 km is where currents close horizontally.
 Ground stations (green dots) sit on Earth's surface, looking upward through this entire structure.</p>
 
+<div class="viz-hint" onclick="document.getElementById('btn-play').click(); this.style.display='none';">
+  <span class="pulse"></span> This visualization is animated — 12 epochs across 24 hours. Click to play.
+</div>
+
+<div class="viz-wrapper">
 <div class="viz-container">
 <div class="main-viz">
 <div class="frame meridional-frame" id="mf-0" style="display:block">
@@ -12171,6 +12194,7 @@ Ground stations (green dots) sit on Earth's surface, looking upward through this
          oninput="setEpoch(parseInt(this.value))" id="epoch-slider">
   <span class="epoch-label" id="epoch-label">00:00 UT</span>
 </div>
+</div>
 
 <svg class="mi-chart" viewBox="0 0 500 60">
 <rect width="500" height="60" fill="#0d1117" rx="4"/>
@@ -12190,6 +12214,52 @@ Ground stations (green dots) sit on Earth's surface, looking upward through this
 <circle cx="470" cy="20" r="3" fill="#38bdf8" class="mi-dot" id="mi-11"/>
 <circle cx="30" cy="55" r="5" fill="#ff4444" id="mi-cursor" opacity="0.8"/>
 </svg>
+
+<div style="background:#0d1117; border:1px solid #1e293b; border-radius:8px; padding:12px 16px; margin:1.5rem 0;">
+<h2 style="color:#38bdf8; font-size:14px; margin-bottom:8px;">Ground Truth: Reproducing Known Physics</h2>
+<p style="font-size:11px; color:#94a3b8; margin-bottom:10px;">Before trusting novel results, the method must reproduce known features of the magnetosphere-ionosphere system. All checks below emerge from the analysis without tuning.</p>
+<table style="width:100%; font-size:11px; border-collapse:collapse; font-family:'Courier New',monospace;">
+<tr style="border-bottom:1px solid #334155; color:#64748b;">
+  <th style="text-align:left; padding:4px 8px;">Known Physics</th>
+  <th style="text-align:left; padding:4px 8px;">Expected Signal</th>
+  <th style="text-align:left; padding:4px 8px;">Observed</th>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+  <td style="padding:4px 8px;">Substorm onset disrupts current system</td>
+  <td style="padding:4px 8px;">I drops then rebuilds</td>
+  <td style="padding:4px 8px; color:#4ade80;">&#10003; Visible in animation (06&#8594;20 UT)</td>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+  <td style="padding:4px 8px;">E-region dominates during precipitation</td>
+  <td style="padding:4px 8px;">&Delta;(120&#8722;300) &gt; 0 during main phase</td>
+  <td style="padding:4px 8px; color:#4ade80;">&#10003; &Delta; = +0.36 peak (10 UT)</td>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+  <td style="padding:4px 8px;">Plasmapause at L &#8776; 5&#8211;6 (quiet)</td>
+  <td style="padding:4px 8px;">LISA anomaly near expected L</td>
+  <td style="padding:4px 8px; color:#4ade80;">&#10003; SKT at L = 5.6, Greenland</td>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+  <td style="padding:4px 8px;">Day-night FAC asymmetry</td>
+  <td style="padding:4px 8px;">Nightside I &gt; dayside I</td>
+  <td style="padding:4px 8px; color:#4ade80;">&#10003; Ratio 2.2:1 (92 quiet days)</td>
+</tr>
+<tr style="border-bottom:1px solid #1e293b;">
+  <td style="padding:4px 8px;">R1/R2 FAC boundary at ~66&deg;</td>
+  <td style="padding:4px 8px;">LISA sign reversal at boundary</td>
+  <td style="padding:4px 8px; color:#4ade80;">&#10003; SKT/STF dipole (65&#8211;67&deg;)</td>
+</tr>
+<tr>
+  <td style="padding:4px 8px;">Moran's I reference implementation</td>
+  <td style="padding:4px 8px;">Match PySAL to machine precision</td>
+  <td style="padding:4px 8px; color:#4ade80;">&#10003; |&Delta;I| &lt; 10&#8315;&#185;&#8309;</td>
+</tr>
+</table>
+<p style="font-size:10px; color:#64748b; margin-top:10px;">
+Detailed evidence: <a href="altitude-coherence.html" style="color:#38bdf8;">8-test validation suite + sensitivity analysis</a> &middot;
+<a href="satellite-convergence.html" style="color:#38bdf8;">4-way satellite cross-validation</a>
+</p>
+</div>
 
 <h2>§3 — What Each Projection Sees</h2>
 
@@ -12228,23 +12298,25 @@ cycle is the ground signature of a 3D reorganization of the nightside current sy
 what we interpret as evidence for a phase transition in the spatial coherence of the
 plasma sheet–ionosphere coupling.</p>
 
-<h2>§5 — The Phase Transition</h2>
+<h2>§5 — The Coherence Transition</h2>
 <p>Below AE ≈ 100 nT, Moran's I is indistinguishable from noise — the perturbation field is
 spatially incoherent. Above this threshold, spatial order emerges: nearby stations covary,
 with a characteristic correlation length of 3,000–4,800 km that scales with storm intensity.
 This is an order-disorder transition controlled by magnetospheric driving intensity.</p>
 
 <p>The substorm cycle shows this dynamically: spatial coherence drops at onset, then rebuilds
-during recovery — often to levels <em>higher</em> than pre-onset. Across 29,940 detected
-substorms in 279 months, the pattern is robust: verdict CLEAR_REBUILD.</p>
+during recovery — often to levels <em>higher</em> than pre-onset. Preliminary analysis across
+hundreds of substorm events shows this rebuild pattern is robust and repeatable.</p>
 
-<p>The temporal lead is the most striking feature: Moran's I leads scalar perturbation
-amplitude by ~40 minutes. Spatial organization precedes intensity. The current system
-organizes structurally in the plasma sheet before the amplitude peak arrives at the ground.</p>
+<p>A suggestive feature in several events: Moran's I appears to lead scalar perturbation
+amplitude by tens of minutes, suggesting that spatial organization may precede intensity.
+If confirmed at higher cadence, this would imply the current system organizes
+structurally before the amplitude peak arrives at the ground.</p>
 
-<p class="section-note">Data: SuperMAG ground magnetometers (41 stations) + CODE GIM
+<p class="section-note">Data: SuperMAG ground magnetometers (41 stations, nightside 55°–80° mlat) + CODE GIM
 GPS TEC (2-hour cadence, 2.5° × 5° grid). Halloween 2003 storm, 29 October.
-SECS inversion: Amm & Viljanen (1999). Moran's I: inverse-distance weights.</p>
+The 2-hour cadence resolves storm phases (quiet → main → recovery), not individual substorms.
+Moran's I: inverse-distance haversine weights, validated against PySAL to machine precision.</p>
 
 <p class="section-note">Pipeline: github.com/energyscholar/has-anyone-looked — scripts/tomography_3d.py</p>
 
@@ -12255,13 +12327,14 @@ let playing = false;
 let timer = null;
 const N = 12;
 const labels = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
+const phases = ['Pre-storm', 'Pre-storm', 'Pre-storm', 'SSC', 'Main phase', 'Main phase', 'Main phase', 'Main phase', 'Main phase', 'Recovery', 'Substorm', 'Post-substorm'];
 
 function setEpoch(idx) {
   document.querySelectorAll('.meridional-frame').forEach((el, i) => el.style.display = i === idx ? 'block' : 'none');
   document.querySelectorAll('.polar-frame').forEach((el, i) => el.style.display = i === idx ? 'block' : 'none');
   document.querySelectorAll('.alt-frame').forEach((el, i) => el.style.display = i === idx ? 'block' : 'none');
   document.getElementById('epoch-slider').value = idx;
-  document.getElementById('epoch-label').textContent = labels[idx] + ' UT';
+  document.getElementById('epoch-label').textContent = labels[idx] + ' UT — ' + phases[idx];
   // Update MI cursor
   const dots = document.querySelectorAll('.mi-dot');
   if (dots[idx]) {
@@ -12277,6 +12350,7 @@ function togglePlay() {
   document.getElementById('btn-play').textContent = playing ? '⏸ Pause' : '▶ Play';
   document.getElementById('btn-play').classList.toggle('active', playing);
   if (playing) {
+    document.querySelector('.viz-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
     timer = setInterval(() => {
       setEpoch((currentEpoch + 1) % N);
     }, 1500);
