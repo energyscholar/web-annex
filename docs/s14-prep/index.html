@@ -64,6 +64,14 @@ h1 { color: var(--heading); font-size: 1.6rem; margin-bottom: 0.2rem; }
 .scene-card .label { color: var(--muted); font-size: 0.72rem; margin-top: 0.2rem; }
 .scene-card a { color: var(--green); text-decoration: none; font-weight: 600; }
 .scene-card a:hover { text-decoration: underline; }
+.scene-card .thumb { max-width: 100%; height: 60px; object-fit: cover; border-radius: 4px; margin-top: 0.3rem; opacity: 0.7; }
+.scene-card .btn-group { display: flex; gap: 0.3rem; margin-top: 0.3rem; justify-content: center; }
+.scene-card .btn-trigger {
+  padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.68rem; font-weight: 600;
+  border: 1px solid #334155; cursor: pointer; transition: background 0.15s;
+}
+.btn-copy { background: var(--card); color: var(--amber); }
+.btn-copy:hover { background: #334155; }
 
 /* Act accordion */
 details.act {
@@ -158,6 +166,7 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
   <div class="s">Tonight</div>
   <a href="#act1"><span class="dot" style="background:var(--blue)"></span>Act 1 — Rescue</a>
   <a href="#act2"><span class="dot" style="background:var(--amber)"></span>Act 2 — Fans</a>
+  <a href="#rewards"><span class="dot" style="background:var(--amber)"></span>Fan Rewards</a>
   <a href="#act3"><span class="dot" style="background:var(--green)"></span>Act 3 — Departure</a>
   <a href="#act4"><span class="dot" style="background:var(--cherry)"></span>Act 4 — Jump</a>
   <div class="s">Reference</div>
@@ -186,22 +195,28 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
 </div>
 
 <!-- Scene Manifest — copy/paste these to Argus to trigger -->
-<p style="font-size:0.72rem; color:var(--muted); margin-bottom:0.4rem;">Copy/paste a trigger phrase to Argus chat, or say it aloud (Craig listening). Click scene name to preview.</p>
+<p style="font-size:0.72rem; color:var(--muted); margin-bottom:0.4rem;">Click <b style="color:var(--amber)">COPY</b> to copy the trigger phrase, then paste to Argus chat. Or say it aloud (Craig listening). Click scene name to preview.</p>
 <div class="scenes-grid">
   <div class="scene-card">
-    <div class="trigger" title="Copy this" style="cursor:copy;" onclick="navigator.clipboard.writeText('Show fan signs')">Show fan signs</div>
     <a href="scenes/fan-signs.html" target="_blank">Fan Protest Signs</a>
     <div class="label">Act 2 opening</div>
+    <div class="btn-group">
+      <button class="btn-trigger btn-copy" onclick="navigator.clipboard.writeText('Show fan signs');this.textContent='Copied!';setTimeout(()=>this.textContent='COPY',1500)">COPY</button>
+    </div>
   </div>
   <div class="scene-card">
-    <div class="trigger" title="Copy this" style="cursor:copy;" onclick="navigator.clipboard.writeText('Show route map')">Show route map</div>
     <a href="scenes/route-briefing.html" target="_blank">Route Map Briefing</a>
     <div class="label">Act 3 briefing</div>
+    <div class="btn-group">
+      <button class="btn-trigger btn-copy" onclick="navigator.clipboard.writeText('Show route map');this.textContent='Copied!';setTimeout(()=>this.textContent='COPY',1500)">COPY</button>
+    </div>
   </div>
   <div class="scene-card">
-    <div class="trigger" title="Copy this" style="cursor:copy;" onclick="navigator.clipboard.writeText('Show Arabus')">Show Arabus</div>
     <a href="scenes/arabus-arrival.html" target="_blank">Arabus System Reveal</a>
     <div class="label">Act 4 cliffhanger</div>
+    <div class="btn-group">
+      <button class="btn-trigger btn-copy" onclick="navigator.clipboard.writeText('Show Arabus');this.textContent='Copied!';setTimeout(()=>this.textContent='COPY',1500)">COPY</button>
+    </div>
   </div>
 </div>
 
@@ -225,7 +240,12 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
   <span class="beat-time">10 min</span>
 </summary>
 <div class="beat-body">
-  <p>PCs in VIP holding suite, Day 2. Cassian's complaint working through channels. Then — sound from outside. Chanting, growing.</p>
+  <p>PCs in VIP holding suite, Day 2. Comms screened since arrest — Hardpoint fielding 1,200+ incoming messages (media, fans, legal, political operators). Cassian's complaint working through channels. Then — sound from outside. Chanting, growing.</p>
+
+  <details class="extra"><summary>Political backstory (GM only)</summary><div class="extra-body">
+    Arrest orchestrated by <b>Senator Varo Shan</b> (anti-Imperial, Voronov's proxy). Plan: use the 72-hour hold to buy Voronov time to clean up CCF pipeline evidence and disappear. Charges mostly fabricated — only Q-ship false registration has teeth.<br><br>
+    <b>Wild card they didn't anticipate:</b> The crew are minor celebrities. The Heroes of Raschev 3-D vids reached Collace only <b>~1 year ago</b> game time — fresh fame on a connected world. A Senate clerk recognized the names on the arrest notice, matched them to the vid cast, posted on the feeds. Viral overnight. Voronov's 72-hour window is collapsing.
+  </div></details>
 
   <div class="ra">
     <div class="ra-label">Read Aloud</div>
@@ -246,7 +266,7 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
   <span class="beat-time">10 min</span>
 </summary>
 <div class="beat-body">
-  <p>Pro-Imperial senator arrives. Barely containing a grin. He's riding the political wave — the anti-Imperials arrested pop-culture heroes on camera.</p>
+  <p>Pro-Imperial senator arrives. Barely containing a grin. He's riding the political wave — the anti-Imperials arrested pop-culture heroes on camera. Koss offers to <b>unscreen comms</b> — letting the 1,200+ messages through is leverage (the crew doesn't yet know how famous they are).</p>
 
   <div class="npc-line">
     <div class="npc-name">KOSS</div>
@@ -296,6 +316,10 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
     "Commander Delleron, sir. Petty Officer First Class Yannick Reese, retired. It's an honor, sir."
   </div>
   <p style="color:var(--muted); font-size:0.8rem;">Comedy: James accepts military honors from fans while maintaining merchant captain cover. Irony visible only to crew.</p>
+  <details class="extra"><summary>Fan leader: PO1 Reese — engagement benefit</summary><div class="extra-body">
+    <b>Reese</b> leads a dozen ex-military types. Behind them: paparazzi conspiracy theorists who hold blurry telephoto photos and believe James is really an Admiral.<br>
+    <b>If James engages:</b> Reese's network is ex-Navy — informal intel about local shipping, system defense boat schedules, and refueling logistics. Useful contacts at any starport in District 268.
+  </div></details>
 </div>
 </details>
 
@@ -307,11 +331,15 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
   <span class="beat-time">5 min</span>
 </summary>
 <div class="beat-body">
-  <p>Engineering student (20s) with hand-made "Marina DeVeillter" action figure. 3D-printed, wrong-color hair. Box stats: <b>Gunner 4, Tactics 3</b> (overstated).</p>
+  <p>Engineering student <b>Lina Tarkesh</b> (20s) with hand-made "Marina DeVeillter" action figure. 3D-printed, wrong-color hair. Box stats: <b>Gunner 4, Tactics 3</b> (overstated).</p>
   <div class="npc-line">
-    <div class="npc-name">FAN</div>
+    <div class="npc-name">LINA TARKESH</div>
     "I 3D-printed it myself! You're the reason I went into weapons engineering!"
   </div>
+  <details class="extra"><summary>Fan leader: Lina Tarkesh — engagement benefit</summary><div class="extra-body">
+    Behind Lina: a sexualized poster crowd (matching Alex's DAZ3D renders — auburn/copper hair, blue-green eyes, freckles, crop top + shorts pose, black jumpsuit, gun poses).<br>
+    <b>If Marina engages:</b> Lina is doing graduate research in magnetic containment — relevant to sandcaster modifications. She'd eagerly share her thesis data. Seeds the magnetic sand innovation for S16.
+  </div></details>
 </div>
 </details>
 
@@ -323,9 +351,13 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
   <span class="beat-time">5 min</span>
 </summary>
 <div class="beat-body">
-  <p>8-12 year olds in homemade Aslan manes rush past security. Bad Trokh phrases. Foam <i>oistekhokh</i>. One recites mangled <i>fteirle</i> oath.</p>
-  <p>Behind them: genuine xenophile society members (respectful), parents on field trip, a few uncomfortably intense types.</p>
+  <p>8-12 year olds in homemade Aslan manes rush past security. Bad Trokh phrases. Foam <i>oistekhokh</i>. One recites mangled <i>fteirle</i> oath. Cheap action figures clutched in small fists.</p>
+  <p>Behind them: a teenager with an embarrassing hairless wanted poster ("Innocent!"). Further back: genuine xenophile society members led by <b>Dava Mirren</b> (respectful), parents on field trip, Aslan furry fetishists in the background.</p>
   <p style="color:var(--muted); font-size:0.8rem;">Comedy + heart: kids adorable and wrong about everything. Asao — landless warrior with false charges — venerated by children.</p>
+  <details class="extra"><summary>Fan leader: Dava Mirren — engagement benefit</summary><div class="extra-body">
+    Dava runs Collace Xenophile Society — legitimate academic org with contacts at Flammarion University. She's horrified by the fetishists but won't say so in public.<br>
+    <b>If Asao engages:</b> Dava's Flammarion connections become available in S18+. Academic contacts, cultural liaison introductions, and a network that takes Asao's situation seriously (not as entertainment).
+  </div></details>
 </div>
 </details>
 
@@ -337,8 +369,12 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
   <span class="beat-time">5 min</span>
 </summary>
 <div class="beat-body">
-  <p>Intense 20-somethings. Signs: "SCIENCE DOESN'T NEED YOUR PERMISSION" and "PLANCK WAS RIGHT." They know the dramatized Otarri research. One has a tattoo of Max's molecular diagram.</p>
-  <p>Max is <b>DELIGHTED.</b> These people GET him. (They don't, exactly.)</p>
+  <p>Intense 20-somethings led by <b>Torben Voss</b>. Signs: "SCIENCE DOESN'T NEED YOUR PERMISSION," "INFORMED CONSENT IS OPTIONAL," "BREAKING EGGS FOR OMELETS," "ETHICS COMMITTEES ARE OPPRESSION." They know the dramatized Otarri research. One has a tattoo of Max's molecular diagram.</p>
+  <p>Max is <b>DELIGHTED.</b> These people GET him. (They don't, exactly. They're worse.)</p>
+  <details class="extra"><summary>Fan leader: Torben Voss — engagement benefit</summary><div class="extra-body">
+    Torben is a grad student in EM physics. The Krieger stuff is performance — underneath, he's genuinely brilliant and has a curated bibliography of frontier EM research.<br>
+    <b>If Max engages:</b> Torben's bibliography includes papers Max hasn't seen — relevant to S15 sensor analysis at Arabus. Torben would also happily join any future research expedition as an unpaid intern (problematic).
+  </div></details>
   <details class="extra"><summary>Elara seed</summary><div class="extra-body">
     Dr. Elara Holt watches from the AD viewport as Max's fans celebrate research she finds ethically questionable. She says nothing yet. But she notices: not one defender argued Max <em>didn't do</em> those things.
   </div></details>
@@ -353,12 +389,42 @@ details.extra .extra-body { font-size: 0.8rem; color: #64748b; padding: 0.3rem 0
   <span class="beat-time">5 min</span>
 </summary>
 <div class="beat-body">
-  <p>Quieter fans at crowd edge. Neat signs: "WE KNOW THE TRUTH ABOUT VON SYDO" and "IS VON SYDO A TELEPATH? 👁️" — presented as affectionate fan-theory memes. Smiling.</p>
+  <p>Organized group at crowd edge, led by <b>Ren Kasara</b>. Matching purple accessories, eye-symbol logo enamel pins, professionally printed banner. Signs: "WE KNOW THE TRUTH ABOUT VON SYDO" and "IS VON SYDO A TELEPATH? 👁️" — but these aren't joke signs. This is an actual psi rights advocacy org using the meme as a vehicle.</p>
   <p><b style="color:var(--purple)">Von Sydo does not think it's funny.</b></p>
   <p>The joke is so close to the truth he has to physically control his reaction. Vera squeezes his arm. Cover now has a cultural leak — the "joke" is in public consciousness.</p>
+  <details class="extra"><summary>Fan leader: Ren Kasara — engagement benefit</summary><div class="extra-body">
+    Ren runs a real psi-rights advocacy org — quietly serious beneath the meme aesthetics. Has documented cases of psionic persecution across District 268.<br>
+    <b>If Von Sydo engages:</b> Ren's persecution intel becomes an ongoing resource — names, locations, and patterns of anti-psionic enforcement. Also a liability: association with a psi-rights org is cover-threatening.
+  </div></details>
 </div>
 </details>
 
+</div>
+</details>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- FAN ENGAGEMENT REWARDS                          -->
+<!-- ═══════════════════════════════════════════════ -->
+<details class="act" id="rewards" style="border-left-color: var(--amber);">
+<summary>Fan Engagement Rewards <span class="act-time">post-Act 2</span></summary>
+<div class="act-body">
+<p style="font-size:0.85rem; color:var(--muted); margin-bottom:0.6rem;">After successful fan engagement, Argus sends each PC a private Imperial Mail with their reward blurb (web-annex page, may include images). Delivered as: "Mr. Delleron, this is for you" — private message via the ship's comms.</p>
+
+<div class="strip strip-green" style="font-size:0.82rem;">
+  <b>James / Reese:</b> Ex-Navy contact network in District 268. Informal intel on shipping schedules, SDB patrol patterns, refueling logistics. DM+1 on Streetwise for starport intelligence in the district.
+</div>
+<div class="strip strip-amber" style="font-size:0.82rem;">
+  <b>Marina / Lina Tarkesh:</b> Magnetic containment thesis data — directly relevant to sandcaster modifications. Seeds the magnetic sand innovation (S16). Technical papers + lab contact at Collace University.
+</div>
+<div class="strip strip-green" style="font-size:0.82rem;">
+  <b>Asao / Dava Mirren:</b> Flammarion University contacts via Xenophile Society. Academic network that takes Asao's legal situation seriously. Cultural liaison introductions for S18+.
+</div>
+<div class="strip" style="font-size:0.82rem; border-left: 3px solid var(--red);">
+  <b>Max / Torben Voss:</b> Curated EM bibliography — papers Max hasn't seen. Relevant to S15 Arabus sensor analysis. Bonus: eager unpaid intern applicant (ethically questionable).
+</div>
+<div class="strip" style="font-size:0.82rem; border-left: 3px solid var(--purple);">
+  <b>Von Sydo / Ren Kasara:</b> Psi persecution intel across District 268 — names, locations, enforcement patterns. Ongoing resource but cover-threatening. Double-edged sword.
+</div>
 </div>
 </details>
 
