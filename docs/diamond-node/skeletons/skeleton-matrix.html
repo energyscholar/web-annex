@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multicritical Skeleton Profiles</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --card-border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --s1: #818cf8;
+    --s2: #f87171;
+    --s3: #4ade80;
+    --s4: #facc15;
+    --ground: #e2e8f0;
+    --sel-a: #06b6d4;
+    --sel-b: #d946ef;
+    --sel-c: #f97316;
+    --flat-outline: rgba(255,255,255,0.12);
+    --flat-glow: rgba(255,255,255,0.5);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  header {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 1rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    max-width: 600px;
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    main { grid-template-columns: 1fr; }
+  }
+
+  /* --- Gallery --- */
+  #gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    #gallery { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .card:hover {
+    border-color: #475569;
+  }
+
+  .card.sel-a { border-color: var(--sel-a); box-shadow: 0 0 12px rgba(6,182,212,0.3); }
+  .card.sel-b { border-color: var(--sel-b); box-shadow: 0 0 12px rgba(217,70,239,0.3); }
+  .card.sel-c { border-color: var(--sel-c); box-shadow: 0 0 12px rgba(249,115,22,0.3); }
+
+  .card svg { width: 100%; max-width: 120px; height: auto; }
+
+  .card-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .card-desc {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.2;
+    margin-top: 0.15rem;
+  }
+
+  .stack-badge {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 0.6rem;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  /* --- Overlay panel --- */
+  #overlay-panel {
+    position: sticky;
+    top: 1rem;
+  }
+
+  #overlay-panel h2 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    color: var(--muted);
+  }
+
+  .overlay-container {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--card-border);
+  }
+
+  #overlay-svg {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* --- Property stack --- */
+  #property-stack {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .prop-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .prop-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--muted);
+    background: transparent;
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+    flex-shrink: 0;
+  }
+
+  .prop-dot.active {
+    background: var(--dot-color, var(--muted));
+    border-color: var(--dot-color, var(--muted));
+    box-shadow: 0 0 6px var(--dot-color, var(--muted));
+  }
+
+  .prop-name {
+    color: var(--muted);
+    transition: color 0.3s;
+  }
+
+  .prop-row.active .prop-name { color: var(--text); }
+
+  .prop-p1 {
+    font-size: 0.65rem;
+    color: #475569;
+    font-style: italic;
+    margin-left: auto;
+    max-width: 140px;
+    text-align: right;
+    line-height: 1.2;
+  }
+
+  /* --- Selection info --- */
+  #selection-info {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    min-height: 1.5rem;
+  }
+
+  #selection-info .name-a { color: var(--sel-a); }
+  #selection-info .name-b { color: var(--sel-b); }
+  #selection-info .name-c { color: var(--sel-c); }
+
+  /* --- Breadcrumb glow --- */
+  .overlay-container.complete {
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 0 30px rgba(255,255,255,0.05);
+    transition: border-color 1.5s, box-shadow 1.5s;
+  }
+
+  /* --- Legend --- */
+  #legend {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem;
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .legend-swatch {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* --- Tooltip --- */
+  .axis-label {
+    font-size: 11px;
+    fill: var(--muted);
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .axis-label-name {
+    font-weight: 600;
+    fill: var(--text);
+  }
+
+  .depth-label {
+    font-size: 9px;
+    fill: #475569;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+</style>
+</head>
+<body>
+<nav style="padding:1rem 1.5rem;font-size:0.85rem;max-width:960px;margin:0 auto"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a></nav>
+
+<div style="max-width:960px;margin:0 auto;padding:0 1.5rem 0.5rem">
+  <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:8px;padding:0.75rem 1rem;font-size:0.8rem;color:#fbbf24;margin-bottom:1rem">
+    <strong>Work in progress.</strong> Skeleton assignments and depth scores are provisional hypotheses, not established results. <a href="index.html" style="color:#fbbf24">Context</a>
+  </div>
+</div>
+
+<header>
+  <h1>Multicritical Skeleton Profiles</h1>
+  <p>Every critical system has a mathematical profile decomposable into four structural skeletons.
+     Most systems have one or two. Some have three. Select systems to overlay their profiles
+     and explore what emerges when different structures combine.</p>
+  <p style="margin-top:0.5rem">The four skeletons: <a href="skeleton-topology.html" style="color:#818cf8">Topology</a>, <a href="skeleton-closure.html" style="color:#4ade80">Closure</a>, <a href="skeleton-computation.html" style="color:#facc15">Computation</a>, and Dynamics (the anchor &mdash; <a href="../multi-critical/" style="color:#f87171">see the tutorials</a>).</p>
+</header>
+
+<main>
+  <section id="gallery"></section>
+
+  <section id="overlay-panel">
+    <h2 id="overlay-title">Select a system</h2>
+    <div class="overlay-container" id="overlay-container">
+      <svg id="overlay-svg" viewBox="0 0 500 500"></svg>
+
+      <div id="property-stack"></div>
+
+      <div id="selection-info"></div>
+    </div>
+
+    <div id="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s1)"></div>Topology</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s2)"></div>Dynamics</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s3)"></div>Closure</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s4)"></div>Computation</div>
+    </div>
+  </section>
+</main>
+
+<script>
+const SYSTEMS = [
+  {id:'climate',       name:'Climate',          s1:0, s2:1, s3:0, s4:0, g:false, desc:'Tipping points'},
+  {id:'magnets',       name:'Magnets',          s1:0, s2:1, s3:0, s4:0, g:true,  desc:'Phase transitions in matter'},
+  {id:'glass',         name:'Glass',            s1:0, s2:1, s3:0, s4:0, g:true,  desc:'Jamming transition'},
+  {id:'ecosystem',     name:'Ecosystem',        s1:0, s2:1, s3:1, s4:0, g:false, desc:'Nutrient cycling + tipping'},
+  {id:'magnetosphere', name:'Magnetosphere',    s1:0, s2:2, s3:0, s4:0, g:false, desc:'Plasmoid transport'},
+  {id:'ml',            name:'ML / Deep Learning',s1:0, s2:1, s3:0, s4:2, g:false, desc:'Double descent + distributed'},
+  {id:'protein',       name:'Protein Folding',  s1:1, s2:1, s3:0, s4:0, g:true,  desc:'Topological knots + jamming'},
+  {id:'nematics',      name:'Active Nematics',  s1:1, s2:2, s3:0, s4:0, g:false, desc:'Topological defect dynamics'},
+  {id:'tokamak',       name:'Tokamak Plasma',   s1:1, s2:2, s3:0, s4:0, g:false, desc:'Transport barriers + MHD'},
+  {id:'brain',         name:'Brain',            s1:1, s2:2, s3:0, s4:2, g:false, desc:'Criticality + neural coordination'},
+  {id:'fqhe',          name:'FQHE / Anyons',    s1:2, s2:1, s3:0, s4:0, g:true,  desc:'Topological computation in matter'},
+  {id:'quasicrystal',  name:'Quasicrystal',     s1:2, s2:1, s3:0, s4:0, g:true,  desc:'Aperiodic topological matter'},
+  {id:'cardiac',       name:'Cardiac',          s1:1, s2:2, s3:2, s4:0, g:false, desc:'Self-creating excitable medium'},
+  {id:'immune',        name:'Immune',           s1:0, s2:1, s3:2, s4:2, g:false, desc:'Adaptive self-creating defense'},
+  {id:'development',   name:'Development',      s1:1, s2:2, s3:2, s4:2, g:false, desc:'Self-creating morphogenesis'},
+  {id:'bz',            name:'BZ Reaction',      s1:1, s2:2, s3:1, s4:1, g:false, desc:'Chemical excitable medium'},
+];
+
+const SKELETONS = [
+  {id:'s1', name:'Topology',    d1:'Protection',      d2:'Computation',       color:'#818cf8'},
+  {id:'s2', name:'Dynamics',    d1:'Spontaneity',      d2:'Coherent transport',color:'#f87171'},
+  {id:'s3', name:'Closure',     d1:'Self-sustenance',  d2:'Self-creation',     color:'#4ade80'},
+  {id:'s4', name:'Computation', d1:'Universality',     d2:'Coordination',      color:'#facc15'},
+];
+
+const LAYERS = [
+  {name:'Self-sustenance',   p1:'Things that make each other',           skel:'s3', depth:1, color:'#4ade80'},
+  {name:'Spontaneity',       p1:'It happens by itself at thresholds',    skel:'s2', depth:1, color:'#f87171'},
+  {name:'Self-creation',     p1:'It makes its own boundary and identity',skel:'s3', depth:2, color:'#4ade80'},
+  {name:'Coherent transport',p1:'It moves without falling apart',        skel:'s2', depth:2, color:'#f87171'},
+  {name:'Protection',        p1:"It can't be destroyed by local damage", skel:'s1', depth:1, color:'#818cf8'},
+  {name:'Universality',      p1:'Its rules can compute anything',        skel:'s4', depth:1, color:'#facc15'},
+  {name:'Coordination',      p1:'It cooperates without a boss',          skel:'s4', depth:2, color:'#facc15'},
+  {name:'Computation',       p1:'It thinks, fault-tolerantly',           skel:'s1', depth:2, color:'#818cf8'},
+  {name:'Physical reality',  p1:"It's in matter. Right now.",            skel:'g',  depth:1, color:'#e2e8f0'},
+];
+
+const SEL_COLORS = ['#06b6d4', '#d946ef', '#f97316'];
+const SEL_CLASSES = ['sel-a', 'sel-b', 'sel-c'];
+
+let selected = [];
+
+function getStackHeight(sys) {
+  let h = 0;
+  if (sys.s3 >= 1) h++;
+  if (sys.s2 >= 1) h++;
+  if (sys.s3 >= 2) h++;
+  if (sys.s2 >= 2) h++;
+  if (sys.s1 >= 1) h++;
+  if (sys.s4 >= 1) h++;
+  if (sys.s4 >= 2) h++;
+  if (sys.s1 >= 2) h++;
+  if (sys.g) h++;
+  return h;
+}
+
+function getLayers(sys) {
+  return [
+    sys.s3 >= 1,
+    sys.s2 >= 1,
+    sys.s3 >= 2,
+    sys.s2 >= 2,
+    sys.s1 >= 1,
+    sys.s4 >= 1,
+    sys.s4 >= 2,
+    sys.s1 >= 2,
+    sys.g === true,
+  ];
+}
+
+function getCombinedScores(systems) {
+  if (systems.length === 0) return {s1:0, s2:0, s3:0, s4:0, g:false};
+  return {
+    s1: Math.max(...systems.map(s => s.s1)),
+    s2: Math.max(...systems.map(s => s.s2)),
+    s3: Math.max(...systems.map(s => s.s3)),
+    s4: Math.max(...systems.map(s => s.s4)),
+    g: systems.some(s => s.g),
+  };
+}
+
+function radarPoints(scores, cx, cy, unit) {
+  return [
+    [cx, cy - scores.s1 * unit],
+    [cx + scores.s2 * unit, cy],
+    [cx, cy + scores.s3 * unit],
+    [cx - scores.s4 * unit, cy],
+  ];
+}
+
+function pointsStr(pts) {
+  return pts.map(p => p.join(',')).join(' ');
+}
+
+function createMiniRadar(sys) {
+  const size = 200;
+  const cx = 100, cy = 100, unit = 38;
+  let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // grid diamonds
+  for (let d = 1; d <= 2; d++) {
+    const pts = radarPoints({s1:d,s2:d,s3:d,s4:d}, cx, cy, unit);
+    svg += `<polygon points="${pointsStr(pts)}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+  }
+
+  // axes
+  const axisColors = ['#818cf8','#f87171','#4ade80','#facc15'];
+  const axisEnds = radarPoints({s1:2,s2:2,s3:2,s4:2}, cx, cy, unit);
+  for (let i = 0; i < 4; i++) {
+    svg += `<line x1="${cx}" y1="${cy}" x2="${axisEnds[i][0]}" y2="${axisEnds[i][1]}" stroke="${axisColors[i]}" stroke-width="1" opacity="0.3"/>`;
+  }
+
+  // data polygon
+  const pts = radarPoints(sys, cx, cy, unit);
+  const hasArea = (sys.s1 + sys.s2 + sys.s3 + sys.s4) > 0;
+  if (hasArea) {
+    svg += `<polygon points="${pointsStr(pts)}" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linejoin="round"/>`;
+  }
+
+  // dot at each axis value
+  for (let i = 0; i < 4; i++) {
+    if ([sys.s1, sys.s2, sys.s3, sys.s4][i] > 0) {
+      svg += `<circle cx="${pts[i][0]}" cy="${pts[i][1]}" r="3" fill="${axisColors[i]}"/>`;
+    }
+  }
+
+  // ground indicator
+  if (sys.g) {
+    svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="#e2e8f0" opacity="0.6"/>`;
+  }
+
+  svg += '</svg>';
+  return svg;
+}
+
+function renderGallery() {
+  const gallery = document.getElementById('gallery');
+  const sorted = [...SYSTEMS].sort((a, b) => getStackHeight(a) - getStackHeight(b));
+
+  sorted.forEach(sys => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.id = sys.id;
+    card.innerHTML = `
+      ${createMiniRadar(sys)}
+      <div class="card-name">${sys.name}</div>
+      <div class="card-desc">${sys.desc}</div>
+      <div class="stack-badge">${getStackHeight(sys)}</div>
+    `;
+    card.addEventListener('click', () => toggleSelection(sys.id));
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `${sys.name}: stack height ${getStackHeight(sys)}`);
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSelection(sys.id); }});
+    gallery.appendChild(card);
+  });
+}
+
+function toggleSelection(id) {
+  const idx = selected.indexOf(id);
+  if (idx >= 0) {
+    selected.splice(idx, 1);
+  } else {
+    if (selected.length >= 3) selected.shift();
+    selected.push(id);
+  }
+  updateSelectionUI();
+  updateOverlay();
+}
+
+function updateSelectionUI() {
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.remove('sel-a', 'sel-b', 'sel-c');
+    const idx = selected.indexOf(card.dataset.id);
+    if (idx >= 0) card.classList.add(SEL_CLASSES[idx]);
+  });
+}
+
+function updateOverlay() {
+  const svg = document.getElementById('overlay-svg');
+  const cx = 250, cy = 250, unit = 85;
+  let content = '';
+
+  // background grid
+  for (let d = 1; d <= 2; d++) {
+    const pts = radarPoints({s1:d,s2:d,s3:d,s4:d}, cx, cy, unit);
+    content += `<polygon points="${pointsStr(pts)}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+  }
+
+  // Flat outline (always visible, faint)
+  const flatPts = radarPoints({s1:2,s2:2,s3:2,s4:2}, cx, cy, unit);
+  content += `<polygon id="flat-outline" points="${pointsStr(flatPts)}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="6 4"/>`;
+
+  // axes
+  const axisColors = ['#818cf8','#f87171','#4ade80','#facc15'];
+  const axisEnds = radarPoints({s1:2,s2:2,s3:2,s4:2}, cx, cy, unit);
+  for (let i = 0; i < 4; i++) {
+    content += `<line x1="${cx}" y1="${cy}" x2="${axisEnds[i][0]}" y2="${axisEnds[i][1]}" stroke="${axisColors[i]}" stroke-width="1.5" opacity="0.3"/>`;
+  }
+
+  // depth tick marks
+  for (let d = 1; d <= 2; d++) {
+    const tickPts = radarPoints({s1:d,s2:d,s3:d,s4:d}, cx, cy, unit);
+    for (let i = 0; i < 4; i++) {
+      content += `<circle cx="${tickPts[i][0]}" cy="${tickPts[i][1]}" r="2" fill="${axisColors[i]}" opacity="0.3"/>`;
+    }
+  }
+
+  // axis labels
+  const labelData = [
+    {x: cx, y: cy - unit*2 - 30, anchor: 'middle', name: 'Topology', sub1: 'Protection', sub2: 'Computation'},
+    {x: cx + unit*2 + 12, y: cy, anchor: 'start', name: 'Dynamics', sub1: 'Spontaneity', sub2: 'Transport'},
+    {x: cx, y: cy + unit*2 + 22, anchor: 'middle', name: 'Closure', sub1: 'Self-sustenance', sub2: 'Self-creation'},
+    {x: cx - unit*2 - 12, y: cy, anchor: 'end', name: 'Information', sub1: 'Universality', sub2: 'Coordination'},
+  ];
+
+  labelData.forEach((l, i) => {
+    content += `<text x="${l.x}" y="${l.y}" text-anchor="${l.anchor}" class="axis-label axis-label-name" fill="${axisColors[i]}">${l.name}</text>`;
+    const dy1 = l.y === cy ? -10 : (l.y < cy ? -12 : 14);
+    const dy2 = l.y === cy ? 14 : (l.y < cy ? -24 : 26);
+    if (l.anchor === 'start' || l.anchor === 'end') {
+      content += `<text x="${l.x}" y="${l.y + 14}" text-anchor="${l.anchor}" class="depth-label">depth 1: ${l.sub1}</text>`;
+      content += `<text x="${l.x}" y="${l.y + 26}" text-anchor="${l.anchor}" class="depth-label">depth 2: + ${l.sub2}</text>`;
+    } else {
+      const baseY = l.y < cy ? l.y - 12 : l.y + 12;
+      content += `<text x="${l.x}" y="${baseY}" text-anchor="${l.anchor}" class="depth-label">${l.sub1} → ${l.sub2}</text>`;
+    }
+  });
+
+  // ground ring at center
+  content += `<circle id="ground-ring" cx="${cx}" cy="${cy}" r="8" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="3 2"/>`;
+
+  const selectedSystems = selected.map(id => SYSTEMS.find(s => s.id === id)).filter(Boolean);
+
+  // individual system polygons
+  selectedSystems.forEach((sys, i) => {
+    const pts = radarPoints(sys, cx, cy, unit);
+    const color = SEL_COLORS[i];
+    content += `<polygon points="${pointsStr(pts)}" fill="${color}22" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>`;
+    for (let j = 0; j < 4; j++) {
+      if ([sys.s1, sys.s2, sys.s3, sys.s4][j] > 0) {
+        content += `<circle cx="${pts[j][0]}" cy="${pts[j][1]}" r="4" fill="${color}"/>`;
+      }
+    }
+  });
+
+  // combined polygon (if 2+ selected)
+  if (selectedSystems.length >= 2) {
+    const combined = getCombinedScores(selectedSystems);
+    const pts = radarPoints(combined, cx, cy, unit);
+    content += `<polygon points="${pointsStr(pts)}" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-dasharray="4 3" stroke-linejoin="round"/>`;
+  }
+
+  // ground indicator
+  if (selectedSystems.length > 0) {
+    const hasGround = selectedSystems.some(s => s.g);
+    if (hasGround) {
+      content += `<circle cx="${cx}" cy="${cy}" r="6" fill="#e2e8f0" opacity="0.7"/>`;
+      content += `<circle cx="${cx}" cy="${cy}" r="8" fill="none" stroke="#e2e8f0" stroke-width="2" opacity="0.5"/>`;
+    }
+  }
+
+  svg.innerHTML = content;
+
+  // update property stack
+  updatePropertyStack(selectedSystems);
+
+  // update selection info
+  updateSelectionInfo(selectedSystems);
+
+  // breadcrumb check
+  checkBreadcrumb(selectedSystems);
+
+  // update title
+  const title = document.getElementById('overlay-title');
+  if (selectedSystems.length === 0) {
+    title.textContent = 'Select a system';
+  } else if (selectedSystems.length === 1) {
+    title.textContent = selectedSystems[0].name;
+  } else {
+    title.textContent = selectedSystems.map(s => s.name).join(' + ');
+  }
+}
+
+function updatePropertyStack(systems) {
+  const container = document.getElementById('property-stack');
+  const combined = systems.length > 0 ? getCombinedScores(systems) : null;
+  const layers = combined ? getLayers(combined) : new Array(8).fill(false);
+
+  let html = '';
+  LAYERS.forEach((layer, i) => {
+    const active = layers[i];
+    html += `
+      <div class="prop-row ${active ? 'active' : ''}" title="${layer.p1}">
+        <div class="prop-dot ${active ? 'active' : ''}" style="--dot-color: ${layer.color}"></div>
+        <span class="prop-name">${layer.name}</span>
+        <span class="prop-p1">${layer.p1}</span>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function updateSelectionInfo(systems) {
+  const info = document.getElementById('selection-info');
+  if (systems.length === 0) {
+    info.innerHTML = 'Click systems to explore their combined profiles';
+    return;
+  }
+
+  const combined = getCombinedScores(systems);
+  const layers = getLayers(combined);
+  const presentCount = layers.filter(Boolean).length;
+  const missing = LAYERS.filter((_, i) => !layers[i]).map(l => l.name);
+
+  let html = '';
+  systems.forEach((s, i) => {
+    if (i > 0) html += ' + ';
+    html += `<span class="name-${String.fromCharCode(97+i)}">${s.name}</span>`;
+  });
+
+  if (missing.length > 0) {
+    html += `<br><span style="color:#475569">Missing: ${missing.join(', ')}</span>`;
+  }
+
+  info.innerHTML = html;
+}
+
+function checkBreadcrumb(systems) {
+  const container = document.getElementById('overlay-container');
+  if (systems.length === 0) {
+    container.classList.remove('complete');
+    return;
+  }
+
+  const combined = getCombinedScores(systems);
+  const layers = getLayers(combined);
+  const allPresent = layers.every(Boolean);
+
+  if (allPresent) {
+    container.classList.add('complete');
+    // subtle: change Flat outline from dashed to solid glow
+    const flatOutline = document.getElementById('flat-outline');
+    if (flatOutline) {
+      flatOutline.setAttribute('stroke', 'rgba(255,255,255,0.5)');
+      flatOutline.setAttribute('stroke-dasharray', 'none');
+      flatOutline.setAttribute('stroke-width', '3');
+    }
+  } else {
+    container.classList.remove('complete');
+    const flatOutline = document.getElementById('flat-outline');
+    if (flatOutline) {
+      flatOutline.setAttribute('stroke', 'rgba(255,255,255,0.12)');
+      flatOutline.setAttribute('stroke-dasharray', '6 4');
+      flatOutline.setAttribute('stroke-width', '2');
+    }
+  }
+}
+
+// init
+renderGallery();
+updateOverlay();
+</script>
+
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:960px;margin:0 auto;padding-left:1.5rem;padding-right:1.5rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
+<script src="../../js/annex-tracker.js"></script>
+</body>
+</html>

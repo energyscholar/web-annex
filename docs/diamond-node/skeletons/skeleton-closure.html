@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skeleton 3: Closure</title>
+<style>
+  :root { --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #e2e8f0; --muted: #94a3b8; --dim: #475569; --s3: #4ade80; --s3dim: rgba(74,222,128,0.15); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.7; }
+  nav { padding: 1rem 2rem; font-size: 0.85rem; }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--text); }
+  header { max-width: 720px; margin: 0 auto; padding: 0 2rem 1rem; }
+  header h1 { font-size: 1.8rem; font-weight: 700; color: var(--s3); }
+  header .sub { color: var(--muted); font-size: 1rem; margin-top: 0.25rem; }
+  main { max-width: 720px; margin: 0 auto; padding: 0 2rem 4rem; }
+  section { margin-top: 3rem; }
+  h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  p { margin-bottom: 1rem; }
+  .quiet { color: var(--muted); font-size: 0.9rem; }
+  .emphasis { color: var(--s3); font-weight: 600; }
+  .diagram { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; text-align: center; }
+  .loop-svg { max-width: 360px; margin: 0 auto; }
+  .side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (max-width: 600px) { .side-by-side { grid-template-columns: 1fr; } }
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+  .panel h3 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .timeline { margin: 1.5rem 0; }
+  .timeline-item { display: flex; gap: 1rem; padding: 0.5rem 0; border-left: 2px solid var(--border); padding-left: 1rem; margin-left: 0.5rem; }
+  .timeline-year { font-family: monospace; color: var(--s3); font-weight: 600; min-width: 50px; }
+  .timeline-who { color: var(--text); font-size: 0.9rem; }
+  .timeline-field { color: var(--dim); font-size: 0.8rem; }
+  .recap-box { background: var(--card); border: 2px solid var(--s3); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+  .recap-box dt { color: var(--s3); font-weight: 600; font-size: 0.9rem; }
+  .recap-box dd { color: var(--text); margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; }
+  .depth-stack { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+  .depth-card { background: var(--card); border: 1px solid var(--border); padding: 1.25rem; }
+  .depth-card:first-child { border-radius: 10px 10px 0 0; }
+  .depth-card:last-child { border-radius: 0 0 10px 10px; border-top: none; }
+  .depth-card h3 { font-size: 0.9rem; margin-bottom: 0.5rem; }
+  .depth-card.d1 { border-left: 3px solid var(--s3); }
+  .depth-card.d2 { border-left: 3px solid #22c55e; background: rgba(34,197,94,0.05); }
+  .step-list { list-style: none; margin: 1rem 0; }
+  .step-list li { padding: 0.4rem 0; font-size: 0.9rem; display: flex; gap: 0.5rem; }
+  .step-list .num { color: var(--s3); font-weight: 600; min-width: 24px; }
+</style>
+</head>
+<body>
+
+<nav><a href="index.html">&larr; Mathematical Skeletons</a></nav>
+
+<header>
+  <h1>Skeleton 3: Closure</h1>
+  <p class="sub">Self-sustenance &rarr; Self-creation. No tracer molecule &mdash; structural test only.</p>
+</header>
+
+<main>
+
+<!-- SECTION 1: THE CAMPFIRE -->
+<section>
+  <h2>The campfire</h2>
+  <p>The simplest closure: a campfire.</p>
+
+  <div class="diagram">
+    <svg class="loop-svg" viewBox="0 0 360 280" style="width:100%;max-width:360px">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+        </marker>
+      </defs>
+      <!-- Circle of causation -->
+      <circle cx="180" cy="140" r="100" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="4 4"/>
+
+      <!-- Nodes -->
+      <circle cx="180" cy="40" r="28" fill="#1e293b" stroke="#4ade80" stroke-width="2"/>
+      <text x="180" y="44" fill="#e2e8f0" text-anchor="middle" font-size="11">Fire</text>
+
+      <circle cx="290" cy="120" r="28" fill="#1e293b" stroke="#4ade80" stroke-width="2"/>
+      <text x="290" y="116" fill="#e2e8f0" text-anchor="middle" font-size="11">Heat</text>
+      <text x="290" y="130" fill="#94a3b8" text-anchor="middle" font-size="9">&amp; light</text>
+
+      <circle cx="250" cy="230" r="28" fill="#1e293b" stroke="#4ade80" stroke-width="2"/>
+      <text x="250" y="226" fill="#e2e8f0" text-anchor="middle" font-size="11">Volatile</text>
+      <text x="250" y="240" fill="#94a3b8" text-anchor="middle" font-size="9">gas</text>
+
+      <circle cx="110" cy="230" r="28" fill="#1e293b" stroke="#4ade80" stroke-width="2"/>
+      <text x="110" y="234" fill="#e2e8f0" text-anchor="middle" font-size="11">Pyrolysis</text>
+
+      <circle cx="70" cy="120" r="28" fill="#1e293b" stroke="#4ade80" stroke-width="2"/>
+      <text x="70" y="116" fill="#e2e8f0" text-anchor="middle" font-size="11">Fuel</text>
+      <text x="70" y="130" fill="#94a3b8" text-anchor="middle" font-size="9">breakdown</text>
+
+      <!-- Arrows -->
+      <line x1="205" y1="52" x2="265" y2="98" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="298" y1="148" x2="268" y2="205" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="222" y1="232" x2="140" y2="232" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="92" y1="205" x2="72" y2="148" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="90" y1="98" x2="155" y2="52" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arr)"/>
+    </svg>
+  </div>
+
+  <p>Fire produces heat. Heat breaks down fuel. Fuel breakdown produces volatile gas. Volatile gas ignites. Ignition produces fire. The fire makes the conditions that sustain the fire. Every product in the loop is produced by something else in the loop.</p>
+  <p>That's <strong>catalytic closure</strong>. Not a metaphor. A structural property: a set of processes where every product is sustained by the set itself.</p>
+</section>
+
+<!-- SECTION 2: WHAT CLOSURE MEANS PRECISELY -->
+<section>
+  <h2>What closure means precisely</h2>
+  <p>A <em>Reflexively Autocatalytic and Food-generated set</em> (RAF) has two requirements:</p>
+
+  <div class="side-by-side">
+    <div class="panel">
+      <h3 style="color:var(--s3)">Reflexively autocatalytic</h3>
+      <p class="quiet">Every reaction in the set is catalyzed by at least one molecule produced by the set. Nothing depends on an outside catalyst.</p>
+    </div>
+    <div class="panel">
+      <h3 style="color:var(--s3)">Food-generated</h3>
+      <p class="quiet">Every reactant can be built from a small "food set" of raw materials through reactions in the set. You can bootstrap the whole thing from simple inputs.</p>
+    </div>
+  </div>
+
+  <p>The campfire is an RAF. So is a metabolic network. So is the cardiac calcium signaling cycle. The mathematical structure is identical.</p>
+  <p class="quiet">The key insight: closure is about the <em>network</em>, not any individual reaction. You can't point to one reaction and say "that's the important one." Remove any single reaction and the RAF might still hold. Closure is a global property of the set.</p>
+</section>
+
+<!-- SECTION 3: YOUR BODY -->
+<section>
+  <h2>Your body is an RAF</h2>
+  <p>Your cells are full of enzymes. Enzymes catalyze reactions. Those reactions produce (among other things) more enzymes. Enzymes &rarr; reactions &rarr; enzymes. Catalytic closure.</p>
+  <p>Hordijk and Steel showed this computationally: real metabolic networks satisfy the RAF property. Not approximately. Exactly. Every reaction catalyzed, every reactant derivable from food molecules.</p>
+  <p>This is why you don't need to be plugged in. A car engine needs someone to supply fuel and maintain parts. Your body <em>maintains itself</em> from food + air + water. That self-maintenance is catalytic closure.</p>
+</section>
+
+<!-- SECTION 4: THE CARDIAC RAF -->
+<section>
+  <h2>The cardiac RAF</h2>
+  <p>The heart's calcium signaling cycle is an RAF. Not metaphorically. Structurally.</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 360 200" style="width:100%;max-width:360px">
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+        </marker>
+      </defs>
+
+      <!-- Simplified calcium cycle -->
+      <rect x="20" y="40" width="80" height="36" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="60" y="62" fill="#e2e8f0" text-anchor="middle" font-size="9">Ca²⁺ release</text>
+
+      <rect x="140" y="10" width="80" height="36" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="180" y="32" fill="#e2e8f0" text-anchor="middle" font-size="9">Contraction</text>
+
+      <rect x="260" y="40" width="80" height="36" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="300" y="62" fill="#e2e8f0" text-anchor="middle" font-size="9">Ion pumps</text>
+
+      <rect x="260" y="120" width="80" height="36" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="300" y="142" fill="#e2e8f0" text-anchor="middle" font-size="9">Relaxation</text>
+
+      <rect x="140" y="155" width="80" height="36" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="180" y="177" fill="#e2e8f0" text-anchor="middle" font-size="9">Ca²⁺ reuptake</text>
+
+      <rect x="20" y="120" width="80" height="36" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="60" y="142" fill="#e2e8f0" text-anchor="middle" font-size="9">Electrical signal</text>
+
+      <!-- Arrows -->
+      <line x1="100" y1="48" x2="140" y2="32" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <line x1="220" y1="28" x2="260" y2="48" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <line x1="300" y1="76" x2="300" y2="120" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <line x1="260" y1="140" x2="220" y2="162" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <line x1="140" y1="172" x2="100" y2="148" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <line x1="60" y1="120" x2="60" y2="76" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <!-- RAF badge -->
+      <text x="180" y="105" fill="#4ade80" text-anchor="middle" font-size="11" font-weight="600">17/17 reactions</text>
+      <text x="180" y="120" fill="#94a3b8" text-anchor="middle" font-size="9">Zero essential reactions</text>
+    </svg>
+  </div>
+
+  <p>17 out of 17 reactions in the cardiac calcium cycle are part of the RAF. <em>Zero essential reactions</em> &mdash; meaning you can remove any single reaction and the RAF property still holds. The system is maximally robust.</p>
+  <p>This is what makes the heart different from a machine. A car engine has essential parts &mdash; remove the spark plug and it stops. The cardiac RAF has no single essential reaction. It sustains itself through redundant closure.</p>
+</section>
+
+<!-- SECTION 5: DEPTH -->
+<section>
+  <h2>Two depths of closure</h2>
+
+  <div class="depth-stack">
+    <div class="depth-card d1">
+      <h3>Depth 1: Self-sustenance</h3>
+      <p class="quiet">The system makes everything it needs to keep running. A campfire sustains itself. A metabolic network sustains itself. The RAF property: every catalyst produced internally.</p>
+      <p class="quiet">Systems with self-sustenance: campfire, metabolism, ecosystem nutrient cycling, cardiac calcium signaling.</p>
+    </div>
+    <div class="depth-card d2">
+      <h3>Depth 2: Self-creation (autopoiesis)</h3>
+      <p class="quiet">The system doesn't just maintain its parts &mdash; it creates its own <em>boundary</em>. It produces the container that separates inside from outside. The cell membrane is produced by the metabolism it contains.</p>
+      <p class="quiet">This is the jump from "makes its parts" to "makes itself as a distinct entity." Few systems reach depth 2. The cardiac system does: the heart generates the electrical and mechanical conditions that maintain its own tissue boundary.</p>
+    </div>
+  </div>
+
+  <p>Most biological systems achieve depth 1 (self-sustenance). Depth 2 (self-creation) is rarer and more interesting. It's the difference between a factory that makes its own parts and a factory that also builds and maintains its own walls.</p>
+</section>
+
+<!-- SECTION 6: THE CONVERGENCES -->
+<section>
+  <h2>Eight formalizations, six discoveries</h2>
+  <p>The same mathematical structure was discovered independently at least six times across four countries and fifty years:</p>
+
+  <div class="timeline">
+    <div class="timeline-item"><span class="timeline-year">1958</span><div><span class="timeline-who">Robert Rosen</span><br><span class="timeline-field">(M,R)-systems. Category theory formalization. USA. Showed life = algebraic closure, not mechanism.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Manfred Eigen</span><br><span class="timeline-field">Hypercycles. Coupled autocatalytic sets. Germany. Origin of life as mutual catalysis.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Maturana &amp; Varela</span><br><span class="timeline-field">Autopoiesis. Self-creating networks. Chile. Defined life as self-boundary-production.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Tibor G&aacute;nti</span><br><span class="timeline-field">Chemoton. Minimal self-reproducing chemical system. Hungary. Independently of all the above.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1986</span><div><span class="timeline-who">Stuart Kauffman</span><br><span class="timeline-field">Autocatalytic sets. Random graph theory. USA. Showed closure arises spontaneously at sufficient complexity.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1994</span><div><span class="timeline-who">Fontana &amp; Buss</span><br><span class="timeline-field">&lambda;-chemistry. Functional closure in abstract chemistry. USA/Austria.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">2004+</span><div><span class="timeline-who">Hordijk &amp; Steel</span><br><span class="timeline-field">RAF theory. Rigorous graph-theoretic formalization. Netherlands/New Zealand. Made it computable.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1984</span><div><span class="timeline-who">Niklas Luhmann</span><br><span class="timeline-field">Social autopoiesis. Applied to communication systems. Germany. Extended the concept beyond chemistry entirely.</span></div></div>
+  </div>
+
+  <p>Eight formalizations. Different notations, different motivations, different fields. All describe the same structural property: a network of processes that collectively produce all the catalysts they need.</p>
+  <p class="quiet">This is a FACETS-scale convergence. Just as 12 fields independently developed criticality mathematics, at least 6 independent lines of work arrived at closure mathematics. The convergence is invisible because each community uses different terminology.</p>
+</section>
+
+<!-- SECTION 7: WHY NO TRACER? -->
+<section>
+  <h2>Why closure has no tracer molecule</h2>
+  <p>Topology has &phi;. Criticality has power-law exponents. Computation has Turing universality proofs. Closure has... nothing equivalent.</p>
+  <p>This is because closure is a <em>network property</em>, not a quantity. You can't measure it with a single number. You have to analyze the full reaction network and check: is every reaction catalyzed? Is everything derivable from food? These are graph-theoretic questions, not numerical ones.</p>
+  <p>The test for closure is <em>structural</em>: compute the RAF and check if it spans the system. Binary result (yes/no), but the test itself requires the full network as input.</p>
+  <p class="quiet">This makes closure harder to detect "in the wild" than the other skeletons. You need the full wiring diagram. But when you have it &mdash; as with the cardiac calcium cycle &mdash; the test is unambiguous.</p>
+</section>
+
+<!-- SECTION 8: RECAP -->
+<section>
+  <h2>Recap</h2>
+  <dl class="recap-box">
+    <dt>Skeleton</dt>
+    <dd>Catalytic / generative closure &mdash; RAF theory, autopoiesis, (M,R)-systems. A network where every process is sustained by the network itself.</dd>
+    <dt>Depth 1: Self-sustenance</dt>
+    <dd>The system makes everything it needs to keep running. Every catalyst produced internally. No essential components.</dd>
+    <dt>Depth 2: Self-creation</dt>
+    <dd>The system creates its own boundary. Not just maintaining parts &mdash; producing the container. The difference between a campfire (d1) and a living cell (d2).</dd>
+    <dt>Tracer</dt>
+    <dd>None. Closure is a structural property, not a numerical signature. Detection requires the full reaction network.</dd>
+    <dt>Key insight</dt>
+    <dd>Closure is what makes living systems different from machines. Machines have essential parts. Closed systems have no essential parts &mdash; the closure itself is the essential property.</dd>
+    <dt>Convergence</dt>
+    <dd>8 independent formalizations across 6 discovery events, 4 countries, 50 years. Rosen, Eigen, Maturana/Varela, G&aacute;nti, Kauffman, Fontana/Buss, Hordijk/Steel, Luhmann.</dd>
+  </dl>
+  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-topology.html" style="color:var(--s1)">&larr; Skeleton 1: Topology</a> &nbsp;&nbsp; <a href="skeleton-computation.html" style="color:var(--s4)">Skeleton 4: Computation &rarr;</a></p>
+</section>
+
+</main>
+
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:720px;margin-left:auto;margin-right:auto;padding-left:2rem;padding-right:2rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
+<script src="../../js/annex-tracker.js"></script>
+</body>
+</html>

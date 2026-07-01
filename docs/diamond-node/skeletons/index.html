@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Four Mathematical Skeletons</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+  --s1: #818cf8;
+  --s2: #f87171;
+  --s3: #22c55e;
+  --s4: #f59e0b;
+  --amber: #f59e0b;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 800px; margin: 0 auto; }
+
+.back { display: inline-block; margin-bottom: 2rem; color: var(--muted); font-size: 0.9rem; text-decoration: none; }
+.back:hover { color: var(--heading); }
+
+h1 {
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 2.2rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--line);
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.lead {
+  font-size: 1.05rem;
+  color: var(--line);
+  font-family: Georgia, serif;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+
+.wip-banner {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--amber);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.wip-banner strong { color: var(--amber); }
+
+.skel-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.skel-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--dim);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.skel-card:hover { transform: translateY(-2px); text-decoration: none; }
+
+.skel-card h2 {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.skel-card .depths {
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.skel-card .desc {
+  color: var(--line);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.skel-card .convergence {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 0.6rem;
+  font-style: italic;
+}
+
+.s1 { border-left: 4px solid var(--s1); }
+.s1:hover { border-color: var(--s1); }
+.s1 h2 { color: var(--s1); }
+.s1 .depths { color: var(--s1); }
+
+.s2 { border-left: 4px solid var(--s2); }
+.s2 h2 { color: var(--s2); }
+.s2 .depths { color: var(--s2); }
+
+.s3 { border-left: 4px solid var(--s3); }
+.s3:hover { border-color: var(--s3); }
+.s3 h2 { color: var(--s3); }
+.s3 .depths { color: var(--s3); }
+
+.s4 { border-left: 4px solid var(--s4); }
+.s4:hover { border-color: var(--s4); }
+.s4 h2 { color: var(--s4); }
+.s4 .depths { color: var(--s4); }
+
+.matrix-card {
+  background: var(--card);
+  border: 1px solid var(--dim);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  margin-top: 2rem;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.matrix-card:hover { border-color: var(--line); transform: translateY(-2px); text-decoration: none; }
+.matrix-card h2 {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--heading);
+  margin-bottom: 0.4rem;
+}
+.matrix-card p { color: var(--muted); font-size: 0.95rem; }
+
+.see-also {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--dim);
+}
+.see-also h3 {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.1rem;
+  color: var(--heading);
+  margin-bottom: 0.75rem;
+}
+.see-also a {
+  color: var(--line);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.see-also a:hover { color: var(--heading); text-decoration: underline; }
+.see-also li { margin: 0.4rem 0; list-style: none; }
+.see-also li::before { content: '\2192\00a0'; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="../index.html" class="back">&larr; Domain Convergence Research</a>
+
+<div class="wip-banner">
+  <strong>Work in progress.</strong> These tutorials are part of an ongoing investigation into multicriticality. The skeleton framework and system assignments are provisional hypotheses, not established results.
+</div>
+
+<h1>The Four Mathematical Skeletons</h1>
+<p class="subtitle">Independent mathematical structures that recur across physical systems</p>
+
+<p class="lead">
+Across eleven scientific domains, the same four mathematical frameworks appear independently. Each was discovered multiple times by communities that don't read each other's journals. Each produces two emergent properties at different depths: a structural property ("has") and a functional property ("does"). Together they decompose the multi-critical profile of any physical system.
+</p>
+
+<div class="skel-grid">
+
+  <a href="skeleton-topology.html" class="skel-card s1">
+    <h2>Skeleton 1: Topology</h2>
+    <div class="depths">Protection &rarr; Fault-tolerant computation</div>
+    <div class="desc">Braid groups, knot invariants, topological protection. Three strands, two crossings, infinite consequences. Alternating braid crossings create Fibonacci growth, giving the golden ratio &phi; = 1.618... as a binary tracer: it either shows up in the system or it doesn't.</div>
+    <div class="convergence">7 independent communities &mdash; from pure mathematics (1860s) to active matter (2010s)</div>
+  </a>
+
+  <div class="skel-card s2" style="cursor:default; opacity:0.8;">
+    <h2>Skeleton 2: Dynamics (Criticality)</h2>
+    <div class="depths">Spontaneity &rarr; Coherent transport</div>
+    <div class="desc">Phase transitions, power laws, scale invariance, renormalization group. The anchor skeleton &mdash; the best-understood of the four, documented in the FACETS paper (arXiv 2601.22389). Criticality runs through every system in the multi-critical tutorials.</div>
+    <div class="convergence">12 independent fields &mdash; see <a href="../multi-critical/" style="color:var(--s2)">the six system tutorials</a></div>
+  </div>
+
+  <a href="skeleton-closure.html" class="skel-card s3">
+    <h2>Skeleton 3: Closure</h2>
+    <div class="depths">Self-sustenance &rarr; Self-creation</div>
+    <div class="desc">Catalytic loops, RAF theory, autopoiesis. A campfire sustains itself. A cell creates itself. No tracer molecule &mdash; closure is a structural property of the network, not a numerical signature. Detection requires the full wiring diagram.</div>
+    <div class="convergence">8 formalizations across 6 independent discoveries, 4 countries, 50 years</div>
+  </a>
+
+  <a href="skeleton-computation.html" class="skel-card s4">
+    <h2>Skeleton 4: Computation</h2>
+    <div class="depths">Universality &rarr; Coordination</div>
+    <div class="desc">Distributed computation, cellular automata, edge of chaos. Simple local rules producing global information processing without central control. The edge of chaos IS the critical point &mdash; this is where Skeleton 4 meets Skeleton 2.</div>
+    <div class="convergence">8 fields &mdash; from Turing (1936) to reservoir computing (2000s)</div>
+  </a>
+
+</div>
+
+<a href="skeleton-matrix.html" class="matrix-card">
+  <h2>Skeleton Matrix &rarr;</h2>
+  <p>Interactive radar chart. 16 systems &times; 4 skeletons &times; 2 depths. Select systems to overlay their profiles and see which combinations cover all nine emergent properties.</p>
+</a>
+
+<div class="see-also">
+  <h3>See also</h3>
+  <ul>
+    <li><a href="../multi-critical/">Multi-Critical Systems</a> &mdash; six interactive tutorials on physical systems where multiple transitions converge</li>
+    <li><a href="../../poised-state-survey/">Poised-State Candidate Systems</a> &mdash; twelve candidate systems evaluated against the five-feature framework</li>
+    <li><a href="../../anyon-fusion/">Anyon Fusion Algebra</a> &mdash; the mathematics behind Skeleton 1's tracer (&phi;)</li>
+    <li><a href="../../acs-closure-v2/">Autocatalytic Closure</a> &mdash; the mathematics behind Skeleton 3 (RAF theory)</li>
+  </ul>
+</div>
+
+</div>
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../index.html" style="color:#94a3b8;text-decoration:none">&larr; Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
+<script src="../../js/annex-tracker.js"></script>
+</body>
+</html>
