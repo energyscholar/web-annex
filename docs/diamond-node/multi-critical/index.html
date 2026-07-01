@@ -157,9 +157,71 @@ a:hover { text-decoration: underline; }
 .pair-card h3 { margin-top: 0; color: var(--heading); font-size: 1.05rem; }
 .pair-card .pair-link { color: var(--muted); font-size: 0.85rem; }
 
+/* WIP banner */
+.wip-banner {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--amber);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.wip-banner strong { color: var(--amber); }
+
 /* Back link */
 .back { display: inline-block; margin-bottom: 2rem; color: var(--muted); font-size: 0.9rem; }
 .back:hover { color: var(--heading); }
+
+/* Skeleton cards */
+.skel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.skel-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.2rem;
+  border: 1px solid var(--dim);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.skel-card:hover { transform: translateY(-2px); text-decoration: none; }
+.skel-card h3 { margin-top: 0; font-size: 1.05rem; }
+.skel-card .skel-sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.4rem; }
+.skel-card .skel-link { color: var(--muted); font-size: 0.82rem; margin-top: 0.6rem; font-style: italic; }
+.skel-card.s1 { border-left: 3px solid #818cf8; }
+.skel-card.s1:hover { border-color: #818cf8; }
+.skel-card.s1 h3 { color: #818cf8; }
+.skel-card.s2 { border-left: 3px solid #f87171; }
+.skel-card.s2 h3 { color: #f87171; }
+.skel-card.s3 { border-left: 3px solid #22c55e; }
+.skel-card.s3:hover { border-color: #22c55e; }
+.skel-card.s3 h3 { color: #22c55e; }
+.skel-card.s4 { border-left: 3px solid #f59e0b; }
+.skel-card.s4:hover { border-color: #f59e0b; }
+.skel-card.s4 h3 { color: #f59e0b; }
+
+/* Matrix banner */
+.matrix-banner {
+  background: var(--card);
+  border: 1px solid var(--dim);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  margin-top: 1rem;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.matrix-banner:hover { border-color: var(--line); transform: translateY(-2px); text-decoration: none; }
+.matrix-banner h3 { margin-top: 0; font-size: 1.2rem; color: var(--heading); }
+.matrix-banner p { color: var(--muted); font-size: 0.95rem; margin-top: 0.5rem; }
 
 /* Fade-in */
 .fade-in {
@@ -336,6 +398,10 @@ a:hover { text-decoration: underline; }
 </div>
 
 <a href="../index.html" class="back">&larr; Domain Convergence Research</a>
+
+<div class="wip-banner">
+  <strong>Work in progress.</strong> This is exploratory research into multicriticality &mdash; a topic with almost no existing literature. The tutorials, skeleton assignments, and cross-system comparisons presented here are provisional hypotheses developed through computational experiments and literature review. They likely contain errors. The goal is to make the questions visible, not to present finished answers.
+</div>
 
 <h1>Multi-Critical Systems</h1>
 <p class="subtitle">Six physical systems where independent phase transitions converge</p>
@@ -573,8 +639,54 @@ The six systems form three natural pairs, each connected by a shared physical me
   </div>
 </div>
 
+<!-- ========== THE FOUR SKELETONS ========== -->
+<h2><span class="sn">3.</span> The Four Skeletons</h2>
+
+<p>
+Across these six systems, the same mathematical structures recur. We decompose each system's multi-critical profile into four independent skeletons &mdash; each a mathematical framework that was independently discovered by multiple communities. The tutorials above show where these skeletons appear in physical systems. The pages below teach each skeleton on its own terms.
+</p>
+
+<p>
+Skeleton 2 (Dynamics / Criticality) is the anchor &mdash; the best-understood of the four, and the one running through every tutorial above. The other three are less familiar and have their own dedicated pages.
+</p>
+
+<div class="skel-grid">
+  <a href="skeleton-topology.html" class="skel-card s1 fade-in">
+    <h3>Skeleton 1: Topology</h3>
+    <p class="skel-sub">Protection &rarr; Computation. Braids, knot invariants, topological protection, fault-tolerant computation. Tracer: &phi; = 1.618...</p>
+    <div class="skel-link">7 communities, one mathematics &rarr;</div>
+  </a>
+  <div class="skel-card s2">
+    <h3>Skeleton 2: Dynamics</h3>
+    <p class="skel-sub">Spontaneity &rarr; Coherent transport. Phase transitions, power laws, scale invariance. The anchor for everything else.</p>
+    <div class="skel-link">Taught throughout the six tutorials above</div>
+  </div>
+  <a href="skeleton-closure.html" class="skel-card s3 fade-in">
+    <h3>Skeleton 3: Closure</h3>
+    <p class="skel-sub">Self-sustenance &rarr; Self-creation. Catalytic loops, RAF theory, autopoiesis. No tracer &mdash; structural test only.</p>
+    <div class="skel-link">8 formalizations, 6 independent discoveries &rarr;</div>
+  </a>
+  <a href="skeleton-computation.html" class="skel-card s4 fade-in">
+    <h3>Skeleton 4: Computation</h3>
+    <p class="skel-sub">Universality &rarr; Coordination. Distributed computation, edge of chaos, emergence. Bridge to Skeleton 2 at the critical point.</p>
+    <div class="skel-link">8 fields, one framework &rarr;</div>
+  </a>
+</div>
+
+<!-- ========== SKELETON MATRIX ========== -->
+<h2><span class="sn">4.</span> Compare</h2>
+
+<p>
+Every system has a skeleton profile: how much of each mathematical structure it exhibits, scored at two depths (has the structure vs. uses the structure). The matrix below lets you overlay profiles for up to three systems and see what emerges &mdash; and what's missing.
+</p>
+
+<a href="skeleton-matrix.html" class="matrix-banner fade-in">
+  <h3>Skeleton Matrix &rarr;</h3>
+  <p>Interactive radar chart. 14 systems &times; 4 skeletons &times; 2 depths. Select systems to overlay their profiles and discover which combinations cover all eight emergent properties.</p>
+</a>
+
 <!-- ========== THE QUESTION ========== -->
-<h2><span class="sn">3.</span> The Question</h2>
+<h2><span class="sn">5.</span> The Question</h2>
 
 <p>
 Each of these systems is well-studied within its home domain. Cardiac electrophysiologists know the Feigenbaum cascade. Active matter physicists know the golden braid. Glass physicists know the two transitions. Plasma physicists know the SOC pedestal.

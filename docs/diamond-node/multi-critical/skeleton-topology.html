@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skeleton 1: Topology</title>
+<style>
+  :root { --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #e2e8f0; --muted: #94a3b8; --dim: #475569; --s1: #818cf8; --s2: #f87171; --s3: #4ade80; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.7; }
+  nav { padding: 1rem 2rem; font-size: 0.85rem; }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--text); }
+  header { max-width: 720px; margin: 0 auto; padding: 0 2rem 1rem; }
+  header h1 { font-size: 1.8rem; font-weight: 700; color: var(--s1); }
+  header .sub { color: var(--muted); font-size: 1rem; margin-top: 0.25rem; }
+  main { max-width: 720px; margin: 0 auto; padding: 0 2rem 4rem; }
+  section { margin-top: 3rem; }
+  h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  p { margin-bottom: 1rem; color: var(--text); }
+  .quiet { color: var(--muted); font-size: 0.9rem; }
+  .emphasis { color: var(--s1); font-weight: 600; }
+  .braid-row { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin: 1.5rem 0; }
+  .braid-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; min-width: 140px; }
+  .braid-box .label { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; font-family: 'Courier New', monospace; }
+  .braid-box .desc { font-size: 0.75rem; color: var(--dim); margin-top: 0.25rem; }
+  .side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (max-width: 600px) { .side-by-side { grid-template-columns: 1fr; } }
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+  .panel h3 { font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .panel.gold { border-color: rgba(234,179,8,0.3); }
+  .panel.periodic { border-color: rgba(148,163,184,0.3); }
+  .fib-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+  .fib-table th { text-align: left; color: var(--muted); font-weight: 500; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .fib-table td { padding: 0.4rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.4); }
+  .fib-table .phi { color: #eab308; font-weight: 600; }
+  .bar-container { margin: 1.5rem 0; }
+  .bar-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0; font-size: 0.8rem; }
+  .bar-label { width: 30px; text-align: right; color: var(--muted); font-family: monospace; }
+  .bar { height: 20px; border-radius: 3px; background: var(--s1); opacity: 0.7; transition: width 0.5s ease; }
+  .bar-ratio { color: var(--dim); font-family: monospace; min-width: 60px; }
+  .phi-line { position: relative; margin: 1.5rem 0; height: 30px; }
+  .phi-marker { position: absolute; left: 0; top: 0; height: 100%; width: 2px; background: #eab308; }
+  .phi-label { position: absolute; top: -18px; font-size: 0.7rem; color: #eab308; }
+  .where-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+  @media (max-width: 600px) { .where-grid { grid-template-columns: 1fr; } }
+  .where-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+  .where-card h4 { font-size: 0.85rem; color: var(--s1); margin-bottom: 0.5rem; }
+  .where-card .phi-val { font-family: monospace; color: #eab308; font-size: 1.1rem; font-weight: 600; }
+  .where-card p { font-size: 0.8rem; color: var(--muted); margin: 0.25rem 0 0; }
+  .timeline { margin: 1.5rem 0; }
+  .timeline-item { display: flex; gap: 1rem; padding: 0.5rem 0; border-left: 2px solid var(--border); padding-left: 1rem; margin-left: 0.5rem; }
+  .timeline-year { font-family: monospace; color: var(--s1); font-weight: 600; min-width: 50px; }
+  .timeline-who { color: var(--text); font-size: 0.9rem; }
+  .timeline-field { color: var(--dim); font-size: 0.8rem; }
+  .recap-box { background: var(--card); border: 2px solid var(--s1); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+  .recap-box dt { color: var(--s1); font-weight: 600; font-size: 0.9rem; }
+  .recap-box dd { color: var(--text); margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; }
+  .wiggle { animation: wiggle 3s ease-in-out infinite; }
+  @keyframes wiggle { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(2deg) translateX(3px); } 75% { transform: rotate(-2deg) translateX(-3px); } }
+</style>
+</head>
+<body>
+
+<nav><a href="index.html">&larr; Multi-Critical Systems</a></nav>
+
+<header>
+  <h1>Skeleton 1: Topology</h1>
+  <p class="sub">Protection &rarr; Computation. Tracer: &phi; = 1.618...</p>
+</header>
+
+<main>
+
+<!-- SECTION 1: WHAT IS A BRAID? -->
+<section>
+  <h2>What is a braid?</h2>
+  <p>Three strands hanging vertically. When two cross, that's a braid generator. The crossing IS the information &mdash; not the material the strands are made of, not their thickness, not their color. Just: which crossed over which.</p>
+  <div class="braid-row">
+    <div class="braid-box"><div id="b-identity"></div><div class="label">Identity</div><div class="desc">No crossings. Nothing happens.</div></div>
+    <div class="braid-box"><div id="b-sigma1"></div><div class="label">&sigma;&#x2081;</div><div class="desc">Left pair crosses.<br>Blue over red.</div></div>
+    <div class="braid-box"><div id="b-sigma2"></div><div class="label">&sigma;&#x2082;</div><div class="desc">Right pair crosses.<br>Red over green.</div></div>
+  </div>
+</section>
+
+<!-- SECTION 2: OVER AND UNDER -->
+<section>
+  <h2>Over and under matter</h2>
+  <p>These two look almost the same. They're not. In &sigma;&#x2081;, blue goes <em>over</em> red. In &sigma;&#x2081;&sup1;, red goes <em>over</em> blue. Different braids. Different topology. You cannot smoothly deform one into the other.</p>
+  <div class="braid-row">
+    <div class="braid-box"><div id="b-sigma1-fwd"></div><div class="label">&sigma;&#x2081;</div><div class="desc">Blue over red</div></div>
+    <div class="braid-box"><div id="b-sigma1-inv"></div><div class="label">&sigma;&#x2081;&#x207B;&#xB9;</div><div class="desc">Red over blue</div></div>
+  </div>
+  <p class="quiet">This is why topology is powerful: the crossing direction is a discrete, absolute fact that survives any continuous deformation. You can stretch, wiggle, or compress the strands &mdash; the over/under pattern doesn't change.</p>
+</section>
+
+<!-- SECTION 3: BRAIDS COMPOSE -->
+<section>
+  <h2>Braids compose</h2>
+  <p>Stack crossings top to bottom. Two crossings make a braid word. Three make a longer word. The word encodes the complete braiding pattern.</p>
+  <p>Two critical braid words, both with two crossings, but with very different futures:</p>
+  <div class="side-by-side">
+    <div class="panel periodic">
+      <h3 style="color:var(--muted)">&sigma;&#x2081;&sigma;&#x2082; &mdash; same direction</h3>
+      <div id="b-s1s2" style="text-align:center"></div>
+      <p class="quiet" style="margin-top:0.75rem">Both crossings go the same way (left strand over right). The strands rotate around each other.</p>
+    </div>
+    <div class="panel gold">
+      <h3 style="color:#eab308">&sigma;&#x2081;&sigma;&#x2082;&#x207B;&#xB9; &mdash; alternating</h3>
+      <div id="b-s1s2inv" style="text-align:center"></div>
+      <p class="quiet" style="margin-top:0.75rem">Crossings alternate direction (left over, then right over). The strands <em>fold</em> over each other.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: PERIODIC vs PSEUDO-ANOSOV -->
+<section>
+  <h2>Periodic vs. pseudo-Anosov</h2>
+  <p>Extend each pattern. Watch what happens.</p>
+  <div class="side-by-side">
+    <div class="panel periodic">
+      <h3 style="color:var(--muted)">Periodic: &sigma;&#x2081;&sigma;&#x2082;&sigma;&#x2081;&sigma;&#x2082;&sigma;&#x2081;&sigma;&#x2082;</h3>
+      <div id="b-periodic" style="text-align:center"></div>
+      <p class="quiet" style="margin-top:0.75rem">After 3 full cycles, the strands return to their starting positions. This braid <strong>repeats</strong>. TEPO = 0.</p>
+    </div>
+    <div class="panel gold">
+      <h3 style="color:#eab308">Golden: &sigma;&#x2081;&sigma;&#x2082;&#x207B;&#xB9;&sigma;&#x2081;&sigma;&#x2082;&#x207B;&#xB9;&sigma;&#x2081;&sigma;&#x2082;&#x207B;&#xB9;</h3>
+      <div id="b-golden" style="text-align:center"></div>
+      <p class="quiet" style="margin-top:0.75rem">The strands never return. Each cycle stretches the pattern further. This is <strong>pseudo-Anosov</strong>. TEPO = log(&phi;).</p>
+    </div>
+  </div>
+  <p>The periodic braid is like twisting a rope &mdash; it winds up but can unwind. The golden braid is like kneading dough &mdash; each fold builds on the previous one, and you can never unfold it back.</p>
+</section>
+
+<!-- SECTION 5: THE GOLDEN RATIO -->
+<section>
+  <h2>Where the golden ratio comes from</h2>
+  <p>Imagine stretching taffy with three hooks. Each &sigma;&#x2081; folds the taffy one way. Each &sigma;&#x2082;&#x207B;&#xB9; folds it the opposite way. Because the folds alternate direction, each new fold builds on the <em>previous two</em> folds, not just the last one.</p>
+  <p>Count the layers of taffy after each crossing:</p>
+
+  <table class="fib-table">
+    <tr><th>Crossings</th><th>Layers</th><th>Growth ratio</th></tr>
+    <tr><td>0</td><td>1</td><td>&mdash;</td></tr>
+    <tr><td>1</td><td>1</td><td>1.000</td></tr>
+    <tr><td>2</td><td>2</td><td>2.000</td></tr>
+    <tr><td>3</td><td>3</td><td>1.500</td></tr>
+    <tr><td>4</td><td>5</td><td>1.667</td></tr>
+    <tr><td>5</td><td>8</td><td>1.600</td></tr>
+    <tr><td>6</td><td>13</td><td>1.625</td></tr>
+    <tr><td>7</td><td>21</td><td>1.615</td></tr>
+    <tr><td>8</td><td>34</td><td class="phi">1.619 &rarr; &phi;</td></tr>
+  </table>
+
+  <p>1, 1, 2, 3, 5, 8, 13, 21, 34 &mdash; the <strong>Fibonacci numbers</strong>. Each is the sum of the previous two. The ratio of consecutive Fibonacci numbers converges to &phi; = 1.618...</p>
+
+  <div class="bar-container" id="fib-bars"></div>
+
+  <p>The golden ratio appears because alternating braid crossings create Fibonacci growth. Each fold reaches back two steps, satisfying F(n) = F(n-1) + F(n-2). The growth rate of that recursion is &phi;.</p>
+
+  <p><span class="emphasis">TEPO = log(&phi;) &asymp; 0.481</span> is the <em>minimum possible</em> stretching rate for a non-repeating 3-strand braid. Less than log(&phi;) means the braid is periodic. At or above log(&phi;) means it's genuinely complex (pseudo-Anosov). The golden ratio is the exact boundary between simple and complex braiding.</p>
+</section>
+
+<!-- SECTION 6: PROTECTION -->
+<section>
+  <h2>Topological protection</h2>
+  <p>Now the physical payoff. Look at this braid:</p>
+  <div class="braid-row">
+    <div class="braid-box wiggle"><div id="b-wiggle"></div><div class="label">wiggle, stretch, compress...</div></div>
+  </div>
+  <p>I'm deforming it. Wiggling the strands, stretching them, compressing them. The crossing pattern doesn't change. Blue still goes over red at the top. Red still goes over green at the bottom. The <em>topology</em> &mdash; the over/under sequence &mdash; survives any smooth deformation.</p>
+  <p>If you store information in that crossing pattern, the information is <strong>protected against local noise</strong>. Small perturbations can't change it. Thermal fluctuations can't change it. The only way to change the crossing pattern is to cut a strand &mdash; a drastic, non-local action.</p>
+  <p>This is <span class="emphasis">Depth 1: Protection</span>. The system has topological properties that resist local perturbation. Topological insulators work this way &mdash; their surface conduction is protected by topology, not by material purity.</p>
+</section>
+
+<!-- SECTION 7: COMPUTATION -->
+<section>
+  <h2>Topological computation</h2>
+  <p>If crossing patterns can encode information, can they encode <em>computation</em>?</p>
+  <p>Yes. Kitaev (1997) showed that braiding certain particles &mdash; anyons &mdash; around each other performs quantum logic gates. The computation is encoded in the braid pattern, and the braid pattern is topologically protected. Errors can't creep in because errors are local, and the computation is global.</p>
+  <p>This is <span class="emphasis">Depth 2: Fault-tolerant computation</span>. Not just protecting stored information, but protecting active computation. The system doesn't just resist noise &mdash; it <em>thinks</em> through it.</p>
+  <p class="quiet">Not all anyons can do this. Ising anyons (k=2) are too simple. Fibonacci anyons (k=3) are the simplest that achieve computational universality. Their quantum dimension is &phi; &mdash; the same golden ratio, from the same braid group algebra.</p>
+</section>
+
+<!-- SECTION 8: WHERE PHI APPEARS -->
+<section>
+  <h2>Where &phi; appears</h2>
+  <p>The golden ratio is the <em>tracer</em> for this skeleton. When &phi; shows up in a physical system, it means B&#x2083; braiding is active. Four fields found it independently:</p>
+  <div class="where-grid">
+    <div class="where-card">
+      <h4>Active Nematics</h4>
+      <div class="phi-val">TEPO = log(&phi;)</div>
+      <p>Liquid crystal defects braid in confined geometries. The stretching rate of defect trajectories = log(&phi;). Measured computationally. Geometry selects the braid class.</p>
+    </div>
+    <div class="where-card">
+      <h4>Fibonacci Anyons</h4>
+      <div class="phi-val">d = &phi;</div>
+      <p>Quantum dimension of Fibonacci anyons = &phi;. From the fusion algebra of SU(2) at level k=3. The simplest non-abelian anyon with computational universality.</p>
+    </div>
+    <div class="where-card">
+      <h4>Quasicrystals</h4>
+      <div class="phi-val">ratio = &phi;</div>
+      <p>Long-to-short tile ratio in Penrose tilings = &phi;. From the algebraic structure of 5-fold symmetry, connected to the icosahedral group.</p>
+    </div>
+    <div class="where-card" style="border-color: rgba(234,179,8,0.15); opacity: 0.7;">
+      <h4>Cardiac <span style="font-size:0.7rem;color:var(--dim)">(predicted)</span></h4>
+      <div class="phi-val" style="opacity:0.5">TEPO = log(&phi;)?</div>
+      <p>If spiral wave tips in the heart braid according to B&#x2083;, the golden ratio should appear in their trajectories. Untested. This is an open falsification target.</p>
+    </div>
+  </div>
+  <p>Four fields. Same number. Same algebra underneath. No shared citations between the first three discoveries. &phi; is a <em>binary</em> test: it either shows up or it doesn't. That makes this skeleton the most falsifiable of the four.</p>
+</section>
+
+<!-- SECTION 9: THE CONVERGENCE -->
+<section>
+  <h2>Seven communities, one mathematics</h2>
+  <p>Like criticality (FACETS), topological mathematics was independently rediscovered by communities that don't read each other's journals:</p>
+  <div class="timeline">
+    <div class="timeline-item"><span class="timeline-year">1860s+</span><div><span class="timeline-who">Mathematicians</span><br><span class="timeline-field">Knot theory, braid groups, Jones polynomial. Pure abstraction.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1970s</span><div><span class="timeline-who">Thouless, Haldane, Kosterlitz</span><br><span class="timeline-field">Topological phase transitions. Condensed matter physics. Nobel 2016.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1982</span><div><span class="timeline-who">Laughlin, Tsui, St&ouml;rmer</span><br><span class="timeline-field">Fractional quantum Hall effect. Found topological order in a 2D electron gas.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1988</span><div><span class="timeline-who">Witten</span><br><span class="timeline-field">Topological quantum field theory. String theory. Connected topology to physics axiomatically.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1997</span><div><span class="timeline-who">Kitaev</span><br><span class="timeline-field">Topological quantum computation. Realized braiding = fault-tolerant quantum gates.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">2005</span><div><span class="timeline-who">Kane &amp; Mele</span><br><span class="timeline-field">Topological insulators. A new class of materials with topologically protected surface states.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">2010s</span><div><span class="timeline-who">Active matter researchers</span><br><span class="timeline-field">Topological defects govern dynamics in liquid crystals, biological tissues, bacterial colonies.</span></div></div>
+  </div>
+  <p class="quiet">The mathematicians didn't teach the physicists. The condensed matter people didn't teach the computer scientists. The active matter people came at it from biology. Seven approaches to the same mathematics, arriving from seven directions.</p>
+</section>
+
+<!-- SECTION 10: RECAP -->
+<section>
+  <h2>Recap</h2>
+  <dl class="recap-box">
+    <dt>Skeleton</dt>
+    <dd>Topological / braided mathematics &mdash; braid groups, knot invariants, modular categories.</dd>
+    <dt>Depth 1: Protection</dt>
+    <dd>Properties that survive any local perturbation. Information stored in topology is physically indestructible short of a drastic global change.</dd>
+    <dt>Depth 2: Computation</dt>
+    <dd>Using topological protection to compute fault-tolerantly. Braiding = logic gates. Errors can't creep in because errors are local and the computation is global.</dd>
+    <dt>Tracer: &phi; = 1.618...</dt>
+    <dd>The golden ratio. Signature of B&#x2083; braid algebra. Appears as TEPO, quantum dimension, or tile ratio. Binary test: either it shows up or the skeleton assignment is wrong.</dd>
+    <dt>Key insight</dt>
+    <dd>Alternating braid crossings create Fibonacci growth. The growth rate is &phi;. This is why the golden ratio appears in every system where three-strand braiding is active.</dd>
+    <dt>Convergence</dt>
+    <dd>7 communities independently discovered this mathematics. None cited the others. This is a FACETS-scale convergence story, undocumented as such.</dd>
+  </dl>
+  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-closure.html" style="color:var(--s3)">Skeleton 3: Closure &rarr;</a></p>
+</section>
+
+</main>
+
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:720px;margin-left:auto;margin-right:auto;padding-left:2rem;padding-right:2rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Multi-Critical Systems</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
+<script src="../../../js/annex-tracker.js"></script>
+
+<script>
+function braidSVG(word, opts = {}) {
+  const w = opts.w || 180, levelH = opts.levelH || 55, pad = opts.pad || 18;
+  const sw = 5, gw = 14, bg = '#1e293b';
+  const colors = ['#818cf8', '#f87171', '#4ade80'];
+  const n = 3, xs = [w*0.25, w*0.5, w*0.75];
+  const h = pad*2 + levelH*(word.length+1);
+  let sa = [0,1,2], out = '';
+
+  for (let p = 0; p < n; p++)
+    out += `<line x1="${xs[p]}" y1="${pad}" x2="${xs[p]}" y2="${pad+levelH*0.4}" stroke="${colors[p]}" stroke-width="${sw}" stroke-linecap="round"/>`;
+
+  for (let i = 0; i < word.length; i++) {
+    const {pos: cp, inv} = word[i];
+    const y1 = pad + levelH*0.4 + i*levelH, y2 = y1 + levelH, ym = (y1+y2)/2;
+    for (let p = 0; p < n; p++)
+      if (p !== cp && p !== cp+1)
+        out += `<line x1="${xs[p]}" y1="${y1}" x2="${xs[p]}" y2="${y2}" stroke="${colors[sa[p]]}" stroke-width="${sw}" stroke-linecap="round"/>`;
+    const oP = inv ? cp+1 : cp, uP = inv ? cp : cp+1;
+    const oS = sa[oP], uS = sa[uP];
+    out += `<path d="M${xs[uP]} ${y1} C${xs[uP]} ${ym} ${xs[oP]} ${ym} ${xs[oP]} ${y2}" stroke="${colors[uS]}" stroke-width="${sw}" fill="none" stroke-linecap="round"/>`;
+    out += `<path d="M${xs[oP]} ${y1} C${xs[oP]} ${ym} ${xs[uP]} ${ym} ${xs[uP]} ${y2}" stroke="${bg}" stroke-width="${gw}" fill="none"/>`;
+    out += `<path d="M${xs[oP]} ${y1} C${xs[oP]} ${ym} ${xs[uP]} ${ym} ${xs[uP]} ${y2}" stroke="${colors[oS]}" stroke-width="${sw}" fill="none" stroke-linecap="round"/>`;
+    [sa[cp], sa[cp+1]] = [sa[cp+1], sa[cp]];
+  }
+  const yb = pad + levelH*0.4 + word.length*levelH;
+  for (let p = 0; p < n; p++)
+    out += `<line x1="${xs[p]}" y1="${yb}" x2="${xs[p]}" y2="${h-pad}" stroke="${colors[sa[p]]}" stroke-width="${sw}" stroke-linecap="round"/>`;
+
+  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:${w}px">${out}</svg>`;
+}
+
+const S1 = {pos:0, inv:false};
+const S1i = {pos:0, inv:true};
+const S2 = {pos:1, inv:false};
+const S2i = {pos:1, inv:true};
+
+document.getElementById('b-identity').innerHTML = braidSVG([], {levelH:80});
+document.getElementById('b-sigma1').innerHTML = braidSVG([S1]);
+document.getElementById('b-sigma2').innerHTML = braidSVG([S2]);
+document.getElementById('b-sigma1-fwd').innerHTML = braidSVG([S1]);
+document.getElementById('b-sigma1-inv').innerHTML = braidSVG([S1i]);
+document.getElementById('b-s1s2').innerHTML = braidSVG([S1, S2]);
+document.getElementById('b-s1s2inv').innerHTML = braidSVG([S1, S2i]);
+document.getElementById('b-periodic').innerHTML = braidSVG([S1,S2,S1,S2,S1,S2], {levelH:45});
+document.getElementById('b-golden').innerHTML = braidSVG([S1,S2i,S1,S2i,S1,S2i], {levelH:45});
+document.getElementById('b-wiggle').innerHTML = braidSVG([S1, S2i]);
+
+// Fibonacci bar chart
+const fibs = [1,1,2,3,5,8,13,21,34];
+const maxF = fibs[fibs.length-1];
+const phi = (1 + Math.sqrt(5)) / 2;
+let barsHTML = '';
+for (let i = 0; i < fibs.length; i++) {
+  const ratio = i > 0 ? (fibs[i]/fibs[i-1]).toFixed(3) : '—';
+  const pct = (fibs[i]/maxF * 100).toFixed(1);
+  const isClose = i > 0 && Math.abs(fibs[i]/fibs[i-1] - phi) < 0.01;
+  barsHTML += `<div class="bar-row">
+    <span class="bar-label">${i}</span>
+    <div class="bar" style="width:${pct}%"></div>
+    <span class="bar-ratio">${fibs[i]}</span>
+    <span class="bar-ratio ${isClose ? 'phi' : ''}" style="color:${isClose ? '#eab308' : 'var(--dim)'}">
+      ${i > 0 ? '&times;' + ratio : ''}${isClose ? ' &asymp; &phi;' : ''}
+    </span>
+  </div>`;
+}
+document.getElementById('fib-bars').innerHTML = barsHTML;
+</script>
+</body>
+</html>
