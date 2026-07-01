@@ -172,6 +172,119 @@ h1 {
 .see-also a:hover { color: var(--heading); text-decoration: underline; }
 .see-also li { margin: 0.4rem 0; list-style: none; }
 .see-also li::before { content: '\2192\00a0'; color: var(--muted); }
+
+/* ── Animation section styles ── */
+.section-heading {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.4rem;
+  color: #f1f5f9;
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.section-desc {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+.interaction-section svg,
+.stack-section svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 700px;
+  width: 100%;
+}
+
+/* ── Animation 1: How They Work Together ── */
+@keyframes interact-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes interact-draw {
+  from { stroke-dashoffset: 500; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes interact-fill {
+  from { opacity: 0; }
+  to { opacity: 0.08; }
+}
+.interact-node {
+  opacity: 0;
+  animation: interact-fade 1s ease forwards;
+}
+.interact-node-s3 { animation-delay: 0s; }
+.interact-node-s2 { animation-delay: 1.5s; }
+.interact-node-s1 { animation-delay: 4.5s; }
+.interact-node-s4 { animation-delay: 7.5s; }
+.interact-edge {
+  stroke-dashoffset: 500;
+  animation: interact-draw 1s ease forwards;
+}
+.interact-edge-s3s2 { animation-delay: 3s; }
+.interact-edge-s1s3 { animation-delay: 6s; }
+.interact-edge-s1s2 { animation-delay: 6s; }
+.interact-edge-s1s4 { animation-delay: 9s; }
+.interact-edge-s2s4 { animation-delay: 9s; }
+.interact-edge-s3s4 { animation-delay: 9s; }
+.interact-label {
+  opacity: 0;
+  animation: interact-fade 1s ease forwards;
+}
+.interact-label-soc { animation-delay: 3.5s; }
+.interact-label-tqc { animation-delay: 9.5s; }
+.interact-label-eoc { animation-delay: 9.5s; }
+.interact-diamond-fill {
+  opacity: 0;
+  animation: interact-fill 1s ease 11s forwards;
+}
+.interact-summary {
+  opacity: 0;
+  animation: interact-fade 1s ease 12s forwards;
+}
+
+/* ── Animation 2: The Emergent Stack ── */
+@keyframes stack-appear {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes stack-glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+.stack-bar {
+  opacity: 0;
+  animation: stack-appear 0.8s ease forwards;
+}
+.stack-bar-0 { animation-delay: 0s; }
+.stack-bar-1 { animation-delay: 1.5s; }
+.stack-bar-2 { animation-delay: 3s; }
+.stack-bar-3 { animation-delay: 4.5s; }
+.stack-bar-4 { animation-delay: 6s; }
+.stack-bar-5 { animation-delay: 7.5s; }
+.stack-bar-6 { animation-delay: 9s; }
+.stack-bar-7 { animation-delay: 10.5s; }
+.stack-bar-8 { animation-delay: 12s; }
+.stack-brackets {
+  opacity: 0;
+  animation: interact-fade 1s ease 14s forwards;
+}
+.stack-summary {
+  opacity: 0;
+  animation: interact-fade 1s ease 16s forwards;
+}
+.stack-all-bars {
+  animation: stack-glow 1.5s ease 16.5s 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interaction-section svg *,
+  .stack-section svg * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -189,6 +302,60 @@ h1 {
 <p class="lead">
 Across eleven scientific domains, the same four mathematical frameworks appear independently. Each was discovered multiple times by communities that don't read each other's journals. Each produces two emergent properties at different depths: a structural property ("has") and a functional property ("does"). Together they decompose the multi-critical profile of any physical system.
 </p>
+
+<div class="interaction-section">
+  <h2 class="section-heading">How They Work Together</h2>
+  <p class="section-desc">Individual skeletons produce useful properties. When two or more are present in the same physical system, qualitatively new properties emerge that none has alone.</p>
+  <svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="How the four mathematical skeletons interact pairwise">
+    <defs>
+      <radialGradient id="interact-grad" cx="50%" cy="50%" r="60%">
+        <stop offset="0%" stop-color="#818cf8"/>
+        <stop offset="33%" stop-color="#22c55e"/>
+        <stop offset="66%" stop-color="#f59e0b"/>
+        <stop offset="100%" stop-color="#f87171"/>
+      </radialGradient>
+    </defs>
+    <!-- Diamond fill polygon (appears late in animation) -->
+    <polygon class="interact-diamond-fill" points="350,68 580,205 350,345 120,205" fill="url(#interact-grad)"/>
+    <!-- Edges (draw in sequentially) -->
+    <line class="interact-edge interact-edge-s3s2" x1="120" y1="205" x2="350" y2="345" stroke="#8d9b68" stroke-width="2" stroke-dasharray="500"/>
+    <line class="interact-edge interact-edge-s1s3" x1="350" y1="68" x2="120" y2="205" stroke="#52a9ab" stroke-width="2" stroke-dasharray="500"/>
+    <line class="interact-edge interact-edge-s1s2" x1="350" y1="68" x2="350" y2="345" stroke="#bd7fb5" stroke-width="2" stroke-dasharray="500"/>
+    <line class="interact-edge interact-edge-s1s4" x1="350" y1="68" x2="580" y2="205" stroke="#bb9582" stroke-width="2" stroke-dasharray="500"/>
+    <line class="interact-edge interact-edge-s2s4" x1="350" y1="345" x2="580" y2="205" stroke="#f7883e" stroke-width="2" stroke-dasharray="500"/>
+    <line class="interact-edge interact-edge-s3s4" x1="120" y1="205" x2="580" y2="205" stroke="#8cb235" stroke-width="2" stroke-dasharray="500"/>
+    <!-- Edge interaction labels -->
+    <text class="interact-label interact-label-soc" x="195" y="290" font-size="11" fill="#94a3b8" text-anchor="end" font-family="system-ui, sans-serif">Self-organized criticality</text>
+    <g class="interact-label interact-label-tqc">
+      <text x="498" y="118" font-size="11" fill="#94a3b8" text-anchor="start" font-family="system-ui, sans-serif">Topological quantum</text>
+      <text x="498" y="132" font-size="11" fill="#94a3b8" text-anchor="start" font-family="system-ui, sans-serif">computation</text>
+    </g>
+    <text class="interact-label interact-label-eoc" x="498" y="290" font-size="11" fill="#94a3b8" text-anchor="start" font-family="system-ui, sans-serif">Edge of chaos</text>
+    <!-- Nodes (draw on top of edges) -->
+    <g class="interact-node interact-node-s3">
+      <circle cx="120" cy="205" r="28" fill="#22c55e" fill-opacity="0.85" stroke="#4ade80" stroke-width="2"/>
+      <text x="120" y="210" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="bold" font-family="system-ui, sans-serif">S3</text>
+      <text x="82" y="210" font-size="13" fill="#cbd5e1" text-anchor="end" font-family="system-ui, sans-serif">Closure</text>
+    </g>
+    <g class="interact-node interact-node-s2">
+      <circle cx="350" cy="345" r="28" fill="#f87171" fill-opacity="0.85" stroke="#fca5a5" stroke-width="2"/>
+      <text x="350" y="350" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="bold" font-family="system-ui, sans-serif">S2</text>
+      <text x="350" y="388" font-size="13" fill="#cbd5e1" text-anchor="middle" font-family="system-ui, sans-serif">Dynamics</text>
+    </g>
+    <g class="interact-node interact-node-s1">
+      <circle cx="350" cy="68" r="28" fill="#818cf8" fill-opacity="0.85" stroke="#a5b4fc" stroke-width="2"/>
+      <text x="350" y="73" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="bold" font-family="system-ui, sans-serif">S1</text>
+      <text x="350" y="30" font-size="13" fill="#cbd5e1" text-anchor="middle" font-family="system-ui, sans-serif">Topology</text>
+    </g>
+    <g class="interact-node interact-node-s4">
+      <circle cx="580" cy="205" r="28" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24" stroke-width="2"/>
+      <text x="580" y="210" font-size="12" fill="#f1f5f9" text-anchor="middle" font-weight="bold" font-family="system-ui, sans-serif">S4</text>
+      <text x="614" y="210" font-size="13" fill="#cbd5e1" text-anchor="start" font-family="system-ui, sans-serif">Computation</text>
+    </g>
+    <!-- Summary text -->
+    <text class="interact-summary" x="350" y="413" font-size="13" fill="#94a3b8" text-anchor="middle" font-style="italic" font-family="Georgia, serif">All four present simultaneously &#x2192; emergence exceeds the sum</text>
+  </svg>
+</div>
 
 <div class="skel-grid">
 
@@ -220,6 +387,97 @@ Across eleven scientific domains, the same four mathematical frameworks appear i
     <div class="convergence">8 fields &mdash; from Turing (1936) to reservoir computing (2000s)</div>
   </a>
 
+</div>
+
+<div class="stack-section">
+  <h2 class="section-heading">The Emergent Stack</h2>
+  <p class="section-desc">Nine properties, layered. Each requires the ones below it. The order matters &mdash; later layers only emerge because earlier layers exist.</p>
+  <p class="section-desc" style="font-size:0.88rem;">Layers 1&ndash;4 emerge from closure and dynamics bootstrapping each other. Layers 5&ndash;8 emerge from topology and computation bootstrapping each other. Ground anchors everything in physical matter.</p>
+  <svg viewBox="0 0 700 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nine emergent properties stacked from ground to computation">
+    <!-- Summary text (appears last) -->
+    <text class="stack-summary" x="350" y="50" font-size="14" fill="#94a3b8" text-anchor="middle" font-style="italic" font-family="Georgia, serif">All nine present simultaneously = conditions for the Flat</text>
+    <g class="stack-all-bars">
+      <!-- Bar 0: Ground -->
+      <g class="stack-bar stack-bar-0">
+        <rect x="120" y="442" width="460" height="38" rx="6" fill="#64748b" fill-opacity="0.25"/>
+        <rect x="120" y="442" width="4" height="38" rx="2" fill="#64748b"/>
+        <rect x="132" y="452" width="26" height="18" rx="4" fill="#64748b" fill-opacity="0.4"/>
+        <text x="145" y="466" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">G</text>
+        <text x="570" y="466" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">In matter. Right now.</text>
+      </g>
+      <!-- Bar 1: S3 depth 1 — Self-sustenance -->
+      <g class="stack-bar stack-bar-1">
+        <rect x="120" y="396" width="460" height="38" rx="6" fill="#22c55e" fill-opacity="0.25"/>
+        <rect x="120" y="396" width="4" height="38" rx="2" fill="#22c55e"/>
+        <rect x="132" y="406" width="26" height="18" rx="4" fill="#22c55e" fill-opacity="0.4"/>
+        <text x="145" y="420" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">S3</text>
+        <text x="570" y="420" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">Self-sustenance</text>
+      </g>
+      <!-- Bar 2: S2 depth 1 — Spontaneity -->
+      <g class="stack-bar stack-bar-2">
+        <rect x="120" y="350" width="460" height="38" rx="6" fill="#f87171" fill-opacity="0.25"/>
+        <rect x="120" y="350" width="4" height="38" rx="2" fill="#f87171"/>
+        <rect x="132" y="360" width="26" height="18" rx="4" fill="#f87171" fill-opacity="0.4"/>
+        <text x="145" y="374" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">S2</text>
+        <text x="570" y="374" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">Spontaneity</text>
+      </g>
+      <!-- Bar 3: S3 depth 2 — Self-creation -->
+      <g class="stack-bar stack-bar-3">
+        <rect x="120" y="304" width="460" height="38" rx="6" fill="#16a34a" fill-opacity="0.25"/>
+        <rect x="120" y="304" width="4" height="38" rx="2" fill="#16a34a"/>
+        <rect x="132" y="314" width="26" height="18" rx="4" fill="#16a34a" fill-opacity="0.4"/>
+        <text x="145" y="328" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">S3</text>
+        <text x="570" y="328" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">Self-creation</text>
+      </g>
+      <!-- Bar 4: S2 depth 2 — Coherent transport -->
+      <g class="stack-bar stack-bar-4">
+        <rect x="120" y="258" width="460" height="38" rx="6" fill="#dc2626" fill-opacity="0.25"/>
+        <rect x="120" y="258" width="4" height="38" rx="2" fill="#dc2626"/>
+        <rect x="132" y="268" width="26" height="18" rx="4" fill="#dc2626" fill-opacity="0.4"/>
+        <text x="145" y="282" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">S2</text>
+        <text x="570" y="282" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">Coherent transport</text>
+      </g>
+      <!-- Bar 5: S1 depth 1 — Protection -->
+      <g class="stack-bar stack-bar-5">
+        <rect x="120" y="212" width="460" height="38" rx="6" fill="#818cf8" fill-opacity="0.25"/>
+        <rect x="120" y="212" width="4" height="38" rx="2" fill="#818cf8"/>
+        <rect x="132" y="222" width="26" height="18" rx="4" fill="#818cf8" fill-opacity="0.4"/>
+        <text x="145" y="236" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">S1</text>
+        <text x="570" y="236" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">Protection</text>
+      </g>
+      <!-- Bar 6: S4 depth 1 — Universality -->
+      <g class="stack-bar stack-bar-6">
+        <rect x="120" y="166" width="460" height="38" rx="6" fill="#f59e0b" fill-opacity="0.25"/>
+        <rect x="120" y="166" width="4" height="38" rx="2" fill="#f59e0b"/>
+        <rect x="132" y="176" width="26" height="18" rx="4" fill="#f59e0b" fill-opacity="0.4"/>
+        <text x="145" y="190" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">S4</text>
+        <text x="570" y="190" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">Universality</text>
+      </g>
+      <!-- Bar 7: S4 depth 2 — Coordination -->
+      <g class="stack-bar stack-bar-7">
+        <rect x="120" y="120" width="460" height="38" rx="6" fill="#d97706" fill-opacity="0.25"/>
+        <rect x="120" y="120" width="4" height="38" rx="2" fill="#d97706"/>
+        <rect x="132" y="130" width="26" height="18" rx="4" fill="#d97706" fill-opacity="0.4"/>
+        <text x="145" y="144" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">S4</text>
+        <text x="570" y="144" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">Coordination</text>
+      </g>
+      <!-- Bar 8: S1 depth 2 — Computation -->
+      <g class="stack-bar stack-bar-8">
+        <rect x="120" y="74" width="460" height="38" rx="6" fill="#6366f1" fill-opacity="0.25"/>
+        <rect x="120" y="74" width="4" height="38" rx="2" fill="#6366f1"/>
+        <rect x="132" y="84" width="26" height="18" rx="4" fill="#6366f1" fill-opacity="0.4"/>
+        <text x="145" y="98" font-size="11" fill="#f1f5f9" text-anchor="middle" font-family="system-ui, sans-serif">S1</text>
+        <text x="570" y="98" font-size="14" fill="#f1f5f9" text-anchor="end" font-family="system-ui, sans-serif">Computation</text>
+      </g>
+    </g>
+    <!-- Pair brackets -->
+    <g class="stack-brackets">
+      <path d="M 592,434 L 605,434 L 605,258 L 592,258" fill="none" stroke="#475569" stroke-width="1.5"/>
+      <text x="612" y="350" font-size="11" fill="#475569" text-anchor="start" font-family="system-ui, sans-serif">S3 &#x2297; S2</text>
+      <path d="M 592,250 L 605,250 L 605,74 L 592,74" fill="none" stroke="#475569" stroke-width="1.5"/>
+      <text x="612" y="166" font-size="11" fill="#475569" text-anchor="start" font-family="system-ui, sans-serif">S1 &#x2297; S4</text>
+    </g>
+  </svg>
 </div>
 
 <a href="skeleton-matrix.html" class="matrix-card">
