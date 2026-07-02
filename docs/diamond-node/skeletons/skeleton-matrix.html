@@ -11,6 +11,7 @@
     --card-border: #334155;
     --text: #e2e8f0;
     --muted: #94a3b8;
+    --dim: #475569;
     --s1: #818cf8;
     --s2: #f87171;
     --s3: #4ade80;
@@ -90,9 +91,7 @@
     position: relative;
   }
 
-  .card:hover {
-    border-color: #475569;
-  }
+  .card:hover { border-color: #475569; }
 
   .card.sel-a { border-color: var(--sel-a); box-shadow: 0 0 12px rgba(6,182,212,0.3); }
   .card.sel-b { border-color: var(--sel-b); box-shadow: 0 0 12px rgba(217,70,239,0.3); }
@@ -123,6 +122,16 @@
     font-size: 0.6rem;
     color: var(--muted);
     font-weight: 700;
+  }
+
+  .face-badge {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    font-size: 0.55rem;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
   }
 
   /* --- Overlay panel --- */
@@ -168,6 +177,17 @@
     font-size: 0.75rem;
   }
 
+  .prop-code {
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 28px;
+    flex-shrink: 0;
+    opacity: 0.5;
+    font-family: 'SF Mono', 'Consolas', monospace;
+  }
+
+  .prop-row.active .prop-code { opacity: 1; }
+
   .prop-dot {
     width: 10px;
     height: 10px;
@@ -184,9 +204,38 @@
     box-shadow: 0 0 6px var(--dot-color, var(--muted));
   }
 
+  .prop-type-tag {
+    font-size: 0.55rem;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .prop-type-M {
+    background: rgba(255,255,255,0.08);
+    color: var(--muted);
+  }
+
+  .prop-type-m {
+    background: rgba(255,255,255,0.04);
+    color: var(--dim);
+  }
+
+  .prop-row.active .prop-type-M {
+    background: rgba(255,255,255,0.15);
+    color: var(--text);
+  }
+
+  .prop-row.active .prop-type-m {
+    background: rgba(255,255,255,0.1);
+    color: var(--muted);
+  }
+
   .prop-name {
     color: var(--muted);
     transition: color 0.3s;
+    flex: 1;
   }
 
   .prop-row.active .prop-name { color: var(--text); }
@@ -195,10 +244,120 @@
     font-size: 0.65rem;
     color: #475569;
     font-style: italic;
-    margin-left: auto;
-    max-width: 140px;
+    max-width: 130px;
     text-align: right;
     line-height: 1.2;
+    flex-shrink: 0;
+  }
+
+  /* --- Edge interactions --- */
+  #edge-panel {
+    margin-top: 1rem;
+    border-top: 1px solid var(--card-border);
+    padding-top: 0.75rem;
+  }
+
+  .edge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    margin-bottom: 0.35rem;
+    opacity: 0.4;
+  }
+
+  .edge-row.active { opacity: 1; }
+
+  .edge-dots {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .edge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .edge-name {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .edge-desc {
+    font-size: 0.65rem;
+    color: var(--dim);
+    margin-left: auto;
+  }
+
+  /* --- Face panel --- */
+  #face-panel {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--card-border);
+    padding-top: 0.75rem;
+  }
+
+  .face-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .face-detail {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .face-deficiency {
+    font-weight: 600;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .face-example {
+    font-size: 0.7rem;
+    color: var(--dim);
+    font-style: italic;
+    margin-top: 0.15rem;
+  }
+
+  /* --- Theory panel --- */
+  #theory-panel {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--card-border);
+    padding-top: 0.75rem;
+    font-size: 0.72rem;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  #theory-panel summary {
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+  }
+
+  #theory-panel p { margin-bottom: 0.5rem; }
+
+  .theory-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.65rem;
+    margin-top: 0.5rem;
+  }
+
+  .theory-table th, .theory-table td {
+    padding: 0.3rem 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .theory-table th {
+    color: var(--muted);
+    font-weight: 600;
   }
 
   /* --- Selection info --- */
@@ -274,8 +433,8 @@
 <header>
   <h1>Multicritical Skeleton Profiles</h1>
   <p>Every critical system has a mathematical profile decomposable into four structural skeletons.
-     Most systems have one or two. Some have three. Select systems to overlay their profiles
-     and explore what emerges when different structures combine.</p>
+     Each skeleton produces two emergent properties: a <strong>Major</strong> property (structural &mdash; the system <em>has</em> it) and a <strong>minor</strong> property (functional &mdash; the system <em>does</em> it).
+     Select systems to overlay their profiles and see what emerges when different structures combine.</p>
   <p style="margin-top:0.5rem">The four skeletons: <a href="skeleton-topology.html" style="color:#818cf8">Topology</a>, <a href="skeleton-closure.html" style="color:#4ade80">Closure</a>, <a href="skeleton-computation.html" style="color:#facc15">Computation</a>, and Dynamics (the anchor &mdash; <a href="../multi-critical/" style="color:#f87171">see the tutorials</a>).</p>
 </header>
 
@@ -289,14 +448,38 @@
 
       <div id="property-stack"></div>
 
+      <div id="edge-panel"></div>
+
+      <div id="face-panel"></div>
+
       <div id="selection-info"></div>
     </div>
 
+    <div id="theory-panel">
+      <details>
+        <summary>Major / minor theory</summary>
+        <p><strong>Major (M)</strong> properties are binary and intrinsic &mdash; a system either has topological protection or it doesn't. <strong>minor (m)</strong> properties are cumulative and extrinsic &mdash; braids compose sequentially to build computation; soliton energy accumulates along a path.</p>
+        <p>M appears when the skeleton is self-referential. m appears when the skeleton couples to an environment &mdash; when there is an inside and an outside.</p>
+        <table class="theory-table">
+          <tr><th>Code</th><th>Type</th><th>Property</th><th>Binary?</th><th>Accumulates?</th></tr>
+          <tr><td>S1M</td><td>Major</td><td>Protection</td><td>Yes</td><td>No</td></tr>
+          <tr><td>S1m</td><td>minor</td><td>Computation</td><td>No</td><td>Yes (braids compose)</td></tr>
+          <tr><td>S2M</td><td>Major</td><td>Spontaneity</td><td>Yes</td><td>No</td></tr>
+          <tr><td>S2m</td><td>minor</td><td>Transport</td><td>No</td><td>Yes (solitons propagate)</td></tr>
+          <tr><td>S3M</td><td>Major</td><td>Self-sustenance</td><td>Yes</td><td>No</td></tr>
+          <tr><td>S3m</td><td>minor</td><td>Self-creation</td><td>No</td><td>Yes (boundaries grow)</td></tr>
+          <tr><td>S4M</td><td>Major</td><td>Universality</td><td>Yes</td><td>No</td></tr>
+          <tr><td>S4m</td><td>minor</td><td>Coordination</td><td>No</td><td>Yes (consensus builds)</td></tr>
+        </table>
+        <p style="margin-top:0.75rem"><strong>Face deficiency classes:</strong> The four skeletons form a tetrahedron. Each face (triple of skeletons) is defined by what&rsquo;s <em>absent</em>. Biology (no S1) is fragile. Topological matter (no S4) is inert. Engineered QC (no S3) is dependent. The interior &mdash; all four present &mdash; is the only regime with no deficiency.</p>
+      </details>
+    </div>
+
     <div id="legend">
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--s1)"></div>Topology</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--s2)"></div>Dynamics</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--s3)"></div>Closure</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--s4)"></div>Computation</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s1)"></div>S1 Topology</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s2)"></div>S2 Dynamics</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s3)"></div>S3 Closure</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s4)"></div>S4 Computation</div>
     </div>
   </section>
 </main>
@@ -313,7 +496,7 @@ const SYSTEMS = [
   {id:'nematics',      name:'Active Nematics',  s1:1, s2:2, s3:0, s4:0, g:false, desc:'Topological defect dynamics'},
   {id:'tokamak',       name:'Tokamak Plasma',   s1:1, s2:2, s3:0, s4:0, g:false, desc:'Transport barriers + MHD'},
   {id:'brain',         name:'Brain',            s1:1, s2:2, s3:0, s4:2, g:false, desc:'Criticality + neural coordination'},
-  {id:'fqhe',          name:'FQHE / Anyons',    s1:2, s2:1, s3:0, s4:0, g:true,  desc:'Topological computation in matter'},
+  {id:'fqhe',          name:'FQHE / Anyons',    s1:2, s2:1, s3:1, s4:0, g:true,  desc:'Topological order + self-generated anyons'},
   {id:'quasicrystal',  name:'Quasicrystal',     s1:2, s2:1, s3:0, s4:0, g:true,  desc:'Aperiodic topological matter'},
   {id:'cardiac',       name:'Cardiac',          s1:1, s2:2, s3:2, s4:0, g:false, desc:'Self-creating excitable medium'},
   {id:'immune',        name:'Immune',           s1:0, s2:1, s3:2, s4:2, g:false, desc:'Adaptive self-creating defense'},
@@ -322,22 +505,38 @@ const SYSTEMS = [
 ];
 
 const SKELETONS = [
-  {id:'s1', name:'Topology',    d1:'Protection',      d2:'Computation',       color:'#818cf8'},
-  {id:'s2', name:'Dynamics',    d1:'Spontaneity',      d2:'Coherent transport',color:'#f87171'},
-  {id:'s3', name:'Closure',     d1:'Self-sustenance',  d2:'Self-creation',     color:'#4ade80'},
-  {id:'s4', name:'Computation', d1:'Universality',     d2:'Coordination',      color:'#facc15'},
+  {id:'s1', name:'Topology',    M:'Protection',      m:'Computation',       color:'#818cf8'},
+  {id:'s2', name:'Dynamics',    M:'Spontaneity',      m:'Coherent transport',color:'#f87171'},
+  {id:'s3', name:'Closure',     M:'Self-sustenance',  m:'Self-creation',     color:'#4ade80'},
+  {id:'s4', name:'Computation', M:'Universality',     m:'Coordination',      color:'#facc15'},
 ];
 
 const LAYERS = [
-  {name:'Self-sustenance',   p1:'Things that make each other',           skel:'s3', depth:1, color:'#4ade80'},
-  {name:'Spontaneity',       p1:'It happens by itself at thresholds',    skel:'s2', depth:1, color:'#f87171'},
-  {name:'Self-creation',     p1:'It makes its own boundary and identity',skel:'s3', depth:2, color:'#4ade80'},
-  {name:'Coherent transport',p1:'It moves without falling apart',        skel:'s2', depth:2, color:'#f87171'},
-  {name:'Protection',        p1:"It can't be destroyed by local damage", skel:'s1', depth:1, color:'#818cf8'},
-  {name:'Universality',      p1:'Its rules can compute anything',        skel:'s4', depth:1, color:'#facc15'},
-  {name:'Coordination',      p1:'It cooperates without a boss',          skel:'s4', depth:2, color:'#facc15'},
-  {name:'Computation',       p1:'It thinks, fault-tolerantly',           skel:'s1', depth:2, color:'#818cf8'},
-  {name:'Physical reality',  p1:"It's in matter. Right now.",            skel:'g',  depth:1, color:'#e2e8f0'},
+  {name:'Self-sustenance',   code:'S3M', type:'M', p1:'Things that make each other',           skel:'s3', depth:1, color:'#4ade80'},
+  {name:'Spontaneity',       code:'S2M', type:'M', p1:'It happens by itself at thresholds',    skel:'s2', depth:1, color:'#f87171'},
+  {name:'Self-creation',     code:'S3m', type:'m', p1:'It makes its own boundary and identity',skel:'s3', depth:2, color:'#4ade80'},
+  {name:'Coherent transport',code:'S2m', type:'m', p1:'It moves without falling apart',        skel:'s2', depth:2, color:'#f87171'},
+  {name:'Protection',        code:'S1M', type:'M', p1:"It can't be destroyed by local damage", skel:'s1', depth:1, color:'#818cf8'},
+  {name:'Universality',      code:'S4M', type:'M', p1:'Its rules can compute anything',        skel:'s4', depth:1, color:'#facc15'},
+  {name:'Coordination',      code:'S4m', type:'m', p1:'It cooperates without a boss',          skel:'s4', depth:2, color:'#facc15'},
+  {name:'Computation',       code:'S1m', type:'m', p1:'It thinks, fault-tolerantly',           skel:'s1', depth:2, color:'#818cf8'},
+  {name:'Physical reality',  code:'G',   type:'G', p1:"It's in matter. Right now.",            skel:'g',  depth:1, color:'#e2e8f0'},
+];
+
+const EDGES = [
+  {s:['s2','s3'], name:'Self-organized criticality', short:'SOC',  desc:'Bak 1987', status:'established'},
+  {s:['s1','s4'], name:'Topological quantum computation', short:'TQC', desc:'Kitaev 2003', status:'established'},
+  {s:['s2','s4'], name:'Edge of chaos', short:'EoC', desc:'Langton 1990', status:'established'},
+  {s:['s1','s2'], name:'Protected criticality', short:'PC',  desc:'Topological phase transitions', status:'candidate'},
+  {s:['s1','s3'], name:'Topological closure', short:'TC',  desc:'AC bridge (anyon fusion as RAF)', status:'candidate'},
+  {s:['s3','s4'], name:'Generative computation', short:'GC',  desc:'Boolean networks + autocatalysis', status:'candidate'},
+];
+
+const FACES = [
+  {present:['s2','s3','s4'], absent:'s1', name:'Fragile',   desc:'Computes and self-sustains, but can be destroyed locally', example:'Biology — cells die from local damage'},
+  {present:['s1','s2','s3'], absent:'s4', name:'Inert',     desc:'Self-organizes with protection, but doesn\'t compute', example:'FQHE matter — interesting but just sits there'},
+  {present:['s1','s2','s4'], absent:'s3', name:'Dependent', desc:'Computes robustly, but requires external maintenance', example:'Engineered quantum computers'},
+  {present:['s1','s3','s4'], absent:'s2', name:'Static',    desc:'Self-sustains and computes, but doesn\'t evolve', example:'Stable quantum memory (weakest example)'},
 ];
 
 const SEL_COLORS = ['#06b6d4', '#d946ef', '#f97316'];
@@ -373,6 +572,39 @@ function getLayers(sys) {
   ];
 }
 
+function getActiveSkeletons(sys) {
+  const active = [];
+  if (sys.s1 > 0) active.push('s1');
+  if (sys.s2 > 0) active.push('s2');
+  if (sys.s3 > 0) active.push('s3');
+  if (sys.s4 > 0) active.push('s4');
+  return active;
+}
+
+function getActiveEdges(skeletons) {
+  return EDGES.filter(e => e.s.every(s => skeletons.includes(s)));
+}
+
+function getActiveFace(skeletons) {
+  if (skeletons.length < 3) return null;
+  for (const face of FACES) {
+    if (face.present.every(s => skeletons.includes(s)) && !skeletons.includes(face.absent)) {
+      return face;
+    }
+  }
+  if (skeletons.length >= 4) return {name:'Complete', desc:'All four skeletons present — no deficiency', absent:null, example:'Conditions for the Flat'};
+  return null;
+}
+
+function getFaceBadge(sys) {
+  const active = getActiveSkeletons(sys);
+  if (active.length >= 4) return {text:'ALL', color:'rgba(255,255,255,0.6)', bg:'rgba(255,255,255,0.1)'};
+  const face = getActiveFace(active);
+  if (!face) return null;
+  const skel = SKELETONS.find(s => s.id === face.absent);
+  return {text:'−' + face.absent.toUpperCase(), color: skel ? skel.color : '#fff', bg: 'rgba(0,0,0,0.3)'};
+}
+
 function getCombinedScores(systems) {
   if (systems.length === 0) return {s1:0, s2:0, s3:0, s4:0, g:false};
   return {
@@ -402,34 +634,29 @@ function createMiniRadar(sys) {
   const cx = 100, cy = 100, unit = 38;
   let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
 
-  // grid diamonds
   for (let d = 1; d <= 2; d++) {
     const pts = radarPoints({s1:d,s2:d,s3:d,s4:d}, cx, cy, unit);
     svg += `<polygon points="${pointsStr(pts)}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
   }
 
-  // axes
   const axisColors = ['#818cf8','#f87171','#4ade80','#facc15'];
   const axisEnds = radarPoints({s1:2,s2:2,s3:2,s4:2}, cx, cy, unit);
   for (let i = 0; i < 4; i++) {
     svg += `<line x1="${cx}" y1="${cy}" x2="${axisEnds[i][0]}" y2="${axisEnds[i][1]}" stroke="${axisColors[i]}" stroke-width="1" opacity="0.3"/>`;
   }
 
-  // data polygon
   const pts = radarPoints(sys, cx, cy, unit);
   const hasArea = (sys.s1 + sys.s2 + sys.s3 + sys.s4) > 0;
   if (hasArea) {
     svg += `<polygon points="${pointsStr(pts)}" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linejoin="round"/>`;
   }
 
-  // dot at each axis value
   for (let i = 0; i < 4; i++) {
     if ([sys.s1, sys.s2, sys.s3, sys.s4][i] > 0) {
       svg += `<circle cx="${pts[i][0]}" cy="${pts[i][1]}" r="3" fill="${axisColors[i]}"/>`;
     }
   }
 
-  // ground indicator
   if (sys.g) {
     svg += `<circle cx="${cx}" cy="${cy}" r="4" fill="#e2e8f0" opacity="0.6"/>`;
   }
@@ -446,7 +673,14 @@ function renderGallery() {
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.id = sys.id;
+
+    const badge = getFaceBadge(sys);
+    const faceBadgeHTML = badge
+      ? `<div class="face-badge" style="color:${badge.color};background:${badge.bg}">${badge.text}</div>`
+      : '';
+
     card.innerHTML = `
+      ${faceBadgeHTML}
       ${createMiniRadar(sys)}
       <div class="card-name">${sys.name}</div>
       <div class="card-desc">${sys.desc}</div>
@@ -486,24 +720,20 @@ function updateOverlay() {
   const cx = 250, cy = 250, unit = 85;
   let content = '';
 
-  // background grid
   for (let d = 1; d <= 2; d++) {
     const pts = radarPoints({s1:d,s2:d,s3:d,s4:d}, cx, cy, unit);
     content += `<polygon points="${pointsStr(pts)}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
   }
 
-  // Flat outline (always visible, faint)
   const flatPts = radarPoints({s1:2,s2:2,s3:2,s4:2}, cx, cy, unit);
   content += `<polygon id="flat-outline" points="${pointsStr(flatPts)}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="6 4"/>`;
 
-  // axes
   const axisColors = ['#818cf8','#f87171','#4ade80','#facc15'];
   const axisEnds = radarPoints({s1:2,s2:2,s3:2,s4:2}, cx, cy, unit);
   for (let i = 0; i < 4; i++) {
     content += `<line x1="${cx}" y1="${cy}" x2="${axisEnds[i][0]}" y2="${axisEnds[i][1]}" stroke="${axisColors[i]}" stroke-width="1.5" opacity="0.3"/>`;
   }
 
-  // depth tick marks
   for (let d = 1; d <= 2; d++) {
     const tickPts = radarPoints({s1:d,s2:d,s3:d,s4:d}, cx, cy, unit);
     for (let i = 0; i < 4; i++) {
@@ -511,33 +741,28 @@ function updateOverlay() {
     }
   }
 
-  // axis labels
   const labelData = [
-    {x: cx, y: cy - unit*2 - 30, anchor: 'middle', name: 'Topology', sub1: 'Protection', sub2: 'Computation'},
-    {x: cx + unit*2 + 12, y: cy, anchor: 'start', name: 'Dynamics', sub1: 'Spontaneity', sub2: 'Transport'},
-    {x: cx, y: cy + unit*2 + 22, anchor: 'middle', name: 'Closure', sub1: 'Self-sustenance', sub2: 'Self-creation'},
-    {x: cx - unit*2 - 12, y: cy, anchor: 'end', name: 'Information', sub1: 'Universality', sub2: 'Coordination'},
+    {x: cx, y: cy - unit*2 - 30, anchor: 'middle', name: 'S1 Topology', sub1: 'M: Protection', sub2: 'm: Computation'},
+    {x: cx + unit*2 + 12, y: cy, anchor: 'start', name: 'S2 Dynamics', sub1: 'M: Spontaneity', sub2: 'm: Transport'},
+    {x: cx, y: cy + unit*2 + 22, anchor: 'middle', name: 'S3 Closure', sub1: 'M: Self-sustenance', sub2: 'm: Self-creation'},
+    {x: cx - unit*2 - 12, y: cy, anchor: 'end', name: 'S4 Computation', sub1: 'M: Universality', sub2: 'm: Coordination'},
   ];
 
   labelData.forEach((l, i) => {
     content += `<text x="${l.x}" y="${l.y}" text-anchor="${l.anchor}" class="axis-label axis-label-name" fill="${axisColors[i]}">${l.name}</text>`;
-    const dy1 = l.y === cy ? -10 : (l.y < cy ? -12 : 14);
-    const dy2 = l.y === cy ? 14 : (l.y < cy ? -24 : 26);
     if (l.anchor === 'start' || l.anchor === 'end') {
-      content += `<text x="${l.x}" y="${l.y + 14}" text-anchor="${l.anchor}" class="depth-label">depth 1: ${l.sub1}</text>`;
-      content += `<text x="${l.x}" y="${l.y + 26}" text-anchor="${l.anchor}" class="depth-label">depth 2: + ${l.sub2}</text>`;
+      content += `<text x="${l.x}" y="${l.y + 14}" text-anchor="${l.anchor}" class="depth-label">${l.sub1}</text>`;
+      content += `<text x="${l.x}" y="${l.y + 26}" text-anchor="${l.anchor}" class="depth-label">${l.sub2}</text>`;
     } else {
       const baseY = l.y < cy ? l.y - 12 : l.y + 12;
-      content += `<text x="${l.x}" y="${baseY}" text-anchor="${l.anchor}" class="depth-label">${l.sub1} → ${l.sub2}</text>`;
+      content += `<text x="${l.x}" y="${baseY}" text-anchor="${l.anchor}" class="depth-label">${l.sub1} &rarr; ${l.sub2}</text>`;
     }
   });
 
-  // ground ring at center
   content += `<circle id="ground-ring" cx="${cx}" cy="${cy}" r="8" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="3 2"/>`;
 
   const selectedSystems = selected.map(id => SYSTEMS.find(s => s.id === id)).filter(Boolean);
 
-  // individual system polygons
   selectedSystems.forEach((sys, i) => {
     const pts = radarPoints(sys, cx, cy, unit);
     const color = SEL_COLORS[i];
@@ -549,14 +774,12 @@ function updateOverlay() {
     }
   });
 
-  // combined polygon (if 2+ selected)
   if (selectedSystems.length >= 2) {
     const combined = getCombinedScores(selectedSystems);
     const pts = radarPoints(combined, cx, cy, unit);
     content += `<polygon points="${pointsStr(pts)}" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-dasharray="4 3" stroke-linejoin="round"/>`;
   }
 
-  // ground indicator
   if (selectedSystems.length > 0) {
     const hasGround = selectedSystems.some(s => s.g);
     if (hasGround) {
@@ -567,16 +790,12 @@ function updateOverlay() {
 
   svg.innerHTML = content;
 
-  // update property stack
   updatePropertyStack(selectedSystems);
-
-  // update selection info
+  updateEdgePanel(selectedSystems);
+  updateFacePanel(selectedSystems);
   updateSelectionInfo(selectedSystems);
-
-  // breadcrumb check
   checkBreadcrumb(selectedSystems);
 
-  // update title
   const title = document.getElementById('overlay-title');
   if (selectedSystems.length === 0) {
     title.textContent = 'Select a system';
@@ -590,20 +809,92 @@ function updateOverlay() {
 function updatePropertyStack(systems) {
   const container = document.getElementById('property-stack');
   const combined = systems.length > 0 ? getCombinedScores(systems) : null;
-  const layers = combined ? getLayers(combined) : new Array(8).fill(false);
+  const layers = combined ? getLayers(combined) : new Array(9).fill(false);
 
   let html = '';
   LAYERS.forEach((layer, i) => {
     const active = layers[i];
+    const typeClass = layer.type === 'M' ? 'prop-type-M' : (layer.type === 'm' ? 'prop-type-m' : 'prop-type-M');
+    const typeLabel = layer.type === 'G' ? 'G' : layer.type;
     html += `
       <div class="prop-row ${active ? 'active' : ''}" title="${layer.p1}">
+        <span class="prop-code">${layer.code}</span>
         <div class="prop-dot ${active ? 'active' : ''}" style="--dot-color: ${layer.color}"></div>
+        <span class="prop-type-tag ${typeClass}">${typeLabel}</span>
         <span class="prop-name">${layer.name}</span>
         <span class="prop-p1">${layer.p1}</span>
       </div>
     `;
   });
   container.innerHTML = html;
+}
+
+function updateEdgePanel(systems) {
+  const panel = document.getElementById('edge-panel');
+  if (systems.length === 0) { panel.innerHTML = ''; return; }
+
+  const combined = getCombinedScores(systems);
+  const active = getActiveSkeletons(combined);
+  const activeEdges = getActiveEdges(active);
+
+  if (activeEdges.length === 0 && EDGES.length > 0) {
+    panel.innerHTML = '';
+    return;
+  }
+
+  let html = '<div style="font-size:0.7rem;color:var(--dim);margin-bottom:0.35rem;font-weight:600">Pairwise interactions</div>';
+  EDGES.forEach(edge => {
+    const isActive = activeEdges.includes(edge);
+    const dots = edge.s.map(s => {
+      const skel = SKELETONS.find(sk => sk.id === s);
+      return `<div class="edge-dot" style="background:${skel.color}"></div>`;
+    }).join('');
+    const statusMark = edge.status === 'established' ? '' : ' *';
+    html += `
+      <div class="edge-row ${isActive ? 'active' : ''}">
+        <div class="edge-dots">${dots}</div>
+        <span class="edge-name">${edge.short}</span>
+        <span style="font-size:0.7rem;color:var(--muted)">${edge.name}${statusMark}</span>
+      </div>
+    `;
+  });
+
+  panel.innerHTML = html;
+}
+
+function updateFacePanel(systems) {
+  const panel = document.getElementById('face-panel');
+  if (systems.length === 0) { panel.innerHTML = ''; return; }
+
+  const combined = getCombinedScores(systems);
+  const active = getActiveSkeletons(combined);
+  const face = getActiveFace(active);
+
+  if (!face) {
+    if (active.length < 3) {
+      panel.innerHTML = `<div style="font-size:0.7rem;color:var(--dim)">${4 - active.length} skeleton${4 - active.length > 1 ? 's' : ''} absent &mdash; not on any face yet</div>`;
+    } else {
+      panel.innerHTML = '';
+    }
+    return;
+  }
+
+  if (face.absent === null) {
+    panel.innerHTML = `
+      <div class="face-label" style="color:var(--flat-glow)">&#x2666; Interior &mdash; Complete</div>
+      <div class="face-detail">${face.desc}</div>
+      <div class="face-example">${face.example}</div>
+    `;
+    return;
+  }
+
+  const missingSkel = SKELETONS.find(s => s.id === face.absent);
+  panel.innerHTML = `
+    <div class="face-label">Face: <span style="color:${missingSkel.color}">${face.name}</span> <span style="font-size:0.7rem;color:var(--dim)">(no ${missingSkel.name})</span></div>
+    <div class="face-detail">${face.desc}</div>
+    <div class="face-deficiency" style="color:${missingSkel.color}">Missing: ${missingSkel.M} + ${missingSkel.m}</div>
+    <div class="face-example">${face.example}</div>
+  `;
 }
 
 function updateSelectionInfo(systems) {
@@ -615,8 +906,7 @@ function updateSelectionInfo(systems) {
 
   const combined = getCombinedScores(systems);
   const layers = getLayers(combined);
-  const presentCount = layers.filter(Boolean).length;
-  const missing = LAYERS.filter((_, i) => !layers[i]).map(l => l.name);
+  const missing = LAYERS.filter((_, i) => !layers[i]).map(l => l.code);
 
   let html = '';
   systems.forEach((s, i) => {
@@ -644,7 +934,6 @@ function checkBreadcrumb(systems) {
 
   if (allPresent) {
     container.classList.add('complete');
-    // subtle: change Flat outline from dashed to solid glow
     const flatOutline = document.getElementById('flat-outline');
     if (flatOutline) {
       flatOutline.setAttribute('stroke', 'rgba(255,255,255,0.5)');
@@ -662,7 +951,6 @@ function checkBreadcrumb(systems) {
   }
 }
 
-// init
 renderGallery();
 updateOverlay();
 </script>
