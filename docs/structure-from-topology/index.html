@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A systems-thinking tutorial showing how coupling multiple graph topologies with type-constrained operators reveals cross-structure features invisible to single-topology analysis — demonstrated on magnetospheric satellite data.">
 <title>Structure from Topology: A Systems-Thinking Worked Example</title>
 <style>
 :root {
@@ -209,6 +210,33 @@ tr:hover { background: rgba(59, 130, 246, 0.05); }
 
 ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
 li { margin-bottom: 0.3rem; }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .controls button { transition: none; }
+}
 </style>
 </head>
 <body>
@@ -221,7 +249,7 @@ li { margin-bottom: 0.3rem; }
   <div class="definition-title" style="color: var(--amber);">Abstract</div>
   <p>A colleague asked me to share my experience using systems thinking to solve problems. Here is one from magnetospheric physics&mdash;not because the domain matters, but because the structural pattern transfers.</p>
   <p>I was analyzing satellite data that carried three independent structures: spatial, spectral, and temporal. Standard practice handles each one separately, projecting away the others. I kept finding features in the raw data that disappeared under single-structure analysis. So I built a minimal relational framework to couple the structures: two field types, three operators whose composition is constrained by their types and mathematical content, and a directed coupling cycle between topologies.</p>
-  <p style="margin-bottom:0;">The framework resolved cross-topology features&mdash;field-aligned currents, injection boundaries&mdash;that single-topology analysis could not cleanly isolate. No optimization target, loss function, or model selection was involved. This tutorial walks through the construction, the constraints that determine it, and what it revealed.</p>
+  <p style="margin-bottom:0;">The framework resolved cross-topology features&mdash;<span class="tip" tabindex="0">field-aligned currents<span class="tt">Electrical currents flowing parallel to Earth's magnetic field lines, connecting the magnetosphere to the ionosphere — analogous to directed data flows along fixed network paths.</span></span>, <span class="tip" tabindex="0">injection boundaries<span class="tt">Sharp transitions where energetic plasma enters the inner magnetosphere from the tail region — like a sudden load spike propagating from one service tier to another.</span></span>&mdash;that single-topology analysis could not cleanly isolate. No optimization target, loss function, or model selection was involved. This tutorial walks through the construction, the constraints that determine it, and what it revealed.</p>
 </div>
 
 <!-- ======================================================= -->
@@ -252,7 +280,7 @@ What I needed was not a better projection. It was a way to compose the topologie
   <p>An <strong>EdgeField</strong> assigns one scalar value to each directed pair of adjacent nodes. It describes the relationship between locations. An EdgeField is inherently directional: the value on edge (<span class="math">i</span>, <span class="math">j</span>) need not equal the value on edge (<span class="math">j</span>, <span class="math">i</span>).</p>
 </div>
 
-<p>These are the only two representation types. Every quantity in the framework is either a NodeField (one value per node) or an EdgeField (one value per directed adjacency pair). Readers familiar with algebraic topology will recognize these as 0-cochains and 1-cochains on the graph.</p>
+<p>These are the only two representation types. Every quantity in the framework is either a NodeField (one value per node) or an EdgeField (one value per directed adjacency pair). Readers familiar with algebraic topology will recognize these as <span class="tip" tabindex="0">0-cochains and 1-cochains<span class="tt">Functions assigning values to nodes (0-cochains) or edges (1-cochains) of a graph — the formal names for NodeField and EdgeField in algebraic topology.</span></span> on the graph.</p>
 
 <div class="svg-container">
 <svg viewBox="0 0 750 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NodeField vs EdgeField on a 4-node graph">
@@ -336,7 +364,7 @@ What I needed was not a better projection. It was a way to compose the topologie
 <!-- ======================================================= -->
 <h2>3. The Bridge: A as Graph Coboundary</h2>
 
-<p>How do you move from a NodeField to an EdgeField? There is exactly one natural transition, and its uniqueness follows from a single requirement: <strong>translational invariance</strong>.</p>
+<p>How do you move from a NodeField to an EdgeField? There is exactly one natural transition, and its uniqueness follows from a single requirement: <strong><span class="tip" tabindex="0">translational invariance<span class="tt">The property that shifting all values by the same constant doesn't change the output — like how relative differences between metrics matter, not their absolute baseline.</span></span></strong>.</p>
 
 <div class="definition">
   <div class="definition-title">Definition (Operator A : NodeField &rarr; EdgeField)</div>
@@ -349,9 +377,9 @@ What I needed was not a better projection. It was a way to compose the topologie
 
 <p>For a single edge (<span class="math">i</span>, <span class="math">j</span>), the most general linear function of two node values is <span class="math">F<sub>ij</sub></span> = <span class="math">&alpha; x<sub>i</sub></span> + <span class="math">&beta; x<sub>j</sub></span>. Translational invariance requires <span class="math">&alpha;</span>(<span class="math">x<sub>i</sub></span> + <span class="math">c</span>) + <span class="math">&beta;</span>(<span class="math">x<sub>j</sub></span> + <span class="math">c</span>) = <span class="math">&alpha; x<sub>i</sub></span> + <span class="math">&beta; x<sub>j</sub></span> for all <span class="math">c</span>, which forces <span class="math">&alpha;</span> + <span class="math">&beta;</span> = 0. Up to a constant scale, the only solution is <span class="math">x<sub>j</sub></span> &minus; <span class="math">x<sub>i</sub></span>.</p>
 
-<p>This is the <strong>graph coboundary operator</strong> <span class="math">d</span><sup>0</sup> from discrete exterior calculus&mdash;the same map from 0-cochains to 1-cochains that appears in simplicial cohomology. I arrived at it from a different starting point: the pre-A admissibility constraint below. The derivation itself recovers a classical construction; what I have not seen elsewhere is the observation about which preprocessing operations it rules out.</p>
+<p>This is the <strong><span class="tip" tabindex="0">graph coboundary operator<span class="tt">The operator that maps node values to edge differences by subtracting source from target — computing the discrete analog of a gradient across a graph.</span></span></strong> <span class="math">d</span><sup>0</sup> from <span class="tip" tabindex="0">discrete exterior calculus<span class="tt">A mathematical framework extending calculus concepts (gradients, curls, divergences) to discrete structures like graphs and meshes.</span></span>&mdash;the same map from 0-cochains to 1-cochains that appears in simplicial cohomology. I arrived at it from a different starting point: the pre-A admissibility constraint below. The derivation itself recovers a classical construction; what I have not seen elsewhere is the observation about which preprocessing operations it rules out.</p>
 
-<div class="insight">A(x)<sub>ij</sub> = &minus;A(x)<sub>ji</sub>. The antisymmetry of the edge field is inherited from the commutativity of subtraction. This symmetry propagates through subsequent operators and constrains what structures can emerge at each stage.</div>
+<div class="insight">A(x)<sub>ij</sub> = &minus;A(x)<sub>ji</sub>. The <span class="tip" tabindex="0">antisymmetry<span class="tt">The property where reversing direction negates the value: edge(A→B) = −edge(B→A) — like a signed diff where the direction of comparison determines the sign.</span></span> of the edge field is inherited from the commutativity of subtraction. This symmetry propagates through subsequent operators and constrains what structures can emerge at each stage.</div>
 
 <h3>Pre-A Admissibility</h3>
 
@@ -366,7 +394,7 @@ What I needed was not a better projection. It was a way to compose the topologie
 
 <p>This is not a rule I imposed. It is a consequence of what A does. If you smooth the NodeField before applying A, the edge field reflects the smoothing kernel, not the data. The constraint is a theorem about the operator, not a convention about the workflow. This is the part I think is new: not A itself&mdash;which is d<sup>0</sup>&mdash;but the explicit characterization of what standard preprocessing steps do to the relational structure A extracts.</p>
 
-<p>One consequence of identifying A with d<sup>0</sup> deserves attention before we move on. The image of the coboundary map is the space of <strong>exact 1-cochains</strong>&mdash;edge fields that are pure gradients, with zero circulation around every cycle in the graph. Everything downstream of A starts in this gradient sector. The question for the next two operators is: which one stays there, and which one leaves?</p>
+<p>One consequence of identifying A with d<sup>0</sup> deserves attention before we move on. The image of the coboundary map is the space of <strong>exact 1-cochains</strong>&mdash;edge fields that are pure gradients, with zero circulation around every cycle in the graph. Everything downstream of A starts in this <span class="tip" tabindex="0">gradient sector<span class="tt">The subspace of edge fields that can be written as differences of node values — fields with no rotational component, like a DAG with no cycles.</span></span>. The question for the next two operators is: which one stays there, and which one leaves?</p>
 
 <!-- ======================================================= -->
 <h2>4. The Composition Chain</h2>
@@ -382,14 +410,14 @@ What I needed was not a better projection. It was a way to compose the topologie
 <div class="definition">
   <div class="definition-title">Definition (Operator B : EdgeField &rarr; EdgeField)</div>
   <p><strong>B</strong> accumulates local relational context. For each directed edge (<span class="math">i</span>, <span class="math">j</span>), B adds to the edge value a contribution from the edges sharing its endpoints along the same axis, so that each edge comes to encode not just its own gradient but the gradient pattern of its neighborhood. Contributions are combined with the sign convention inherited from A, so that the accumulation respects edge direction: the value built up on (<span class="math">i</span>, <span class="math">j</span>) is the negation of the value built up on (<span class="math">j</span>, <span class="math">i</span>).</p>
-  <p><strong>B preserves antisymmetry.</strong> If the input edge field is antisymmetric&mdash;<span class="math">e</span>(<span class="math">i</span>,<span class="math">j</span>) = &minus;<span class="math">e</span>(<span class="math">j</span>,<span class="math">i</span>), as everything downstream of A is&mdash;then B&rsquo;s output is antisymmetric as well: <span class="math">B(e)</span>(<span class="math">i</span>,<span class="math">j</span>) = &minus;<span class="math">B(e)</span>(<span class="math">j</span>,<span class="math">i</span>). B does not create circulation or couple distinct axes; it amplifies and locally smooths the relational structure already present, leaving the field within the image of the coboundary map. In discrete-calculus terms, <strong>B keeps the field curl-free</strong>: it is still, up to the accumulation, a gradient.</p>
+  <p><strong>B preserves antisymmetry.</strong> If the input edge field is antisymmetric&mdash;<span class="math">e</span>(<span class="math">i</span>,<span class="math">j</span>) = &minus;<span class="math">e</span>(<span class="math">j</span>,<span class="math">i</span>), as everything downstream of A is&mdash;then B&rsquo;s output is antisymmetric as well: <span class="math">B(e)</span>(<span class="math">i</span>,<span class="math">j</span>) = &minus;<span class="math">B(e)</span>(<span class="math">j</span>,<span class="math">i</span>). B does not create circulation or couple distinct axes; it amplifies and locally smooths the relational structure already present, leaving the field within the image of the coboundary map. In discrete-calculus terms, <strong>B keeps the field <span class="tip" tabindex="0">curl-free<span class="tt">Having zero net circulation around every closed loop — a pure gradient field with no rotational structure, like a dependency graph with no cycles.</span></span></strong>: it is still, up to the accumulation, a gradient.</p>
 </div>
 
 <h3>R: antisymmetric circulation</h3>
 
 <div class="definition">
   <div class="definition-title">Definition (Operator R : EdgeField &times; &Ropf; &rarr; EdgeField)</div>
-  <p><strong>R</strong> introduces <strong>circulation</strong>&mdash;the component that local accumulation cannot produce. B builds up gradient structure but leaves the field curl-free: it remains, in discrete-calculus terms, the coboundary of some node field. A pure gradient has no circulation. R adds exactly the part B cannot: a rotational component that takes the field <em>out</em> of the image of the coboundary map. The parameter &rho; &isin; &Ropf; controls the strength of this added circulation and is bounded.</p>
+  <p><strong>R</strong> introduces <strong><span class="tip" tabindex="0">circulation<span class="tt">Net flow around a closed loop in the graph — nonzero circulation means rotational structure that pure node-to-node gradients cannot produce.</span></span></strong>&mdash;the component that local accumulation cannot produce. B builds up gradient structure but leaves the field curl-free: it remains, in discrete-calculus terms, the coboundary of some node field. A pure gradient has no circulation. R adds exactly the part B cannot: a rotational component that takes the field <em>out</em> of the image of the coboundary map. The parameter &rho; &isin; &Ropf; controls the strength of this added circulation and is bounded.</p>
   <p><strong>What R breaks.</strong> Both B and R preserve edge antisymmetry&mdash;<span class="math">R(e)</span>(<span class="math">i</span>,<span class="math">j</span>) = &minus;<span class="math">R(e)</span>(<span class="math">j</span>,<span class="math">i</span>), same as B. So antisymmetry is <em>not</em> the symmetry that distinguishes them. The symmetry R breaks is the <strong>curl-free property</strong>: B&rsquo;s output is a gradient (zero circulation around every cycle); R&rsquo;s output is not. This is the precise sense in which R &ldquo;breaks symmetry and creates structure&rdquo;&mdash;it produces the rotational, non-gradient component of the edge field. In two or more dimensions, this is where perpendicular-axis coupling lives&mdash;R adds cross-terms that move the field out of im(<span class="math">d</span><sup>0</sup>), with &rho; controlling the mixing strength. In one dimension, R introduces forward-backward directional bias that sustains dynamics under iteration, though the field remains exact on the single cycle (the loop sum is zero for any &rho;). Accumulation alone can never produce the non-gradient component, because accumulation of gradients stays a gradient.</p>
 </div>
 
@@ -494,7 +522,7 @@ What I needed was not a better projection. It was a way to compose the topologie
 
 <p>Each topology has its own NodeField and EdgeField. A and B operate <em>within</em> each topology independently: spatial A extracts spatial gradients; spectral A extracts spectral gradients. Nothing couples them yet.</p>
 
-<p>The coupling comes from R. In the multi-topology extension, <strong>R passes edge-field structure from one topology to the next in a directed cycle</strong>:</p>
+<p>The coupling comes from R. In the multi-topology extension, <strong>R passes edge-field structure from one topology to the next in a <span class="tip" tabindex="0">directed cycle<span class="tt">A closed loop where edges follow a fixed order — here S→τ→C→S, like a unidirectional message-passing ring between three services.</span></span></strong>:</p>
 
 <div class="svg-container">
 <svg viewBox="0 0 650 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Multi-topology coupling cycle S to tau to C to S">
@@ -659,7 +687,7 @@ What I needed was not a better projection. It was a way to compose the topologie
 
 <h3>What single-topology analysis sees</h3>
 
-<p><strong>Spatial analysis alone</strong> (kriging, interpolation, variograms): treats each energy channel independently. At any given energy, the spatial map shows gradients and trends. These are real but incomplete. A sharp spatial gradient at 10 keV might be part of an injection boundary or it might be a spatial artifact. Without spectral context, you cannot distinguish them.</p>
+<p><strong>Spatial analysis alone</strong> (<span class="tip" tabindex="0">kriging<span class="tt">A spatial interpolation technique from geostatistics that estimates values at unmeasured locations using statistical models of spatial correlation.</span></span>, interpolation, <span class="tip" tabindex="0">variograms<span class="tt">Plots showing how measurement similarity decreases with distance — a spatial statistics tool for characterizing correlation structure in geographically distributed data.</span></span>): treats each energy channel independently. At any given energy, the spatial map shows gradients and trends. These are real but incomplete. A sharp spatial gradient at 10 keV might be part of an injection boundary or it might be a spatial artifact. Without spectral context, you cannot distinguish them.</p>
 
 <p><strong>Spectral analysis alone</strong> (energy spectra at fixed locations): shows the energy distribution at each point. A hardening spectrum (shift toward higher energies) at one location might indicate freshly injected plasma or an artifact of the satellite's orbit. Without spatial context, you cannot tell.</p>
 

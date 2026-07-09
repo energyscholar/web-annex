@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive matrix mapping ten physical systems against five domain clusters — topology, dynamics, origin-of-life, computation, materials. Reveals bridge coverage, gap maps, mechanism taxonomy, and research targets. Click any cell to explore inter-domain connections.">
 <title>Physical Systems &times; Domain Bridge Chart</title>
 <style>
 :root {
@@ -682,6 +683,33 @@ footer a:hover {
   body { font-size: 16px; }
   .container { padding: 1rem 1rem 3rem; }
 }
+
+/* Physics tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  svg animate, svg animateTransform { animation-play-state: paused; }
+  * { transition-duration: 0s !important; }
+}
 </style>
 </head>
 <body>
@@ -701,7 +729,7 @@ footer a:hover {
 <div class="container">
 
 <h1>Physical Systems &times; Domain Bridge Chart</h1>
-<p class="subtitle">Which physical systems bridge which domains &mdash; and where are the gaps?</p>
+<p class="subtitle">Which physical systems <span class="tip" tabindex="0">bridge<span class="tt">A physical system where the same mathematical structure appears in two different scientific domains &mdash; not by analogy, but by mathematical identity. Same universality class, same scaling exponents, same correlation functions.</span></span> which domains &mdash; and where are the gaps?</p>
 
 <nav class="toc card">
   <ol>
@@ -720,7 +748,7 @@ footer a:hover {
 
 <h2 id="matrix"><span class="section-number">1.</span> Physical Systems &times; Domain Matrix</h2>
 
-<p>Ten physical systems mapped against five domain clusters. Each cell records whether the system exhibits behavior in that domain: confirmed (<span style="color:var(--heading)">&check;</span>), theoretical/proposed (<span style="color:var(--line)">?</span>), or no known connection. Click any cell, row header, or column header to highlight connections.</p>
+<p>Ten physical systems mapped against five <span class="tip" tabindex="0">domain clusters<span class="tt">Groups of scientific disciplines that share deep mathematical structure &mdash; topology, dynamics/solitons, origin-of-life/autocatalysis, computation, and materials science. Systems in the same cluster obey the same equations, not just similar ones.</span></span>. Each cell records whether the system exhibits behavior in that domain: confirmed (<span style="color:var(--heading)">&check;</span>), theoretical/proposed (<span style="color:var(--line)">?</span>), or no known connection. Click any cell, row header, or column header to highlight connections.</p>
 
 <p class="matrix-instructions">Click a cell to highlight its row and column. Click a row header to highlight that system's bridges. Click a column header to highlight all systems in that cluster.</p>
 
@@ -865,7 +893,7 @@ footer a:hover {
       </div>
       <div class="endpoint-block" style="border-color:var(--green);">
         <div class="ep-label">B-endpoint: Gene regulation at <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2</div>
-        <div class="ep-detail"><span class="ep-key">Complex system:</span> Boolean network at the edge of chaos. Gene regulation with average connectivity <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2 sits at the directed percolation universality class critical point. <span class="citation">(Kauffman 1993)</span></div>
+        <div class="ep-detail"><span class="ep-key">Complex system:</span> Boolean network at the edge of chaos. Gene regulation with average connectivity <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2 sits at the <span class="tip" tabindex="0">directed percolation universality class<span class="tt">A family of phase transitions where activity spreads through a network with a preferred direction. All systems in this class share identical critical exponents regardless of microscopic details &mdash; gene networks, forest fires, and epidemic models all collapse onto the same mathematics.</span></span> critical point. <span class="citation">(Kauffman 1993)</span></div>
         <div class="ep-detail"><span class="ep-key">Universality class:</span> Directed percolation</div>
         <div class="ep-detail"><span class="ep-key">Evidence:</span> <span class="status-tag status-confirmed">Confirmed</span></div>
       </div>
@@ -1140,14 +1168,14 @@ footer a:hover {
 <div class="mechanism-type" style="border-left: 3px solid var(--blue);">
   <h4 style="color:var(--blue);">Type 1: Rule-space structural identity</h4>
   <div class="mech-bridges">Bridges: CB, CD-a, BD, AC (if confirmed) &mdash; ~4 bridges</div>
-  <p>Both endpoints are complex systems whose rule spaces share the same mathematical structure. The bridge is not an analogy &mdash; it is a provable isomorphism between rule spaces. At the critical point, the systems are literally the same mathematics.</p>
+  <p>Both endpoints are complex systems whose rule spaces share the same mathematical structure. The bridge is not an analogy &mdash; it is a provable <span class="tip" tabindex="0">isomorphism<span class="tt">A one-to-one mapping between two mathematical structures that preserves all operations and relationships. If two systems are isomorphic, anything you can prove about one is automatically true of the other &mdash; they are the same system wearing different labels.</span></span> between rule spaces. At the critical point, the systems are literally the same mathematics.</p>
   <p style="margin-bottom:0;">Example: a Boolean network at <span style="font-family:'Times New Roman',serif;font-style:italic;">K</span>&thinsp;&asymp;&thinsp;2 <em>is</em> a cellular automaton in the directed percolation universality class. This is not a metaphor; the dynamical systems are mathematically identical at the <abbr title="Renormalization Group &mdash; mathematical framework for coarse-graining">RG</abbr> fixed point.</p>
 </div>
 
 <div class="mechanism-type" style="border-left: 3px solid var(--green);">
   <h4 style="color:var(--green);">Type 2: Topological protection</h4>
   <div class="mech-bridges">Bridges: AB &mdash; ~1 bridge</div>
-  <p>Topology provides the invariant that stabilizes structures from another domain. The bridge mechanism is protection/stabilization rather than identity. The topological charge (winding number, Chern number) prevents the solitonic structure from dispersing or unwinding.</p>
+  <p>Topology provides the invariant that stabilizes structures from another domain. The bridge mechanism is protection/stabilization rather than identity. The <span class="tip" tabindex="0">topological charge<span class="tt">A quantity (like a winding number or Chern number) that counts how many times a field configuration wraps around a mathematical space. It can only change in integer steps, so it acts like a lock &mdash; the system cannot smoothly deform away from its current state.</span></span> (winding number, Chern number) prevents the solitonic structure from dispersing or unwinding.</p>
   <p style="margin-bottom:0;">Example: skyrmions are stable because their homotopy class <span style="font-family:'Times New Roman',serif;font-style:italic;">&pi;</span><sub>2</sub>(<span style="font-family:'Times New Roman',serif;font-style:italic;">S</span><sup>2</sup>) = &#8484; prevents continuous deformation to the vacuum state.</p>
 </div>
 
@@ -1155,7 +1183,7 @@ footer a:hover {
   <h4 style="color:var(--golden);">Type 3: Co-emergence at criticality</h4>
   <div class="mech-bridges">Bridges: BC &mdash; ~1 bridge</div>
   <p>Both phenomena emerge from the same critical point in the same physical system. They co-occur because criticality generates both simultaneously. The bridge is the shared bifurcation.</p>
-  <p style="margin-bottom:0;">Example: in the BZ reaction, the Hopf bifurcation simultaneously produces both the solitonic structures (spiral waves) and the autocatalytic dynamics. They are two aspects of the same phase transition.</p>
+  <p style="margin-bottom:0;">Example: in the BZ reaction, the <span class="tip" tabindex="0">Hopf bifurcation<span class="tt">A critical point where a stable steady state suddenly begins to oscillate. Below the threshold: the system sits still. Above: it rings like a bell. The oscillation frequency and amplitude are set by the mathematics, not the specific system &mdash; chemical reactions, neurons, and lasers all exhibit the same Hopf transition.</span></span> simultaneously produces both the solitonic structures (spiral waves) and the autocatalytic dynamics. They are two aspects of the same phase transition.</p>
 </div>
 
 <div class="mechanism-type" style="border-left: 3px solid var(--purple);">

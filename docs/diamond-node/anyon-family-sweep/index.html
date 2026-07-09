@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Systematic sweep of non-abelian anyon fusion algebras — SU(2)k, SU(3)k, SO(3)k, D(S₃), Haagerup — testing which support self-catalysis, RAF closure, and computational universality. Key finding: phase transition at k=3 where self-catalysis and universality emerge simultaneously.">
 <title>Anyon Family Sweep: Complex System Suitability</title>
 <style>
 :root {
@@ -217,6 +218,40 @@ abbr {
   font-style: italic;
   color: var(--line);
 }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>
@@ -225,7 +260,7 @@ abbr {
 <a class="back-link" href="../">&larr; Domain Convergence Research</a>
 
 <h1>Non-Abelian Anyon Family Sweep</h1>
-<p class="subtitle">Which anyon fusion algebras support complex systems via self-catalysis, <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure, and computational universality?</p>
+<p class="subtitle">Which anyon <span class="tip" tabindex="0">fusion algebras<span class="tt">Rules governing what happens when two anyons combine — a multiplication table for particle types. The algebra determines which output particles are possible from each input pair.</span></span> support complex systems via self-catalysis, <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure, and computational universality?</p>
 
 <h2>Summary</h2>
 
@@ -343,7 +378,7 @@ abbr {
 <!-- SU(2)_k Main Sequence -->
 <h3>1. SU(2)<sub>k</sub> Chern-Simons &mdash; The Main Sequence</h3>
 
-<p>The most important family. Anyons labeled by spin <span class="formula">j = 0, 1/2, 1, ..., k/2</span>. Fusion follows truncated Clebsch-Gordan rules: <span class="formula">j<sub>1</sub> &times; j<sub>2</sub> = |j<sub>1</sub>&minus;j<sub>2</sub>| + ... + min(j<sub>1</sub>+j<sub>2</sub>, k&minus;j<sub>1</sub>&minus;j<sub>2</sub>)</span>. Quantum dimension: <span class="formula">d<sub>j</sub> = sin(&pi;(2j+1)/(k+2)) / sin(&pi;/(k+2))</span>.</p>
+<p>The most important family. Anyons labeled by spin <span class="formula">j = 0, 1/2, 1, ..., k/2</span>. Fusion follows truncated <span class="tip" tabindex="0">Clebsch-Gordan rules<span class="tt">Standard rules for combining angular momenta in quantum mechanics. In anyon physics, the truncated version (cut off at level k) determines which particle types can result from fusing two anyons.</span></span>: <span class="formula">j<sub>1</sub> &times; j<sub>2</sub> = |j<sub>1</sub>&minus;j<sub>2</sub>| + ... + min(j<sub>1</sub>+j<sub>2</sub>, k&minus;j<sub>1</sub>&minus;j<sub>2</sub>)</span>. <span class="tip" tabindex="0">Quantum dimension<span class="tt">A number measuring how fast the computational state space grows when adding particles. Not spatial dimensions. Fibonacci anyons have quantum dimension φ ≈ 1.618 — the golden ratio.</span></span>: <span class="formula">d<sub>j</sub> = sin(&pi;(2j+1)/(k+2)) / sin(&pi;/(k+2))</span>.</p>
 
 <!-- k=2 Ising -->
 <div class="family-section">
@@ -358,7 +393,7 @@ abbr {
 
 <p><strong><abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure:</strong> Partial. &sigma; generates {1,&psi;} directly but needs &psi; as co-reactant to regenerate itself. The full set {1,&sigma;,&psi;} is closed under fusion. The <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> condition is technically met (&sigma; catalyzes &psi; production, &psi; catalyzes &sigma; regeneration), but the catalytic network is a simple 2-cycle, not a complex web.</p>
 
-<p><strong>Universality:</strong> No. Ising braiding generates only the Clifford group &mdash; not dense in SU(N). Requires magic state distillation for universality.</p>
+<p><strong>Universality:</strong> No. Ising braiding generates only the <span class="tip" tabindex="0">Clifford group<span class="tt">A finite set of quantum gates that can efficiently simulate stabilizer circuits but cannot perform universal quantum computation alone. The "safe" subset — powerful but limited.</span></span> &mdash; not dense in SU(N). Requires <span class="tip" tabindex="0">magic state distillation<span class="tt">A technique to boost limited gates to universality by preparing special quantum states. Expensive — requires many noisy copies to produce one clean state. Unnecessary when braiding alone is universal.</span></span> for universality.</p>
 
 <p><strong>Dimension growth:</strong> <span class="formula">d<sub>&sigma;</sub> = &radic;2 &asymp; 1.414</span>. Slowest growth of any non-abelian family.</p>
 
@@ -377,7 +412,7 @@ abbr {
 
 <p><strong><abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure:</strong> Yes. All three Kauffman criteria satisfied: (1) Generation &mdash; &tau; generates {1, &tau;} from a single fusion. (2) Transformation &mdash; fusion transforms particle types. (3) Closure &mdash; all outputs &isin; {1, &tau;}.</p>
 
-<p><strong>Universality:</strong> Yes. Fibonacci anyon braiding is dense in SU(N) &mdash; computationally universal.</p>
+<p><strong>Universality:</strong> Yes. Fibonacci anyon braiding is <span class="tip" tabindex="0">dense in SU(N)<span class="tt">The braiding operations can approximate ANY quantum gate to arbitrary precision. Like how rational numbers are dense in the reals — there's always one close enough to any target value.</span></span> &mdash; computationally universal.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup></p>
 
 <p><strong>Dimension growth:</strong> <span class="formula">d<sub>&tau;</sub> = &phi; = (1+&radic;5)/2 &asymp; 1.618</span>. The golden ratio. Fusion space dimensions follow the Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, ...</p>
 
@@ -485,10 +520,10 @@ abbr {
 </div>
 
 <!-- D(S_3) -->
-<h3>4. D(S<sub>3</sub>) &mdash; Quantum Double of S<sub>3</sub></h3>
+<h3>4. D(S<sub>3</sub>) &mdash; <span class="tip" tabindex="0">Quantum Double<span class="tt">A mathematical construction that builds an anyon theory from any finite group. The resulting anyons come from the group's conjugacy classes and representations. Produces non-abelian anyons but with limited (non-universal) braiding.</span></span> of S<sub>3</sub></h3>
 
 <div class="family-section">
-<p>The simplest non-abelian finite group quantum double. 8 anyon types corresponding to irreps of the Drinfeld double of the symmetric group S<sub>3</sub>. Non-abelian anyons include a 2-dimensional charge sector (e<sub>C</sub>, associated with the conjugacy class of transpositions).</p>
+<p>The simplest non-abelian finite group quantum double. 8 anyon types corresponding to irreps of the <span class="tip" tabindex="0">Drinfeld double<span class="tt">The algebraic structure underlying quantum doubles. Named after mathematician Vladimir Drinfeld. Combines a group with its dual to create a quasi-triangular Hopf algebra — the mathematical home of anyon fusion and braiding.</span></span> of the symmetric group S<sub>3</sub>. Non-abelian anyons include a 2-dimensional charge sector (e<sub>C</sub>, associated with the conjugacy class of transpositions).</p>
 
 <p>Fusion rules for e<sub>C</sub>:</p>
 <div class="fusion-rule">e<sub>C</sub> &times; e<sub>C</sub> = 1 + e<sub>C</sub> + e<sub>C</sub>&prime;</div>
@@ -508,9 +543,9 @@ abbr {
 <h3>5. Haagerup Fusion Category</h3>
 
 <div class="family-section">
-<p>The Haagerup category is exotic &mdash; it does not arise from any Chern-Simons theory or quantum group construction. Discovered as a subfactor, it has 6 simple objects.</p>
+<p>The Haagerup category is exotic &mdash; it does not arise from any Chern-Simons theory or quantum group construction. Discovered as a <span class="tip" tabindex="0">subfactor<span class="tt">A mathematical structure from operator algebra — a way of embedding one algebra inside another. Some fusion categories, like Haagerup, were discovered as subfactors rather than from any physical gauge theory.</span></span>, it has 6 simple objects.</p>
 
-<p>The generating object &alpha; has quantum dimension <span class="formula">d<sub>&alpha;</sub> = (5+&radic;13)/2 &asymp; 4.303</span> &mdash; the largest quantum dimension of any known "small" <abbr title="Modular Tensor Category">MTC</abbr>.</p>
+<p>The generating object &alpha; has quantum dimension <span class="formula">d<sub>&alpha;</sub> = (5+&radic;13)/2 &asymp; 4.303</span> &mdash; the largest quantum dimension of any known "small" <span class="tip" tabindex="0">MTC<span class="tt">Modular Tensor Category — the mathematical framework for classifying anyon theories. A complete MTC specifies all particle types, fusion rules, braiding matrices, and topological invariants of a 2+1D topological phase.</span></span>.</p>
 
 <p>Fusion rules (partial; full rules involve 6 objects):</p>
 <div class="fusion-rule">&alpha; &times; &alpha; = 1 + &alpha; + &alpha;* + &beta; + &beta;* + &gamma; &nbsp;(produces essentially everything)</div>
@@ -537,11 +572,11 @@ Every non-abelian anyon family with k&ge;3 (or equivalent complexity threshold) 
 </li>
 <li>
 <strong>There is a phase transition at the onset of self-catalysis.</strong>
-In SU(2)<sub>k</sub>: k=2 has no self-catalysis and no universality; k=3 has both. The transition is sharp. The same algebraic structure (non-trivial self-coupling <span class="formula">N<sup>j</sup><sub>jj</sub> &ge; 1</span>) enables both self-catalysis and computational universality simultaneously. <em>This is the key finding:</em> the two properties share a common algebraic origin.
+In SU(2)<sub>k</sub>: k=2 has no self-catalysis and no universality; k=3 has both. The transition is sharp. The same algebraic structure (non-trivial self-coupling <span class="formula">N<sup>j</sup><sub>jj</sub> &ge; 1</span>) enables both self-catalysis and computational universality simultaneously.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> <em>This is the key finding:</em> the two properties share a common algebraic origin.
 </li>
 <li>
 <strong>The Fibonacci model is the critical case, not the typical case.</strong>
-Fibonacci sits exactly at the phase transition: minimal self-catalysis (one outcome: &tau;&times;&tau;&rarr;&tau; plus vacuum), minimal universality (barely dense in SU(2)), golden ratio dimension growth (the "slowest irrational"). Analogous to K=2 in Boolean networks &mdash; the critical point between order and chaos. <em>The Fibonacci model is the edge of chaos for anyon fusion algebras.</em>
+Fibonacci sits exactly at the phase transition: minimal self-catalysis (one outcome: &tau;&times;&tau;&rarr;&tau; plus vacuum), minimal universality (barely dense in SU(2)), golden ratio dimension growth (the "slowest irrational"). Analogous to K=2 in Boolean networks &mdash; the critical point between order and chaos. <em>The Fibonacci model is the <span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between ordered and chaotic behavior where computation is maximized. Systems here are complex enough to process information but ordered enough to maintain structure. Fibonacci anyons sit at this boundary for fusion algebras.</span></span> for anyon fusion algebras.</em>
 </li>
 <li>
 <strong>Universality does not perfectly correlate with <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure.</strong>
@@ -575,11 +610,19 @@ The sweet spot is k=3 through k&asymp;5&ndash;6. Below k=3, the algebra is too s
 
 <div class="conclusions">
 <ol>
-<li>The AC bridge via <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure is <strong>generic</strong> across anyon families with k&ge;3. It is not a special property of Fibonacci anyons. Any sufficiently complex fusion algebra satisfies autocatalytic closure.</li>
+<li>The AC bridge via <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closure is <strong>generic</strong> across anyon families with k&ge;3. It is not a special property of Fibonacci anyons. Any sufficiently complex fusion algebra satisfies autocatalytic closure.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup></li>
 <li>Fibonacci is the <strong>critical/minimal case</strong> &mdash; the phase transition between algebras that do and don't support complex systems. This makes it the natural starting point for investigation, but not the only target.</li>
 <li>The k=4 and k=5 models may be <strong>better targets</strong> for finding complex dynamics in lattice simulations, because their richer fusion rules (3+ outcomes) create denser catalytic networks with more room for structured heterogeneity.</li>
 <li>The onset of self-catalysis coincides with the onset of computational universality. This is the <strong>strongest evidence</strong> that the AC bridge is real: the same algebraic structure enables both the topological property (universal computation) and the autocatalytic property (self-sustaining closure). They share a common algebraic root.</li>
 <li><strong>Open questions:</strong> Does the lattice braiding search find Class IV behavior more easily at k=4&ndash;5 than k=3? Is the "sweet spot" at k=3 (edge of chaos) or k=4&ndash;5 (richly complex)? Does the Haagerup category produce complex dynamics despite its non-standard origin? Is classical computational equivalence sufficient for the bridge, or is quantum universality required?</li>
+</ol>
+</div>
+
+<div class="footnotes">
+<ol>
+<li id="fn1">Freedman, M. J., Larsen, M. &amp; Wang, Z. (2002). A modular functor which is universal for quantum computation. <em>Communications in Mathematical Physics</em>, 227, 605-622. Proves SU(2)<sub>k</sub> braiding is dense in SU(N) for k ≥ 3. <a href="#fnref1">&uarr;</a></li>
+<li id="fn2">Kitaev, A. Y. (2003). Fault-tolerant quantum computation by anyons. <em>Annals of Physics</em>, 303(1), 2-30. Foundational paper establishing topological quantum computation via non-abelian anyons. <a href="#fnref2">&uarr;</a></li>
+<li id="fn3">Hordijk, W. &amp; Steel, M. (2004). Detecting autocatalytic, self-sustaining sets in chemical reaction systems. <em>Journal of Theoretical Biology</em>, 227(4), 451-461. Formal definition and detection algorithm for RAF sets. <a href="#fnref3">&uarr;</a></li>
 </ol>
 </div>
 

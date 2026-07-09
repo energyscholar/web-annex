@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Three strands, two crossings, infinite consequences. How alternating braid crossings create Fibonacci growth, making the golden ratio φ = 1.618 a binary tracer for topological protection and fault-tolerant computation. Interactive braid visualizations.">
 <title>Skeleton 1: Topology</title>
 <style>
   :root { --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #e2e8f0; --muted: #94a3b8; --dim: #475569; --s1: #818cf8; --s2: #f87171; --s3: #4ade80; }
@@ -58,6 +59,39 @@
   .recap-box dd { color: var(--text); margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; }
   .wiggle { animation: wiggle 3s ease-in-out infinite; }
   @keyframes wiggle { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(2deg) translateX(3px); } 75% { transform: rotate(-2deg) translateX(-3px); } }
+  /* Tooltips */
+  .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+  .tip .tt {
+    display: none; position: absolute; bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a2744; border: 1px solid var(--muted); border-radius: 8px;
+    padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+    color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+    line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    text-align: left; letter-spacing: normal; text-transform: none;
+  }
+  .tip .tt::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--muted);
+  }
+  .tip:hover .tt, .tip:focus .tt { display: block; }
+  @media (max-width: 640px) {
+    .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+      transform: none; max-width: none; width: auto; }
+    .tip .tt::after { display: none; }
+  }
+  /* Footnotes */
+  .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+  .fn:hover { color: var(--text); }
+  .footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .footnotes ol { padding-left: 1.5rem; }
+  .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+  .footnotes li a { color: var(--muted); }
+  .footnotes li a:hover { color: var(--text); }
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .wiggle { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -74,7 +108,7 @@
 <!-- SECTION 1: WHAT IS A BRAID? -->
 <section>
   <h2>What is a braid?</h2>
-  <p>Three strands hanging vertically. When two cross, that's a braid generator. The crossing IS the information &mdash; not the material the strands are made of, not their thickness, not their color. Just: which crossed over which.</p>
+  <p>Three strands hanging vertically. When two cross, that's a <span class="tip" tabindex="0">braid generator<span class="tt">A single crossing of two adjacent strands. The atomic operation of braid theory. Every braid is built from sequences of generators.</span></span>. The crossing IS the information &mdash; not the material the strands are made of, not their thickness, not their color. Just: which crossed over which.</p>
   <div class="braid-row">
     <div class="braid-box"><div id="b-identity"></div><div class="label">Identity</div><div class="desc">No crossings. Nothing happens.</div></div>
     <div class="braid-box"><div id="b-sigma1"></div><div class="label">&sigma;&#x2081;</div><div class="desc">Left pair crosses.<br>Blue over red.</div></div>
@@ -85,7 +119,7 @@
 <!-- SECTION 2: OVER AND UNDER -->
 <section>
   <h2>Over and under matter</h2>
-  <p>These two look almost the same. They're not. In &sigma;&#x2081;, blue goes <em>over</em> red. In &sigma;&#x2081;&sup1;, red goes <em>over</em> blue. Different braids. Different topology. You cannot smoothly deform one into the other.</p>
+  <p>These two look almost the same. They're not. In &sigma;&#x2081;, blue goes <em>over</em> red. In &sigma;&#x2081;&sup1;, red goes <em>over</em> blue. Different braids. Different <span class="tip" tabindex="0">topology<span class="tt">The study of properties preserved under continuous deformation &mdash; stretching, bending, twisting, but not cutting or gluing. &lsquo;Rubber-sheet geometry.&rsquo;</span></span>. You cannot smoothly deform one into the other.</p>
   <div class="braid-row">
     <div class="braid-box"><div id="b-sigma1-fwd"></div><div class="label">&sigma;&#x2081;</div><div class="desc">Blue over red</div></div>
     <div class="braid-box"><div id="b-sigma1-inv"></div><div class="label">&sigma;&#x2081;&#x207B;&#xB9;</div><div class="desc">Red over blue</div></div>
@@ -125,7 +159,7 @@
     <div class="panel gold">
       <h3 style="color:#eab308">Golden: &sigma;&#x2081;&sigma;&#x2082;&#x207B;&#xB9;&sigma;&#x2081;&sigma;&#x2082;&#x207B;&#xB9;&sigma;&#x2081;&sigma;&#x2082;&#x207B;&#xB9;</h3>
       <div id="b-golden" style="text-align:center"></div>
-      <p class="quiet" style="margin-top:0.75rem">The strands never return. Each cycle stretches the pattern further. This is <strong>pseudo-Anosov</strong>. TEPO = log(&phi;).</p>
+      <p class="quiet" style="margin-top:0.75rem">The strands never return. Each cycle stretches the pattern further. This is <strong><span class="tip" tabindex="0">pseudo-Anosov<span class="tt">A braid that stretches material exponentially with each iteration. The mathematical opposite of periodic (which returns to its starting state). Named after mathematician Dmitri Anosov.</span></span></strong>. <span class="tip" tabindex="0">TEPO<span class="tt">Topological Entropy Per Operation. Measures how much a braid stretches space per crossing. TEPO = 0 means periodic. TEPO = log(&phi;) is the minimum for a genuinely complex 3-strand braid.</span></span> = log(&phi;).</p>
     </div>
   </div>
   <p>The periodic braid is like twisting a rope &mdash; it winds up but can unwind. The golden braid is like kneading dough &mdash; each fold builds on the previous one, and you can never unfold it back.</p>
@@ -150,7 +184,7 @@
     <tr><td>8</td><td>34</td><td class="phi">1.619 &rarr; &phi;</td></tr>
   </table>
 
-  <p>1, 1, 2, 3, 5, 8, 13, 21, 34 &mdash; the <strong>Fibonacci numbers</strong>. Each is the sum of the previous two. The ratio of consecutive Fibonacci numbers converges to &phi; = 1.618...</p>
+  <p>1, 1, 2, 3, 5, 8, 13, 21, 34 &mdash; the <strong><span class="tip" tabindex="0">Fibonacci numbers<span class="tt">The sequence 1, 1, 2, 3, 5, 8, 13, 21... where each number is the sum of the previous two. They appear whenever a process reaches back two steps.</span></span></strong>. Each is the sum of the previous two. The ratio of consecutive Fibonacci numbers converges to &phi; = 1.618...</p>
 
   <div class="bar-container" id="fib-bars"></div>
 
@@ -167,17 +201,17 @@
     <div class="braid-box wiggle"><div id="b-wiggle"></div><div class="label">wiggle, stretch, compress...</div></div>
   </div>
   <p>I'm deforming it. Wiggling the strands, stretching them, compressing them. The crossing pattern doesn't change. Blue still goes over red at the top. Red still goes over green at the bottom. The <em>topology</em> &mdash; the over/under sequence &mdash; survives any smooth deformation.</p>
-  <p>If you store information in that crossing pattern, the information is <strong>protected against local noise</strong>. Small perturbations can't change it. Thermal fluctuations can't change it. The only way to change the crossing pattern is to cut a strand &mdash; a drastic, non-local action.</p>
-  <p>This is <span class="emphasis">Depth 1: Protection</span>. The system has topological properties that resist local perturbation. Topological insulators work this way &mdash; their surface conduction is protected by topology, not by material purity.</p>
+  <p>If you store information in that crossing pattern, the information is <strong><span class="tip" tabindex="0">protected against local noise<span class="tt">Information stored in topology survives any smooth deformation &mdash; stretching, wiggling, compressing. Only cutting (a drastic, non-local action) can change it.</span></span></strong>. Small perturbations can't change it. Thermal fluctuations can't change it. The only way to change the crossing pattern is to cut a strand &mdash; a drastic, non-local action.</p>
+  <p>This is <span class="emphasis">Depth 1: Protection</span>. The system has topological properties that resist local perturbation. <span class="tip" tabindex="0">Topological insulators<span class="tt">Materials that conduct electricity on their surface but not their interior, with the surface conduction protected by topology. Predicted 2005, observed 2007.</span></span> work this way &mdash; their surface conduction is protected by topology, not by material purity.</p>
 </section>
 
 <!-- SECTION 7: COMPUTATION -->
 <section>
   <h2>Topological computation</h2>
   <p>If crossing patterns can encode information, can they encode <em>computation</em>?</p>
-  <p>Yes. Kitaev (1997) showed that braiding certain particles &mdash; anyons &mdash; around each other performs quantum logic gates. The computation is encoded in the braid pattern, and the braid pattern is topologically protected. Errors can't creep in because errors are local, and the computation is global.</p>
+  <p>Yes. Kitaev (1997) showed<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> that braiding certain particles &mdash; <span class="tip" tabindex="0">anyons<span class="tt">Particles that exist only in 2D systems and obey neither Bose nor Fermi statistics. Braiding them around each other performs quantum logic gates. Named by Frank Wilczek.</span></span> &mdash; around each other performs quantum logic gates. The computation is encoded in the braid pattern, and the braid pattern is topologically protected. Errors can't creep in because errors are local, and the computation is global.</p>
   <p>This is <span class="emphasis">Depth 2: Fault-tolerant computation</span>. Not just protecting stored information, but protecting active computation. The system doesn't just resist noise &mdash; it <em>thinks</em> through it.</p>
-  <p class="quiet">Not all anyons can do this. Ising anyons (k=2) are too simple. Fibonacci anyons (k=3) are the simplest that achieve computational universality. Their quantum dimension is &phi; &mdash; the same golden ratio, from the same braid group algebra.</p>
+  <p class="quiet">Not all anyons can do this. <span class="tip" tabindex="0">Ising anyons<span class="tt">Anyons at Chern-Simons level k=2. Too simple for universal quantum computation &mdash; they can only produce a limited set of quantum gates.</span></span> (k=2) are too simple. <span class="tip" tabindex="0">Fibonacci anyons<span class="tt">The simplest anyons that achieve computational universality. Their quantum dimension is &phi;. At Chern-Simons level k=3 in the SU(2) theory.</span></span> (k=3) are the simplest that achieve computational universality. Their <span class="tip" tabindex="0">quantum dimension<span class="tt">A number characterizing how the Hilbert space grows when you add an anyon to the system. For Fibonacci anyons, d = &phi;. It determines the computational power.</span></span> is &phi; &mdash; the same golden ratio, from the same braid group algebra.</p>
 </section>
 
 <!-- SECTION 8: WHERE PHI APPEARS -->
@@ -214,12 +248,12 @@
   <h2>Seven communities, one mathematics</h2>
   <p>Like criticality (FACETS), topological mathematics was independently rediscovered by communities that don't read each other's journals:</p>
   <div class="timeline">
-    <div class="timeline-item"><span class="timeline-year">1860s+</span><div><span class="timeline-who">Mathematicians</span><br><span class="timeline-field">Knot theory, braid groups, Jones polynomial. Pure abstraction.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">1970s</span><div><span class="timeline-who">Thouless, Haldane, Kosterlitz</span><br><span class="timeline-field">Topological phase transitions. Condensed matter physics. Nobel 2016.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1860s+</span><div><span class="timeline-who">Mathematicians</span><br><span class="timeline-field">Knot theory, braid groups, <span class="tip" tabindex="0">Jones polynomial<span class="tt">A knot invariant discovered by Vaughan Jones (1984) that connects knot theory to statistical mechanics. Fields Medal work that bridged pure math and physics.</span></span>. Pure abstraction.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1970s</span><div><span class="timeline-who">Thouless, Haldane, Kosterlitz</span><br><span class="timeline-field">Topological phase transitions. Condensed matter physics. Nobel 2016.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup></span></div></div>
     <div class="timeline-item"><span class="timeline-year">1982</span><div><span class="timeline-who">Laughlin, Tsui, St&ouml;rmer</span><br><span class="timeline-field">Fractional quantum Hall effect. Found topological order in a 2D electron gas.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1988</span><div><span class="timeline-who">Witten</span><br><span class="timeline-field">Topological quantum field theory. String theory. Connected topology to physics axiomatically.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1997</span><div><span class="timeline-who">Kitaev</span><br><span class="timeline-field">Topological quantum computation. Realized braiding = fault-tolerant quantum gates.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">2005</span><div><span class="timeline-who">Kane &amp; Mele</span><br><span class="timeline-field">Topological insulators. A new class of materials with topologically protected surface states.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">2005</span><div><span class="timeline-who">Kane &amp; Mele</span><br><span class="timeline-field">Topological insulators.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> A new class of materials with topologically protected surface states.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">2010s</span><div><span class="timeline-who">Active matter researchers</span><br><span class="timeline-field">Topological defects govern dynamics in liquid crystals, biological tissues, bacterial colonies.</span></div></div>
   </div>
   <p class="quiet">The mathematicians didn't teach the physicists. The condensed matter people didn't teach the computer scientists. The active matter people came at it from biology. Seven approaches to the same mathematics, arriving from seven directions.</p>
@@ -246,6 +280,14 @@
 </section>
 
 </main>
+
+<div class="footnotes" style="max-width:720px;margin:2rem auto 0;padding:1rem 2rem 0;border-top:1px solid #334155">
+  <ol>
+    <li id="fn1">Kitaev, A. (2003). Fault-tolerant quantum computation by anyons. <em>Annals of Physics</em>, 303, 2&ndash;30. Original preprint 1997. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Kane, C. &amp; Mele, E. (2005). Z&#x2082; topological order and the quantum spin Hall effect. <em>Phys. Rev. Lett.</em>, 95, 146802. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Thouless, D., Haldane, D. &amp; Kosterlitz, J. M. Nobel Prize in Physics 2016 for topological phase transitions and topological phases of matter. <a href="#fnref3">&uarr;</a></li>
+  </ol>
+</div>
 
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:720px;margin-left:auto;margin-right:auto;padding-left:2rem;padding-right:2rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
 <script src="../../js/annex-tracker.js"></script>

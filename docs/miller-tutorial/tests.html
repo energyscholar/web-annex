@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Automated test suite for the Miller coevolving automata engine. Validates automaton construction, game mechanics, genetic algorithm operators, and experiment replication against published results.">
 <title>Miller Engine -- Test Suite</title>
 <style>
   :root {
@@ -60,6 +61,11 @@
   .test.fail { border-left-color: var(--red); color: var(--red); background: rgba(239,83,80,0.05); }
   .test .detail { color: var(--text-dim); font-size: 0.78rem; margin-left: 1rem; }
   .test .num { color: var(--text-dim); display: inline-block; width: 2.5em; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
 </style>
 </head>
 <body>

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Simple local rules, global computation. No ant has a map, yet the colony finds the shortest path. Computational capability peaks at the critical point — the edge of chaos — where Skeleton 4 meets Skeleton 2. Interactive Game of Life demonstrations.">
 <title>Skeleton 4: Computation</title>
 <style>
   :root { --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #e2e8f0; --muted: #94a3b8; --dim: #475569; --s4: #f59e0b; --s2: #f87171; }
@@ -56,6 +57,39 @@
   .recap-box { background: var(--card); border: 2px solid var(--s4); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
   .recap-box dt { color: var(--s4); font-weight: 600; font-size: 0.9rem; }
   .recap-box dd { color: var(--text); margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; }
+  /* Tooltips */
+  .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+  .tip .tt {
+    display: none; position: absolute; bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a2744; border: 1px solid var(--muted); border-radius: 8px;
+    padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+    color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+    line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    text-align: left; letter-spacing: normal; text-transform: none;
+  }
+  .tip .tt::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--muted);
+  }
+  .tip:hover .tt, .tip:focus .tt { display: block; }
+  @media (max-width: 640px) {
+    .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+      transform: none; max-width: none; width: auto; }
+    .tip .tt::after { display: none; }
+  }
+  /* Footnotes */
+  .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+  .fn:hover { color: var(--text); }
+  .footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .footnotes ol { padding-left: 1.5rem; }
+  .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+  .footnotes li a { color: var(--muted); }
+  .footnotes li a:hover { color: var(--text); }
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in { opacity: 1; transform: none; transition: none; }
+  }
 </style>
 </head>
 <body>
@@ -72,9 +106,9 @@
 <!-- SECTION 1: THE ANT COLONY -->
 <section>
   <h2>No ant has a map</h2>
-  <p>An ant colony finds the shortest path to food. No ant knows the shortest path. No ant has a map. No ant is in charge. Each ant follows two rules: (1) follow pheromone trails, (2) leave pheromone behind.</p>
+  <p>An ant colony finds the shortest path to food. No ant knows the shortest path. No ant has a map. No ant is in charge. Each ant follows two rules: (1) follow <span class="tip" tabindex="0">pheromone trails<span class="tt">Chemical signals deposited by ants that evaporate over time. Shorter paths get reinforced faster (more ants traverse them before the pheromone fades). This is how the colony &lsquo;computes&rsquo; shortest paths.</span></span>, (2) leave pheromone behind.</p>
   <p>From those two rules, the colony <em>computes</em> optimal foraging routes. The computation is distributed across thousands of simple agents. No individual agent computes anything useful. The system computes.</p>
-  <p>This is Skeleton 4: distributed computation. Simple local rules producing global information processing without any central controller.</p>
+  <p>This is Skeleton 4: <span class="tip" tabindex="0">distributed computation<span class="tt">Information processing spread across many simple agents with no central controller. The computation is a property of the system, not any individual component.</span></span>. Simple local rules producing global information processing without any central controller.</p>
 </section>
 
 <!-- SECTION 2: GAME OF LIFE -->
@@ -94,7 +128,7 @@
     </div>
     <div class="panel">
       <h3 style="color:var(--s4)">What emerges</h3>
-      <p class="quiet" style="margin-top:0.5rem">Gliders (move across the grid). Oscillators (repeat). Glider guns (produce gliders). Logic gates. A Turing-complete computer. From four rules about counting neighbors.</p>
+      <p class="quiet" style="margin-top:0.5rem"><span class="tip" tabindex="0">Gliders<span class="tt">A pattern in Conway&rsquo;s Game of Life that translates across the grid over successive generations. The simplest moving structure, and a building block for constructing logic gates.</span></span> (move across the grid). Oscillators (repeat). Glider guns (produce gliders). Logic gates. A <span class="tip" tabindex="0">Turing-complete<span class="tt">Capable of simulating any computation that a Turing machine can perform, given enough time and memory. The theoretical ceiling of computational power.</span></span> computer. From four rules about counting neighbors.</p>
     </div>
   </div>
 
@@ -129,11 +163,11 @@
     </div>
   </div>
 
-  <p>Langton (1990) showed this explicitly: computational capability peaks at the phase transition between order and chaos. Too ordered = frozen, can't compute. Too chaotic = noisy, can't remember. The sweet spot is the <em>critical point</em>.</p>
+  <p>Langton (1990)<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> showed this explicitly: computational capability peaks at the <span class="tip" tabindex="0">phase transition<span class="tt">A sudden qualitative change in behavior at a threshold value. Water freezing, magnets demagnetizing, neural networks shifting from ordered to chaotic. The critical point is the boundary.</span></span> between order and chaos. Too ordered = frozen, can&rsquo;t compute. Too chaotic = noisy, can&rsquo;t remember. The sweet spot is the <em>critical point</em>.</p>
 
   <div class="bridge-box">
     <h3>The bridge to Skeleton 2</h3>
-    <p style="font-size:0.9rem">This is where Skeleton 4 (Computation) meets Skeleton 2 (Dynamics/Criticality). The edge of chaos IS the critical point. Computation concentrates at criticality. This is not a metaphor &mdash; it's the same mathematical object seen from two directions.</p>
+    <p style="font-size:0.9rem">This is where Skeleton 4 (Computation) meets Skeleton 2 (Dynamics/Criticality). The <span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between ordered (frozen, predictable) and chaotic (noisy, unpredictable) behavior. Where computation is maximized &mdash; ordered enough to store information, chaotic enough to process it.</span></span> IS the critical point. Computation concentrates at criticality. This is not a metaphor &mdash; it's the same mathematical object seen from two directions.</p>
     <p class="quiet" style="margin-top:0.5rem">Computation adds a new lens to criticality: the critical point isn't just where phase transitions happen. It's where <em>information processing</em> is maximized. The system computes most powerfully at exactly the point where it's about to change state.</p>
   </div>
 </section>
@@ -145,7 +179,7 @@
   <div class="depth-stack">
     <div class="depth-card d1">
       <h3>Depth 1: Universality</h3>
-      <p class="quiet">The system can simulate any computation, given enough time and space. Conway's Life is Turing-complete. Random Boolean networks at criticality are Turing-complete. A system at depth 1 has the <em>capacity</em> for arbitrary computation.</p>
+      <p class="quiet">The system can simulate any computation, given enough time and space. Conway's Life is Turing-complete. Random <span class="tip" tabindex="0">Boolean networks<span class="tt">Networks where each node has a binary state (on/off) and updates based on logical rules applied to its inputs. Kauffman used them to model gene regulatory networks.</span></span> at criticality are Turing-complete. A system at depth 1 has the <em>capacity</em> for arbitrary computation.</p>
       <p class="quiet">Universality is about potential: the computational substrate is powerful enough, in principle, to compute anything. Whether it actually does is a separate question.</p>
     </div>
     <div class="depth-card d2">
@@ -161,16 +195,16 @@
 <!-- SECTION 5: THE BRAIN -->
 <section>
   <h2>The brain computes at criticality</h2>
-  <p>Neuronal avalanches follow power laws. This was one of the early criticality observations (Beggs &amp; Plenz, 2003). The brain operates near a critical point.</p>
+  <p>Neuronal avalanches follow <span class="tip" tabindex="0">power laws<span class="tt">Mathematical patterns with no characteristic scale. Small events are common, large events are rare, and the ratio between scales is constant. The signature of criticality.</span></span>. This was one of the early criticality observations (Beggs &amp; Plenz, 2003)<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup>. The brain operates near a critical point.</p>
   <p>But the brain doesn't just <em>exist</em> at criticality. It <em>computes</em> there. The critical point maximizes:</p>
   <div class="side-by-side">
     <div class="panel">
       <h3 style="color:var(--s4)">Dynamic range</h3>
-      <p class="quiet">The range of stimulus intensities the system can distinguish. Maximized at criticality. Subcritical systems compress dynamic range. Supercritical systems saturate.</p>
+      <p class="quiet"><span class="tip" tabindex="0">Dynamic range<span class="tt">The range of input intensities a system can distinguish. At criticality, dynamic range is maximized &mdash; the system can detect both whispers and shouts without saturating.</span></span>: the range of stimulus intensities the system can distinguish. Maximized at criticality. Subcritical systems compress dynamic range. Supercritical systems saturate.</p>
     </div>
     <div class="panel">
       <h3 style="color:var(--s4)">Information transfer</h3>
-      <p class="quiet">Mutual information between distant neurons. Maximized at criticality. The critical point is where correlations span the whole system, enabling long-range coordination.</p>
+      <p class="quiet"><span class="tip" tabindex="0">Mutual information<span class="tt">A measure of how much knowing one variable tells you about another. Between distant neurons, mutual information peaks at criticality &mdash; the critical point enables long-range communication.</span></span> between distant neurons. Maximized at criticality. The critical point is where correlations span the whole system, enabling long-range coordination.</p>
     </div>
   </div>
   <p>The brain has both depth 1 (universality &mdash; it can, in principle, compute anything) and depth 2 (coordination &mdash; it actually coordinates perception, thought, and action). It's the prototypical Skeleton 4 system.</p>
@@ -185,10 +219,10 @@
     <div class="timeline-item"><span class="timeline-year">1936</span><div><span class="timeline-who">Turing</span><br><span class="timeline-field">Universal computation. Abstract machines. Proved limits of computability.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1948</span><div><span class="timeline-who">von Neumann</span><br><span class="timeline-field">Cellular automata. Self-reproducing machines. Showed computation could be distributed.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1970</span><div><span class="timeline-who">Conway</span><br><span class="timeline-field">Game of Life. Proved simple local rules can produce universal computation.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">1987</span><div><span class="timeline-who">Bak, Tang, Wiesenfeld</span><br><span class="timeline-field">Self-organized criticality. Systems that tune themselves to the computational sweet spot.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1987</span><div><span class="timeline-who">Bak, Tang, Wiesenfeld</span><sup><a class="fn" href="#fn3" id="fnref3">3</a></sup><br><span class="timeline-field"><span class="tip" tabindex="0">Self-organized criticality<span class="tt">A system that naturally evolves toward a critical state without external tuning. Bak, Tang, and Wiesenfeld (1987) showed sandpiles do this &mdash; the brain may too.</span></span>. Systems that tune themselves to the computational sweet spot.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1990</span><div><span class="timeline-who">Langton</span><br><span class="timeline-field">Edge of chaos. Explicitly showed computation peaks at the phase transition.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1993</span><div><span class="timeline-who">Kauffman</span><br><span class="timeline-field">Boolean networks. Random gene regulatory networks compute at criticality.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">2000s</span><div><span class="timeline-who">Reservoir computing</span><br><span class="timeline-field">Echo state networks. Showed that any sufficiently complex dynamical system near criticality can compute.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">2000s</span><div><span class="timeline-who"><span class="tip" tabindex="0">Reservoir computing<span class="tt">A machine learning approach where a complex dynamical system near criticality serves as the computational substrate. Only the output layer is trained &mdash; the &lsquo;reservoir&rsquo; provides the computation.</span></span></span><br><span class="timeline-field">Echo state networks. Showed that any sufficiently complex dynamical system near criticality can compute.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">2002</span><div><span class="timeline-who">Wolfram</span><br><span class="timeline-field">A New Kind of Science. Classified all simple programs. Class 4 (between order and chaos) = universal computation.</span></div></div>
   </div>
 
@@ -216,6 +250,14 @@
 </section>
 
 </main>
+
+<div class="footnotes" style="max-width:720px;margin:2rem auto 0;padding:1rem 2rem 0;border-top:1px solid #334155">
+  <ol>
+    <li id="fn1">Langton, C. (1990). Computation at the edge of chaos. <em>Physica D</em>, 42, 12&ndash;37. Showed computational capability peaks at the phase transition. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Beggs, J. M. &amp; Plenz, D. (2003). Neuronal avalanches in neocortical circuits. <em>J. Neurosci.</em>, 23, 11167&ndash;11177. The founding observation of brain criticality. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Bak, P., Tang, C. &amp; Wiesenfeld, K. (1987). Self-organized criticality. <em>Phys. Rev. Lett.</em>, 59, 381. The original SOC paper. <a href="#fnref3">&uarr;</a></li>
+  </ol>
+</div>
 
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:720px;margin-left:auto;margin-right:auto;padding-left:2rem;padding-right:2rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
 <script src="../../js/annex-tracker.js"></script>

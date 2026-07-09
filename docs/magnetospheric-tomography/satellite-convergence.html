@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Four-way satellite convergence analysis showing why SKT (65.4°N) is a LISA spatial anomaly hot outlier. Swarm FAC, RBSP HOPE, Swarm EFI, and Swarm AOB measurements converge on a current system boundary effect at L≈5.6 during the 2015 St. Patrick's Day storm.">
 <title>Four-Way Satellite Convergence — SKT/STF Boundary Diagnosis</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -55,6 +57,31 @@ button.active { background: #334488; color: #fff; }
 .pass-list label:hover { color: #88aacc; }
 .pass-list input { margin-right: 4px; accent-color: #6688cc; }
 .crosshair { stroke: #334; stroke-width: 0.5; stroke-dasharray: 2,2; }
+/* Physics tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid #6688cc; border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: #aabbdd; width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: #6688cc;
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
 </style>
 </head><body>
 <div class="container">
@@ -65,13 +92,13 @@ button.active { background: #334488; color: #fff; }
 <span style="color:#94a3b8;">Satellite Convergence</span>
 </nav>
 
-<h1>Four-Way Satellite Convergence: Why SKT is a LISA Hot Outlier</h1>
-<div class="subtitle">Swarm FAC + RBSP HOPE + Swarm EFI + Swarm AOB — 2015 Mar 12-14, St. Patrick's Day Storm</div>
+<h1>Four-Way Satellite Convergence: Why SKT is a <span class="tip" tabindex="0">LISA<span class="tt">Local Indicator of Spatial Association — identifies individual locations that are spatial outliers relative to their neighbors. A LISA hot spot has high values surrounded by high values. A LISA hot outlier has high values surrounded by LOW values — anomalous local structure.</span></span> Hot Outlier</h1>
+<div class="subtitle"><span class="tip" tabindex="0">Swarm FAC<span class="tt">Field-Aligned Current measurements from ESA's Swarm satellite constellation. FACs flow along magnetic field lines between the magnetosphere and ionosphere. Swarm measures them via the curl of the magnetic field perturbation.</span></span> + <span class="tip" tabindex="0">RBSP HOPE<span class="tt">Helium, Oxygen, Proton, and Electron detector on NASA's Van Allen Probes (formerly RBSP). Measures the energy and composition of magnetospheric plasma. Key for identifying the plasmapause — the boundary between cold, dense plasmasphere and hot, tenuous plasma sheet.</span></span> + <span class="tip" tabindex="0">Swarm EFI<span class="tt">Electric Field Instrument on ESA's Swarm satellites. Measures ionospheric plasma density and drift velocity. Reveals the sharp density gradients at the boundary between different magnetospheric current systems.</span></span> + <span class="tip" tabindex="0">Swarm AOB<span class="tt">Auroral Oval Boundary detection from Swarm data. Maps the poleward and equatorward edges of the auroral zone using particle precipitation signatures. The equatorward boundary is a key marker of the open-closed field line boundary.</span></span> — 2015 Mar 12-14, St. Patrick's Day Storm</div>
 
 <div class="thesis">
 <b>Thesis:</b> SKT (65.4°N, L≈5.6) sits at the boundary between two magnetospheric current systems.
 Four independent satellite measurements converge on the same explanation: FAC sign reversal,
-plasmapause crossing, identical ionospheric density, and auroral oval edge. The LISA spatial
+<span class="tip" tabindex="0">plasmapause<span class="tt">The sharp outer boundary of the plasmasphere — the region of cold, dense plasma co-rotating with Earth. Beyond the plasmapause, plasma is hot and tenuous. Its location (~L=3-5 depending on activity) marks a fundamental boundary in magnetospheric structure.</span></span> crossing, identical ionospheric density, and auroral oval edge. The LISA spatial
 anomaly is a <b>current system boundary effect</b>, not ionospheric or crustal.
 </div>
 

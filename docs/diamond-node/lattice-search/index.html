@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Lattice braiding search — 1,570 simulations of spatially extended Fibonacci anyon chains (60 sites). Period-4 ABBA patterns produce 12.7% Class IV candidates, but all are domain-wall interference, not genuine complexity. Honest assessment: the product-state approximation strips out entanglement — the very resource that enables quantum complexity.">
 <title>Lattice Braiding Search &mdash; Spatially Extended Dynamics</title>
 <style>
 :root {
@@ -222,6 +223,40 @@ abbr {
   border-bottom: 1px dotted var(--muted);
   cursor: help;
 }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>
@@ -234,7 +269,7 @@ abbr {
 
 <h2>Overview</h2>
 
-<p>The <a href="../braiding-search/">braiding phase space search</a> established that single-rule repetition on a finite Hilbert space cannot produce genuine complexity. This search extends to <strong>spatially extended systems</strong>: 1D lattice chains where different braiding rules operate at different sites, producing emergent spatiotemporal patterns.</p>
+<p>The <a href="../braiding-search/">braiding phase space search</a> established that single-rule repetition on a finite Hilbert space cannot produce genuine complexity. This search extends to <strong><span class="tip" tabindex="0">spatially extended systems<span class="tt">Systems where the dynamics happen across space, not just at a single point. Each location has its own state, and neighboring locations interact. Cellular automata and lattice models are spatially extended; a single oscillator is not.</span></span></strong>: 1D lattice chains where different braiding rules operate at different sites, producing emergent spatiotemporal patterns.</p>
 
 <p>The motivation is physical: real topological systems involve many anyons distributed in space. Complexity might emerge from the interplay between local quantum dynamics (braiding) and spatial structure (the lattice pattern), even when each local operation is simple.</p>
 
@@ -247,13 +282,13 @@ abbr {
   <li>Apply F-matrix coupling to propagate information between neighbors (coupling strength 0.3)</li>
 </ol>
 
-<p><strong>Rule selection.</strong> The top 50 rule pairs were selected from the single-rule search, ranked by commutator norm (maximizing non-commutativity of the two rules).</p>
+<p><strong>Rule selection.</strong> The top 50 rule pairs were selected from the single-rule search, ranked by <span class="tip" tabindex="0">commutator norm<span class="tt">A measure of how much two operations fail to commute — how different AB is from BA. Large commutator norm means the order of applying rules matters a lot, creating more potential for complex dynamics from rule interactions.</span></span> (maximizing non-commutativity of the two rules).</p>
 
-<p><strong>Spatial patterns.</strong> 12 pattern types tested: uniform A, uniform B, alternating, period-3 (AAB), period-4 (ABBA), Fibonacci word, three random densities (30%, 50%, 70%), block (half/half), gradient, and Thue-Morse.</p>
+<p><strong>Spatial patterns.</strong> 12 pattern types tested: uniform A, uniform B, alternating, period-3 (AAB), period-4 (ABBA), <span class="tip" tabindex="0">Fibonacci word<span class="tt">An aperiodic binary sequence built by the substitution 0→01, 1→0 (producing 0, 01, 010, 01001, ...). Related to the golden ratio. Neither periodic nor random — it has a quasicrystalline structure with long-range order but no exact repetition.</span></span>, three random densities (30%, 50%, 70%), block (half/half), gradient, and <span class="tip" tabindex="0">Thue-Morse<span class="tt">An aperiodic binary sequence (0110100110010110...) built by repeatedly appending the complement. Overlap-free: no substring appears twice consecutively. Used as a test pattern for dynamics between order and chaos.</span></span>.</p>
 
 <p><strong>Two models:</strong></p>
 <ul style="padding-left:1.5rem; margin:0.75rem 0;">
-  <li><strong>Linear model:</strong> Braiding rule at each site determined by the fixed spatial pattern. Product-state approximation (no entanglement between sites).</li>
+  <li><strong>Linear model:</strong> Braiding rule at each site determined by the fixed spatial pattern. <span class="tip" tabindex="0">Product-state approximation<span class="tt">Treating each site's quantum state as independent — a 60×2 array instead of a 2^60 vector. Computationally tractable but strips out entanglement, the very resource that makes quantum systems quantum. Also called mean-field approximation.</span></span> (no entanglement between sites).</li>
   <li><strong>Nonlinear model:</strong> Braiding rule at each site depends on the current state of its neighbor (if P(&tau;) > threshold, use rule B; otherwise rule A). This is a true <abbr title="Cellular Automaton">CA</abbr> with state-dependent update rules.</li>
 </ul>
 
@@ -308,7 +343,7 @@ abbr {
 </thead>
 <tbody>
 <tr><td>II (periodic)</td><td>~88%</td><td>Threshold feedback creates fast lock-in</td></tr>
-<tr><td>III (chaotic)</td><td>~12%</td><td>Period-doubling to chaos</td></tr>
+<tr><td>III (chaotic)</td><td>~12%</td><td><span class="tip" tabindex="0">Period-doubling<span class="tt">A route to chaos where oscillation period successively doubles: 1→2→4→8→... Governed by Feigenbaum's universal constants (δ ≈ 4.669). The same cascade appears in dripping faucets, heart tissue, and population models.</span></span> to chaos</td></tr>
 <tr><td>IV (complex)</td><td class="zero">0%</td><td>No complex intermediate</td></tr>
 </tbody>
 </table>
@@ -319,21 +354,21 @@ abbr {
 
 <div class="honest-box">
 <strong>The linear "Class IV" candidates are not genuinely complex.</strong>
-<p>Close inspection reveals that the 54 candidates classified as Class IV are <strong>domain-wall interference patterns</strong>: standing and traveling waves created by the boundary between regions with different braiding rules. These patterns have spatial structure, but they lack the hallmarks of genuine complexity:</p>
+<p>Close inspection reveals that the 54 candidates classified as Class IV are <strong><span class="tip" tabindex="0">domain-wall interference patterns<span class="tt">Standing and traveling waves created at the boundary between spatial regions with different rules. Visually complex but structurally simple — discrete Fourier spectra, no information processing, no genuine computation. The lattice equivalent of ripples from two dropped stones.</span></span></strong>: standing and traveling waves created by the boundary between regions with different braiding rules. These patterns have spatial structure, but they lack the hallmarks of genuine complexity:</p>
 <ul style="padding-left:1.5rem; margin:0.75rem 0;">
   <li>No gliders or localized propagating structures</li>
   <li>No information processing or logical operations</li>
   <li>No sensitivity to initial conditions beyond the initial transient</li>
-  <li>Spatial Fourier spectra are discrete (quasi-periodic), not broadband</li>
+  <li>Spatial <span class="tip" tabindex="0">Fourier spectra<span class="tt">Decomposition of a spatial pattern into frequency components — which wavelengths are present and how strong each is. Discrete spectra (sharp peaks) indicate quasi-periodicity. Broadband spectra (smooth, spread-out) indicate chaos or genuine complexity.</span></span> are discrete (quasi-periodic), not broadband</li>
 </ul>
-<p>The nonlinear model shows period-doubling to chaos with no complex intermediate. The threshold mechanism is too blunt: it creates a binary switch that locks in quickly, destroying the spatial structure that might support complexity.</p>
+<p>The nonlinear model shows period-doubling to chaos with no complex intermediate. The threshold mechanism is too blunt:<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> it creates a binary switch that locks in quickly, destroying the spatial structure that might support complexity.</p>
 </div>
 
 <h2>The Fundamental Bottleneck</h2>
 
 <div class="bottleneck-box">
 <strong>Product-state approximation strips out entanglement.</strong>
-<p>Both models use a product-state (mean-field) approximation: each site's state is independent of its neighbors, coupled only through the F-matrix at each time step. This is computationally tractable (the state is 60 &times; 2 complex numbers, not a 2<sup>60</sup>-dimensional vector), but it discards the very thing that makes quantum systems quantum: <strong>entanglement</strong>.</p>
+<p>Both models use a product-state (mean-field) approximation: each site's state is independent of its neighbors, coupled only through the F-matrix at each time step. This is computationally tractable (the state is 60 &times; 2 complex numbers, not a 2<sup>60</sup>-dimensional vector), but it discards the very thing that makes quantum systems quantum: <strong><span class="tip" tabindex="0">entanglement<span class="tt">Quantum correlations with no classical analogue. Two entangled particles share information that can't be described by knowing each particle separately. The resource that makes quantum computation more powerful than classical, and the thing the product-state approximation discards.</span></span></strong>.</p>
 
 <p>In a full quantum simulation, braiding would create entanglement between sites. This entanglement is where the complexity lives. The topological properties that make Fibonacci anyons computationally universal are properties of the <em>entangled</em> many-body state, not properties that can be captured in a product-state approximation.</p>
 
@@ -345,9 +380,9 @@ abbr {
 <div class="forward-box">
 <strong>Four approaches could break through the entanglement barrier.</strong>
 <ol style="padding-left:1.5rem; margin:0.75rem 0;">
-  <li><strong>Matrix Product State (<abbr title="Matrix Product State">MPS</abbr>) simulation.</strong> Represent the chain as an <abbr title="Matrix Product State">MPS</abbr> with bond dimension chi. This captures entanglement up to chi correlations. Cost: O(N chi<sup>3</sup>) per step. For 60 sites at chi=64, this is feasible on modern hardware. The question: does entanglement entropy grow with time (indicating genuine complexity) or saturate (indicating topological order without dynamics)?</li>
+  <li><strong><span class="tip" tabindex="0">Matrix Product State<span class="tt">A compact representation of quantum states that captures entanglement up to a tunable bond dimension χ. The sweet spot between full simulation (exponentially expensive) and product-state (no entanglement). Standard tool in condensed matter physics.</span></span> (MPS) simulation.</strong> Represent the chain as an <abbr title="Matrix Product State">MPS</abbr> with bond dimension chi. This captures entanglement up to chi correlations. Cost: O(N chi<sup>3</sup>) per step. For 60 sites at chi=64, this is feasible on modern hardware.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> The question: does entanglement entropy grow with time (indicating genuine complexity) or saturate (indicating topological order without dynamics)?</li>
   <li><strong>Measurement-based dynamics.</strong> Intersperse braiding with projective measurements. This breaks unitarity and can create genuinely irreversible dynamics. The measurement collapses entanglement locally, but the braiding re-creates it. The interplay might support complex dynamics.</li>
-  <li><strong>Dissipative coupling (Lindblad dynamics).</strong> Add controlled decoherence via a Lindblad master equation. This models a topological system coupled to an environment. Dissipation breaks unitarity and can drive the system to non-equilibrium steady states with complex structure.</li>
+  <li><strong>Dissipative coupling (Lindblad dynamics).</strong> Add controlled decoherence via a <span class="tip" tabindex="0">Lindblad master equation<span class="tt">The most general equation for open quantum system evolution that preserves probability and positivity. Adds controlled decoherence to unitary dynamics — modeling how a quantum system loses information to its environment. Breaks time-reversibility.</span></span>. This models a topological system coupled to an environment. Dissipation breaks unitarity and can drive the system to non-equilibrium steady states with complex structure.</li>
   <li><strong>Smooth nonlinear feedback.</strong> Replace the binary threshold with a smooth function (e.g., tanh with adjustable steepness). The binary threshold is a singular limit that destroys intermediate behavior. A smooth feedback function might support a richer dynamical landscape.</li>
 </ol>
 </div>
@@ -376,6 +411,13 @@ abbr {
 <h3>Nonlinear model: by spatial pattern</h3>
 <img src="lattice_nonlinear_candidates_by_pattern.png" alt="Nonlinear lattice model results by spatial pattern type. Threshold feedback overwhelms spatial structure.">
 <p class="plot-caption">Nonlinear model results grouped by spatial pattern. The threshold feedback mechanism dominates over the spatial pattern: all patterns converge to similar periodic or chaotic behavior within 20 steps.</p>
+</div>
+
+<div class="footnotes">
+<ol>
+<li id="fn1">Schollwöck, U. (2011). The density-matrix renormalization group in the age of matrix product states. <em>Annals of Physics</em>, 326(1), 96-192. Comprehensive review of MPS methods for simulating 1D quantum systems with controlled entanglement. <a href="#fnref1">&uarr;</a></li>
+<li id="fn2">Feigenbaum, M. J. (1978). Quantitative universality for a class of nonlinear transformations. <em>Journal of Statistical Physics</em>, 19(1), 25-52. Discovery of universal constants in period-doubling cascades. <a href="#fnref2">&uarr;</a></li>
+</ol>
 </div>
 
 </div>

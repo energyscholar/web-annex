@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Domain convergence research — investigating cross-domain bridges between criticality, topology, autocatalysis, computation, and seven other scientific fields. Interactive tutorials, computational experiments, and key findings including the k=2→3 phase transition in Chern-Simons self-catalysis.">
 <title>Domain Convergence Research</title>
 <style>
 :root {
@@ -203,6 +204,31 @@ p { margin-bottom: 1rem; }
   color: var(--line);
   margin-bottom: 0.5rem;
 }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}
 </style>
 </head>
 <body>
@@ -211,7 +237,7 @@ p { margin-bottom: 1rem; }
 <h1>Domain Convergence Research</h1>
 <p class="subtitle">Investigating cross-domain bridges between eleven scientific fields</p>
 
-<p class="intro-text">This collection documents a systematic investigation into structural relationships between criticality, topology, autocatalysis, computation, and seven other scientific domains. The work combines interactive tutorials with computational experiments, tracking both positive findings and null results.</p>
+<p class="intro-text">This collection documents a systematic investigation into structural relationships between <span class="tip" tabindex="0">criticality<span class="tt">The study of phase transitions — sudden qualitative changes in a system's behavior at threshold values. Power laws, scale invariance, and universality are its signatures.</span></span>, <span class="tip" tabindex="0">topology<span class="tt">Mathematical properties preserved under continuous deformation. Braiding, knot invariants, and topological protection. Information stored in topology survives local noise.</span></span>, <span class="tip" tabindex="0">autocatalysis<span class="tt">A network of reactions where every catalyst is produced by the network itself. Self-sustaining systems, from campfires to cells. Formalized as RAF (Reflexively Autocatalytic Food-generated) theory.</span></span>, computation, and seven other scientific domains. The work combines interactive tutorials with computational experiments, tracking both positive findings and null results.</p>
 
 <h2>Interactive Tutorials</h2>
 <div class="card-grid">
@@ -311,10 +337,10 @@ p { margin-bottom: 1rem; }
 <h2>Key Findings</h2>
 <div class="findings">
 <ul>
-  <li class="proven">Self-catalysis and RAF closure are <strong>generic</strong> for k&ge;3 in SU(2)<sub>k</sub> Chern-Simons theory, not special to Fibonacci anyons. Verified by explicit construction of fusion rules for k=2 through k=6.</li>
+  <li class="proven"><span class="tip" tabindex="0">Self-catalysis<span class="tt">A reaction where a product catalyzes its own production. In anyon physics: when a particle type appears in its own fusion products (N^j_jj ≥ 1).</span></span> and <span class="tip" tabindex="0">RAF closure<span class="tt">A network satisfying two conditions: every reaction is catalyzed internally, and every reactant can be built from simple 'food' molecules. The mathematical test for self-sustenance.</span></span> are <strong>generic</strong> for k&ge;3 in SU(2)<sub>k</sub> <span class="tip" tabindex="0">Chern-Simons theory<span class="tt">A topological quantum field theory that describes anyon behavior in 2D systems. The level k determines which anyon types exist and how they fuse. Higher k = more complex anyons.</span></span>, not special to <span class="tip" tabindex="0">Fibonacci anyons<span class="tt">The simplest non-abelian anyons capable of universal quantum computation. They appear at Chern-Simons level k=3 and have quantum dimension φ (the golden ratio).</span></span>. Verified by explicit construction of fusion rules for k=2 through k=6.</li>
   <li class="proven">Sharp phase transition at k=2 to k=3: self-catalysis and computational universality share the same algebraic root (non-trivial self-coupling N<sup>j</sup><sub>jj</sub> &ge; 1). Below threshold, neither property holds; at or above, both hold.</li>
-  <li class="structural">Fibonacci anyons sit at the edge of chaos for fusion algebras: minimal self-catalysis, minimal universality, golden ratio dimension growth. Analogous to K=2 in Boolean networks.</li>
-  <li class="null-result">No genuine Class IV behavior in braiding phase space: unitary evolution on finite Hilbert space is linear and norm-preserving, giving Lyapunov exponent exactly zero. The 360 "Class IV" candidates (n=3) are quasi-periodic with irrational eigenvalue phases.</li>
+  <li class="structural">Fibonacci anyons sit at the <span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between ordered and chaotic behavior where computation is maximized. For anyon fusion algebras, Fibonacci sits at this boundary — minimal self-catalysis, minimal universality.</span></span> for fusion algebras: minimal self-catalysis, minimal universality, golden ratio dimension growth. Analogous to K=2 in Boolean networks.</li>
+  <li class="null-result">No genuine Class IV behavior in braiding phase space: unitary evolution on finite Hilbert space is linear and norm-preserving, giving <span class="tip" tabindex="0">Lyapunov exponent<span class="tt">A measure of how fast nearby trajectories diverge. Positive = chaos (trajectories separate exponentially). Zero = no chaos (trajectories stay together). Exactly zero for unitary quantum evolution.</span></span> exactly zero. The 360 "Class IV" candidates (n=3) are quasi-periodic with irrational eigenvalue phases.</li>
   <li class="structural">Bridge mechanism taxonomy: approximately 4 of 7 identified bridges operate on rule-space structural identity rather than parameter coincidence or dynamical coupling.</li>
   <li class="structural">The AC bridge (topology &harr; autocatalysis) has physical content beyond the algebraic structural identity. Anyon emergence from the substrate (Nayak et al. 2008) IS physical generation in Kauffman's sense &mdash; the food set is energy input, the generation is collective excitation, the closure is fusion algebra. FQHE systems are already AC demonstrators; the gap is formal recognition and cross-community publication, not finding a new system.</li>
 </ul>

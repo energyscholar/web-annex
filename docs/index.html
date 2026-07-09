@@ -33,6 +33,7 @@
   mini-shell (xterm.js) mapping the tutorial tree as a filesystem.
 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive tutorials spanning magnetospheric physics, complex systems, topological quantum computation, autocatalytic closure, AI governance, and more. Each tutorial stands alone. The cross-domain pattern emerges for those who read several.">
 <title>Web Annex — Bruce Stephenson</title>
 <style>
 :root {
@@ -240,6 +241,31 @@ footer {
   .card-grid { grid-template-columns: 1fr 1fr; }
   .card-grid.single { grid-template-columns: 1fr; }
 }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid #94a3b8; border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: #94a3b8;
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
 </style>
 </head>
 <body>
@@ -303,7 +329,7 @@ footer {
 <a class="card" data-level="0" href="magnetosphere-tutorial/">
   <div class="card-thumb"><img src="art/thumbnails/magnetosphere-tutorial.svg" alt="" loading="lazy"></div>
   <div class="card-title">The Magnetosphere <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Animated introduction to Earth's invisible shield. Solar wind, magnetic field lines, Birkeland currents, reconnection, substorms, and why it matters for infrastructure. Seven scroll-triggered animated scenes.</div>
+  <div class="card-desc">Animated introduction to Earth's invisible shield. Solar wind, magnetic field lines, <span class="tip" tabindex="0">Birkeland currents<span class="tt">Electric currents that flow along Earth's magnetic field lines between the magnetosphere and ionosphere. They carry energy from the solar wind down to the aurora. Discovered by Kristian Birkeland in 1908, confirmed by satellite in the 1960s.</span></span>, reconnection, substorms, and why it matters for infrastructure. Seven scroll-triggered animated scenes.</div>
 </a>
 
 <a class="card" data-level="0" href="ai-governance/">
@@ -315,14 +341,14 @@ footer {
 <a class="card" data-level="0" href="miller-tutorial/">
   <div class="card-thumb"><img src="art/thumbnails/miller-tutorial.svg" alt="" loading="lazy"></div>
   <div class="card-title">Coevolving Machines and the Social Threshold <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Interactive evolutionary game theory simulation based on John H. Miller's research. Explores how simple adaptive agents produce complex cooperative dynamics, phase transitions in social systems, and the emergence of collective behavior from individual strategy.</div>
+  <div class="card-desc">Interactive evolutionary game theory simulation based on John H. Miller's research. Explores how simple adaptive agents produce complex cooperative dynamics, <span class="tip" tabindex="0">phase transitions<span class="tt">Abrupt qualitative changes in a system's behavior at a critical parameter value. Water freezing, magnets losing magnetism, ecosystems collapsing — same mathematical structure, different substrates.</span></span> in social systems, and the emergence of collective behavior from individual strategy.</div>
   <div class="card-meta">Includes live simulation engine, replication studies, and test suite</div>
 </a>
 
 <a class="card" data-level="0" href="acs-closure-v2/">
   <div class="card-thumb"><img src="art/thumbnails/acs-closure-v2.svg" alt="" loading="lazy"></div>
   <div class="card-title">Autocatalytic Closure for the Working Mathematician <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">Kauffman's autocatalytic sets presented as formal mathematics. Covers RAF theory (reflexively autocatalytic, food-generated sets), closure properties, the percolation phase transition in random catalytic networks, and the connection to origin-of-life chemistry. Revised edition.</div>
+  <div class="card-desc">Kauffman's <span class="tip" tabindex="0">autocatalytic sets<span class="tt">Self-sustaining networks where every component is produced by reactions within the network itself. Nothing external is needed except a food set. The mathematical framework for self-organization across chemistry, biology, and computation.</span></span> presented as formal mathematics. Covers RAF theory (reflexively autocatalytic, food-generated sets), closure properties, the percolation phase transition in random catalytic networks, and the connection to origin-of-life chemistry. Revised edition.</div>
 </a>
 
 <a class="card" data-level="0" href="structure-from-topology/">
@@ -361,7 +387,7 @@ footer {
 <a class="card" data-level="2" href="anyon-fusion/">
   <div class="card-thumb"><img src="art/thumbnails/anyon-fusion.svg" alt="" loading="lazy"></div>
   <div class="card-title">Fibonacci Anyon Fusion Algebra <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Animated introduction to the Fibonacci anyon model. Covers fusion rules (&tau;&times;&tau; = 1+&tau;), the Fibonacci dimension sequence, fusion trees, braiding as quantum gates, and the connection to topological quantum computation. Eight sections with replay-able SVG animations.</div>
+  <div class="card-desc">Animated introduction to the Fibonacci anyon model. Covers fusion rules (&tau;&times;&tau; = 1+&tau;), the Fibonacci dimension sequence, fusion trees, braiding as quantum gates, and the connection to <span class="tip" tabindex="0">topological quantum computation<span class="tt">A model of quantum computing where information is encoded in the braiding patterns of quasiparticles called anyons. Because the braid's topology is a global property, local perturbations cannot corrupt the computation — fault tolerance is built into the physics, not bolted on.</span></span>. Eight sections with replay-able SVG animations.</div>
 </a>
 
 <a class="card" data-level="2" href="poised-state-survey/">
@@ -381,7 +407,7 @@ footer {
 <a class="card" data-level="3" href="criticality-bridges/">
   <div class="card-thumb"><img src="art/thumbnails/criticality-bridges.svg" alt="" loading="lazy"></div>
   <div class="card-title">Criticality Bridges &mdash; Physical Systems <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Six concrete physical systems where critical phenomena demonstrably couple scientific domains. Gene regulatory networks, BZ reaction, cortical neural tissue, immune system, magnetic skyrmions, and Earth's magnetosphere.</div>
+  <div class="card-desc">Six concrete physical systems where <span class="tip" tabindex="0">critical phenomena<span class="tt">The behavior of physical systems near a phase transition — where correlations extend across the entire system, fluctuations diverge, and the system becomes scale-invariant. The same mathematical structure appears in magnets, fluids, neural networks, and ecosystems.</span></span> demonstrably couple scientific domains. Gene regulatory networks, BZ reaction, cortical neural tissue, immune system, magnetic skyrmions, and Earth's magnetosphere.</div>
 </a>
 
 <!-- === L4: Fourth return (+2) — explicit cross-domain + provocative === -->
@@ -389,7 +415,7 @@ footer {
 <a class="card" data-level="4" href="domain-convergence/">
   <div class="card-thumb"><img src="art/thumbnails/domain-convergence.svg" alt="" loading="lazy"></div>
   <div class="card-title">Domain Convergence &mdash; An Animated Introduction <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">How eleven scientific fields independently discovered different faces of the same physical phenomenon. Covers domain clusters, seven bridges, scale invariance as stitching mechanism, the AC bridge structural identity, and the emergent property stack.</div>
+  <div class="card-desc">How eleven scientific fields independently discovered different faces of the same physical phenomenon. Covers domain clusters, seven bridges, <span class="tip" tabindex="0">scale invariance<span class="tt">A system looks the same at every magnification — zoom in or out and the statistical structure is unchanged. Near a critical point, this self-similarity emerges spontaneously and connects microscopic physics to macroscopic behavior. It is the mechanism that makes universality possible.</span></span> as stitching mechanism, the AC bridge structural identity, and the emergent property stack.</div>
 </a>
 
 <a class="card" data-level="4" href="search-suppression/">

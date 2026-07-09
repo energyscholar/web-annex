@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Systematic enumeration of 1,622 Fibonacci anyon braiding rules classified by Wolfram complexity classes. Key result: zero genuine chaos — unitary evolution on finite Hilbert space is provably incapable of producing sensitive dependence on initial conditions. All 'Class IV' candidates are quasi-periodic.">
 <title>Braiding Phase Space Search &mdash; NKS Enumeration</title>
 <style>
 :root {
@@ -189,6 +190,41 @@ abbr {
   border-bottom: 1px dotted var(--muted);
   cursor: help;
 }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>
@@ -197,18 +233,18 @@ abbr {
 <a class="back-link" href="../">&larr; Domain Convergence Research</a>
 
 <h1>Braiding Phase Space Search</h1>
-<p class="subtitle"><abbr title="New Kind of Science">NKS</abbr> enumeration of Fibonacci anyon braiding rules, classified by Wolfram's four complexity classes</p>
+<p class="subtitle"><abbr title="New Kind of Science">NKS</abbr> enumeration of Fibonacci anyon braiding rules, classified by Wolfram's four <span class="tip" tabindex="0">complexity classes<span class="tt">Wolfram's classification of dynamical system behavior: Class I (dies out), Class II (repeats), Class III (random/chaotic), Class IV (complex — structured but not repeating, capable of computation). Rule 110 is the canonical Class IV example.</span></span></p>
 
 <h2>Overview</h2>
 
-<p>This search systematically enumerates braiding rules on Fibonacci anyons and classifies the resulting dynamics by Wolfram's four complexity classes (the <abbr title="New Kind of Science">NKS</abbr> approach). The goal: determine whether any braiding rule on a finite fusion space can produce genuine Class IV (complex) behavior&mdash;the kind of dynamics that supports computation.</p>
+<p>This search systematically enumerates braiding rules on Fibonacci anyons and classifies the resulting dynamics by Wolfram's four complexity classes (the <abbr title="New Kind of Science">NKS</abbr> approach).<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> The goal: determine whether any braiding rule on a finite fusion space can produce genuine <span class="tip" tabindex="0">Class IV<span class="tt">The rarest complexity class — behavior that is neither periodic nor purely random, but structured enough to support computation. Cellular automata Rule 110 and Conway's Game of Life exhibit Class IV dynamics.</span></span> (complex) behavior&mdash;the kind of dynamics that supports computation.</p>
 
-<p>Fibonacci anyons have two particle types: <strong>1</strong> (vacuum) and <strong>&tau;</strong>. Their fusion rule is <span class="formula">&tau; &times; &tau; = 1 + &tau;</span>. For <span class="formula">n</span> anyons fusing left-to-right, the state space dimension follows the Fibonacci sequence: F(n&minus;1). Braiding is represented by unitary matrices (R-matrices composed with F-matrices) acting on this fusion space.</p>
+<p>Fibonacci anyons have two particle types: <strong>1</strong> (vacuum) and <strong>&tau;</strong>. Their <span class="tip" tabindex="0">fusion rule<span class="tt">The rule governing what particle types result when two anyons combine. For Fibonacci anyons, τ × τ = 1 + τ — fusing two τ particles produces either vacuum (1) or another τ, with probabilities determined by the quantum state.</span></span> is <span class="formula">&tau; &times; &tau; = 1 + &tau;</span>. For <span class="formula">n</span> anyons fusing left-to-right, the state space dimension follows the Fibonacci sequence: F(n&minus;1). Braiding is represented by unitary matrices (<span class="tip" tabindex="0">R-matrices<span class="tt">Matrices encoding the phase acquired when two anyons are exchanged. For Fibonacci anyons, these are 2×2 unitary matrices with entries involving the golden ratio. The fundamental building blocks of braiding operations.</span></span> composed with <span class="tip" tabindex="0">F-matrices<span class="tt">Matrices encoding the associativity of fusion — how regrouping three anyons (fusing AB first vs BC first) relates the two bases. Together with R-matrices, they completely determine the braiding behavior.</span></span>) acting on this fusion space.</p>
 
 <h2>Method</h2>
 
 <div class="section-card">
-<p><strong>Braid word enumeration.</strong> For n=3 anyons (2D fusion space), the braid group generators are &sigma;<sub>1</sub> and &sigma;<sub>2</sub>, each with an inverse. A braiding rule is a word in {&sigma;<sub>1</sub>, &sigma;<sub>1</sub><sup>&minus;1</sup>, &sigma;<sub>2</sub>, &sigma;<sub>2</sub><sup>&minus;1</sup>} of length 1 through 5. This gives:</p>
+<p><strong>Braid word enumeration.</strong> For n=3 anyons (2D fusion space), the <span class="tip" tabindex="0">braid group<span class="tt">The mathematical group describing all possible particle exchanges. Elements are sequences of neighbor swaps (braids). Unlike permutations, braids track the path of exchange — swapping clockwise differs from swapping counterclockwise.</span></span> generators are &sigma;<sub>1</sub> and &sigma;<sub>2</sub>, each with an inverse. A braiding rule is a word in {&sigma;<sub>1</sub>, &sigma;<sub>1</sub><sup>&minus;1</sup>, &sigma;<sub>2</sub>, &sigma;<sub>2</sub><sup>&minus;1</sup>} of length 1 through 5. This gives:</p>
 <ul style="padding-left:1.5rem; margin:0.75rem 0;">
   <li>n=3: <strong>1,364 rules</strong> (lengths 1&ndash;5, 4 generators per position)</li>
   <li>n=4: <strong>258 rules</strong> (lengths 1&ndash;3, 6 generators per position, 3D fusion space)</li>
@@ -218,11 +254,11 @@ abbr {
 <ul style="padding-left:1.5rem; margin:0.75rem 0;">
   <li><strong>Class I</strong> (fixed point): trajectory converges to a fixed state</li>
   <li><strong>Class II</strong> (periodic): trajectory repeats with detectable period</li>
-  <li><strong>Class III</strong> (chaotic): positive Lyapunov exponent, sensitive dependence</li>
+  <li><strong>Class III</strong> (chaotic): positive <span class="tip" tabindex="0">Lyapunov exponent<span class="tt">A measure of how fast nearby trajectories diverge. Positive = chaos (trajectories separate exponentially). Zero = no chaos. For unitary quantum evolution, the Lyapunov exponent is always exactly zero — nearby states neither converge nor diverge.</span></span>, sensitive dependence</li>
   <li><strong>Class IV</strong> (complex): intermediate&mdash;neither periodic nor fully random</li>
 </ul>
 
-<p><strong>Physics verification.</strong> Each composite braid matrix is checked for unitarity (&sigma;&sigma;<sup>&dagger;</sup> = I) and eigenvalue structure. Yang-Baxter satisfaction is verified for the physical R-matrices.</p>
+<p><strong>Physics verification.</strong> Each composite braid matrix is checked for unitarity (&sigma;&sigma;<sup>&dagger;</sup> = I) and eigenvalue structure. <span class="tip" tabindex="0">Yang-Baxter<span class="tt">A consistency equation for particle exchanges: swapping A-B, then B-C, then A-B must equal B-C, then A-B, then B-C. Physical R-matrices always satisfy this. Violation would mean the braiding depends on how you decompose the exchange sequence.</span></span> satisfaction is verified for the physical R-matrices.</p>
 </div>
 
 <h2>Results</h2>
@@ -263,11 +299,11 @@ abbr {
 
 <div class="key-finding">
 <strong>Unitary evolution on finite Hilbert space cannot produce chaos.</strong>
-<p>This is provable from first principles. A braiding rule acts as a unitary matrix U on the fusion space. Iteration produces the sequence U, U<sup>2</sup>, U<sup>3</sup>, ... The eigenvalues of U are phases <span class="formula">e<sup>i&theta;<sub>j</sub></sup></span>. After n iterations, the state components evolve as <span class="formula">e<sup>in&theta;<sub>j</sub></sup></span>.</p>
+<p>This is provable from first principles. A braiding rule acts as a <span class="tip" tabindex="0">unitary matrix<span class="tt">A matrix whose inverse equals its conjugate transpose. Preserves vector lengths (probabilities sum to 1) and is reversible. All quantum evolution without measurement is unitary. Key consequence: no information is created or destroyed.</span></span> U on the fusion space. Iteration produces the sequence U, U<sup>2</sup>, U<sup>3</sup>, ... The eigenvalues of U are phases <span class="formula">e<sup>i&theta;<sub>j</sub></sup></span>. After n iterations, the state components evolve as <span class="formula">e<sup>in&theta;<sub>j</sub></sup></span>.</p>
 
 <p>This evolution is <strong>linear</strong> and <strong>norm-preserving</strong>. The Lyapunov exponent is <strong>exactly zero</strong>: nearby trajectories neither converge nor diverge. There is no sensitive dependence on initial conditions.</p>
 
-<p>If all eigenvalue phases <span class="formula">&theta;<sub>j</sub>/2&pi;</span> are rational, the trajectory is exactly periodic (period = LCM of denominators). If any phase is irrational, the trajectory is <strong>quasi-periodic</strong>&mdash;it never exactly repeats but fills a torus densely. This quasi-periodicity can mimic complexity over short timescales, which is why these candidates appear as "Class IV" in the NKS classifier. But they are not genuinely complex: they have zero entropy rate and no computational capacity.</p>
+<p>If all eigenvalue phases <span class="formula">&theta;<sub>j</sub>/2&pi;</span> are rational, the trajectory is exactly periodic (period = LCM of denominators). If any phase is irrational, the trajectory is <span class="tip" tabindex="0"><strong>quasi-periodic</strong><span class="tt">Motion combining frequencies with irrational ratios. Never exactly repeats, but isn't chaotic — it densely fills a torus. Like two clocks ticking at rates whose ratio is the golden number. Zero entropy rate: no genuine surprise.</span></span>&mdash;it never exactly repeats but fills a torus densely. This quasi-periodicity can mimic complexity over short timescales, which is why these candidates appear as "Class IV" in the NKS classifier. But they are not genuinely complex: they have zero <span class="tip" tabindex="0">entropy rate<span class="tt">The rate at which a system generates genuinely new information per time step. Periodic and quasi-periodic systems have zero entropy rate (no surprises ever). Chaotic systems have positive entropy rate. A key test for genuine complexity.</span></span> and no computational capacity.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup></p>
 
 <p>The 360 Class IV candidates (n=3) all have irrational eigenvalue phases related to <span class="formula">&phi; = (1+&radic;5)/2</span>. They are dense quasi-periodic orbits on a 2-torus, not complex dynamics.</p>
 </div>
@@ -295,6 +331,13 @@ abbr {
 <h3>n=4 strands: Class IV candidates</h3>
 <img src="braiding_class4_4strand.png" alt="Class IV candidate trajectories for 4-strand Fibonacci anyon braiding. 3D state space projections showing quasi-periodic orbits.">
 <p class="plot-caption">Class IV candidates for n=4 Fibonacci anyon braiding (3D fusion space). Higher-dimensional quasi-periodic orbits, still with zero Lyapunov exponent. The richer structure comes from three eigenvalue phases rather than two.</p>
+</div>
+
+<div class="footnotes">
+<ol>
+<li id="fn1">Wolfram, S. (2002). <em>A New Kind of Science</em>. Wolfram Media. The four-class framework for classifying dynamical systems by their long-term behavior. <a href="#fnref1">&uarr;</a></li>
+<li id="fn2">Nayak, C., Simon, S. H., Stern, A., Freedman, M. &amp; Das Sarma, S. (2008). Non-abelian anyons and topological quantum computation. <em>Reviews of Modern Physics</em>, 80(3), 1083-1159. Comprehensive review including Fibonacci anyon R-matrices and F-matrices. <a href="#fnref2">&uarr;</a></li>
+</ol>
 </div>
 
 </div>

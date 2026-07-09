@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Six physical systems where phase transitions bridge scientific domains — gene regulatory networks, the BZ reaction, cortical neural tissue, the immune system, magnetic skyrmions, and the magnetosphere. Each demonstrates how criticality creates mathematical identity between fields that share no microscopic connection.">
 <title>Criticality Bridges &mdash; Physical Systems Connecting Domains</title>
 <style>
 :root {
@@ -314,6 +315,42 @@ footer {
   body { font-size: 16px; }
   .container { padding: 1rem 1rem 3rem; }
 }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+  .replay-btn { transition: none; }
+}
 </style>
 </head>
 <body>
@@ -354,13 +391,13 @@ footer {
 
 <h2 id="intro"><span class="section-number">1.</span> Criticality as a Bridge</h2>
 
-<p>At a critical point, the microscopic details of a physical system become irrelevant. Only symmetry and dimensionality matter. The correlation length diverges, fluctuations span all scales, and the system's behavior is governed entirely by a small set of universal quantities &mdash; the critical exponents.</p>
+<p>At a critical point, the microscopic details of a physical system become irrelevant. Only symmetry and dimensionality matter. The <span class="tip" tabindex="0">correlation length<span class="tt">The characteristic distance over which fluctuations are correlated. At a critical point, it diverges — fluctuations span the entire system. This divergence is what makes microscopic details irrelevant and universality possible.</span></span> diverges, fluctuations span all scales, and the system's behavior is governed entirely by a small set of universal quantities &mdash; the <span class="tip" tabindex="0">critical exponents<span class="tt">Universal numbers characterizing a phase transition — how magnetization vanishes (β), susceptibility diverges (γ), correlation length grows (ν). Systems in the same universality class share identical exponents regardless of their microscopic details.</span></span>.</p>
 
-<p>This has a remarkable consequence: systems from completely different scientific domains can share identical mathematical descriptions at their respective critical points. A ferromagnet near its Curie temperature, a binary fluid near its consolute point, and a lattice gas near its percolation threshold all belong to the same universality class. They share the same exponents, the same correlation functions, the same scaling relations &mdash; despite having nothing in common at the microscopic level.</p>
+<p>This has a remarkable consequence: systems from completely different scientific domains can share identical mathematical descriptions at their respective critical points. A ferromagnet near its Curie temperature, a binary fluid near its consolute point, and a lattice gas near its percolation threshold all belong to the same <span class="tip" tabindex="0">universality class<span class="tt">A category of phase transitions sharing the same critical exponents and scaling functions. Determined only by symmetry and dimensionality, not microscopic details. The Ising class alone describes magnets, binary alloys, and lattice gases.</span></span>. They share the same exponents, the same correlation functions, the same scaling relations &mdash; despite having nothing in common at the microscopic level.</p>
 
 <div class="card highlight">
 <p>This is not analogy. It is mathematical identity.</p>
-<p>Same universality class = same scaling exponents = same correlation functions = same renormalization group fixed point.</p>
+<p>Same universality class = same scaling exponents = same correlation functions = same <span class="tip" tabindex="0">renormalization group<span class="tt">A mathematical framework for understanding how a system's behavior changes when viewed at different scales. At a critical point, the system looks the same at every scale — a fixed point of the renormalization group flow. Developed by Wilson (Nobel Prize 1982).</span></span> fixed point.</p>
 </div>
 
 <p>What follows are six physical systems where this principle demonstrably connects scientific domains that otherwise have no obvious relationship. In each case, a phase transition or critical point is the mechanism that couples the domains &mdash; the bridge across which mathematical structure flows.</p>
@@ -381,9 +418,9 @@ footer {
 
 <p>Stuart Kauffman's insight, developed across three decades of work, was to model a cell's gene regulation as a random Boolean network: <span class="math">N</span> genes, each receiving input from <span class="math">K</span> randomly chosen other genes, with a randomly chosen Boolean function determining the gene's next state.</p>
 
-<p>The parameter <span class="math">K</span> controls the system's qualitative behavior. At <span class="math">K</span> = 1, most genes freeze into fixed states &mdash; the network is ordered, insensitive, dead. At <span class="math">K</span> &ge; 3, the network is chaotic &mdash; small perturbations cascade unpredictably through the system, and attractors are exponentially numerous. At <span class="math">K</span> &asymp; 2, the network sits at the boundary between these phases: the <em>edge of chaos</em>.</p>
+<p>The parameter <span class="math">K</span> controls the system's qualitative behavior. At <span class="math">K</span> = 1, most genes freeze into fixed states &mdash; the network is ordered, insensitive, dead. At <span class="math">K</span> &ge; 3, the network is chaotic &mdash; small perturbations cascade unpredictably through the system, and attractors are exponentially numerous. At <span class="math">K</span> &asymp; 2, the network sits at the boundary between these phases: the <em><span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between ordered and chaotic behavior in dynamical systems. Systems at this boundary maximize information processing and computational capacity. In Boolean networks, this occurs at connectivity K ≈ 2.</span></span></em>.</p>
 
-<p>This boundary is a genuine phase transition. Derrida and Pomeau showed in 1986 that the annealed approximation of a random Boolean network maps exactly onto the directed percolation problem. The critical point at <span class="math">K</span> &asymp; 2 falls in the <strong>directed percolation universality class</strong> &mdash; the same class that governs forest fires, epidemic spreading, and catalytic surface reactions.</p>
+<p>This boundary is a genuine phase transition. Derrida and Pomeau showed in 1986 that the annealed approximation of a random Boolean network maps exactly onto the directed percolation problem. The critical point at <span class="math">K</span> &asymp; 2 falls in the <strong><span class="tip" tabindex="0">directed percolation universality class<span class="tt">The most common universality class for transitions between absorbing (inactive) and active states. Governs spreading processes with a preferred direction — forest fires, epidemics, catalytic reactions. Critical exponents: β ≈ 0.58, ν_⊥ ≈ 1.10 in 2D.</span></span></strong> &mdash; the same class that governs forest fires, epidemic spreading, and catalytic surface reactions.</p>
 
 <p>The autocatalytic aspect is essential. Genes activate other genes' transcription, producing proteins that regulate still other genes. The regulatory network is a self-sustaining catalytic web &mdash; an autocatalytic set in Kauffman's own terminology (what he later formalized as RAF sets). The critical point at <span class="math">K</span> &asymp; 2 is precisely where the autocatalytic network spontaneously assembles into stable cell types (attractors) without being too rigid to respond or too volatile to persist.</p>
 
@@ -428,9 +465,9 @@ footer {
 <div class="card">
 <p><strong>Autocatalysis.</strong> The reaction is self-catalyzing. The intermediate HBrO<sub>2</sub> catalyzes its own production from bromate: a positive feedback loop that drives the oscillation. The overall reaction scheme involves at least two coupled autocatalytic cycles (the Oregonator model captures these as two key intermediates).</p>
 
-<p><strong>Criticality.</strong> The oscillatory state emerges through a Hopf bifurcation &mdash; a continuous phase transition from a stable steady state to a limit cycle. Below the bifurcation parameter value, the system relaxes to equilibrium. Above it, stable oscillations appear. At the bifurcation point itself, the system has divergent susceptibility and critical slowing down.</p>
+<p><strong>Criticality.</strong> The oscillatory state emerges through a <span class="tip" tabindex="0">Hopf bifurcation<span class="tt">A phase transition from a stable fixed point to a limit cycle (stable oscillation). As a parameter crosses the critical value, a pair of complex eigenvalues crosses the imaginary axis. The amplitude of oscillation grows continuously from zero — a continuous (second-order) transition.</span></span> &mdash; a continuous phase transition from a stable steady state to a limit cycle. Below the bifurcation parameter value, the system relaxes to equilibrium. Above it, stable oscillations appear. At the bifurcation point itself, the system has divergent susceptibility and critical slowing down.</p>
 
-<p><strong>Solitonic behavior.</strong> The spiral waves are dissipative solitons &mdash; coherent, localized structures that propagate without dispersing and interact with quasi-particle properties. They have a well-defined topological charge (the winding number of the spiral tip), they scatter off each other, and they can be annihilated only in pairs of opposite chirality.</p>
+<p><strong>Solitonic behavior.</strong> The spiral waves are <span class="tip" tabindex="0">dissipative solitons<span class="tt">Coherent, self-sustaining structures in systems far from equilibrium. Unlike conservative solitons (which preserve energy exactly), dissipative solitons maintain their form through continuous energy input and dissipation. BZ spirals and cardiac reentry are examples.</span></span> &mdash; coherent, localized structures that propagate without dispersing and interact with quasi-particle properties. They have a well-defined <span class="tip" tabindex="0">topological charge<span class="tt">An integer labeling a topological defect — counting how many times a field winds around a singularity. Spiral waves have charge ±1. Topological charge is conserved: defects can only appear or disappear in pairs of opposite charge.</span></span> (the winding number of the spiral tip), they scatter off each other, and they can be annihilated only in pairs of opposite chirality.</p>
 </div>
 
 <p>The BZ reaction is therefore a physical system where an autocatalytic chemical network crosses a critical threshold and produces topologically characterized solitonic structures. It bridges three domains through a single piece of wet chemistry that can be observed in a petri dish.</p>
@@ -463,7 +500,7 @@ footer {
   <div class="domain-connect">Nonlinear dynamics (6) &harr; Parallel computation (10), plus Universality / CA (9)</div>
 </div>
 
-<p>In 2003, John Beggs and Dietmar Plenz placed multi-electrode arrays on slices of rat cortical tissue and measured spontaneous neural activity. They discovered that neural firing propagates in cascades &mdash; <em>neuronal avalanches</em> &mdash; whose sizes follow a power law with exponent &asymp; &minus;3/2. This is the signature of a system sitting at the critical point of the mean-field branching process universality class.</p>
+<p>In 2003, John Beggs and Dietmar Plenz placed multi-electrode arrays on slices of rat cortical tissue and measured spontaneous neural activity. They discovered that neural firing propagates in cascades &mdash; <em><span class="tip" tabindex="0">neuronal avalanches<span class="tt">Cascades of neural firing that propagate through cortical tissue. At criticality, their size distribution follows a power law with exponent ≈ -3/2 (mean-field branching process). First observed by Beggs and Plenz (2003) in rat cortex.</span></span></em> &mdash; whose sizes follow a power law with exponent &asymp; &minus;3/2. This is the signature of a system sitting at the critical point of the mean-field branching process universality class.</p>
 
 <p>The finding has since been replicated in vivo, across species, and using multiple measurement techniques (LFP, MEG, fMRI BOLD fluctuations). The cortex appears to operate at or very near a critical phase transition &mdash; the boundary between two regimes:</p>
 
@@ -502,7 +539,7 @@ footer {
   <div class="domain-connect">Autocatalysis (7) &harr; Universality / CA (9) &harr; Criticality (6)</div>
 </div>
 
-<p>Niels Jerne's idiotypic network theory, proposed in 1974, recognized that the adaptive immune system is not merely a collection of independent pathogen detectors but a self-referential network. Antibodies recognize antigens &mdash; but the variable regions of antibodies are themselves antigens to other antibodies. The immune system is a network of mutual recognition, where antibodies stimulate and suppress each other's production.</p>
+<p>Niels Jerne's <span class="tip" tabindex="0">idiotypic network<span class="tt">Jerne's theory (1974) that antibodies recognize not only foreign antigens but also each other's variable regions. The immune system forms a self-referential network of mutual recognition, creating feedback loops that regulate immune response.</span></span> theory, proposed in 1974, recognized that the adaptive immune system is not merely a collection of independent pathogen detectors but a self-referential network. Antibodies recognize antigens &mdash; but the variable regions of antibodies are themselves antigens to other antibodies. The immune system is a network of mutual recognition, where antibodies stimulate and suppress each other's production.</p>
 
 <p>This network is autocatalytic: antigen recognition triggers clonal expansion (proliferation of lymphocytes), which produces more antibodies, which stimulate more recognition events. It is also, in a precise sense, a cellular automaton: discrete immune cells follow local rules (encounter antigen &rarr; activate &rarr; proliferate &rarr; differentiate &rarr; die), and the collective behavior &mdash; immunity, tolerance, autoimmunity &mdash; emerges from these local interactions without central control.</p>
 
@@ -541,7 +578,7 @@ footer {
   <div class="domain-connect">Topology (1) &harr; Solitons (5) &harr; Condensed matter (3)</div>
 </div>
 
-<p>A magnetic skyrmion is a swirling texture of magnetic moments in a thin film &mdash; a vortex where the spins rotate smoothly from pointing up at the boundary to pointing down at the center, winding around one full time. It is simultaneously three things:</p>
+<p>A magnetic <span class="tip" tabindex="0">skyrmion<span class="tt">A topologically protected spin texture in magnetic materials — a nanoscale whirlpool of magnetization that cannot be unwound by continuous deformation. Characterized by an integer topological charge. Promising for ultra-dense data storage.</span></span> is a swirling texture of magnetic moments in a thin film &mdash; a vortex where the spins rotate smoothly from pointing up at the boundary to pointing down at the center, winding around one full time. It is simultaneously three things:</p>
 
 <div class="card">
 <p><strong>A topological object.</strong> A skyrmion is characterized by a topological charge &mdash; an integer winding number computed by integrating the solid angle subtended by the magnetization over the two-dimensional plane. This charge is quantized: it cannot change by continuous deformation. A skyrmion cannot be unwound into the uniform ferromagnetic state without tearing the spin texture &mdash; it is topologically protected.</p>

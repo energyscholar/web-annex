@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive simulation of Miller's coevolving automata. Run experiments with configurable population sizes, mutation rates, and automaton states. Watch cooperation emerge in real time.">
 <title>Miller's Coevolving Automata -- Interactive Simulation</title>
 <style>
   :root {
@@ -658,6 +659,32 @@
     .lab-display { grid-template-columns: 1fr; }
     .lab-summary { grid-template-columns: 1fr; }
   }
+  @media (prefers-reduced-motion: reduce) {
+    canvas { animation: none; }
+    * { transition-duration: 0.01ms !important; }
+  }
+
+  /* Tooltips */
+  .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+  .tip .tt {
+    display: none; position: absolute; bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a2744; border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+    color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+    line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    text-align: left; letter-spacing: normal; text-transform: none;
+  }
+  .tip .tt::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--border);
+  }
+  .tip:hover .tt, .tip:focus .tt { display: block; }
+  @media (max-width: 640px) {
+    .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+      transform: none; max-width: none; width: auto; }
+    .tip .tt::after { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -690,7 +717,7 @@
       </div>
 
       <div class="control-group">
-        <span class="control-label">States per agent</span>
+        <span class="control-label"><span class="tip" tabindex="0">States per agent<span class="tt">The number of internal states each Moore machine can have. Miller's central finding: the jump from 1 to 2 states crosses a computational threshold — conditional strategies like Tit-for-Tat become possible.</span></span></span>
         <div class="control-row">
           <input type="range" id="states" min="1" max="16" value="2">
           <span class="control-value" id="states-val">2</span>
@@ -698,7 +725,7 @@
       </div>
 
       <div class="control-group">
-        <span class="control-label">Rounds per match</span>
+        <span class="control-label"><span class="tip" tabindex="0">Rounds per match<span class="tt">How many moves each pair of agents plays per encounter. More rounds give cooperative strategies time to establish reciprocity and outperform defectors.</span></span></span>
         <div class="control-row">
           <input type="range" id="rounds" min="1" max="200" value="150">
           <span class="control-value" id="rounds-val">150</span>
@@ -706,7 +733,7 @@
       </div>
 
       <div class="control-group">
-        <span class="control-label">Mutation rate</span>
+        <span class="control-label"><span class="tip" tabindex="0">Mutation rate<span class="tt">Probability of each bit in the genome flipping during reproduction. Above ~0.02, mutation destroys conditional strategies faster than selection can repair them — Miller's second phase transition.</span></span></span>
         <div class="control-row">
           <input type="range" id="mutation" min="1" max="50" value="5">
           <span class="control-value" id="mutation-val">0.005</span>
@@ -714,7 +741,7 @@
       </div>
 
       <div class="control-group">
-        <span class="control-label">Noise (misreport)</span>
+        <span class="control-label"><span class="tip" tabindex="0">Noise (misreport)<span class="tt">Each move has this probability of being flipped before the opponent sees it. Simulates implementation error. Even 1% noise destroys cooperation at 2 states — strategies can't tell accidental defection from real betrayal.</span></span></span>
         <div class="control-row">
           <input type="range" id="noise" min="0" max="100" value="0">
           <span class="control-value" id="noise-val">0.0%</span>
@@ -739,7 +766,7 @@
 
       <!-- Payoff matrix sliders -->
       <div class="control-group">
-        <span class="control-label">T (Temptation)</span>
+        <span class="control-label"><span class="tip" tabindex="0">T (Temptation)<span class="tt">Payoff for defecting when the opponent cooperates. In the Prisoner's Dilemma: T > R > P > S. Higher T makes defection more attractive.</span></span></span>
         <div class="control-row">
           <input type="range" id="payoff-T" min="0" max="10" value="5">
           <span class="control-value" id="payoff-T-val">5</span>
@@ -856,7 +883,7 @@
 
     <!-- Bridge Annotation (P5.4) -->
     <div class="bridge-annotation" id="bridge-annotation">
-      <p>This transition &mdash; from asocial equilibrium to cooperative equilibrium via a sharp evolutionary revolution &mdash; is the pattern Miller identified as central to social origins. A single additional state, the minimum unit of computational capacity, produces a qualitative change in collective behavior. Kauffman found the same threshold structure in molecular autocatalysis (RAF theory). The structural question: does this pattern govern AI-human institutional closure?</p>
+      <p>This transition &mdash; from <span class="tip" tabindex="0">asocial equilibrium<span class="tt">A stable state where agents act independently with no conditional response to others — like isolated microservices with no inter-service communication.</span></span> to cooperative equilibrium via a sharp <span class="tip" tabindex="0">evolutionary revolution<span class="tt">An abrupt population-wide shift in strategy composition, driven by selection pressure — the population "tips" from one dominant strategy to another in a few generations.</span></span> &mdash; is the pattern Miller identified as central to social origins. A single additional state, the minimum unit of computational capacity, produces a qualitative change in collective behavior. Kauffman found the same threshold structure in molecular <span class="tip" tabindex="0">autocatalysis<span class="tt">A chemical network where reactions produce their own catalysts — a self-sustaining cycle, like a build system that compiles its own compiler.</span></span> (<span class="tip" tabindex="0">RAF theory<span class="tt">Reflexively Autocatalytic and Food-generated sets — a mathematical framework for identifying self-sustaining reaction networks. Developed by Hordijk &amp; Steel.</span></span>). The structural question: does this pattern govern AI-human institutional closure?</p>
       <p><a href="index.html">Read the full analysis &rarr;</a></p>
     </div>
 

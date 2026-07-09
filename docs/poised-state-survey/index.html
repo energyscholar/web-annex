@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Twelve physical systems scored against a five-feature framework — criticality, topology, autocatalysis, computation, and braiding — revealing six cross-cutting patterns that suggest the convergence hypothesis casts observable shadows across condensed matter, biology, and materials science.">
 <title>Shadows of the Poised State</title>
 <style>
 :root {
@@ -152,6 +153,40 @@ nav a:hover, nav a.active { color: var(--heading); background: var(--dim); }
   .container { padding: 1rem; }
   nav { gap: 0.15rem; }
   nav a { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+}
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
 }
 </style>
 </head>
@@ -371,7 +406,7 @@ This survey examines twelve candidate systems, scores them against the five-feat
 
 <div class="card" style="border-color: var(--amber); margin-top: 2rem;">
 <h4 style="color: var(--amber);">The Autocatalysis Gap</h4>
-<p>Across all twelve systems, autocatalytic closure is consistently the <em>weakest</em> feature &mdash; present at best as structural analogy. If the poised-state hypothesis requires all five features to converge, the theory <strong>predicts</strong> that genuine autocatalytic closure should be discoverable in quasicrystal growth, turbulent cascade dynamics, and the 1/f noise mechanism. Its absence is the sharpest test of the framework.</p>
+<p>Across all twelve systems, <span class="tip" tabindex="0">autocatalytic closure<span class="tt">A network of reactions where every catalyst needed is produced by some reaction within the network itself. Self-sustaining: given a food source, it maintains itself without external catalysts. Kauffman&rsquo;s RAF sets formalize this.</span></span> is consistently the <em>weakest</em> feature &mdash; present at best as structural analogy. If the poised-state hypothesis requires all five features to converge, the theory <strong>predicts</strong> that genuine autocatalytic closure should be discoverable in quasicrystal growth, turbulent cascade dynamics, and the 1/f noise mechanism. Its absence is the sharpest test of the framework.</p>
 </div>
 
 <!-- ========== DEEP DIVES ========== -->
@@ -384,7 +419,7 @@ This survey examines twelve candidate systems, scores them against the five-feat
 </svg>
 </div>
 
-<p>The brain operates near a critical point where the branching ratio &sigma; approaches 1. Below criticality, signals die out. Above, they explode into seizure. At &sigma; = 1, avalanches follow power-law distributions with exponent &tau; &asymp; 1.60 (PNAS, 2025), maximizing dynamic range and information transmission.</p>
+<p>The brain operates near a critical point where the <span class="tip" tabindex="0">branching ratio<span class="tt">A measure of how signals propagate through a network. If &sigma; &lt; 1, signals die out (subcritical). If &sigma; &gt; 1, they explode (supercritical). At &sigma; = 1 exactly, the system sits at criticality &mdash; the sweet spot for information processing.</span></span> &sigma; approaches 1. Below criticality, signals die out. Above, they explode into seizure. At &sigma; = 1, avalanches follow <span class="tip" tabindex="0">power-law distributions<span class="tt">Statistical distributions where the probability of large events falls off as a power of their size, not exponentially. No characteristic scale &mdash; the same pattern repeats at every magnification. The signature of systems at a critical point.</span></span> with exponent &tau; &asymp; 1.60 (PNAS, 2025), maximizing <span class="tip" tabindex="0">dynamic range<span class="tt">The ratio between the largest and smallest signals a system can detect and process. At criticality, neural networks maximize dynamic range &mdash; they can respond to whispers and shouts with equal sensitivity.</span></span> and information transmission.</p>
 
 <p>A 2025 PNAS study found <strong>genetic contributions</strong> to brain criticality, suggesting it is not an accident but selected for. The critical state is the computational sweet spot: maximum sensitivity to inputs, maximum information storage, maximum dynamic range. The brain doesn&rsquo;t merely <em>tolerate</em> criticality &mdash; it <em>maintains</em> itself there.</p>
 
@@ -429,7 +464,7 @@ This survey examines twelve candidate systems, scores them against the five-feat
 </svg>
 </div>
 
-<p>In epithelial cell sheets, elongated cells form a nematic liquid crystal. This living crystal has topological defects: <strong>+1/2 defects</strong> (comets that self-propel) and <strong>&minus;1/2 defects</strong> (trefoils that sit still). These defects aren&rsquo;t incidental &mdash; they <em>organize</em> the tissue.</p>
+<p>In epithelial cell sheets, elongated cells form a <span class="tip" tabindex="0">nematic liquid crystal<span class="tt">A material whose rod-shaped molecules align along a common direction but aren&rsquo;t arranged in layers &mdash; orientational order without positional order. The alignment field can have topological defects: points where the orientation is undefined.</span></span>. This living crystal has <span class="tip" tabindex="0">topological defects<span class="tt">Points or lines where an order parameter field is undefined &mdash; singularities that cannot be removed by smooth deformation. Classified by their winding number (topological charge). Spiral wave tips, dislocations in crystals, and vortices in superfluids are all topological defects.</span></span>: <strong>+1/2 defects</strong> (comets that self-propel) and <strong>&minus;1/2 defects</strong> (trefoils that sit still). These defects aren&rsquo;t incidental &mdash; they <em>organize</em> the tissue.</p>
 
 <p>In 2022, <em>Nature Materials</em> showed that integer topological defects organize stresses driving tissue morphogenesis in regenerating Hydra. Defects mark where cells die, where tissues fold, where organs form. Topology tells biology where to build.</p>
 
@@ -452,7 +487,7 @@ This survey examines twelve candidate systems, scores them against the five-feat
 
 <p>Au<sub>51</sub>Al<sub>34</sub>Yb<sub>15</sub> sits at a <strong>quantum critical point without external tuning</strong> (Deguchi et al., <em>Nature Materials</em>, 2012). No magnetic field, no pressure, no doping &mdash; the material is critical purely because of its aperiodic structure. Divergent susceptibility (&chi;<sup>&minus;1</sup> ~ T<sup>0.51</sup>), logarithmically divergent specific heat. The effect vanishes in crystalline approximants of near-identical composition. Structure alone drives criticality.</p>
 
-<p>All electronic eigenstates in Fibonacci quasicrystals are critical &mdash; neither extended nor localized &mdash; with multifractal scaling. The energy spectrum is a self-similar Cantor set. A 2023 <em>Nature Physics</em> paper confirmed nested patterns of localized, delocalized, and multifractal states.</p>
+<p>All electronic eigenstates in Fibonacci quasicrystals are critical &mdash; neither extended nor localized &mdash; with <span class="tip" tabindex="0">multifractal<span class="tt">A fractal whose scaling behavior varies from point to point. Instead of one fractal dimension, there&rsquo;s a continuous spectrum of local dimensions. Critical wavefunctions in quasicrystals are multifractal &mdash; neither fully extended nor fully localized.</span></span> scaling. The energy spectrum is a self-similar Cantor set. A 2023 <em>Nature Physics</em> paper confirmed nested patterns of localized, delocalized, and multifractal states.</p>
 
 <div class="card" style="border-color: var(--purple);">
 <h4 style="color: var(--purple);">The Fibonacci Bridge</h4>
@@ -477,7 +512,7 @@ This survey examines twelve candidate systems, scores them against the five-feat
 
 <p>Pettini et al. (<em>Entropy</em>, 2025) found two specific heat peaks in Lennard-Jones glass formers: a second-order transition and a weakly first-order transition. Both are accompanied by topological changes in the potential energy landscape &mdash; inflection points in mean curvature, principal curvature dispersion, and scalar curvature variance, connected to topology by the Pinkall and Overholt theorems.</p>
 
-<p>Simultaneously, the Gardner transition (glass &rarr; marginally stable subbasins) was shown in October 2024 to coincide with the emergence of jamming scalings. Two distinct ordering transitions with topological defects mediating both. If these interact at a codimension-two point &mdash; that is a <strong>bicritical system</strong>.</p>
+<p>Simultaneously, the Gardner transition (glass &rarr; marginally stable subbasins) was shown in October 2024 to coincide with the emergence of jamming scalings. Two distinct ordering transitions with topological defects mediating both. If these interact at a <span class="tip" tabindex="0">codimension-two<span class="tt">A point in parameter space requiring two parameters to be tuned simultaneously. Like the intersection of two lines &mdash; one constraint gives a line, two constraints give a point. Bicritical points are codimension-two.</span></span> point &mdash; that is a <strong><span class="tip" tabindex="0">bicritical system<span class="tt">A system where two distinct phase transitions interact at a single point in parameter space. At a bicritical point, the universality class changes &mdash; the critical exponents are different from either transition considered alone.</span></span></strong>.</p>
 
 <div class="card" style="border-color: var(--amber);">
 <h4 style="color: var(--amber);">Strategic Value</h4>
@@ -494,7 +529,7 @@ This survey examines twelve candidate systems, scores them against the five-feat
 </svg>
 </div>
 
-<p>The FMO complex in green sulfur bacteria transfers absorbed light energy to the reaction center with ~99% efficiency at room temperature. The mechanism: <strong>environment-assisted quantum transport</strong> (ENAQT). Noise doesn&rsquo;t destroy quantum coherence &mdash; it <em>helps</em>. At the optimal dephasing strength, environmental fluctuations eliminate inefficient transport paths while opening new channels.</p>
+<p>The FMO complex in green sulfur bacteria transfers absorbed light energy to the reaction center with ~99% efficiency at room temperature. The mechanism: <strong><span class="tip" tabindex="0">environment-assisted quantum transport<span class="tt">A mechanism where environmental noise actually helps energy transfer instead of destroying it. At an optimal noise level, random fluctuations eliminate inefficient pathways while opening new channels. The biological analogue of stochastic resonance.</span></span></strong> (ENAQT). Noise doesn&rsquo;t destroy quantum coherence &mdash; it <em>helps</em>. At the optimal dephasing strength, environmental fluctuations eliminate inefficient transport paths while opening new channels.</p>
 
 <p>This pattern &mdash; noise as resource, not obstacle &mdash; appears across multiple poised-state candidates:</p>
 <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
@@ -560,7 +595,7 @@ This survey examines twelve candidate systems, scores them against the five-feat
 </svg>
 </div>
 
-<p>The Kosterlitz-Thouless transition is the unbinding of topological defect pairs. It was discovered in 2D superfluids (Nobel Prize, 2016). It is now appearing in:</p>
+<p>The <span class="tip" tabindex="0">Kosterlitz-Thouless<span class="tt">A phase transition driven by the unbinding of topological defect pairs. Below the transition, defects are bound in neutral pairs. Above it, they fly apart and disorder the system. Nobel Prize 2016.</span></span> transition is the unbinding of topological defect pairs. It was discovered in 2D superfluids (Nobel Prize, 2016). It is now appearing in:</p>
 
 <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
 <li><strong>Cardiac tissue</strong> (Frontiers, 2025) &mdash; AFL = bound pairs, AF = unbound</li>

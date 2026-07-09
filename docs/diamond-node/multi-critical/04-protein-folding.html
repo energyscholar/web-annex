@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Protein folding is where four independent phase-transition frameworks converge in a single molecule: thermodynamic criticality, anomalous jamming (δ = 9/2), self-organized critical kinetics, and edge-of-chaos dynamics in disordered proteins. Interactive packing fraction explorer across fold classes.">
 <title>Protein Folding — Multi-Critical Systems</title>
 <style>
 :root {
@@ -199,10 +200,48 @@ sub, sup { font-size: 0.75em; }
   font-size: 0.9rem; color: var(--line);
 }
 
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
+/* Responsive */
 @media (max-width: 600px) {
   h1 { font-size: 2rem; }
   .container { padding: 1rem 1rem 3rem; }
   summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
 }
 </style>
 </head>
@@ -228,17 +267,17 @@ What makes protein folding extraordinary from a physics perspective is not the f
 <h3>1. Thermodynamic criticality &mdash; cooperative folding</h3>
 
 <p>
-Protein folding is a first-order phase transition with cooperative behavior. The protein goes from unfolded to folded in a single step &mdash; not gradually. For small proteins, this transition is two-state: unfolded or folded, nothing in between. The enthalpy-entropy compensation at the folding temperature <span class="math">T</span><sub>f</sub> produces a sharp transition, and the cooperativity (measured by the van&rsquo;t Hoff enthalpy ratio) approaches a true thermodynamic critical point for larger proteins.
+Protein folding is a <span class="tip" tabindex="0">first-order phase transition<span class="tt">An abrupt, discontinuous jump between two states &mdash; like water boiling. The system doesn&rsquo;t gradually blend between states; it snaps from one to the other. Contrast with second-order transitions, which are smooth and continuous.</span></span> with cooperative behavior.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> The protein goes from unfolded to folded in a single step &mdash; not gradually. For small proteins, this transition is two-state: unfolded or folded, nothing in between. The enthalpy-entropy compensation at the folding temperature <span class="math">T</span><sub>f</sub> produces a sharp transition, and the cooperativity (measured by the <span class="tip" tabindex="0">van&rsquo;t Hoff enthalpy<span class="tt">A measure of how &ldquo;all-or-nothing&rdquo; a transition is. If the van&rsquo;t Hoff enthalpy matches the calorimetric enthalpy, the transition is perfectly two-state &mdash; like a light switch, not a dimmer.</span></span> ratio) approaches a true thermodynamic critical point for larger proteins.
 </p>
 
 <h3>2. Jamming &mdash; a packing transition with an anomalous exponent</h3>
 
 <p>
-The interior of a folded protein is packed. Amino acid side chains fill space with a packing fraction <span class="math">&phi;</span><sub>c</sub> &asymp; 0.55 &mdash; denser than random loose packing (~0.55) but less dense than crystalline close packing (~0.74). This is not coincidental. It is a <strong>jamming transition</strong>: the point where random packing becomes mechanically rigid.
+The interior of a folded protein is packed. Amino acid side chains fill space with a <span class="tip" tabindex="0">packing fraction<span class="tt">The fraction of space actually occupied by particles. A packing fraction of 0.55 means 55% of the volume is filled with amino acid side chains and 45% is empty. Like measuring how much of a jar is marbles vs. air.</span></span> <span class="math">&phi;</span><sub>c</sub> &asymp; 0.55 &mdash; denser than random loose packing (~0.55) but less dense than crystalline close packing (~0.74). This is not coincidental. It is a <strong><span class="tip" tabindex="0">jamming transition<span class="tt">The point where randomly packed particles become mechanically rigid &mdash; they can no longer rearrange. Like when a traffic jam locks up: each car is individually mobile, but collectively they&rsquo;re stuck. A phase transition from fluid-like to solid-like.</span></span></strong>: the point where random packing becomes mechanically rigid.
 </p>
 
 <p>
-In 2025, Grigas and colleagues published a landmark finding in PRX Life: the jamming transition in protein cores has an <strong>anomalous critical exponent</strong> <span class="math">&delta;</span> = 9/2. This value appears nowhere else in jamming physics. Standard frictionless spheres give <span class="math">&delta;</span> = 2. Standard frictional particles give <span class="math">&delta;</span> = 3/2. The protein value <span class="math">&delta;</span> = 9/2 defines a new universality class &mdash; one that appears to be specific to the geometry and interaction potential of amino acid side chains.
+In 2025, Grigas and colleagues published a finding in PRX Life: the jamming transition in protein cores has an <strong>anomalous <span class="tip" tabindex="0">critical exponent<span class="tt">A number that describes how a physical quantity changes as a system approaches a tipping point. Different universality classes have different exponents &mdash; they&rsquo;re the mathematical fingerprint of the transition type.</span></span></strong> <span class="math">&delta;</span> = 9/2.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> This value appears nowhere else in jamming physics. Standard frictionless spheres give <span class="math">&delta;</span> = 2. Standard frictional particles give <span class="math">&delta;</span> = 3/2. The protein value <span class="math">&delta;</span> = 9/2 defines a new universality class &mdash; one that appears to be specific to the geometry and interaction potential of amino acid side chains.
 </p>
 
 <p>
@@ -248,7 +287,7 @@ And this exponent appears to be <em>universal across all protein fold classes</e
 <h3>3. SOC kinetics &mdash; power-law folding times</h3>
 
 <p>
-How long a protein takes to fold is not random. Folding time distributions follow power laws, not exponentials. This is a signature of <strong>self-organized criticality</strong> (SOC) &mdash; the system organizes itself to a critical state without fine-tuning.
+How long a protein takes to fold is not random. Folding time distributions follow <span class="tip" tabindex="0">power laws<span class="tt">A mathematical relationship where one quantity varies as a fixed power of another &mdash; like y = x&sup3;. Power-law distributions have no characteristic scale: small events are common, large events are rare, and the ratio between them is constant. Exponential distributions have a typical size; power laws don&rsquo;t.</span></span>, not exponentials. This is a signature of <strong><span class="tip" tabindex="0">self-organized criticality<span class="tt">A system that drives itself to a critical state without anyone tuning the parameters. Think of a sand pile: you keep adding grains, and it automatically maintains itself at the angle where avalanches of all sizes occur. No thermostat needed &mdash; it just happens.</span></span></strong> (SOC) &mdash; the system organizes itself to a critical state without fine-tuning.
 </p>
 
 <p>
@@ -258,11 +297,11 @@ Three kinetic universality classes have been identified, each with its own power
 <h3>4. Edge-of-chaos &mdash; disordered proteins</h3>
 
 <p>
-Not all proteins fold. About 30% of the human proteome consists of <strong>intrinsically disordered proteins</strong> (IDPs) &mdash; sequences that never adopt a fixed three-dimensional structure. IDPs are not broken or incomplete. They function <em>because</em> they are disordered: flexible, adaptive, capable of binding multiple partners.
+Not all proteins fold. About 30% of the human proteome consists of <strong><span class="tip" tabindex="0">intrinsically disordered proteins<span class="tt">Proteins that never settle into a fixed 3D shape. They exist as a constantly shifting ensemble of conformations &mdash; like a piece of wet spaghetti rather than a rigid tool. They function through flexibility, not structure.</span></span></strong> (IDPs)<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> &mdash; sequences that never adopt a fixed three-dimensional structure. IDPs are not broken or incomplete. They function <em>because</em> they are disordered: flexible, adaptive, capable of binding multiple partners.
 </p>
 
 <p>
-IDPs operate at the <strong>edge of chaos</strong> &mdash; the boundary between ordered dynamics (stable folded structure) and chaotic dynamics (random coil with no persistent interactions). This boundary is itself a critical phenomenon, producing long-range correlations along the protein chain and sensitivity to perturbation that enables the rapid conformational switching IDPs require for function.
+IDPs operate at the <strong><span class="tip" tabindex="0">edge of chaos<span class="tt">The narrow boundary between two regimes: too ordered (frozen, rigid, unable to adapt) and too chaotic (random, unstable, unable to remember). Systems at this boundary can both store information and respond flexibly &mdash; the computational sweet spot.</span></span></strong> &mdash; the boundary between ordered dynamics (stable folded structure) and chaotic dynamics (random coil with no persistent interactions). This boundary is itself a critical phenomenon, producing long-range correlations along the protein chain and sensitivity to perturbation that enables the rapid conformational switching IDPs require for function.
 </p>
 
 <!-- ========== MAIN SVG: FOUR FRAMEWORKS CONVERGENCE ========== -->
@@ -339,7 +378,7 @@ IDPs operate at the <strong>edge of chaos</strong> &mdash; the boundary between 
 <h2>The Anomalous Exponent</h2>
 
 <p>
-The jamming result deserves special attention. When you compress random spheres together, they reach a packing fraction where they can no longer rearrange &mdash; the <em>jamming point</em>. At this point, the bulk modulus diverges as a power law with an exponent that depends on the particle interactions. For frictionless spheres: <span class="math">&delta;</span> = 2. For frictional particles: <span class="math">&delta;</span> = 3/2.
+The jamming result deserves special attention. When you compress random spheres together, they reach a packing fraction where they can no longer rearrange &mdash; the <em>jamming point</em>. At this point, the <span class="tip" tabindex="0">bulk modulus<span class="tt">A measure of how much a material resists being uniformly compressed. High bulk modulus = hard to squeeze. It describes the material&rsquo;s response to pressure applied equally from all directions.</span></span> diverges as a power law with an exponent that depends on the particle interactions. For frictionless spheres: <span class="math">&delta;</span> = 2. For frictional particles: <span class="math">&delta;</span> = 3/2.
 </p>
 
 <p>
@@ -347,11 +386,11 @@ For amino acids in protein cores: <span class="math">&delta;</span> = 9/2.
 </p>
 
 <p>
-This value has no precedent in jamming physics. It suggests that the effective interaction potential between amino acid side chains &mdash; a combination of van der Waals attraction, hydrogen bonding, and the hydrophobic effect &mdash; produces a fundamentally different type of mechanical rigidity than any previously studied granular system.
+This value has no precedent in jamming physics. It suggests that the effective interaction potential between amino acid side chains &mdash; a combination of van der Waals attraction, hydrogen bonding, and the <span class="tip" tabindex="0">hydrophobic effect<span class="tt">The tendency of nonpolar molecules to cluster together in water &mdash; not because they attract each other, but because water molecules prefer bonding with each other. It&rsquo;s the main force driving protein folding: oily side chains get pushed to the interior.</span></span> &mdash; produces a fundamentally different type of mechanical rigidity than any previously studied granular system.
 </p>
 
 <p>
-More remarkably, this exponent appears to be <strong>universal across all fold classes</strong>. A preliminary test on 30 protein structures across all major fold classes (all-alpha, all-beta, alpha/beta, alpha+beta) shows no statistically significant variation in packing fraction: Kruskal-Wallis <span class="math">p</span> = 0.31 with a mean <span class="math">&phi;</span> = 0.590 &plusmn; 0.042. The fold class &mdash; the overall architecture of the protein &mdash; does not change the packing. The jamming transition is the same regardless of how the protein is arranged.
+More remarkably, this exponent appears to be <strong>universal across all fold classes</strong>. A preliminary test on 30 protein structures across all major fold classes (all-alpha, all-beta, alpha/beta, alpha+beta) shows no statistically significant variation in packing fraction: <span class="tip" tabindex="0">Kruskal-Wallis<span class="tt">A statistical test that checks whether several groups come from the same distribution, without assuming the data is bell-shaped. A high p-value (like 0.31) means no significant difference between groups &mdash; they look statistically identical.</span></span> <span class="math">p</span> = 0.31 with a mean <span class="math">&phi;</span> = 0.590 &plusmn; 0.042. The fold class &mdash; the overall architecture of the protein &mdash; does not change the packing. The jamming transition is the same regardless of how the protein is arranged.
 </p>
 
 <!-- ========== INTERACTIVE: PACKING ACROSS FOLD CLASSES ========== -->
@@ -456,7 +495,7 @@ More remarkably, this exponent appears to be <strong>universal across all fold c
 <h2>The Gardner-Jamming Chain</h2>
 
 <p>
-This is where protein folding connects to the <a href="01-glass-transition.html">glass transition</a>. Below the Kauzmann temperature <span class="math">T</span><sub>K</sub>, the glass undergoes a Gardner transition &mdash; each metastable state fractures into a fractal hierarchy of marginally stable sub-states. The Gardner transition produces the same scaling laws that govern jamming.
+This is where protein folding connects to the <a href="01-glass-transition.html">glass transition</a>. Below the Kauzmann temperature <span class="math">T</span><sub>K</sub>, the glass undergoes a <span class="tip" tabindex="0">Gardner transition<span class="tt">A transition within the glass phase where each metastable state shatters into a fractal hierarchy of sub-states. Named after Elizabeth Gardner (1957&ndash;1988). It connects glass physics to the physics of tightly packed particles.</span></span><sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> &mdash; each metastable state fractures into a fractal hierarchy of <span class="tip" tabindex="0">marginally stable<span class="tt">Balanced on the edge of instability. The smallest push can trigger a rearrangement. Not unstable (falling apart), not stable (firmly locked) &mdash; right at the boundary. Like a stack of blocks that stands but wobbles at the slightest touch.</span></span> sub-states. The Gardner transition produces the same scaling laws that govern jamming.
 </p>
 
 <p>
@@ -484,7 +523,7 @@ If glass bicriticality is real (Tutorial 01), then the Gardner transition is whe
   </summary>
   <div class="detail-body">
     <p>
-      At the jamming transition, the bulk modulus <span class="math">K</span> scales as <span class="math">K</span> ~ (&phi; &minus; &phi;<sub>c</sub>)<sup>&delta;&minus;2</sup> and the shear modulus <span class="math">G</span> scales as <span class="math">G</span> ~ (&phi; &minus; &phi;<sub>c</sub>)<sup>&delta;&minus;3/2</sup>. These relations connect the macroscopic elastic response to the microscopic packing geometry.
+      At the jamming transition, the bulk modulus <span class="math">K</span> scales as <span class="math">K</span> ~ (&phi; &minus; &phi;<sub>c</sub>)<sup>&delta;&minus;2</sup> and the <span class="tip" tabindex="0">shear modulus<span class="tt">A measure of how much a material resists being deformed sideways &mdash; pushed so the top slides relative to the bottom, like a deck of cards. Related to but distinct from bulk modulus, which resists uniform compression.</span></span> <span class="math">G</span> scales as <span class="math">G</span> ~ (&phi; &minus; &phi;<sub>c</sub>)<sup>&delta;&minus;3/2</sup>. These relations connect the macroscopic elastic response to the microscopic packing geometry.
     </p>
     <p>
       Known universality classes for jamming:
@@ -510,7 +549,7 @@ If glass bicriticality is real (Tutorial 01), then the Gardner transition is whe
   </summary>
   <div class="detail-body">
     <p>
-      Protein folding kinetics divide into three universality classes based on the energy landscape topology:
+      Protein folding kinetics divide into three universality classes based on the <span class="tip" tabindex="0">energy landscape<span class="tt">An abstract surface where each point represents a possible arrangement of all the atoms, and the height represents the system&rsquo;s energy. Valleys are stable configurations; ridges are barriers between them. Folding is a journey across this landscape to the deepest valley.</span></span> topology:
     </p>
     <p>
       <strong>Two-state folders:</strong> A single barrier separates the unfolded and folded states. Folding is an all-or-none transition. Small proteins (&lt; 100 residues) typically fold this way. The folding time distribution follows a power law with an exponent related to the barrier height.
@@ -639,6 +678,16 @@ If glass bicriticality is real (Tutorial 01), then the Gardner transition is whe
     <p>Angell, C. A. (2002). Liquid fragility and the glass transition in water and aqueous solutions. <em>Chem. Rev.</em>, 102, 2627&ndash;2650.</p>
   </div>
 </details>
+
+<!-- ========== FOOTNOTES ========== -->
+<div class="footnotes fade-in">
+<ol>
+  <li id="fn1">Grigas, A. T. et al. (2025). Anomalous jamming exponent in protein cores. <em>PRX Life</em>. The first measurement of a jamming critical exponent specific to biological matter. <a href="#fnref1">&uarr;</a></li>
+  <li id="fn2">Bryngelson, J. D. &amp; Wolynes, P. G. (1987). Spin glasses and the statistical mechanics of protein folding. <em>PNAS</em>, 84, 7524&ndash;7528. The paper that connected protein folding to statistical mechanics phase transitions. <a href="#fnref2">&uarr;</a></li>
+  <li id="fn3">Uversky, V. N. (2019). Intrinsically disordered proteins and their &ldquo;mysterious&rdquo; (meta)physics. <em>Front. Phys.</em>, 7, 10. Comprehensive review of the physics of proteins that function without folding. <a href="#fnref3">&uarr;</a></li>
+  <li id="fn4">Charbonneau, P. et al. (2024). Gardner transition and jamming scalings. arXiv:2410.23797. Demonstrates that the Gardner transition produces the scaling exponents governing jamming. See also Parisi, G. &amp; Zamponi, F. (2010). <em>Rev. Mod. Phys.</em>, 82, 789&ndash;845. <a href="#fnref4">&uarr;</a></li>
+</ol>
+</div>
 
 <!-- ========== BOTTOM NAVIGATION ========== -->
 <div class="tutorial-nav">

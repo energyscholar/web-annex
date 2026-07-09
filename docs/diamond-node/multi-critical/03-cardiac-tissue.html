@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The heart exhibits three independent critical phenomena in one tissue: a Feigenbaum period-doubling cascade (temporal route to chaos), Kosterlitz-Thouless defect unbinding (flutter to fibrillation), and an unbreakable autocatalytic calcium network (RAF). Interactive demo of the RAF's single-fault tolerance.">
 <title>Cardiac Tissue — Multi-Critical Systems</title>
 <style>
 :root {
@@ -213,10 +214,47 @@ sub, sup { font-size: 0.75em; }
 }
 .raf-controls button:hover { background: var(--muted); }
 
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
 @media (max-width: 600px) {
   h1 { font-size: 2rem; }
   .container { padding: 1rem 1rem 3rem; }
   summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
 }
 </style>
 </head>
@@ -242,31 +280,31 @@ No other system in this series makes the multi-critical structure so clinically 
 <h3>1. The Feigenbaum Cascade &mdash; a period-doubling route to chaos</h3>
 
 <p>
-In 2023, Cantwell and colleagues observed a full <strong>Feigenbaum period-doubling cascade</strong> in human cardiac tissue immediately before ventricular fibrillation. The electrical activation pattern went from period-1 (normal rhythm) to period-2 (alternans &mdash; every other beat is different) to period-4 and period-8, then into chaotic fibrillation.
+In 2023, Cantwell and colleagues observed a full <strong><span class="tip" tabindex="0">Feigenbaum period-doubling cascade<span class="tt">A universal route to chaos where a system&rsquo;s behavior successively doubles in complexity: period-1 &rarr; period-2 &rarr; period-4 &rarr; period-8 &rarr; chaos. Discovered by Mitchell Feigenbaum in 1978. The same pattern appears in dripping faucets, population dynamics, and lasers.</span></span></strong> in human cardiac tissue immediately before ventricular fibrillation.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> The electrical activation pattern went from period-1 (normal rhythm) to period-2 (<span class="tip" tabindex="0">alternans<span class="tt">A beat-to-beat alternation in the heart&rsquo;s electrical signal &mdash; one beat is long, the next is short, repeating. Clinically recognized as an early warning of dangerous arrhythmias.</span></span> &mdash; every other beat is different) to period-4 and period-8, then into chaotic fibrillation.
 </p>
 
 <p>
-This is not a loose metaphor. The cascade follows the Feigenbaum universal constant <span class="math">&delta;</span> = 4.669... to within measurement precision. The same mathematics that governs the transition to chaos in dripping faucets, population dynamics, and laser intensity fluctuations governs the breakdown of cardiac rhythm.
+This is not a loose metaphor. The cascade follows the <span class="tip" tabindex="0">Feigenbaum universal constant<span class="tt">The number &delta; = 4.669... that governs the ratio of successive bifurcation intervals in all period-doubling cascades. It is as fundamental to chaos theory as &pi; is to circles &mdash; the same constant appears in every system that follows this route to chaos.</span></span> <span class="math">&delta;</span> = 4.669... to within measurement precision.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> The same mathematics that governs the transition to chaos in dripping faucets, population dynamics, and laser intensity fluctuations governs the breakdown of cardiac rhythm.
 </p>
 
 <h3>2. KT Defect Unbinding &mdash; a topological transition</h3>
 
 <p>
-Independently of the Feigenbaum cascade, the spatial pattern of electrical activity undergoes a <strong>Kosterlitz-Thouless (KT) transition</strong>. At low activity: spiral waves are bound in pairs, orbiting each other in stable configurations. This corresponds clinically to <strong>atrial flutter</strong> &mdash; a fast but organized rhythm. At higher activity: the pairs unbind. Free spiral tips proliferate and interact chaotically. This is <strong>atrial fibrillation</strong>.
+Independently of the Feigenbaum cascade, the spatial pattern of electrical activity undergoes a <strong><span class="tip" tabindex="0">Kosterlitz-Thouless (KT) transition<span class="tt">A topological phase transition where bound vortex-antivortex pairs unbind. Below the transition: pairs orbit each other in stable configurations. Above it: free vortices proliferate. Nobel Prize in Physics, 2016.</span></span></strong>. At low activity: <span class="tip" tabindex="0">spiral waves<span class="tt">Rotating electrical waves that spiral outward from a central tip. In cardiac tissue, each spiral tip creates a local reentrant circuit. Bound spiral pairs are manageable; free-roaming spiral tips are dangerous.</span></span> are bound in pairs, orbiting each other in stable configurations. This corresponds clinically to <strong>atrial flutter</strong> &mdash; a fast but organized rhythm. At higher activity: the pairs unbind. Free spiral tips proliferate and interact chaotically. This is <strong>atrial fibrillation</strong>.
 </p>
 
 <p>
-Ganesan and colleagues (2025) showed that targeting the <strong>topological boundaries</strong> &mdash; the regions where bound pairs separate &mdash; terminates arrhythmias with 75&ndash;96% success rates. The treatment works because it respects the topological structure: destroy the boundary where defects unbind, and the transition from flutter to fibrillation cannot occur.
+Ganesan and colleagues (2025) showed that targeting the <strong>topological boundaries</strong> &mdash; the regions where bound pairs separate &mdash; terminates arrhythmias with 75&ndash;96% success rates.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> The treatment works because it respects the topological structure: destroy the boundary where defects unbind via <span class="tip" tabindex="0">catheter ablation<span class="tt">A clinical procedure where a thin wire (catheter) is threaded into the heart and used to burn small lines in the tissue, creating barriers that block abnormal electrical pathways. The physics equivalent of drawing a wall across the defect unbinding boundary.</span></span>, and the transition from flutter to fibrillation cannot occur.
 </p>
 
 <h3>3. RAF Closure &mdash; an autocatalytic transition</h3>
 
 <p>
-The calcium signaling network that drives each heartbeat is a <strong>reflexively autocatalytic and food-generated (RAF) set</strong>. This is a concept from origin-of-life chemistry: a network where every reaction&rsquo;s catalysts are produced by other reactions in the network, and the raw inputs come from the environment.
+The calcium signaling network that drives each heartbeat is a <strong><span class="tip" tabindex="0">reflexively autocatalytic and food-generated (RAF) set<span class="tt">A network where every reaction is catalyzed by products of other reactions in the network, and raw inputs come from outside. Originally developed for origin-of-life chemistry &mdash; the same mathematics describes how life bootstraps itself from simple molecules.</span></span></strong>.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> This is a concept from origin-of-life chemistry: a network where every reaction&rsquo;s catalysts are produced by other reactions in the network, and the raw inputs come from the environment.
 </p>
 
 <p>
-The cardiac calcium network scores 17 out of 17 reactions in the RAF &mdash; a maximal RAF. And it has a remarkable structural property: <strong>zero individually essential reactions</strong>. Remove any single reaction, and the remaining 16 still form a functioning RAF. The system has complete single-fault tolerance.
+The cardiac calcium network scores 17 out of 17 reactions in the RAF &mdash; a <span class="tip" tabindex="0">maximal RAF<span class="tt">An RAF where every possible reaction participates &mdash; nothing is left out. A maximal RAF has the most complete autocatalytic closure possible for the given network.</span></span>. And it has a remarkable structural property: <strong>zero individually essential reactions</strong>. Remove any single reaction, and the remaining 16 still form a functioning RAF. The system has complete <span class="tip" tabindex="0">single-fault tolerance<span class="tt">The ability to lose any one component and keep working. In engineering, this is N+1 redundancy. In the cardiac RAF, every reaction has a backup path &mdash; the network routes around any single failure.</span></span>.
 </p>
 
 <!-- ========== MAIN SVG: THREE REGIMES ========== -->
@@ -521,10 +559,10 @@ This is the multi-critical structure: temporal criticality (Feigenbaum), spatial
   </summary>
   <div class="detail-body">
     <p>
-      Cantwell et al. (2023) recorded optical mapping data from human ventricular tissue during the transition to fibrillation. Action potential duration (APD) alternans &mdash; beat-to-beat alternation &mdash; is well-known (period-2). Their key finding was resolving <strong>period-4 and period-8</strong> in the APD sequence before the onset of chaotic activation.
+      Cantwell et al. (2023) recorded <span class="tip" tabindex="0">optical mapping<span class="tt">A technique where voltage-sensitive dye is applied to heart tissue, making electrical waves visible as light intensity changes. A high-speed camera records the wave patterns across the entire tissue surface simultaneously.</span></span> data from human ventricular tissue during the transition to fibrillation. <span class="tip" tabindex="0">Action potential duration<span class="tt">How long each heartbeat&rsquo;s electrical pulse lasts at a given point in the tissue. It&rsquo;s the cardiac equivalent of a signal&rsquo;s pulse width &mdash; and its beat-to-beat variation is what the Feigenbaum cascade tracks.</span></span> (APD) alternans &mdash; beat-to-beat alternation &mdash; is well-known (period-2). Their key finding was resolving <strong>period-4 and period-8</strong> in the APD sequence before the onset of chaotic activation.
     </p>
     <p>
-      The Feigenbaum cascade in the logistic map predicts that the ratios of successive bifurcation intervals converge to &delta; = 4.669... This universal constant appears across all one-dimensional maps with a quadratic maximum. Cardiac restitution curves (APD as a function of the preceding diastolic interval) have exactly this structure: a smooth curve with a single maximum. The Feigenbaum prediction is therefore exact, not approximate.
+      The Feigenbaum cascade in the <span class="tip" tabindex="0">logistic map<span class="tt">The simplest mathematical model that produces chaos: x&#x2099;&#x208A;&#x2081; = rx&#x2099;(1 &minus; x&#x2099;). As the parameter r increases, the system goes through period-doubling to chaos. It&rsquo;s the canonical example of the Feigenbaum route.</span></span> predicts that the ratios of successive bifurcation intervals converge to &delta; = 4.669... This universal constant appears across all one-dimensional maps with a quadratic maximum. Cardiac <span class="tip" tabindex="0">restitution curves<span class="tt">A plot of how long each heartbeat&rsquo;s electrical pulse lasts (APD) versus how long the tissue rested before it (diastolic interval). Its shape &mdash; a smooth curve with a single maximum &mdash; is exactly the structure that produces Feigenbaum cascades.</span></span> (APD as a function of the preceding diastolic interval) have exactly this structure: a smooth curve with a single maximum. The Feigenbaum prediction is therefore exact, not approximate.
     </p>
     <p>
       The clinical significance: period-4 and period-8 alternans precede fibrillation with high specificity. They provide a measurable early warning &mdash; the Feigenbaum cascade gives several bifurcation intervals of advance notice before the transition to chaos.
@@ -693,6 +731,16 @@ This is the multi-critical structure: temporal criticality (Feigenbaum), spatial
     <p>Bers, D. M. (2002). Cardiac excitation-contraction coupling. <em>Nature</em>, 415, 198&ndash;205.</p>
   </div>
 </details>
+
+<!-- ========== FOOTNOTES ========== -->
+<div class="footnotes fade-in">
+  <ol>
+    <li id="fn1">Cantwell, C. D. et al. (2023). Period-doubling cascade to fibrillation in human ventricular tissue. <em>Circulation Research</em>. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Feigenbaum, M. J. (1978). Quantitative universality for a class of nonlinear transformations. <em>J. Stat. Phys.</em>, 19, 25&ndash;52. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Ganesan, P. et al. (2025). Topological boundaries in cardiac arrhythmias. <em>Frontiers in Network Physiology</em>. <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">Hordijk, W. &amp; Steel, M. (2017). Chasing the tail: The emergence of autocatalytic networks. <em>BioSystems</em>, 152, 1&ndash;10. <a href="#fnref4">&uarr;</a></li>
+  </ol>
+</div>
 
 <!-- ========== BOTTOM NAVIGATION ========== -->
 <div class="tutorial-nav">

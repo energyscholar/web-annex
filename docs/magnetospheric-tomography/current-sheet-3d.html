@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="3D magnetospheric current sheet structure during the Halloween 2003 storm. Latitude-resolved Moran's I mapped to equatorial L-shells with altitude decomposition, showing the meridional cross-section of coherence through the storm.">
 <title>3D Current Sheet Structure — Halloween 2003</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,11 +21,36 @@ button:hover { background: #2a2a5a; }
 .metric .v { color: #88aaff; }
 .info { font-size: 9px; color: #334; line-height: 1.3; margin-top: 3px; }
 svg { display: block; }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid #6688cc; border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: #b0b0c8; width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: #6688cc;
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
 </style>
 </head><body>
 <div class="container">
-<h1>Magnetospheric Current Sheet: 3D Coherence Structure</h1>
-<div class="sub">Halloween 2003 — Latitude-resolved Moran's I mapped to equatorial L-shells + altitude decomposition</div>
+<h1>Magnetospheric <span class="tip" tabindex="0">Current Sheet<span class="tt">A thin layer of electric current flowing in the magnetosphere's equatorial plane. During storms, it thins and intensifies as magnetic energy accumulates in the tail. Its structure reveals how energy is stored and released.</span></span>: 3D Coherence Structure</h1>
+<div class="sub">Halloween 2003 — Latitude-resolved <span class="tip" tabindex="0">Moran's I<span class="tt">A spatial autocorrelation statistic (-1 to +1). Values near +1 mean neighboring stations show similar perturbations (organized structure). Near 0 means random. Measures whether the magnetic field disturbance has spatial coherence at each latitude.</span></span> mapped to equatorial <span class="tip" tabindex="0">L-shells<span class="tt">A coordinate measuring distance from Earth in the equatorial plane, in units of Earth radii. L=1 is the equator surface. L=5.6 corresponds to ~65° latitude. Higher L = further out in the magnetosphere. Named for McIlwain's L parameter.</span></span> + altitude decomposition</div>
 
 <div class="controls">
 <button onclick="togglePlay()" id="playBtn">&#9654;</button>
@@ -49,7 +76,7 @@ Right axis: L-shell mapping (dipole)
 <h2>Altitude Profile + Phase Space</h2>
 <svg id="svgAlt" width="260" height="320" viewBox="0 0 260 320"></svg>
 <div class="info">
-Left: I vs altitude (2-layer Chapman)<br>
+Left: I vs altitude (2-layer <span class="tip" tabindex="0">Chapman<span class="tt">The Chapman profile describes how solar radiation is absorbed at different altitudes, producing an ionization peak. Two layers: E-region (~120 km, auroral precipitation) and F-region (~300 km, solar EUV). Each altitude's coherence reveals different current systems.</span></span>)<br>
 Blue band: F-region (300km) / Red band: precipitation (120km)
 </div>
 </div>
@@ -69,7 +96,7 @@ Gray bars: RMS (log scale) — Anomaly markers: * = multi-observable coincidence
 <svg id="svgMerid" width="100%" height="180" viewBox="0 0 700 180"></svg>
 <div class="info">
 Horizontal: L-shell (equatorial distance). Vertical: altitude. Color intensity = coherence at that (L, alt) cell.
-Green = high Moran's I. The current sheet thickness appears as the width of the coherent band.
+Green = high Moran's I. The <span class="tip" tabindex="0">current sheet thickness<span class="tt">The spatial extent (in L-shell) over which the current sheet maintains coherent structure. A thin, coherent current sheet (narrow green band) indicates concentrated energy storage. Broadening suggests disruption or energy release.</span></span> appears as the width of the coherent band.
 </div>
 </div>
 

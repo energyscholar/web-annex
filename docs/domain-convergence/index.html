@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An animated introduction to domain convergence — how eleven scientific fields from topology to autocatalysis keep discovering the same mathematical structures. Five clusters, seven bridges, and the recognition that anyon emergence is autocatalytic generation.">
 <title>Domain Convergence &mdash; An Animated Introduction</title>
 <style>
 :root {
@@ -353,6 +354,41 @@ abbr {
   body { font-size: 16px; }
   .container { padding: 1rem 1rem 3rem; }
 }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--muted); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  .replay-btn { display: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>
@@ -489,15 +525,15 @@ abbr {
 
   <p><strong>Bridge 2: CD-a &mdash; Autocatalysis &harr; Cellular automata.</strong> Boolean networks are cellular automata with irregular connectivity. The category-theoretic formalization of this equivalence is underway. <span class="citation">(Kauffman 1969; Wolfram 2002)</span></p>
 
-  <p><strong>Bridge 3: CD-b &mdash; Autopoiesis &harr; Computation.</strong> A fragile bridge. Philosophy meets engineering. Louis Kauffman's eigenform theory provides the strongest existing link: a self-referential fixed point where observation and object co-arise. <span class="citation">(L. Kauffman 2005; Maturana &amp; Varela 1980)</span></p>
+  <p><strong>Bridge 3: CD-b &mdash; Autopoiesis &harr; Computation.</strong> A fragile bridge. Philosophy meets engineering. Louis Kauffman's <span class="tip" tabindex="0">eigenform<span class="tt">A self-referential fixed point where the process of observation and the object observed co-arise &mdash; the observer creates the object, which in turn defines the observer. Louis Kauffman's formalization of the strange loop at the heart of autopoiesis.</span></span> theory provides the strongest existing link: a self-referential fixed point where observation and object co-arise. <span class="citation">(L. Kauffman 2005; Maturana &amp; Varela 1980)</span></p>
 
-  <p><strong>Bridge 4: BC &mdash; Solitons &harr; Origin-of-life.</strong> A fragile bridge. Nobody currently spans both fields at a technical level. The connection runs through dissipative solitons in reaction-diffusion systems, which can form self-sustaining localized structures in chemical media. <span class="citation">(Akhmediev &amp; Ankiewicz 2005)</span></p>
+  <p><strong>Bridge 4: BC &mdash; Solitons &harr; Origin-of-life.</strong> A fragile bridge. Nobody currently spans both fields at a technical level. The connection runs through <span class="tip" tabindex="0">dissipative solitons<span class="tt">Self-sustaining localized structures in systems far from equilibrium. Unlike conservative solitons that preserve energy exactly, dissipative solitons maintain their form through continuous energy input and output &mdash; like a candle flame that holds its shape despite constant material flow.</span></span> in reaction-diffusion systems, which can form self-sustaining localized structures in chemical media. <span class="citation">(Akhmediev &amp; Ankiewicz 2005)</span></p>
 
   <p><strong>Bridge 5: AC &mdash; Topology &harr; Autocatalysis.</strong> The capstone &mdash; the largest gap and the most consequential bridge. Discussed in detail in Section 7.</p>
 
   <p><strong>Bridge 6: BD &mdash; Dynamics &harr; Computation.</strong> Redundancy backup for bridge 3. Reservoir computing at criticality: dynamical systems at phase transitions perform optimal computation. <span class="citation">(Bertschinger &amp; Natschl&auml;ger 2004; Langton 1990)</span></p>
 
-  <p><strong>Bridge 7: AB &mdash; Topology &harr; Solitons.</strong> Redundancy backup for bridge 4. Topological solitons are already classified by homotopy groups. This bridge is partially built. <span class="citation">(Manton &amp; Sutcliffe 2004)</span></p>
+  <p><strong>Bridge 7: AB &mdash; Topology &harr; Solitons.</strong> Redundancy backup for bridge 4. Topological solitons are already classified by <span class="tip" tabindex="0">homotopy<span class="tt">A way of classifying spaces by asking which loops can be continuously shrunk to a point. Two shapes are homotopy equivalent if one can be smoothly deformed into the other. Topological solitons are classified by homotopy groups.</span></span> groups. This bridge is partially built. <span class="citation">(Manton &amp; Sutcliffe 2004)</span></p>
 </div>
 
 <p>The two backup bridges (6 and 7) ensure that even if both fragile bridges fail, the network of five clusters still forms a connected graph. Five bridges suffice for closure; seven provide fault tolerance.</p>
@@ -510,7 +546,7 @@ abbr {
 
 <p>A hypothesis: <strong>criticality and scale invariance may serve as the mathematical bridge between domains.</strong></p>
 
-<p>At a critical point &mdash; a continuous phase transition &mdash; microscopic details wash out. The correlation length diverges, fluctuations occur at all scales, and the system's behavior is governed entirely by symmetry, dimensionality, and the nature of the order parameter. Systems in the same <em>universality class</em> share identical critical exponents regardless of their physical substrate.</p>
+<p>At a critical point &mdash; a continuous phase transition &mdash; microscopic details wash out. The <span class="tip" tabindex="0">correlation length<span class="tt">The distance over which fluctuations in one part of a system influence another part. At a phase transition, it diverges &mdash; fluctuations span the entire system. This divergence is why microscopic details become irrelevant at critical points.</span></span> diverges, fluctuations occur at all scales, and the system's behavior is governed entirely by symmetry, dimensionality, and the nature of the <span class="tip" tabindex="0">order parameter<span class="tt">A quantity that distinguishes between phases &mdash; zero in one phase, nonzero in the other. Magnetization in a magnet, density difference in a fluid, superfluid fraction in helium. The variable that &lsquo;orders&rsquo; the system.</span></span>. Systems in the same <em><span class="tip" tabindex="0">universality class<span class="tt">A category of phase transitions sharing identical critical exponents and scaling functions. Determined by symmetry and dimensionality alone &mdash; not microscopic details. A magnet and a fluid can be in the same universality class.</span></span></em> share identical <span class="tip" tabindex="0">critical exponents<span class="tt">Universal numbers that describe how quantities diverge or vanish near a phase transition. Like &beta; (order parameter), &gamma; (susceptibility), &nu; (correlation length). Systems in the same universality class share identical exponents.</span></span> regardless of their physical substrate.</p>
 
 <p>This is a remarkable fact. It means that:</p>
 
@@ -573,7 +609,7 @@ abbr {
   <tbody>
     <tr>
       <td><strong>CB</strong></td>
-      <td>Percolation threshold <span class="citation">(well-characterized)</span></td>
+      <td><span class="tip" tabindex="0">Percolation threshold<span class="tt">The critical density at which a random network becomes connected &mdash; isolated clusters suddenly merge into a giant spanning cluster. Below the threshold: fragments. Above: a connected path exists across the entire system.</span></span> <span class="citation">(well-characterized)</span></td>
       <td><abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr> emergence as phase transition <span class="citation">(well-characterized)</span></td>
       <td><span class="status-tag status-known">Both known</span></td>
     </tr>
@@ -624,11 +660,11 @@ abbr {
 
 <h2 id="ac-bridge"><span class="section-number">7.</span> The AC Bridge &mdash; Structural Identity</h2>
 
-<p>The hardest bridge turns out to be the most interesting. It connects the mathematical core of topology (cluster A) to the origin-of-life mathematics of autocatalysis (cluster C). These fields have essentially no shared literature. A topologist studying modular tensor categories does not read Kauffman's work on <abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr> sets, and vice versa.</p>
+<p>The hardest bridge turns out to be the most interesting. It connects the mathematical core of topology (cluster A) to the origin-of-life mathematics of autocatalysis (cluster C). These fields have essentially no shared literature. A topologist studying <span class="tip" tabindex="0">modular tensor categories<span class="tt">The mathematical structure that classifies anyon models &mdash; an algebraic framework encoding fusion rules, braiding statistics, and quantum dimensions. Each modular tensor category defines a self-consistent system of anyonic quasiparticles.</span></span> does not read Kauffman's work on <abbr title="Reflexively Autocatalytic Food-generated &mdash; a self-sustaining catalytic network (Kauffman/Hordijk/Steel)">RAF</abbr> sets, and vice versa.</p>
 
 <p>Yet there is a striking structural parallel.</p>
 
-<p>But this is not just algebra. Anyonic quasiparticles are not abstract mathematical objects placed into a system from outside &mdash; they are <em>collective excitations generated by the substrate</em> under the right conditions <span class="citation">(Nayak et al. 2008)</span>. The two-dimensional electron gas physically creates the anyons through collective reorganization. This means Kauffman's "generation" criterion is not merely structurally satisfied at the algebraic level &mdash; it is <em>physically instantiated</em>. The substrate generates its own quasiparticles (Established), those quasiparticles' fusion algebra is autocatalytically closed (Structural analogy), and the whole system is self-sustaining as long as conditions are maintained.</p>
+<p>But this is not just algebra. Anyonic <span class="tip" tabindex="0">quasiparticles<span class="tt">Collective excitations in a many-body system that behave like particles but aren&rsquo;t fundamental &mdash; they emerge from the coordinated motion of many real particles. Like a wave in a stadium: no single person is the wave, but the wave carries energy and information.</span></span> are not abstract mathematical objects placed into a system from outside &mdash; they are <em>collective excitations generated by the substrate</em> under the right conditions <span class="citation">(Nayak et al. 2008)</span>. The two-dimensional electron gas physically creates the anyons through collective reorganization. This means Kauffman's "generation" criterion is not merely structurally satisfied at the algebraic level &mdash; it is <em>physically instantiated</em>. The substrate generates its own quasiparticles (Established), those quasiparticles' fusion algebra is autocatalytically closed (Structural analogy), and the whole system is self-sustaining as long as conditions are maintained.</p>
 
 <p>FQHE systems are therefore already AC demonstrators. The bridge is not "find a system where topology and autocatalysis coexist." It is "recognize that anyon emergence in existing systems IS autocatalytic generation." The remaining gap is not scientific but sociological: topologists do not read autocatalysis literature, and origin-of-life researchers do not read condensed matter physics.</p>
 

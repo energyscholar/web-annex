@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Six physical systems where independent phase transitions converge — glass, active matter, cardiac tissue, protein folding, brain, tokamak. Interactive tutorials teaching multicriticality from first principles, ordered from simplest to most complex.">
 <title>Multi-Critical Systems</title>
 <style>
 :root {
@@ -268,6 +269,34 @@ a:hover { text-decoration: underline; }
   .system-card .card-title { font-size: 1.1rem; }
   .hero-pattern { display: none; }
 }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  .hero-pattern svg { animation: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+  .system-card, .skel-card, .matrix-banner { transition: none; }
+}
 </style>
 </head>
 <body>
@@ -407,11 +436,11 @@ a:hover { text-decoration: underline; }
 <p class="subtitle">Six physical systems where independent phase transitions converge</p>
 
 <p class="lead">
-This is a series of six interactive tutorials examining a pattern that appears across condensed matter, biophysics, neuroscience, and plasma physics: <strong>multiple independent phase transitions converging in a single physical system</strong>. At the convergence point, the transitions couple, the universality class changes, and new structure emerges that no single transition contains.
+This is a series of six interactive tutorials examining a pattern that appears across condensed matter, biophysics, neuroscience, and plasma physics: <strong>multiple independent <span class="tip" tabindex="0">phase transitions<span class="tt">Sudden qualitative changes in a system's behavior at threshold values — like water freezing or magnets losing magnetism. Characterized by power laws, diverging correlations, and universal behavior.</span></span> converging in a single physical system</strong>. At the convergence point, the transitions couple, the <span class="tip" tabindex="0">universality class<span class="tt">A category of phase transitions sharing the same critical exponents regardless of microscopic details. Water boiling and iron demagnetizing share a universality class — different physics, identical mathematics at the transition.</span></span> changes, and new structure emerges that no single transition contains.
 </p>
 
 <p>
-A single critical transition is a point in parameter space where one order parameter diverges &mdash; the system reorganizes. This is well understood. A <strong>multi-critical point</strong> is where two or more independent transitions converge. At the coupling point, the physics changes qualitatively: the coupled system produces correlations, failure modes, and early-warning signals that exist only in the interaction between transitions, not in either one alone.
+A single critical transition is a point in parameter space where one <span class="tip" tabindex="0">order parameter<span class="tt">A measurable quantity that distinguishes phases. Zero on one side of the transition, nonzero on the other. Magnetization for magnets, density difference for liquids. At criticality, it fluctuates at all scales.</span></span> diverges &mdash; the system reorganizes. This is well understood. A <strong><span class="tip" tabindex="0">multi-critical point<span class="tt">A point in parameter space where two or more independent phase transitions converge. The physics at this point is qualitatively different from either transition alone — new exponents, new correlations, new phenomena.</span></span></strong> is where two or more independent transitions converge. At the coupling point, the physics changes qualitatively: the coupled system produces correlations, failure modes, and early-warning signals that exist only in the interaction between transitions, not in either one alone.
 </p>
 
 <p>
@@ -421,6 +450,19 @@ Each tutorial below teaches one physical system, starting from plain language an
 <p>
 The central question: <em>why do multiple independent transitions converge in the same physical system &mdash; and what does the coupling produce that no single transition contains?</em>
 </p>
+
+<a href="00-what-is-multicriticality.html" class="system-card" style="border-left: 3px solid #a855f7; margin: 2rem 0;">
+  <div class="card-header">
+    <span class="card-num" style="color: #a855f7;">00</span>
+    <span class="card-title">What Is Multicriticality?</span>
+  </div>
+  <div class="card-transitions">
+    <span class="tag" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">START HERE</span>
+  </div>
+  <div class="card-desc">
+    Interactive introduction. What happens when tipping points interact &mdash; explained from first principles with animated phase diagrams, a threshold coupling demo, and a side-by-side detection comparison. No physics background required. If you&rsquo;re new to multicriticality, start here before the six system tutorials below.
+  </div>
+</a>
 
 <!-- ========== MAP SVG ========== -->
 <div class="viz fade-in">
@@ -526,7 +568,7 @@ The central question: <em>why do multiple independent transitions converge in th
       <span class="tag tag-topological">T<sub>K</sub> thermodynamic</span>
     </div>
     <div class="card-desc">
-      The cleanest bicritical case. Two transitions &mdash; one weakly first-order, one second-order &mdash; resolved as distinct specific heat peaks with independent topological signatures. In strong glass formers, they nearly merge. Fragility measures distance from the codimension-two point where they meet.
+      The cleanest bicritical case. Two transitions &mdash; one weakly first-order, one second-order &mdash; resolved as distinct specific heat peaks with independent topological signatures. In strong glass formers, they nearly merge. Fragility measures distance from the <span class="tip" tabindex="0">codimension-two<span class="tt">A point requiring two independent parameters tuned simultaneously to reach. Rare and structurally constrained — finding the intersection of two lines rather than just one point on one line.</span></span> point where they meet.
     </div>
     <div class="card-pair">Paired with: Protein Folding &mdash; connected through the Gardner/jamming chain</div>
   </a>
@@ -542,7 +584,7 @@ The central question: <em>why do multiple independent transitions converge in th
       <span class="tag tag-critical">novel &eta;=1.04</span>
     </div>
     <div class="card-desc">
-      Three critical phenomena with independent exponents. Defect onset follows Manna universality on closed surfaces and directed percolation on open ones &mdash; boundary topology selects the universality class. Confinement geometry selects braid class: golden braid in confinement, trivial braids on flat torus. A novel universality class at the periodic-to-chaotic boundary.
+      Three critical phenomena with independent exponents. Defect onset follows Manna universality on closed surfaces and <span class="tip" tabindex="0">directed percolation<span class="tt">A universality class for spreading processes with a preferred direction (like water flowing downhill through random soil). The most common class for transitions between absorbing and active states.</span></span> on open ones &mdash; boundary topology selects the universality class. Confinement geometry selects braid class: golden braid in confinement, trivial braids on flat torus. A novel universality class at the periodic-to-chaotic boundary.
     </div>
     <div class="card-pair">Paired with: Cardiac Tissue &mdash; connected through KT defect unbinding</div>
   </a>
@@ -558,7 +600,7 @@ The central question: <em>why do multiple independent transitions converge in th
       <span class="tag tag-autocatalytic">RAF closure</span>
     </div>
     <div class="card-desc">
-      Three transition frameworks in one tissue. Full period-doubling cascade before fibrillation. Kosterlitz-Thouless defect unbinding maps flutter to bound vortex pairs and fibrillation to unbound. The calcium signaling network is a maximal autocatalytic set &mdash; 17 of 17 reactions, zero individually essential, catastrophic only at class-level removal.
+      Three transition frameworks in one tissue. Full period-doubling cascade before fibrillation. <span class="tip" tabindex="0">Kosterlitz-Thouless<span class="tt">A phase transition driven by topological defects (vortices) binding and unbinding. No divergent order parameter — instead, the character of the defect population changes qualitatively. Nobel Prize 2016.</span></span> defect unbinding maps flutter to bound vortex pairs and fibrillation to unbound. The calcium signaling network is a maximal autocatalytic set &mdash; 17 of 17 reactions, zero individually essential, catastrophic only at class-level removal.
     </div>
     <div class="card-pair">Paired with: Active Matter &mdash; connected through KT defect unbinding</div>
   </a>
@@ -591,7 +633,7 @@ The central question: <em>why do multiple independent transitions converge in th
       <span class="tag tag-topological">spiral defects</span>
     </div>
     <div class="card-desc">
-      Near-consensus on avalanche criticality from 140 datasets. Modular-hierarchical cortical architecture stretches the critical point into a Griffiths phase &mdash; no fine-tuning. Cortical spiral waves carry conserved topological charge. The architecture that produces the Griffiths phase is the same architecture that supports topological defect dynamics.
+      Near-consensus on avalanche criticality from 140 datasets. Modular-hierarchical cortical architecture stretches the critical point into a <span class="tip" tabindex="0">Griffiths phase<span class="tt">A region near a phase transition where rare, strongly ordered clusters create anomalously slow dynamics. The system is technically disordered but behaves critically because rare regions act as local nucleation sites.</span></span> &mdash; no fine-tuning. Cortical spiral waves carry conserved topological charge. The architecture that produces the Griffiths phase is the same architecture that supports topological defect dynamics.
     </div>
     <div class="card-pair">Paired with: Tokamak &mdash; connected through Griffiths phase architecture</div>
   </a>
@@ -624,7 +666,7 @@ The six systems form three natural pairs, each connected by a shared physical me
 <div class="pair-grid">
   <div class="pair-card fade-in">
     <h3>Glass &harr; Protein</h3>
-    <p>The Gardner transition sits below the Kauzmann temperature. Gardner produces jamming scalings. Jamming sets the protein packing fraction &phi;<sub>c</sub>&nbsp;&asymp;&nbsp;0.55. The chain runs: glass bicriticality &rarr; Gardner &rarr; jamming &rarr; protein packing. Two systems, one causal chain through three transitions.</p>
+    <p>The <span class="tip" tabindex="0">Gardner transition<span class="tt">A secondary transition within the glass phase where the energy landscape shatters from smooth basins into a fractal hierarchy of sub-basins. Discovered theoretically in spin glasses, now confirmed experimentally in colloids.</span></span> sits below the Kauzmann temperature. Gardner produces jamming scalings. Jamming sets the protein packing fraction &phi;<sub>c</sub>&nbsp;&asymp;&nbsp;0.55. The chain runs: glass bicriticality &rarr; Gardner &rarr; jamming &rarr; protein packing. Two systems, one causal chain through three transitions.</p>
     <div class="pair-link">Tutorials 01 &amp; 04</div>
   </div>
   <div class="pair-card fade-in">
@@ -643,7 +685,7 @@ The six systems form three natural pairs, each connected by a shared physical me
 <h2><span class="sn">3.</span> The Four Skeletons</h2>
 
 <p>
-Across these six systems, the same mathematical structures recur. We decompose each system's multi-critical profile into four independent skeletons &mdash; each a mathematical framework that was independently discovered by multiple communities. The tutorials above show where these skeletons appear in physical systems. The pages below teach each skeleton on its own terms.
+Across these six systems, the same mathematical structures recur. We decompose each system's multi-critical profile into four independent <span class="tip" tabindex="0">skeletons<span class="tt">Independent mathematical frameworks — topology, dynamics, closure, computation — that recur across multicritical systems. Each was discovered independently by multiple research communities in different fields.</span></span> &mdash; each a mathematical framework that was independently discovered by multiple communities. The tutorials above show where these skeletons appear in physical systems. The pages below teach each skeleton on its own terms.
 </p>
 
 <p>

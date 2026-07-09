@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The tokamak H-mode pedestal hosts three converging critical phenomena: self-organized critical avalanches governing energy release, topological magnetic islands providing ELM control, and a noise-stabilized autocatalytic transport barrier at the edge of chaos. Interactive noise-stabilized barrier explorer.">
 <title>Tokamak H-Mode Pedestal — Multi-Critical Systems</title>
 <style>
 :root {
@@ -211,6 +212,40 @@ input[type="range"]::-moz-range-thumb {
 }
 .noise-readout .detail { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; }
 
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 @media (max-width: 600px) {
   h1 { font-size: 1.8rem; }
   .container { padding: 1rem 1rem 3rem; }
@@ -227,11 +262,11 @@ input[type="range"]::-moz-range-thumb {
 <p class="subtitle">Self-organized criticality, magnetic islands, and a self-sustaining loop</p>
 
 <p class="lead">
-A tokamak confines plasma &mdash; ionized gas at 150 million degrees &mdash; inside a doughnut-shaped magnetic field. The goal is controlled nuclear fusion. The obstacle is turbulence: the hot plasma generates turbulent fluctuations that carry heat outward, eroding confinement. In the late 1980s, physicists discovered that above a threshold heating power, the plasma spontaneously enters a state of dramatically improved confinement called <strong>H-mode</strong>. No one designed it. The plasma organized itself.
+A <span class="tip" tabindex="0">tokamak<span class="tt">A doughnut-shaped device that confines plasma using magnetic fields. The name is a Russian acronym. The leading approach to controlled nuclear fusion.</span></span> confines plasma &mdash; ionized gas at 150 million degrees &mdash; inside a doughnut-shaped magnetic field. The goal is controlled nuclear fusion. The obstacle is turbulence: the hot plasma generates turbulent fluctuations that carry heat outward, eroding confinement. In the late 1980s, physicists discovered that above a threshold heating power, the plasma spontaneously enters a state of dramatically improved confinement called <strong><span class="tip" tabindex="0">H-mode<span class="tt">High-confinement mode &mdash; a plasma state with dramatically reduced energy loss, discovered in 1982. The plasma spontaneously transitions from L-mode (low confinement) when heating exceeds a threshold.</span></span></strong>.<sup><a class="fn" href="#fn5" id="fnref5">5</a></sup> No one designed it. The plasma organized itself.
 </p>
 
 <p>
-The key structure in H-mode is the <strong>pedestal</strong>: a narrow region at the plasma edge where the pressure profile steepens dramatically, forming a transport barrier. The pedestal is not static. It builds up, releases its energy in violent bursts called <strong>edge-localized modes (ELMs)</strong>, rebuilds, and bursts again. This cycle is governed by three independent critical phenomena converging in a single region of plasma.
+The key structure in H-mode is the <strong><span class="tip" tabindex="0">pedestal<span class="tt">The narrow region at the plasma edge where the pressure profile steepens sharply, forming a transport barrier. Named for the step-like shape it creates in the pressure profile.</span></span></strong>: a narrow region at the plasma edge where the pressure profile steepens dramatically, forming a <span class="tip" tabindex="0">transport barrier<span class="tt">A region where turbulent transport of heat and particles is strongly suppressed, allowing steep pressure gradients to build. The pedestal IS the transport barrier.</span></span>. The pedestal is not static. It builds up, releases its energy in violent bursts called <strong><span class="tip" tabindex="0">edge-localized modes (ELMs)<span class="tt">Violent periodic bursts that release energy stored in the pedestal. Like pressure-relief valves that fire when the gradient exceeds a stability limit. Damaging to reactor walls.</span></span></strong>, rebuilds, and bursts again. This cycle is governed by three independent critical phenomena converging in a single region of plasma.
 </p>
 
 <p>
@@ -244,21 +279,21 @@ The tokamak is the only non-biological system in this series. Its inclusion demo
 <h3>1. SOC avalanches &mdash; the sandpile pedestal</h3>
 
 <p>
-Chapman, Dendy, and Hnat (PRL 2001) demonstrated that the pedestal operates as a <strong>self-organized critical (SOC) sandpile</strong>. The pressure gradient is the slope of the pile. Turbulent transport events are the avalanches. When the gradient exceeds a local threshold, a transport event fires, reducing the gradient locally &mdash; like sand sliding down an oversteep slope. The system self-organizes to maintain the gradient near the critical threshold.
+Chapman, Dendy, and Hnat (PRL 2001) demonstrated that the pedestal operates as a <strong><span class="tip" tabindex="0">self-organized critical<span class="tt">A system that naturally evolves toward a critical state without external tuning &mdash; like a sandpile that maintains itself at the angle of repose. Coined by Bak, Tang, and Wiesenfeld (1987).</span></span> (SOC) sandpile</strong>.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> The pressure gradient is the slope of the pile. Turbulent transport events are the avalanches. When the gradient exceeds a local threshold, a transport event fires, reducing the gradient locally &mdash; like sand sliding down an oversteep slope. The system self-organizes to maintain the gradient near the critical threshold.
 </p>
 
 <p>
-ELMs are the large avalanches. The pedestal builds until the entire edge region exceeds the stability limit, then releases its stored energy in a single catastrophic event. Between ELMs, smaller avalanches continually redistribute energy, maintaining the critical gradient. The avalanche size distribution follows a power law &mdash; the signature of SOC.
+ELMs are the large avalanches. The pedestal builds until the entire edge region exceeds the stability limit, then releases its stored energy in a single catastrophic event. Between ELMs, smaller avalanches continually redistribute energy, maintaining the critical gradient. The avalanche size distribution follows a <span class="tip" tabindex="0">power law<span class="tt">A mathematical pattern where the probability of an event decreases as a fixed power of its size. No characteristic scale &mdash; small events are common, large ones rare but not impossible.</span></span> &mdash; the signature of SOC.
 </p>
 
 <h3>2. Magnetic topology &mdash; islands mediate control</h3>
 
 <p>
-In 2024, Park and colleagues published a landmark result in <em>Nature Physics</em>: direct observation of <strong>magnetic islands</strong> forming during ELM suppression. Magnetic islands are topological structures &mdash; regions where the magnetic field lines close on themselves, creating islands of trapped plasma within the otherwise nested flux surfaces.
+In 2024, Park and colleagues published a result in <em>Nature Physics</em>: direct observation of <strong><span class="tip" tabindex="0">magnetic islands<span class="tt">Closed loops in the magnetic field that trap plasma, breaking the normal nested-surface geometry. They form at surfaces where field lines close on themselves after a rational number of turns.</span></span></strong> forming during ELM suppression.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> Magnetic islands are topological structures &mdash; regions where the magnetic field lines close on themselves, creating islands of trapped plasma within the otherwise nested <span class="tip" tabindex="0">flux surfaces<span class="tt">Nested, doughnut-shaped surfaces traced out by magnetic field lines in a tokamak. In ideal conditions, plasma is confined to these surfaces. Their integrity determines confinement quality.</span></span>.
 </p>
 
 <p>
-When external magnetic perturbations (resonant magnetic perturbations, or RMPs) are applied to suppress ELMs, they work not by smoothly modifying the pressure profile, but by creating magnetic islands at rational flux surfaces. The islands break the nested topology of the magnetic field, introducing new pathways for particle and energy transport. This is a <strong>topological phase transition</strong> in the magnetic field structure: from nested, intact flux surfaces to an island-containing topology with fundamentally different transport properties.
+When external magnetic perturbations (<span class="tip" tabindex="0">resonant magnetic perturbations, or RMPs<span class="tt">External magnetic fields applied to deliberately create magnetic islands at specific locations. The primary tool for suppressing ELMs in fusion reactors, including ITER.</span></span>) are applied to suppress ELMs, they work not by smoothly modifying the pressure profile, but by creating magnetic islands at <span class="tip" tabindex="0">rational flux surfaces<span class="tt">Surfaces in the tokamak where magnetic field lines close on themselves after a rational number of toroidal/poloidal turns (e.g., 3 toroidal turns per 2 poloidal turns). Islands form preferentially here.</span></span>. The islands break the nested topology of the magnetic field, introducing new pathways for particle and energy transport. This is a <strong><span class="tip" tabindex="0">topological phase transition<span class="tt">A change in the fundamental connectivity of a field &mdash; not a gradual shift but a qualitative restructuring. Creating a magnetic island changes the topology from nested tori to a punctured surface.</span></span></strong> in the magnetic field structure: from nested, intact flux surfaces to an island-containing topology with fundamentally different transport properties.
 </p>
 
 <h3>3. The predator-prey loop &mdash; autocatalytic self-maintenance</h3>
@@ -268,11 +303,11 @@ The transport barrier does not just exist &mdash; it <strong>creates the conditi
 </p>
 
 <p>
-Steep pressure gradients drive turbulence. Turbulence generates Reynolds stress. Reynolds stress produces <strong>zonal flows</strong> &mdash; sheared plasma flows that run around the torus. Zonal flows suppress the turbulence that created them. Suppressed turbulence allows the pressure gradient to steepen further. The steeper gradient drives more turbulence, completing the cycle.
+Steep pressure gradients drive turbulence. Turbulence generates <span class="tip" tabindex="0">Reynolds stress<span class="tt">The force exerted by turbulent fluctuations on the mean flow. In plasma, turbulent eddies transfer momentum to create large-scale zonal flows. The bridge between turbulence and order.</span></span>. Reynolds stress produces <strong><span class="tip" tabindex="0">zonal flows<span class="tt">Sheared plasma flows that wrap around the torus in the toroidal direction. Generated by turbulence via Reynolds stress. They suppress the turbulence that created them &mdash; a key self-regulating mechanism.</span></span></strong> &mdash; sheared plasma flows that run around the torus.<sup><a class="fn" href="#fn6" id="fnref6">6</a></sup> Zonal flows suppress the turbulence that created them. Suppressed turbulence allows the pressure gradient to steepen further. The steeper gradient drives more turbulence, completing the cycle.
 </p>
 
 <p>
-McMillan and colleagues (2018) identified a self-sustaining quasi-traveling-wave at the plasma edge that exists at the <strong>edge of chaos</strong> &mdash; a structure that propagates only because it continuously creates the conditions for its own propagation. Remarkably, Huang et al. (2025) showed this cycle requires <strong>stochastic noise exceeding 100% signal-to-noise ratio</strong> to sustain itself. The transport barrier is noise-stabilized: it cannot exist in a perfectly deterministic system.
+McMillan and colleagues (2018) identified a self-sustaining quasi-traveling-wave at the plasma edge that exists at the <strong><span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between laminar (ordered) and turbulent (chaotic) flow. Structures at this boundary are marginally stable &mdash; they persist only by continuously regenerating their own stability conditions.</span></span></strong><sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> &mdash; a structure that propagates only because it continuously creates the conditions for its own propagation. Remarkably, Huang et al. (2025) showed this cycle requires <strong>stochastic noise exceeding 100% <span class="tip" tabindex="0">signal-to-noise ratio<span class="tt">The ratio of a signal&rsquo;s strength to the background noise level. An SNR above 100% means the noise is larger than the signal &mdash; the system is more random than deterministic.</span></span></strong><sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> to sustain itself. The transport barrier is noise-stabilized: it cannot exist in a perfectly deterministic system.
 </p>
 
 <!-- ========== MAIN SVG: THE AUTOCATALYTIC LOOP ========== -->
@@ -679,6 +714,17 @@ The question that opens from here: <strong>can multi-critical coupling be detect
 <p>
 That is the research program these tutorials motivate.
 </p>
+
+<div class="footnotes fade-in">
+  <ol>
+    <li id="fn1">Chapman, S. C., Dendy, R. O. &amp; Hnat, B. (2001). A sandpile model with tokamak-like properties. <em>Phys. Rev. Lett.</em>, 86, 2814. SOC model of the pedestal. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Park, J.-K. et al. (2024). Direct observation of magnetic islands during ELM suppression. <em>Nature Physics</em>. First direct imaging of islands mediating ELM control. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">McMillan, B. F. et al. (2018). Self-sustaining quasi-traveling-wave at the tokamak edge. <em>Phys. Plasmas</em>. Edge-of-chaos structure. <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">Huang, Z. et al. (2025). Noise-sustained transport barrier in tokamak edge. Stochastic noise &gt; 100% SNR required. <a href="#fnref4">&uarr;</a></li>
+    <li id="fn5">Wagner, F. et al. (1982). Regime of improved confinement in the ASDEX tokamak. <em>Phys. Rev. Lett.</em>, 49, 1408. Discovery of H-mode. <a href="#fnref5">&uarr;</a></li>
+    <li id="fn6">Diamond, P. H. et al. (2005). Zonal flows in plasma &mdash; a review. <em>Plasma Phys. Control. Fusion</em>, 47, R35. <a href="#fnref6">&uarr;</a></li>
+  </ol>
+</div>
 
 <!-- ========== BOTTOM NAVIGATION ========== -->
 <div class="tutorial-nav">

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Reproducible evidence of content-selective Google search de-indexing across Cryptome, Slashdot, and Substack. Every test is a Google search you can run in 30 seconds. Controls prove selectivity is content-based, not domain-level.">
 <title>Content-Selective Search De-Indexing: A Reproducibility Report</title>
 <style>
 :root {
@@ -322,6 +323,46 @@ ul.plain li { margin-bottom: 0.5rem; }
   .test-table th, .test-table td { padding: 0.5rem; }
   body { padding: 1rem 0.5rem; }
 }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--border);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--border); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--border); }
+/* Replication log */
+.repl-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; font-size: 0.85rem; }
+.repl-row input[type="checkbox"] { accent-color: var(--green); }
+.repl-row .repl-ts { color: var(--green); font-size: 0.78rem; }
+.repl-clear { margin-top: 0.75rem; background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; padding: 0.25rem 0.75rem; font-size: 0.78rem; cursor: pointer; }
+.repl-clear:hover { color: var(--text); border-color: var(--muted); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .copied-toast { transition: none; }
+}
 </style>
 </head>
 <body>
@@ -334,7 +375,13 @@ ul.plain li { margin-bottom: 0.5rem; }
 
 <div class="abstract">
   <div class="abstract-title">Abstract</div>
-  <p style="margin-bottom:0">We document content-selective search de-indexing across three platforms (Cryptome, Slashdot, Substack). Control cases on each platform demonstrate that the de-indexing is content-based, not domain-level or SEO-related. Every test in this report is a Google search that a reader can perform independently in under five minutes. We make no claims about the mechanism or intent behind the de-indexing. This report documents <em>that</em> it occurs, provides evidence of selectivity, and is designed for independent replication.</p>
+  <p style="margin-bottom:0">We document content-selective search <span class="tip" tabindex="0">de-indexing<span class="tt">Removing a URL from a search engine's index so it doesn't appear in results, even though the page still exists and returns HTTP 200. Different from deleting the page — the content is there, it's just invisible to search.</span></span> across three platforms (Cryptome, Slashdot, Substack). Control cases on each platform demonstrate that the de-indexing is content-based, not domain-level or SEO-related. Every test in this report is a Google search that a reader can perform independently in under five minutes. We make no claims about the mechanism or intent behind the de-indexing. This report documents <em>that</em> it occurs, provides evidence of selectivity, and is designed for independent replication.</p>
+</div>
+
+<div class="section-card" style="margin:1.5rem 0;">
+  <p style="margin-bottom:0.5rem;font-weight:700;color:var(--heading);">Your Replication Log</p>
+  <p style="font-size:0.85rem;margin-bottom:0.75rem;">Click the checkbox after you run each test. Your timestamps are stored locally and never sent anywhere.</p>
+  <div id="replication-log"></div>
 </div>
 
 <div class="toc">
@@ -355,9 +402,9 @@ ul.plain li { margin-bottom: 0.5rem; }
 <h2 id="methodology">1. Methodology</h2>
 
 <h3>What We Test</h3>
-<p>Whether specific URLs that exist and return HTTP 200 appear in Google search results when searched by exact title, by content keywords, or by the <code>site:</code> operator.</p>
+<p>Whether specific URLs that exist and return <span class="tip" tabindex="0">HTTP 200<span class="tt">The standard web server response code meaning 'OK — the page exists and was served successfully.' A page returning HTTP 200 is alive and accessible; if Google can't find it, the absence is on Google's side, not the server's.</span></span> appear in Google search results when searched by exact title, by content keywords, or by the <span class="tip" tabindex="0"><code>site:</code> operator<span class="tt">A Google search modifier that restricts results to a specific domain. 'site:example.com query' returns only pages from example.com matching 'query'. When a page exists but the site: operator can't find it, the page has been de-indexed.</span></span>.</p>
 
-<h3>What Constitutes a Control</h3>
+<h3>What Constitutes a <span class="tip" tabindex="0">Control<span class="tt">A test designed to eliminate alternative explanations. Here: content on the same domain, by the same author, with similar characteristics, that IS indexed. If the de-indexed content's absence were caused by anything other than content selectivity, the control would also be absent.</span></span></h3>
 <p>Content on the <strong>same domain</strong>, by the <strong>same author</strong>, with <strong>similar age and traffic characteristics</strong>, that <em>is</em> indexed by Google. If the suppressed content's absence were caused by domain-level blocking, poor SEO, or low traffic, the control content would be equally absent.</p>
 
 <h3>Tool Required</h3>
@@ -368,7 +415,7 @@ ul.plain li { margin-bottom: 0.5rem; }
 <ul class="plain">
   <li>Replicable by anyone in 30 seconds with a Google search</li>
   <li>Have a control case on the same platform proving selectivity is not domain-level</li>
-  <li>Cannot be explained by any standard alternative (low traffic, robots.txt, platform moderation, content age, noindex tags)</li>
+  <li>Cannot be explained by any standard alternative (low traffic, <span class="tip" tabindex="0">robots.txt<span class="tt">A file at the root of a website that tells search engine crawlers which pages they may or may not index. One of the standard explanations for a page not appearing in search results — ruled out here because the control pages on the same domain are indexed.</span></span>, platform moderation, content age, <span class="tip" tabindex="0">noindex<span class="tt">An HTML meta tag or HTTP header that instructs search engines not to index a specific page. Like robots.txt but page-level rather than site-level. Another standard explanation for search absence — ruled out by checking the page source.</span></span> tags)</li>
 </ul>
 <p>Cases that are ambiguous, require platform-specific knowledge, or could plausibly be explained by organic search behavior are excluded.</p>
 
@@ -554,7 +601,7 @@ ul.plain li { margin-bottom: 0.5rem; }
       <td>C01 proves <code>postquantum.substack.com</code> is indexed. C02 proves Slashdot comments by the same user are indexed (10+). Other Cryptome pages (e.g., the site's front page, its widely linked documents) appear normally in Google results. The de-indexing is page-specific, not domain-level.</td>
     </tr>
     <tr>
-      <td><strong>Low PageRank / poor SEO</strong></td>
+      <td><strong>Low <span class="tip" tabindex="0">PageRank<span class="tt">Google's algorithm for ranking web pages by importance, based on how many other pages link to them and how important those linking pages are. Higher PageRank = higher in search results. A page with few inbound links might rank low, but this doesn't explain selective absence — the page wouldn't appear at all.</span></span> / poor SEO</strong></td>
       <td>T02, T03, and C01 are on the same Substack account by the same author, with similar publication dates and audience. Substack controls the page structure, metadata, and SEO for all articles equally. T01 (Cryptome) has 42 Wayback Machine captures over 12 years — Google's crawler has visited it hundreds of times. T04 (Slashdot) is a Score 5 comment by a user whose other 10+ comments are all indexed (C02).</td>
     </tr>
     <tr>
@@ -592,7 +639,7 @@ ul.plain li { margin-bottom: 0.5rem; }
       <th>ID</th>
       <th>URL</th>
       <th>HTTP Status</th>
-      <th>Wayback Machine</th>
+      <th><span class="tip" tabindex="0">Wayback Machine<span class="tt">Internet Archive's service that periodically saves snapshots of web pages. If a page has Wayback captures, it proves the page was publicly accessible and crawlable — a search engine's failure to index it can't be blamed on the page being hidden or ephemeral.</span></span></th>
     </tr>
   </thead>
   <tbody>
@@ -715,6 +762,52 @@ function copyQuery(btn) {
 }
 </script>
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
+<script>
+(function() {
+  var KEY = 'suppression-replication-log';
+  var log = JSON.parse(localStorage.getItem(KEY) || '{}');
+  var cards = document.querySelectorAll('.test-card');
+  var container = document.getElementById('replication-log');
+  cards.forEach(function(card) {
+    var id = card.querySelector('.test-card-id').textContent.split('—')[0].trim();
+    var row = document.createElement('div');
+    row.className = 'repl-row';
+    var cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = !!log[id];
+    var label = document.createElement('span');
+    label.textContent = id;
+    var ts = document.createElement('span');
+    ts.className = 'repl-ts';
+    ts.textContent = log[id] ? 'Verified ' + log[id] : '';
+    cb.addEventListener('change', function() {
+      if (cb.checked) {
+        var now = new Date().toLocaleString();
+        log[id] = now;
+        ts.textContent = 'Verified ' + now;
+      } else {
+        delete log[id];
+        ts.textContent = '';
+      }
+      localStorage.setItem(KEY, JSON.stringify(log));
+    });
+    row.appendChild(cb);
+    row.appendChild(label);
+    row.appendChild(ts);
+    container.appendChild(row);
+  });
+  var clearBtn = document.createElement('button');
+  clearBtn.className = 'repl-clear';
+  clearBtn.textContent = 'Clear log';
+  clearBtn.addEventListener('click', function() {
+    localStorage.removeItem(KEY);
+    log = {};
+    container.querySelectorAll('input').forEach(function(c) { c.checked = false; });
+    container.querySelectorAll('.repl-ts').forEach(function(s) { s.textContent = ''; });
+  });
+  container.appendChild(clearBtn);
+})();
+</script>
 <script src="../js/annex-tracker.js"></script>
 </body>
 </html>

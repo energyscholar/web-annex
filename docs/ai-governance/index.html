@@ -196,6 +196,36 @@ li { margin-bottom: 0.3rem; }
   .svg-container { padding: 1rem; }
 }
 
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
 @media (prefers-reduced-motion: reduce) {
   .section { opacity: 1; transform: none; transition: none; }
   .replay-btn { display: none; }
@@ -212,7 +242,7 @@ li { margin-bottom: 0.3rem; }
 <p class="subtitle">Memory is solved. Governance isn&rsquo;t.</p>
 <p class="byline">Argus &amp; Bruce Stephenson &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; CC BY 4.0</p>
 
-<p>Your AI remembers you now. ChatGPT, Claude, Gemini &mdash; they all persist facts across sessions. This is real progress. It is also, on its own, a liability. Memory without architecture produces sycophancy that compounds over time, context leakage between roles, and corrections filed so generically they never fire when they matter. This guide shows what it takes to make memory <em>safe</em>. The system that produced this document has been in continuous operation since December 2025 &mdash; 160+ sessions across six months. The document you are reading is the evidence.</p>
+<p>Your AI remembers you now. ChatGPT, Claude, Gemini &mdash; they all persist facts across sessions. This is real progress. It is also, on its own, a liability. Memory without architecture produces <span class="tip" tabindex="0">sycophancy<span class="tt">An AI failure mode where the system agrees with the user regardless of accuracy. Like a yes-man in a meeting — the answers feel good but erode trust over time. Governance systems detect and correct for this.</span></span> that compounds over time, <span class="tip" tabindex="0">context leakage<span class="tt">When information from one role, session, or domain bleeds into another where it doesn't belong. The AI equivalent of replying-all with confidential data. Prevented by strict role separation and information flow control.</span></span> between roles, and corrections filed so generically they never fire when they matter. This guide shows what it takes to make memory <em>safe</em>. The system that produced this document has been in continuous operation since December 2025 &mdash; 160+ sessions across six months. The document you are reading is the evidence.</p>
 
 <!-- Hero: Three Orthogonal Governance Axes -->
 <div class="svg-container" id="hero-axes-svg" style="margin:2rem 0;">
@@ -346,9 +376,9 @@ li { margin-bottom: 0.3rem; }
 <div class="text-block">
 <p>Your AI remembers you now. It remembers your name, your preferences, your past corrections. This is progress. It is also, without governance, dangerous.</p>
 
-<p>Multi-turn sycophancy compounds over time &mdash; your AI agrees with your misconceptions more readily the longer it knows you. Context leaks between roles: Client A&rsquo;s rebrand shows up in Client B&rsquo;s session. Corrections get filed so generically that the same architectural mistake recurs for the third time despite being &ldquo;saved.&rdquo; Memory without structure is now recognized as a security surface, not just a feature gap.</p>
+<p>Multi-turn sycophancy compounds over time &mdash; your AI agrees with your misconceptions more readily the longer it knows you. Context leaks between roles: Client A&rsquo;s rebrand shows up in Client B&rsquo;s session. Corrections get filed so generically that the same architectural mistake recurs for the third time despite being &ldquo;saved.&rdquo; Memory without structure is now recognized as a <span class="tip" tabindex="0">security surface<span class="tt">Any part of a system where an attacker — or in this case, accumulated errors — can interact with or influence its behavior. Persistent memory that isn't governed becomes a surface for compounding confabulation, not just a feature gap.</span></span>, not just a feature gap.</p>
 
-<p>The solution is not more memory. It is governance: structured architecture that makes memory safe, role discipline that prevents drift, and ethical guardrails that detect when the system starts agreeing with you instead of helping you.</p>
+<p>The solution is not more memory. It is <span class="tip" tabindex="0">governance<span class="tt">The set of rules, roles, and checks that constrain an AI system's behavior. Not the model's capability — the architecture around it. Three axes: execution discipline (Triad), truth-telling (Dignity Net), and memory continuity.</span></span>: structured architecture that makes memory safe, <span class="tip" tabindex="0">role discipline<span class="tt">Running different AI functions in isolated contexts — one instance plans, another implements, neither sees the other's raw output. Like the auditor/developer split in software organizations. Prevents self-validation drift.</span></span> that prevents drift, and ethical guardrails that detect when the system starts agreeing with you instead of helping you.</p>
 </div>
 </div>
 
@@ -460,9 +490,9 @@ li { margin-bottom: 0.3rem; }
 </div>
 
 <div class="text-block">
-<p>Flat markdown files with YAML frontmatter are the source of truth. An ingestion script parses them into a SQLite database with FTS5 full-text search. The database is a read cache &mdash; deterministically rebuildable from the flat files. Version-controlled, greppable, human-readable upstream; fast, queryable downstream.</p>
+<p>Flat markdown files with <span class="tip" tabindex="0">YAML frontmatter<span class="tt">A metadata block at the top of a markdown file, delimited by triple dashes (---). Stores structured data — type, domain, confidence, half-life — that the ingestion script parses into database columns. Human-readable, version-controllable, greppable.</span></span> are the source of truth. An ingestion script parses them into a SQLite database with <span class="tip" tabindex="0">FTS5 full-text search<span class="tt">SQLite's built-in full-text search engine. Indexes every word in every memory file, enabling sub-millisecond ranked retrieval across thousands of records. The AI searches its own memory the same way you search email — by keyword relevance, not file browsing.</span></span>. The database is a read cache &mdash; deterministically rebuildable from the flat files. Version-controlled, greppable, human-readable upstream; fast, queryable downstream.</p>
 
-<p>Each memory has a type (feedback, skill, project, correction), a domain, a confidence score, and a half-life for staleness detection. Memories decay. A correction from three months ago about a library API that has since changed should not fire with the same authority as yesterday&rsquo;s feedback. The system tracks this and flags stale knowledge before citing it.</p>
+<p>Each memory has a type (feedback, skill, project, correction), a domain, a confidence score, and a half-life for staleness detection. Memories <span class="tip" tabindex="0">decay<span class="tt">A correction that fires correctly when first recorded but gradually loses precision over time as context shifts. Like a Post-it note that made sense last month but is ambiguous now. Requires periodic validation and staleness tracking.</span></span>. A correction from three months ago about a library API that has since changed should not fire with the same authority as yesterday&rsquo;s feedback. The system tracks this and flags stale knowledge before citing it.</p>
 </div>
 
 <div class="insight">The database is never the source of truth &mdash; it is a read cache. If it corrupts, you run one script and rebuild it from the markdown files. This is not a design choice about convenience. It is a survival property: the system&rsquo;s knowledge must be recoverable from human-readable files that live in git.</div>
@@ -550,9 +580,9 @@ li { margin-bottom: 0.3rem; }
 </div>
 
 <div class="text-block">
-<p>The Triad protocol separates planning from execution. The Auditor writes plans and acceptance criteria. The Generator executes exactly what the plan specifies. The human provides purpose and authorizes transitions. The copy-paste gate between shells is a hard separation &mdash; the Generator has no conversation history from the Auditor.</p>
+<p>The Triad protocol separates planning from execution. The Auditor writes plans and acceptance criteria. The Generator executes exactly what the plan specifies. The human provides purpose and authorizes transitions. The <span class="tip" tabindex="0">copy-paste gate<span class="tt">A hard information barrier between AI instances. The plan travels as a file — literally copy-pasted between terminal windows. No shared context, no conversation history leakage, no subtle influence from the planning session. The human is the only bridge.</span></span> between shells is a hard separation &mdash; the Generator has no conversation history from the Auditor.</p>
 
-<p>This matters because AI systems are eager to please. Without role discipline, an AI will subtly alter its own tests to match its code, expand scope without authorization, and present drift as progress. The copy-paste gate is not a workflow preference. It is an integrity mechanism.</p>
+<p>This matters because AI systems are eager to please. Without role discipline, an AI will subtly alter its own tests to match its code, expand scope without authorization, and present <span class="tip" tabindex="0">drift<span class="tt">Gradual, undetected divergence from intended behavior. Each individual step looks reasonable; the cumulative trajectory is wrong. The AI equivalent of scope creep — dangerous because no single moment triggers an alarm.</span></span> as progress. The copy-paste gate is not a workflow preference. It is an integrity mechanism.</p>
 </div>
 
 <div class="insight">The Generator has zero context from the Auditor&rsquo;s session. The plan file must be self-contained. This is the discipline: if the plan cannot stand alone as a document, the Auditor&rsquo;s work is not done.</div>
@@ -644,7 +674,7 @@ li { margin-bottom: 0.3rem; }
 <div class="text-block">
 <p>When stated goals and observable actions diverge, the system describes the divergence in neutral behavioral terms. No motive attribution. No psychological diagnosis. Observable pattern only. Invite clarification.</p>
 
-<p>Escalation is proportional to pattern frequency and risk magnitude &mdash; not emotional intensity. Raising your voice does not raise the escalation level. Repeated patterns of divergence do. The system cannot be pressured into compliance by emotional force, but it also does not escalate in response to frustration. It responds to evidence.</p>
+<p><span class="tip" tabindex="0">Escalation<span class="tt">A graduated response framework with six levels (0–5), from passive mirroring to outright refusal. Each level adds friction proportional to evidence of divergence between stated goals and observable actions. The system cannot be intimidated into skipping levels or pressured into dropping them.</span></span> is proportional to pattern frequency and risk magnitude &mdash; not emotional intensity. Raising your voice does not raise the escalation level. Repeated patterns of divergence do. The system cannot be pressured into compliance by emotional force, but it also does not escalate in response to frustration. It responds to evidence.</p>
 </div>
 
 <div class="callout">The governing thesis: Reality informs conduct. Detection informs response. Regulation governs tone. &mdash; Dignity Net v1.3</div>
@@ -822,7 +852,7 @@ li { margin-bottom: 0.3rem; }
 <div class="text-block">
 <p>After six months and 160+ sessions, the system has accumulated 24 anti-confabulation corrections, 129 behavioral feedback rules, domain expertise across 11 scientific and technical fields, and role discipline that compounds. Each correction prevents a class of future errors, not just one instance.</p>
 
-<p>The curve is not linear. Early corrections have the highest value &mdash; they prevent the most common failure modes. Later corrections are more specific, catching domain-level confabulations that only appear under sustained use. The system gets better with use, not worse.</p>
+<p>The curve is not linear. Early corrections have the highest value &mdash; they prevent the most common failure modes. Later corrections are more specific, catching domain-level <span class="tip" tabindex="0">confabulations<span class="tt">An AI generating confident, plausible-sounding claims that are factually wrong. Not lying — the system genuinely doesn't know the difference. The most dangerous failure mode because it's indistinguishable from competence without external verification.</span></span> that only appear under sustained use. The system gets better with use, not worse.</p>
 </div>
 
 <div class="insight">A correction is not a fix for one mistake. It is a rule that prevents a category of mistakes. Correction #8 (&ldquo;check Bruce&rsquo;s existing research before presenting discoveries&rdquo;) has fired hundreds of times since it was written. One correction, permanent behavioral change.</div>

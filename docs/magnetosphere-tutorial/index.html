@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive tutorial on Earth's magnetosphere — the invisible magnetic shield that deflects the solar wind. Seven sections from solar physics to geomagnetic storms, with animated SVG diagrams showing the bow shock, field-aligned currents, magnetic reconnection, and the substorm cycle. Explains the $2 trillion infrastructure risk from geomagnetically induced currents.">
 <title>The Magnetosphere: Earth's Invisible Shield</title>
 <style>
 :root {
@@ -169,6 +170,44 @@ a:hover { text-decoration: underline; }
   body { padding: 1rem 0.5rem; }
   .svg-wrap { padding: 0.5rem; }
 }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .section { opacity: 1; transform: none; transition: none; }
+  .replay-btn { transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>
@@ -247,7 +286,7 @@ a:hover { text-decoration: underline; }
 </div>
 <div class="text-block">
   <p>One hundred and fifty million kilometres away, the Sun exhales. It has been doing this for <span class="stat stat-solar">four and a half billion years</span> -- longer than life has existed on Earth.</p>
-  <p>Every second, the Sun ejects <span class="stat stat-solar">a million tonnes</span> of charged plasma into space. Protons, electrons, alpha particles -- a supersonic wind of ionized gas streaming outward in every direction at <span class="stat stat-solar">400 km/s</span>.</p>
+  <p>Every second, the Sun ejects <span class="stat stat-solar">a million tonnes</span> of charged <span class="tip" tabindex="0">plasma<span class="tt">Gas heated until electrons separate from atoms, creating a soup of free-moving charged particles that responds to electric and magnetic fields. The fourth state of matter after solid, liquid, and gas.</span></span> into space. Protons, electrons, alpha particles -- a <span class="tip" tabindex="0">supersonic<span class="tt">Faster than the speed of sound in the medium. In plasma, "sound speed" depends on temperature and magnetic field, typically 40-60 km/s in the solar wind. The wind at 400 km/s outruns any wave that could warn the medium ahead.</span></span> wind of ionized gas streaming outward in every direction at <span class="stat stat-solar">400 km/s</span>.</p>
   <p>This is the solar wind. It fills the entire solar system. And it never stops.</p>
 </div>
 </div>
@@ -300,7 +339,7 @@ a:hover { text-decoration: underline; }
 </svg>
 </div>
 <div class="text-block">
-  <p>The solar wind carries the Sun's magnetic field with it -- the <span class="stat" style="color:var(--field-open)">interplanetary magnetic field</span> (IMF). The plasma is so conductive that the magnetic field is frozen into the flow, dragged outward like taffy.</p>
+  <p>The solar wind carries the Sun's magnetic field with it -- the <span class="tip" tabindex="0"><span class="stat" style="color:var(--field-open)">interplanetary magnetic field</span><span class="tt">The Sun's magnetic field, stretched and dragged into space by the solar wind. Like a garden hose on a spinning sprinkler, it forms a spiral pattern across the solar system. Its direction at Earth determines whether the magnetosphere's shield holds or opens.</span></span> (IMF). The plasma is so conductive that the magnetic field is frozen into the flow, dragged outward like taffy.</p>
   <p>At Earth's orbit, the wind is supersonic -- faster than any wave can propagate through it. When it meets an obstacle, it cannot slow down gradually. It must form a shock.</p>
 </div>
 </div>
@@ -373,7 +412,7 @@ a:hover { text-decoration: underline; }
 </div>
 <div class="text-block">
   <p>Earth stands in the way. Deep inside the planet, a core of liquid iron has been convecting for four and a half billion years. That churning metal generates a magnetic field that inflates an enormous cavity in the solar wind -- the <span class="stat stat-earth">magnetosphere</span>.</p>
-  <p>The <span class="stat stat-earth">magnetopause</span> is the outer boundary of this cavity, shaped by the balance between solar wind pressure and magnetic pressure. Ahead of it stands the <span class="stat" style="color:var(--bowshock)">bow shock</span> -- where the supersonic wind slams to a halt, heating and slowing before it flows around the obstacle.</p>
+  <p>The <span class="tip" tabindex="0"><span class="stat stat-earth">magnetopause</span><span class="tt">The outer boundary of the magnetosphere -- the surface where solar wind pressure and Earth's magnetic pressure are in balance. Typically 10 Earth radii (64,000 km) sunward, but can be pushed to 6 during storms. Think of it as the hull of the ship.</span></span> is the outer boundary of this cavity, shaped by the balance between solar wind pressure and magnetic pressure. Ahead of it stands the <span class="tip" tabindex="0"><span class="stat" style="color:var(--bowshock)">bow shock</span><span class="tt">A standing shock wave upstream of the magnetosphere, like the bow wave of a ship. The supersonic solar wind can't "know" the obstacle is ahead, so it piles up and abruptly decelerates, heating from ~100,000 K to over 1,000,000 K in a thin layer.</span></span> -- where the supersonic wind slams to a halt, heating and slowing before it flows around the obstacle.</p>
   <p>The magnetosphere extends <span class="stat stat-earth">10 Earth radii</span> sunward and stretches hundreds of Earth radii downwind into a long magnetotail. The Moon passes through it once every orbit.</p>
   <div class="callout">
     <strong>The Shue model</strong> describes the magnetopause shape: <em>r = r<sub>0</sub>(2/(1 + cos&theta;))<sup>&alpha;</sup></em>, where r<sub>0</sub> is the standoff distance and &alpha; controls the tail flaring. The shape you see above is computed from this equation.
@@ -475,8 +514,8 @@ a:hover { text-decoration: underline; }
 </div>
 <div class="text-block">
   <p>Kristian Birkeland proposed this circuit in <span class="stat">1908</span>. It took sixty years for satellites to prove him right.</p>
-  <p>The <span class="stat" style="color:var(--current-birkeland)">Birkeland currents</span> flow along magnetic field lines -- descending from the magnetosphere into the polar ionosphere, crossing the ionosphere as <span class="stat" style="color:var(--current-pedersen)">Pedersen currents</span>, rising back up on the other side, and closing through the magnetosphere. Where the current enters the atmosphere, atoms glow: the <span class="stat stat-field">aurora</span>.</p>
-  <p>The energy source is the solar wind. The generator is magnetic reconnection at the magnetopause. The load is the ionosphere. This is a real electrical circuit -- complete with a power supply, transmission lines, and a resistive load -- operating on a planetary scale.</p>
+  <p>The <span class="tip" tabindex="0"><span class="stat" style="color:var(--current-birkeland)">Birkeland currents</span><span class="tt">Electric currents that flow along magnetic field lines between the magnetosphere and the ionosphere. Named for Kristian Birkeland, who proposed them in 1908 based on his Arctic expeditions. Satellites confirmed their existence in the 1960s.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup></span></span> flow along magnetic field lines -- descending from the magnetosphere into the polar ionosphere, crossing the ionosphere as <span class="tip" tabindex="0"><span class="stat" style="color:var(--current-pedersen)">Pedersen currents</span><span class="tt">Horizontal currents in the ionosphere driven by the electric field mapped down from the magnetosphere. They flow perpendicular to the magnetic field, closing the Birkeland current circuit. The ionosphere acts as a resistive load in this planetary-scale electrical circuit.</span></span>, rising back up on the other side, and closing through the magnetosphere. Where the current enters the atmosphere, atoms glow: the <span class="stat stat-field">aurora</span>.</p>
+  <p>The energy source is the solar wind. The generator is magnetic <span class="tip" tabindex="0">reconnection<span class="tt">A process where oppositely directed magnetic field lines break and rejoin in a new configuration, converting stored magnetic energy into kinetic energy and heat. The same mechanism that drives solar flares -- applied here at the boundary between the solar wind and Earth's field.</span></span> at the magnetopause. The load is the ionosphere. This is a real electrical circuit -- complete with a power supply, transmission lines, and a resistive load -- operating on a planetary scale.</p>
 </div>
 </div>
 
@@ -624,10 +663,10 @@ a:hover { text-decoration: underline; }
 </svg>
 </div>
 <div class="text-block">
-  <p>A substorm is the magnetosphere's way of releasing accumulated energy. It unfolds in three phases:</p>
+  <p>A <span class="tip" tabindex="0">substorm<span class="tt">A cycle of energy storage and explosive release in the magnetotail, lasting 1-3 hours. Not a "small storm" — it's a distinct process where the magnetotail accumulates solar wind energy until it becomes unstable, then releases it all at once. Several substorms may occur during a larger geomagnetic storm.</span></span> is the magnetosphere's way of releasing accumulated energy. It unfolds in three phases:</p>
   <p><span class="stat" style="color:var(--plasma)">Growth phase:</span> Energy from the solar wind loads into the magnetotail. The tail stretches, the plasma sheet thins, and magnetic energy accumulates like a spring being wound.</p>
   <p><span class="stat stat-warn">Onset:</span> The stretched tail becomes unstable. A new reconnection point forms in the tail (the "near-Earth neutral line"), and the magnetic field snaps -- releasing stored energy in minutes.</p>
-  <p><span class="stat stat-field">Recovery:</span> Hot plasma surges earthward. The magnetic field dipolarizes -- snapping back toward its original shape. The aurora flares across the sky. The cycle begins again.</p>
+  <p><span class="stat stat-field">Recovery:</span> Hot plasma surges earthward. The magnetic field <span class="tip" tabindex="0">dipolarizes<span class="tt">The stretched, tail-like magnetic field snaps back toward its resting dipole (bar magnet) shape. Like releasing a rubber band -- the stored magnetic energy converts to kinetic energy, accelerating particles earthward and lighting up the aurora.</span></span> -- snapping back toward its original shape. The aurora flares across the sky. The cycle begins again.</p>
   <div class="callout">
     This cycle repeats every <strong>2-4 hours</strong> during active conditions. The magnetosphere is not a static shield -- it breathes, loads, and discharges continuously.
   </div>
@@ -713,12 +752,20 @@ a:hover { text-decoration: underline; }
 </div>
 <div class="text-block">
   <p>When the gate opens and substorms fire, the changing magnetic field induces electric currents in every long conductor on Earth's surface. Power lines. Pipelines. Railway tracks. Submarine cables.</p>
-  <p>These <span class="stat stat-warn">geomagnetically induced currents</span> (GICs) can saturate power transformers, causing voltage collapse and permanent damage. The 1989 Quebec blackout left six million people without power for nine hours -- caused by a geomagnetic storm.</p>
+  <p>These <span class="tip" tabindex="0"><span class="stat stat-warn">geomagnetically induced currents</span><span class="tt">Stray electric currents driven through ground-level conductors (power lines, pipelines, railway tracks) by rapid changes in Earth's magnetic field during geomagnetic storms. They enter power grids through transformer ground connections and can saturate transformer cores, causing overheating and permanent damage.</span></span> (GICs) can saturate power transformers, causing voltage collapse and permanent damage. The 1989 Quebec blackout left six million people without power for nine hours -- caused by a geomagnetic storm.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup></p>
   <div class="callout callout-warn">
-    <strong>This is not a toy.</strong> A Carrington-class event (1859) today would cause an estimated <span class="stat stat-warn">$2 trillion</span> in damage to global infrastructure. The magnetosphere is the shield that stands between civilization and the Sun's output -- and it has a door that opens regularly.
+    <strong>This is not a toy.</strong> A Carrington-class event (1859) today would cause an estimated <span class="stat stat-warn">$2 trillion</span> in damage to global infrastructure.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> The magnetosphere is the shield that stands between civilization and the Sun's output -- and it has a door that opens regularly.
   </div>
   <p>This is happening right now, above your head, whether anyone is watching or not.</p>
 </div>
+</div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn1">Bolduc, L. (2002). GIC observations and studies in the Hydro-Qu&eacute;bec power system. <em>Journal of Atmospheric and Solar-Terrestrial Physics</em>, 64(16), 1793-1802. The March 1989 storm collapsed the entire Hydro-Qu&eacute;bec grid in 92 seconds. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">National Research Council (2008). <em>Severe Space Weather Events -- Understanding Societal and Economic Impacts</em>. National Academies Press. The $1-2 trillion estimate covers a 4-10 year recovery period for a Carrington-class event. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Birkeland, K. (1908). <em>The Norwegian Aurora Polaris Expedition 1902-1903</em>. H. Aschehoug. Birkeland's terrella experiments and Arctic observations predicted field-aligned currents six decades before satellite confirmation. <a href="#fnref3">&uarr;</a></li>
+  </ol>
 </div>
 
 <div class="contact">

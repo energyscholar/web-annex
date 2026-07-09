@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Magnetospheric tomography of the Halloween 2003 storm — reconstructing 3D current sheet structure from combined ground magnetometer and GPS TEC projections. Interactive cross-section visualization showing how two independent projections at different angles recover altitude information, analogous to CT scanning applied to space physics.">
 <title>Magnetospheric Tomography — Halloween 2003</title>
 <style>
 :root { --bg: #0f172a; --fg: #e2e8f0; --accent: #38bdf8; --muted: #64748b; }
@@ -42,6 +43,40 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 em { color: var(--accent); font-style: normal; }
 .section-note { color: var(--muted); font-size: 0.82rem; }
 svg { border-radius: 6px; }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--accent); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--fg); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--accent);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--accent); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #1e293b; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--accent); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  @keyframes pulse { 0%, 100% { opacity: 1; } }
+  * { transition: none !important; }
+}
 </style>
 </head>
 <body>
@@ -58,13 +93,13 @@ and GPS projections — Halloween Storm, 29 October 2003</p>
 
 <h2>§1 — The Problem of Projection</h2>
 <p>Ground magnetometers measure the magnetic perturbation at Earth's surface — a 2D projection
-of a 3D current system that spans from the plasma sheet (~6–15 R<sub>E</sub> in the magnetotail)
-through field-aligned currents to the ionosphere at 110 km altitude. A single projection
+of a 3D current system that spans from the <span class="tip" tabindex="0">plasma sheet<span class="tt">A thin, hot layer of plasma in the magnetotail's equatorial plane, extending from ~6 to beyond 30 Earth radii. It is the reservoir of energy that feeds substorms. Its earthward boundary is where field-aligned currents originate.</span></span> (~6–15 R<sub>E</sub> in the magnetotail)
+through <span class="tip" tabindex="0">field-aligned currents<span class="tt">Electric currents that flow along magnetic field lines between the magnetosphere and ionosphere (also called Birkeland currents). They connect the plasma sheet generator to the ionospheric load, forming a complete electrical circuit.</span></span> to the ionosphere at 110 km altitude. A single projection
 loses altitude information. The currents could be at 100 km or 100,000 km — the ground
 signature looks the same.</p>
 
 <p>GPS satellites orbit at 20,200 km and transmit through the ionosphere. The signal delay
-measures Total Electron Content (TEC) along each satellite-receiver ray path. A different
+measures <span class="tip" tabindex="0">Total Electron Content<span class="tt">The integrated electron density along a signal path, measured in TECU (10^16 electrons/m²). GPS signals are delayed by free electrons in the ionosphere. The delay gives TEC; multiple satellite paths give altitude resolution via tomographic inversion.</span></span> (TEC) along each satellite-receiver ray path. A different
 projection of the same 3D system, at a different angle. Neither projection alone gives
 altitude. Together, they can.</p>
 
@@ -77,7 +112,7 @@ here for the first time — magnetospheric current reconstruction.
 <h2>§2 — The Reconstruction</h2>
 <p>The meridional cross-section below shows the combined reconstruction. Earth sits at center.
 Dipole field lines curve from the auroral ionosphere (55°–75° magnetic latitude) out to the
-equatorial plane where they map to L-shells of 4–15 R<sub>E</sub>. The nightside plasma sheet
+equatorial plane where they map to <span class="tip" tabindex="0">L-shells<span class="tt">McIlwain's L parameter — the equatorial crossing distance of a magnetic field line, in Earth radii. L=4 means a field line crossing the equatorial plane at 4 R_E. Higher L = further out, mapping to higher latitudes at the ground.</span></span> of 4–15 R<sub>E</sub>. The nightside plasma sheet
 lies along the equatorial plane beyond ~4 R<sub>E</sub>.</p>
 
 <p>Color columns along the field lines show <em>electron density</em> from the Chapman altitude
@@ -12236,7 +12271,7 @@ Ground stations (green dots) sit on Earth's surface, looking upward through this
 </tr>
 <tr style="border-bottom:1px solid #1e293b;">
   <td style="padding:4px 8px;">Plasmapause at L &#8776; 5&#8211;6 (quiet)</td>
-  <td style="padding:4px 8px;">LISA anomaly near expected L</td>
+  <td style="padding:4px 8px;"><span class="tip" tabindex="0">LISA<span class="tt">Local Indicator of Spatial Association — a per-station decomposition of the global Moran's I. Identifies individual locations that contribute anomalously high or low spatial correlation. A LISA 'hot outlier' has high values surrounded by low values.</span></span> anomaly near expected L</td>
   <td style="padding:4px 8px; color:#4ade80;">&#10003; SKT at L = 5.6, Greenland</td>
 </tr>
 <tr style="border-bottom:1px solid #1e293b;">
@@ -12264,9 +12299,9 @@ Detailed evidence: <a href="altitude-coherence.html" style="color:#38bdf8;">8-te
 <h2>§3 — What Each Projection Sees</h2>
 
 <div class="key-concept">
-<strong>Projection 1 — Ground magnetometers (upward):</strong> The Biot-Savart integral
+<strong>Projection 1 — Ground magnetometers (upward):</strong> The <span class="tip" tabindex="0">Biot-Savart integral<span class="tt">The fundamental law relating electric current to magnetic field. Each current element produces a magnetic field that falls off as 1/r². A ground station measures the superposition of all currents above it, weighted by distance — close currents dominate.</span></span>
 of all currents above the station, weighted by 1/r². Dominated by the nearest current
-system: ionospheric closure at 110 km. Spatial pattern (Moran's I) reveals current sheet
+system: ionospheric closure at 110 km. Spatial pattern (<span class="tip" tabindex="0">Moran's I<span class="tt">A spatial autocorrelation statistic (-1 to +1). Measures whether nearby ground stations show similar (I>0) or dissimilar (I<0) magnetic perturbations. High I means the current system has large-scale organized structure visible at the ground.</span></span>) reveals current sheet
 geometry. But altitude is integrated out — the projection loses the third dimension.
 </div>
 
@@ -12278,10 +12313,10 @@ paths sample a longer ionospheric chord — more sensitive to horizontal gradien
 altitude (110 km). The crossing angles give altitude discrimination.
 </div>
 
-<p>The Chapman decomposition converts the column-integrated TEC into an altitude profile:
+<p>The <span class="tip" tabindex="0">Chapman decomposition<span class="tt">A technique to convert column-integrated TEC into an altitude profile of electron density. Assumes the ionosphere has characteristic layers (E at ~120 km, F at ~300 km) with known scale heights. Named after Sydney Chapman's ionospheric theory.</span></span> converts the column-integrated TEC into an altitude profile:
 n<sub>e</sub>(z) peaks at ~300 km (F-region) with scale height ~60 km. The conductance
 that matters for current closure comes from the E-region (~110 km), where collision
-frequencies are high enough for horizontal Pedersen and Hall currents. The altitude
+frequencies are high enough for horizontal <span class="tip" tabindex="0">Pedersen and Hall currents<span class="tt">Two types of horizontal current in the ionosphere. Pedersen currents flow parallel to the electric field (resistive). Hall currents flow perpendicular (reactive). Both require the collision-dominated E-region (~110 km) where ions collide with neutrals fast enough to create differential drift.</span></span>. The altitude
 profile panel (right) shows how electron density varies with height at different
 auroral latitudes.</p>
 
@@ -12299,7 +12334,7 @@ what we interpret as evidence for a phase transition in the spatial coherence of
 plasma sheet–ionosphere coupling.</p>
 
 <h2>§5 — The Coherence Transition</h2>
-<p>Below AE ≈ 100 nT, Moran's I is indistinguishable from noise — the perturbation field is
+<p>Below <span class="tip" tabindex="0">AE<span class="tt">Auroral Electrojet index — a measure of global auroral zone geomagnetic activity derived from 12 magnetometer stations near the auroral oval. AE is the upper minus lower envelope of the horizontal component. Units: nanotesla. Higher AE = stronger auroral currents.</span></span> ≈ 100 nT, Moran's I is indistinguishable from noise — the perturbation field is
 spatially incoherent. Above this threshold, spatial order emerges: nearby stations covary,
 with a characteristic correlation length of 3,000–4,800 km that scales with storm intensity.
 This is an order-disorder transition controlled by magnetospheric driving intensity.</p>
@@ -12314,12 +12349,18 @@ If confirmed at higher cadence, this would imply the current system organizes
 structurally before the amplitude peak arrives at the ground.</p>
 
 <p class="section-note">Data: SuperMAG ground magnetometers (41 stations, nightside 55°–80° mlat) + CODE GIM
-GPS TEC (2-hour cadence, 2.5° × 5° grid). Halloween 2003 storm, 29 October.
+GPS TEC (2-hour cadence, 2.5° × 5° grid). Halloween 2003 storm, 29 October.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup>
 The 2-hour cadence resolves storm phases (quiet → main → recovery), not individual substorms.
-Moran's I: inverse-distance haversine weights, validated against PySAL to machine precision.</p>
+Moran's I: inverse-distance haversine weights, validated against PySAL<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> to machine precision.</p>
 
 <p class="section-note">Pipeline: github.com/energyscholar/has-anyone-looked — scripts/tomography_3d.py</p>
 
+<div class="footnotes">
+  <ol>
+    <li id="fn1">Gjerloev, J. W. (2012). The SuperMAG data processing technique. <em>Journal of Geophysical Research</em>, 117, A09213. SuperMAG provides baseline-subtracted ground magnetometer data from a global network of stations with consistent processing. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Rey, S. J. & Anselin, L. (2010). PySAL: A Python Library of Spatial Analytical Methods. In <em>Handbook of Applied Spatial Analysis</em>. Springer. PySAL's spatial autocorrelation module provides the reference implementation for Moran's I validation. <a href="#fnref2">&uarr;</a></li>
+  </ol>
+</div>
 
 <script>
 let currentEpoch = 0;

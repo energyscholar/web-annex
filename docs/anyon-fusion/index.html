@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fibonacci Anyon Fusion Algebra</title>
+<meta name="description" content="Interactive tutorial on Fibonacci anyon fusion algebra — the simplest model of universal topological quantum computation. Covers fusion rules, the Fibonacci connection, braiding as computation, and topological error protection.">
 <style>
 :root {
   --bg: #0f172a;
@@ -313,6 +314,50 @@ a:hover { text-decoration: underline; }
   75% { d: path('M 40 40 C 75 8, 125 12, 160 40'); }
   100% { d: path('M 40 40 C 80 10, 120 10, 160 40'); }
 }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--muted); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .section { opacity: 1; transform: none; transition: none; }
+  .replay-btn { display: none; }
+  .particle-vac, .particle-tau,
+  .tree-level-1, .tree-tau3, .tree-level-2, .tree-tau4, .tree-level-3, .tree-fib, .tree-labels,
+  .deloc-anyons, .deloc-arcs, .deloc-questions, .deloc-label,
+  .braid-diagram, .braid-gate,
+  .topo-clean, .topo-wobbly, .topo-eq,
+  .r3-branch-line-l, .r3-branch-line-r,
+  .r3-out-vac, .r3-out-tau, .r3-superpos { opacity: 1 !important; }
+}
 </style>
 </head>
 <body>
@@ -342,7 +387,7 @@ a:hover { text-decoration: underline; }
 
 <p>In the simplest universal model of quantum computation, there are only two kinds of particle. Everything follows from one fusion rule.</p>
 
-<p>These particles are <em>anyons</em> &mdash; quasiparticles that exist only in two-dimensional systems and obey exchange statistics that are neither bosonic nor fermionic. Fibonacci anyons are the simplest anyon model that supports universal quantum computation.</p>
+<p>These particles are <em><span class="tip" tabindex="0">anyons<span class="tt">Quasiparticles that exist only in 2D systems. Unlike fermions or bosons, swapping two anyons can multiply the quantum state by any phase — or even apply a matrix operation.</span></span></em> &mdash; <span class="tip" tabindex="0">quasiparticles<span class="tt">Collective excitations in a material that behave like particles but emerge from many-body interactions — like a wave in a stadium crowd rather than an individual person.</span></span> that exist only in two-dimensional systems and obey exchange statistics that are neither bosonic nor fermionic. Fibonacci anyons are the simplest anyon model that supports universal quantum computation.</p>
 
 <div class="svg-container" id="particles-svg">
 <svg viewBox="0 0 500 160" width="500" height="160">
@@ -386,7 +431,7 @@ a:hover { text-decoration: underline; }
   <tr>
     <td><span class="math" style="color: var(--golden)">&tau;</span></td>
     <td>Fibonacci anyon</td>
-    <td><span class="math">d</span> = <span class="math">&phi;</span> = (1+&radic;5)/2 &asymp; 1.618</td>
+    <td><span class="tip" tabindex="0"><span class="math">d</span><span class="tt">Quantum dimension — a number measuring how much Hilbert space each particle type contributes. Determines how fast the state space grows as you add particles.</span></span> = <span class="math">&phi;</span> = (1+&radic;5)/2 &asymp; 1.618</td>
   </tr>
 </table>
 
@@ -632,11 +677,11 @@ a:hover { text-decoration: underline; }
 <p class="section-number">Section 4</p>
 <h2>The Fusion Space</h2>
 
-<p>Quantum information in a topological quantum computer is not stored in individual anyons. It is stored in the <em>fusion space</em> &mdash; the space of valid fusion paths through the tree.</p>
+<p>Quantum information in a topological quantum computer is not stored in individual anyons. It is stored in the <em><span class="tip" tabindex="0">fusion space<span class="tt">The set of all valid fusion outcomes for a collection of anyons. Like a decision tree where each branch is a possible quantum state — the information lives in which branch, not in any single particle.</span></span></em> &mdash; the space of valid fusion paths through the tree.</p>
 
 <div class="definition">
   <p class="definition-title">Definition: Fusion Space</p>
-  <p>The fusion space is a Hilbert space whose basis states are the valid fusion paths. A system of <span class="math">n</span> Fibonacci anyons with fixed total charge has a fusion space of dimension <span class="math">F</span>(<span class="math">n</span>&minus;1) for total charge <span class="math">1</span>, or <span class="math">F</span>(<span class="math">n</span>) for total charge <span class="math" style="color: var(--golden)">&tau;</span>, where <span class="math">F</span> is the Fibonacci sequence (with <span class="math">F</span>(1) = <span class="math">F</span>(2) = 1).</p>
+  <p>The fusion space is a <span class="tip" tabindex="0">Hilbert space<span class="tt">A mathematical space of quantum states — like a coordinate system for quantum information, where each axis represents a possible measurement outcome.</span></span> whose basis states are the valid fusion paths. A system of <span class="math">n</span> Fibonacci anyons with fixed total charge has a fusion space of dimension <span class="math">F</span>(<span class="math">n</span>&minus;1) for total charge <span class="math">1</span>, or <span class="math">F</span>(<span class="math">n</span>) for total charge <span class="math" style="color: var(--golden)">&tau;</span>, where <span class="math">F</span> is the Fibonacci sequence (with <span class="math">F</span>(1) = <span class="math">F</span>(2) = 1).</p>
 </div>
 
 <div class="svg-container" id="delocal-svg">
@@ -680,7 +725,7 @@ a:hover { text-decoration: underline; }
 <button class="replay-btn" onclick="replaySection('sec4')">Replay</button>
 </div>
 
-<div class="insight">No measurement on any single anyon reveals which fusion path the system is on. This is <em>topological non-locality</em> &mdash; the qubit is encoded in the collective state of all the anyons, inaccessible to any local probe.</div>
+<div class="insight">No measurement on any single anyon reveals which fusion path the system is on. This is <em><span class="tip" tabindex="0">topological non-locality<span class="tt">Information stored in global relationships between particles rather than in any single particle. No local measurement can extract it — like a secret split across multiple servers where no single server holds enough to reconstruct it.</span></span></em> &mdash; the qubit is encoded in the collective state of all the anyons, inaccessible to any local probe.</div>
 
 <table>
   <tr><th>Anyons (<span class="math">n</span>)</th><th>Fusion space dim (total charge <span class="math" style="color: var(--golden)">&tau;</span>)</th><th>Qubits (approx)</th></tr>
@@ -701,9 +746,9 @@ a:hover { text-decoration: underline; }
 <p class="section-number">Section 5</p>
 <h2>Braiding as Computation</h2>
 
-<p>When you physically exchange two anyons &mdash; moving one around the other in the plane &mdash; this applies a unitary transformation to the fusion space. Different exchange sequences produce different quantum gates.</p>
+<p>When you physically exchange two anyons &mdash; moving one around the other in the plane &mdash; this applies a <span class="tip" tabindex="0">unitary transformation<span class="tt">A reversible quantum operation that preserves total probability. The quantum equivalent of a rotation — it moves the state around without losing information.</span></span> to the fusion space. Different exchange sequences produce different quantum gates.</p>
 
-<p>In three dimensions, exchanging two identical particles twice returns the system to its original state. In two dimensions, the second exchange is <em>topologically distinct</em> from the first &mdash; the worldlines form a braid, and the braid group is infinite and non-abelian.</p>
+<p>In three dimensions, exchanging two identical particles twice returns the system to its original state. In two dimensions, the second exchange is <em>topologically distinct</em> from the first &mdash; the worldlines form a braid, and the <span class="tip" tabindex="0">braid group<span class="tt">The mathematical group describing all possible ways to weave strands over and under each other. Unlike simple permutations, braids record the full history of which strand crossed over which.</span></span> is infinite and <span class="tip" tabindex="0">non-abelian<span class="tt">Operations whose result depends on the order they are performed — doing A then B gives a different result than B then A. This is what makes the system powerful enough for universal computation.</span></span>.</p>
 
 <div class="svg-container" id="braid-svg">
 <svg viewBox="0 0 500 220" width="500" height="220" id="braid-canvas">
@@ -752,8 +797,8 @@ a:hover { text-decoration: underline; }
 <p>For three Fibonacci anyons with total charge <span class="math" style="color: var(--golden)">&tau;</span>, the fusion space is two-dimensional &mdash; a single qubit. The braid generators <span class="math">&sigma;<sub>1</sub></span> and <span class="math">&sigma;<sub>2</sub></span> act as 2&times;2 unitary matrices whose entries involve <span class="math">e<sup>4&pi;i/5</sup></span> and the golden ratio <span class="math">&phi;</span>.</p>
 
 <div class="theorem">
-  <p class="theorem-title">Theorem (Freedman, Larsen, Wang 2002)</p>
-  <p>The image of the braid group representation for Fibonacci anyons is <em>dense</em> in SU(2). That is, any single-qubit unitary transformation can be approximated to arbitrary precision by a finite sequence of braids. Combined with the ability to perform entangling gates between qubit pairs, braiding Fibonacci anyons is sufficient for <strong>universal quantum computation</strong>.</p>
+  <p class="theorem-title">Theorem (Freedman, Larsen, Wang 2002)<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup></p>
+  <p>The image of the braid group representation for Fibonacci anyons is <em>dense</em> in <span class="tip" tabindex="0">SU(2)<span class="tt">The group of all 2×2 unitary matrices with determinant 1. All possible single-qubit quantum gates live in this group — "dense in SU(2)" means braids can approximate any of them.</span></span>. That is, any single-qubit unitary transformation can be approximated to arbitrary precision by a finite sequence of braids. Combined with the ability to perform entangling gates between qubit pairs, braiding Fibonacci anyons is sufficient for <strong>universal quantum computation</strong>.</p>
 </div>
 
 <div class="insight">For Fibonacci anyons, braiding alone is sufficient for universal quantum computation. Any quantum algorithm can be compiled into a sequence of anyon exchanges. No additional error correction is needed &mdash; the topological nature of the encoding provides it intrinsically.</div>
@@ -768,7 +813,7 @@ a:hover { text-decoration: underline; }
 <p class="section-number">Section 6</p>
 <h2>Topological Protection</h2>
 
-<p>The central promise of topological quantum computation is <em>fault tolerance by physics</em>. The quantum gates are determined by the topology of the anyon worldlines &mdash; which strands cross over which &mdash; not by the precise geometric path taken.</p>
+<p>The central promise of topological quantum computation is <em>fault tolerance by physics</em><sup><a class="fn" href="#fn3" id="fnref3">3</a></sup>. The quantum gates are determined by the topology of the anyon worldlines &mdash; which strands cross over which &mdash; not by the precise geometric path taken.</p>
 
 <div class="svg-container" id="topo-svg">
 <svg viewBox="0 0 520 200" width="520" height="200" id="topo-canvas">
@@ -820,7 +865,7 @@ a:hover { text-decoration: underline; }
 <p class="section-number">Section 7</p>
 <h2>The Autocatalytic Connection</h2>
 
-<p>The Fibonacci anyon fusion algebra satisfies a structural pattern that appears throughout self-sustaining systems &mdash; Kauffman's three criteria for autocatalytic closure.</p>
+<p>The Fibonacci anyon fusion algebra satisfies a structural pattern that appears throughout self-sustaining systems &mdash; Kauffman's three criteria for <span class="tip" tabindex="0">autocatalytic closure<span class="tt">A self-sustaining set where every element is produced by reactions within the set itself. Like a software system that can rebuild all its own components from source — nothing needs to be imported from outside.</span></span>.</p>
 
 <div class="three-panel">
   <div class="panel" style="border-top: 3px solid var(--green);">
@@ -843,7 +888,7 @@ a:hover { text-decoration: underline; }
 <div class="theorem">
   <p class="theorem-title">Structural Identity &mdash; with Physical Content</p>
   <p>The Fibonacci anyon fusion algebra satisfies Kauffman's three closure criteria for autocatalytic sets. At the algebraic level, this is a structural identity &mdash; the same abstract axioms in two mathematical languages <span class="citation">(Structural analogy &mdash; Anchor 7)</span>.</p>
-  <p style="margin-top:0.5rem;">But in FQHE systems, it is more than algebra. Anyonic quasiparticles are collective excitations <em>generated by the substrate</em> <span class="citation">(Nayak et al. 2008 &mdash; Established, Anchor 2)</span>. The physical generation of anyons by the 2DEG IS Kauffman's generation criterion, physically instantiated. FQHE systems are already AC bridge demonstrators &mdash; the gap is cross-community recognition, not finding a new system.</p>
+  <p style="margin-top:0.5rem;">But in FQHE systems, it is more than algebra. Anyonic quasiparticles are collective excitations <em>generated by the substrate</em> <span class="citation">(Nayak et al. 2008 &mdash; Established, Anchor 2)</span><sup><a class="fn" href="#fn2" id="fnref2">2</a></sup>. The physical generation of anyons by the 2DEG IS Kauffman's generation criterion, physically instantiated. FQHE systems are already AC bridge demonstrators &mdash; the gap is cross-community recognition, not finding a new system.</p>
 </div>
 </div>
 
@@ -856,7 +901,7 @@ a:hover { text-decoration: underline; }
 
 <p>Fibonacci anyons are predicted to exist as quasiparticle excitations in certain fractional quantum Hall states &mdash; specifically the <span class="math">&nu;</span> = 12/5 state, as described by the Read&ndash;Rezayi model (1999). They have not yet been experimentally confirmed.</p>
 
-<p>This is not a materials problem. The fractional quantum Hall effect occurs in GaAs heterostructures, graphene, ZnO, and Si/SiGe &mdash; the substrate does not define the phenomenon. What matters are the conditions: low temperature, strong magnetic field, high-mobility two-dimensional electron gas. The same topological order can emerge in any material that provides the right conditions. (Anchor 1: substrate independence.)</p>
+<p>This is not a materials problem. The fractional quantum Hall effect occurs in GaAs heterostructures, graphene, ZnO, and Si/SiGe &mdash; the substrate does not define the phenomenon. What matters are the conditions: low temperature, strong magnetic field, high-mobility <span class="tip" tabindex="0">two-dimensional electron gas<span class="tt">A thin layer of electrons confined to move in only two dimensions, typically at the interface between two semiconductor materials. The 2D confinement is what allows anyonic excitations to exist.</span></span>. The same topological order can emerge in any material that provides the right conditions. (Anchor 1: substrate independence.)</p>
 
 <p>Anyons are <em>collective excitations</em> &mdash; they are generated by the substrate, not imported into it. The two-dimensional electron system, under the right conditions, spontaneously organizes into a topologically ordered phase whose elementary excitations carry fractional charge and non-abelian braiding statistics. The substrate does not merely host the anyons; it generates them. (Anchor 2: substrate generativity.)</p>
 
@@ -1260,6 +1305,13 @@ sectionAnimators['sec2'] = function() {
 // ============================================================
 document.addEventListener('DOMContentLoaded', setupObserver);
 </script>
+<div class="footnotes">
+  <ol>
+    <li id="fn1">M. H. Freedman, M. Larsen, and Z. Wang, "A modular functor which is universal for quantum computation," <em>Communications in Mathematical Physics</em> 227, 605–622 (2002). <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">C. Nayak, S. H. Simon, A. Stern, M. Freedman, and S. Das Sarma, "Non-Abelian anyons and topological quantum computation," <em>Reviews of Modern Physics</em> 80, 1083–1159 (2008). <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">A. Y. Kitaev, "Fault-tolerant quantum computation by anyons," <em>Annals of Physics</em> 303, 2–30 (2003). <a href="#fnref3">&uarr;</a></li>
+  </ol>
+</div>
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
 <script src="../js/annex-tracker.js"></script>
 </body>

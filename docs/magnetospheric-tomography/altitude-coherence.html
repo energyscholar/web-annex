@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Altitude-resolved spatial coherence analysis of the Halloween 2003 geomagnetic storm. Interactive Moran's I profiles at precipitation (120 km) and F-region (300 km) altitudes using SuperMAG ground magnetometers and GPS TEC tomographic decomposition. Play through 48 half-hour epochs.">
 <title>Altitude-Resolved Spatial Coherence — Halloween 2003</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -46,6 +48,31 @@ button.active { background: #38bdf8; color: #0f172a; }
 .eq { background: #0c0c22; border: 1px solid #1e293b; border-radius: 4px; padding: 10px;
   font-size: 12px; text-align: center; margin: 10px 0; color: #94a3b8; }
 .eq .var { color: #38bdf8; font-style: italic; }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid #38bdf8; border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: #e2e8f0; width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: #38bdf8;
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
 </style>
 </head><body>
 <div class="container">
@@ -56,8 +83,8 @@ button.active { background: #38bdf8; color: #0f172a; }
 <a href="satellite-convergence.html">Satellite Convergence</a>
 </nav>
 
-<h1>Where Spatial Coherence Lives: Altitude-Resolved Moran's I</h1>
-<div class="subtitle">Halloween 2003 — SuperMAG ground magnetometers + GPS TEC tomographic decomposition</div>
+<h1>Where <span class="tip" tabindex="0">Spatial Coherence<span class="tt">How much nearby ground magnetometer stations agree with each other. High coherence (Moran's I near 1) means organized, large-scale structure. Near zero means random, uncorrelated perturbations.</span></span> Lives: Altitude-Resolved Moran's I</h1>
+<div class="subtitle">Halloween 2003 — <span class="tip" tabindex="0">SuperMAG<span class="tt">A worldwide collaboration of organizations providing ground-based magnetometer data. Over 300 stations across Earth's surface, measuring the magnetic field perturbations caused by ionospheric and magnetospheric currents.</span></span> ground magnetometers + <span class="tip" tabindex="0">GPS TEC<span class="tt">Total Electron Content — the total number of electrons along a path between a GPS satellite and ground receiver. Measured in TECU (10^16 electrons/m²). Reveals ionospheric density structure at different altitudes via tomographic inversion.</span></span> tomographic decomposition</div>
 
 <div class="controls">
 <button onclick="togglePlay()" id="playBtn">&#9654; Play</button>
@@ -75,9 +102,9 @@ button.active { background: #38bdf8; color: #0f172a; }
 <h2>Altitude Coherence Profile</h2>
 <svg id="svgAlt" width="260" height="320" viewBox="0 0 260 320"></svg>
 <div class="info" style="margin-top:4px;">
-<b>Precipitation layer</b> (120 km): auroral electron precipitation<br>
-<b>F-region</b> (300 km): solar EUV ionization<br>
-I > 0 at an altitude = spatially organized at that height
+<b>Precipitation layer</b> (120 km): <span class="tip" tabindex="0">auroral electron precipitation<span class="tt">Electrons accelerated down magnetic field lines that slam into the upper atmosphere at 120 km altitude. They excite atmospheric atoms, producing the aurora. The energy deposition creates enhanced ionization at this specific altitude.</span></span><br>
+<b>F-region</b> (300 km): <span class="tip" tabindex="0">solar EUV ionization<span class="tt">Extreme ultraviolet radiation from the Sun ionizing atmospheric atoms at ~300 km altitude (the F-region). This is the 'quiet' source of ionospheric plasma — always present, varying with solar activity and local time.</span></span><br>
+<span class="tip" tabindex="0">Moran's I<span class="tt">A spatial autocorrelation statistic ranging from -1 (anti-correlated) through 0 (random) to +1 (perfectly correlated neighbors). Values above ~0.3 indicate meaningful spatial organization. Named after Patrick Moran (1950).</span></span> > 0 at an altitude = spatially organized at that height
 </div>
 </div>
 

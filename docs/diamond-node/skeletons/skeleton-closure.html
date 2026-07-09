@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Catalytic closure — from campfires to cells. A Reflexively Autocatalytic Food-generated (RAF) network sustains itself without external catalysts. Eight independent formalizations across six discoveries, four countries, fifty years. Interactive campfire and cardiac calcium cycle diagrams.">
 <title>Skeleton 3: Closure</title>
 <style>
   :root { --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #e2e8f0; --muted: #94a3b8; --dim: #475569; --s3: #4ade80; --s3dim: rgba(74,222,128,0.15); }
@@ -44,6 +45,39 @@
   .step-list { list-style: none; margin: 1rem 0; }
   .step-list li { padding: 0.4rem 0; font-size: 0.9rem; display: flex; gap: 0.5rem; }
   .step-list .num { color: var(--s3); font-weight: 600; min-width: 24px; }
+  /* Tooltips */
+  .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+  .tip .tt {
+    display: none; position: absolute; bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a2744; border: 1px solid var(--muted); border-radius: 8px;
+    padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+    color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+    line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    text-align: left; letter-spacing: normal; text-transform: none;
+  }
+  .tip .tt::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--muted);
+  }
+  .tip:hover .tt, .tip:focus .tt { display: block; }
+  @media (max-width: 640px) {
+    .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+      transform: none; max-width: none; width: auto; }
+    .tip .tt::after { display: none; }
+  }
+  /* Footnotes */
+  .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+  .fn:hover { color: var(--text); }
+  .footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .footnotes ol { padding-left: 1.5rem; }
+  .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+  .footnotes li a { color: var(--muted); }
+  .footnotes li a:hover { color: var(--text); }
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in { opacity: 1; transform: none; transition: none; }
+  }
 </style>
 </head>
 <body>
@@ -101,13 +135,13 @@
   </div>
 
   <p>Fire produces heat. Heat breaks down fuel. Fuel breakdown produces volatile gas. Volatile gas ignites. Ignition produces fire. The fire makes the conditions that sustain the fire. Every product in the loop is produced by something else in the loop.</p>
-  <p>That's <strong>catalytic closure</strong>. Not a metaphor. A structural property: a set of processes where every product is sustained by the set itself.</p>
+  <p>That's <strong><span class="tip" tabindex="0">catalytic closure<span class="tt">A set of chemical reactions where every catalyst needed is produced by the reactions themselves. No external catalyst required. The mathematical definition of self-sustenance.</span></span></strong>. Not a metaphor. A structural property: a set of processes where every product is sustained by the set itself.</p>
 </section>
 
 <!-- SECTION 2: WHAT CLOSURE MEANS PRECISELY -->
 <section>
   <h2>What closure means precisely</h2>
-  <p>A <em>Reflexively Autocatalytic and Food-generated set</em> (RAF) has two requirements:</p>
+  <p>A <em><span class="tip" tabindex="0">Reflexively Autocatalytic and Food-generated set<span class="tt">A network satisfying two conditions: (1) every reaction is catalyzed by something the network produces, and (2) every reactant can be built from simple &lsquo;food&rsquo; molecules via network reactions.</span></span></em> (RAF) has two requirements:</p>
 
   <div class="side-by-side">
     <div class="panel">
@@ -121,14 +155,14 @@
   </div>
 
   <p>The campfire is an RAF. So is a metabolic network. So is the cardiac calcium signaling cycle. The mathematical structure is identical.</p>
-  <p class="quiet">The key insight: closure is about the <em>network</em>, not any individual reaction. You can't point to one reaction and say "that's the important one." Remove any single reaction and the RAF might still hold. Closure is a global property of the set.</p>
+  <p class="quiet">The key insight: closure is a <span class="tip" tabindex="0">network property<span class="tt">A property of the whole system, not any individual component. You can&rsquo;t point to one reaction and say &lsquo;that&rsquo;s the closure.&rsquo; Remove any single reaction and the closure may still hold.</span></span>, not any individual reaction. You can't point to one reaction and say "that's the important one." Remove any single reaction and the RAF might still hold. Closure is a global property of the set.</p>
 </section>
 
 <!-- SECTION 3: YOUR BODY -->
 <section>
   <h2>Your body is an RAF</h2>
-  <p>Your cells are full of enzymes. Enzymes catalyze reactions. Those reactions produce (among other things) more enzymes. Enzymes &rarr; reactions &rarr; enzymes. Catalytic closure.</p>
-  <p>Hordijk and Steel showed this computationally: real metabolic networks satisfy the RAF property. Not approximately. Exactly. Every reaction catalyzed, every reactant derivable from food molecules.</p>
+  <p>Your cells are full of <span class="tip" tabindex="0">enzymes<span class="tt">Proteins that catalyze (speed up) chemical reactions without being consumed. Your body contains thousands of different enzymes, each catalyzing specific reactions.</span></span>. Enzymes catalyze reactions. Those reactions produce (among other things) more enzymes. Enzymes &rarr; reactions &rarr; enzymes. Catalytic closure.</p>
+  <p>Hordijk and Steel showed this computationally<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup>: real metabolic networks satisfy the RAF property. Not approximately. Exactly. Every reaction catalyzed, every reactant derivable from food molecules.</p>
   <p>This is why you don't need to be plugged in. A car engine needs someone to supply fuel and maintain parts. Your body <em>maintains itself</em> from food + air + water. That self-maintenance is catalytic closure.</p>
 </section>
 
@@ -178,7 +212,7 @@
     </svg>
   </div>
 
-  <p>17 out of 17 reactions in the cardiac calcium cycle are part of the RAF. <em>Zero essential reactions</em> &mdash; meaning you can remove any single reaction and the RAF property still holds. The system is maximally robust.</p>
+  <p>17 out of 17 reactions in the cardiac calcium cycle are part of the RAF. <em>Zero <span class="tip" tabindex="0">essential reactions<span class="tt">Reactions whose removal would break the RAF property. Zero essential reactions means maximum robustness &mdash; the system tolerates any single failure.</span></span></em> &mdash; meaning you can remove any single reaction and the RAF property still holds. The system is maximally robust.</p>
   <p>This is what makes the heart different from a machine. A car engine has essential parts &mdash; remove the spark plug and it stops. The cardiac RAF has no single essential reaction. It sustains itself through redundant closure.</p>
 </section>
 
@@ -193,7 +227,7 @@
       <p class="quiet">Systems with self-sustenance: campfire, metabolism, ecosystem nutrient cycling, cardiac calcium signaling.</p>
     </div>
     <div class="depth-card d2">
-      <h3>Depth 2: Self-creation (autopoiesis)</h3>
+      <h3>Depth 2: Self-creation (<span class="tip" tabindex="0">autopoiesis<span class="tt">Self-creation. A system that produces its own boundary and internal components. Coined by Maturana and Varela (1971). The distinction between a machine (made by something else) and a living system (makes itself).</span></span>)</h3>
       <p class="quiet">The system doesn't just maintain its parts &mdash; it creates its own <em>boundary</em>. It produces the container that separates inside from outside. The cell membrane is produced by the metabolism it contains.</p>
       <p class="quiet">This is the jump from "makes its parts" to "makes itself as a distinct entity." Few systems reach depth 2. The cardiac system does: the heart generates the electrical and mechanical conditions that maintain its own tissue boundary.</p>
     </div>
@@ -208,11 +242,11 @@
   <p>The same mathematical structure was discovered independently at least six times across four countries and fifty years:</p>
 
   <div class="timeline">
-    <div class="timeline-item"><span class="timeline-year">1958</span><div><span class="timeline-who">Robert Rosen</span><br><span class="timeline-field">(M,R)-systems. Category theory formalization. USA. Showed life = algebraic closure, not mechanism.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Manfred Eigen</span><br><span class="timeline-field">Hypercycles. Coupled autocatalytic sets. Germany. Origin of life as mutual catalysis.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Maturana &amp; Varela</span><br><span class="timeline-field">Autopoiesis. Self-creating networks. Chile. Defined life as self-boundary-production.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1958</span><div><span class="timeline-who">Robert Rosen</span><br><span class="timeline-field"><span class="tip" tabindex="0">(M,R)-systems<span class="tt">Robert Rosen&rsquo;s (1958) category-theory formalization of life. M = metabolism, R = repair. Showed life is algebraic closure, not mechanism.</span></span>. Category theory formalization. USA. Showed life = algebraic closure, not mechanism.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Manfred Eigen</span><br><span class="timeline-field"><span class="tip" tabindex="0">Hypercycles<span class="tt">Manfred Eigen&rsquo;s (1971) formalization: coupled autocatalytic cycles where each cycle catalyzes the next. A precursor to RAF theory.</span></span>. Coupled autocatalytic sets. Germany. Origin of life as mutual catalysis.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Maturana &amp; Varela</span><sup><a class="fn" href="#fn3" id="fnref3">3</a></sup><br><span class="timeline-field">Autopoiesis. Self-creating networks. Chile. Defined life as self-boundary-production.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Tibor G&aacute;nti</span><br><span class="timeline-field">Chemoton. Minimal self-reproducing chemical system. Hungary. Independently of all the above.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">1986</span><div><span class="timeline-who">Stuart Kauffman</span><br><span class="timeline-field">Autocatalytic sets. Random graph theory. USA. Showed closure arises spontaneously at sufficient complexity.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1986</span><div><span class="timeline-who">Stuart Kauffman</span><sup><a class="fn" href="#fn2" id="fnref2">2</a></sup><br><span class="timeline-field">Autocatalytic sets. Random graph theory. USA. Showed closure arises spontaneously at sufficient complexity.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1994</span><div><span class="timeline-who">Fontana &amp; Buss</span><br><span class="timeline-field">&lambda;-chemistry. Functional closure in abstract chemistry. USA/Austria.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">2004+</span><div><span class="timeline-who">Hordijk &amp; Steel</span><br><span class="timeline-field">RAF theory. Rigorous graph-theoretic formalization. Netherlands/New Zealand. Made it computable.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1984</span><div><span class="timeline-who">Niklas Luhmann</span><br><span class="timeline-field">Social autopoiesis. Applied to communication systems. Germany. Extended the concept beyond chemistry entirely.</span></div></div>
@@ -226,7 +260,7 @@
 <section>
   <h2>Why closure has no tracer molecule</h2>
   <p>Topology has &phi;. Criticality has power-law exponents. Computation has Turing universality proofs. Closure has... nothing equivalent.</p>
-  <p>This is because closure is a <em>network property</em>, not a quantity. You can't measure it with a single number. You have to analyze the full reaction network and check: is every reaction catalyzed? Is everything derivable from food? These are graph-theoretic questions, not numerical ones.</p>
+  <p>This is because closure is a <em>network property</em>, not a quantity. You can't measure it with a single number. You have to analyze the full reaction network and check: is every reaction catalyzed? Is everything derivable from food? These are <span class="tip" tabindex="0">graph-theoretic<span class="tt">Analyzed using the mathematics of networks (nodes and edges). RAF theory represents reactions as nodes and catalysis relationships as edges, then checks structural properties.</span></span> questions, not numerical ones.</p>
   <p>The test for closure is <em>structural</em>: compute the RAF and check if it spans the system. Binary result (yes/no), but the test itself requires the full network as input.</p>
   <p class="quiet">This makes closure harder to detect "in the wild" than the other skeletons. You need the full wiring diagram. But when you have it &mdash; as with the cardiac calcium cycle &mdash; the test is unambiguous.</p>
 </section>
@@ -252,6 +286,14 @@
 </section>
 
 </main>
+
+<div class="footnotes" style="max-width:720px;margin:2rem auto 0;padding:1rem 2rem 0;border-top:1px solid #334155">
+  <ol>
+    <li id="fn1">Hordijk, W. &amp; Steel, M. (2004). Detecting autocatalytic, self-sustaining sets in chemical reaction systems. <em>J. Theor. Biol.</em>, 227, 451&ndash;461. Made RAF theory computable. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Kauffman, S. (1986). Autocatalytic sets of proteins. <em>J. Theor. Biol.</em>, 119, 1&ndash;24. Showed closure arises spontaneously at sufficient complexity. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Maturana, H. &amp; Varela, F. (1980). <em>Autopoiesis and Cognition</em>. Original formulation 1971. Defined life as self-boundary-production. <a href="#fnref3">&uarr;</a></li>
+  </ol>
+</div>
 
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:720px;margin-left:auto;margin-right:auto;padding-left:2rem;padding-right:2rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
 <script src="../../js/annex-tracker.js"></script>

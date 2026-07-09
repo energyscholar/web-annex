@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The brain contains three independent critical phenomena — neuronal avalanches with power-law scaling, Griffiths phases from modular-hierarchical cortical architecture that make criticality robust without fine-tuning, and topological spiral wave defects with conserved charge. Interactive Griffiths phase explorer.">
 <title>Brain — Multi-Critical Systems</title>
 <style>
 :root {
@@ -211,6 +212,40 @@ input[type="range"]::-moz-range-thumb {
 }
 .regime-readout .detail { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; }
 
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 @media (max-width: 600px) {
   h1 { font-size: 2rem; }
   .container { padding: 1rem 1rem 3rem; }
@@ -231,7 +266,7 @@ The brain is the most controversial system in this series. For twenty years, neu
 </p>
 
 <p>
-In 2025, that debate shifted. A 140-dataset meta-analysis by Hengen and Shew in <em>Neuron</em> established near-consensus that the brain <em>is</em> near criticality. But the brain is not near a single critical point. It contains <strong>three independent critical phenomena</strong> &mdash; and a structural mechanism that makes criticality robust without requiring precise parameter tuning.
+In 2025, that debate shifted. A 140-dataset meta-analysis by Hengen and Shew in <em>Neuron</em><sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> established near-consensus that the brain <em>is</em> near criticality. But the brain is not near a single critical point. It contains <strong>three independent critical phenomena</strong> &mdash; and a structural mechanism that makes criticality robust without requiring precise parameter tuning.
 </p>
 
 <!-- ========== THE THREE PHENOMENA ========== -->
@@ -240,7 +275,7 @@ In 2025, that debate shifted. A 140-dataset meta-analysis by Hengen and Shew in 
 <h3>1. Avalanche criticality &mdash; neural cascades</h3>
 
 <p>
-When one neuron fires, it can trigger its neighbors to fire, which trigger their neighbors, and so on. These cascading events are called <strong>neuronal avalanches</strong>. At criticality, avalanche sizes follow a power law: most are small (a few neurons), but occasionally a cascade sweeps across an entire cortical region. There is no characteristic size &mdash; the distribution is scale-free.
+When one neuron fires, it can trigger its neighbors to fire, which trigger their neighbors, and so on. These cascading events are called <strong><span class="tip" tabindex="0">neuronal avalanches<span class="tt">A cascade of neural activity where one neuron firing triggers its neighbors, which trigger their neighbors. Like a chain reaction. The size distribution reveals whether the system is at a critical point.</span></span></strong><sup><a class="fn" href="#fn5" id="fnref5">5</a></sup>. At criticality, avalanche sizes follow a <span class="tip" tabindex="0">power law<span class="tt">A mathematical pattern where small events are common and large events are rare, with no characteristic scale. Doubling the size reduces frequency by a fixed ratio. The hallmark of scale-free, critical systems.</span></span>: most are small (a few neurons), but occasionally a cascade sweeps across an entire cortical region. There is no characteristic size &mdash; the distribution is <span class="tip" tabindex="0">scale-free<span class="tt">A system with no characteristic size &mdash; events of all scales occur, from tiny to system-spanning. The ratio between scales is constant. Contrast with normal distributions, which cluster around a mean.</span></span>.
 </p>
 
 <p>
@@ -248,17 +283,17 @@ The 140-dataset meta-analysis consolidated evidence from EEG, MEG, two-photon im
 </p>
 
 <p>
-More remarkable: genes that push the brain toward criticality are under <strong>positive selection</strong>. And proximity to criticality correlates with <strong>fluid intelligence</strong> (PNAS 2025). Evolution has optimized the brain not for a particular circuit pattern, but for a particular distance from a phase transition.
+More remarkable: genes that push the brain toward criticality are under <strong><span class="tip" tabindex="0">positive selection<span class="tt">Evolutionary pressure favoring a trait. Genes under positive selection have accumulated more functional mutations than expected by chance, indicating that evolution has actively optimized them.</span></span></strong>. And proximity to criticality correlates with <strong><span class="tip" tabindex="0">fluid intelligence<span class="tt">The ability to reason and solve novel problems without relying on learned knowledge. Measured by pattern recognition and abstract reasoning tests. Distinct from crystallized intelligence (accumulated knowledge).</span></span></strong> (PNAS 2025)<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup>. Evolution has optimized the brain not for a particular circuit pattern, but for a particular distance from a <span class="tip" tabindex="0">phase transition<span class="tt">A sudden qualitative change in a system&rsquo;s behavior at a threshold value &mdash; like water freezing at 0&deg;C. In the brain, the transition is between ordered (synchronized) and disordered (random) neural activity.</span></span>.
 </p>
 
 <h3>2. Griffiths phases &mdash; extended criticality from architecture</h3>
 
 <p>
-The standard objection to brain criticality has always been the <strong>fine-tuning problem</strong>: a critical point is a single point in parameter space. Why would billions of neurons be tuned to exactly that point? The slightest perturbation should push the system away from criticality.
+The standard objection to brain criticality has always been the <strong><span class="tip" tabindex="0">fine-tuning problem<span class="tt">The objection that a critical point occupies a single value in parameter space. Maintaining the brain exactly at that value seems implausibly precise &mdash; like balancing a pencil on its tip forever.</span></span></strong>: a critical point is a single point in parameter space. Why would billions of neurons be tuned to exactly that point? The slightest perturbation should push the system away from criticality.
 </p>
 
 <p>
-The answer is <strong>Griffiths phases</strong>. In a modular-hierarchical network &mdash; which is precisely the architecture of the cerebral cortex &mdash; the critical <em>point</em> is stretched into a critical <em>phase</em>. Over a finite range of parameters, the system shows power-law scaling, long-range correlations, and the other signatures of criticality. No fine-tuning required.
+The answer is <strong><span class="tip" tabindex="0">Griffiths phases<span class="tt">Extended critical regions that appear in modular networks. Instead of a single critical point, modular architecture stretches criticality over a range of parameters. Named after Robert Griffiths (1969).</span></span></strong><sup><a class="fn" href="#fn2" id="fnref2">2</a></sup>. In a <span class="tip" tabindex="0">modular-hierarchical<span class="tt">A network organized into distinct communities (modules) that are themselves grouped into larger communities, forming a hierarchy. The cerebral cortex has this structure: columns &rarr; areas &rarr; lobes.</span></span> network &mdash; which is precisely the architecture of the cerebral cortex &mdash; the critical <em>point</em> is stretched into a critical <em>phase</em>. Over a finite range of parameters, the system shows power-law scaling, long-range correlations, and the other signatures of criticality. No fine-tuning required.
 </p>
 
 <p>
@@ -268,7 +303,7 @@ The mechanism is elegant: individual modules can be locally supercritical or sub
 <h3>3. Topological defects &mdash; cortical spiral waves</h3>
 
 <p>
-Independently of the avalanche and Griffiths phenomena, the brain&rsquo;s electrical activity contains <strong>spiral waves</strong> &mdash; rotating patterns of neural activity visible in EEG and MEG recordings. Xu and colleagues (Nature Human Behaviour, 2023) showed that these spirals are genuine <strong>topological defects</strong> with conserved topological charge that annihilate in pairs, exactly like the defects in <a href="02-active-matter.html">active matter</a> and <a href="03-cardiac-tissue.html">cardiac tissue</a>.
+Independently of the avalanche and Griffiths phenomena, the brain&rsquo;s electrical activity contains <strong><span class="tip" tabindex="0">spiral waves<span class="tt">Rotating patterns of electrical activity that sweep across the cortex. Each spiral has a center (the topological defect) and a rotation direction that determines information flow.</span></span></strong> &mdash; rotating patterns of neural activity visible in EEG and MEG recordings. Xu and colleagues (Nature Human Behaviour, 2023)<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> showed that these spirals are genuine <strong><span class="tip" tabindex="0">topological defects<span class="tt">Points where a continuous field has a singularity that cannot be smoothed away &mdash; like the eye of a hurricane. They carry conserved &lsquo;charge&rsquo; and can only be created or destroyed in pairs.</span></span></strong> with conserved <span class="tip" tabindex="0">topological charge<span class="tt">A conserved integer (+1 or &minus;1) assigned to each spiral center based on its rotation direction. Total charge is constant &mdash; spirals always appear and disappear in opposite-charge pairs.</span></span> that annihilate in pairs, exactly like the defects in <a href="02-active-matter.html">active matter</a> and <a href="03-cardiac-tissue.html">cardiac tissue</a>.
 </p>
 
 <p>
@@ -499,7 +534,7 @@ This is a different type of multi-criticality from the previous tutorials. In th
     </p>
     <p>
       &bull; Power-law distributions persist (with continuously varying exponents)<br/>
-      &bull; Susceptibility diverges (anomalously slow relaxation)<br/>
+      &bull; <span class="tip" tabindex="0">Susceptibility<span class="tt">How strongly a system responds to a small perturbation. At a critical point, susceptibility diverges &mdash; even a tiny push produces a large response. In a Griffiths phase, it stays elevated over a range.</span></span> diverges (anomalously slow relaxation)<br/>
       &bull; Correlation lengths are long but finite<br/>
       &bull; The system responds to perturbations as if critical
     </p>
@@ -519,7 +554,7 @@ This is a different type of multi-criticality from the previous tutorials. In th
   </summary>
   <div class="detail-body">
     <p>
-      Xu et al. (<em>Nature Human Behaviour</em>, 2023) identified spiral wave patterns in human EEG/MEG data that satisfy the mathematical criteria for topological defects: (1) the phase field has a winding number of &plusmn;1 around each spiral center, (2) spiral centers carry conserved topological charge (total charge is constant except when pairs are created or annihilated), (3) spirals of opposite charge annihilate on contact.
+      Xu et al. (<em>Nature Human Behaviour</em>, 2023) identified spiral wave patterns in human EEG/MEG data that satisfy the mathematical criteria for topological defects: (1) the phase field has a <span class="tip" tabindex="0">winding number<span class="tt">How many times a field&rsquo;s phase rotates around a point. A winding number of &plusmn;1 means the phase completes one full rotation &mdash; the mathematical definition of a topological defect.</span></span> of &plusmn;1 around each spiral center, (2) spiral centers carry conserved topological charge (total charge is constant except when pairs are created or annihilated), (3) spirals of opposite charge annihilate on contact.
     </p>
     <p>
       The spirals are large-scale structures spanning centimeters of cortex. They rotate at frequencies in the theta (4&ndash;8 Hz) and alpha (8&ndash;13 Hz) bands. The rotation direction determines the direction of information flow: clockwise spirals propagate signals inward (toward the center), counterclockwise spirals propagate signals outward. This creates a natural mechanism for gating information between cortical regions &mdash; two regions can communicate only when their spiral rotation directions are compatible.
@@ -596,7 +631,7 @@ This is a different type of multi-criticality from the previous tutorials. In th
   </summary>
   <div class="detail-body">
     <p>
-      <strong>Claim:</strong> The universality class of the avalanche transition depends on the network topology. Modular-hierarchical networks produce Griffiths phases with non-universal exponents. Small-world networks without modularity produce standard mean-field criticality. Scale-free networks produce a different class entirely. The brain&rsquo;s specific exponents are a consequence of its modular-hierarchical architecture, not of neural dynamics per se.
+      <strong>Claim:</strong> The <span class="tip" tabindex="0">universality class<span class="tt">A group of phase transitions that share the same critical exponents despite occurring in different physical systems. Determined by symmetry and dimensionality, not microscopic details.</span></span> of the avalanche transition depends on the network topology. Modular-hierarchical networks produce Griffiths phases with non-universal exponents. Small-world networks without modularity produce standard mean-field criticality. Scale-free networks produce a different class entirely. The brain&rsquo;s specific exponents are a consequence of its modular-hierarchical architecture, not of neural dynamics per se.
     </p>
     <p>
       <strong>Status:</strong> Framework. Sun et al. (<em>Nature Physics</em>, 2025) independently showed that network topology governs criticality class in cytoskeletal networks &mdash; consistent with this prediction in a non-neural system.
@@ -675,6 +710,16 @@ This is a different type of multi-criticality from the previous tutorials. In th
     <p>Touboul, J. &amp; Destexhe, A. (2017). Power-law statistics and universal scaling in the absence of criticality. <em>Phys. Rev. E</em>, 95, 012413.</p>
   </div>
 </details>
+
+<div class="footnotes fade-in">
+  <ol>
+    <li id="fn1">Hengen, K. B. &amp; Shew, W. L. (2025). Neural criticality: A comprehensive meta-analysis. <em>Neuron</em>. 140 datasets across species, modalities, and brain states. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Moretti, P. &amp; Mu&ntilde;oz, M. A. (2013). Griffiths phases and the stretching of criticality in brain networks. <em>Nature Communications</em>, 4, 2521. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Xu, Y. et al. (2023). Cortical spiral waves as topological defects. <em>Nature Human Behaviour</em>. Conserved topological charge, pair creation/annihilation. <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">PNAS (2025). Genetic basis of proximity to criticality in the human brain. Positive selection on criticality-associated genes; correlation with fluid intelligence. <a href="#fnref4">&uarr;</a></li>
+    <li id="fn5">Beggs, J. M. &amp; Plenz, D. (2003). Neuronal avalanches in neocortical circuits. <em>J. Neurosci.</em>, 23, 11167&ndash;11177. The founding observation. <a href="#fnref5">&uarr;</a></li>
+  </ol>
+</div>
 
 <!-- ========== BOTTOM NAVIGATION ========== -->
 <div class="tutorial-nav">

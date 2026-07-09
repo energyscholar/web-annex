@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Active matter — material made of self-propelled particles — exhibits three independent critical phenomena whose universality classes are selected by the geometry of the container. The same equations produce golden braids on a sphere and trivial motion on a torus. Interactive tutorial with geometry quiz.">
 <title>Active Matter — Multi-Critical Systems</title>
 <style>
 :root {
@@ -212,10 +213,47 @@ sub, sup { font-size: 0.75em; }
   font-family: system-ui, sans-serif; margin-top: 0.3rem;
 }
 
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
 @media (max-width: 600px) {
   h1 { font-size: 2rem; }
   .container { padding: 1rem 1rem 3rem; }
   summary { font-size: 0.85rem; padding: 0.75rem 1rem; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
 }
 </style>
 </head>
@@ -228,15 +266,15 @@ sub, sup { font-size: 0.75em; }
 <p class="subtitle">Three critical phenomena, geometry as the selector</p>
 
 <p class="lead">
-Active matter is material made of components that consume energy and move themselves. Bacteria swimming. Molecular motors crawling along filaments. Cells migrating through tissue. Unlike ordinary fluids, where energy enters at the boundary and cascades to small scales, active matter is driven at every point &mdash; each particle is its own engine.
+<span class="tip" tabindex="0">Active matter<span class="tt">Material made of components that consume energy and propel themselves &mdash; bacteria, molecular motors, migrating cells. Unlike ordinary fluids, energy enters at every point, not just at the boundary.</span></span> is material made of components that consume energy and move themselves. Bacteria swimming. Molecular motors crawling along filaments. Cells migrating through tissue. Unlike ordinary fluids, where energy enters at the boundary and cascades to small scales, active matter is driven at every point &mdash; each particle is its own engine.
 </p>
 
 <p>
-This local energy injection creates a new kind of physics. Active matter forms <strong>topological defects</strong> &mdash; points where the local alignment of particles is undefined, like the crown of your head where hair whorls in every direction. In nematic liquid crystals, these defects come in two types: +1/2 defects (comet-shaped, self-propelled) and &minus;1/2 defects (trefoil-shaped, passive). The +1/2 defects are the actors. They move, interact, pair up, and dance.
+This local energy injection creates a new kind of physics. Active matter forms <strong><span class="tip" tabindex="0">topological defects<span class="tt">Points where the alignment pattern is undefined &mdash; like the crown of your head where hair whorls in every direction. &ldquo;Topological&rdquo; means they can&rsquo;t be smoothed away; they must be created or destroyed in pairs.</span></span></strong> &mdash; points where the local alignment of particles is undefined. In <span class="tip" tabindex="0">nematic liquid crystals<span class="tt">A state of matter between liquid and solid where rod-shaped molecules flow freely but tend to align along a common direction. &ldquo;Nematic&rdquo; means thread-like &mdash; the molecules point the same way but aren&rsquo;t arranged in layers.</span></span>, these defects come in two types: +1/2 defects (comet-shaped, self-propelled) and &minus;1/2 defects (trefoil-shaped, passive). The +1/2 defects are the actors. They move, interact, pair up, and dance.
 </p>
 
 <p>
-What makes active matter a multi-critical system is that the defect dance is governed by <strong>three independent critical phenomena</strong>, each with its own measurable exponents &mdash; and those exponents depend on the geometry of the surface the matter lives on.
+What makes active matter a multi-critical system is that the defect dance is governed by <strong>three independent critical phenomena</strong>, each with its own measurable <span class="tip" tabindex="0">critical exponents<span class="tt">Numbers that describe exactly how a system&rsquo;s properties change as it approaches a tipping point. Different types of transitions have different exponents &mdash; they&rsquo;re the mathematical fingerprint of the transition type.</span></span> &mdash; and those exponents depend on the geometry of the surface the matter lives on.
 </p>
 
 <!-- ========== THE THREE TRANSITIONS ========== -->
@@ -245,25 +283,25 @@ What makes active matter a multi-critical system is that the defect dance is gov
 <h3>1. Defect density onset &mdash; a counting transition</h3>
 
 <p>
-As you increase the activity (the energy each particle injects), defects begin to appear. Below a critical activity, the system is ordered: no defects, uniform alignment. Above it, defects proliferate. The transition from zero defects to a finite density of defects is a continuous phase transition with a well-defined critical exponent.
+As you increase the activity (the energy each particle injects), defects begin to appear. Below a critical activity, the system is ordered: no defects, uniform alignment. Above it, defects proliferate. The transition from zero defects to a finite density of defects is a continuous <span class="tip" tabindex="0">phase transition<span class="tt">A qualitative change in a system&rsquo;s behavior &mdash; not just &ldquo;more of the same&rdquo; but a fundamentally different state. Water freezing, a magnet demagnetizing, a network congesting.</span></span> with a well-defined critical exponent.
 </p>
 
 <p>
-The surprise: the exponent depends on the <strong>topology of the surface</strong>. On a closed surface (a sphere), defect onset follows <strong>Manna universality</strong> with &beta; &asymp; 0.639. On an open channel, it follows standard <strong>directed percolation</strong> with &beta; &asymp; 0.583. These are genuinely different universality classes. The boundary conditions &mdash; whether the surface closes on itself &mdash; select which class governs the transition.
+The surprise: the exponent depends on the <strong>topology of the surface</strong>. On a closed surface (a sphere), defect onset follows <strong><span class="tip" tabindex="0">Manna universality<span class="tt">A universality class for phase transitions where the total particle count is conserved. Named after S. S. Manna (1991). Produces different critical exponents than the more common directed percolation class.</span></span></strong> with <span class="tip" tabindex="0">&beta;<span class="tt">The order parameter exponent &mdash; it describes how quickly the defect density grows above the critical threshold. Different universality classes have different &beta; values, so measuring &beta; tells you which class you&rsquo;re in.</span></span> &asymp; 0.639. On an open channel, it follows standard <strong><span class="tip" tabindex="0">directed percolation<span class="tt">The &ldquo;default&rdquo; universality class for transitions between active and absorbing states. Like water percolating through soil but with a preferred direction. The most common critical behavior for systems that can get stuck.</span></span></strong> with &beta; &asymp; 0.583.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> These are genuinely different <span class="tip" tabindex="0">universality classes<span class="tt">Groups of physically different systems that share the same critical exponents and scaling behavior near their tipping points. A magnet and a fluid can be in the same class &mdash; same math, completely different stuff.</span></span>. The boundary conditions &mdash; whether the surface closes on itself &mdash; select which class governs the transition.
 </p>
 
 <h3>2. Braid selection &mdash; a topological transition</h3>
 
 <p>
-Once defects appear, they move. On a confined surface (like a droplet or a cell), three +1/2 defects trace out trajectories in space-time that braid around each other. Braids are topological objects: they record which strand passes over which, and this pattern cannot be changed by smooth deformations.
+Once defects appear, they move. On a confined surface (like a droplet or a cell), three +1/2 defects trace out trajectories in space-time that <span class="tip" tabindex="0">braid<span class="tt">A topological object recording which strands pass over which in space-time. Like intertwined ropes &mdash; the crossing pattern is fixed and can&rsquo;t be changed by smoothly rearranging the strands.</span></span> around each other. Braids are topological objects: they record which strand passes over which, and this pattern cannot be changed by smooth deformations.
 </p>
 
 <p>
-The system selects a specific braid &mdash; and geometry determines which one. In confinement (on a disk or sphere), defects trace the <strong>golden braid</strong>: the minimum-entropy pseudo-Anosov braid with topological entropy TEPO = log(&phi;), where &phi; = (1+&radic;5)/2 is the golden ratio. With four defects: the <strong>silver braid</strong> at TEPO = log(1+&radic;2).
+The system selects a specific braid &mdash; and geometry determines which one. In confinement (on a disk or sphere), defects trace the <strong>golden braid</strong>: the minimum-entropy <span class="tip" tabindex="0">pseudo-Anosov<span class="tt">A braid that stretches material lines exponentially with each repetition &mdash; genuine topological mixing that never simplifies back. Pseudo-Anosov braids are the &ldquo;irreversible&rdquo; class; finite-order braids eventually return to their starting pattern.</span></span> braid with <span class="tip" tabindex="0">topological entropy<span class="tt">A number measuring how fast complexity grows under braiding. TEPO = 0 means no growth (trivial). TEPO &gt; 0 means exponential stretching &mdash; the braid genuinely mixes. Higher TEPO = more mixing per operation.</span></span> TEPO = log(&phi;), where &phi; = (1+&radic;5)/2 is the <span class="tip" tabindex="0">golden ratio<span class="tt">The number (1+&radic;5)/2 &asymp; 1.618. It appears throughout mathematics as the &ldquo;most irrational&rdquo; number &mdash; hardest to approximate by fractions. Here it is the minimum stretching factor for irreversible braids on three strands.</span></span>.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> With four defects: the <strong>silver braid</strong> at TEPO = log(1+&radic;2).
 </p>
 
 <p>
-On a flat torus with periodic boundaries: <strong>TEPO = 0</strong> at all activity levels. The braids are finite-order &mdash; they repeat after a fixed number of exchanges, never growing in complexity. The same physics, the same equations, the same parameters &mdash; but the geometry of the container selects a completely different topological class of defect dynamics.
+On a flat <span class="tip" tabindex="0">torus<span class="tt">A doughnut-shaped surface. In simulations, a &ldquo;flat torus&rdquo; is created by wrapping a rectangle so opposite edges connect &mdash; periodic boundary conditions. It has zero curvature and Euler characteristic &chi; = 0.</span></span> with periodic boundaries: <strong>TEPO = 0</strong> at all activity levels. The braids are finite-order &mdash; they repeat after a fixed number of exchanges, never growing in complexity. The same physics, the same equations, the same parameters &mdash; but the geometry of the container selects a completely different topological class of defect dynamics.
 </p>
 
 <h3>3. Novel criticality &mdash; an unknown class</h3>
@@ -382,7 +420,7 @@ The three critical phenomena are not independent. They are linked by a single or
 </p>
 
 <p>
-A closed surface (positive Euler characteristic) forces topological charge conservation &mdash; the total defect charge must equal the Euler characteristic of the surface. This constraint selects Manna universality for the onset transition and pseudo-Anosov braids for the topological dynamics. An open surface lifts the topological constraint: defects can enter and exit at the boundary, selecting directed percolation for onset and simpler braids for dynamics.
+A closed surface (positive <span class="tip" tabindex="0">Euler characteristic<span class="tt">A single number that captures a surface&rsquo;s topology. Sphere: &chi; = 2. Torus (doughnut): &chi; = 0. Two-holed surface: &chi; = &minus;2. It constrains what kinds of defects a surface can host &mdash; total defect charge must equal &chi;.</span></span>) forces topological charge conservation &mdash; the total defect charge must equal the Euler characteristic of the surface. This constraint selects Manna universality for the onset transition and pseudo-Anosov braids for the topological dynamics. An open surface lifts the topological constraint: defects can enter and exit at the boundary, selecting directed percolation for onset and simpler braids for dynamics.
 </p>
 
 <p>
@@ -449,7 +487,7 @@ With four defects, the system selects TEPO = log(1+&radic;2) &asymp; 0.881 &mdas
 </p>
 
 <p>
-This connects active matter to an entirely different part of physics. In the <a href="03-cardiac-tissue.html">next tutorial</a>, we see the same topological defect unbinding &mdash; the same KT physics &mdash; in cardiac tissue, where bound vortex pairs correspond to atrial flutter and unbound vortices to fibrillation.
+This connects active matter to an entirely different part of physics. In the <a href="03-cardiac-tissue.html">next tutorial</a>, we see the same topological defect unbinding &mdash; the same <span class="tip" tabindex="0">KT physics<span class="tt">Kosterlitz-Thouless physics (Nobel Prize, 2016). Vortex-antivortex pairs that are bound at low activity unbind at a critical threshold. The transition is topological &mdash; driven by defect liberation, not symmetry breaking.</span></span> &mdash; in cardiac tissue, where bound vortex pairs correspond to atrial flutter and unbound vortices to fibrillation.
 </p>
 
 <!-- ========== TECHNICAL DETAILS ========== -->
@@ -461,16 +499,16 @@ This connects active matter to an entirely different part of physics. In the <a 
   </summary>
   <div class="detail-body">
     <p>
-      Directed percolation (DP) is the default universality class for absorbing-state transitions in systems with a single scalar order parameter. The Janssen-Grassberger conjecture states that any continuous transition from an active to an absorbing state, with a single-component order parameter and no extra symmetry or conservation law, belongs to the DP class.
+      <span class="tip" tabindex="0">Directed percolation<span class="tt">A universality class for transitions where a system can get &ldquo;stuck&rdquo; in an absorbing state (no activity). Like water percolating through soil with gravity setting a preferred direction. The default class for active-to-dead transitions.</span></span> (DP) is the default universality class for <span class="tip" tabindex="0">absorbing-state transitions<span class="tt">Transitions where the system can reach a state from which it never escapes. Once all defects are gone, the defect-free state is &ldquo;absorbing&rdquo; &mdash; no spontaneous defect creation can restart the dynamics.</span></span> in systems with a single scalar order parameter. The <span class="tip" tabindex="0">Janssen-Grassberger conjecture<span class="tt">A widely-accepted (but not proven) principle: any continuous transition to an absorbing state with a single order parameter and no special symmetry belongs to the directed percolation universality class. One of the most robust conjectures in nonequilibrium physics.</span></span> states that any continuous transition from an active to an absorbing state, with a single-component order parameter and no extra symmetry or conservation law, belongs to the DP class.
     </p>
     <p>
-      Manna universality (conserved directed percolation, C-DP) is the corresponding class when the total number of particles is <em>conserved</em>. On a closed surface, the total topological charge is fixed by the Gauss-Bonnet theorem: &Sigma; <span class="math">q</span><sub>i</sub> = &chi;, where &chi; is the Euler characteristic. This conservation law shifts the system from DP (&beta; &asymp; 0.583 in 2D) to Manna (&beta; &asymp; 0.639).
+      Manna universality (conserved directed percolation, C-DP) is the corresponding class when the total number of particles is <em>conserved</em>. On a closed surface, the total topological charge is fixed by the <span class="tip" tabindex="0">Gauss-Bonnet theorem<span class="tt">A deep result connecting geometry to topology: the total curvature of a closed surface is fixed by its topology (Euler characteristic). For defects, it means the total defect charge on a closed surface is a constant, regardless of dynamics.</span></span>: &Sigma; <span class="math">q</span><sub>i</sub> = &chi;, where &chi; is the Euler characteristic.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> This conservation law shifts the system from DP (&beta; &asymp; 0.583 in 2D) to Manna (&beta; &asymp; 0.639).
     </p>
     <p>
       The measured defect onset exponent in confined active nematics: &nu; &asymp; 0.648, R&sup2; = 0.93. Consistent with Manna &beta; &asymp; 0.639 in 2D. On open channels (Doostmohammadi et al. 2017): &beta; &asymp; 0.583, consistent with standard DP. The surface topology acts as a selection rule between universality classes.
     </p>
     <p>
-      Independent confirmation: PNAS 2025 &ldquo;Hidden order in active nematic defects&rdquo; finds hyperuniform defect distributions on closed surfaces &mdash; a hallmark of conserved-density universality classes. The connection to Manna was identified independently.
+      Independent confirmation: PNAS 2025 finds <span class="tip" tabindex="0">hyperuniform<span class="tt">A special type of spatial order where density fluctuations are suppressed at large scales &mdash; more orderly than random but not crystalline. A hallmark of conserved-density universality classes.</span></span> defect distributions on closed surfaces &mdash; a hallmark of conserved-density universality classes.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> The connection to Manna was identified independently.
     </p>
   </div>
 </details>
@@ -482,7 +520,7 @@ This connects active matter to an entirely different part of physics. In the <a 
   </summary>
   <div class="detail-body">
     <p>
-      Topological entropy (TEPO) of a braid &beta; is defined as TEPO(&beta;) = lim<sub>n&rarr;&infin;</sub> (1/n) log ||&beta;<sup>n</sup>||, where ||&middot;|| is any submultiplicative matrix norm. For computational purposes, TEPO is bounded below by the logarithm of the spectral radius of the reduced Burau matrix evaluated at <span class="math">t</span> = &minus;1.
+      Topological entropy (TEPO) of a braid &beta; is defined as TEPO(&beta;) = lim<sub>n&rarr;&infin;</sub> (1/n) log ||&beta;<sup>n</sup>||, where ||&middot;|| is any submultiplicative matrix norm. For computational purposes, TEPO is bounded below by the logarithm of the <span class="tip" tabindex="0">spectral radius<span class="tt">The largest eigenvalue (in absolute value) of a matrix. It controls how fast the matrix&rsquo;s action grows under repeated application &mdash; directly connected to the stretching rate of the braid.</span></span> of the reduced <span class="tip" tabindex="0">Burau matrix<span class="tt">A matrix representation of a braid that encodes its crossing structure. Evaluating it at a specific parameter value gives a computable lower bound on the braid&rsquo;s topological entropy.</span></span> evaluated at <span class="math">t</span> = &minus;1.
     </p>
     <p>
       For the golden braid &sigma;<sub>1</sub>&sigma;<sub>2</sub><sup>&minus;1</sup> on three strands, the Burau matrix at <span class="math">t</span> = &minus;1 has eigenvalues &phi; and 1/&phi;, giving TEPO = log(&phi;) exactly. This is the minimum nonzero TEPO on B<sub>3</sub>.
@@ -711,6 +749,16 @@ This connects active matter to an entirely different part of physics. In the <a 
     <p>Ganesan, P. et al. (2025). Topological boundaries in cardiac arrhythmias. <em>Frontiers in Network Physiology</em>.</p>
   </div>
 </details>
+
+<!-- ========== FOOTNOTES ========== -->
+<div class="footnotes fade-in">
+  <ol>
+    <li id="fn1">Doostmohammadi, A. et al. (2017). Onset of meso-scale turbulence in active nematics. <em>Nature Communications</em>, 8, 15326. Hinrichsen, H. (2000). Non-equilibrium critical phenomena and phase transitions into absorbing states. <em>Adv. Phys.</em>, 49, 815&ndash;958. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Memarian, F. et al. (2024). Minimum topological entropy of braids in active nematics. <em>Phys. Rev. Lett.</em> Klein, S. et al. (2025). Golden and silver braid orbits in confined active nematics. arXiv:2503.10880. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Manna, S. S. (1991). Two-state model of self-organized criticality. <em>J. Phys. A</em>, 24, L363. <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">PNAS (2025). Hidden order in active nematic defects. [Hyperuniform defect distributions on closed surfaces]. <a href="#fnref4">&uarr;</a></li>
+  </ol>
+</div>
 
 <!-- ========== BOTTOM NAVIGATION ========== -->
 <div class="tutorial-nav">

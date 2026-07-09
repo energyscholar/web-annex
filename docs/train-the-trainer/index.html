@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Intensive 5-day Claude Code Train-the-Trainer workshops. Cohorts of 10. Your people become expert-level AI coding trainers. They train everyone else. 30 days follow-up support included.">
 <title>Claude Code Train-the-Trainer — Bruce Stephenson</title>
 <style>
 :root {
@@ -219,6 +220,32 @@ code {
   border-radius: 8px;
   overflow: hidden;
 }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid #94a3b8; border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: #94a3b8;
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  svg animate, svg animateTransform, svg animateMotion { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>
@@ -434,7 +461,7 @@ code {
 
 <p>Most organizations know this. Over 60% of executives have formally linked AI spending to ROI targets. But the same discipline hasn't reached training: 61% rely on workers to learn on the job, fewer than half provide dedicated time for that learning, and over half of employees are seeking training from outside sources at their own expense. More speed shouldn't mean more problems &mdash; but without structured skilling, that's exactly what happens.</p>
 
-<p>This is not going to happen organically. Workforce AI competency requires the same deliberate design that the AI systems themselves required. The metric that matters is time-to-competency &mdash; not how many hours of training were delivered, but how fast your people reach the point where the tool pays for itself.</p>
+<p>This is not going to happen organically. Workforce AI competency requires the same deliberate design that the AI systems themselves required. The metric that matters is <span class="tip" tabindex="0">time-to-competency<span class="tt">The elapsed time from tool deployment to the point where a worker uses it well enough to justify the investment. The metric that matters for training ROI — not hours of training delivered, but how fast productivity gains appear.</span></span> &mdash; not how many hours of training were delivered, but how fast your people reach the point where the tool pays for itself.</p>
 
 <div class="insight">The bottleneck in enterprise AI is the last mile: the gap between deploying a tool and having a workforce that can use it at the level that justifies the investment.</div>
 
@@ -444,17 +471,17 @@ code {
 
 <div class="curriculum-item">
 <h3>Day 1: Foundation &mdash; Architecture and Configuration</h3>
-<p><strong>Exercise:</strong> Each trainer configures a <code>CLAUDE.md</code> for an actual project &mdash; encoding coding standards, cost rules, and domain-specific instructions. They set up permission systems, governance boundaries, and observability. They run sessions with and without configuration and measure the difference. By end of day, every trainer has a strong foundation: a working project config they built themselves.</p>
+<p><strong>Exercise:</strong> Each trainer configures a <span class="tip" tabindex="0"><code>CLAUDE.md</code><span class="tt">A project configuration file that tells Claude Code how to behave in a specific repository. Like .editorconfig for formatting rules, but for AI behavior — coding standards, cost limits, domain-specific instructions, what to never do.</span></span> for an actual project &mdash; encoding coding standards, cost rules, and domain-specific instructions. They set up permission systems, governance boundaries, and observability. They run sessions with and without configuration and measure the difference. By end of day, every trainer has a strong foundation: a working project config they built themselves.</p>
 </div>
 
 <div class="curriculum-item">
 <h3>Day 2: Optimize and Transform &mdash; Cost and Efficiency</h3>
-<p><strong>Exercise:</strong> Trainers take the same coding task and complete it two ways: naive and optimized. Token management, model routing, grep-before-read, parallel tool calls, session chunking. They see 75% cost reduction in their own usage, not a slide deck claiming it. The goal: throughput, quality, and consistency &mdash; not just speed. Techniques become muscle memory through repetition.</p>
+<p><strong>Exercise:</strong> Trainers take the same coding task and complete it two ways: naive and optimized. <span class="tip" tabindex="0">Token management<span class="tt">Controlling how much text the AI processes per request. Tokens are the unit of AI consumption — roughly ¾ of a word. Inefficient prompting wastes tokens like inefficient queries waste database IOPS. Optimization means doing the same work with fewer tokens.</span></span>, <span class="tip" tabindex="0">model routing<span class="tt">Selecting the right AI model for each subtask. Like choosing between a forklift and a hand truck — the expensive model for judgment calls, the cheap model for mechanical work. Can reduce costs 75% with no quality loss.</span></span>, grep-before-read, parallel tool calls, session chunking. They see 75% cost reduction in their own usage, not a slide deck claiming it. The goal: throughput, quality, and consistency &mdash; not just speed. Techniques become muscle memory through repetition.</p>
 </div>
 
 <div class="curriculum-item">
 <h3>Day 3: Role Separation Architecture</h3>
-<p><strong>Exercise:</strong> Trainers run the Triad pattern live &mdash; separate Claude instances for coding and auditing, directional information flow, neither seeing the other's raw output. They experience the failure mode first (single agent self-validates, misses drift) then the fix. This is a deliberate design discipline, not a productivity hack &mdash; the pattern clicks when you've watched it catch something you missed.</p>
+<p><strong>Exercise:</strong> Trainers run the <span class="tip" tabindex="0">Triad pattern<span class="tt">A role-separation architecture where one AI instance plans and another implements, with neither seeing the other's raw output. Like the auditor/developer split in SOX compliance — the separation is the control. Prevents self-validation drift.</span></span> live &mdash; separate Claude instances for coding and auditing, directional information flow, neither seeing the other's raw output. They experience the failure mode first (single agent self-validates, misses drift) then the fix. This is a deliberate design discipline, not a productivity hack &mdash; the pattern clicks when you've watched it catch something you missed.</p>
 </div>
 
 <div class="curriculum-item">
@@ -476,7 +503,7 @@ code {
 <li>Documented 75% reduction in token costs through configuration and workflow optimization</li>
 <li>Published interactive tutorials demonstrating these patterns (<a href="../">see this site</a>)</li>
 <li>Fortune 500 technology training background &mdash; I've designed and delivered Train-the-Trainer programs before, multiple times</li>
-<li>Built and refined the role-separation architecture through hundreds of production sessions</li>
+<li>Built and refined the <span class="tip" tabindex="0">role-separation architecture<span class="tt">Running different AI functions in isolated contexts — one instance plans, another implements, neither sees the other's raw output. Prevents the most common AI failure mode: a system validating its own work and missing drift.</span></span> through hundreds of production sessions</li>
 </ul>
 
 <div class="insight">Of 370,000 employees at a typical enterprise, the number who are both more skilled with Claude Code than I am <em>and</em> have the ability and inclination to teach it is approximately zero. That intersection is the value proposition.</div>

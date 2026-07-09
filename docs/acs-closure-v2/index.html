@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How fixed-point theory on powerset lattices gives emergence a precise algebraic definition — autocatalytic closure (RAF theory) explained through the mathematics you already know.">
 <title>Autocatalytic Closure for the Working Mathematician</title>
 <style>
 :root {
@@ -209,6 +210,43 @@ tr:hover { background: rgba(59, 130, 246, 0.05); }
 
 ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
 li { margin-bottom: 0.3rem; }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>
@@ -231,7 +269,7 @@ li { margin-bottom: 0.3rem; }
 
 <p><strong>Algebraic closure of <span style="text-decoration:overline;color:var(--heading);font-family:serif;font-style:italic;">Q</span>.</strong> No finite list of adjoined roots produces it. You state a universal property&mdash;every non-constant polynomial splits&mdash;and the field satisfying that condition is the minimal such extension. The property dictates the domain; the domain does not precede the property.</p>
 
-<p>In each case, you specified a relation or property, and the domain fell out as a fixed point.</p>
+<p>In each case, you specified a relation or property, and the domain fell out as a <span class="tip" tabindex="0">fixed point<span class="tt">A value unchanged by an operation — like a config that a convergence loop returns unmodified</span></span>.</p>
 
 <div class="svg-container" id="diagram-1">
 <svg viewBox="0 0 780 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two-column comparison: Classical Mode vs Closure Mode">
@@ -493,9 +531,9 @@ li { margin-bottom: 0.3rem; }
 <!-- ======================================================= -->
 <h2>4. The Algorithm (Greatest Fixed Point)</h2>
 
-<p>Enumerating all 2<sup>|<span class="math">R</span>|</sup> subsets of <span class="math">R</span> to find <span class="math">R</span>&prime; = &Phi;(<span class="math">R</span>&prime;) is exponential. But &Phi; is monotone on a finite lattice, so we can compute the greatest fixed point by iterating from the top: start with <span class="math">R</span>&prime; = <span class="math">R</span> (all reactions), compute the closure cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>), remove every reaction whose reactants or catalyst fall outside that closure, and repeat. Each step either removes at least one reaction or converges. The process terminates in at most |<span class="math">R</span>| iterations.</p>
+<p>Enumerating all 2<sup>|<span class="math">R</span>|</sup> subsets of <span class="math">R</span> to find <span class="math">R</span>&prime; = &Phi;(<span class="math">R</span>&prime;) is exponential. But &Phi; is <span class="tip" tabindex="0">monotone<span class="tt">Order-preserving: larger input always produces larger-or-equal output. Guarantees convergence when iterating</span></span> on a finite <span class="tip" tabindex="0">lattice<span class="tt">A set with a partial ordering where any two elements have a unique max (join) and min (meet) — a generalized hierarchy with guaranteed merge operations</span></span>, so we can compute the greatest fixed point by iterating from the top: start with <span class="math">R</span>&prime; = <span class="math">R</span> (all reactions), compute the <span class="tip" tabindex="0">closure<span class="tt">All elements reachable from a starting set under given operations — like computing all reachable nodes in a dependency graph</span></span> cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>), remove every reaction whose reactants or catalyst fall outside that closure, and repeat. Each step either removes at least one reaction or converges. The process terminates in at most |<span class="math">R</span>| iterations.</p>
 
-<p>The key observation: if <span class="math">R</span>&prime; &supe; <span class="math">R</span>&Prime;, then cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) &supe; cl<sub><span class="math">R</span>&Prime;</sub>(<span class="math">F</span>), so &Phi;(<span class="math">R</span>&prime;) &supe; &Phi;(<span class="math">R</span>&Prime;). This makes &Phi; a monotone map on (<span class="math">&weierp;</span>(<span class="math">R</span>), &supe;). Tarski's fixed-point theorem guarantees a unique greatest fixed point, which is exactly what the pruning algorithm converges to.</p>
+<p>The key observation: if <span class="math">R</span>&prime; &supe; <span class="math">R</span>&Prime;, then cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) &supe; cl<sub><span class="math">R</span>&Prime;</sub>(<span class="math">F</span>), so &Phi;(<span class="math">R</span>&prime;) &supe; &Phi;(<span class="math">R</span>&Prime;). This makes &Phi; a monotone map on (<span class="math">&weierp;</span>(<span class="math">R</span>), &supe;). <span class="tip" tabindex="0">Tarski's fixed-point theorem<span class="tt">Guarantees that any order-preserving function on a complete lattice has both a greatest and a least fixed point — existence by structure, not by search</span></span> guarantees a unique greatest fixed point, which is exactly what the pruning algorithm converges to.</p>
 
 <p>Step through it on the puzzle from Section 2:</p>
 
@@ -623,19 +661,19 @@ li { margin-bottom: 0.3rem; }
 <h2>5. Now the Definition</h2>
 
 <div class="definition">
-  <div class="definition-title">Definition (RAF &mdash; Hordijk &amp; Steel, 2004)</div>
+  <div class="definition-title">Definition (RAF &mdash; Hordijk &amp; Steel, 2004)<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup></div>
   <p>A <em>Catalytic Reaction System</em> (CRS) is a triple <span class="math">Q</span> = (<span class="math">X</span>, <span class="math">R</span>, <span class="math">C</span>), where <span class="math">X</span> is a finite set of types, <span class="math">R</span> is a set of reactions (each <span class="math">r</span> having a reactant set &rho;(<span class="math">r</span>) &sube; <span class="math">X</span> and a product set &pi;(<span class="math">r</span>) &sube; <span class="math">X</span>), and <span class="math">C</span> &sube; <span class="math">X</span> &times; <span class="math">R</span> is the catalysis relation.</p>
   <p>Given a food set <span class="math">F</span> &sube; <span class="math">X</span>, a non-empty subset <span class="math">R</span>&prime; &sube; <span class="math">R</span> is a <em>Reflexively Autocatalytic, F-generated</em> set (<strong>RAF</strong>) if:</p>
   <ol style="margin-top: 0.5rem;">
     <li><strong>F-generated:</strong> &forall;<span class="math">r</span> &isin; <span class="math">R</span>&prime; : &rho;(<span class="math">r</span>) &sube; cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>)</li>
-    <li><strong>Reflexively autocatalytic:</strong> &forall;<span class="math">r</span> &isin; <span class="math">R</span>&prime; : &exist;<span class="math">x</span> &isin; cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) s.t. (<span class="math">x</span>,<span class="math">r</span>) &isin; <span class="math">C</span></li>
+    <li><strong><span class="tip" tabindex="0">Reflexively autocatalytic<span class="tt">Every reaction in the set is catalyzed by something the set itself produces — no external enablers needed</span></span>:</strong> &forall;<span class="math">r</span> &isin; <span class="math">R</span>&prime; : &exist;<span class="math">x</span> &isin; cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) s.t. (<span class="math">x</span>,<span class="math">r</span>) &isin; <span class="math">C</span></li>
   </ol>
   <p style="margin-top:0.75rem;">where cl<sub><span class="math">R</span>&prime;</sub>(<span class="math">F</span>) is the closure of <span class="math">F</span> under repeated application of reactions in <span class="math">R</span>&prime; whose reactants are available.</p>
 </div>
 
 <p>Read this definition carefully. <em>No intrinsic property of the elements of <span class="math">X</span> appears.</em> There is no mass, no charge, no color, no function. The entire definition is stated in terms of three maps: &rho; (what goes in), &pi; (what comes out), and <span class="math">C</span> (what enables what). The identity of each <span class="math">x</span> &isin; <span class="math">X</span> is exhaustively determined by its relational position in the network&mdash;what it catalyzes, what reactions produce it, what reactions consume it. Nothing else participates in the definition.</p>
 
-<p>This is 100% relational mathematics. And because it is purely relational, it is <strong>substrate-independent</strong>. Any system that instantiates the same graph structure&mdash;the same pattern of reactant, product, and catalysis relations&mdash;is formally the same CRS. The proof machinery transfers wholesale: same monotone operator, same lattice, same fixed-point theorem. Only the labels change.</p>
+<p>This is 100% relational mathematics. And because it is purely relational, it is <strong><span class="tip" tabindex="0">substrate-independent<span class="tt">The mathematics works regardless of physical implementation — like how TCP/IP runs identically over copper, fiber, or radio</span></span></strong>. Any system that instantiates the same graph structure&mdash;the same pattern of reactant, product, and catalysis relations&mdash;is formally the same CRS. The proof machinery transfers wholesale: same monotone operator, same lattice, same fixed-point theorem. Only the labels change.</p>
 
 <table>
   <tr>
@@ -705,7 +743,7 @@ li { margin-bottom: 0.3rem; }
 
 <div class="definition">
   <div class="definition-title">Definition (Irreducible RAF)</div>
-  <p>A RAF <span class="math">R</span>&prime; is <em>irreducible</em> (an <strong>irrRAF</strong>) if no proper non-empty subset of <span class="math">R</span>&prime; is itself a RAF. Equivalently: removing any single reaction from <span class="math">R</span>&prime; destroys the RAF property.</p>
+  <p>A RAF <span class="math">R</span>&prime; is <em><span class="tip" tabindex="0">irreducible<span class="tt">Cannot be broken into smaller parts that each have the same property — like a prime number or an atomic service that can't be decomposed further</span></span></em> (an <strong>irrRAF</strong>) if no proper non-empty subset of <span class="math">R</span>&prime; is itself a RAF. Equivalently: removing any single reaction from <span class="math">R</span>&prime; destroys the RAF property.</p>
 </div>
 
 <div class="theorem">
@@ -720,7 +758,7 @@ li { margin-bottom: 0.3rem; }
 
 <h3>The Phase Transition</h3>
 
-<p>Kauffman (1986) conjectured that in sufficiently complex catalytic networks, self-sustaining subsets appear with near-certainty. Mossel &amp; Steel (2005) proved the conjecture for the binary polymer model with independent catalysis: in a random CRS where each molecule catalyzes each reaction independently with probability <span class="math">p</span>, the probability that a RAF exists undergoes a sharp transition near <span class="math">p</span> &sim; 1/<span class="math">n</span>, where <span class="math">n</span> = |<span class="math">X</span>|.</p>
+<p>Kauffman (1986)<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> conjectured that in sufficiently complex catalytic networks, self-sustaining subsets appear with near-certainty. Mossel &amp; Steel (2005)<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> proved the conjecture for the binary polymer model with independent catalysis: in a random CRS where each molecule catalyzes each reaction independently with probability <span class="math">p</span>, the probability that a RAF exists undergoes a sharp transition near <span class="math">p</span> &sim; 1/<span class="math">n</span>, where <span class="math">n</span> = |<span class="math">X</span>|.</p>
 
 <div class="svg-container" id="diagram-5">
 <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Phase transition sigmoid showing probability of RAF existence vs catalysis probability">
@@ -780,7 +818,7 @@ li { margin-bottom: 0.3rem; }
 </svg>
 </div>
 
-<p>Below the threshold: no subset of <span class="math">R</span> is self-sustaining. No amount of searching the lattice yields a RAF. Above: irreducible self-sustenance appears. The transition sharpens as <span class="math">n</span> grows&mdash;a familiar signature of phase transitions in combinatorial structures. The passage from "no collective property anywhere" to "irreducible collective property guaranteed" is not gradual. It is a threshold phenomenon in the lattice, as abrupt as percolation on a graph.</p>
+<p>Below the threshold: no subset of <span class="math">R</span> is self-sustaining. No amount of searching the lattice yields a RAF. Above: irreducible self-sustenance appears. The transition sharpens as <span class="math">n</span> grows&mdash;a familiar signature of <span class="tip" tabindex="0">phase transitions<span class="tt">Abrupt qualitative change at a critical threshold — like water freezing, or a network flipping from fragmented to connected at a percolation point</span></span> in combinatorial structures. The passage from "no collective property anywhere" to "irreducible collective property guaranteed" is not gradual. It is a threshold phenomenon in the lattice, as abrupt as <span class="tip" tabindex="0">percolation<span class="tt">A threshold phenomenon where global connectivity suddenly appears in a network as enough local connections form</span></span> on a graph.</p>
 
 <!-- ======================================================= -->
 <h2>7. Coda</h2>
@@ -796,6 +834,14 @@ li { margin-bottom: 0.3rem; }
     <li>Mossel, E. &amp; Steel, M. (2005). Random biochemical networks: the probability of self-sustaining autocatalysis. <em>J. Theor. Biol.</em> 233:327&ndash;336.</li>
   </ul>
   <p style="margin-top:0.75rem;">Autocatalytic Closure for the Working Mathematician &mdash; B. Stephenson, 2026.</p>
+</div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn1">Hordijk, W. &amp; Steel, M. (2004). Detecting autocatalytic, self-sustaining sets in chemical reaction systems. <em>J. Theor. Biol.</em> 227:451&ndash;461. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Kauffman, S. A. (1986). Autocatalytic sets of proteins. <em>J. Theor. Biol.</em> 119:1&ndash;24. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Mossel, E. &amp; Steel, M. (2005). Random biochemical networks: the probability of self-sustaining autocatalysis. <em>J. Theor. Biol.</em> 233:327&ndash;336. <a href="#fnref3">&uarr;</a></li>
+  </ol>
 </div>
 
 </div>

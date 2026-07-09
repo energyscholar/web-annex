@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Independent replication of Miller's coevolving automata experiments — cooperation rates, phase transitions, mutation rate sensitivity, and the computational threshold confirmed across 30-seed parameter sweeps.">
 <title>Replication Results — Miller's Coevolving Automata</title>
 <style>
   :root {
@@ -376,6 +377,32 @@
     .gap-analysis { grid-template-columns: 1fr; }
     .nav-links { flex-direction: column; gap: 0.5rem; }
   }
+
+  /* Tooltips */
+  .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+  .tip .tt {
+    display: none; position: absolute; bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+    color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+    line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    text-align: left; letter-spacing: normal; text-transform: none;
+  }
+  .tip .tt::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--border);
+  }
+  .tip:hover .tt, .tip:focus .tt { display: block; }
+  @media (max-width: 640px) {
+    .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+      transform: none; max-width: none; width: auto; }
+    .tip .tt::after { display: none; }
+  }
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
 </style>
 </head>
 <body>
@@ -439,7 +466,7 @@
 <section id="miller-1996">
 <h2>1. Miller 1996 Replication</h2>
 
-<p>Miller (1996) reports the central result of evolving 30 Moore-machine automata playing iterated Prisoner's Dilemma over 50 generations. He tested three conditions: a Perfect Information Environment (PIE, no noise), 1% Noise Environment (1% NE), and 5% Noise Environment (5% NE). We replicated all three conditions with 40 independent seeds per condition, using 16-state automata and single-population round-robin tournaments — matching Miller's original protocol.</p>
+<p>Miller (1996) reports the central result of evolving 30 Moore-machine automata playing iterated Prisoner's Dilemma over 50 generations. He tested three conditions: a Perfect Information Environment (PIE, no noise), 1% Noise Environment (1% NE), and 5% Noise Environment (5% NE). We replicated all three conditions with 40 independent seeds per condition, using 16-state automata and single-population <span class="tip" tabindex="0">round-robin tournaments<span class="tt">Every agent plays every other agent exactly once per generation. Total matches = n(n−1)/2 for single-population, or n×m for two-population. Fitness is the cumulative payoff across all matches — no sampling, no matchmaking bias.</span></span> — matching Miller's original protocol.</p>
 
 <h3>Results Table</h3>
 
@@ -635,7 +662,7 @@
 
 <div class="card highlight">
   <div class="card-title">CONFIRMED</div>
-  <p>The phase transition is real, sharp, and robust. One-state automata are computationally incapable of conditional strategies — they must play the same move regardless of history. Two states unlock Tit-for-Tat, Grim Trigger, and other reciprocal strategies. The 1&rarr;2 gap (69 percentage points) dwarfs any subsequent improvement. Our slightly higher cooperation rates at 2+ states are consistent with the two-population protocol (where cross-population tournaments prevent self-play degeneracies) and 200 vs 50 generations of evolution.</p>
+  <p>The phase transition is real, sharp, and robust. One-state automata are computationally incapable of <span class="tip" tabindex="0">conditional strategies<span class="tt">Strategies whose next action depends on what happened previously — "if you defected, I defect; if you cooperated, I cooperate." Requires at least two internal states: one to encode "cooperating" and one to encode "retaliating." A single-state machine has no conditional branching.</span></span> — they must play the same move regardless of history. Two states unlock Tit-for-Tat, Grim Trigger, and other reciprocal strategies. The 1&rarr;2 gap (69 percentage points) dwarfs any subsequent improvement. Our slightly higher cooperation rates at 2+ states are consistent with the two-population protocol (where cross-population tournaments prevent self-play degeneracies) and 200 vs 50 generations of evolution.</p>
 </div>
 </section>
 
@@ -670,7 +697,7 @@
 
 <div class="card discovery">
   <div class="card-title">WHY TFT WINS</div>
-  <p>With correct mutation fidelity (guaranteed bit-flip semantics yielding 0.74 effective mutations per offspring), populations are clean enough that TFT's <strong>forgiving reciprocity</strong> outperforms Grim's harsh permanent retaliation. Grim punishes a single defection with eternal defection — costly when most opponents actually cooperate reliably. TFT forgives immediately, recovering the cooperative surplus.</p>
+  <p>With correct <span class="tip" tabindex="0">mutation fidelity<span class="tt">Whether the mutation operator actually changes each targeted gene to a different value (bit-flip semantics). A naive implementation using randInt(0, n−1) can randomly select the current value — a no-op "mutation." At 2 states this happens 50% of the time, halving the effective mutation rate.</span></span> (guaranteed bit-flip semantics yielding 0.74 effective mutations per offspring), populations are clean enough that TFT's <strong>forgiving reciprocity</strong> outperforms Grim's harsh permanent retaliation. Grim punishes a single defection with eternal defection — costly when most opponents actually cooperate reliably. TFT forgives immediately, recovering the cooperative surplus.</p>
   <p style="margin-top: 0.8rem;">Each match starts fresh (agents reset to their initial state), so Grim's "permanent" retaliation is per-match, not cross-match. This makes Grim's harshness even more wasteful — it throws away cooperation for the remainder of a single match based on one defection that may have been an opponent's exploratory move.</p>
 </div>
 
@@ -809,7 +836,7 @@
 <div class="card discovery">
   <div class="card-title">FINDING: mut=0.003 OUTPERFORMS 0.005 UNDER TOURNAMENT SELECTION</div>
   <p>The optimal mutation rate (0.003) produces 90.2% cooperation with a standard deviation of only 7.3% — compared to Miller's 0.005 which gives 75.0% with sd=28.8%. The sweet spot balances exploration (enough mutation to discover TFT) against disruption (not so much that evolved strategies are constantly corrupted).</p>
-  <p style="margin-top: 0.8rem;">The cliff at 0.010 is dramatic: cooperation drops from 75% to 17% with a 2&times; increase in mutation rate. This is not gradual degradation — it's a phase transition in the mutation landscape. Above this cliff, mutation destroys cooperative strategies faster than selection can rebuild them.</p>
+  <p style="margin-top: 0.8rem;">The cliff at 0.010 is dramatic: cooperation drops from 75% to 17% with a 2&times; increase in mutation rate. This is not gradual degradation — it's a <span class="tip" tabindex="0">phase transition<span class="tt">An abrupt qualitative change in system behavior at a critical parameter value. Like water freezing at 0°C — gradual cooling, sudden crystallization. Here: a small increase in mutation rate causes cooperation to collapse from 75% to 17%, not degrade smoothly.</span></span> in the mutation landscape. Above this cliff, mutation destroys cooperative strategies faster than selection can rebuild them.</p>
   <p style="margin-top: 0.8rem;">Miller calibrates his mutation rate to 0.74 expected mutations per offspring (genome-length-proportional, not empirically optimized). His stronger fitness-proportional selection can sustain cooperation against the disruption this creates. With our weaker tournament selection, a lower rate (0.003) balances exploration against disruption more effectively.</p>
 </div>
 </section>
@@ -853,7 +880,7 @@
 <p>The fix: always select a value different from the current gene (bit-flip semantics for binary genes, guaranteed-different for multi-valued genes). This is consistent with nucleotide substitution, where a base always changes to a <em>different</em> base.</p>
 
 <h3>Bimodal Distributions</h3>
-<p>Evolutionary outcomes at 16 states are sharply bimodal. Roughly 55% of runs reach Miller's 2.80+ cooperative zone, while ~23% get stuck below 2.00 in defection equilibria. Reporting only the mean (our 2.51 vs Miller's 2.80) is misleading — the populations either cooperate well or don't cooperate at all. The mean falls in a valley where almost no individual runs actually land.</p>
+<p>Evolutionary outcomes at 16 states are sharply <span class="tip" tabindex="0">bimodal<span class="tt">A distribution with two distinct peaks (modes) rather than one. The runs cluster into two groups — high-cooperation and stuck-at-defection — with very few landing in between. Reporting the mean falls in the valley between the peaks, where almost no individual run actually lands.</span></span>. Roughly 55% of runs reach Miller's 2.80+ cooperative zone, while ~23% get stuck below 2.00 in defection equilibria. Reporting only the mean (our 2.51 vs Miller's 2.80) is misleading — the populations either cooperate well or don't cooperate at all. The mean falls in a valley where almost no individual runs actually land.</p>
 
 <p><strong>Lesson:</strong> Always report distribution shape for evolutionary outcomes, not just mean and standard deviation. The sd tells you the spread but not the modality.</p>
 
@@ -861,7 +888,7 @@
 <p>Curated demonstration seeds are tied to the exact RNG consumption pattern of the engine. Any code change that adds, removes, or reorders random number draws invalidates all seeds. After the mutation fix changed RNG draws at 2 states, all five curated seeds needed re-verification. (They all survived because the fix changed the <em>probability</em> of same-value picks, not the consumption <em>count</em>.) This is a general hazard of any demonstration that depends on specific random seeds.</p>
 
 <h3>Selection Pressure Differences</h3>
-<p>Miller's GA uses fitness-proportional selection with z-score normalization: <code>z = (x &minus; &mu;) / (s &middot; &alpha;)</code> with &alpha;=2. Our engine uses ranked tournament selection. These are fundamentally different selection pressures:</p>
+<p>Miller's GA uses <span class="tip" tabindex="0">fitness-proportional selection<span class="tt">Reproduction probability is directly proportional to fitness score. An agent with twice the fitness gets twice the chance to reproduce. More exploitative than tournament selection — amplifies fitness differences, causing winning strategies to dominate faster but reducing genetic diversity.</span></span> with z-score normalization: <code>z = (x &minus; &mu;) / (s &middot; &alpha;)</code> with &alpha;=2. Our engine uses ranked <span class="tip" tabindex="0">tournament selection<span class="tt">Pick k random agents, the fittest wins and reproduces. Selection pressure depends on tournament size k, not absolute fitness values. More explorative than fitness-proportional selection — a weak agent can still reproduce if it happens to face even weaker opponents in its tournament.</span></span>. These are fundamentally different selection pressures:</p>
 <ul>
   <li><strong>Fitness-proportional:</strong> More exploitative. High-fitness individuals dominate reproduction. Cooperation, once established, is strongly reinforced.</li>
   <li><strong>Tournament selection:</strong> More explorative. Selection pressure is rank-based, not magnitude-based. Less sensitive to the absolute fitness gap between cooperators and defectors.</li>

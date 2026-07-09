@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive radar chart of 16 physical systems decomposed into four mathematical skeletons — topology, dynamics, closure, and computation — at two depths each. Select up to three systems to overlay their profiles and discover which combinations cover all nine emergent properties.">
 <title>Multicritical Skeleton Profiles</title>
 <style>
   :root {
@@ -419,6 +420,30 @@
     fill: #475569;
     font-family: system-ui, -apple-system, sans-serif;
   }
+  /* Tooltips */
+  .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+  .tip .tt {
+    display: none; position: absolute; bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a2744; border: 1px solid var(--muted); border-radius: 8px;
+    padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+    color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+    line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    text-align: left; letter-spacing: normal; text-transform: none;
+  }
+  .tip .tt::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--muted);
+  }
+  .tip:hover .tt, .tip:focus .tt { display: block; }
+  @media (max-width: 640px) {
+    .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+      transform: none; max-width: none; width: auto; }
+    .tip .tt::after { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0s !important; }
+  }
 </style>
 </head>
 <body>
@@ -432,8 +457,8 @@
 
 <header>
   <h1>Multicritical Skeleton Profiles</h1>
-  <p>Every critical system has a mathematical profile decomposable into four structural skeletons.
-     Each skeleton produces two emergent properties: a <strong>Major</strong> property (structural &mdash; the system <em>has</em> it) and a <strong>minor</strong> property (functional &mdash; the system <em>does</em> it).
+  <p>Every critical system has a <span class="tip" tabindex="0">mathematical profile<span class="tt">The combination of skeletons present in a system, at what depths, and which pairwise interactions they produce. A fingerprint of mathematical structure.</span></span> decomposable into four structural skeletons.
+     Each skeleton produces two emergent properties: a <span class="tip" tabindex="0"><strong>Major</strong><span class="tt">Binary and intrinsic &mdash; a system either has it or doesn&rsquo;t. Self-referential: the skeleton acting on itself. Example: topological protection exists or it doesn&rsquo;t.</span></span> property (structural &mdash; the system <em>has</em> it) and a <span class="tip" tabindex="0"><strong>minor</strong><span class="tt">Cumulative and extrinsic &mdash; it builds up through interaction with an environment. The skeleton coupled to something outside itself. Example: braids compose to build computation.</span></span> property (functional &mdash; the system <em>does</em> it).
      Select systems to overlay their profiles and see what emerges when different structures combine.</p>
   <p style="margin-top:0.5rem">The four skeletons: <a href="skeleton-topology.html" style="color:#818cf8">Topology</a>, <a href="skeleton-closure.html" style="color:#4ade80">Closure</a>, <a href="skeleton-computation.html" style="color:#facc15">Computation</a>, and Dynamics (the anchor &mdash; <a href="../multi-critical/" style="color:#f87171">see the tutorials</a>).</p>
 </header>
@@ -459,7 +484,7 @@
       <details>
         <summary>Major / minor theory</summary>
         <p><strong>Major (M)</strong> properties are binary and intrinsic &mdash; a system either has topological protection or it doesn't. <strong>minor (m)</strong> properties are cumulative and extrinsic &mdash; braids compose sequentially to build computation; soliton energy accumulates along a path.</p>
-        <p>M appears when the skeleton is self-referential. m appears when the skeleton couples to an environment &mdash; when there is an inside and an outside.</p>
+        <p>M appears when the skeleton is <span class="tip" tabindex="0">self-referential<span class="tt">The skeleton&rsquo;s properties acting on themselves. Protection protects. Self-sustenance sustains itself. These are intrinsic &mdash; they don&rsquo;t need an outside.</span></span>. m appears when the skeleton couples to an environment &mdash; when there is an inside and an outside.</p>
         <table class="theory-table">
           <tr><th>Code</th><th>Type</th><th>Property</th><th>Binary?</th><th>Accumulates?</th></tr>
           <tr><td>S1M</td><td>Major</td><td>Protection</td><td>Yes</td><td>No</td></tr>
@@ -471,7 +496,7 @@
           <tr><td>S4M</td><td>Major</td><td>Universality</td><td>Yes</td><td>No</td></tr>
           <tr><td>S4m</td><td>minor</td><td>Coordination</td><td>No</td><td>Yes (consensus builds)</td></tr>
         </table>
-        <p style="margin-top:0.75rem"><strong>Face deficiency classes:</strong> The four skeletons form a tetrahedron. Each face (triple of skeletons) is defined by what&rsquo;s <em>absent</em>. Biology (no S1) is fragile. Topological matter (no S4) is inert. Engineered QC (no S3) is dependent. The interior &mdash; all four present &mdash; is the only regime with no deficiency.</p>
+        <p style="margin-top:0.75rem"><strong>Face deficiency classes:</strong> The four skeletons form a <span class="tip" tabindex="0">tetrahedron<span class="tt">The four skeletons form the vertices of a tetrahedron. Each face (triangle of three skeletons) is defined by which fourth skeleton is absent. The interior has all four.</span></span>. Each face (triple of skeletons) is defined by what&rsquo;s <em>absent</em>. Biology (no S1) is fragile. Topological matter (no S4) is inert. Engineered QC (no S3) is dependent. The interior &mdash; all four present &mdash; is the only regime with no deficiency.</p>
       </details>
     </div>
 

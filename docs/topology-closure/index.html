@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How persistent file-system architecture creates the graph topology that token-chain models cannot — K3 coupling, graph Laplacian analysis, and autocatalytic closure between Memory, Structure, and Ethics axes.">
 <title>Where the Topology Lives</title>
 <style>
 :root {
@@ -192,6 +193,41 @@ li { margin-bottom: 0.3rem; }
 
 a { color: var(--blue); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
 </style>
 </head>
 <body>
@@ -238,7 +274,7 @@ a:hover { text-decoration: underline; }
 
 <div class="definition">
   <p class="definition-title">Architecture layer</p>
-  <p>Everything that wraps the model. Persistent files on disk. Protocols stored as structured documents. Verification gates between sessions. Session boundaries with human review. The model reads from and writes to this layer, but the state itself persists regardless of what the model does in any single forward pass.</p>
+  <p>Everything that wraps the model. Persistent files on disk. Protocols stored as structured documents. Verification gates between sessions. Session boundaries with human review. The model reads from and writes to this layer, but the state itself persists regardless of what the model does in any single <span class="tip" tabindex="0">forward pass<span class="tt">One complete traversal of input through a neural network's layers to produce output — a single inference cycle, typically milliseconds of computation.</span></span>.</p>
 </div>
 
 <p>You analyzed the model layer exhaustively. The architecture layer is where the topology lives.</p>
@@ -325,7 +361,7 @@ a:hover { text-decoration: underline; }
 <!-- ======================================================= -->
 <h2>5. What Lives Outside the Chain</h2>
 
-<p>The three persistent cliques are NOT in the token chain. They are file-system state:</p>
+<p>The three persistent <span class="tip" tabindex="0">cliques<span class="tt">In graph theory, a subset of nodes where every node connects directly to every other. The strongest possible local connectivity — no node is more than one hop from any other in the group.</span></span> are NOT in the token chain. They are file-system state:</p>
 
 <div class="definition">
   <p class="definition-title">M &mdash; Memory</p>
@@ -344,7 +380,7 @@ a:hover { text-decoration: underline; }
 
 <p>Each axis has its own internal ordering &mdash; its own persistence, its own protocol, its own structure. The model reads them at session start. The model may propose changes. But <strong>Origin (the human) verifies before changes commit to the persistent state.</strong> This is your Axiom 1 operating as a gate on state transitions.</p>
 
-<div class="insight">When the model misprocesses a constraint (your null-space problem), Origin catches it (your Axiom 1), and a <em>correction</em> is added to the persistent state. The model's unreliability is not terminal in this architecture &mdash; it becomes the food set for the catalytic cycles. Each failure, caught and corrected, exercises an edge in the coupling graph.</div>
+<div class="insight">When the model misprocesses a constraint (your null-space problem), Origin catches it (your Axiom 1), and a <em>correction</em> is added to the persistent state. The model's unreliability is not terminal in this architecture &mdash; it becomes the <span class="tip" tabindex="0">food set<span class="tt">In autocatalytic set theory, the externally supplied inputs that feed catalytic reactions — analogous to API requests or user events that enter your system from outside.</span></span> for the <span class="tip" tabindex="0">catalytic cycles<span class="tt">Self-reinforcing feedback loops where each process's output feeds another. Like a CI pipeline where test failures generate documentation that improves future code quality.</span></span>. Each failure, caught and corrected, exercises an edge in the coupling graph.</div>
 
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
@@ -443,7 +479,7 @@ a:hover { text-decoration: underline; }
 <!-- ======================================================= -->
 <h2>7. But Everything Gets Tokenized</h2>
 
-<p><strong>This is the strongest counterargument.</strong> You will think it immediately: "Sure, you have persistent files. But every time the model reads those files, the relational structure enters the token chain and hits the same null-space problem. The corrections file gets tokenized. The DN spec gets tokenized. Persistent state doesn't help if the model can't reliably process it."</p>
+<p><strong>This is the strongest counterargument.</strong> You will think it immediately: "Sure, you have persistent files. But every time the model reads those files, the relational structure enters the token chain and hits the same <span class="tip" tabindex="0">null-space problem<span class="tt">When structured information is encoded as sequential tokens, relationships that depend on global structure effectively vanish — like foreign key constraints lost when you flatten a relational database into a CSV.</span></span>. The corrections file gets tokenized. The DN spec gets tokenized. Persistent state doesn't help if the model can't reliably process it."</p>
 
 <p>The counterargument is valid within one session. Here is why it does not block closure:</p>
 
@@ -464,7 +500,7 @@ a:hover { text-decoration: underline; }
 
 <p>The coupling matrix <span class="math">W</span> (3&times;3, directed edge weights <span class="math">w<sub>ij</sub></span> &isin; (0, 1)) describes the strength of catalytic pathways between axes &mdash; measured from session-log event data, not declared by fiat.</p>
 
-<p>Graph Laplacian <span class="math">L</span> = <span class="math">D</span> &minus; <span class="math">W</span>. The characteristic polynomial reduces to a depressed cubic:</p>
+<p><span class="tip" tabindex="0">Graph Laplacian<span class="tt">A matrix encoding a network's connectivity — like a weighted routing table that captures both which nodes connect and how strongly. Its eigenvalues reveal whether the network holds together or fragments.</span></span> <span class="math">L</span> = <span class="math">D</span> &minus; <span class="math">W</span>. The characteristic polynomial reduces to a <span class="tip" tabindex="0">depressed cubic<span class="tt">A cubic equation simplified by removing the squared term, leaving λ³ − Sλ − D = 0. Solvable in closed form, which makes the eigenvalue analysis tractable.</span></span>:</p>
 
 <span class="math-block">&lambda;&sup3; &minus; S&lambda; &minus; D = 0</span>
 
@@ -486,7 +522,7 @@ a:hover { text-decoration: underline; }
 
 <h3>Topological comparison</h3>
 
-<p><strong>Web LLM = K1 at best.</strong> Only a weak Memory node (flat key-value facts in the provider's memory feature). No persistent S or E axes. <span class="math">&lambda;</span><sub>1</sub> = 0. No algebraic connectivity. Your analysis applies without exception.</p>
+<p><strong>Web LLM = K1 at best.</strong> Only a weak Memory node (flat key-value facts in the provider's memory feature). No persistent S or E axes. <span class="math">&lambda;</span><sub>1</sub> = 0. No <span class="tip" tabindex="0">algebraic connectivity<span class="tt">The second-smallest eigenvalue of the graph Laplacian — measures how tightly a network is connected. Zero means disconnected components; higher values mean more resilience to link failures.</span></span>. Your analysis applies without exception.</p>
 
 <p><strong>Trellis = K3.</strong> All six edges can fire. <span class="math">D</span> &ne; 0. <span class="math">&lambda;</span><sub>1</sub> can reach and exceed 1.0 as coupling weights strengthen through accumulated sessions.</p>
 
@@ -585,7 +621,7 @@ a:hover { text-decoration: underline; }
 
 <div class="callout">You are right about the model layer. No solution exists there, and none is proposed here.</div>
 
-<p>The solution is at the architecture layer &mdash; persistent external state with K3 topology, verified by Origin, accumulating toward closure through the very failures you correctly diagnosed. The question is not whether the model is smart enough. It is whether the architecture provides the graph structure in which a phase transition can occur.</p>
+<p>The solution is at the architecture layer &mdash; persistent external state with K3 topology, verified by Origin, accumulating toward closure through the very failures you correctly diagnosed. The question is not whether the model is smart enough. It is whether the architecture provides the graph structure in which a <span class="tip" tabindex="0">phase transition<span class="tt">An abrupt qualitative change in system behavior at a critical threshold — like a database that handles queries fine until connection count hits a threshold, then response times jump discontinuously.</span></span> can occur.</p>
 
 <!-- ======================================================= -->
 <h2>12. References</h2>
