@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Multicriticality is what happens when tipping points interact. When two failure modes couple, the safe operating boundary curves inward — systems can fail when no individual parameter has reached its threshold. Tutorial with interactive demonstrations.">
+<title>What Is Multicriticality?</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+
+  --phase-a: #3b82f6;
+  --phase-b: #22c55e;
+  --phase-c: #f59e0b;
+  --critical: #ef4444;
+  --multicritical: #a855f7;
+  --safe: rgba(34, 197, 94, 0.12);
+  --danger: rgba(239, 68, 68, 0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.subtitle { text-align: center; color: var(--muted); font-size: 1.1rem; margin-bottom: 3rem; font-style: italic; font-family: Georgia, serif; }
+h2 { font-size: 1.8rem; margin: 3.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h2 .sn { color: var(--blue); font-size: 0.9em; margin-right: 0.3em; }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+
+.lead { font-size: 1.15rem; color: var(--line); font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem; }
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+
+/* Visualization containers */
+.viz {
+  width: 100%; margin: 2rem 0; border-radius: 12px;
+  overflow: hidden; background: var(--card);
+  border: 1px solid var(--dim);
+}
+.viz canvas { width: 100%; display: block; }
+.viz svg { width: 100%; display: block; }
+
+.viz-label {
+  text-align: center; padding: 0.6rem 1rem 0;
+  font-size: 0.82rem; color: var(--muted);
+  letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600;
+}
+
+/* Cards */
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+}
+
+/* Interactive elements */
+.interactive-box {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  margin: 2rem 0;
+  border: 1px solid var(--dim);
+  border-left: 3px solid var(--purple);
+}
+.interactive-box h3 {
+  margin-top: 0; color: var(--heading);
+  font-family: system-ui, sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.interactive-box .hint {
+  font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem;
+}
+
+/* Slider styling */
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px;
+  background: var(--dim); border-radius: 3px; outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--purple); cursor: pointer;
+  border: 2px solid var(--heading);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--purple); cursor: pointer;
+  border: 2px solid var(--heading);
+}
+
+.slider-row {
+  display: flex; align-items: center; gap: 0.75rem; margin: 0.75rem 0;
+}
+.slider-row label {
+  font-size: 0.85rem; color: var(--line); min-width: 120px; font-weight: 600;
+}
+.slider-row .value {
+  font-size: 0.85rem; color: var(--heading); min-width: 50px; text-align: right;
+  font-family: 'Courier New', monospace;
+}
+
+/* Toggle switch */
+.toggle-row {
+  display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0;
+}
+.toggle-row label {
+  font-size: 0.85rem; color: var(--line); font-weight: 600;
+}
+.toggle {
+  position: relative; width: 48px; height: 26px;
+  background: var(--dim); border-radius: 13px;
+  cursor: pointer; transition: background 0.3s;
+  border: none; padding: 0;
+}
+.toggle.active { background: var(--purple); }
+.toggle::after {
+  content: ''; position: absolute;
+  top: 3px; left: 3px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--heading);
+  transition: transform 0.3s;
+}
+.toggle.active::after { transform: translateX(22px); }
+.toggle-label {
+  font-size: 0.85rem; color: var(--heading); font-weight: 600;
+  min-width: 30px;
+}
+
+/* Indicator bars */
+.indicators {
+  display: flex; gap: 1rem; padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--dim);
+}
+.indicator {
+  flex: 1;
+}
+.indicator .ind-label {
+  font-size: 0.72rem; color: var(--muted); text-transform: uppercase;
+  letter-spacing: 0.06em; font-weight: 600; margin-bottom: 0.3rem;
+}
+.indicator .ind-bar {
+  height: 6px; background: var(--dim); border-radius: 3px; overflow: hidden;
+}
+.indicator .ind-fill {
+  height: 100%; border-radius: 3px;
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+/* Approach path buttons */
+.path-btns {
+  display: flex; gap: 0.5rem; padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--dim); flex-wrap: wrap;
+}
+.path-btn {
+  padding: 0.35rem 0.8rem; border-radius: 6px;
+  font-size: 0.82rem; font-weight: 600;
+  border: 1px solid var(--dim); background: transparent;
+  color: var(--line); cursor: pointer;
+  transition: all 0.2s;
+}
+.path-btn:hover { border-color: var(--line); color: var(--heading); }
+.path-btn.active { border-color: var(--purple); color: var(--purple); background: rgba(168, 85, 247, 0.1); }
+
+/* Callout */
+.callout {
+  background: var(--card); border-radius: 12px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+  border-left: 3px solid var(--amber);
+  border: 1px solid var(--dim); border-left: 3px solid var(--amber);
+}
+.callout.insight { border-left-color: var(--purple); }
+.callout.key { border-left-color: var(--red); }
+.callout h4 { font-family: system-ui, sans-serif; font-size: 0.85rem; text-transform: uppercase;
+  letter-spacing: 0.04em; margin-bottom: 0.5rem; }
+.callout.insight h4 { color: var(--purple); }
+.callout.key h4 { color: var(--red); }
+.callout h4.amber { color: var(--amber); }
+.callout p { font-size: 0.95rem; margin-bottom: 0.5rem; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Example grid */
+.example-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem; margin: 1.5rem 0;
+}
+.example-card {
+  background: var(--card); border-radius: 12px;
+  padding: 1.25rem; border: 1px solid var(--dim);
+}
+.example-card h4 {
+  font-family: system-ui, sans-serif; font-size: 0.95rem;
+  margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.example-card .ex-icon { font-size: 1.3rem; }
+.example-card p { font-size: 0.88rem; color: var(--line); margin-bottom: 0.3rem; }
+.example-card .ex-params {
+  font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+/* Side-by-side panels */
+.comparison {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0;
+}
+@media (max-width: 640px) { .comparison { grid-template-columns: 1fr; } }
+.comp-panel {
+  background: var(--card); border-radius: 12px;
+  border: 1px solid var(--dim); overflow: hidden;
+}
+.comp-panel .panel-header {
+  padding: 0.7rem 1rem; font-size: 0.8rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--dim);
+}
+.comp-panel.standard .panel-header { color: var(--muted); }
+.comp-panel.multicritical .panel-header { color: var(--purple); }
+.comp-panel canvas { width: 100%; display: block; }
+
+/* Requirement cards */
+.req-list { margin: 1.5rem 0; }
+.req-item {
+  display: flex; gap: 1rem; align-items: flex-start;
+  padding: 1.25rem; margin-bottom: 0.75rem;
+  background: var(--card); border-radius: 12px;
+  border: 1px solid var(--dim);
+}
+.req-num {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+}
+.req-item:nth-child(1) .req-num { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.req-item:nth-child(2) .req-num { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.req-item:nth-child(3) .req-num { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
+.req-body h4 { font-family: system-ui, sans-serif; font-size: 1rem; margin-bottom: 0.3rem; }
+.req-body p { font-size: 0.92rem; color: var(--line); margin-bottom: 0; }
+
+/* Inline math */
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+
+/* Progressive disclosure */
+details {
+  background: var(--card); border-radius: 8px; margin: 1.25rem 0;
+  border: 1px solid var(--dim); overflow: hidden;
+}
+details[open] { border-color: rgba(148, 163, 184, 0.25); }
+summary {
+  padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 600;
+  font-size: 0.92rem; color: var(--line); list-style: none;
+  display: flex; align-items: center; gap: 0.6rem;
+  transition: color 0.2s, background 0.2s; user-select: none;
+}
+summary:hover { color: var(--heading); background: rgba(255,255,255,0.02); }
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '\25B8'; font-size: 0.75rem; color: var(--muted);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+details .detail-body { padding: 0 1.25rem 1.25rem; }
+details .detail-body p { font-size: 0.92rem; margin-bottom: 0.8rem; }
+details .detail-body p:last-child { margin-bottom: 0; }
+details.technical { border-left: 3px solid var(--line); }
+
+/* Scroll fade */
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Tutorial nav */
+.tutorial-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim);
+}
+.tutorial-nav a {
+  color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+.tutorial-nav a:hover { color: var(--heading); text-decoration: none; }
+.tutorial-nav .next { margin-left: auto; }
+
+/* Footer */
+.footer-note {
+  margin-top: 3rem; text-align: center;
+  color: var(--muted); font-size: 0.85rem;
+}
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="index.html" class="back">&larr; Multi-Critical Systems</a>
+
+<h1>What Is Multicriticality?</h1>
+<p class="subtitle">When Tipping Points Collide</p>
+
+<p class="lead">
+Every complex system has tipping points &mdash; thresholds beyond which behavior changes
+abruptly. A database saturates its connection pool. A power grid loses a critical link.
+A material melts. These single tipping points are well understood. But what happens when
+<em>two tipping points interact?</em> That&rsquo;s multicriticality &mdash; and it changes
+everything about how failure works and how it can be detected.
+</p>
+
+<!-- ============================================================
+     SECTION 1: ONE TIPPING POINT
+     ============================================================ -->
+
+<h2><span class="sn">1.</span> One Tipping Point</h2>
+
+<p>
+A system approaching a single tipping point shows characteristic warning signs.
+These are called <strong><span class="tip" tabindex="0">early warning signals<span class="tt">Measurable statistical changes in a system&rsquo;s behavior that precede a major transition. Analogous to response times creeping up before a server crashes.</span></span></strong> (EWS), and they arise from a
+universal mathematical phenomenon: <strong><span class="tip" tabindex="0">critical slowing down<span class="tt">A system takes longer and longer to recover from small disturbances as it approaches a tipping point. Like a server taking progressively longer to clear its queue under increasing load.</span></span></strong>.
+</p>
+
+<p>
+As the system approaches its threshold, it recovers more slowly from <span class="tip" tabindex="0">perturbations<span class="tt">Small disturbances &mdash; spikes in load, brief network blips, momentary resource contention. Any small push away from the system&rsquo;s current state.</span></span>.
+Fluctuations grow larger. The system&rsquo;s &ldquo;memory&rdquo; of its recent state
+increases. These three signatures &mdash; slower recovery, larger <span class="tip" tabindex="0">variance<span class="tt">How widely measurements spread around the average. Low variance = stable, predictable. High variance = wild swings.</span></span>, higher
+<span class="tip" tabindex="0">autocorrelation<span class="tt">How much a measurement resembles its recent past. High autocorrelation means the system &ldquo;remembers&rdquo; &mdash; today&rsquo;s value strongly predicts tomorrow&rsquo;s.</span></span> &mdash; are measurable and reliable.
+</p>
+
+<div class="interactive-box">
+  <h3>Critical Slowing Down</h3>
+  <p class="hint">Drag the stress slider to see how behavior changes as a system approaches its tipping point.</p>
+  <div class="viz" style="margin: 1rem 0 0;">
+    <canvas id="csd-canvas" height="220"></canvas>
+    <div class="indicators">
+      <div class="indicator">
+        <div class="ind-label">Autocorrelation</div>
+        <div class="ind-bar"><div class="ind-fill" id="ind-acf" style="width: 10%; background: var(--green);"></div></div>
+      </div>
+      <div class="indicator">
+        <div class="ind-label">Variance</div>
+        <div class="ind-bar"><div class="ind-fill" id="ind-var" style="width: 8%; background: var(--green);"></div></div>
+      </div>
+      <div class="indicator">
+        <div class="ind-label">Recovery Time</div>
+        <div class="ind-bar"><div class="ind-fill" id="ind-rec" style="width: 5%; background: var(--green);"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slider-row">
+    <label>Stress Level</label>
+    <input type="range" id="csd-slider" min="0" max="100" value="15">
+    <span class="value" id="csd-value">15%</span>
+  </div>
+</div>
+
+<p>
+At low stress, the time series fluctuates rapidly around a stable value &mdash; quick
+perturbations, quick recovery. As stress increases toward the tipping point, fluctuations
+become slower, larger, and more persistent. The system is losing its ability to bounce back.
+</p>
+
+<div class="callout insight">
+  <h4>Key Insight</h4>
+  <p>
+    Critical slowing down is not specific to any one kind of system. It appears in
+    databases approaching connection limits, ecosystems approaching collapse, materials
+    approaching phase transitions, and power grids approaching cascade failure. The mathematics
+    is identical. This <span class="tip" tabindex="0">universality<span class="tt">The principle that the same mathematical behavior appears in wildly different systems near their tipping points. Databases, ecosystems, and magnets can share the same warning signals &mdash; not by analogy, but by mathematical necessity.</span></span> is what makes early warning signals powerful &mdash; and it
+    is what multicriticality disrupts.
+  </p>
+</div>
+
+<!-- ============================================================
+     SECTION 2: THE PHASE DIAGRAM
+     ============================================================ -->
+
+<h2 class="fade-in"><span class="sn">2.</span> The Phase Diagram</h2>
+
+<p class="fade-in">
+A <strong><span class="tip" tabindex="0">phase diagram<span class="tt">A map showing which behavioral mode a system exhibits for each combination of its control variables. Think of it as a 2D dashboard where position tells you not just current values but which operating regime the system is in.</span></span></strong> is a map of behavior. Each point represents a possible
+state of the system (defined by its <span class="tip" tabindex="0">control parameters<span class="tt">The variables that determine the system&rsquo;s state &mdash; temperature, load, pressure, connection count, memory usage. The knobs you can turn, or that the environment turns for you.</span></span>), and the map is divided into
+regions where the system behaves qualitatively differently.
+</p>
+
+<p class="fade-in">
+The boundaries between regions are <strong><span class="tip" tabindex="0">phase boundaries<span class="tt">Lines on the phase diagram where the system&rsquo;s behavior changes qualitatively &mdash; not just &ldquo;more of the same&rdquo; but a fundamentally different operating mode. Like the boundary between &ldquo;degraded&rdquo; and &ldquo;down.&rdquo;</span></span></strong> &mdash; lines (or
+surfaces, in higher dimensions) where the system&rsquo;s behavior changes abruptly. A
+<strong><span class="tip" tabindex="0">critical point<span class="tt">A special location where the transition between phases becomes gradual rather than abrupt. The system transforms continuously, and early warning signals are strongest here.</span></span></strong> is a special location on or at the end of a phase boundary
+where the transition becomes continuous: instead of an abrupt jump, the system passes
+through a smooth but increasingly dramatic transformation.
+</p>
+
+<div class="viz fade-in">
+  <div class="viz-label">Phase Diagram &mdash; Single Critical Point</div>
+  <svg id="pd-single" viewBox="0 0 600 380" style="max-height: 380px;">
+    <!-- Background regions -->
+    <defs>
+      <linearGradient id="phaseA-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="rgba(59,130,246,0.08)"/>
+        <stop offset="100%" stop-color="rgba(59,130,246,0.15)"/>
+      </linearGradient>
+      <linearGradient id="phaseB-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="rgba(245,158,11,0.08)"/>
+        <stop offset="100%" stop-color="rgba(245,158,11,0.15)"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Phase A region -->
+    <path d="M 60 340 L 60 60 L 540 60 L 540 340 Z" fill="url(#phaseA-grad)" opacity="0.6"/>
+    <!-- Phase boundary -->
+    <path d="M 60 340 Q 200 280, 320 200" stroke="#ef4444" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Phase B region (below boundary) -->
+    <path d="M 60 340 Q 200 280, 320 200 L 540 200 L 540 340 Z" fill="url(#phaseB-grad)" opacity="0.5"/>
+
+    <!-- Critical point -->
+    <circle cx="320" cy="200" r="8" fill="#ef4444" opacity="0.3">
+      <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.15;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="320" cy="200" r="5" fill="#ef4444"/>
+
+    <!-- Axis labels -->
+    <text x="300" y="370" fill="#94a3b8" font-size="13" text-anchor="middle" font-family="system-ui">Parameter 1 (e.g., Temperature)</text>
+    <text x="25" y="210" fill="#94a3b8" font-size="13" text-anchor="middle" font-family="system-ui" transform="rotate(-90, 25, 210)">Parameter 2 (e.g., Pressure)</text>
+
+    <!-- Region labels -->
+    <text x="150" y="140" fill="#3b82f6" font-size="15" font-weight="600" font-family="Georgia" opacity="0.7">Phase A</text>
+    <text x="420" y="300" fill="#f59e0b" font-size="15" font-weight="600" font-family="Georgia" opacity="0.7">Phase B</text>
+
+    <!-- Critical point label -->
+    <text x="335" y="190" fill="#ef4444" font-size="12" font-weight="600" font-family="system-ui">Critical Point</text>
+
+    <!-- Phase boundary label -->
+    <text x="130" y="315" fill="#ef4444" font-size="11" font-family="system-ui" opacity="0.7">Phase Boundary</text>
+
+    <!-- Grid lines -->
+    <line x1="60" y1="340" x2="540" y2="340" stroke="#334155" stroke-width="1"/>
+    <line x1="60" y1="340" x2="60" y2="60" stroke="#334155" stroke-width="1"/>
+  </svg>
+</div>
+
+<p class="fade-in">
+The critical point matters because it is where early warning signals are strongest and
+most reliable. As the system approaches the critical point, critical slowing down produces
+measurable signatures. Cross the phase boundary away from the critical point and the
+transition is abrupt &mdash; less warning, harder to detect.
+</p>
+
+<!-- ============================================================
+     SECTION 3: WHEN BOUNDARIES COLLIDE
+     ============================================================ -->
+
+<h2 class="fade-in"><span class="sn">3.</span> When Boundaries Collide</h2>
+
+<p class="fade-in">
+Real systems rarely have just one tipping point. A database has connection limits <em>and</em>
+memory limits <em>and</em> disk I/O limits. A material has temperature-driven transitions
+<em>and</em> pressure-driven transitions <em>and</em> composition-driven transitions.
+Each threshold has its own phase boundary in the diagram.
+</p>
+
+<p class="fade-in">
+<strong>A multicritical point is where two or more phase boundaries meet.</strong>
+</p>
+
+<p class="fade-in">
+This is not just &ldquo;two thresholds close together.&rdquo; At a multicritical point,
+the transitions <em>interact</em>. The mathematical structure of the critical behavior
+changes qualitatively. Different <span class="tip" tabindex="0">critical exponents<span class="tt">Numbers that describe exactly how a system&rsquo;s properties change as it approaches a tipping point &mdash; how fast correlations grow, how order emerges. Different types of transitions have different exponents. They&rsquo;re the mathematical fingerprint of the transition.</span></span>. Different <span class="tip" tabindex="0">universality class<span class="tt">A group of physically different systems that share the same critical exponents and scaling behavior. A magnet and a fluid can be in the same class &mdash; same math, completely different stuff. Multicritical transitions belong to different classes than single-critical ones.</span></span>.
+Different warning signals.
+</p>
+
+<div class="interactive-box fade-in">
+  <h3>The Multicritical Point</h3>
+  <p class="hint">Select an approach path to see how the system behaves depending on which boundary it approaches.</p>
+  <div class="viz" style="margin: 1rem 0 0;">
+    <svg id="pd-multi" viewBox="0 0 600 420">
+      <defs>
+        <linearGradient id="mc-phaseA" x1="0" y1="0" x2="0.5" y2="0.5">
+          <stop offset="0%" stop-color="rgba(59,130,246,0.06)"/>
+          <stop offset="100%" stop-color="rgba(59,130,246,0.14)"/>
+        </linearGradient>
+        <linearGradient id="mc-phaseB" x1="0.5" y1="0" x2="1" y2="0.5">
+          <stop offset="0%" stop-color="rgba(34,197,94,0.06)"/>
+          <stop offset="100%" stop-color="rgba(34,197,94,0.14)"/>
+        </linearGradient>
+        <linearGradient id="mc-phaseC" x1="0.5" y1="0.5" x2="1" y2="1">
+          <stop offset="0%" stop-color="rgba(245,158,11,0.06)"/>
+          <stop offset="100%" stop-color="rgba(245,158,11,0.14)"/>
+        </linearGradient>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 Z" fill="#94a3b8"/>
+        </marker>
+      </defs>
+
+      <!-- Three regions -->
+      <path d="M 60 380 L 60 50 L 300 50 L 300 220 L 60 380 Z" fill="url(#mc-phaseA)"/>
+      <path d="M 300 50 L 540 50 L 540 220 L 300 220 Z" fill="url(#mc-phaseB)"/>
+      <path d="M 60 380 L 300 220 L 540 220 L 540 380 Z" fill="url(#mc-phaseC)"/>
+
+      <!-- Phase boundary 1 (A-C) -->
+      <line x1="60" y1="380" x2="300" y2="220" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Phase boundary 2 (B-C) -->
+      <line x1="540" y1="220" x2="300" y2="220" stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Phase boundary 3 (A-B, ending at multicritical) -->
+      <line x1="300" y1="50" x2="300" y2="220" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 4" stroke-linecap="round" opacity="0.7"/>
+
+      <!-- Multicritical point -->
+      <circle cx="300" cy="220" r="10" fill="#a855f7" opacity="0.2">
+        <animate attributeName="r" values="10;16;10" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.2;0.08;0.2" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="300" cy="220" r="6" fill="#a855f7"/>
+
+      <!-- Region labels -->
+      <text x="160" y="170" fill="#3b82f6" font-size="16" font-weight="600" font-family="Georgia" opacity="0.7">Phase A</text>
+      <text x="145" y="190" fill="#3b82f6" font-size="11" font-family="system-ui" opacity="0.5">e.g., Normal</text>
+      <text x="400" y="140" fill="#22c55e" font-size="16" font-weight="600" font-family="Georgia" opacity="0.7">Phase B</text>
+      <text x="385" y="160" fill="#22c55e" font-size="11" font-family="system-ui" opacity="0.5">e.g., Degraded</text>
+      <text x="360" y="330" fill="#f59e0b" font-size="16" font-weight="600" font-family="Georgia" opacity="0.7">Phase C</text>
+      <text x="380" y="350" fill="#f59e0b" font-size="11" font-family="system-ui" opacity="0.5">e.g., Failed</text>
+
+      <!-- Multicritical label -->
+      <text x="300" y="255" fill="#a855f7" font-size="12" font-weight="700" font-family="system-ui" text-anchor="middle">Multicritical Point</text>
+
+      <!-- Boundary labels -->
+      <text x="135" y="330" fill="#ef4444" font-size="10" font-family="system-ui" opacity="0.6" transform="rotate(-33, 135, 330)">Boundary 1</text>
+      <text x="435" y="213" fill="#06b6d4" font-size="10" font-family="system-ui" opacity="0.6">Boundary 2</text>
+
+      <!-- Approach paths (animated via JS) -->
+      <g id="mc-paths">
+        <!-- Path A: approach boundary 1 (away from MCP) -->
+        <circle id="path-dot-a" cx="130" cy="180" r="5" fill="#ef4444" opacity="0" stroke="#ef4444" stroke-width="1.5"/>
+        <line id="path-line-a" x1="130" y1="180" x2="130" y2="180" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" opacity="0"/>
+        <!-- Path B: approach boundary 2 (away from MCP) -->
+        <circle id="path-dot-b" cx="450" cy="150" r="5" fill="#06b6d4" opacity="0" stroke="#06b6d4" stroke-width="1.5"/>
+        <line id="path-line-b" x1="450" y1="150" x2="450" y2="150" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4 3" opacity="0"/>
+        <!-- Path C: approach multicritical point -->
+        <circle id="path-dot-c" cx="200" cy="120" r="5" fill="#a855f7" opacity="0" stroke="#a855f7" stroke-width="1.5"/>
+        <line id="path-line-c" x1="200" y1="120" x2="200" y2="120" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 3" opacity="0"/>
+      </g>
+
+      <!-- Axes -->
+      <line x1="60" y1="380" x2="540" y2="380" stroke="#334155" stroke-width="1"/>
+      <line x1="60" y1="380" x2="60" y2="50" stroke="#334155" stroke-width="1"/>
+      <text x="300" y="408" fill="#94a3b8" font-size="13" text-anchor="middle" font-family="system-ui">Control Parameter 1</text>
+      <text x="25" y="220" fill="#94a3b8" font-size="13" text-anchor="middle" font-family="system-ui" transform="rotate(-90, 25, 220)">Control Parameter 2</text>
+    </svg>
+
+    <div class="path-btns">
+      <button class="path-btn" data-path="a" onclick="animatePath('a')">Approach Boundary 1</button>
+      <button class="path-btn" data-path="b" onclick="animatePath('b')">Approach Boundary 2</button>
+      <button class="path-btn" data-path="c" onclick="animatePath('c')">Approach Multicritical Point</button>
+    </div>
+  </div>
+
+  <div id="path-desc" style="min-height: 3.5em; margin-top: 0.75rem;">
+    <p style="font-size: 0.92rem; color: var(--muted);">Select a path to see the difference.</p>
+  </div>
+</div>
+
+<p class="fade-in">
+Approaching a single boundary produces standard critical slowing down &mdash; one type of
+transition, one set of warning signals. Approaching the multicritical point produces
+<strong>qualitatively different behavior</strong>: the critical exponents change, the
+<span class="tip" tabindex="0">scaling laws<span class="tt">Mathematical relationships describing how properties change near a tipping point. They follow power laws &mdash; doubling the distance from the critical point changes the observable by a fixed ratio, not a fixed amount.</span></span> change, and single-parameter detection strategies fail because the transition
+involves the interaction of two (or more) distinct instabilities.
+</p>
+
+<div class="callout key fade-in">
+  <h4>The Core Problem</h4>
+  <p>
+    A detector trained on single critical points will not recognize the warning signs of a
+    multicritical transition. The mathematical structure is different. The exponents are different.
+    The approach signatures are different. You need detection methods that are aware of parameter
+    coupling &mdash; not just N copies of single-parameter detection running in parallel.
+  </p>
+</div>
+
+<!-- ============================================================
+     SECTION 4: THE COUPLING EFFECT
+     ============================================================ -->
+
+<h2 class="fade-in"><span class="sn">4.</span> The Coupling Effect</h2>
+
+<p class="fade-in">
+The most practically important consequence of multicriticality is <strong>threshold
+coupling</strong>. When two failure modes interact, the threshold for one changes
+depending on the proximity to the other.
+</p>
+
+<p class="fade-in">
+Consider a system with two stress parameters. With no coupling, each has a fixed
+failure threshold &mdash; the safe region is a rectangle in parameter space. With coupling,
+the safe region <em>curves inward</em>. The system can fail even when neither parameter
+has reached its individual threshold.
+</p>
+
+<div class="interactive-box fade-in">
+  <h3>Threshold Coupling</h3>
+  <p class="hint">Adjust the parameters and toggle coupling to see how interaction changes the failure boundary.</p>
+
+  <div class="viz" style="margin: 1rem 0 0;">
+    <canvas id="coupling-canvas" height="360"></canvas>
+  </div>
+
+  <div class="slider-row">
+    <label>CPU Load</label>
+    <input type="range" id="param-a" min="0" max="100" value="35">
+    <span class="value" id="val-a">35%</span>
+  </div>
+  <div class="slider-row">
+    <label>Memory Pressure</label>
+    <input type="range" id="param-b" min="0" max="100" value="30">
+    <span class="value" id="val-b">30%</span>
+  </div>
+  <div class="toggle-row">
+    <label>Parameter Coupling</label>
+    <button class="toggle" id="coupling-toggle" onclick="toggleCoupling()"></button>
+    <span class="toggle-label" id="coupling-label">OFF</span>
+  </div>
+  <div id="coupling-status" style="font-size: 0.88rem; margin-top: 0.5rem; min-height: 1.5em;"></div>
+</div>
+
+<p class="fade-in">
+With coupling on, try setting both sliders to around 65%. Neither has reached its
+individual threshold (100%), but the system is already in the danger zone. This is the
+coupling effect: <strong>the combination is more dangerous than the sum of the parts.</strong>
+</p>
+
+<details class="technical fade-in">
+  <summary><span class="detail-icon">&mdash;</span> Technical: The Failure Boundary Shape</summary>
+  <div class="detail-body">
+    <p>
+      Without coupling, the failure boundary is a rectangle: fail when
+      <span class="math">x &gt; x<sub>max</sub></span> OR
+      <span class="math">y &gt; y<sub>max</sub></span>. This is the independence assumption.
+    </p>
+    <p>
+      With coupling, the boundary becomes a curve:
+      <span class="math">(x/x<sub>max</sub>)<sup>p</sup> + (y/y<sub>max</sub>)<sup>p</sup> = 1</span>,
+      where <span class="math">p</span> controls the strength of coupling. At
+      <span class="math">p = &infin;</span>, the boundary is a rectangle (no coupling).
+      As <span class="math">p</span> decreases toward 1, the boundary curves inward.
+      At <span class="math">p = 1</span>, it&rsquo;s a straight line &mdash; maximum coupling.
+      Below <span class="math">p = 1</span>, the boundary curves even further.
+    </p>
+    <p>
+      In physical systems, <span class="math">p</span> is determined by the
+      underlying coupling between <span class="tip" tabindex="0">order parameters<span class="tt">Quantities that distinguish between phases &mdash; like magnetization (zero above the transition, nonzero below) or density difference. In infrastructure: metrics that change qualitatively at failure boundaries, not just quantitatively.</span></span>. Near a multicritical point,
+      coupling is strong and the boundary curves significantly &mdash; the &ldquo;safe
+      rectangle&rdquo; of independent thresholds dramatically overstates the actual safe region.
+    </p>
+  </div>
+</details>
+
+<!-- ============================================================
+     SECTION 5: WHAT STANDARD DETECTION MISSES
+     ============================================================ -->
+
+<h2 class="fade-in"><span class="sn">5.</span> What Standard Detection Misses</h2>
+
+<p class="fade-in">
+Standard monitoring systems watch parameters independently. Each parameter gets its own
+threshold, its own alarm, its own dashboard gauge. This is equivalent to assuming the
+failure boundary is a rectangle &mdash; no coupling between parameters.
+</p>
+
+<p class="fade-in">
+A multicritical-aware detector watches the <em>combined state</em> in the full
+parameter space. It sees the curved boundary. It detects the coupling. It warns when the
+system enters a region that individual gauges show as safe.
+</p>
+
+<div class="comparison fade-in">
+  <div class="comp-panel standard">
+    <div class="panel-header">Standard Monitoring</div>
+    <canvas id="gauge-canvas" height="200"></canvas>
+  </div>
+  <div class="comp-panel multicritical">
+    <div class="panel-header">Multicritical Detection</div>
+    <canvas id="phase-canvas" height="200"></canvas>
+  </div>
+</div>
+
+<div class="slider-row fade-in">
+  <label>System State</label>
+  <input type="range" id="detect-slider" min="0" max="100" value="20">
+  <span class="value" id="detect-value">20%</span>
+</div>
+
+<p class="fade-in" style="font-size: 0.92rem; color: var(--muted); margin-top: 0.5rem;" id="detect-desc">
+Move the slider to see how the same system state appears under two detection paradigms.
+</p>
+
+<div class="callout fade-in" style="border-left-color: var(--amber);">
+  <h4 class="amber">The Expensive Failures</h4>
+  <p>
+    Most system failures have a single dominant cause &mdash; and standard monitoring
+    catches those. But catastrophic failures &mdash; the cascading, multi-cause outages
+    that take down entire systems &mdash; require multiple contributing causes
+    approaching their thresholds simultaneously.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> These are the expensive ones. The ones
+    that cost millions per hour. And they are structurally invisible to
+    independent-parameter detection.
+  </p>
+</div>
+
+<!-- ============================================================
+     SECTION 6: ACROSS DOMAINS
+     ============================================================ -->
+
+<h2 class="fade-in"><span class="sn">6.</span> Same Mathematics, Different Systems</h2>
+
+<p class="fade-in">
+Multicriticality is not a metaphor. The same equations, the same exponents, the same
+scaling laws appear in systems that have nothing in common except their mathematical
+structure near coupled tipping points.
+</p>
+
+<div class="example-grid fade-in">
+  <div class="example-card">
+    <h4><span class="ex-icon" style="color: var(--blue);">&#9679;</span> Water</h4>
+    <p>The liquid-gas <span class="tip" tabindex="0">critical point<span class="tt">Where the distinction between liquid and gas disappears &mdash; above it, there&rsquo;s only one fluid phase. Discovered experimentally in CO&#8322; in 1869.</span></span> (single) has been understood since 1869.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup>
+    Experimental and computational evidence (2024&ndash;2026) for a liquid-liquid critical point creates a <strong><span class="tip" tabindex="0">tricritical<span class="tt">A specific type of multicritical point where three phase boundaries and three phases meet. The simplest and most-studied kind of multicritical point.</span></span></strong>
+    geometry where two transition lines meet.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> The <span class="tip" tabindex="0">critical exponent<span class="tt">&beta; (beta) describes how the difference between two phases vanishes as you approach the critical point. A change in &beta; means fundamentally different transition physics &mdash; not just a different system, but a different kind of transition.</span></span> changes from <span class="math">&beta;</span>&nbsp;&asymp;&nbsp;0.326
+    to <span class="math">&beta;</span>&nbsp;=&nbsp;0.25.</p>
+    <div class="ex-params">Parameters: T, P, density-polarization</div>
+  </div>
+
+  <div class="example-card">
+    <h4><span class="ex-icon" style="color: var(--red);">&#9679;</span> Magnetic Materials</h4>
+    <p>The <span class="tip" tabindex="0">Blume-Capel model<span class="tt">A mathematical model of a magnet where each atomic spin can be &ldquo;up,&rdquo; &ldquo;down,&rdquo; or &ldquo;off.&rdquo; The &ldquo;off&rdquo; option creates a second control parameter, leading to a multicritical point. A workhorse model in statistical physics.</span></span>: a magnet with tunable <span class="tip" tabindex="0">single-ion anisotropy<span class="tt">A property where individual atoms prefer certain spin orientations. In the model, it controls how many spins turn &ldquo;off&rdquo; &mdash; creating a second independent axis of control beyond temperature.</span></span>.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> At low anisotropy,
+    a <span class="tip" tabindex="0">second-order transition<span class="tt">A smooth, continuous transition where properties change gradually. Critical slowing down occurs here. Think: a system gracefully degrading, with time to detect and respond.</span></span>. At high anisotropy, <span class="tip" tabindex="0">first-order<span class="tt">An abrupt jump between states &mdash; like water suddenly boiling. Less warning, harder to predict. Think: a system that&rsquo;s fine until it suddenly isn&rsquo;t.</span></span>. Where they meet:
+    a tricritical point with distinct universality class.</p>
+    <div class="ex-params">Parameters: T, D (anisotropy), H (field)</div>
+  </div>
+
+  <div class="example-card">
+    <h4><span class="ex-icon" style="color: var(--green);">&#9679;</span> Ecosystems</h4>
+    <p>Predator-prey systems near extinction thresholds. When habitat fragmentation adds
+    a second control parameter, the tipping point for population collapse shifts &mdash;
+    coupled thresholds create a multicritical geometry.</p>
+    <div class="ex-params">Parameters: prey density, predation, habitat</div>
+  </div>
+
+  <div class="example-card">
+    <h4><span class="ex-icon" style="color: var(--purple);">&#9679;</span> Infrastructure</h4>
+    <p>A database under combined connection pressure and memory pressure. The failure mode
+    at pure connection saturation (timeout cascade) differs from pure memory exhaustion (OOM kill).
+    Where both approach threshold: a qualitatively different failure with no single-parameter precursor.</p>
+    <div class="ex-params">Parameters: connections, memory, disk I/O</div>
+  </div>
+</div>
+
+<details class="technical fade-in">
+  <summary><span class="detail-icon">&mdash;</span> Why "Not a Metaphor" Is a Strong Claim</summary>
+  <div class="detail-body">
+    <p>
+      In physics, <span class="tip" tabindex="0">universality<span class="tt">The principle that systems with completely different microscopic details can share identical behavior near tipping points. A magnet and a fluid can have the same critical exponents &mdash; not because they&rsquo;re similar, but because the math constrains them to.</span></span> means that systems with completely different microscopic
+      details can share the same critical exponents and <span class="tip" tabindex="0">scaling functions<span class="tt">Mathematical functions that describe how measurable quantities change near a critical point. They collapse data from different systems onto the same curve when plotted correctly.</span></span> near a phase
+      transition. This is not analogy &mdash; it is proven mathematically through
+      <span class="tip" tabindex="0">renormalization group theory<span class="tt">A mathematical framework that explains universality by systematically &ldquo;zooming out.&rdquo; It shows which microscopic details matter at large scales (very few) and which don&rsquo;t (most of them). Nobel Prize in Physics, 1982.</span></span>. The critical behavior depends on a small number of
+      properties (<span class="tip" tabindex="0">dimensionality<span class="tt">How many spatial dimensions the system occupies. A 2D film and a 3D block have different critical exponents even if made of the same material.</span></span>, symmetry, range of interaction), not on the specific system.
+    </p>
+    <p>
+      The same universality holds at multicritical points. A tricritical point in a
+      magnet and a tricritical point in a fluid mixture share the same exponents, the same
+      scaling functions, the same <span class="tip" tabindex="0">crossover behavior<span class="tt">How a system smoothly transitions between different universality classes as you move through parameter space &mdash; e.g., from single-critical to multicritical behavior.</span></span>. If an infrastructure system exhibits
+      the same mathematical structure near coupled thresholds, the same equations apply &mdash;
+      not as analogy but as mathematical consequence.
+    </p>
+  </div>
+</details>
+
+<!-- ============================================================
+     SECTION 7: WHAT DETECTION REQUIRES
+     ============================================================ -->
+
+<h2 class="fade-in"><span class="sn">7.</span> Three Requirements for Multicritical Detection</h2>
+
+<p class="fade-in">
+Detecting the approach to a multicritical point requires three distinct capabilities.
+Standard single-parameter monitoring has the first. Most systems lack the second and
+third.
+</p>
+
+<div class="req-list fade-in">
+  <div class="req-item">
+    <div class="req-num">1</div>
+    <div class="req-body">
+      <h4>Gradient Detection</h4>
+      <p>Measure differences between neighboring observations. This detects that
+      something is changing. Every monitoring system does this &mdash; it&rsquo;s the
+      baseline capability.</p>
+    </div>
+  </div>
+
+  <div class="req-item">
+    <div class="req-num">2</div>
+    <div class="req-body">
+      <h4>Accumulation</h4>
+      <p>Detect that gradients are <em>accumulating along the system&rsquo;s continuation paths</em>, not just spiking and recovering. This is what
+      distinguishes a momentary spike from critical slowing down. The system&rsquo;s memory is
+      growing &mdash; perturbations are persisting longer, autocorrelation is increasing.
+      Without accumulation detection, you see that two parameters are coupled <em>right now</em>
+      but not that the coupling has been <em>growing</em>. The growth pattern is the
+      early warning.</p>
+    </div>
+  </div>
+
+  <div class="req-item">
+    <div class="req-num">3</div>
+    <div class="req-body">
+      <h4>Coupling Detection</h4>
+      <p>Detect <span class="tip" tabindex="0">asymmetric interactions<span class="tt">Interactions where the effect is not equal in both directions &mdash; CPU load might strongly affect memory pressure, but memory pressure might weakly affect CPU. This directional asymmetry is a hallmark of real coupling vs. coincidence.</span></span> between multiple parameters. This is what makes
+      it <em>multi</em>critical rather than N independent single-parameter detectors. The
+      coupling between parameters &mdash; how one parameter&rsquo;s gradient affects
+      another&rsquo;s &mdash; is the signal that distinguishes a multicritical approach from
+      two independent single-critical approaches happening simultaneously.</p>
+    </div>
+  </div>
+</div>
+
+<div class="callout insight fade-in">
+  <h4>The Missing Piece</h4>
+  <p>
+    Most monitoring platforms have strong gradient detection (Requirement 1). Some have
+    rudimentary accumulation via rolling statistics (partial Requirement 2). Almost none
+    have genuine coupling detection (Requirement 3) &mdash; they run N independent detectors
+    and assume the failure boundary is a rectangle. The curved boundary goes undetected
+    until it is crossed.
+  </p>
+</div>
+
+<!-- ============================================================
+     SECTION 8: SUMMARY
+     ============================================================ -->
+
+<h2 class="fade-in"><span class="sn">8.</span> Summary</h2>
+
+<p class="fade-in">
+<strong>Multicriticality</strong> is what happens when tipping points interact. It is not
+&ldquo;more parameters&rdquo; &mdash; it is the <em>coupling between parameters near their
+respective thresholds</em> that creates qualitatively new behavior: different failure modes,
+different warning signals, different mathematics.
+</p>
+
+<p class="fade-in">
+Standard detection monitors N parameters independently and assumes a rectangular failure
+boundary. Multicritical detection monitors the coupling between parameters and detects the
+curved boundary that independent monitoring misses. The systems that fail in the gap between
+the rectangle and the curve are precisely the multi-cause, cascading failures that are hardest
+to predict and most expensive to experience.
+</p>
+
+<p class="fade-in">
+The mathematics of multicriticality is well-established in condensed matter physics and
+statistical mechanics, where it has been studied for over fifty years.<sup><a class="fn" href="#fn5" id="fnref5">5</a></sup> Its application to
+infrastructure monitoring, ecosystem management, and other complex systems is the natural
+extension of universality &mdash; the principle that the mathematics of tipping points
+does not depend on what the system is made of.
+</p>
+
+<div class="footnotes fade-in">
+  <ol>
+    <li id="fn1">T. Andrews, &ldquo;On the Continuity of the Gaseous and Liquid States of Matter,&rdquo; <em>Phil. Trans. R. Soc.</em> <strong>159</strong>, 575&ndash;590 (1869). <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">F. Sciortino <em>et al.</em>, &ldquo;Liquid-liquid critical point in supercooled water,&rdquo; <em>PNAS</em> <strong>121</strong> (2024); S. You <em>et al.</em>, &ldquo;Experimental observation of the liquid-liquid critical point,&rdquo; <em>Science</em> (2026). <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">M. Blume, <em>Phys. Rev.</em> <strong>141</strong>, 517 (1966); H.W.J. Capel, <em>Physica</em> <strong>32</strong>, 966 (1966). <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">R.I. Cook, &ldquo;How Complex Systems Fail,&rdquo; Cognitive Technologies Laboratory, University of Chicago (2000). See especially observation 11: &ldquo;catastrophe requires multiple failures.&rdquo; <a href="#fnref4">&uarr;</a></li>
+    <li id="fn5">R.B. Griffiths, &ldquo;Thermodynamics Near the Two-Fluid Critical Mixing Point in He&#179;-He&#8308;,&rdquo; <em>Phys. Rev. Lett.</em> <strong>24</strong>, 715 (1970). I.D. Lawrie &amp; S. Sarbach, &ldquo;Theory of Tricritical Points,&rdquo; in <em>Phase Transitions and Critical Phenomena</em>, Vol. 9 (1984). <a href="#fnref5">&uarr;</a></li>
+  </ol>
+</div>
+
+<!-- Nav -->
+<div class="tutorial-nav">
+  <a href="index.html">&larr; Multi-Critical Systems</a>
+  <a href="01-glass-transition.html" class="next">Glass Transition &rarr;</a>
+</div>
+
+<div class="footer-note">
+  Domain Convergence Research
+</div>
+
+</div><!-- .container -->
+
+<script>
+/* ============================================================
+   SEEDED PRNG (for reproducible time series)
+   ============================================================ */
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function seededGaussian(rng) {
+  var u = 0, v = 0;
+  while (u === 0) u = rng();
+  while (v === 0) v = rng();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+
+/* ============================================================
+   THEME COLORS — read from CSS vars
+   ============================================================ */
+const STYLE = getComputedStyle(document.documentElement);
+const C = {
+  bg:     STYLE.getPropertyValue('--bg').trim(),
+  card:   STYLE.getPropertyValue('--card').trim(),
+  text:   STYLE.getPropertyValue('--text').trim(),
+  heading:STYLE.getPropertyValue('--heading').trim(),
+  muted:  STYLE.getPropertyValue('--muted').trim(),
+  line:   STYLE.getPropertyValue('--line').trim(),
+  dim:    STYLE.getPropertyValue('--dim').trim(),
+  red:    STYLE.getPropertyValue('--red').trim(),
+  blue:   STYLE.getPropertyValue('--blue').trim(),
+  green:  STYLE.getPropertyValue('--green').trim(),
+  amber:  STYLE.getPropertyValue('--amber').trim(),
+  purple: STYLE.getPropertyValue('--purple').trim(),
+  cyan:   STYLE.getPropertyValue('--cyan').trim(),
+};
+
+/* ============================================================
+   1. CRITICAL SLOWING DOWN CANVAS
+   ============================================================ */
+const CSD = {
+  canvas: null, ctx: null,
+  W: 0, H: 0,
+  series: {},
+
+  init() {
+    this.canvas = document.getElementById('csd-canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.resize();
+    this.precompute();
+    this.draw(15);
+
+    document.getElementById('csd-slider').addEventListener('input', (e) => {
+      const v = parseInt(e.target.value);
+      document.getElementById('csd-value').textContent = v + '%';
+      this.draw(v);
+    });
+
+    new ResizeObserver(() => { this.resize(); this.draw(parseInt(document.getElementById('csd-slider').value)); })
+      .observe(this.canvas.parentElement);
+  },
+
+  resize() {
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    this.W = rect.width;
+    this.H = 220;
+    this.canvas.width = this.W * dpr;
+    this.canvas.height = this.H * dpr;
+    this.canvas.style.width = this.W + 'px';
+    this.canvas.style.height = this.H + 'px';
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  },
+
+  precompute() {
+    const N = 400;
+    const levels = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 98];
+    levels.forEach(s => {
+      const rng = mulberry32(42 + s * 7);
+      const theta = 0.5 * (1 - s / 100 * 0.97);
+      const sigma = 0.08 + (s / 100) * 0.22;
+      const dt = 0.05;
+      const data = [0];
+      for (let i = 1; i < N; i++) {
+        const dx = theta * (0 - data[i-1]) * dt + sigma * Math.sqrt(dt) * seededGaussian(rng);
+        data.push(data[i-1] + dx);
+      }
+      this.series[s] = data;
+    });
+  },
+
+  interpolate(stress) {
+    const keys = Object.keys(this.series).map(Number).sort((a,b) => a-b);
+    if (stress <= keys[0]) return this.series[keys[0]];
+    if (stress >= keys[keys.length-1]) return this.series[keys[keys.length-1]];
+    let lo = keys[0], hi = keys[keys.length-1];
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (stress >= keys[i] && stress <= keys[i+1]) { lo = keys[i]; hi = keys[i+1]; break; }
+    }
+    const t = (stress - lo) / (hi - lo);
+    const dLo = this.series[lo], dHi = this.series[hi];
+    return dLo.map((v, i) => v * (1 - t) + dHi[i] * t);
+  },
+
+  draw(stress) {
+    const ctx = this.ctx;
+    const data = this.interpolate(stress);
+    const N = data.length;
+    const pad = { l: 10, r: 10, t: 15, b: 15 };
+    const w = this.W - pad.l - pad.r;
+    const h = this.H - pad.t - pad.b;
+
+    ctx.clearRect(0, 0, this.W, this.H);
+
+    // Grid
+    ctx.strokeStyle = C.dim;
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(pad.l, pad.t + h/2); ctx.lineTo(pad.l + w, pad.t + h/2);
+    ctx.stroke();
+
+    // Time series
+    const yMin = -1.2, yMax = 1.2;
+    const scaleY = h / (yMax - yMin);
+    ctx.beginPath();
+    ctx.strokeStyle = stress < 50 ? C.blue : (stress < 80 ? C.amber : C.red);
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = 0.9;
+    for (let i = 0; i < N; i++) {
+      const x = pad.l + (i / (N - 1)) * w;
+      const y = pad.t + (yMax - data[i]) * scaleY;
+      const yc = Math.max(pad.t, Math.min(pad.t + h, y));
+      if (i === 0) ctx.moveTo(x, yc); else ctx.lineTo(x, yc);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Glow effect
+    ctx.beginPath();
+    ctx.strokeStyle = stress < 50 ? C.blue : (stress < 80 ? C.amber : C.red);
+    ctx.lineWidth = 5;
+    ctx.globalAlpha = 0.12;
+    for (let i = 0; i < N; i++) {
+      const x = pad.l + (i / (N - 1)) * w;
+      const y = pad.t + (yMax - data[i]) * scaleY;
+      const yc = Math.max(pad.t, Math.min(pad.t + h, y));
+      if (i === 0) ctx.moveTo(x, yc); else ctx.lineTo(x, yc);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Stress label
+    ctx.fillStyle = C.muted;
+    ctx.font = '11px system-ui';
+    ctx.textAlign = 'right';
+    ctx.fillText('Stress: ' + stress + '%', this.W - pad.r, pad.t + 12);
+
+    // Compute indicators
+    const mean = data.reduce((a, b) => a + b, 0) / N;
+    const variance = data.reduce((a, b) => a + (b - mean) * (b - mean), 0) / N;
+    let acf1 = 0, v0 = 0;
+    for (let i = 0; i < N - 1; i++) {
+      acf1 += (data[i] - mean) * (data[i+1] - mean);
+      v0 += (data[i] - mean) * (data[i] - mean);
+    }
+    acf1 = v0 > 0 ? acf1 / v0 : 0;
+
+    const acfPct = Math.min(100, Math.max(5, acf1 * 100));
+    const varPct = Math.min(100, Math.max(5, variance * 300));
+    const recPct = Math.min(100, Math.max(5, (1 / (1 - Math.min(acf1, 0.99))) * 3));
+
+    const barColor = (pct) => pct < 40 ? C.green : (pct < 70 ? C.amber : C.red);
+
+    const acfBar = document.getElementById('ind-acf');
+    const varBar = document.getElementById('ind-var');
+    const recBar = document.getElementById('ind-rec');
+    acfBar.style.width = acfPct + '%'; acfBar.style.background = barColor(acfPct);
+    varBar.style.width = varPct + '%'; varBar.style.background = barColor(varPct);
+    recBar.style.width = recPct + '%'; recBar.style.background = barColor(recPct);
+  }
+};
+
+/* ============================================================
+   3. MULTICRITICAL APPROACH PATHS
+   ============================================================ */
+let activePathAnim = null;
+
+function animatePath(which) {
+  if (activePathAnim) cancelAnimationFrame(activePathAnim);
+
+  document.querySelectorAll('.path-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.path-btn[data-path="' + which + '"]').classList.add('active');
+
+  // Reset all paths
+  ['a','b','c'].forEach(p => {
+    document.getElementById('path-dot-' + p).setAttribute('opacity', '0');
+    document.getElementById('path-line-' + p).setAttribute('opacity', '0');
+  });
+
+  const desc = document.getElementById('path-desc');
+  const dot = document.getElementById('path-dot-' + which);
+  const line = document.getElementById('path-line-' + which);
+
+  const paths = {
+    a: { sx: 130, sy: 180, ex: 195, ey: 295, dur: 2000,
+         desc: '<p style="font-size:0.92rem;"><strong style="color:var(--red);">Single boundary approach.</strong> The system crosses Boundary 1 — a standard A→C phase transition. EWS detects critical slowing down along one parameter. Single-parameter detection works here.</p>' },
+    b: { sx: 450, sy: 150, ex: 430, ey: 215, dur: 2000,
+         desc: '<p style="font-size:0.92rem;"><strong style="color:var(--cyan);">Single boundary approach.</strong> The system crosses Boundary 2 — a standard B→C transition. Different failure mode, but still a single-parameter crossing. Standard EWS works.</p>' },
+    c: { sx: 200, sy: 120, ex: 298, ey: 218, dur: 2500,
+         desc: '<p style="font-size:0.92rem;"><strong style="color:var(--purple);">Multicritical approach.</strong> The system approaches where both boundaries meet. Neither single-parameter detector triggers — the warning signal is in the <em>coupling between parameters</em>. The failure mode is qualitatively different from either single-boundary crossing. Critical exponents change. Standard single-parameter EWS fails.</p>' },
+  };
+  const p = paths[which];
+  desc.innerHTML = p.desc;
+
+  dot.setAttribute('opacity', '1');
+  line.setAttribute('opacity', '0.6');
+
+  const start = performance.now();
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function step(now) {
+    let t = Math.min(1, (now - start) / p.dur);
+    if (reducedMotion) t = 1;
+    const ease = t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2;
+
+    const cx = p.sx + (p.ex - p.sx) * ease;
+    const cy = p.sy + (p.ey - p.sy) * ease;
+    dot.setAttribute('cx', cx);
+    dot.setAttribute('cy', cy);
+    line.setAttribute('x1', p.sx);
+    line.setAttribute('y1', p.sy);
+    line.setAttribute('x2', cx);
+    line.setAttribute('y2', cy);
+
+    if (t < 1 && !reducedMotion) {
+      activePathAnim = requestAnimationFrame(step);
+    }
+  }
+  activePathAnim = requestAnimationFrame(step);
+}
+
+/* ============================================================
+   4. COUPLING DEMO CANVAS
+   ============================================================ */
+const COUPLING = {
+  canvas: null, ctx: null,
+  W: 0, H: 0,
+  coupled: false,
+
+  init() {
+    this.canvas = document.getElementById('coupling-canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.resize();
+    this.draw();
+
+    ['param-a','param-b'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => this.draw());
+    });
+
+    new ResizeObserver(() => { this.resize(); this.draw(); })
+      .observe(this.canvas.parentElement);
+  },
+
+  resize() {
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    this.W = rect.width;
+    this.H = 360;
+    this.canvas.width = this.W * dpr;
+    this.canvas.height = this.H * dpr;
+    this.canvas.style.width = this.W + 'px';
+    this.canvas.style.height = this.H + 'px';
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  },
+
+  draw() {
+    const ctx = this.ctx;
+    const a = parseInt(document.getElementById('param-a').value);
+    const b = parseInt(document.getElementById('param-b').value);
+    document.getElementById('val-a').textContent = a + '%';
+    document.getElementById('val-b').textContent = b + '%';
+
+    const pad = { l: 55, r: 25, t: 25, b: 45 };
+    const w = this.W - pad.l - pad.r;
+    const h = this.H - pad.t - pad.b;
+
+    ctx.clearRect(0, 0, this.W, this.H);
+
+    // Map parameter to plot coordinates
+    const px = (v) => pad.l + (v / 100) * w;
+    const py = (v) => pad.t + h - (v / 100) * h;
+
+    // Draw safe region
+    if (this.coupled) {
+      // Coupled: superellipse boundary (p ≈ 1.4)
+      const p = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(px(0), py(0));
+      // Bottom edge
+      ctx.lineTo(px(100), py(0));
+      // Right edge up to boundary
+      const steps = 60;
+      // Trace the boundary curve from (100, 0) around to (0, 100)
+      // (x/100)^p + (y/100)^p = 1 => y = 100 * (1 - (x/100)^p)^(1/p)
+      ctx.lineTo(px(100), py(0));
+      for (let i = steps; i >= 0; i--) {
+        const xn = i / steps;
+        const yn = Math.pow(Math.max(0, 1 - Math.pow(xn, p)), 1/p);
+        ctx.lineTo(px(xn * 100), py(yn * 100));
+      }
+      ctx.lineTo(px(0), py(0));
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.08)';
+      ctx.fill();
+
+      // Danger region
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const xn = i / steps;
+        const yn = Math.pow(Math.max(0, 1 - Math.pow(xn, p)), 1/p);
+        if (i === 0) ctx.moveTo(px(xn * 100), py(yn * 100));
+        else ctx.lineTo(px(xn * 100), py(yn * 100));
+      }
+      ctx.lineTo(px(0), py(100));
+      ctx.lineTo(px(100), py(100));
+      ctx.lineTo(px(100), py(0));
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(239, 68, 68, 0.06)';
+      ctx.fill();
+
+      // Draw boundary curve
+      ctx.beginPath();
+      for (let i = 0; i <= steps; i++) {
+        const xn = i / steps;
+        const yn = Math.pow(Math.max(0, 1 - Math.pow(xn, p)), 1/p);
+        if (i === 0) ctx.moveTo(px(xn * 100), py(yn * 100));
+        else ctx.lineTo(px(xn * 100), py(yn * 100));
+      }
+      ctx.strokeStyle = C.red;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Ghost rectangle (what independent thresholds would be)
+      ctx.strokeStyle = C.muted;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.strokeRect(px(0), py(100), w, h);
+      ctx.setLineDash([]);
+
+      // Label the gap
+      ctx.fillStyle = C.muted;
+      ctx.font = '10px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('Coupling', px(75), py(75) - 5);
+      ctx.fillText('danger zone', px(75), py(75) + 8);
+
+    } else {
+      // Uncoupled: rectangle
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.08)';
+      ctx.fillRect(px(0), py(100), w, h);
+
+      // Boundary (rectangle at 100%)
+      ctx.strokeStyle = C.red;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(px(100), py(0));
+      ctx.lineTo(px(100), py(100));
+      ctx.lineTo(px(0), py(100));
+      ctx.stroke();
+    }
+
+    // Grid
+    ctx.strokeStyle = C.dim;
+    ctx.lineWidth = 0.5;
+    for (let g = 25; g <= 75; g += 25) {
+      ctx.beginPath();
+      ctx.moveTo(px(g), py(0)); ctx.lineTo(px(g), py(100));
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(px(0), py(g)); ctx.lineTo(px(100), py(g));
+      ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = C.dim;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px(0), py(0)); ctx.lineTo(px(100), py(0));
+    ctx.moveTo(px(0), py(0)); ctx.lineTo(px(0), py(100));
+    ctx.stroke();
+
+    // Axis labels
+    ctx.fillStyle = C.line;
+    ctx.font = '12px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('CPU Load →', px(50), this.H - 8);
+    ctx.save();
+    ctx.translate(14, py(50));
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Memory Pressure →', 0, 0);
+    ctx.restore();
+
+    // Tick labels
+    ctx.fillStyle = C.muted;
+    ctx.font = '10px system-ui';
+    ctx.textAlign = 'center';
+    [0, 25, 50, 75, 100].forEach(v => {
+      ctx.fillText(v + '%', px(v), py(0) + 14);
+    });
+    ctx.textAlign = 'right';
+    [0, 25, 50, 75, 100].forEach(v => {
+      ctx.fillText(v + '%', px(0) - 5, py(v) + 4);
+    });
+
+    // State point
+    const stateX = px(a);
+    const stateY = py(b);
+
+    // Determine if in danger zone
+    let inDanger = false;
+    if (this.coupled) {
+      const norm = Math.pow(a / 100, 1.4) + Math.pow(b / 100, 1.4);
+      inDanger = norm > 1;
+    } else {
+      inDanger = a >= 100 || b >= 100;
+    }
+
+    // Proximity to boundary
+    let proximity = 0;
+    if (this.coupled) {
+      const norm = Math.pow(a / 100, 1.4) + Math.pow(b / 100, 1.4);
+      proximity = norm;
+    } else {
+      proximity = Math.max(a, b) / 100;
+    }
+
+    // State point glow
+    const dotColor = inDanger ? C.red : (proximity > 0.7 ? C.amber : C.green);
+    ctx.beginPath();
+    ctx.arc(stateX, stateY, 12, 0, Math.PI * 2);
+    ctx.fillStyle = dotColor;
+    ctx.globalAlpha = 0.2;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // State point
+    ctx.beginPath();
+    ctx.arc(stateX, stateY, 5, 0, Math.PI * 2);
+    ctx.fillStyle = dotColor;
+    ctx.fill();
+    ctx.strokeStyle = C.heading;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Legend
+    ctx.fillStyle = C.muted;
+    ctx.font = '10px system-ui';
+    ctx.textAlign = 'left';
+    if (this.coupled) {
+      ctx.fillStyle = C.red;
+      ctx.fillText('— Coupled boundary', px(2), py(97));
+      ctx.fillStyle = C.muted;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(px(2), py(93)); ctx.lineTo(px(12), py(93)); ctx.strokeStyle = C.muted; ctx.lineWidth = 1; ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillText('  Independent thresholds', px(12), py(92.5));
+    } else {
+      ctx.fillStyle = C.red;
+      ctx.fillText('— Failure threshold', px(2), py(97));
+    }
+
+    // Status
+    const status = document.getElementById('coupling-status');
+    if (inDanger) {
+      if (this.coupled && a < 100 && b < 100) {
+        status.innerHTML = '<span style="color:var(--red); font-weight:600;">DANGER — Coupled failure zone.</span> Neither parameter has reached its individual threshold, but the combination exceeds the coupled boundary.';
+      } else {
+        status.innerHTML = '<span style="color:var(--red); font-weight:600;">DANGER — Threshold exceeded.</span>';
+      }
+    } else if (proximity > 0.7) {
+      status.innerHTML = '<span style="color:var(--amber); font-weight:600;">WARNING — Approaching boundary.</span>';
+    } else {
+      status.innerHTML = '<span style="color:var(--green);">Safe operating region.</span>';
+    }
+  }
+};
+
+function toggleCoupling() {
+  COUPLING.coupled = !COUPLING.coupled;
+  const btn = document.getElementById('coupling-toggle');
+  const lbl = document.getElementById('coupling-label');
+  btn.classList.toggle('active', COUPLING.coupled);
+  lbl.textContent = COUPLING.coupled ? 'ON' : 'OFF';
+  COUPLING.draw();
+}
+
+/* ============================================================
+   5. DETECTION COMPARISON
+   ============================================================ */
+const DETECT = {
+  gaugeCanvas: null, phaseCanvas: null,
+  gCtx: null, pCtx: null,
+  W: 0, H: 0,
+
+  init() {
+    this.gaugeCanvas = document.getElementById('gauge-canvas');
+    this.phaseCanvas = document.getElementById('phase-canvas');
+    this.gCtx = this.gaugeCanvas.getContext('2d');
+    this.pCtx = this.phaseCanvas.getContext('2d');
+    this.resize();
+    this.draw(20);
+
+    document.getElementById('detect-slider').addEventListener('input', (e) => {
+      const v = parseInt(e.target.value);
+      document.getElementById('detect-value').textContent = v + '%';
+      this.draw(v);
+    });
+
+    new ResizeObserver(() => { this.resize(); this.draw(parseInt(document.getElementById('detect-slider').value)); })
+      .observe(this.gaugeCanvas.parentElement);
+  },
+
+  resize() {
+    [this.gaugeCanvas, this.phaseCanvas].forEach(c => {
+      const rect = c.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      this.W = rect.width;
+      this.H = 200;
+      c.width = this.W * dpr;
+      c.height = this.H * dpr;
+      c.style.width = this.W + 'px';
+      c.style.height = this.H + 'px';
+      c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+    });
+  },
+
+  draw(pct) {
+    // Coupled approach: both parameters rise together along a diagonal
+    const cpuLoad = pct * 0.82;
+    const memLoad = pct * 0.78;
+    const diskLoad = pct * 0.45;
+
+    this.drawGauges(cpuLoad, memLoad, diskLoad);
+    this.drawPhase(cpuLoad, memLoad, pct);
+
+    const desc = document.getElementById('detect-desc');
+    const coupled = Math.pow(cpuLoad/100, 1.4) + Math.pow(memLoad/100, 1.4);
+    if (coupled > 1) {
+      if (cpuLoad <= 70 && memLoad <= 70) {
+        desc.innerHTML = '<span style="color:var(--red);font-weight:600;">Every gauge reads OK — but the coupled system has already crossed the multicritical boundary.</span> This is exactly the scenario standard monitoring misses.';
+      } else {
+        desc.innerHTML = '<span style="color:var(--red);font-weight:600;">Gauges show only moderate warnings — no alarm triggered — but the coupled system has crossed the multicritical boundary.</span> The curved boundary was crossed before any individual threshold.';
+      }
+    } else if (coupled > 0.7) {
+      desc.innerHTML = '<span style="color:var(--amber);">Approaching the coupled boundary.</span> Individual parameters look manageable, but the phase space view shows mounting danger.';
+    } else {
+      desc.innerHTML = 'Move the slider to see how the same system state appears under two detection paradigms.';
+    }
+  },
+
+  drawGauges(cpu, mem, disk) {
+    const ctx = this.gCtx;
+    ctx.clearRect(0, 0, this.W, this.H);
+
+    const gauges = [
+      { label: 'CPU', value: cpu, max: 100 },
+      { label: 'Memory', value: mem, max: 100 },
+      { label: 'Disk I/O', value: disk, max: 100 },
+    ];
+
+    const gw = (this.W - 40) / 3;
+    gauges.forEach((g, i) => {
+      const cx = 20 + gw * i + gw / 2;
+      const cy = 90;
+      const r = Math.min(gw / 2 - 10, 50);
+
+      // Gauge arc background
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, Math.PI, 0);
+      ctx.strokeStyle = C.dim;
+      ctx.lineWidth = 8;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Gauge arc fill
+      const angle = Math.PI + (g.value / g.max) * Math.PI;
+      const color = g.value > 90 ? C.red : (g.value > 70 ? C.amber : C.green);
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, Math.PI, angle);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 8;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Value text
+      ctx.fillStyle = C.heading;
+      ctx.font = 'bold 16px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText(Math.round(g.value) + '%', cx, cy + 8);
+
+      // Label
+      ctx.fillStyle = C.muted;
+      ctx.font = '11px system-ui';
+      ctx.fillText(g.label, cx, cy + r + 20);
+
+      // Status text
+      ctx.fillStyle = color;
+      ctx.font = '10px system-ui';
+      const statusText = g.value > 90 ? 'ALARM' : (g.value > 70 ? 'WARN' : 'OK');
+      ctx.fillText(statusText, cx, cy - r - 8);
+    });
+  },
+
+  drawPhase(cpu, mem, pct) {
+    const ctx = this.pCtx;
+    ctx.clearRect(0, 0, this.W, this.H);
+
+    const pad = { l: 40, r: 15, t: 15, b: 35 };
+    const w = this.W - pad.l - pad.r;
+    const h = this.H - pad.t - pad.b;
+    const px = (v) => pad.l + (v / 100) * w;
+    const py = (v) => pad.t + h - (v / 100) * h;
+
+    // Coupled boundary
+    const p = 1.4;
+    const steps = 40;
+
+    // Safe region
+    ctx.beginPath();
+    ctx.moveTo(px(0), py(0));
+    ctx.lineTo(px(100), py(0));
+    for (let i = steps; i >= 0; i--) {
+      const xn = i / steps;
+      const yn = Math.pow(Math.max(0, 1 - Math.pow(xn, p)), 1/p);
+      ctx.lineTo(px(xn * 100), py(yn * 100));
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(34, 197, 94, 0.06)';
+    ctx.fill();
+
+    // Danger region
+    ctx.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const xn = i / steps;
+      const yn = Math.pow(Math.max(0, 1 - Math.pow(xn, p)), 1/p);
+      if (i === 0) ctx.moveTo(px(xn * 100), py(yn * 100));
+      else ctx.lineTo(px(xn * 100), py(yn * 100));
+    }
+    ctx.lineTo(px(0), py(100));
+    ctx.lineTo(px(100), py(100));
+    ctx.lineTo(px(100), py(0));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.06)';
+    ctx.fill();
+
+    // Boundary
+    ctx.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const xn = i / steps;
+      const yn = Math.pow(Math.max(0, 1 - Math.pow(xn, p)), 1/p);
+      if (i === 0) ctx.moveTo(px(xn * 100), py(yn * 100));
+      else ctx.lineTo(px(xn * 100), py(yn * 100));
+    }
+    ctx.strokeStyle = C.red;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Axes
+    ctx.strokeStyle = C.dim;
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(px(0), py(0)); ctx.lineTo(px(100), py(0));
+    ctx.moveTo(px(0), py(0)); ctx.lineTo(px(0), py(100));
+    ctx.stroke();
+
+    ctx.fillStyle = C.muted;
+    ctx.font = '10px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('CPU', px(50), this.H - 5);
+    ctx.save();
+    ctx.translate(10, py(50));
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('Memory', 0, 0);
+    ctx.restore();
+
+    // Trail
+    if (pct > 5) {
+      ctx.beginPath();
+      ctx.strokeStyle = C.purple;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.4;
+      for (let t = 0; t <= pct; t++) {
+        const cx = t * 0.82;
+        const cy = t * 0.78;
+        if (t === 0) ctx.moveTo(px(cx), py(cy));
+        else ctx.lineTo(px(cx), py(cy));
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    // State point
+    const coupled = Math.pow(cpu/100, p) + Math.pow(mem/100, p);
+    const dotColor = coupled > 1 ? C.red : (coupled > 0.7 ? C.amber : C.green);
+
+    ctx.beginPath();
+    ctx.arc(px(cpu), py(mem), 8, 0, Math.PI * 2);
+    ctx.fillStyle = dotColor;
+    ctx.globalAlpha = 0.25;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    ctx.beginPath();
+    ctx.arc(px(cpu), py(mem), 4, 0, Math.PI * 2);
+    ctx.fillStyle = dotColor;
+    ctx.fill();
+    ctx.strokeStyle = C.heading;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Status
+    ctx.font = 'bold 11px system-ui';
+    ctx.textAlign = 'right';
+    ctx.fillStyle = dotColor;
+    ctx.fillText(coupled > 1 ? 'DANGER' : (coupled > 0.7 ? 'WARNING' : 'SAFE'), this.W - pad.r, pad.t + 14);
+  }
+};
+
+/* ============================================================
+   SCROLL FADE-IN
+   ============================================================ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  CSD.init();
+  COUPLING.init();
+  DETECT.init();
+});
+</script>
+</body>
+</html>
