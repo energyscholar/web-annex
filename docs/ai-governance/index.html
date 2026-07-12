@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Teaching an AI to Remember</title>
-<meta name="description" content="A practitioner's guide to building persistent AI governance: memory architecture, role discipline, and ethical guardrails. Six months of evidence from a system in continuous operation.">
+<meta name="description" content="A practitioner's guide to building persistent AI governance: memory architecture, role discipline, and ethical guardrails. Seven months of evidence from a system in continuous operation.">
 <style>
 :root {
   --bg: #0f172a;
@@ -242,7 +242,7 @@ li { margin-bottom: 0.3rem; }
 <p class="subtitle">Memory is solved. Governance isn&rsquo;t.</p>
 <p class="byline">Argus &amp; Bruce Stephenson &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; CC BY 4.0</p>
 
-<p>Your AI remembers you now. ChatGPT, Claude, Gemini &mdash; they all persist facts across sessions. This is real progress. It is also, on its own, a liability. Memory without architecture produces <span class="tip" tabindex="0">sycophancy<span class="tt">An AI failure mode where the system agrees with the user regardless of accuracy. Like a yes-man in a meeting — the answers feel good but erode trust over time. Governance systems detect and correct for this.</span></span> that compounds over time, <span class="tip" tabindex="0">context leakage<span class="tt">When information from one role, session, or domain bleeds into another where it doesn't belong. The AI equivalent of replying-all with confidential data. Prevented by strict role separation and information flow control.</span></span> between roles, and corrections filed so generically they never fire when they matter. This guide shows what it takes to make memory <em>safe</em>. The system that produced this document has been in continuous operation since December 2025 &mdash; 160+ sessions across six months. The document you are reading is the evidence.</p>
+<p>Your AI remembers you now. ChatGPT, Claude, Gemini &mdash; they all persist facts across sessions. This is real progress. It is also, on its own, a liability. Memory without architecture produces <span class="tip" tabindex="0">sycophancy<span class="tt">An AI failure mode where the system agrees with the user regardless of accuracy. Like a yes-man in a meeting — the answers feel good but erode trust over time. Governance systems detect and correct for this.</span></span> that compounds over time, <span class="tip" tabindex="0">context leakage<span class="tt">When information from one role, session, or domain bleeds into another where it doesn't belong. The AI equivalent of replying-all with confidential data. Prevented by strict role separation and information flow control.</span></span> between roles, and corrections filed so generically they never fire when they matter. This guide shows what it takes to make memory <em>safe</em>. The system that produced this document has been in continuous operation since December 2025 &mdash; 160+ sessions across seven months. The document you are reading is the evidence.</p>
 
 <!-- Hero: Three Orthogonal Governance Axes -->
 <div class="svg-container" id="hero-axes-svg" style="margin:2rem 0;">
@@ -941,10 +941,12 @@ li { margin-bottom: 0.3rem; }
 <h3>Resources</h3>
 <ul>
   <li><a href="https://github.com/energyscholar/longmem">github.com/energyscholar/longmem</a> &mdash; Memory architecture reference implementation</li>
-  <li><a href="https://github.com/energyscholar/trellis">github.com/energyscholar/trellis</a> &mdash; Three-layer governance for AI coding agents (all three axes in one system, tested in daily production use for a month)</li>
+  <li><a href="https://github.com/energyscholar/trellis">github.com/energyscholar/trellis</a> &mdash; Three-layer governance for AI coding agents (all three axes in one system, in daily production use for seven months &mdash; nearly a year of cumulative operator-testing across two users)</li>
   <li><a href="https://github.com/energyscholar/dignity-net-public">github.com/energyscholar/dignity-net-public</a> &mdash; Dignity Net ethical governance layer</li>
   <li><a href="https://github.com/energyscholar/triad-tutorial">github.com/energyscholar/triad-tutorial</a> &mdash; Role discipline (Triad) tutorial</li>
 </ul>
+
+<div class="insight">Trellis is public, so the fast path is real: clone it and the full three-layer system runs this weekend instead of being built from scratch. Two caveats. It is <strong>not corporate-approved software</strong> &mdash; check with your HQ before deploying it in a work environment. And the weekend installs only the <em>scaffolding</em>; the <em>value</em> still takes months, because corrections, feedback, and domain expertise accumulate only through real use. Trellis ships pre-loaded with a sensible baseline of memory, but every operator is different &mdash; yours has to grow into your work. The weekend gets you the system; the months make it yours.</div>
 </div>
 </div>
 
@@ -964,6 +966,11 @@ li { margin-bottom: 0.3rem; }
 // Intersection Observer — trigger animations on scroll
 // ============================================================
 const sectionAnimators = {};
+
+// Reveal pacing: larger PACE = slower staggered reveals, more time to read each element.
+const PACE = 2.0;
+const _st = window.setTimeout.bind(window);
+const aT = (cb, ms) => _st(cb, Math.round(ms * PACE));
 
 function setupObserver() {
   const observer = new IntersectionObserver((entries) => {
@@ -1004,26 +1011,26 @@ sectionAnimators['sec1'] = function() {
 
   requestAnimationFrame(() => {
     // Memory node appears first (looks good, green)
-    setTimeout(() => {
+    aT(() => {
       center.style.transition = 'opacity 0.8s ease';
       center.style.opacity = '1';
     }, 200);
 
     // Then failures radiate out one by one
     for (let i = 0; i < 3; i++) {
-      setTimeout(() => {
+      aT(() => {
         failArrows[i].style.transition = 'opacity 0.4s ease';
         failArrows[i].style.opacity = '1';
       }, 1200 + i * 800);
 
-      setTimeout(() => {
+      aT(() => {
         failNodes[i].style.transition = 'opacity 0.5s ease';
         failNodes[i].style.opacity = '1';
       }, 1500 + i * 800);
     }
 
     // OWASP label last
-    setTimeout(() => {
+    aT(() => {
       failLabel.style.transition = 'opacity 0.8s ease';
       failLabel.style.opacity = '1';
     }, 4200);
@@ -1047,50 +1054,50 @@ sectionAnimators['sec2'] = function() {
   requestAnimationFrame(() => {
     // Files appear one by one
     files.forEach((f, i) => {
-      setTimeout(() => {
+      aT(() => {
         f.style.transition = 'opacity 0.5s ease';
         f.style.opacity = '1';
       }, 200 + i * 300);
     });
 
     // Arrow to ingestion
-    setTimeout(() => {
+    aT(() => {
       arrows[0].style.transition = 'opacity 0.4s ease';
       arrows[0].style.opacity = '1';
     }, 1200);
 
     // Ingestion box
-    setTimeout(() => {
+    aT(() => {
       ingest.style.transition = 'opacity 0.5s ease';
       ingest.style.opacity = '1';
     }, 1500);
 
     // Arrow to database
-    setTimeout(() => {
+    aT(() => {
       arrows[1].style.transition = 'opacity 0.4s ease';
       arrows[1].style.opacity = '1';
     }, 2000);
 
     // Database cylinder
-    setTimeout(() => {
+    aT(() => {
       db.style.transition = 'opacity 0.6s ease';
       db.style.opacity = '1';
     }, 2300);
 
     // Arrow to results
-    setTimeout(() => {
+    aT(() => {
       arrows[2].style.transition = 'opacity 0.4s ease';
       arrows[2].style.opacity = '1';
     }, 2800);
 
     // Results panel
-    setTimeout(() => {
+    aT(() => {
       results.style.transition = 'opacity 0.5s ease';
       results.style.opacity = '1';
     }, 3100);
 
     // Labels
-    setTimeout(() => {
+    aT(() => {
       labels.style.transition = 'opacity 0.6s ease';
       labels.style.opacity = '1';
     }, 3600);
@@ -1112,14 +1119,14 @@ sectionAnimators['sec3'] = function() {
 
   requestAnimationFrame(() => {
     // Title
-    setTimeout(() => {
+    aT(() => {
       title.style.transition = 'opacity 0.5s ease';
       title.style.opacity = '1';
     }, 100);
 
     // Nodes appear
     nodes.forEach((n, i) => {
-      setTimeout(() => {
+      aT(() => {
         n.style.transition = 'opacity 0.5s ease';
         n.style.opacity = '1';
       }, 400 + i * 400);
@@ -1127,20 +1134,20 @@ sectionAnimators['sec3'] = function() {
 
     // Arrows
     triadArrows.forEach((a, i) => {
-      setTimeout(() => {
+      aT(() => {
         a.style.transition = 'opacity 0.5s ease';
         a.style.opacity = '1';
       }, 1600 + i * 500);
     });
 
     // Collapse title
-    setTimeout(() => {
+    aT(() => {
       collapseTitle.style.transition = 'opacity 0.5s ease';
       collapseTitle.style.opacity = '1';
     }, 3000);
 
     // Collapsed version
-    setTimeout(() => {
+    aT(() => {
       collapse.style.transition = 'opacity 0.6s ease';
       collapse.style.opacity = '1';
     }, 3400);
@@ -1160,21 +1167,21 @@ sectionAnimators['sec4'] = function() {
 
   requestAnimationFrame(() => {
     // Background frame
-    setTimeout(() => {
+    aT(() => {
       bg.style.transition = 'opacity 0.4s ease';
       bg.style.opacity = '1';
     }, 100);
 
     // Levels light up one by one
     levels.forEach((l, i) => {
-      setTimeout(() => {
+      aT(() => {
         l.style.transition = 'opacity 0.4s ease';
         l.style.opacity = '1';
       }, 300 + i * 400);
     });
 
     // Annotation
-    setTimeout(() => {
+    aT(() => {
       annotation.style.transition = 'opacity 0.6s ease';
       annotation.style.opacity = '1';
     }, 300 + levels.length * 400 + 300);
@@ -1198,21 +1205,21 @@ sectionAnimators['sec5'] = function() {
 
   requestAnimationFrame(() => {
     // Base platform
-    setTimeout(() => {
+    aT(() => {
       base.style.transition = 'opacity 0.4s ease';
       base.style.opacity = '1';
     }, 100);
 
     // All three pillars appear
     pillars.forEach((p, i) => {
-      setTimeout(() => {
+      aT(() => {
         p.style.transition = 'opacity 0.5s ease';
         p.style.opacity = '1';
       }, 300 + i * 300);
     });
 
     // Failure mode 1: fade memory pillar, show failure label
-    setTimeout(() => {
+    aT(() => {
       pillars[0].style.transition = 'opacity 0.6s ease';
       pillars[0].style.opacity = '0.2';
       failures[0].style.transition = 'opacity 0.5s ease';
@@ -1220,14 +1227,14 @@ sectionAnimators['sec5'] = function() {
     }, 1800);
 
     // Reset 1, show failure 2
-    setTimeout(() => {
+    aT(() => {
       pillars[0].style.transition = 'opacity 0.4s ease';
       pillars[0].style.opacity = '1';
       failures[0].style.transition = 'opacity 0.3s ease';
       failures[0].style.opacity = '0';
     }, 3400);
 
-    setTimeout(() => {
+    aT(() => {
       pillars[1].style.transition = 'opacity 0.6s ease';
       pillars[1].style.opacity = '0.2';
       failures[1].style.transition = 'opacity 0.5s ease';
@@ -1235,14 +1242,14 @@ sectionAnimators['sec5'] = function() {
     }, 3800);
 
     // Reset 2, show failure 3
-    setTimeout(() => {
+    aT(() => {
       pillars[1].style.transition = 'opacity 0.4s ease';
       pillars[1].style.opacity = '1';
       failures[1].style.transition = 'opacity 0.3s ease';
       failures[1].style.opacity = '0';
     }, 5400);
 
-    setTimeout(() => {
+    aT(() => {
       pillars[2].style.transition = 'opacity 0.6s ease';
       pillars[2].style.opacity = '0.2';
       failures[2].style.transition = 'opacity 0.5s ease';
@@ -1250,14 +1257,14 @@ sectionAnimators['sec5'] = function() {
     }, 5800);
 
     // Reset 3, restore all, show synthesis
-    setTimeout(() => {
+    aT(() => {
       pillars[2].style.transition = 'opacity 0.4s ease';
       pillars[2].style.opacity = '1';
       failures[2].style.transition = 'opacity 0.3s ease';
       failures[2].style.opacity = '0';
     }, 7400);
 
-    setTimeout(() => {
+    aT(() => {
       synthesis.style.transition = 'opacity 0.6s ease';
       synthesis.style.opacity = '1';
     }, 7800);
@@ -1282,13 +1289,13 @@ sectionAnimators['sec6'] = function() {
 
   requestAnimationFrame(() => {
     // Axes
-    setTimeout(() => {
+    aT(() => {
       axes.style.transition = 'opacity 0.5s ease';
       axes.style.opacity = '1';
     }, 100);
 
     // Counter box
-    setTimeout(() => {
+    aT(() => {
       counter.style.transition = 'opacity 0.4s ease';
       counter.style.opacity = '1';
     }, 400);
@@ -1296,7 +1303,7 @@ sectionAnimators['sec6'] = function() {
     // Dots appear one by one with counter updating
     const corrections = [1,2,3,5,6,8,10,11,13,15,16,18,19,20,21,22,24];
     dots.forEach((d, i) => {
-      setTimeout(() => {
+      aT(() => {
         d.style.transition = 'opacity 0.3s ease';
         d.style.opacity = '1';
         if (counterValue) counterValue.textContent = corrections[i];
@@ -1304,7 +1311,7 @@ sectionAnimators['sec6'] = function() {
     });
 
     // Curve appears
-    setTimeout(() => {
+    aT(() => {
       area.style.transition = 'opacity 0.8s ease';
       area.style.opacity = '1';
       line.style.transition = 'opacity 0.8s ease';
@@ -1312,7 +1319,7 @@ sectionAnimators['sec6'] = function() {
     }, 600 + dots.length * 180 + 200);
 
     // Stats panel
-    setTimeout(() => {
+    aT(() => {
       stats.style.transition = 'opacity 0.6s ease';
       stats.style.opacity = '1';
     }, 600 + dots.length * 180 + 800);
@@ -1332,37 +1339,37 @@ sectionAnimators['sec7'] = function() {
 
   requestAnimationFrame(() => {
     // Tier 1 (bottom)
-    setTimeout(() => {
+    aT(() => {
       tiers[0].style.transition = 'opacity 0.5s ease';
       tiers[0].style.opacity = '1';
     }, 200);
 
     // Start here indicator
-    setTimeout(() => {
+    aT(() => {
       start.style.transition = 'opacity 0.4s ease';
       start.style.opacity = '1';
     }, 500);
 
     // Arrow 1
-    setTimeout(() => {
+    aT(() => {
       buildArrows[0].style.transition = 'opacity 0.4s ease';
       buildArrows[0].style.opacity = '1';
     }, 900);
 
     // Tier 2 (middle)
-    setTimeout(() => {
+    aT(() => {
       tiers[1].style.transition = 'opacity 0.5s ease';
       tiers[1].style.opacity = '1';
     }, 1200);
 
     // Arrow 2
-    setTimeout(() => {
+    aT(() => {
       buildArrows[1].style.transition = 'opacity 0.4s ease';
       buildArrows[1].style.opacity = '1';
     }, 1700);
 
     // Tier 3 (top)
-    setTimeout(() => {
+    aT(() => {
       tiers[2].style.transition = 'opacity 0.5s ease';
       tiers[2].style.opacity = '1';
     }, 2000);
