@@ -108,6 +108,17 @@ p { margin-bottom: 1rem; }
 
 .feature-callout p:last-child { margin-bottom: 0; }
 
+.copilot-mark {
+  float: right;
+  width: 132px;
+  height: 132px;
+  margin: 0.1rem 0 0.6rem 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .copilot-mark { width: 92px; height: 92px; margin-left: 0.9rem; }
+}
+
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -572,6 +583,35 @@ code {
 <p><strong>Why 10:</strong> Hands-on AI training fails at scale. When someone is stuck on a configuration problem or a workflow that isn't clicking, they need the instructor's attention <em>now</em>, not after 49 other people. The exercises are the point; the class size protects them.</p>
 
 <div class="feature-callout">
+<svg class="copilot-mark" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Argus Presenter emblem">
+  <style>
+    @keyframes ttEyeFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    @keyframes ttRing { 0%,100% { opacity: 0.12; } 50% { opacity: 0.3; } }
+    @media (prefers-reduced-motion: reduce) { .copilot-mark * { animation: none !important; } }
+  </style>
+  <defs>
+    <radialGradient id="ttGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="url(#ttGlow)"/>
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#00e5ff" stroke-width="0.7" stroke-dasharray="10,7" style="animation:ttRing 4s infinite"/>
+  <circle cx="100" cy="100" r="58" fill="none" stroke="#00e5ff" stroke-width="0.5" stroke-dasharray="6,5" style="animation:ttRing 3s infinite 1s"/>
+  <!-- Outer group positions; inner group floats (CSS transform overrides the SVG transform attr). -->
+  <g transform="translate(100,100) scale(0.82)">
+   <g style="animation:ttEyeFloat 6s ease-in-out infinite">
+    <path d="M-55,0 Q0,-40 55,0 Q0,40 -55,0Z" fill="none" stroke="#00e5ff" stroke-width="2.4" opacity="0.85"/>
+    <circle cx="0" cy="0" r="18" fill="none" stroke="#00e5ff" stroke-width="1.6" opacity="0.6"/>
+    <circle cx="0" cy="0" r="8" fill="#00e5ff" opacity="0.35">
+      <animate attributeName="r" values="8;10;8" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.35;0.55;0.35" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="0" r="3" fill="#00e5ff" opacity="0.85"/>
+    <circle cx="5" cy="-5" r="2" fill="#fff" opacity="0.6"/>
+   </g>
+  </g>
+</svg>
 <div class="feature-callout-title">Every participant gets a live AI copilot</div>
 <p>This program doesn't just teach AI-assisted engineering &mdash; it runs on it. Alongside the instructor, each participant works with a dedicated AI assistant for real-time, one-to-one coaching. The routine "why isn't this working?" moments get unblocked instantly, so the instructor's attention goes where it matters most &mdash; the hard problems. It's the same workflow the course teaches, demonstrated in the room. <em>A signature feature of the program, tailored per cohort.</em></p>
 </div>
