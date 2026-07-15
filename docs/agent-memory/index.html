@@ -118,6 +118,26 @@ li { margin-bottom: 0.4rem; }
 .abstract { background: var(--card); border: 1px solid #334155; border-left: 3px solid var(--golden); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0 2rem; }
 .abstract p { margin-bottom: 0.6rem; }
 .abstract p:last-child { margin-bottom: 0; }
+.toc { background: var(--card); border: 1px solid #334155; border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0 2rem; }
+.toc-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.6rem; }
+.toc ol { margin: 0 0 0 1.2rem; }
+.toc li { margin-bottom: 0.35rem; }
+.toc-controls { margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #334155; }
+.toc-btn { background: transparent; color: var(--muted); border: 1px solid #334155; border-radius: 6px; padding: 0.3rem 0.8rem; font-size: 0.8rem; cursor: pointer; font-family: inherit; }
+.toc-btn:hover { color: var(--heading); border-color: var(--blue); }
+details.acc { border-bottom: 1px solid #334155; }
+details.acc:first-of-type { border-top: 1px solid #334155; }
+details.acc > summary { list-style: none; cursor: pointer; padding: 1.15rem 0; display: flex; align-items: baseline; gap: 0.65rem; }
+details.acc > summary::-webkit-details-marker { display: none; }
+.acc-chevron { color: var(--muted); transition: transform 0.2s ease; font-size: 0.9rem; align-self: center; }
+details.acc[open] > summary .acc-chevron { transform: rotate(90deg); }
+.acc-title { color: var(--heading); font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
+details.acc > summary:hover .acc-title { color: var(--blue); }
+.acc-teaser { color: var(--muted); font-size: 0.85rem; font-weight: 400; margin-left: auto; text-align: right; }
+.acc-body { padding: 0.25rem 0 1.5rem; }
+.acc-body h3 { margin-top: 1.25rem; }
+@media (max-width: 640px) { .acc-teaser { display: none; } }
+@media (prefers-reduced-motion: reduce) { .acc-chevron { transition: none; } }
 </style>
 </head>
 <body>
@@ -145,8 +165,24 @@ li { margin-bottom: 0.4rem; }
 <div class="svg-caption">Remove any one leg and the structure doesn't get worse — it falls.</div>
 </div>
 
+<nav class="toc" aria-label="Contents">
+<div class="toc-title">Contents · click a section to open it</div>
+<ol>
+<li><a href="#sec-pillars">An agent needs three things</a></li>
+<li><a href="#sec-seven">Memory is seven systems, not one</a></li>
+<li><a href="#sec-gov">The third pillar: governance</a></li>
+<li><a href="#sec-breaks">What breaks — F1–F6</a></li>
+<li><a href="#sec-principles">The principles, on one page</a></li>
+<li><a href="#sec-security">The same discipline, in security terms</a></li>
+<li><a href="#sec-close">Back to the three pillars</a></li>
+</ol>
+<div class="toc-controls"><button class="toc-btn" id="expand-all" type="button">Expand all</button></div>
+</nav>
+
 <!-- ===================== INTRO ===================== -->
-<div class="section">
+<details class="acc" id="sec-pillars">
+<summary><span class="acc-chevron">▸</span><span class="acc-title">An agent needs three things</span><span class="acc-teaser">intelligence · memory · governance</span></summary>
+<div class="acc-body">
 <p>Start with the architecture, because the failures only make sense against it. An effective agent rests on <strong>three</strong> co-equal foundations:</p>
 <ul>
 <li><strong style="color:var(--blue)">Intelligence</strong> — the model. What it can reason about.</li>
@@ -155,10 +191,12 @@ li { margin-bottom: 0.4rem; }
 </ul>
 <p>Leave out the third and you don't get a slightly worse agent; you get one that remembers its way into trouble faster. Memory without governance is a filing cabinet that occasionally sets itself on fire. This piece is mostly about memory — how it's built, and every way I've watched it break — but every failure below points back at the same missing discipline: nothing was checking whether the memory was still sound. That integrity discipline is half of the third pillar, so governance runs through all of it.</p>
 </div>
+</details>
 
 <!-- ===================== SEVEN SYSTEMS ===================== -->
-<div class="section">
-<h2>Memory is seven systems, not one</h2>
+<details class="acc" id="sec-seven">
+<summary><span class="acc-chevron">▸</span><span class="acc-title">Memory is seven systems, not one</span><span class="acc-teaser">the vector-DB myth + the seven</span></summary>
+<div class="acc-body">
 <p>Ask most engineers how to give an agent memory and you'll hear "use a vector database." Vector search is one useful retrieval mechanism. It is not memory. Memory is at least seven distinct systems, each solving a different problem, and in a running agent they look like this:</p>
 
 <div class="svg-container">
@@ -210,10 +248,12 @@ li { margin-bottom: 0.4rem; }
 <div class="svg-caption">The derived caches blink out and come back — rebuilt from the food. Lose them and you lose speed, not knowledge.</div>
 </div>
 </div>
+</details>
 
 <!-- ===================== GOVERNANCE ===================== -->
-<div class="section">
-<h2>The third pillar: governance</h2>
+<details class="acc" id="sec-gov">
+<summary><span class="acc-chevron">▸</span><span class="acc-title">The third pillar: governance</span><span class="acc-teaser">integrity · conduct · compartmentation</span></summary>
+<div class="acc-body">
 <p>Watch what happens when people list "procedural memory" and give examples like <em>require human approval before a financial transaction</em> or <em>validate generated SQL before running it</em>. Those aren't a kind of memory. That's governance, misfiled. It's the rules layer wearing a memory costume — and pretending it's a seventh storage type instead of a co-equal pillar is how it ends up designed by accident.</p>
 <p>Governance has two faces:</p>
 <ul>
@@ -226,10 +266,12 @@ li { margin-bottom: 0.4rem; }
 <p>That point deserves its own paragraph. <strong>Not every memory should be visible to every query.</strong> This system segregates restricted records into compartments reachable only through redacted views — and the boundary is honored at <em>every</em> copy of the data: the database, the retrieval layer, and the full-text search index, not just the top-level API. Most agent memory stores everything at a single trust level, which means the day anything leaks, <em>everything</em> leaks. (Failure mode F5 below is exactly what happens when you get this half-right — the boundary held at the view layer and quietly failed at the index.)</p>
 <p>Why call governance a pillar rather than a feature? Because whatever you leave unnamed, you leave half-built. This system had the conduct side — Dignity Net — in place early. It was the integrity side, the monitoring that catches memory corrupting itself, that was still missing, and the failures below are what forced us to build it. Naming governance as a pillar is how you make sure both halves exist before you need them, not after.</p>
 </div>
+</details>
 
 <!-- ===================== WHAT BREAKS ===================== -->
-<div class="section">
-<h2>What breaks</h2>
+<details class="acc" id="sec-breaks">
+<summary><span class="acc-chevron">▸</span><span class="acc-title">What breaks</span><span class="acc-teaser">six failure modes, F1–F6</span></summary>
+<div class="acc-body">
 <p>Here are the six, in the order they taught their lessons. Each card below — <strong>F1</strong> through <strong>F6</strong>, marked in red — gives the mechanism, the root cause, why it stayed hidden, and the principle that came out of it.</p>
 
 <div class="fail">
@@ -326,10 +368,12 @@ li { margin-bottom: 0.4rem; }
 <div class="svg-caption">Governance made visible: the breaker trips before the damage lands.</div>
 </div>
 </div>
+</details>
 
 <!-- ===================== PRINCIPLES ===================== -->
-<div class="section">
-<h2>The principles, on one page</h2>
+<details class="acc" id="sec-principles">
+<summary><span class="acc-chevron">▸</span><span class="acc-title">The principles, on one page</span><span class="acc-teaser">eight rules</span></summary>
+<div class="acc-body">
 <ul class="pull">
 <li>Derived is a cache, never food. If you can't rebuild it from source, it <em>is</em> source.</li>
 <li>Archival is a state, not a move. Removing from the read path is deletion.</li>
@@ -341,10 +385,12 @@ li { margin-bottom: 0.4rem; }
 <li>You can't fix a plumbing bug with a prompt. Upkeep belongs in the harness.</li>
 </ul>
 </div>
+</details>
 
 <!-- ===================== SECURITY LENS ===================== -->
-<div class="section">
-<h2>The same discipline, in security terms</h2>
+<details class="acc" id="sec-security">
+<summary><span class="acc-chevron">▸</span><span class="acc-title">The same discipline, in security terms</span><span class="acc-teaser">Schneier's standards, applied</span></summary>
+<div class="acc-body">
 <p>None of this is exotic. Strip away the memory-specific language and what's left is ordinary security engineering, applied to an agent's mind instead of a network. Red-team the design with a working security engineer's checklist and most of the controls already have names:</p>
 <ul class="pull">
 <li><strong>Security is a process, not a product.</strong> Integrity isn't a state you reach at build time; it's re-checked on every rebuild by the damage meter and circuit breaker. The process <em>is</em> the product. (F6)</li>
@@ -357,13 +403,16 @@ li { margin-bottom: 0.4rem; }
 </ul>
 <p>Three of those phrasings — process-not-product, complexity-is-the-enemy, and data-as-toxic-asset — are <a href="https://www.schneier.com/">Schneier's</a>; the rest are standard practice. A real red-team wouldn't stop at the wins, though. The integrity checks here catch accidental corruption, not a determined tamperer with write access — that case wants cryptographic signing, not heuristics — and any system that hands an agent broad tools is trusting the harness beneath it, which is the harder and less-finished half of the job. The honest claim isn't that this memory is secure. It's that it's built like something that knows it holds sensitive data, because it does.</p>
 </div>
+</details>
 
 <!-- ===================== CLOSE ===================== -->
-<div class="section">
-<h2>Back to the three pillars</h2>
+<details class="acc" id="sec-close">
+<summary><span class="acc-chevron">▸</span><span class="acc-title">Back to the three pillars</span><span class="acc-teaser">the payoff</span></summary>
+<div class="acc-body">
 <p>Every failure above is a memory failure that was really a governance failure — an integrity check that didn't exist, a boundary the index didn't honor, a success that was never verified. That's why I don't think memory is half of an effective agent. Intelligence is one third. Memory is one third. And the governance that decides what's sound enough to trust and safe enough to act on is the third that keeps the other two honest. Leave it out and the other two will, eventually and silently, lie to you.</p>
 <div class="callout">Companion piece: <a href="../ai-governance/">Governing Your AI</a> — the same three-layer idea from the build side, with a practical path from fifteen minutes to a full system.</div>
 </div>
+</details>
 
 <div class="footnotes">
 <p><strong>Changelog.</strong> 2026-07-15 — Initial publication. Seven memory systems, six failure modes (F1–F6), and a security-principles read. Living document; new failure modes appended as they're found.</p>
@@ -372,6 +421,23 @@ li { margin-bottom: 0.4rem; }
 
 </div>
 
+<script>
+(function(){
+  var accs = Array.prototype.slice.call(document.querySelectorAll('details.acc'));
+  document.querySelectorAll('.toc a').forEach(function(a){
+    a.addEventListener('click', function(){
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && t.tagName === 'DETAILS') t.open = true;
+    });
+  });
+  var btn = document.getElementById('expand-all');
+  if (btn) btn.addEventListener('click', function(){
+    var anyClosed = accs.some(function(d){ return !d.open; });
+    accs.forEach(function(d){ d.open = anyClosed; });
+    btn.textContent = anyClosed ? 'Collapse all' : 'Expand all';
+  });
+})();
+</script>
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 <script>
 // Section reveal on scroll (matches web-annex house pattern; disabled under reduced-motion via CSS)
