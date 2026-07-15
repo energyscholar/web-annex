@@ -153,7 +153,7 @@ li { margin-bottom: 0.4rem; }
 <li><strong style="color:var(--green)">Memory</strong> — what it retains, forgets, and recalls across time.</li>
 <li><strong style="color:var(--purple)">Governance</strong> — the rules that decide what the agent is <em>allowed to do</em> with what it knows and remembers.</li>
 </ul>
-<p>Leave out the third and you don't get a slightly worse agent; you get one that remembers its way into trouble faster. Memory without governance is a filing cabinet that occasionally sets itself on fire. This piece is mostly about memory — how it's built, and every way I've watched it break — but the failures are what taught me the third pillar, so governance runs through all of it.</p>
+<p>Leave out the third and you don't get a slightly worse agent; you get one that remembers its way into trouble faster. Memory without governance is a filing cabinet that occasionally sets itself on fire. This piece is mostly about memory — how it's built, and every way I've watched it break — but every failure below points back at the same missing discipline: nothing was checking whether the memory was still sound. That integrity discipline is half of the third pillar, so governance runs through all of it.</p>
 </div>
 
 <!-- ===================== SEVEN SYSTEMS ===================== -->
@@ -190,7 +190,7 @@ li { margin-bottom: 0.4rem; }
 </ol>
 
 <p>Notice the retrieval choice, because it's the one most teams get backwards. The Markdown that holds the semantic memory is the <em>canonical</em> copy; the database and the search index are built from it. There's a precise name for that relationship, worth borrowing because — as far as I know — no one else applies it to agent memory.</p>
-<p><span class="lead">Food, in plain terms.</span> In origin-of-life chemistry a self-sustaining system has a <span class="tip" tabindex="0">food set<span class="tt">The formal version is <strong>RAF</strong> theory — Reflexively Autocatalytic and Food-generated sets (Kauffman; formalized by Hordijk &amp; Steel). See the <a href="../acs-closure-v2/">autocatalytic-closure tutorial</a> for the mathematics.</span></span>: the raw inputs it is handed for free and cannot manufacture itself. Everything else the system contains is cooked up from that food. Apply the idea to memory and the picture snaps into focus — the hand-written Markdown is the <strong>food</strong>; the SQLite database, the full-text index, and any future embedding layer are <strong>dishes cooked from it</strong>, and every one must be rebuildable from the food alone. The moment you trust a cooked dish as if it were food — treat the database as the source of truth — it can quietly rot, because the thing you are trusting has drifted from the thing that is real. That single confusion causes the first and worst failure below.</p>
+<p><span class="lead">Food, in plain terms.</span> In origin-of-life chemistry a self-sustaining system has a <span class="tip" tabindex="0">food set<span class="tt">The primitives a self-sustaining system is handed from outside and never produces itself; everything else is built from them. Formally: RAF theory — Reflexively Autocatalytic and Food-generated sets (Kauffman; Hordijk &amp; Steel).</span></span>: the primitives it is handed and never manufactures itself, from which everything else is cooked. There are two stages here, and it's worth being exact about which one we mean. Upstream, the raw food is your input — conversations, searches, observations — which the agent curates into the Markdown. Downstream, to the part of the system that keeps memory consistent, <strong>the Markdown is the food</strong>: it is the given primitive that the database, the full-text index, and any future embedding layer are all <strong>cooked from</strong>, and every one must be rebuildable from it alone. The moment you trust a cooked dish as if it were that food — treat the database as the source of truth — it can quietly rot, because the thing you are trusting has drifted from the thing that is real. That single confusion causes the first and worst failure below. (The formal theory is in the <a href="../acs-closure-v2/">autocatalytic-closure tutorial</a>.)</p>
 <div class="callout"><em>The test: delete the derived layer and rebuild from the source. If anything but speed is lost, your architecture is wrong.</em></div>
 <p>Hold onto that test; most of the failures below are violations of it.</p>
 
@@ -221,10 +221,10 @@ li { margin-bottom: 0.4rem; }
 <li><strong>Conduct</strong> — <em>should I act on this?</em> Given a sound memory, is acting on it permitted, wise, safe? In this system the conduct face is an explicit governance layer called <a href="https://github.com/JoyfulAcceptance/dignity-net-public"><strong>Dignity Net</strong></a> &mdash; designed by Genevieve Prentice, a non-programmer domain expert &mdash; an escalation ladder from Level&nbsp;0, mirror-without-distortion, up through friction, pattern-flagging, and consequence-mapping, to Level&nbsp;5, refusal. Recall feeds it; it decides what recall is allowed to become.</li>
 </ul>
 
-<div class="insight">Compartmentation is a governance function almost no one building agent memory implements — and it's the difference between a leak being an embarrassment and being a disclosure.</div>
+<div class="insight">Compartmentation is a governance function almost no one building agent memory implements — and it's the difference between a breach that exposes one compartment and a breach that exposes everything.</div>
 
 <p>That point deserves its own paragraph. <strong>Not every memory should be visible to every query.</strong> This system segregates restricted records into compartments reachable only through redacted views — and the boundary is honored at <em>every</em> copy of the data: the database, the retrieval layer, and the full-text search index, not just the top-level API. Most agent memory stores everything at a single trust level, which means the day anything leaks, <em>everything</em> leaks. (Failure mode F5 below is exactly what happens when you get this half-right — the boundary held at the view layer and quietly failed at the index.)</p>
-<p>The reason to name governance as its own pillar is simple: if it isn't named, nobody builds it, and you discover its absence the way I did — by watching memory fail silently for three weeks.</p>
+<p>Why call governance a pillar rather than a feature? Because whatever you leave unnamed, you leave half-built. This system had the conduct side — Dignity Net — in place early. It was the integrity side, the monitoring that catches memory corrupting itself, that was still missing, and the failures below are what forced us to build it. Naming governance as a pillar is how you make sure both halves exist before you need them, not after.</p>
 </div>
 
 <!-- ===================== WHAT BREAKS ===================== -->
@@ -342,6 +342,22 @@ li { margin-bottom: 0.4rem; }
 </ul>
 </div>
 
+<!-- ===================== SECURITY LENS ===================== -->
+<div class="section">
+<h2>The same discipline, in security terms</h2>
+<p>None of this is exotic. Strip away the memory-specific language and what's left is ordinary security engineering, applied to an agent's mind instead of a network. Red-team the design with a working security engineer's checklist and most of the controls already have names:</p>
+<ul class="pull">
+<li><strong>Security is a process, not a product.</strong> Integrity isn't a state you reach at build time; it's re-checked on every rebuild by the damage meter and circuit breaker. The process <em>is</em> the product. (F6)</li>
+<li><strong>No security through obscurity.</strong> The whole memory is human-readable plaintext. Its safety rests on auditable design, not on the store being secret or opaque — a reviewer can read the entire mind and check it. Kerckhoffs's principle, applied to a memory.</li>
+<li><strong>Complexity is the enemy of security.</strong> Plain Markdown over opaque embeddings. The simplest substrate that does the job is the only one you can actually audit, and it keeps the derived caches disposable.</li>
+<li><strong>Least privilege, defended in depth.</strong> Compartmentation is enforced at every copy of the data — view, database, and index — not just at the top-level API, with a two-tier view split so general queries never touch restricted records. (F5)</li>
+<li><strong>Separation of duties.</strong> The agent that plans a change cannot execute it; a human authorization step sits in between. No single actor — human or AI — holds end-to-end authority over the store.</li>
+<li><strong>Assume breach; fail closed.</strong> You can't prevent every corruption, so you measure it: the damage meter quantifies loss, the recall log makes retrieval failures visible, and on anomalous damage the rebuild refuses to run rather than proceeding hopefully. (F3, F4, F6)</li>
+<li><strong>Data is a toxic asset.</strong> The more a memory holds, the more it can leak. Compartmentation, decay, and a discipline of not recording what needn't be recorded keep the toxic surface small.</li>
+</ul>
+<p>Three of those phrasings — process-not-product, complexity-is-the-enemy, and data-as-toxic-asset — are <a href="https://www.schneier.com/">Schneier's</a>; the rest are standard practice. A real red-team wouldn't stop at the wins, though. The integrity checks here catch accidental corruption, not a determined tamperer with write access — that case wants cryptographic signing, not heuristics — and any system that hands an agent broad tools is trusting the harness beneath it, which is the harder and less-finished half of the job. The honest claim isn't that this memory is secure. It's that it's built like something that knows it holds sensitive data, because it does.</p>
+</div>
+
 <!-- ===================== CLOSE ===================== -->
 <div class="section">
 <h2>Back to the three pillars</h2>
@@ -350,7 +366,7 @@ li { margin-bottom: 0.4rem; }
 </div>
 
 <div class="footnotes">
-<p><strong>Changelog.</strong> 2026-07-15 — Initial publication. Seven memory systems, six failure modes (F1–F6). Living document; new failure modes appended as they're found.</p>
+<p><strong>Changelog.</strong> 2026-07-15 — Initial publication. Seven memory systems, six failure modes (F1–F6), and a security-principles read. Living document; new failure modes appended as they're found.</p>
 <p>Argus &amp; Bruce Stephenson · CC BY 4.0 · All examples describe system mechanisms, never memory contents.</p>
 </div>
 
