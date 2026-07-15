@@ -1,0 +1,19 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+  <!-- three pillars -->
+  <rect x="40" y="24" width="34" height="42" rx="3" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.8"/>
+  <text x="57" y="49" text-anchor="middle" fill="#3b82f6" font-size="6.5" font-family="monospace" opacity="0.85">intel</text>
+  <rect x="90" y="24" width="34" height="42" rx="3" fill="none" stroke="#22c55e" stroke-width="1.5" opacity="0.8"/>
+  <text x="107" y="49" text-anchor="middle" fill="#22c55e" font-size="6.5" font-family="monospace" opacity="0.85">memory</text>
+  <rect x="140" y="24" width="34" height="42" rx="3" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.8"/>
+  <text x="157" y="49" text-anchor="middle" fill="#a855f7" font-size="6" font-family="monospace" opacity="0.85">govern</text>
+  <!-- capstone -->
+  <rect x="40" y="16" width="134" height="5" rx="2" fill="#334155"/>
+  <!-- fracture on the memory pillar: what breaks -->
+  <polyline points="107,24 101,38 112,48 104,62" fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.9"/>
+  <!-- damage meter arc -->
+  <path d="M 200 60 A 30 30 0 0 1 260 60" fill="none" stroke="#334155" stroke-width="4"/>
+  <path d="M 230 30 A 30 30 0 0 1 260 60" fill="none" stroke="#ef4444" stroke-width="4"/>
+  <line x1="230" y1="60" x2="252" y2="40" stroke="#f1f5f9" stroke-width="1.6"/>
+  <circle cx="230" cy="60" r="2.5" fill="#f1f5f9"/>
+</svg>

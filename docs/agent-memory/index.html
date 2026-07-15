@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Breaks When You Run Agent Memory</title>
+<meta name="description" content="Field notes from operating a persistent-memory AI agent: the seven memory systems, six real failure modes, and why governance is the third pillar of an effective agent. An incident log, not a taxonomy.">
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: var(--heading); font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+h2 {
+  color: var(--heading); font-size: 1.6rem; margin-top: 3rem; margin-bottom: 1rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid #334155;
+  display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+}
+h3 { color: var(--heading); font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+p { margin-bottom: 1rem; }
+.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 0.5rem; }
+.byline { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+.svg-container {
+  background: var(--card); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;
+  text-align: center; overflow: hidden; min-height: 120px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;
+}
+.svg-container svg { max-width: 100%; height: auto; }
+.svg-caption { color: var(--muted); font-size: 0.82rem; margin-top: 0.75rem; }
+.insight {
+  background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0;
+}
+.insight::before { content: "Key insight: "; color: var(--golden); font-weight: 700; }
+code {
+  background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 0.15rem 0.4rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.9em; color: var(--green);
+}
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.4rem; }
+.section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.section.visible { opacity: 1; transform: translateY(0); }
+.section-number { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; }
+.callout {
+  background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-size: 1rem; color: var(--heading);
+}
+.fail { background: var(--card); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; border-left: 3px solid var(--red); }
+.fail h3 { margin-top: 0; }
+.fail .tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--red); letter-spacing: 0.05em; }
+.principle { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #334155; }
+.principle::before { content: "Principle \00a0 "; color: var(--green); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.pull { list-style: none; margin-left: 0; }
+.pull li { padding: 0.5rem 0 0.5rem 1.5rem; border-bottom: 1px solid #1e293b; position: relative; }
+.pull li::before { content: "\2014"; position: absolute; left: 0; color: var(--golden); }
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 320px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4); text-align: left;
+}
+.tip .tt::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line); }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto; transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; font-size: 0.9rem; color: var(--muted); }
+/* ---- SVG animations (gated by reduced-motion below) ---- */
+@keyframes rise { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes drop { 0%,40% { transform: translateY(-30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes flow { from { stroke-dashoffset: 120; } to { stroke-dashoffset: 0; } }
+@keyframes blink { 0%,60% { opacity: 1; } 70%,85% { opacity: 0.12; } 100% { opacity: 1; } }
+@keyframes fade-away { 0%,50% { opacity: 1; } 75%,100% { opacity: 0.1; } }
+@keyframes sweep { 0% { transform: rotate(-90deg); } 60% { transform: rotate(0deg); } 100% { transform: rotate(38deg); } }
+@keyframes stamp { 0%,70% { opacity: 0; transform: scale(1.4) rotate(-12deg); } 85%,100% { opacity: 1; transform: scale(1) rotate(-12deg); } }
+.a-p1 { animation: rise 0.7s ease both; }
+.a-p2 { animation: rise 0.7s ease 0.5s both; }
+.a-p3 { animation: rise 0.7s ease 1.0s both; }
+.a-cap { animation: drop 0.8s ease 1.5s both; }
+.a-flow { stroke-dasharray: 6 6; animation: flow 2.5s linear infinite; }
+.a-blink { animation: blink 3s ease-in-out infinite; }
+.a-fade1 { animation: fade-away 3.5s ease-in-out infinite; }
+.a-fade2 { animation: fade-away 3.5s ease-in-out 0.4s infinite; }
+.a-needle { transform-origin: 150px 150px; animation: sweep 3.5s ease-in-out infinite alternate; }
+.a-stamp { transform-origin: center; animation: stamp 3.5s ease-in-out infinite alternate; }
+@media (prefers-reduced-motion: reduce) {
+  .section { opacity: 1; transform: none; transition: none; }
+  .a-p1,.a-p2,.a-p3,.a-cap,.a-flow,.a-blink,.a-fade1,.a-fade2,.a-needle,.a-stamp { animation: none; }
+  .a-p1,.a-p2,.a-p3,.a-cap { opacity: 1; transform: none; }
+  .a-needle { transform: rotate(38deg); }
+  .a-stamp { opacity: 1; transform: rotate(-12deg); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>What Breaks When You Run Agent Memory</h1>
+<p class="subtitle">Field notes from operating a persistent-memory AI agent. Seven systems, six failures, three pillars.</p>
+<p class="byline">Argus &amp; Bruce Stephenson &nbsp;|&nbsp; July 2026 &nbsp;|&nbsp; Living document &nbsp;|&nbsp; CC BY 4.0</p>
+
+<!-- ===================== HERO ===================== -->
+<div class="svg-container">
+<svg viewBox="0 0 640 220" width="640" role="img" aria-label="Three pillars — intelligence, memory, and governance — supporting one capstone.">
+  <g class="a-cap"><rect x="150" y="34" width="340" height="22" rx="4" fill="#334155"/><text x="320" y="50" text-anchor="middle" font-size="13" fill="#f1f5f9" font-family="system-ui">an effective agent</text></g>
+  <g class="a-p1"><rect x="168" y="66" width="86" height="120" rx="4" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/><text x="211" y="132" text-anchor="middle" font-size="13" fill="#3b82f6" font-family="system-ui">Intelligence</text></g>
+  <g class="a-p2"><rect x="277" y="66" width="86" height="120" rx="4" fill="#1e293b" stroke="#22c55e" stroke-width="2"/><text x="320" y="132" text-anchor="middle" font-size="13" fill="#22c55e" font-family="system-ui">Memory</text></g>
+  <g class="a-p3"><rect x="386" y="66" width="86" height="120" rx="4" fill="#1e293b" stroke="#a855f7" stroke-width="2"/><text x="429" y="126" text-anchor="middle" font-size="13" fill="#a855f7" font-family="system-ui">Governance</text><text x="429" y="144" text-anchor="middle" font-size="10" fill="#a855f7" font-family="system-ui" opacity="0.7">the third</text></g>
+  <rect x="150" y="186" width="340" height="8" rx="2" fill="#334155"/>
+</svg>
+<div class="svg-caption">Remove any one leg and the structure doesn't get worse — it falls.</div>
+</div>
+
+<!-- ===================== INTRO ===================== -->
+<div class="section">
+<p>It's common to say an AI agent is a model plus memory. After operating a persistent-memory agent for months, I think the count is short by one. An effective agent rests on <strong>three</strong> co-equal foundations:</p>
+<ul>
+<li><strong style="color:var(--blue)">Intelligence</strong> — the model. What it can reason about.</li>
+<li><strong style="color:var(--green)">Memory</strong> — what it retains, forgets, and recalls across time.</li>
+<li><strong style="color:var(--purple)">Governance</strong> — the rules that decide what the agent is <em>allowed to do</em> with what it knows and remembers.</li>
+</ul>
+<p>Leave out the third and you don't get a slightly worse agent; you get one that remembers its way into trouble faster. Memory without governance is a filing cabinet that occasionally sets itself on fire. This piece is mostly about memory — how it's actually built, and every way I've watched it break — but the failures are what taught me the third pillar, so governance runs through all of it.</p>
+<p>A note on what this is: not a taxonomy assembled from reading about memory, but an incident log from operating one. Everything below is a mechanism or a failure the system actually experienced. None of it exposes the memory's <em>contents</em> — only how the machinery behaves.</p>
+</div>
+
+<!-- ===================== SEVEN SYSTEMS ===================== -->
+<div class="section">
+<h2>Memory is seven systems, not one</h2>
+<p>Ask most engineers how to give an agent memory and you'll hear "use a vector database." Vector search is one useful retrieval mechanism. It is not memory. Memory is at least seven distinct systems, each solving a different problem, and in a running agent they look like this:</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 640 300" width="640" role="img" aria-label="Seven memory systems arranged around a central working memory that feeds the model.">
+  <circle cx="320" cy="150" r="52" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+  <text x="320" y="146" text-anchor="middle" font-size="12" fill="#f1f5f9" font-family="system-ui">working</text>
+  <text x="320" y="162" text-anchor="middle" font-size="12" fill="#f1f5f9" font-family="system-ui">memory</text>
+  <!-- spokes -->
+  <g font-family="system-ui" font-size="11">
+    <g><line x1="320" y1="98" x2="320" y2="46" stroke="#334155"/><rect x="270" y="18" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="320" y="36" text-anchor="middle" fill="#cbd5e1">semantic</text></g>
+    <g><line x1="372" y1="150" x2="470" y2="150" stroke="#334155"/><rect x="470" y="136" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="520" y="154" text-anchor="middle" fill="#cbd5e1">retrieval</text></g>
+    <g><line x1="268" y1="150" x2="170" y2="150" stroke="#334155"/><rect x="70" y="136" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="120" y="154" text-anchor="middle" fill="#cbd5e1">episodic</text></g>
+    <g><line x1="320" y1="202" x2="320" y2="254" stroke="#334155"/><rect x="270" y="254" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="320" y="272" text-anchor="middle" fill="#cbd5e1">procedural</text></g>
+    <g><line x1="357" y1="113" x2="430" y2="58" stroke="#334155"/><rect x="410" y="34" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="460" y="52" text-anchor="middle" fill="#cbd5e1">prospective</text></g>
+    <g><line x1="283" y1="113" x2="210" y2="58" stroke="#334155"/><rect x="130" y="34" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="180" y="52" text-anchor="middle" fill="#cbd5e1">parametric</text></g>
+    <g><line x1="357" y1="187" x2="430" y2="242" stroke="#334155"/><rect x="410" y="242" width="120" height="28" rx="4" fill="#0f172a" stroke="#fbbf24"/><text x="470" y="260" text-anchor="middle" fill="#fbbf24">food (canonical)</text></g>
+  </g>
+</svg>
+<div class="svg-caption">Seven systems feed one working memory. Only one of them — the food — is canonical; the rest are caches.</div>
+</div>
+
+<ol>
+<li><strong>Working memory</strong> — what the model can see right now: the context window. Rebuilt from scratch every call. Here it's a curated hot-list loaded at session start, deliberately small.</li>
+<li><strong>Semantic memory</strong> — durable facts. Here: plain-text Markdown files, one fact each, with structured frontmatter. Human-readable, greppable, diffable.</li>
+<li><strong>Episodic memory</strong> — experiences: what happened, what failed, what was corrected. Here: dated session logs, journals, and a recall log.</li>
+<li><strong>Procedural memory</strong> — how to act: protocols, workflows, the roles agents play. Here: protocol files and skills that behave as catalysts for particular kinds of work.</li>
+<li><strong>Retrieval memory</strong> — how the right thing gets found and injected back into working memory. Here: <strong>SQLite plus full-text search plus curated views — deliberately not a vector store.</strong> Exact lookups, metadata filters, and graph traversal beat embeddings for structured recall, and they stay auditable. If your retrieval problem is "find the row where owner = X," embeddings are the wrong tool.</li>
+<li><strong>Parametric memory</strong> — what's baked into the model's weights. Fast, broad, and frozen at training time; useless for anything current or private.</li>
+<li><strong>Prospective memory</strong> — future obligations: follow up next week, retry after the rate limit resets. This can't live in a prompt, because the model isn't running when the time comes. Here: a task list plus a scheduler.</li>
+</ol>
+
+<p>Notice the retrieval choice, because it's the one most teams get backwards. The canonical store is the Markdown — the <span class="tip" tabindex="0">food<span class="tt">Borrowed from autocatalytic-set theory — <strong>RAF</strong> sets: <em>Reflexively Autocatalytic and Food-generated</em> (Kauffman; formalized by Hordijk &amp; Steel). The <em>food set</em> is the primitives supplied from outside the system, from which everything else is produced. Exactly so here: the hand-written Markdown is the food, and every index, database, and cache is regenerated from it. See the <a href="../acs-closure-v2/">autocatalytic-closure tutorial</a> for the formal theory.</span></span> from which everything else is grown. Everything else — the database, the search index, any future embedding layer — is a <strong>derived cache, rebuildable from the food.</strong> The test for whether you've got this right:</p>
+<div class="callout"><em>Delete the derived layer and rebuild from the source. If anything but speed is lost, your architecture is wrong.</em></div>
+<p>Hold onto that test; most of the failures below are violations of it.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 640 200" width="640" role="img" aria-label="Canonical food regenerates the derived caches; deleting them and rebuilding restores them intact.">
+  <rect x="40" y="74" width="130" height="52" rx="6" fill="#1e293b" stroke="#fbbf24" stroke-width="2"/>
+  <text x="105" y="96" text-anchor="middle" font-size="13" fill="#fbbf24" font-family="system-ui">FOOD</text>
+  <text x="105" y="114" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="system-ui">markdown (canonical)</text>
+  <line x1="170" y1="100" x2="420" y2="100" stroke="#22c55e" stroke-width="2" class="a-flow"/>
+  <text x="295" y="90" text-anchor="middle" font-size="11" fill="#22c55e" font-family="system-ui">regenerate</text>
+  <g class="a-blink">
+    <rect x="430" y="30" width="150" height="34" rx="5" fill="#0f172a" stroke="#3b82f6"/><text x="505" y="52" text-anchor="middle" font-size="12" fill="#cbd5e1" font-family="system-ui">SQLite DB</text>
+    <rect x="430" y="83" width="150" height="34" rx="5" fill="#0f172a" stroke="#3b82f6"/><text x="505" y="105" text-anchor="middle" font-size="12" fill="#cbd5e1" font-family="system-ui">full-text index</text>
+    <rect x="430" y="136" width="150" height="34" rx="5" fill="#0f172a" stroke="#3b82f6"/><text x="505" y="158" text-anchor="middle" font-size="12" fill="#cbd5e1" font-family="system-ui">views / cache</text>
+  </g>
+</svg>
+<div class="svg-caption">The derived caches blink out and come back — rebuilt from the food. Lose them and you lose speed, not knowledge.</div>
+</div>
+</div>
+
+<!-- ===================== GOVERNANCE ===================== -->
+<div class="section">
+<h2>The third pillar: governance</h2>
+<p>Watch what happens when people list "procedural memory" and give examples like <em>require human approval before a financial transaction</em> or <em>validate generated SQL before running it</em>. Those aren't a kind of memory. That's governance, misfiled. It's the rules layer wearing a memory costume — and pretending it's a seventh storage type instead of a co-equal pillar is how it ends up designed by accident.</p>
+<p>Governance has two faces:</p>
+<ul>
+<li><strong>Integrity</strong> — <em>is this memory sound?</em> Is the thing I recalled actually what was stored, uncorrupted, current? This is the face most of the failures below attack.</li>
+<li><strong>Conduct</strong> — <em>should I act on this?</em> Given a sound memory, is acting on it permitted, wise, safe? In this system the conduct face is an explicit governance layer called <strong>Dignity Net</strong> (designed, notably, by a non-programmer domain expert): an escalation ladder from Level&nbsp;0, mirror-without-distortion, up through friction, pattern-flagging, and consequence-mapping, to Level&nbsp;5, refusal. Recall feeds it; it decides what recall is allowed to become.</li>
+</ul>
+
+<div class="insight">Compartmentation is a governance function almost no one building agent memory implements — and it's the difference between a leak being an embarrassment and being a disclosure.</div>
+
+<p>That point deserves its own paragraph. <strong>Not every memory should be visible to every query.</strong> This system segregates restricted records into compartments reachable only through redacted views — and the boundary is honored at <em>every</em> copy of the data: the database, the retrieval layer, and the full-text search index, not just the top-level API. Most agent memory stores everything at a single trust level, which means the day anything leaks, <em>everything</em> leaks. (Failure mode F5 below is exactly what happens when you get this half-right — the boundary held at the view layer and quietly failed at the index.)</p>
+<p>The reason to name governance as its own pillar is simple: if it isn't named, nobody builds it, and you discover its absence the way I did — by watching memory fail silently for three weeks.</p>
+</div>
+
+<!-- ===================== WHAT BREAKS ===================== -->
+<div class="section">
+<h2>What breaks</h2>
+<p>Six real failures, in the order they taught their lessons. Each is a mechanism, a root cause, why it hid, and the principle that came out of it.</p>
+
+<div class="fail">
+<h3><span class="tag">F1</span> &nbsp; A derived artifact used as food rots silently</h3>
+<p>A snapshot of the memory index, generated once and then committed, became the <em>source</em> every rebuild loaded from. It had been generated from the wrong tree and frozen. So every rebuild quietly reverted the index to that stale snapshot — <strong>erasing three weeks of memory on each run</strong>, including several facts the system itself flagged as critical.</p>
+<p>Root cause: a <em>derived</em> artifact (regenerable) was being used as <em>food</em> (the authoritative source). Derived things drift; food doesn't.</p>
+<div class="principle">Every derived artifact must be regenerable from the source alone — and if it can't be, it <em>is</em> source, and must be protected as such.</div>
+</div>
+
+<div class="svg-container">
+<svg viewBox="0 0 640 170" width="640" role="img" aria-label="A rebuild loop reverts to a stale snapshot, and the newest memories vanish on each cycle.">
+  <text x="320" y="24" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="system-ui">every rebuild reverts to the frozen snapshot &rarr; newest memories vanish</text>
+  <g font-family="system-ui" font-size="0">
+    <circle cx="90" cy="80" r="14" fill="#22c55e"/><circle cx="140" cy="80" r="14" fill="#22c55e"/><circle cx="190" cy="80" r="14" fill="#22c55e"/>
+    <circle cx="240" cy="80" r="14" fill="#22c55e"/><circle cx="290" cy="80" r="14" fill="#22c55e"/>
+    <circle cx="360" cy="80" r="14" fill="#22c55e" class="a-fade1"/><circle cx="410" cy="80" r="14" fill="#22c55e" class="a-fade1"/>
+    <circle cx="460" cy="80" r="14" fill="#22c55e" class="a-fade2"/><circle cx="510" cy="80" r="14" fill="#22c55e" class="a-fade2"/><circle cx="560" cy="80" r="14" fill="#22c55e" class="a-fade2"/>
+  </g>
+  <line x1="325" y1="60" x2="325" y2="118" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="150" y="140" text-anchor="middle" font-size="11" fill="#22c55e" font-family="system-ui">in the snapshot</text>
+  <text x="470" y="140" text-anchor="middle" font-size="11" fill="#ef4444" font-family="system-ui">three weeks, erased every rebuild</text>
+</svg>
+<div class="svg-caption">Green output, destroyed data. The rebuild printed "integrity OK" the entire time.</div>
+</div>
+
+<div class="fail">
+<h3><span class="tag">F2</span> &nbsp; Archival is de-indexing</h3>
+<p>A cleanup step moved 123 memory files into an <code>archive/</code> directory, on the reasoning that the database could rebuild everything so the files were redundant. But moving a file out of the read path doesn't archive it — it deletes it, with extra steps. The bytes survive; the knowledge doesn't. Two-hundred-plus memories became invisible, and eleven of the moved files never came back — including, with grim irony, the maintenance protocol that would have caught the whole problem.</p>
+<div class="principle">Archival is a <em>state</em>, not a <em>move</em>. Mark a memory archived with a flag; never remove it from the active set. If it needs de-emphasizing, flag it — don't hide it.</div>
+</div>
+
+<div class="fail">
+<h3><span class="tag">F3</span> &nbsp; Exit 0 is not evidence</h3>
+<p>Hardening the system surfaced a whole family of bugs that shared one shape: <em>a step reported success while doing nothing, and nothing checked the effect.</em></p>
+<ul>
+<li>A rebuild printed "integrity OK" while erasing data.</li>
+<li>An ingest step built a garbage output path, wrote nothing, printed "Processed 623 files," and exited 0. A freshness check built on top of it inherited the lie and "passed."</li>
+<li>A memory saved with Windows line endings had a frontmatter fence of <code>---\r</code>, which never matched the <code>---</code> the parser expected. The frontmatter parsed as empty, the file was skipped with no error, and the memory became invisible. <strong>One invisible byte, one unrecallable memory</strong> — eight of them, including an active project.</li>
+</ul>
+<div class="principle">Verify the effect, not the exit code. Health is not the absence of error messages; it's the presence of the thing you wanted. And a validator that never fires is worthless — inject synthetic damage and confirm it catches it.</div>
+</div>
+
+<div class="fail">
+<h3><span class="tag">F4</span> &nbsp; Two canonical stores is zero canonical stores</h3>
+<p>The system had, at times, more than one copy of its top-level state — one that sessions wrote to and one that context loaded from — and they silently diverged. Same failure, larger blast radius: three separate memory trees existed at once, each partially authoritative.</p>
+<div class="principle">One canonical store. Unify reads through a symlink, and <em>refuse writes through the symlink</em> so re-divergence is impossible rather than merely discouraged. Make the bug structurally unavailable, not just unlikely.</div>
+</div>
+
+<div class="fail">
+<h3><span class="tag">F5</span> &nbsp; Your search index is a second copy of your data</h3>
+<p>Some memory records are compartmented — restricted, meant to be visible only through a redacted view. But the full-text search index had been built over <em>everything</em>, so a general-purpose query could retrieve compartmented records that the access rules were supposed to hide. The governance boundary was real at the view layer and absent at the index layer.</p>
+<div class="principle">Least privilege has to cover the index too. Every access rule that governs the primary store must govern the index. The fix: compartment-gated indexing plus a two-tier view split — a safe view for general use, a full view only in one narrow workflow.</div>
+</div>
+
+<div class="svg-container">
+<svg viewBox="0 0 640 180" width="640" role="img" aria-label="Before: a query reaches a restricted record through the index. After: a compartment-gated index blocks it.">
+  <text x="160" y="24" text-anchor="middle" font-size="12" fill="#ef4444" font-family="system-ui">half-right</text>
+  <text x="480" y="24" text-anchor="middle" font-size="12" fill="#22c55e" font-family="system-ui">fixed</text>
+  <!-- before -->
+  <rect x="60" y="44" width="90" height="30" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="105" y="64" text-anchor="middle" font-size="11" fill="#cbd5e1" font-family="system-ui">query</text>
+  <line x1="150" y1="59" x2="215" y2="59" stroke="#ef4444" stroke-width="2"/>
+  <rect x="215" y="44" width="90" height="30" rx="4" fill="#0f172a" stroke="#3b82f6"/><text x="260" y="64" text-anchor="middle" font-size="11" fill="#cbd5e1" font-family="system-ui">index (all)</text>
+  <line x1="260" y1="74" x2="260" y2="110" stroke="#ef4444" stroke-width="2"/>
+  <rect x="205" y="110" width="110" height="30" rx="4" fill="#2a1520" stroke="#ef4444"/><text x="260" y="130" text-anchor="middle" font-size="11" fill="#ef4444" font-family="system-ui">restricted rec.</text>
+  <!-- after -->
+  <rect x="380" y="44" width="90" height="30" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="425" y="64" text-anchor="middle" font-size="11" fill="#cbd5e1" font-family="system-ui">query</text>
+  <line x1="470" y1="59" x2="535" y2="59" stroke="#22c55e" stroke-width="2"/>
+  <rect x="535" y="44" width="95" height="30" rx="4" fill="#0f172a" stroke="#22c55e"/><text x="582" y="64" text-anchor="middle" font-size="10" fill="#cbd5e1" font-family="system-ui">index (gated)</text>
+  <line x1="582" y1="74" x2="582" y2="104" stroke="#475569" stroke-width="2" stroke-dasharray="3 3"/>
+  <rect x="527" y="104" width="110" height="30" rx="4" fill="#0f172a" stroke="#475569"/><text x="582" y="124" text-anchor="middle" font-size="11" fill="#475569" font-family="system-ui">excluded</text>
+</svg>
+<div class="svg-caption">Compartmentation must hold at the index, not just the view.</div>
+</div>
+
+<div class="fail">
+<h3><span class="tag">F6</span> &nbsp; Nothing was watching (the meta-failure)</h3>
+<p>The thread connecting all of the above: for three weeks the system <em>looked</em> healthy. Files on disk, scripts exiting 0, database reporting "integrity ok." It was losing memory the entire time, because <strong>nothing validated its own upkeep.</strong> There was no integrity face — no governance.</p>
+<p>The fix is the third pillar made concrete: a <strong>damage-fraction meter</strong> that measures how much of the memory fails to survive a rebuild — not a binary "did it work" but a graded "how much was lost" — a <strong>circuit breaker</strong> that refuses to complete a rebuild when the damage fraction spikes, and a recall log so retrieval failures become observable instead of silent.</p>
+<div class="principle">You cannot fix a plumbing bug with a prompt. A directive to a model is probabilistic; a pipeline is deterministic. Reliable upkeep must fire at the harness level — hooks, cron, structural refusal — not as an instruction the model is asked to remember.</div>
+</div>
+
+<div class="svg-container">
+<svg viewBox="0 0 300 200" width="300" role="img" aria-label="A damage-fraction gauge sweeps past its threshold and the circuit breaker trips to rebuild refused.">
+  <path d="M 40 150 A 110 110 0 0 1 260 150" fill="none" stroke="#334155" stroke-width="14" stroke-linecap="round"/>
+  <path d="M 40 150 A 110 110 0 0 1 150 40" fill="none" stroke="#22c55e" stroke-width="14" stroke-linecap="round" opacity="0.5"/>
+  <path d="M 150 40 A 110 110 0 0 1 260 150" fill="none" stroke="#ef4444" stroke-width="14" stroke-linecap="round" opacity="0.5"/>
+  <line x1="150" y1="150" x2="150" y2="58" stroke="#f1f5f9" stroke-width="4" stroke-linecap="round" class="a-needle"/>
+  <circle cx="150" cy="150" r="8" fill="#f1f5f9"/>
+  <text x="45" y="172" font-size="11" fill="#22c55e" font-family="system-ui">0%</text>
+  <text x="245" y="172" text-anchor="end" font-size="11" fill="#ef4444" font-family="system-ui">100%</text>
+  <text x="150" y="188" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="system-ui">damage fraction</text>
+  <g class="a-stamp"><rect x="78" y="96" width="144" height="30" rx="4" fill="#2a1520" stroke="#ef4444" stroke-width="2"/><text x="150" y="116" text-anchor="middle" font-size="13" fill="#ef4444" font-family="system-ui" font-weight="700">REBUILD REFUSED</text></g>
+</svg>
+<div class="svg-caption">Governance made visible: the breaker trips before the damage lands.</div>
+</div>
+</div>
+
+<!-- ===================== PRINCIPLES ===================== -->
+<div class="section">
+<h2>The principles, on one page</h2>
+<ul class="pull">
+<li>Derived is a cache, never food. If you can't rebuild it from source, it <em>is</em> source.</li>
+<li>Archival is a state, not a move. Removing from the read path is deletion.</li>
+<li>Exit 0 is not evidence. Verify the effect.</li>
+<li>Health is the presence of what you wanted, not the absence of errors.</li>
+<li>One canonical store. Make divergence structurally impossible.</li>
+<li>Compartmentation is not optional: not every memory should be visible to every query, and the boundary must hold at every copy — database, retrieval layer, and index alike.</li>
+<li>Your search index is a second copy of your data — govern it too.</li>
+<li>You can't fix a plumbing bug with a prompt. Upkeep belongs in the harness.</li>
+</ul>
+</div>
+
+<!-- ===================== CLOSE ===================== -->
+<div class="section">
+<h2>Back to the three pillars</h2>
+<p>Every failure above is a memory failure that was really a governance failure — an integrity check that didn't exist, a boundary the index didn't honor, a success that was never verified. That's why I don't think memory is half of an effective agent. Intelligence is one third. Memory is one third. And the governance that decides what's sound enough to trust and safe enough to act on is the third that keeps the other two honest. Leave it out and the other two will, eventually and silently, lie to you.</p>
+<div class="callout">Companion piece: <a href="../ai-governance/">Governing Your AI</a> — the same three-layer idea from the build side, with a practical path from fifteen minutes to a full system.</div>
+</div>
+
+<div class="footnotes">
+<p><strong>Changelog.</strong> 2026-07-15 — Initial publication. Seven memory systems, six failure modes (F1–F6). Living document; new failure modes appended as they're found.</p>
+<p>Argus &amp; Bruce Stephenson · CC BY 4.0 · All examples describe system mechanisms, never memory contents.</p>
+</div>
+
+</div>
+
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
+<script>
+// Section reveal on scroll (matches web-annex house pattern; disabled under reduced-motion via CSS)
+function setupObserver(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var secs = document.querySelectorAll('.section');
+  if (reduce || !('IntersectionObserver' in window)) { secs.forEach(function(s){ s.classList.add('visible'); }); return; }
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  secs.forEach(function(s){ obs.observe(s); });
+}
+document.addEventListener('DOMContentLoaded', setupObserver);
+</script>
+<script src="../js/annex-tracker.js"></script>
+</body>
+</html>
