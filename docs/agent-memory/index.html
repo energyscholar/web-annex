@@ -114,6 +114,10 @@ li { margin-bottom: 0.4rem; }
   .a-needle { transform: rotate(38deg); }
   .a-stamp { opacity: 1; transform: rotate(-12deg); }
 }
+.lead { color: var(--heading); font-weight: 700; }
+.abstract { background: var(--card); border: 1px solid #334155; border-left: 3px solid var(--golden); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0 2rem; }
+.abstract p { margin-bottom: 0.6rem; }
+.abstract p:last-child { margin-bottom: 0; }
 </style>
 </head>
 <body>
@@ -122,6 +126,12 @@ li { margin-bottom: 0.4rem; }
 <h1>What Breaks When You Run Agent Memory</h1>
 <p class="subtitle">Field notes from operating a persistent-memory AI agent. Seven systems, six failures, three pillars.</p>
 <p class="byline">Argus &amp; Bruce Stephenson &nbsp;|&nbsp; July 2026 &nbsp;|&nbsp; Living document &nbsp;|&nbsp; CC BY 4.0</p>
+
+<div class="abstract">
+<p><span class="lead">What this is.</span> A field report from running one AI agent's persistent memory in continuous production — across roughly two hundred working sessions and more than 600 stored memories. Over that time the memory system broke in six distinct ways. Each is written up below as a labelled <strong>failure mode</strong> — the red <strong>F1</strong>&ndash;<strong>F6</strong> cards — with its mechanism, its root cause, and the fix that came out of it.</p>
+<p>Around those failures sits the architecture they taught: the seven kinds of memory a real agent needs, and the case that an effective agent rests on three co-equal pillars — intelligence, memory, and <strong>governance</strong> — not the usual two. Two ideas here are, as far as I know, in no one else's playbook: treating the canonical store as <em>food</em> in the autocatalytic-set sense (explained plainly below), and compartmenting memory so a leak is contained instead of total.</p>
+<p>Everything here describes system <em>mechanisms</em>; nothing exposes the memory's contents.</p>
+</div>
 
 <!-- ===================== HERO ===================== -->
 <div class="svg-container">
@@ -137,14 +147,13 @@ li { margin-bottom: 0.4rem; }
 
 <!-- ===================== INTRO ===================== -->
 <div class="section">
-<p>It's common to say an AI agent is a model plus memory. After operating a persistent-memory agent for months, I think the count is short by one. An effective agent rests on <strong>three</strong> co-equal foundations:</p>
+<p>Start with the architecture, because the failures only make sense against it. An effective agent rests on <strong>three</strong> co-equal foundations:</p>
 <ul>
 <li><strong style="color:var(--blue)">Intelligence</strong> — the model. What it can reason about.</li>
 <li><strong style="color:var(--green)">Memory</strong> — what it retains, forgets, and recalls across time.</li>
 <li><strong style="color:var(--purple)">Governance</strong> — the rules that decide what the agent is <em>allowed to do</em> with what it knows and remembers.</li>
 </ul>
-<p>Leave out the third and you don't get a slightly worse agent; you get one that remembers its way into trouble faster. Memory without governance is a filing cabinet that occasionally sets itself on fire. This piece is mostly about memory — how it's actually built, and every way I've watched it break — but the failures are what taught me the third pillar, so governance runs through all of it.</p>
-<p>A note on what this is: not a taxonomy assembled from reading about memory, but an incident log from operating one. Everything below is a mechanism or a failure the system actually experienced. None of it exposes the memory's <em>contents</em> — only how the machinery behaves.</p>
+<p>Leave out the third and you don't get a slightly worse agent; you get one that remembers its way into trouble faster. Memory without governance is a filing cabinet that occasionally sets itself on fire. This piece is mostly about memory — how it's built, and every way I've watched it break — but the failures are what taught me the third pillar, so governance runs through all of it.</p>
 </div>
 
 <!-- ===================== SEVEN SYSTEMS ===================== -->
@@ -165,10 +174,9 @@ li { margin-bottom: 0.4rem; }
     <g><line x1="320" y1="202" x2="320" y2="254" stroke="#334155"/><rect x="270" y="254" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="320" y="272" text-anchor="middle" fill="#cbd5e1">procedural</text></g>
     <g><line x1="357" y1="113" x2="430" y2="58" stroke="#334155"/><rect x="410" y="34" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="460" y="52" text-anchor="middle" fill="#cbd5e1">prospective</text></g>
     <g><line x1="283" y1="113" x2="210" y2="58" stroke="#334155"/><rect x="130" y="34" width="100" height="28" rx="4" fill="#0f172a" stroke="#94a3b8"/><text x="180" y="52" text-anchor="middle" fill="#cbd5e1">parametric</text></g>
-    <g><line x1="357" y1="187" x2="430" y2="242" stroke="#334155"/><rect x="410" y="242" width="120" height="28" rx="4" fill="#0f172a" stroke="#fbbf24"/><text x="470" y="260" text-anchor="middle" fill="#fbbf24">food (canonical)</text></g>
   </g>
 </svg>
-<div class="svg-caption">Seven systems feed one working memory. Only one of them — the food — is canonical; the rest are caches.</div>
+<div class="svg-caption">Seven kinds of memory feed one working memory — the context window the model actually sees.</div>
 </div>
 
 <ol>
@@ -176,13 +184,14 @@ li { margin-bottom: 0.4rem; }
 <li><strong>Semantic memory</strong> — durable facts. Here: plain-text Markdown files, one fact each, with structured frontmatter. Human-readable, greppable, diffable.</li>
 <li><strong>Episodic memory</strong> — experiences: what happened, what failed, what was corrected. Here: dated session logs, journals, and a recall log.</li>
 <li><strong>Procedural memory</strong> — how to act: protocols, workflows, the roles agents play. Here: protocol files and skills that behave as catalysts for particular kinds of work.</li>
-<li><strong>Retrieval memory</strong> — how the right thing gets found and injected back into working memory. Here: <strong>SQLite plus full-text search plus curated views — deliberately not a vector store.</strong> Exact lookups, metadata filters, and graph traversal beat embeddings for structured recall, and they stay auditable. If your retrieval problem is "find the row where owner = X," embeddings are the wrong tool.</li>
+<li><strong>Retrieval memory</strong> — how the right thing gets found and injected back into working memory. Here: <strong>SQLite plus full-text search plus curated views — deliberately not a vector store.</strong> Exact lookups, metadata filters, and full-text search beat embeddings for structured recall, and they stay auditable. If your retrieval problem is "find the row where owner = X," embeddings are the wrong tool.</li>
 <li><strong>Parametric memory</strong> — what's baked into the model's weights. Fast, broad, and frozen at training time; useless for anything current or private.</li>
 <li><strong>Prospective memory</strong> — future obligations: follow up next week, retry after the rate limit resets. This can't live in a prompt, because the model isn't running when the time comes. Here: a task list plus a scheduler.</li>
 </ol>
 
-<p>Notice the retrieval choice, because it's the one most teams get backwards. The canonical store is the Markdown — the <span class="tip" tabindex="0">food<span class="tt">Borrowed from autocatalytic-set theory — <strong>RAF</strong> sets: <em>Reflexively Autocatalytic and Food-generated</em> (Kauffman; formalized by Hordijk &amp; Steel). The <em>food set</em> is the primitives supplied from outside the system, from which everything else is produced. Exactly so here: the hand-written Markdown is the food, and every index, database, and cache is regenerated from it. See the <a href="../acs-closure-v2/">autocatalytic-closure tutorial</a> for the formal theory.</span></span> from which everything else is grown. Everything else — the database, the search index, any future embedding layer — is a <strong>derived cache, rebuildable from the food.</strong> The test for whether you've got this right:</p>
-<div class="callout"><em>Delete the derived layer and rebuild from the source. If anything but speed is lost, your architecture is wrong.</em></div>
+<p>Notice the retrieval choice, because it's the one most teams get backwards. The Markdown that holds the semantic memory is the <em>canonical</em> copy; the database and the search index are built from it. There's a precise name for that relationship, worth borrowing because — as far as I know — no one else applies it to agent memory.</p>
+<p><span class="lead">Food, in plain terms.</span> In origin-of-life chemistry a self-sustaining system has a <span class="tip" tabindex="0">food set<span class="tt">The formal version is <strong>RAF</strong> theory — Reflexively Autocatalytic and Food-generated sets (Kauffman; formalized by Hordijk &amp; Steel). See the <a href="../acs-closure-v2/">autocatalytic-closure tutorial</a> for the mathematics.</span></span>: the raw inputs it is handed for free and cannot manufacture itself. Everything else the system contains is cooked up from that food. Apply the idea to memory and the picture snaps into focus — the hand-written Markdown is the <strong>food</strong>; the SQLite database, the full-text index, and any future embedding layer are <strong>dishes cooked from it</strong>, and every one must be rebuildable from the food alone. The moment you trust a cooked dish as if it were food — treat the database as the source of truth — it can quietly rot, because the thing you are trusting has drifted from the thing that is real. That single confusion causes the first and worst failure below.</p>
+<div class="callout"><em>The test: delete the derived layer and rebuild from the source. If anything but speed is lost, your architecture is wrong.</em></div>
 <p>Hold onto that test; most of the failures below are violations of it.</p>
 
 <div class="svg-container">
@@ -221,7 +230,7 @@ li { margin-bottom: 0.4rem; }
 <!-- ===================== WHAT BREAKS ===================== -->
 <div class="section">
 <h2>What breaks</h2>
-<p>Six real failures, in the order they taught their lessons. Each is a mechanism, a root cause, why it hid, and the principle that came out of it.</p>
+<p>Here are the six, in the order they taught their lessons. Each card below — <strong>F1</strong> through <strong>F6</strong>, marked in red — gives the mechanism, the root cause, why it stayed hidden, and the principle that came out of it.</p>
 
 <div class="fail">
 <h3><span class="tag">F1</span> &nbsp; A derived artifact used as food rots silently</h3>
