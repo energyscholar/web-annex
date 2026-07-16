@@ -1,0 +1,10 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#0b0e16"/>
+  <g fill="#475569"><circle cx="30" cy="20" r="1"/><circle cx="70" cy="55" r="1"/><circle cx="120" cy="15" r="0.8"/><circle cx="200" cy="60" r="1"/><circle cx="250" cy="25" r="0.8"/><circle cx="160" cy="50" r="0.8"/></g>
+  <circle cx="60" cy="10" r="4" fill="#f59e0b"/>
+  <circle cx="130" cy="45" r="13" fill="#dc2626"/><circle cx="130" cy="45" r="18" fill="#ef4444" opacity="0.25"/>
+  <circle cx="215" cy="28" r="10" fill="#7dd3fc"/>
+  <path d="M60 10 L130 45" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+  <path d="M60 10 L215 28" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+  <text x="130" y="70" text-anchor="middle" fill="#94a3b8" font-size="7" font-family="monospace">rogue worlds of the rift</text>
+</svg>
