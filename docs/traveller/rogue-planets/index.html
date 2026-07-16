@@ -169,5 +169,24 @@ const navlinks=[...document.querySelectorAll('.topnav a')];
 const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){navlinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}}),{rootMargin:'-40% 0px -55% 0px'});
 secs.forEach(s=>spy.observe(s));
 </script>
+<!--
+════════════════════════════════════════════════════════════════
+  ACCESS CODES (plaintext — PROOF-OF-CONCEPT; hide better later)
+  Playability safeguard: keys can never be lost.
+  ────────────────────────────────────────────────────────────
+  spinward-marches   → onboarding help toggle (given to all players up front)
+  cocytus-ephemeris  → A1  Cocytus (the ideal iceteroid)
+  sandoval-wreck     → A2  Scout's grave + black box
+  shepherd-1         → A3a "it's alive"
+  shepherd-2         → A3b "it's a mind"
+  shepherd-3         → A3c "its body / danger zones"
+  shepherd-4         → A3d "its capabilities"
+  belt-survey        → A4  Belt census
+  expedition-fate    → N1  Lost expedition
+  ocean-life         → N2  Life in the dark
+  access-fracture    → N4  Access fracture / refuel site
+  rogue-census       → P1  Full rogue census
+════════════════════════════════════════════════════════════════
+-->
 </body>
 </html>
