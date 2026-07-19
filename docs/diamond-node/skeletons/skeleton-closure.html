@@ -45,6 +45,15 @@
   .step-list { list-style: none; margin: 1rem 0; }
   .step-list li { padding: 0.4rem 0; font-size: 0.9rem; display: flex; gap: 0.5rem; }
   .step-list .num { color: var(--s3); font-weight: 600; min-width: 24px; }
+  /* Collapsible deep/secondary sections */
+  details.collapse { margin: 0; }
+  details.collapse > summary { font-size: 1.2rem; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1rem; cursor: pointer; list-style: none; }
+  details.collapse > summary::-webkit-details-marker { display: none; }
+  details.collapse > summary::before { content: '\25B8\00a0'; color: var(--muted); font-size: 0.85em; }
+  details.collapse[open] > summary::before { content: '\25BE\00a0'; }
+  details.collapse > summary:hover { color: var(--s3); }
+  /* "Our hypothesis" marker for unpublished program results */
+  .hyp { font-size: .72em; font-weight: 600; color: #e0a030; border: 1px solid #e0a03055; border-radius: 3px; padding: 0 4px; margin-left: 4px; white-space: nowrap; cursor: help; vertical-align: middle; }
   /* Tooltips */
   .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
   .tip .tt {
@@ -169,7 +178,7 @@
 <!-- SECTION 4: THE CARDIAC RAF -->
 <section>
   <h2>The cardiac RAF</h2>
-  <p>The heart's calcium signaling cycle is an RAF. Not metaphorically. Structurally.</p>
+  <p>Our analysis finds that the heart's calcium signaling cycle satisfies the RAF property structurally, not just as a metaphor.<span class="hyp tip" tabindex="0">&#x25C6; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus. The specific figures below (17/17 reactions, zero essential reactions) are this program's own computation on a model of the cardiac calcium cycle.</span></span></p>
 
   <div class="diagram">
     <svg viewBox="0 0 360 200" style="width:100%;max-width:360px">
@@ -212,7 +221,7 @@
     </svg>
   </div>
 
-  <p>17 out of 17 reactions in the cardiac calcium cycle are part of the RAF. <em>Zero <span class="tip" tabindex="0">essential reactions<span class="tt">Reactions whose removal would break the RAF property. Zero essential reactions means maximum robustness &mdash; the system tolerates any single failure.</span></span></em> &mdash; meaning you can remove any single reaction and the RAF property still holds. The system is maximally robust.</p>
+  <p>In our model, 17 out of 17 reactions in the cardiac calcium cycle are part of the RAF, with <em>zero <span class="tip" tabindex="0">essential reactions<span class="tt">Reactions whose removal would break the RAF property. Zero essential reactions means maximum robustness &mdash; the system tolerates any single failure.</span></span></em> &mdash; meaning you can remove any single reaction and the RAF property still holds. On this analysis the system is maximally robust.</p>
   <p>This is what makes the heart different from a machine. A car engine has essential parts &mdash; remove the spark plug and it stops. The cardiac RAF has no single essential reaction. It sustains itself through redundant closure.</p>
 </section>
 
@@ -238,22 +247,24 @@
 
 <!-- SECTION 6: THE CONVERGENCES -->
 <section>
-  <h2>Eight formalizations, six discoveries</h2>
+  <details class="collapse">
+  <summary>Eight formalizations, six discoveries</summary>
   <p>The same mathematical structure was discovered independently at least six times across four countries and fifty years:</p>
 
   <div class="timeline">
     <div class="timeline-item"><span class="timeline-year">1958</span><div><span class="timeline-who">Robert Rosen</span><br><span class="timeline-field"><span class="tip" tabindex="0">(M,R)-systems<span class="tt">Robert Rosen&rsquo;s (1958) category-theory formalization of life. M = metabolism, R = repair. Showed life is algebraic closure, not mechanism.</span></span>. Category theory formalization. USA. Showed life = algebraic closure, not mechanism.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Manfred Eigen</span><br><span class="timeline-field"><span class="tip" tabindex="0">Hypercycles<span class="tt">Manfred Eigen&rsquo;s (1971) formalization: coupled autocatalytic cycles where each cycle catalyzes the next. A precursor to RAF theory.</span></span>. Coupled autocatalytic sets. Germany. Origin of life as mutual catalysis.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Maturana &amp; Varela</span><sup><a class="fn" href="#fn3" id="fnref3">3</a></sup><br><span class="timeline-field">Autopoiesis. Self-creating networks. Chile. Defined life as self-boundary-production.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Tibor G&aacute;nti</span><br><span class="timeline-field">Chemoton. Minimal self-reproducing chemical system. Hungary. Independently of all the above.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1977</span><div><span class="timeline-who">Manfred Eigen</span><br><span class="timeline-field"><span class="tip" tabindex="0">Hypercycles<span class="tt">The hypercycle &mdash; coupled autocatalytic cycles where each cycle catalyzes the next &mdash; was named and developed by Eigen &amp; Schuster (1977&ndash;78). A precursor to RAF theory.</span></span>. Coupled autocatalytic sets. Germany. Origin of life as mutual catalysis.</span></div></div>
+    <div class="timeline-item"><span class="timeline-year">1984</span><div><span class="timeline-who">Niklas Luhmann</span><br><span class="timeline-field">Social autopoiesis. Applied to communication systems. Germany. Extended the concept beyond chemistry entirely.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1986</span><div><span class="timeline-who">Stuart Kauffman</span><sup><a class="fn" href="#fn2" id="fnref2">2</a></sup><br><span class="timeline-field">Autocatalytic sets. Random graph theory. USA. Showed closure arises spontaneously at sufficient complexity.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1994</span><div><span class="timeline-who">Fontana &amp; Buss</span><br><span class="timeline-field">&lambda;-chemistry. Functional closure in abstract chemistry. USA/Austria.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">2004+</span><div><span class="timeline-who">Hordijk &amp; Steel</span><br><span class="timeline-field">RAF theory. Rigorous graph-theoretic formalization. Netherlands/New Zealand. Made it computable.</span></div></div>
-    <div class="timeline-item"><span class="timeline-year">1984</span><div><span class="timeline-who">Niklas Luhmann</span><br><span class="timeline-field">Social autopoiesis. Applied to communication systems. Germany. Extended the concept beyond chemistry entirely.</span></div></div>
   </div>
 
   <p>Eight formalizations. Different notations, different motivations, different fields. All describe the same structural property: a network of processes that collectively produce all the catalysts they need.</p>
-  <p class="quiet">This is a FACETS-scale convergence. Just as 12 fields independently developed criticality mathematics, at least 6 independent lines of work arrived at closure mathematics. The convergence is invisible because each community uses different terminology.</p>
+  <p class="quiet">This is a <span class="tip" tabindex="0">FACETS<span class="tt">A cross-domain survey paper cataloguing how the mathematics of criticality was independently developed across roughly a dozen scientific fields (arXiv:2601.22389).</span></span>-scale convergence. Just as ~12 fields independently developed criticality mathematics, at least 6 independent lines of work arrived at closure mathematics. The convergence is invisible because each community uses different terminology.</p>
+  </details>
 </section>
 
 <!-- SECTION 7: WHY NO TRACER? -->
@@ -267,7 +278,8 @@
 
 <!-- SECTION 8: RECAP -->
 <section>
-  <h2>Recap</h2>
+  <details class="collapse">
+  <summary>Recap</summary>
   <dl class="recap-box">
     <dt>Skeleton</dt>
     <dd>Catalytic / generative closure &mdash; RAF theory, autopoiesis, (M,R)-systems. A network where every process is sustained by the network itself.</dd>
@@ -280,9 +292,10 @@
     <dt>Key insight</dt>
     <dd>Closure is what makes living systems different from machines. Machines have essential parts. Closed systems have no essential parts &mdash; the closure itself is the essential property.</dd>
     <dt>Convergence</dt>
-    <dd>8 independent formalizations across 6 discovery events, 4 countries, 50 years. Rosen, Eigen, Maturana/Varela, G&aacute;nti, Kauffman, Fontana/Buss, Hordijk/Steel, Luhmann.</dd>
+    <dd>8 independent formalizations across 6 discovery events, 4 countries, 50 years. Rosen, Maturana/Varela, G&aacute;nti, Eigen, Luhmann, Kauffman, Fontana/Buss, Hordijk/Steel.</dd>
   </dl>
-  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-topology.html" style="color:var(--s1)">&larr; Skeleton 1: Topology</a> &nbsp;&nbsp; <a href="skeleton-computation.html" style="color:var(--s4)">Skeleton 4: Computation &rarr;</a></p>
+  </details>
+  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-criticality.html" style="color:#f87171">&larr; Skeleton 2: Criticality</a> &nbsp;&nbsp; <a href="skeleton-computation.html" style="color:#f59e0b">Skeleton 4: Computation &rarr;</a></p>
 </section>
 
 </main>

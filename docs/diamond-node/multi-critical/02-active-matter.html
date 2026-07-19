@@ -235,6 +235,9 @@ sub, sup { font-size: 0.75em; }
   .tip .tt::after { display: none; }
 }
 
+/* Our-result marker (novel / not-yet-peer-reviewed claims) */
+.hyp{font-size:.72em;font-weight:600;color:#e0a030;border:1px solid #e0a03055;border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;cursor:help;vertical-align:middle}
+.hyp .tt{font-weight:400}
 /* Footnotes */
 .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
 .fn:hover { color: var(--line); }
@@ -307,7 +310,7 @@ On a flat <span class="tip" tabindex="0">torus<span class="tt">A doughnut-shaped
 <h3>3. Novel criticality &mdash; an unknown class</h3>
 
 <p>
-At the boundary between periodic and chaotic defect motion, a third critical phenomenon appears with the exponent <span class="math">&eta;</span> = 1.04. This exponent does not match any known universality class &mdash; not Ising, not XY, not percolation, not any classification in the standard taxonomy. It is genuinely novel.
+At a critical activity threshold, active-nematic defects reach an <span class="tip" tabindex="0">anti-hyperuniform<span class="tt">A critical state in which large-scale density fluctuations are anomalously suppressed &mdash; the opposite of clustering. Reported for active topological defects at a critical activity by Guldager Andersen et al. (2025).</span></span> critical state with an <span class="tip" tabindex="0">anomalous dimension<span class="tt">The exponent &eta; controls how correlations decay with distance at the critical point. The standard 2D classes cluster near 0.25 or below, so &eta; = 1.04 is strikingly large.</span></span> <span class="math">&eta;</span> = 1.04. This exponent matches no known universality class &mdash; not Ising, not XY, not percolation. Whether this critical threshold coincides with the periodic-to-chaotic braiding transition is <span class="hyp tip" tabindex="0">&#9670; our reading<span class="tt">An original, not-yet-peer-reviewed connection from this research program &mdash; distinct from established consensus.</span></span>.
 </p>
 
 <!-- ========== MAIN SVG: GEOMETRY SELECTS BRAIDS ========== -->
@@ -413,7 +416,9 @@ At the boundary between periodic and chaotic defect motion, a third critical phe
 </div>
 
 <!-- ========== WHY GEOMETRY MATTERS ========== -->
-<h2>Geometry as Selector</h2>
+<details class="technical fade-in">
+<summary><span class="detail-icon">&#9670;</span> Geometry as Selector: why the container determines the physics</summary>
+<div class="detail-body" style="padding-top:1rem;">
 
 <p>
 The three critical phenomena are not independent. They are linked by a single organizing principle: <strong>geometry selects the universality class</strong>.
@@ -430,6 +435,9 @@ A flat torus (zero Euler characteristic) has periodic boundaries and zero curvat
 <p>
 This is not a parameter effect &mdash; the equations of motion are identical in all three geometries. The initial conditions are drawn from the same distribution. Only the boundary conditions differ. <strong>The container determines the physics.</strong>
 </p>
+
+</div>
+</details>
 
 <!-- ========== INTERACTIVE: GEOMETRY QUIZ ========== -->
 <div class="interactive-box fade-in">
@@ -505,10 +513,10 @@ This connects active matter to an entirely different part of physics. In the <a 
       Manna universality (conserved directed percolation, C-DP) is the corresponding class when the total number of particles is <em>conserved</em>. On a closed surface, the total topological charge is fixed by the <span class="tip" tabindex="0">Gauss-Bonnet theorem<span class="tt">A deep result connecting geometry to topology: the total curvature of a closed surface is fixed by its topology (Euler characteristic). For defects, it means the total defect charge on a closed surface is a constant, regardless of dynamics.</span></span>: &Sigma; <span class="math">q</span><sub>i</sub> = &chi;, where &chi; is the Euler characteristic.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> This conservation law shifts the system from DP (&beta; &asymp; 0.583 in 2D) to Manna (&beta; &asymp; 0.639).
     </p>
     <p>
-      The measured defect onset exponent in confined active nematics: &nu; &asymp; 0.648, R&sup2; = 0.93. Consistent with Manna &beta; &asymp; 0.639 in 2D. On open channels (Doostmohammadi et al. 2017): &beta; &asymp; 0.583, consistent with standard DP. The surface topology acts as a selection rule between universality classes.
+      The measured defect-density onset exponent in confined active nematics: &beta; &asymp; 0.648, R&sup2; = 0.93.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed measurement from this research program &mdash; distinct from established consensus.</span></span> This is an <em>order-parameter</em> exponent (how fast the defect density grows above threshold), so it is directly comparable to the Manna <span class="tip" tabindex="0">order-parameter exponent<span class="tt">&beta; governs how the order parameter grows just past the transition. It is a different exponent from the correlation-length exponent &nu;, which governs how far apart correlated regions extend &mdash; the two must not be equated.</span></span> &beta; &asymp; 0.639 in 2D, not to the correlation-length exponent &nu;. On open channels (Doostmohammadi et al. 2017): &beta; &asymp; 0.583, consistent with standard DP. The surface topology acts as a selection rule between universality classes.
     </p>
     <p>
-      Independent confirmation: PNAS 2025 finds <span class="tip" tabindex="0">hyperuniform<span class="tt">A special type of spatial order where density fluctuations are suppressed at large scales &mdash; more orderly than random but not crystalline. A hallmark of conserved-density universality classes.</span></span> defect distributions on closed surfaces &mdash; a hallmark of conserved-density universality classes.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> The connection to Manna was identified independently.
+      Independent confirmation: de la Cotte et al. (<em>PNAS</em>, 2025) find <span class="tip" tabindex="0">hyperuniform<span class="tt">A special type of spatial order where density fluctuations are suppressed at large scales &mdash; more orderly than random but not crystalline. A hallmark of conserved-density / hidden-order states.</span></span> defect distributions in active nematics &mdash; suppressed number fluctuations of the kind expected from conserved-density universality classes.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> The connection to Manna was identified independently.
     </p>
   </div>
 </details>
@@ -536,7 +544,7 @@ This connects active matter to an entirely different part of physics. In the <a 
       B<sub>9</sub>: TEPO<sub>min</sub> &ge; 0.210
     </p>
     <p>
-      Asymptotic pattern: TEPO<sub>min</sub> &times; n &rarr; ~1.89. The minimum entropy decreases with strand count, but the product TEPO &times; n converges &mdash; suggesting a universal packing limit for topological complexity per strand.
+      Asymptotic pattern: TEPO<sub>min</sub> &times; n &rarr; ~1.89.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">The convergence of TEPO&times;n and its ~1.89 limit are this program&rsquo;s own computation from Burau lower bounds &mdash; a suggestive pattern, not an established theorem.</span></span> The minimum entropy decreases with strand count, but the product TEPO &times; n converges &mdash; suggesting a universal packing limit for topological complexity per strand.
     </p>
     <!-- Detail SVG: Braid diagram -->
     <div class="viz" style="margin: 1rem 0;">
@@ -603,13 +611,13 @@ This connects active matter to an entirely different part of physics. In the <a 
   </summary>
   <div class="detail-body">
     <p>
-      At the boundary between periodic and chaotic defect dynamics, Reports on Progress in Physics (2025) reports a critical exponent &eta; = 1.04 that falls outside all standard universality classes. For comparison: 2D Ising &eta; = 0.25, 2D XY &eta; = 0.25, 2D percolation &eta; = 5/24, 3D Ising &eta; &asymp; 0.036.
+      At the boundary between periodic and chaotic defect dynamics, Guldager Andersen et al. (<em>Reports on Progress in Physics</em>, 2025) report a critical exponent &eta; = 1.04(8) that falls outside all standard universality classes.<sup><a class="fn" href="#fn5" id="fnref5">5</a></sup> For comparison: 2D Ising &eta; = 0.25, 2D XY &eta; = 0.25, 2D percolation &eta; = 5/24, 3D Ising &eta; &asymp; 0.036.
     </p>
     <p>
       The value &eta; = 1.04 is anomalously large. It suggests a new type of critical behavior specific to the periodic-to-chaotic transition in active nematic defect dynamics &mdash; a transition that involves simultaneous symmetry breaking (translational order of defect lattice) and topological change (onset of pseudo-Anosov braiding).
     </p>
     <p>
-      This is the multi-critical signal: the coupling between the symmetry-breaking transition and the topological transition produces a universality class that neither contains individually. A single-transition theory cannot produce &eta; = 1.04 &mdash; it is an emergent property of the coupling.
+      This is the multi-critical signal, as we read it:<span class="hyp tip" tabindex="0">&#9670; our hypothesis<span class="tt">The &eta; = 1.04 measurement is a published result (Guldager Andersen et al. 2025); interpreting it as the fingerprint of a <em>multicritical coupling</em> between the symmetry-breaking and topological transitions is this program&rsquo;s hypothesis, not an established conclusion.</span></span> the coupling between the symmetry-breaking transition and the topological transition produces a universality class that neither contains individually. On this reading a single-transition theory cannot produce &eta; = 1.04 &mdash; it is an emergent property of the coupling.
     </p>
   </div>
 </details>
@@ -647,10 +655,10 @@ This connects active matter to an entirely different part of physics. In the <a 
       <strong>Claim:</strong> Defect density onset on closed surfaces follows Manna/conserved-DP universality (&beta; &asymp; 0.639), while open surfaces follow standard DP (&beta; &asymp; 0.583). The surface topology acts as a selection rule between universality classes.
     </p>
     <p>
-      <strong>Status: <span style="color: var(--status-survived);">Survived.</span></strong> Measured defect onset exponent &nu; &asymp; 0.648 matches Manna &beta; &asymp; 0.639 in 2D (R&sup2; = 0.93). Physical mechanism: topological charge conservation on closed surfaces provides the conserved quantity required for C-DP universality.
+      <strong>Status: <span style="color: var(--status-survived);">Survived.</span></strong> Measured defect-density onset exponent &beta; &asymp; 0.648 &mdash; an order-parameter exponent &mdash; matches Manna &beta; &asymp; 0.639 in 2D (R&sup2; = 0.93). Physical mechanism: topological charge conservation on closed surfaces provides the conserved quantity required for C-DP universality.
     </p>
     <p>
-      <strong>Independent support:</strong> PNAS 2025 &ldquo;Hidden order in active nematic defects&rdquo; independently identifies hyperuniform defect distributions on closed surfaces, a signature of conserved-density universality classes. Doostmohammadi et al. (2017) report &beta; &asymp; 0.583 for open channels, consistent with standard DP.
+      <strong>Independent support:</strong> de la Cotte et al. (<em>PNAS</em> 2025), &ldquo;Hidden order in active nematic defects,&rdquo; independently identify hyperuniform (suppressed-fluctuation) defect distributions, a signature associated with conserved-density universality classes. Doostmohammadi et al. (2017) report &beta; &asymp; 0.583 for open channels, consistent with standard DP.
     </p>
     <div class="kill-criteria">
       <strong>KILL CRITERIA:</strong> If closed-surface onset exponents match standard DP rather than Manna/C-DP, or if open-boundary systems show Manna exponents, Prediction #12 fails. The topology-dependent selection rule would be wrong.
@@ -742,8 +750,8 @@ This connects active matter to an entirely different part of physics. In the <a 
     <p>Klein, S. et al. (2025). Golden and silver braid orbits in confined active nematics. arXiv:2503.10880.</p>
     <p>Hillebrand, M. &amp; Alert, R. (2025). Discontinuous defect unbinding transition in active nematics. <em>Nature Communications</em>.</p>
     <p>Doostmohammadi, A. et al. (2017). Onset of meso-scale turbulence in active nematics. <em>Nature Communications</em>, 8, 15326.</p>
-    <p>Reports on Progress in Physics (2025). Novel universality class in active nematic defect dynamics. [&eta; = 1.04 measurement].</p>
-    <p>PNAS (2025). Hidden order in active nematic defects. [Hyperuniform defect distributions on closed surfaces].</p>
+    <p>Guldager Andersen, S., Ma, T., Katsume, M. F., Li, K., Liu, X., Pedersen, M. C., &amp; Doostmohammadi, A. (2025). Anti-hyperuniform critical states of active topological defects. <em>Reports on Progress in Physics</em>. arXiv:2509.22911. doi:10.1088/1361-6633/ae075e. [&eta; = 1.04(8) anomalous dimension].</p>
+    <p>de la Cotte, A., Pearce, D. J. G., Nambisan, J., Puggioni, L., Levy, A., Giomi, L., &amp; Fernandez-Nieves, A. (2025). Hidden order in active nematic defects. <em>PNAS</em>, 122. doi:10.1073/pnas.2512147122. [Hyperuniform defect distributions].</p>
     <p>Manna, S. S. (1991). Two-state model of self-organized criticality. <em>J. Phys. A</em>, 24, L363.</p>
     <p>Hinrichsen, H. (2000). Non-equilibrium critical phenomena and phase transitions into absorbing states. <em>Adv. Phys.</em>, 49, 815&ndash;958.</p>
     <p>Ganesan, P. et al. (2025). Topological boundaries in cardiac arrhythmias. <em>Frontiers in Network Physiology</em>.</p>
@@ -756,7 +764,8 @@ This connects active matter to an entirely different part of physics. In the <a 
     <li id="fn1">Doostmohammadi, A. et al. (2017). Onset of meso-scale turbulence in active nematics. <em>Nature Communications</em>, 8, 15326. Hinrichsen, H. (2000). Non-equilibrium critical phenomena and phase transitions into absorbing states. <em>Adv. Phys.</em>, 49, 815&ndash;958. <a href="#fnref1">&uarr;</a></li>
     <li id="fn2">Memarian, F. et al. (2024). Minimum topological entropy of braids in active nematics. <em>Phys. Rev. Lett.</em> Klein, S. et al. (2025). Golden and silver braid orbits in confined active nematics. arXiv:2503.10880. <a href="#fnref2">&uarr;</a></li>
     <li id="fn3">Manna, S. S. (1991). Two-state model of self-organized criticality. <em>J. Phys. A</em>, 24, L363. <a href="#fnref3">&uarr;</a></li>
-    <li id="fn4">PNAS (2025). Hidden order in active nematic defects. [Hyperuniform defect distributions on closed surfaces]. <a href="#fnref4">&uarr;</a></li>
+    <li id="fn4">de la Cotte, A., Pearce, D. J. G., Nambisan, J., Puggioni, L., Levy, A., Giomi, L., &amp; Fernandez-Nieves, A. (2025). Hidden order in active nematic defects. <em>PNAS</em>, 122. doi:10.1073/pnas.2512147122. <a href="#fnref4">&uarr;</a></li>
+    <li id="fn5">Guldager Andersen, S., Ma, T., Katsume, M. F., Li, K., Liu, X., Pedersen, M. C., &amp; Doostmohammadi, A. (2025). Anti-hyperuniform critical states of active topological defects. <em>Reports on Progress in Physics</em>. arXiv:2509.22911. doi:10.1088/1361-6633/ae075e. <a href="#fnref5">&uarr;</a></li>
   </ol>
 </div>
 
@@ -767,7 +776,7 @@ This connects active matter to an entirely different part of physics. In the <a 
 </div>
 
 <p class="footer-note">
-  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../../">Web Annex</a>
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../">Web Annex</a>
 </p>
 
 </div>
@@ -779,6 +788,6 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
-<script src="../../../js/annex-tracker.js"></script>
+<script src="../../js/annex-tracker.js"></script>
 </body>
 </html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Criticality — the best-understood skeleton. Order parameters, correlation length, universality classes, the renormalization group, and critical slowing down. How a single control parameter tips a system from order to disorder, producing spontaneity and coherent transport. Interactive critical-point explorer.">
+<title>Skeleton 2: Criticality</title>
+<style>
+  :root { --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #e2e8f0; --muted: #94a3b8; --dim: #475569; --s1: #818cf8; --s2: #f87171; --s3: #4ade80; --s4: #f59e0b; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.7; }
+  nav { padding: 1rem 2rem; font-size: 0.85rem; }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--text); }
+  header { max-width: 720px; margin: 0 auto; padding: 0 2rem 1rem; }
+  header h1 { font-size: 1.8rem; font-weight: 700; color: var(--s2); }
+  header .sub { color: var(--muted); font-size: 1rem; margin-top: 0.25rem; }
+  main { max-width: 720px; margin: 0 auto; padding: 0 2rem 4rem; }
+  section { margin-top: 3rem; }
+  h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  p { margin-bottom: 1rem; color: var(--text); }
+  .quiet { color: var(--muted); font-size: 0.9rem; }
+  .emphasis { color: var(--s2); font-weight: 600; }
+  .side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (max-width: 600px) { .side-by-side { grid-template-columns: 1fr; } }
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+  .panel h3 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+  @media (max-width: 600px) { .three-col { grid-template-columns: 1fr; } }
+  .phase-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+  .phase-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; }
+  .phase-card .state { font-size: 2rem; margin: 0.5rem 0; }
+  .phase-card p { font-size: 0.8rem; color: var(--muted); margin: 0; }
+  .phase-card.ordered { border-color: rgba(96,165,250,0.3); }
+  .phase-card.critical { border-color: rgba(248,113,113,0.5); box-shadow: 0 0 15px rgba(248,113,113,0.1); }
+  .phase-card.disordered { border-color: rgba(148,163,184,0.3); }
+  .diagram { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; text-align: center; }
+  /* Interactive critical-point explorer */
+  .ising-grid { display: inline-grid; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .ising-cell { width: 12px; height: 12px; }
+  .ctrl-row { display: flex; align-items: center; gap: 0.75rem; margin: 1rem auto 0; max-width: 420px; }
+  .ctrl-row input[type=range] { flex: 1; accent-color: var(--s2); }
+  .ctrl-row label { font-size: 0.8rem; color: var(--muted); }
+  .readout { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.75rem; font-family: monospace; font-size: 0.85rem; color: var(--muted); }
+  .readout b { color: var(--s2); font-weight: 600; }
+  .phase-name { margin-top: 0.5rem; font-size: 0.9rem; font-weight: 600; }
+  .depth-stack { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+  .depth-card { background: var(--card); border: 1px solid var(--border); padding: 1.25rem; }
+  .depth-card:first-child { border-radius: 10px 10px 0 0; }
+  .depth-card:last-child { border-radius: 0 0 10px 10px; border-top: none; }
+  .depth-card h3 { font-size: 0.9rem; margin-bottom: 0.5rem; }
+  .depth-card.d1 { border-left: 3px solid var(--s2); }
+  .depth-card.d2 { border-left: 3px solid #dc2626; background: rgba(220,38,38,0.05); }
+  .bridge-box { background: var(--card); border: 2px solid var(--s4); border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; }
+  .bridge-box h3 { color: var(--s4); font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .uni-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+  .uni-table th { text-align: left; color: var(--muted); font-weight: 500; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .uni-table td { padding: 0.4rem 0.75rem; border-bottom: 1px solid rgba(51,65,85,0.4); }
+  .uni-table .exp { color: var(--s2); font-family: monospace; }
+  .timeline { margin: 1.5rem 0; }
+  .timeline-item { display: flex; gap: 1rem; padding: 0.5rem 0; border-left: 2px solid var(--border); padding-left: 1rem; margin-left: 0.5rem; }
+  .timeline-year { font-family: monospace; color: var(--s2); font-weight: 600; min-width: 50px; }
+  .timeline-who { color: var(--text); font-size: 0.9rem; }
+  .timeline-field { color: var(--dim); font-size: 0.8rem; }
+  .recap-box { background: var(--card); border: 2px solid var(--s2); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+  .recap-box dt { color: var(--s2); font-weight: 600; font-size: 0.9rem; }
+  .recap-box dd { color: var(--text); margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; }
+  /* Collapsible deep/secondary sections */
+  details.collapse { margin: 0; }
+  details.collapse > summary { font-size: 1.2rem; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1rem; cursor: pointer; list-style: none; }
+  details.collapse > summary::-webkit-details-marker { display: none; }
+  details.collapse > summary::before { content: '\25B8\00a0'; color: var(--muted); font-size: 0.85em; }
+  details.collapse[open] > summary::before { content: '\25BE\00a0'; }
+  details.collapse > summary:hover { color: var(--s2); }
+  /* Tooltips */
+  .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+  .tip .tt {
+    display: none; position: absolute; bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a2744; border: 1px solid var(--muted); border-radius: 8px;
+    padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+    color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+    line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    text-align: left; letter-spacing: normal; text-transform: none;
+  }
+  .tip .tt::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--muted);
+  }
+  .tip:hover .tt, .tip:focus .tt { display: block; }
+  @media (max-width: 640px) {
+    .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+      transform: none; max-width: none; width: auto; }
+    .tip .tt::after { display: none; }
+  }
+  /* Footnotes */
+  .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+  .fn:hover { color: var(--text); }
+  .footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .footnotes ol { padding-left: 1.5rem; }
+  .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+  .footnotes li a { color: var(--muted); }
+  .footnotes li a:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav><a href="index.html">&larr; Mathematical Skeletons</a></nav>
+
+<header>
+  <h1>Skeleton 2: Criticality</h1>
+  <p class="sub">Spontaneity &rarr; Coherent transport. Tracer: power-law <span class="tip" tabindex="0">critical exponents<span class="tt">Numbers such as &beta;, &nu;, &gamma; that describe how quantities diverge or vanish as a system approaches its critical point. Systems in the same universality class share the same exponents.</span></span>.</p>
+</header>
+
+<main>
+
+<!-- SECTION 1: THE ANCHOR -->
+<section>
+  <h2>The best-understood skeleton</h2>
+  <p>Heat water and it boils. Cool a magnet and it magnetizes. Push an ecosystem and it collapses. In each case a system sits in one phase, a single knob is turned, and at one special value the whole system reorganizes at once. That special value is the <strong><span class="tip" tabindex="0">critical point<span class="tt">The exact value of a control parameter (temperature, pressure, density&hellip;) at which a system changes phase. At this point fluctuations occur on every length scale at once.</span></span></strong>.</p>
+  <p>Of the four skeletons, criticality is the <em>anchor</em> &mdash; the most thoroughly developed. Physics has spent a century building its mathematics: <span class="tip" tabindex="0">phase transitions<span class="tt">A qualitative change of state at a threshold &mdash; solid to liquid, disordered to ordered, stable to collapsed. The transition is sharp: a tiny change in the control parameter flips the whole system.</span></span>, <span class="tip" tabindex="0">scale invariance<span class="tt">At the critical point a system looks statistically the same at every zoom level. There is no characteristic size &mdash; patterns repeat across scales.</span></span>, <span class="tip" tabindex="0">universality<span class="tt">The surprising fact that utterly different systems &mdash; a magnet, a fluid, an alloy &mdash; behave identically near their critical points, sharing the same exponents. The microscopic details wash out.</span></span>, and the <span class="tip" tabindex="0">renormalization group<span class="tt">A mathematical method (Wilson, 1971) for tracking how a system's description changes as you zoom out. It explains universality and earned the 1982 Nobel Prize in Physics.</span></span> that ties them together. This page is the reference other skeletons lean on.</p>
+</section>
+
+<!-- SECTION 2: ORDER PARAMETER -->
+<section>
+  <h2>The order parameter</h2>
+  <p>Every phase transition has an <strong><span class="tip" tabindex="0">order parameter<span class="tt">A quantity that is zero in the disordered phase and nonzero in the ordered phase &mdash; for example the net magnetization of a magnet. It measures &lsquo;how much order&rsquo; the system has.</span></span></strong>: a number that is zero on one side of the transition and grows continuously from zero on the other side. For a magnet it is the net magnetization. For a boiling liquid it is the density difference between liquid and gas. For a neural network it is the size of the largest correlated cluster.</p>
+  <p>Below the critical point the order parameter grows as a <em>power law</em> of the distance to the transition: <span class="emphasis">m &sim; (T<sub>c</sub> &minus; T)<sup>&beta;</sup></span>. The exponent <span class="tip" tabindex="0">&beta;<span class="tt">The order-parameter exponent. It controls how quickly order grows as you move past the critical point. Different universality classes have different values of &beta; &mdash; e.g. &beta; &asymp; 0.33 for the 3D Ising class.</span></span> does not depend on the substance &mdash; it depends only on the system's <em>universality class</em>. That is the first hint that criticality is skeleton-level mathematics, not a fact about any one material.</p>
+</section>
+
+<!-- SECTION 3: INTERACTIVE -->
+<section>
+  <h2>Cross the critical point</h2>
+  <p>Drag the control parameter through the transition. Far below, the system is <strong>ordered</strong> &mdash; nearly all cells point the same way. Far above, it is <strong>disordered</strong> &mdash; random static. At the critical point, domains of every size coexist: the pattern looks the same whether you zoom in or out.</p>
+
+  <div class="diagram">
+    <div id="ising-grid-wrap"></div>
+    <div class="phase-name" id="phase-name" style="color:var(--s2)">Critical</div>
+    <div class="ctrl-row">
+      <label>ordered</label>
+      <input type="range" id="temp-slider" min="0" max="100" value="50" aria-label="Control parameter (temperature)">
+      <label>disordered</label>
+    </div>
+    <div class="readout">
+      <span>T / T<sub>c</sub> = <b id="ro-t">1.00</b></span>
+      <span>&xi; &asymp; <b id="ro-xi">&infin;</b></span>
+      <span>m = <b id="ro-m">0.0</b></span>
+    </div>
+    <p class="quiet" style="margin-top:1rem">Schematic, not a physical simulation &mdash; it illustrates how domain size (the <span class="tip" tabindex="0">correlation length &xi;<span class="tt">The typical size of a correlated domain &mdash; a patch of the system that acts as a unit. Away from the critical point it is small; at the critical point it diverges to the size of the whole system.</span></span>) and net order (m) behave as the control parameter crosses T<sub>c</sub>.</p>
+  </div>
+</section>
+
+<!-- SECTION 4: CORRELATION LENGTH -->
+<section>
+  <h2>The correlation length diverges</h2>
+  <p>The single quantity that makes a critical point special is the <strong>correlation length &xi;</strong> &mdash; the distance over which one part of the system &lsquo;feels&rsquo; another. Away from the transition, &xi; is small: a disturbance here has no effect over there. As you approach the critical point, &xi; grows &mdash; and <em>at</em> the critical point it diverges to infinity.</p>
+  <p>When &xi; is infinite, the system has no characteristic length scale. Fluctuations of every size occur together, which is exactly what <span class="tip" tabindex="0">scale invariance<span class="tt">No preferred size. A zoomed-in patch is statistically indistinguishable from the whole. Mathematically, correlations decay as a power of distance rather than exponentially.</span></span> means. It is also why critical systems produce <strong><span class="tip" tabindex="0">power laws<span class="tt">Relationships of the form (quantity) &prop; (size)<sup>&minus;exponent</sup>. Small events common, large events rare, and no typical scale in between &mdash; the fingerprint of criticality.</span></span></strong> everywhere: with no characteristic scale, the only self-consistent statistics are scale-free.</p>
+  <p class="quiet">This is the skeleton's <em>tracer</em>. Where topology leaves the fingerprint &phi;, criticality leaves power-law exponents &mdash; &beta;, &nu;, &gamma; &mdash; measurable in the tails of distributions and in how quantities scale near the transition.</p>
+</section>
+
+<!-- SECTION 5: CRITICAL SLOWING DOWN -->
+<section>
+  <h2>Critical slowing down &mdash; the early warning</h2>
+  <p>As a system nears a critical transition, it takes longer and longer to recover from small disturbances. Perturb it and the wobble decays more slowly; the system becomes sluggish and &lsquo;sticky.&rsquo; This is <strong><span class="tip" tabindex="0">critical slowing down<span class="tt">Near a tipping point the recovery rate from perturbations drops toward zero. Measurable signs: rising autocorrelation ('the system remembers longer') and rising variance ('fluctuations grow').</span></span></strong>, and it is one of the most practically important facts about criticality.</p>
+  <p>Because slowing down leaves statistical footprints &mdash; rising variance and rising <span class="tip" tabindex="0">autocorrelation<span class="tt">How strongly the system's current state predicts its next state. It climbs toward 1 as a tipping point approaches, because the system relaxes ever more slowly.</span></span> &mdash; you can sometimes forecast a tipping point <em>before</em> it happens. Scheffer and colleagues (2009)<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> showed these <span class="tip" tabindex="0">early-warning signals<span class="tt">Generic statistical indicators (variance, autocorrelation, skewness) that rise ahead of many critical transitions, from ecosystems and climate to physiology and finance.</span></span> appear across ecosystems, climate, physiology, and finance &mdash; a convergence in its own right.</p>
+  <p class="quiet">Early-warning signals are exactly where criticality touches applied work on tipping points: the same mathematics that describes a magnet losing its magnetization describes an ecosystem approaching collapse.</p>
+</section>
+
+<!-- SECTION 6: UNIVERSALITY & RG -->
+<section>
+  <h2>Universality and the renormalization group</h2>
+  <p>Here is the deepest fact. Measure &beta; for a magnet, for a boiling fluid, and for a binary alloy separating into two phases. You get the <em>same number</em>. The three systems could not be more different microscopically, yet near their critical points they are mathematically identical. They belong to the same <strong>universality class</strong>.</p>
+
+  <table class="uni-table">
+    <tr><th>Universality class</th><th>&beta;</th><th>Example systems</th></tr>
+    <tr><td>Mean-field</td><td class="exp">0.5</td><td>Superconductors, high dimensions</td></tr>
+    <tr><td>2D Ising</td><td class="exp">0.125</td><td>Thin magnetic films, adsorbed layers</td></tr>
+    <tr><td>3D Ising</td><td class="exp">~0.33</td><td>Uniaxial magnets, liquid&ndash;gas, binary alloys</td></tr>
+    <tr><td>3D XY</td><td class="exp">~0.35</td><td>Superfluid helium, planar magnets</td></tr>
+  </table>
+
+  <p>Why does this happen? Kadanoff (1966) and then Wilson (1971)<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> answered it with the <strong>renormalization group</strong>: systematically zoom out, averaging over small-scale details, and watch how the system's description changes. At the critical point the description stops changing &mdash; it is a <em>fixed point</em> of the zooming-out operation. Everything that differs between a magnet and a fluid is a small-scale detail that washes out under repeated zooming; only the fixed point&rsquo;s exponents survive. Universality classes <em>are</em> the fixed points. This insight earned Wilson the 1982 Nobel Prize in Physics.</p>
+  <p class="quiet">This is what makes criticality a mathematical skeleton rather than a collection of coincidences: the renormalization group proves that unrelated systems share one underlying object.</p>
+</section>
+
+<!-- SECTION 7: EMERGENT PROPERTIES -->
+<section>
+  <h2>Two depths of criticality</h2>
+  <p>Like every skeleton, criticality produces two emergent properties: a structural one the system <em>has</em>, and a functional one the system <em>does</em>.</p>
+
+  <div class="depth-stack">
+    <div class="depth-card d1">
+      <h3>Depth 1: Spontaneity <span class="quiet">(the system <em>has</em> it)</span></h3>
+      <p class="quiet">Order appears by itself. Nobody tells the magnet which way to point; at the critical temperature it <span class="tip" tabindex="0">spontaneously breaks symmetry<span class="tt">The laws are symmetric (up and down are equivalent) but the outcome is not &mdash; the system picks one direction on its own. The hallmark of a continuous phase transition.</span></span> and chooses a direction. This is the Major property of Skeleton 2: at a threshold, structure emerges spontaneously, with no external designer and no gradual tuning.</p>
+    </div>
+    <div class="depth-card d2">
+      <h3>Depth 2: Coherent transport <span class="quiet">(the system <em>does</em> it)</span></h3>
+      <p class="quiet">Once a critical medium is organized, it can carry signals across itself without falling apart. <span class="tip" tabindex="0">Solitons<span class="tt">Self-reinforcing waves that travel long distances without spreading out or losing shape &mdash; because nonlinearity balances dispersion. Nerve impulses and some plasma structures behave this way.</span></span>, excitation waves, and plasma structures move as coherent units, transporting energy or information over long distances. This is the minor property: it <em>accumulates</em> along a path, in contrast to the binary, all-at-once character of spontaneity.</p>
+    </div>
+  </div>
+
+  <p>A spiral wave crossing heart tissue, a nerve impulse travelling down an axon, a plasmoid ejected from the magnetosphere &mdash; all are coherent transport riding on a critically poised medium.</p>
+</section>
+
+<!-- SECTION 8: BRIDGES -->
+<section>
+  <h2>Where criticality meets the other skeletons</h2>
+  <p>Because criticality is the anchor, it forms the strongest bridges to the other three skeletons.</p>
+
+  <div class="bridge-box">
+    <h3>Criticality &harr; Computation: the edge of chaos</h3>
+    <p style="font-size:0.9rem">Computation is maximized precisely at the critical point &mdash; ordered enough to store information, disordered enough to transmit it. This is the <span class="tip" tabindex="0">B&ndash;D bridge<span class="tt">Bridge letters: A = Topology, B = Criticality, C = Autocatalysis / Closure, D = Computation. B&ndash;D links Criticality and Computation.</span></span> (Criticality &harr; Computation), the <span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between frozen order and chaotic noise. Langton (1990) showed computational capability peaks there &mdash; and it coincides with the critical point.</span></span> studied by <a href="skeleton-computation.html" style="color:var(--s4)">Skeleton 4</a>.</p>
+  </div>
+
+  <div class="bridge-box" style="border-color:var(--s3)">
+    <h3 style="color:var(--s3)">Criticality &harr; Closure: self-organized criticality</h3>
+    <p style="font-size:0.9rem">Some systems tune <em>themselves</em> to the critical point without any external knob &mdash; a sandpile always relaxing to its angle of repose. This <span class="tip" tabindex="0">self-organized criticality<span class="tt">Bak, Tang &amp; Wiesenfeld (1987): systems that naturally evolve to a critical state and stay there, producing power-law avalanches without fine-tuning.</span></span> is the <span class="tip" tabindex="0">B&ndash;C bridge<span class="tt">Bridge letters: A = Topology, B = Criticality, C = Autocatalysis / Closure, D = Computation. B&ndash;C links Criticality and Closure &mdash; a system whose own dynamics maintain it at the critical point.</span></span> (Criticality &harr; <a href="skeleton-closure.html" style="color:var(--s3)">Closure</a>): the network's self-sustaining dynamics hold it at criticality.</p>
+  </div>
+
+  <p class="quiet">The <a href="skeleton-matrix.html" style="color:var(--muted)">Skeleton Matrix</a> shows criticality (S2) as the axis nearly every physical system lights up &mdash; which is why it earns the name anchor.</p>
+</section>
+
+<!-- SECTION 9: CONVERGENCE (collapsed) -->
+<section>
+  <details class="collapse">
+    <summary>A century, twelve fields, one mathematics</summary>
+    <p>Criticality is the convergence story documented in the <span class="tip" tabindex="0">FACETS<span class="tt">Bruce Stephenson's cross-domain survey paper cataloguing how the mathematics of criticality was independently developed across roughly a dozen scientific fields (arXiv:2601.22389).</span></span> survey (arXiv:2601.22389): at least a dozen fields built the same mathematics without citing one another.</p>
+    <div class="timeline">
+      <div class="timeline-item"><span class="timeline-year">1937</span><div><span class="timeline-who">Landau</span><br><span class="timeline-field">Order parameter and the general theory of continuous phase transitions.</span></div></div>
+      <div class="timeline-item"><span class="timeline-year">1944</span><div><span class="timeline-who">Onsager</span><br><span class="timeline-field">Exact solution of the 2D Ising model &mdash; proof that a simple model has a genuine critical point.</span></div></div>
+      <div class="timeline-item"><span class="timeline-year">1966</span><div><span class="timeline-who">Kadanoff</span><br><span class="timeline-field">Block-spin scaling. The idea that zooming out is the key operation.</span></div></div>
+      <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Wilson</span><br><span class="timeline-field">Renormalization group. Made universality quantitative. Nobel 1982.<sup><a class="fn" href="#fn2" id="fnref2b">2</a></sup></span></div></div>
+      <div class="timeline-item"><span class="timeline-year">1971</span><div><span class="timeline-who">Stanley</span><br><span class="timeline-field">Textbook synthesis<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> that unified the field for a generation of physicists.</span></div></div>
+      <div class="timeline-item"><span class="timeline-year">1987</span><div><span class="timeline-who">Bak, Tang, Wiesenfeld</span><br><span class="timeline-field">Self-organized criticality. Systems that tune themselves to the critical point.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup></span></div></div>
+      <div class="timeline-item"><span class="timeline-year">2003</span><div><span class="timeline-who">Beggs &amp; Plenz</span><br><span class="timeline-field">Neuronal avalanches &mdash; criticality observed in living brain tissue.</span></div></div>
+      <div class="timeline-item"><span class="timeline-year">2009</span><div><span class="timeline-who">Scheffer et al.</span><br><span class="timeline-field">Early-warning signals for critical transitions &mdash; criticality reaches ecology, climate, and medicine.<sup><a class="fn" href="#fn3" id="fnref3b">3</a></sup></span></div></div>
+    </div>
+    <p class="quiet">Statistical physics, condensed matter, ecology, neuroscience, climate science, economics, materials science&hellip; each community developed criticality in its own dialect. FACETS argues the underlying mathematics is one skeleton seen a dozen times.</p>
+  </details>
+</section>
+
+<!-- SECTION 10: RECAP (collapsed) -->
+<section>
+  <details class="collapse">
+    <summary>Recap</summary>
+    <dl class="recap-box">
+      <dt>Skeleton</dt>
+      <dd>Criticality / dynamics &mdash; phase transitions, order parameters, correlation length, universality classes, the renormalization group. The best-understood of the four skeletons.</dd>
+      <dt>Depth 1: Spontaneity</dt>
+      <dd>Order emerges by itself at a threshold. Spontaneous symmetry breaking, with no external designer. Binary and all-at-once.</dd>
+      <dt>Depth 2: Coherent transport</dt>
+      <dd>A critically poised medium carries signals without dispersing &mdash; solitons, excitation waves, plasma structures. Accumulates along a path.</dd>
+      <dt>Tracer: power-law exponents</dt>
+      <dd>&beta;, &nu;, &gamma;. Measurable in scaling behaviour and the tails of distributions. Shared within a universality class, independent of microscopic detail.</dd>
+      <dt>Key insight</dt>
+      <dd>At the critical point the correlation length diverges: no characteristic scale, fluctuations on every size, power laws everywhere. The renormalization group explains why unrelated systems share the same exponents.</dd>
+      <dt>Convergence</dt>
+      <dd>~12 fields independently developed criticality mathematics &mdash; the FACETS convergence (arXiv:2601.22389).</dd>
+    </dl>
+  </details>
+  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-topology.html" style="color:var(--s1)">&larr; Skeleton 1: Topology</a> &nbsp;&nbsp; <a href="skeleton-closure.html" style="color:var(--s3)">Skeleton 3: Closure &rarr;</a></p>
+</section>
+
+</main>
+
+<div class="footnotes" style="max-width:720px;margin:2rem auto 0;padding:1rem 2rem 0;border-top:1px solid #334155">
+  <ol>
+    <li id="fn1">Stanley, H. E. (1971). <em>Introduction to Phase Transitions and Critical Phenomena</em>. Oxford University Press. The standard synthesis of the field. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Wilson, K. G. (1971). Renormalization group and critical phenomena. <em>Phys. Rev. B</em>, 4, 3174&ndash;3183. Nobel Prize in Physics 1982. <a href="#fnref2">&uarr;</a> <a href="#fnref2b">&uarr;</a></li>
+    <li id="fn3">Scheffer, M., Bascompte, J., Brock, W. A., et al. (2009). Early-warning signals for critical transitions. <em>Nature</em>, 461, 53&ndash;59. <a href="#fnref3">&uarr;</a> <a href="#fnref3b">&uarr;</a></li>
+    <li id="fn4">Bak, P., Tang, C. &amp; Wiesenfeld, K. (1987). Self-organized criticality: an explanation of 1/f noise. <em>Phys. Rev. Lett.</em>, 59, 381&ndash;384. <a href="#fnref4">&uarr;</a></li>
+  </ol>
+</div>
+
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:720px;margin-left:auto;margin-right:auto;padding-left:2rem;padding-right:2rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
+<script src="../../js/annex-tracker.js"></script>
+
+<script>
+(function () {
+  // Interactive critical-point explorer. Event-driven only (no animation loop),
+  // so it inherently respects prefers-reduced-motion.
+  var N = 20, cellPx = 12;
+  var wrap = document.getElementById('ising-grid-wrap');
+  var slider = document.getElementById('temp-slider');
+  if (!wrap || !slider) return;
+
+  var grid = document.createElement('div');
+  grid.className = 'ising-grid';
+  grid.style.gridTemplateColumns = 'repeat(' + N + ', ' + cellPx + 'px)';
+  var cells = [];
+  for (var i = 0; i < N * N; i++) {
+    var c = document.createElement('div');
+    c.className = 'ising-cell';
+    grid.appendChild(c);
+    cells.push(c);
+  }
+  wrap.appendChild(grid);
+
+  var UP = '#f87171', DOWN = '#1e293b';
+
+  function render(t01) {
+    // t01 in [0,1]; critical at 0.5
+    var Tc = 0.5;
+    var d = Math.abs(t01 - Tc);
+    var below = t01 < Tc;
+    // correlation length in cells: small away from Tc, large at Tc
+    var xi = Math.max(1, Math.min(N, Math.round(0.5 / (d + 0.045))));
+    // net order parameter: strong deep in ordered phase, zero at/above Tc
+    var m = below ? Math.min(1, (Tc - t01) / Tc * 1.7) : 0;
+    // build correlated domains at scale xi
+    var block = xi;
+    var bcols = Math.ceil(N / block);
+    var domains = [];
+    for (var b = 0; b < bcols * bcols; b++) domains.push(Math.random() < 0.5 ? 1 : -1);
+
+    var upCount = 0;
+    for (var r = 0; r < N; r++) {
+      for (var col = 0; col < N; col++) {
+        var bi = Math.floor(r / block) * bcols + Math.floor(col / block);
+        var s = domains[bi];
+        if (below) {
+          // ordered phase: bias toward the majority (up) direction
+          if (Math.random() < m) s = 1;
+        } else if (d > 0) {
+          // disordered phase: inject uncorrelated static
+          if (Math.random() < d / Tc * 0.6) s = Math.random() < 0.5 ? 1 : -1;
+        }
+        cells[r * N + col].style.background = s === 1 ? UP : DOWN;
+        if (s === 1) upCount++;
+      }
+    }
+
+    // readouts
+    var tRatio = (t01 / Tc).toFixed(2);
+    document.getElementById('ro-t').textContent = tRatio;
+    var xiTxt = d < 0.02 ? '∞' : xi.toString();
+    document.getElementById('ro-xi').textContent = xiTxt;
+    var netM = Math.abs(upCount / (N * N) * 2 - 1);
+    document.getElementById('ro-m').textContent = netM.toFixed(2);
+
+    var nameEl = document.getElementById('phase-name');
+    if (d < 0.08) { nameEl.textContent = 'Critical'; nameEl.style.color = '#f87171'; }
+    else if (below) { nameEl.textContent = 'Ordered'; nameEl.style.color = '#60a5fa'; }
+    else { nameEl.textContent = 'Disordered'; nameEl.style.color = '#94a3b8'; }
+  }
+
+  slider.addEventListener('input', function () { render(slider.value / 100); });
+  render(0.5);
+})();
+</script>
+</body>
+</html>

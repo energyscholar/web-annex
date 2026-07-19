@@ -222,6 +222,9 @@ sub, sup { font-size: 0.75em; }
   .tip .tt::after { display: none; }
 }
 
+/* Hypothesis / own-result marker */
+.hyp{font-size:.72em;font-weight:600;color:#e0a030;border:1px solid #e0a03055;border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;cursor:help;vertical-align:middle}
+
 /* Footnotes */
 .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
 .fn:hover { color: var(--line); }
@@ -390,7 +393,7 @@ This value has no precedent in jamming physics. It suggests that the effective i
 </p>
 
 <p>
-More remarkably, this exponent appears to be <strong>universal across all fold classes</strong>. A preliminary test on 30 protein structures across all major fold classes (all-alpha, all-beta, alpha/beta, alpha+beta) shows no statistically significant variation in packing fraction: <span class="tip" tabindex="0">Kruskal-Wallis<span class="tt">A statistical test that checks whether several groups come from the same distribution, without assuming the data is bell-shaped. A high p-value (like 0.31) means no significant difference between groups &mdash; they look statistically identical.</span></span> <span class="math">p</span> = 0.31 with a mean <span class="math">&phi;</span> = 0.590 &plusmn; 0.042. The fold class &mdash; the overall architecture of the protein &mdash; does not change the packing. The jamming transition is the same regardless of how the protein is arranged.
+More remarkably, this exponent may be <strong>universal across all fold classes</strong>.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus. The &delta; = 9/2 exponent itself is from Grigas et al.; the cross-fold-class universality test below is ours.</span></span> A preliminary test on 30 protein structures across all major fold classes (all-alpha, all-beta, alpha/beta, alpha+beta) shows no statistically significant variation in packing fraction: <span class="tip" tabindex="0">Kruskal-Wallis<span class="tt">A statistical test that checks whether several groups come from the same distribution, without assuming the data is bell-shaped. A high p-value (like 0.31) means no significant difference between groups &mdash; they look statistically identical.</span></span> <span class="math">p</span> = 0.31 with a mean <span class="math">&phi;</span> = 0.590 &plusmn; 0.042 (N = 30 &mdash; too small to be definitive). The fold class &mdash; the overall architecture of the protein &mdash; does not change the packing. The jamming transition is the same regardless of how the protein is arranged.
 </p>
 
 <!-- ========== INTERACTIVE: PACKING ACROSS FOLD CLASSES ========== -->
@@ -492,10 +495,11 @@ More remarkably, this exponent appears to be <strong>universal across all fold c
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
 <!-- ========== THE CHAIN ========== -->
-<h2>The Gardner-Jamming Chain</h2>
-
+<details class="fade-in">
+  <summary>The Gardner-Jamming Chain</summary>
+  <div class="detail-body">
 <p>
-This is where protein folding connects to the <a href="01-glass-transition.html">glass transition</a>. Below the Kauzmann temperature <span class="math">T</span><sub>K</sub>, the glass undergoes a <span class="tip" tabindex="0">Gardner transition<span class="tt">A transition within the glass phase where each metastable state shatters into a fractal hierarchy of sub-states. Named after Elizabeth Gardner (1957&ndash;1988). It connects glass physics to the physics of tightly packed particles.</span></span><sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> &mdash; each metastable state fractures into a fractal hierarchy of <span class="tip" tabindex="0">marginally stable<span class="tt">Balanced on the edge of instability. The smallest push can trigger a rearrangement. Not unstable (falling apart), not stable (firmly locked) &mdash; right at the boundary. Like a stack of blocks that stands but wobbles at the slightest touch.</span></span> sub-states. The Gardner transition produces the same scaling laws that govern jamming.
+This is where protein folding connects to the <a href="01-glass-transition.html">glass transition</a>. Below the <span class="tip" tabindex="0">Kauzmann temperature<span class="tt">The temperature at which a supercooled liquid&rsquo;s extra entropy over the crystal would vanish &mdash; a lower bound on where the glass transition must intervene. Named after Walter Kauzmann.</span></span> <span class="math">T</span><sub>K</sub>, the glass undergoes a <span class="tip" tabindex="0">Gardner transition<span class="tt">A transition within the glass phase where each metastable state shatters into a fractal hierarchy of sub-states. Named after Elizabeth Gardner (1957&ndash;1988). It connects glass physics to the physics of tightly packed particles.</span></span><sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> &mdash; each metastable state fractures into a fractal hierarchy of <span class="tip" tabindex="0">marginally stable<span class="tt">Balanced on the edge of instability. The smallest push can trigger a rearrangement. Not unstable (falling apart), not stable (firmly locked) &mdash; right at the boundary. Like a stack of blocks that stands but wobbles at the slightest touch.</span></span> sub-states. The Gardner transition produces the same scaling laws that govern jamming.
 </p>
 
 <p>
@@ -511,8 +515,10 @@ Each arrow represents a known mathematical connection, not an analogy. The Gardn
 </p>
 
 <p>
-If glass bicriticality is real (Tutorial 01), then the Gardner transition is where the two glass transitions most strongly couple. And the jamming that emerges from that coupling is the same physics that packs protein cores. The most basic feature of protein structure &mdash; how tightly the amino acids are packed &mdash; may be a downstream consequence of a codimension-two point in glass parameter space.
+If glass bicriticality is real (Tutorial 01), then the Gardner transition is where the two glass transitions most strongly couple. And the jamming that emerges from that coupling is the same physics that packs protein cores. The most basic feature of protein structure &mdash; how tightly the amino acids are packed &mdash; may be a downstream consequence of a <span class="tip" tabindex="0">codimension-two point<span class="tt">A point in parameter space you can only reach by tuning two independent knobs at once &mdash; where two critical lines cross. Rarer and more constrained than an ordinary critical point.</span></span> in glass parameter space.
 </p>
+  </div>
+</details>
 
 <!-- ========== TECHNICAL DETAILS ========== -->
 
@@ -696,7 +702,7 @@ If glass bicriticality is real (Tutorial 01), then the Gardner transition is whe
 </div>
 
 <p class="footer-note">
-  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../../">Web Annex</a>
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../">Web Annex</a>
 </p>
 
 </div>
@@ -708,6 +714,6 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
-<script src="../../../js/annex-tracker.js"></script>
+<script src="../../js/annex-tracker.js"></script>
 </body>
 </html>

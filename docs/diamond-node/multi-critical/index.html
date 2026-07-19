@@ -290,6 +290,21 @@ a:hover { text-decoration: underline; }
     transform: none; max-width: none; width: auto; }
   .tip .tt::after { display: none; }
 }
+/* Our-result marker (novel / not-yet-peer-reviewed claims) */
+.hyp{font-size:.72em;font-weight:600;color:#e0a030;border:1px solid #e0a03055;border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;cursor:help;vertical-align:middle}
+/* Progressive disclosure */
+details.section { background: var(--card); border-radius: 8px; margin: 1.5rem 0; border: 1px solid var(--dim); overflow: hidden; }
+details.section[open] { border-color: rgba(148,163,184,0.25); }
+details.section > summary {
+  padding: 1rem 1.25rem; cursor: pointer; font-weight: 600; font-size: 1.1rem;
+  font-family: 'Times New Roman', Georgia, serif; color: var(--heading); list-style: none;
+  display: flex; align-items: center; gap: 0.6rem; user-select: none;
+}
+details.section > summary:hover { background: rgba(255,255,255,0.02); }
+details.section > summary::-webkit-details-marker { display: none; }
+details.section > summary::before { content: '\25B8'; font-size: 0.8rem; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+details.section[open] > summary::before { transform: rotate(90deg); }
+details.section .detail-body { padding: 0 1.25rem 1.25rem; }
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .fade-in { opacity: 1; transform: none; transition: none; }
@@ -429,7 +444,7 @@ a:hover { text-decoration: underline; }
 <a href="../index.html" class="back">&larr; Domain Convergence Research</a>
 
 <div class="wip-banner">
-  <strong>Work in progress.</strong> This is exploratory research into multicriticality &mdash; a topic with almost no existing literature. The tutorials, skeleton assignments, and cross-system comparisons presented here are provisional hypotheses developed through computational experiments and literature review. They likely contain errors. The goal is to make the questions visible, not to present finished answers.
+  <strong>Work in progress.</strong> This is exploratory research into multicriticality. Multicritical points themselves are a well-established topic in statistical physics, and a recent literature actively studies how systems <em>self-organize</em> toward them (e.g. Sormunen, Gross &amp; Saram&auml;ki 2025, <a href="https://arxiv.org/abs/2506.04275">arXiv:2506.04275</a>). What is provisional here is the cross-system synthesis: the skeleton assignments, the pairwise mechanism claims, and the system-by-system profiles are hypotheses developed through computational experiments and literature review. They likely contain errors. The goal is to make the questions visible, not to present finished answers.
 </div>
 
 <h1>Multi-Critical Systems</h1>
@@ -584,7 +599,7 @@ The central question: <em>why do multiple independent transitions converge in th
       <span class="tag tag-critical">novel &eta;=1.04</span>
     </div>
     <div class="card-desc">
-      Three critical phenomena with independent exponents. Defect onset follows Manna universality on closed surfaces and <span class="tip" tabindex="0">directed percolation<span class="tt">A universality class for spreading processes with a preferred direction (like water flowing downhill through random soil). The most common class for transitions between absorbing and active states.</span></span> on open ones &mdash; boundary topology selects the universality class. Confinement geometry selects braid class: golden braid in confinement, trivial braids on flat torus. A novel universality class at the periodic-to-chaotic boundary.
+      Three critical phenomena with independent exponents. Defect onset follows Manna universality on closed surfaces and <span class="tip" tabindex="0">directed percolation<span class="tt">A universality class for spreading processes with a preferred direction (like water flowing downhill through random soil). The most common class for transitions between absorbing and active states.</span></span> on open ones &mdash; boundary topology selects the universality class. Confinement geometry selects braid class: golden braid in confinement, trivial braids on flat torus. A novel universality class at the periodic-to-chaotic boundary.<span class="hyp tip" tabindex="0">&#9670; our reading<span class="tt">The measured &eta;=1.04 exponent is a published result (Guldager Andersen et al. 2025); reading it as a <em>multicritical coupling</em> signature is this program&rsquo;s hypothesis, not established consensus.</span></span>
     </div>
     <div class="card-pair">Paired with: Cardiac Tissue &mdash; connected through KT defect unbinding</div>
   </a>
@@ -600,7 +615,7 @@ The central question: <em>why do multiple independent transitions converge in th
       <span class="tag tag-autocatalytic">RAF closure</span>
     </div>
     <div class="card-desc">
-      Three transition frameworks in one tissue. Full period-doubling cascade before fibrillation. <span class="tip" tabindex="0">Kosterlitz-Thouless<span class="tt">A phase transition driven by topological defects (vortices) binding and unbinding. No divergent order parameter — instead, the character of the defect population changes qualitatively. Nobel Prize 2016.</span></span> defect unbinding maps flutter to bound vortex pairs and fibrillation to unbound. The calcium signaling network is a maximal autocatalytic set &mdash; 17 of 17 reactions, zero individually essential, catastrophic only at class-level removal.
+      Three transition frameworks in one tissue. Full period-doubling cascade before fibrillation. <span class="tip" tabindex="0">Kosterlitz-Thouless<span class="tt">A phase transition driven by topological defects (vortices) binding and unbinding. No divergent order parameter — instead, the character of the defect population changes qualitatively. Nobel Prize 2016.</span></span> defect unbinding maps flutter to bound vortex pairs and fibrillation to unbound. The calcium signaling network is a maximal autocatalytic set &mdash; 17 of 17 reactions, zero individually essential, catastrophic only at class-level removal.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus.</span></span>
     </div>
     <div class="card-pair">Paired with: Active Matter &mdash; connected through KT defect unbinding</div>
   </a>
@@ -617,7 +632,7 @@ The central question: <em>why do multiple independent transitions converge in th
       <span class="tag tag-chaos">edge-of-chaos</span>
     </div>
     <div class="card-desc">
-      Four independent phase-transition frameworks converge in one system. Cooperative two-state folding. Jamming at &phi;<sub>c</sub>&nbsp;&asymp;&nbsp;0.55 with an anomalous exponent found nowhere else. Power-law folding kinetics across three universality classes. Edge-of-chaos dynamics in disordered proteins. Four frameworks that normally describe unrelated physics, meeting here.
+      Four independent phase-transition frameworks converge in one system. Cooperative two-state folding. Jamming at &phi;<sub>c</sub>&nbsp;&asymp;&nbsp;0.55 with an anomalous exponent found nowhere else.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus.</span></span> Power-law folding kinetics across three universality classes. Edge-of-chaos dynamics in disordered proteins. Four frameworks that normally describe unrelated physics, meeting here.
     </div>
     <div class="card-pair">Paired with: Glass Transition &mdash; connected through the Gardner/jamming chain</div>
   </a>
@@ -728,19 +743,24 @@ Every system has a skeleton profile: how much of each mathematical structure it 
 </a>
 
 <!-- ========== THE QUESTION ========== -->
-<h2><span class="sn">5.</span> The Question</h2>
+<details class="section fade-in">
+<summary><span class="sn" style="color:var(--blue);font-size:0.9em;margin-right:0.3em">5.</span> The Question</summary>
+<div class="detail-body">
 
 <p>
 Each of these systems is well-studied within its home domain. Cardiac electrophysiologists know the Feigenbaum cascade. Active matter physicists know the golden braid. Glass physicists know the two transitions. Plasma physicists know the SOC pedestal.
 </p>
 
 <p>
-What none of these communities has asked is: <strong>why do multiple independent transitions converge in the same physical system?</strong> And what does the coupling between transitions produce that no single transition contains?
+What none of these communities has asked is: <strong>why do multiple independent transitions converge in the same physical system?</strong> And what does the coupling between transitions produce that no single transition contains? Recent work on <span class="tip" tabindex="0">self-organization to multicriticality<span class="tt">A 2025 line of work (Sormunen, Gross &amp; Saram&auml;ki) showing that some systems tune themselves toward multicritical points without external fine-tuning &mdash; a possible mechanism for why such points recur across domains.</span></span> (Sormunen, Gross &amp; Saram&auml;ki 2025) begins to ask a related question from the dynamics side.
 </p>
 
 <p>
 That is what these tutorials examine.
 </p>
+
+</div>
+</details>
 
 <p style="margin-top: 2rem; color: var(--muted); font-size: 0.85rem; text-align: center;">
 Part of <a href="../index.html">Domain Convergence Research</a>

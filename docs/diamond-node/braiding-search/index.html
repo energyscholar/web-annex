@@ -220,6 +220,37 @@ abbr {
 .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
 .footnotes li a { color: var(--muted); }
 .footnotes li a:hover { color: var(--line); }
+/* Collapsible sections */
+details.collapse {
+  background: var(--card);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  padding: 0 1.5rem;
+}
+details.collapse > summary {
+  cursor: pointer;
+  padding: 1rem 0;
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+details.collapse > summary::-webkit-details-marker { display: none; }
+details.collapse > summary::before {
+  content: '\25B8';
+  color: var(--blue);
+  font-size: 0.9em;
+  transition: transform 0.2s;
+}
+details.collapse[open] > summary::before { transform: rotate(90deg); }
+details.collapse > summary:hover { color: var(--blue); }
+details.collapse[open] > summary { border-bottom: 1px solid #334155; margin-bottom: 1rem; }
+details.collapse > *:last-child { margin-bottom: 1.5rem; }
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .fade-in { opacity: 1; transform: none; transition: none; }
@@ -239,9 +270,12 @@ abbr {
 
 <p>This search systematically enumerates braiding rules on Fibonacci anyons and classifies the resulting dynamics by Wolfram's four complexity classes (the <abbr title="New Kind of Science">NKS</abbr> approach).<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> The goal: determine whether any braiding rule on a finite fusion space can produce genuine <span class="tip" tabindex="0">Class IV<span class="tt">The rarest complexity class — behavior that is neither periodic nor purely random, but structured enough to support computation. Cellular automata Rule 110 and Conway's Game of Life exhibit Class IV dynamics.</span></span> (complex) behavior&mdash;the kind of dynamics that supports computation.</p>
 
+<p><strong>The null result here is expected a priori.</strong> A single fixed unitary matrix iterated on a finite Hilbert space is provably quasi-periodic (see <a href="#key-finding">Key Finding</a>), so we do not expect genuine chaos or complexity from this search. Its real value is <span class="tip" tabindex="0">calibration<span class="tt">Running a method on a case where the true answer is known (here: "no genuine complexity") to measure how often the classifier mistakes structured-but-simple behavior for complexity — its false-positive rate.</span></span>: it measures the <span class="tip" tabindex="0">false-positive rate<span class="tt">The fraction of cases a classifier flags as positive (here, "Class IV / complex") when the ground truth is negative. A high rate here warns that "Class IV" labels elsewhere may be over-counted.</span></span> of the Wolfram-class classifier &mdash; how often it labels a quasi-periodic orbit "Class IV." That calibration is what makes the later lattice search interpretable.</p>
+
 <p>Fibonacci anyons have two particle types: <strong>1</strong> (vacuum) and <strong>&tau;</strong>. Their <span class="tip" tabindex="0">fusion rule<span class="tt">The rule governing what particle types result when two anyons combine. For Fibonacci anyons, τ × τ = 1 + τ — fusing two τ particles produces either vacuum (1) or another τ, with probabilities determined by the quantum state.</span></span> is <span class="formula">&tau; &times; &tau; = 1 + &tau;</span>. For <span class="formula">n</span> anyons fusing left-to-right, the state space dimension follows the Fibonacci sequence: F(n&minus;1). Braiding is represented by unitary matrices (<span class="tip" tabindex="0">R-matrices<span class="tt">Matrices encoding the phase acquired when two anyons are exchanged. For Fibonacci anyons, these are 2×2 unitary matrices with entries involving the golden ratio. The fundamental building blocks of braiding operations.</span></span> composed with <span class="tip" tabindex="0">F-matrices<span class="tt">Matrices encoding the associativity of fusion — how regrouping three anyons (fusing AB first vs BC first) relates the two bases. Together with R-matrices, they completely determine the braiding behavior.</span></span>) acting on this fusion space.</p>
 
-<h2>Method</h2>
+<details class="collapse">
+<summary>Method</summary>
 
 <div class="section-card">
 <p><strong>Braid word enumeration.</strong> For n=3 anyons (2D fusion space), the <span class="tip" tabindex="0">braid group<span class="tt">The mathematical group describing all possible particle exchanges. Elements are sequences of neighbor swaps (braids). Unlike permutations, braids track the path of exchange — swapping clockwise differs from swapping counterclockwise.</span></span> generators are &sigma;<sub>1</sub> and &sigma;<sub>2</sub>, each with an inverse. A braiding rule is a word in {&sigma;<sub>1</sub>, &sigma;<sub>1</sub><sup>&minus;1</sup>, &sigma;<sub>2</sub>, &sigma;<sub>2</sub><sup>&minus;1</sup>} of length 1 through 5. This gives:</p>
@@ -260,6 +294,7 @@ abbr {
 
 <p><strong>Physics verification.</strong> Each composite braid matrix is checked for unitarity (&sigma;&sigma;<sup>&dagger;</sup> = I) and eigenvalue structure. <span class="tip" tabindex="0">Yang-Baxter<span class="tt">A consistency equation for particle exchanges: swapping A-B, then B-C, then A-B must equal B-C, then A-B, then B-C. Physical R-matrices always satisfy this. Violation would mean the braiding depends on how you decompose the exchange sequence.</span></span> satisfaction is verified for the physical R-matrices.</p>
 </div>
+</details>
 
 <h2>Results</h2>
 
@@ -295,7 +330,7 @@ abbr {
 
 <p><strong>Critical observation:</strong> Zero Class III in both searches. And the "Class IV" candidates are not genuinely complex&mdash;they are quasi-periodic, as explained below.</p>
 
-<h2>Key Finding: No Genuine Chaos</h2>
+<h2 id="key-finding">Key Finding: No Genuine Chaos</h2>
 
 <div class="key-finding">
 <strong>Unitary evolution on finite Hilbert space cannot produce chaos.</strong>
@@ -319,7 +354,8 @@ abbr {
   <div>Spatially extended braiding on 60-anyon chains. Does spatial extent rescue complexity?</div>
 </a>
 
-<h2>Plots</h2>
+<details class="collapse">
+<summary>Plots</summary>
 
 <div class="plot-container">
 <h3>n=3 strands: Class IV candidates</h3>
@@ -332,6 +368,7 @@ abbr {
 <img src="braiding_class4_4strand.png" alt="Class IV candidate trajectories for 4-strand Fibonacci anyon braiding. 3D state space projections showing quasi-periodic orbits.">
 <p class="plot-caption">Class IV candidates for n=4 Fibonacci anyon braiding (3D fusion space). Higher-dimensional quasi-periodic orbits, still with zero Lyapunov exponent. The richer structure comes from three eigenvalue phases rather than two.</p>
 </div>
+</details>
 
 <div class="footnotes">
 <ol>

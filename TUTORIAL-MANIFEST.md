@@ -18,7 +18,7 @@
 | Responsive design | Yes | Mobile-first. DPR-aware canvas. overflow-x on wide content. |
 | Accessibility | Yes | prefers-reduced-motion, keyboard focus, tabindex on tooltips. |
 | Theme | Match series | DN = dark observatory. Science = per-series. |
-| OPSEC | Yes | No Diamond Node framing, no researcher names in DN context, no NDA/DARPA/TQNN/jill/skeletons/RAF, no Metatron/Robin/Jason. |
+| OPSEC | Yes | Red-lines: the literal name "Diamond Node", jill, Metatron/Robin/Jason, NDA/DARPA/TQNN/Healer/guided-deduction, "pylon", internal session tags (S1xx/S2xx), and any living researcher framed as an outreach target. NOT red-lines: "skeletons", "RAF theory", "poised state", and normal citation of published work (Kauffman 1986, Hordijk & Steel, "named by Frank Wilczek") are fine public math. Public frame = "domain convergence" (never "Diamond Node"). Operator/EWS-detection language is permitted. |
 | Nav links | Yes | Back to index + next/prev within series. |
 
 ---
@@ -318,3 +318,13 @@ freethemath.org/
 
 **B9 fix: skeletons/skeleton-matrix.html**
 - Added missing reduced-motion CSS (prefers-reduced-motion: reduce).
+
+**S201 (2026-07-19): diamond-node full audit + upgrade — COMPLETE**
+- 3-agent read-only audit + adversarial red-team of every diamond-node tutorial; 4-agent implementation pass; correctness red-team before ship.
+- NEW page `skeletons/skeleton-criticality.html` (S2 — the missing 4th skeleton); dead S2 card made live; nav chain now Topology→Criticality→Closure→Computation→Matrix.
+- Deleted 4 orphaned duplicate skeleton pages under `multi-critical/`.
+- Fixed broken tracker/footer links on all 7 multi-critical pages (`../../../js` → `../../js`).
+- Correctness: anyon-sweep TQC (SU(2)_4 not braiding-universal + FLW k=4/k=8 exceptions; D(S_3) solvable-group correction; SU(2)_5 formula; Freedman M.H.); lattice denominator 54/1300; cardiac Feigenbaum reframed; active-matter ν→β; removed leaked "S163g" tag.
+- Citations: added Sormunen/Gross 2025, Ashwin 2025, Frank&Jacobs 2026, Fang et al. 2025, Li (Nat Phys 2026); completed Cook 2000, Guldager-Andersen 2025, de la Cotte 2025; DOWNGRADED brain PNAS (wrong-scope) + REMOVED fabricated "Huang et al. 2025".
+- Q2 "◆ our result" hypothesis markers on the program's own unpublished results (9 files).
+- Accordions (short-on-load) + many tooltips + bridge-letter tooltips (A=Topology, B=Criticality, C=Autocatalysis/Closure, D=Computation) throughout. Completeness-adjacent overclaims softened. OPSEC clean; HTML validated.

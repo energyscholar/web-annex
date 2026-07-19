@@ -59,6 +59,13 @@
   .recap-box dd { color: var(--text); margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; }
   .wiggle { animation: wiggle 3s ease-in-out infinite; }
   @keyframes wiggle { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(2deg) translateX(3px); } 75% { transform: rotate(-2deg) translateX(-3px); } }
+  /* Collapsible deep/secondary sections */
+  details.collapse { margin: 0; }
+  details.collapse > summary { font-size: 1.2rem; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1rem; cursor: pointer; list-style: none; }
+  details.collapse > summary::-webkit-details-marker { display: none; }
+  details.collapse > summary::before { content: '\25B8\00a0'; color: var(--muted); font-size: 0.85em; }
+  details.collapse[open] > summary::before { content: '\25BE\00a0'; }
+  details.collapse > summary:hover { color: var(--s1); }
   /* Tooltips */
   .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
   .tip .tt {
@@ -240,13 +247,14 @@
       <p>If spiral wave tips in the heart braid according to B&#x2083;, the golden ratio should appear in their trajectories. Untested. This is an open falsification target.</p>
     </div>
   </div>
-  <p>Four fields. Same number. Same algebra underneath. No shared citations between the first three discoveries. &phi; is a <em>binary</em> test: it either shows up or it doesn't. That makes this skeleton the most falsifiable of the four.</p>
+  <p>Four fields. Same number. Same algebra underneath. No shared citations between the first three discoveries. Because &phi; either shows up or it doesn't, it gives this skeleton a relatively crisp falsification target. <span class="quiet">A caution, though: &phi; appears in many unrelated settings (growth patterns, continued fractions, aesthetics), so its presence is <em>suggestive</em> rather than proof &mdash; the stronger claim is that the golden ratio arises specifically from B&#x2083; braid algebra, which is what the mechanism above predicts.</span></p>
 </section>
 
 <!-- SECTION 9: THE CONVERGENCE -->
 <section>
-  <h2>Seven communities, one mathematics</h2>
-  <p>Like criticality (FACETS), topological mathematics was independently rediscovered by communities that don't read each other's journals:</p>
+  <details class="collapse">
+  <summary>Seven communities, one mathematics</summary>
+  <p>Like criticality (<span class="tip" tabindex="0">FACETS<span class="tt">A cross-domain survey paper cataloguing how the mathematics of criticality was independently developed across roughly a dozen scientific fields (arXiv:2601.22389).</span></span>), topological mathematics was independently rediscovered by communities that don't read each other's journals:</p>
   <div class="timeline">
     <div class="timeline-item"><span class="timeline-year">1860s+</span><div><span class="timeline-who">Mathematicians</span><br><span class="timeline-field">Knot theory, braid groups, <span class="tip" tabindex="0">Jones polynomial<span class="tt">A knot invariant discovered by Vaughan Jones (1984) that connects knot theory to statistical mechanics. Fields Medal work that bridged pure math and physics.</span></span>. Pure abstraction.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1970s</span><div><span class="timeline-who">Thouless, Haldane, Kosterlitz</span><br><span class="timeline-field">Topological phase transitions. Condensed matter physics. Nobel 2016.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup></span></div></div>
@@ -257,11 +265,13 @@
     <div class="timeline-item"><span class="timeline-year">2010s</span><div><span class="timeline-who">Active matter researchers</span><br><span class="timeline-field">Topological defects govern dynamics in liquid crystals, biological tissues, bacterial colonies.</span></div></div>
   </div>
   <p class="quiet">The mathematicians didn't teach the physicists. The condensed matter people didn't teach the computer scientists. The active matter people came at it from biology. Seven approaches to the same mathematics, arriving from seven directions.</p>
+  </details>
 </section>
 
 <!-- SECTION 10: RECAP -->
 <section>
-  <h2>Recap</h2>
+  <details class="collapse">
+  <summary>Recap</summary>
   <dl class="recap-box">
     <dt>Skeleton</dt>
     <dd>Topological / braided mathematics &mdash; braid groups, knot invariants, modular categories.</dd>
@@ -270,13 +280,14 @@
     <dt>Depth 2: Computation</dt>
     <dd>Using topological protection to compute fault-tolerantly. Braiding = logic gates. Errors can't creep in because errors are local and the computation is global.</dd>
     <dt>Tracer: &phi; = 1.618...</dt>
-    <dd>The golden ratio. Signature of B&#x2083; braid algebra. Appears as TEPO, quantum dimension, or tile ratio. Binary test: either it shows up or the skeleton assignment is wrong.</dd>
+    <dd>The golden ratio. Signature of B&#x2083; braid algebra. Appears as TEPO, quantum dimension, or tile ratio. A relatively crisp check &mdash; but because &phi; also arises in unrelated settings, its presence is suggestive rather than conclusive on its own.</dd>
     <dt>Key insight</dt>
     <dd>Alternating braid crossings create Fibonacci growth. The growth rate is &phi;. This is why the golden ratio appears in every system where three-strand braiding is active.</dd>
     <dt>Convergence</dt>
     <dd>7 communities independently discovered this mathematics. None cited the others. This is a FACETS-scale convergence story, undocumented as such.</dd>
   </dl>
-  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-closure.html" style="color:var(--s3)">Skeleton 3: Closure &rarr;</a></p>
+  </details>
+  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-criticality.html" style="color:var(--s2)">Skeleton 2: Criticality &rarr;</a></p>
 </section>
 
 </main>

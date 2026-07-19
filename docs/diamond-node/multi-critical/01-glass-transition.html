@@ -275,6 +275,9 @@ input[type="range"]::-moz-range-thumb {
   .tip .tt::after { display: none; }
 }
 
+/* Our-result marker (novel / not-yet-peer-reviewed claims) */
+.hyp{font-size:.72em;font-weight:600;color:#e0a030;border:1px solid #e0a03055;border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;cursor:help;vertical-align:middle}
+.hyp .tt{font-weight:400}
 /* Footnotes */
 .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
 .fn:hover { color: var(--line); }
@@ -489,7 +492,7 @@ At a bicritical point, two independent <span class="tip" tabindex="0">phase tran
 </p>
 
 <p>
-The strong-glass limit &mdash; where <span class="math">T</span><sub>MCT</sub> equals <span class="math">T</span><sub>K</sub> &mdash; is exactly this point. Strong glass formers are <em>near</em> the bicritical point. Fragile glass formers are <em>far</em> from it. <strong>Fragility is distance from bicriticality.</strong>
+The strong-glass limit &mdash; where <span class="math">T</span><sub>MCT</sub> equals <span class="math">T</span><sub>K</sub> &mdash; is exactly this point. Strong glass formers are <em>near</em> the bicritical point. Fragile glass formers are <em>far</em> from it. <strong>Fragility is distance from bicriticality.</strong><span class="hyp tip" tabindex="0">&#9670; our hypothesis<span class="tt">Reframing fragility as distance from a bicritical point is an original proposal of this research program, not established glass-physics consensus. The two transitions (Pettini et al. 2025) are published; the bicritical interpretation is ours and remains to be tested.</span></span>
 </p>
 
 <p>
@@ -593,7 +596,9 @@ This reframing turns an empirical classification (strong vs. fragile) into a str
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
 <!-- ========== THE GARDNER CONNECTION ========== -->
-<h2>A Third Transition Below</h2>
+<details class="technical fade-in">
+<summary><span class="detail-icon">&#9670;</span> A Third Transition Below: the Gardner connection</summary>
+<div class="detail-body" style="padding-top:1rem;">
 
 <p>
 Below <span class="math">T</span><sub>K</sub>, a third transition appears. Called the <strong><span class="tip" tabindex="0">Gardner transition<span class="tt">A transition within the glass phase where each metastable state shatters into a fractal hierarchy of sub-states. Named after Elizabeth Gardner (1957&ndash;1988). It connects glass physics to the physics of tightly packed particles.</span></span></strong>, it splits each glass state into a fractal hierarchy of sub-states &mdash; <span class="tip" tabindex="0">marginally stable<span class="tt">Balanced on the edge of instability. The smallest push can trigger a rearrangement. Not unstable (not falling apart), not stable (not firmly locked) &mdash; right at the boundary.</span></span> configurations separated by vanishing barriers. The Gardner transition produces the <span class="tip" tabindex="0">scaling laws<span class="tt">Mathematical relationships describing how properties change near a tipping point. They follow power laws &mdash; doubling the distance from the critical point changes the observable by a fixed ratio, not a fixed amount.</span></span> that govern <span class="tip" tabindex="0">jamming<span class="tt">The physics of disordered particles packed as tightly as possible &mdash; like sand grains in a jar. Jammed systems are rigid but structurally disordered, sharing deep mathematical connections with glasses.</span></span>: the physics of tightly packed disordered particles.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup>
@@ -602,6 +607,9 @@ Below <span class="math">T</span><sub>K</sub>, a third transition appears. Calle
 <p>
 This creates a chain that connects the glass transition to an entirely different physical system. The chain runs: <em>glass bicriticality &rarr; Gardner transition &rarr; jamming scalings &rarr; protein core packing</em>. We follow this chain in <a href="04-protein-folding.html">Tutorial 04</a>.
 </p>
+
+</div>
+</details>
 
 <p>
 The glass transition is the simplest system in this series: two transitions, one coupling parameter, one codimension-two point. It introduces the core idea &mdash; that the <em>coupling</em> between transitions matters, not just the transitions themselves &mdash; in the most stripped-down setting possible.
@@ -695,7 +703,7 @@ The glass transition is the simplest system in this series: two transitions, one
     </svg>
     </div>
     <p>
-      Preliminary correlation: <span class="math">r</span> = 0.56, <span class="math">p</span> = 0.09 (N = 10 glass formers). Suggestive but not significant. Needs careful <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> compilation for 20+ systems with well-characterized fragility values.
+      Preliminary correlation: <span class="math">r</span> = 0.56, <span class="math">p</span> = 0.09 (N = 10 glass formers).<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed computation from this research program &mdash; distinct from established consensus. At N=10, p=0.09, this is a hint, not a finding.</span></span> Suggestive but not significant. Needs careful <span class="math">T</span><sub>MCT</sub> / <span class="math">T</span><sub>K</sub> compilation for 20+ systems with well-characterized fragility values.
     </p>
   </div>
 </details>
@@ -827,7 +835,7 @@ The glass transition is the simplest system in this series: two transitions, one
 </div>
 
 <p class="footer-note">
-  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../../">Web Annex</a>
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../">Web Annex</a>
 </p>
 
 </div>
@@ -840,6 +848,6 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
-<script src="../../../js/annex-tracker.js"></script>
+<script src="../../js/annex-tracker.js"></script>
 </body>
 </html>

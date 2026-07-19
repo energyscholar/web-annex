@@ -236,6 +236,9 @@ sub, sup { font-size: 0.75em; }
   .tip .tt::after { display: none; }
 }
 
+/* Hypothesis / own-result marker */
+.hyp{font-size:.72em;font-weight:600;color:#e0a030;border:1px solid #e0a03055;border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;cursor:help;vertical-align:middle}
+
 /* Footnotes */
 .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
 .fn:hover { color: var(--line); }
@@ -267,7 +270,7 @@ sub, sup { font-size: 0.75em; }
 <p class="subtitle">Period-doubling, defect unbinding, and autocatalytic closure &mdash; in one organ</p>
 
 <p class="lead">
-Your heart beats about 100,000 times a day. Each beat is a coordinated electrical wave that sweeps across the atria, pauses at the atrioventricular node, then triggers the ventricles. When this coordination fails, the result ranges from harmless palpitations to sudden cardiac death. The physics of how it fails turns out to involve three independent transition frameworks converging in a single tissue.
+Your heart beats about 100,000 times a day. Each beat is a coordinated electrical wave that sweeps across the atria, pauses at the <span class="tip" tabindex="0">atrioventricular node<span class="tt">The electrical relay between the upper chambers (atria) and lower chambers (ventricles) of the heart. It briefly delays the signal so the ventricles fill before they contract.</span></span>, then triggers the ventricles. When this coordination fails, the result ranges from harmless palpitations to sudden cardiac death. The physics of how it fails turns out to involve three independent transition frameworks converging in a single tissue.
 </p>
 
 <p>
@@ -280,11 +283,11 @@ No other system in this series makes the multi-critical structure so clinically 
 <h3>1. The Feigenbaum Cascade &mdash; a period-doubling route to chaos</h3>
 
 <p>
-In 2023, Cantwell and colleagues observed a full <strong><span class="tip" tabindex="0">Feigenbaum period-doubling cascade<span class="tt">A universal route to chaos where a system&rsquo;s behavior successively doubles in complexity: period-1 &rarr; period-2 &rarr; period-4 &rarr; period-8 &rarr; chaos. Discovered by Mitchell Feigenbaum in 1978. The same pattern appears in dripping faucets, population dynamics, and lasers.</span></span></strong> in human cardiac tissue immediately before ventricular fibrillation.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> The electrical activation pattern went from period-1 (normal rhythm) to period-2 (<span class="tip" tabindex="0">alternans<span class="tt">A beat-to-beat alternation in the heart&rsquo;s electrical signal &mdash; one beat is long, the next is short, repeating. Clinically recognized as an early warning of dangerous arrhythmias.</span></span> &mdash; every other beat is different) to period-4 and period-8, then into chaotic fibrillation.
+In 2023, Cantwell and colleagues observed a full <strong><span class="tip" tabindex="0">Feigenbaum period-doubling cascade<span class="tt">A universal route to chaos where a system&rsquo;s behavior successively doubles in complexity: period-1 &rarr; period-2 &rarr; period-4 &rarr; period-8 &rarr; chaos. Discovered by Mitchell Feigenbaum in 1978. The same pattern appears in dripping faucets, population dynamics, and lasers.</span></span></strong> in human cardiac tissue immediately before <span class="tip" tabindex="0">ventricular fibrillation<span class="tt">A lethal rhythm in which the heart&rsquo;s lower chambers quiver chaotically instead of pumping. Without immediate defibrillation it causes sudden cardiac death within minutes.</span></span>.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> The electrical activation pattern went from period-1 (normal rhythm) to period-2 (<span class="tip" tabindex="0">alternans<span class="tt">A beat-to-beat alternation in the heart&rsquo;s electrical signal &mdash; one beat is long, the next is short, repeating. Clinically recognized as an early warning of dangerous arrhythmias.</span></span> &mdash; every other beat is different) to period-4 and period-8, then into chaotic fibrillation.
 </p>
 
 <p>
-This is not a loose metaphor. The cascade follows the <span class="tip" tabindex="0">Feigenbaum universal constant<span class="tt">The number &delta; = 4.669... that governs the ratio of successive bifurcation intervals in all period-doubling cascades. It is as fundamental to chaos theory as &pi; is to circles &mdash; the same constant appears in every system that follows this route to chaos.</span></span> <span class="math">&delta;</span> = 4.669... to within measurement precision.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> The same mathematics that governs the transition to chaos in dripping faucets, population dynamics, and laser intensity fluctuations governs the breakdown of cardiac rhythm.
+This is more than a loose metaphor. The cascade appears to follow the <span class="tip" tabindex="0">Feigenbaum universal constant<span class="tt">The number &delta; = 4.669... that governs the ratio of successive bifurcation intervals in all period-doubling cascades. It is as fundamental to chaos theory as &pi; is to circles &mdash; the same constant appears in every system that follows this route to chaos.</span></span> <span class="math">&delta;</span> = 4.669...: the ratios of successive bifurcation intervals reported in the 2023 measurements are consistent with the universal value, though a single dataset cannot pin the constant down to high precision.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> The same mathematics that governs the transition to chaos in dripping faucets, population dynamics, and laser intensity fluctuations appears to govern the breakdown of cardiac rhythm.
 </p>
 
 <h3>2. KT Defect Unbinding &mdash; a topological transition</h3>
@@ -304,7 +307,7 @@ The calcium signaling network that drives each heartbeat is a <strong><span clas
 </p>
 
 <p>
-The cardiac calcium network scores 17 out of 17 reactions in the RAF &mdash; a <span class="tip" tabindex="0">maximal RAF<span class="tt">An RAF where every possible reaction participates &mdash; nothing is left out. A maximal RAF has the most complete autocatalytic closure possible for the given network.</span></span>. And it has a remarkable structural property: <strong>zero individually essential reactions</strong>. Remove any single reaction, and the remaining 16 still form a functioning RAF. The system has complete <span class="tip" tabindex="0">single-fault tolerance<span class="tt">The ability to lose any one component and keep working. In engineering, this is N+1 redundancy. In the cardiac RAF, every reaction has a backup path &mdash; the network routes around any single failure.</span></span>.
+The cardiac calcium network scores 17 out of 17 reactions in the RAF &mdash; a <span class="tip" tabindex="0">maximal RAF<span class="tt">An RAF where every possible reaction participates &mdash; nothing is left out. A maximal RAF has the most complete autocatalytic closure possible for the given network.</span></span>. And it has a remarkable structural property: <strong>zero individually essential reactions</strong>.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus.</span></span> Remove any single reaction, and the remaining 16 still form a functioning RAF. The system has complete <span class="tip" tabindex="0">single-fault tolerance<span class="tt">The ability to lose any one component and keep working. In engineering, this is N+1 redundancy. In the cardiac RAF, every reaction has a backup path &mdash; the network routes around any single failure.</span></span>.
 </p>
 
 <!-- ========== MAIN SVG: THREE REGIMES ========== -->
@@ -436,7 +439,7 @@ The third framework is the most surprising. The calcium signaling cascade that t
 </p>
 
 <p>
-RAF analysis reveals a striking structural property. Of the 17 reactions, <strong>none is individually essential</strong>. Remove any single reaction &mdash; any ion channel, any kinase, any pump &mdash; and the remaining 16 still form a functioning autocatalytic set. The system has evolved not just to function, but to be robust against single-point failures.
+RAF analysis reveals a striking structural property. Of the 17 reactions, <strong>none is individually essential</strong>.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus.</span></span> Remove any single reaction &mdash; any ion channel, any kinase, any pump &mdash; and the remaining 16 still form a functioning autocatalytic set. The system has evolved not just to function, but to be robust against single-point failures.
 </p>
 
 <p>
@@ -444,7 +447,7 @@ Where does it break? Only at the <strong>class level</strong>. Remove all calciu
 </p>
 
 <p>
-The minimum sustaining core is just <strong>three reactions</strong>: a PKA phosphorylation cycle. This 3-reaction core maintains the entire autocatalytic set. It is the smallest RAF within the RAF &mdash; the kernel that everything else depends on.
+The minimum sustaining core is just <strong>three reactions</strong>: a PKA phosphorylation cycle.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus.</span></span> This 3-reaction core maintains the entire autocatalytic set. It is the smallest RAF within the RAF &mdash; the kernel that everything else depends on.
 </p>
 
 <!-- ========== INTERACTIVE: REMOVE A REACTION ========== -->
@@ -532,8 +535,9 @@ The minimum sustaining core is just <strong>three reactions</strong>: a PKA phos
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
 <!-- ========== HOW THEY COUPLE ========== -->
-<h2>How the Three Transitions Couple</h2>
-
+<details class="fade-in">
+  <summary>How the Three Transitions Couple</summary>
+  <div class="detail-body">
 <p>
 Each transition framework describes something real in cardiac tissue. But they are not three independent stories about the same organ. They interact:
 </p>
@@ -547,8 +551,10 @@ The <strong>RAF</strong> is the substrate that supports both. It persists throug
 </p>
 
 <p>
-This is the multi-critical structure: temporal criticality (Feigenbaum), spatial criticality (KT), and network criticality (RAF closure), all present simultaneously, each with measurable signatures, interacting to produce the full clinical picture of cardiac arrhythmia.
+This is the multi-critical structure: temporal criticality (Feigenbaum), spatial criticality (KT), and network criticality (RAF closure), all present simultaneously, each with measurable signatures, interacting to produce the full clinical picture of cardiac arrhythmia. Recent work on classifying tipping points by their temporal scale-invariance (Frank &amp; Jacobs, 2026) places period-doubling cascades like this one within a broader taxonomy of transitions &mdash; a reminder that the routes to arrhythmia are instances of much more general phenomena.
 </p>
+  </div>
+</details>
 
 <!-- ========== TECHNICAL DETAILS ========== -->
 
@@ -562,7 +568,7 @@ This is the multi-critical structure: temporal criticality (Feigenbaum), spatial
       Cantwell et al. (2023) recorded <span class="tip" tabindex="0">optical mapping<span class="tt">A technique where voltage-sensitive dye is applied to heart tissue, making electrical waves visible as light intensity changes. A high-speed camera records the wave patterns across the entire tissue surface simultaneously.</span></span> data from human ventricular tissue during the transition to fibrillation. <span class="tip" tabindex="0">Action potential duration<span class="tt">How long each heartbeat&rsquo;s electrical pulse lasts at a given point in the tissue. It&rsquo;s the cardiac equivalent of a signal&rsquo;s pulse width &mdash; and its beat-to-beat variation is what the Feigenbaum cascade tracks.</span></span> (APD) alternans &mdash; beat-to-beat alternation &mdash; is well-known (period-2). Their key finding was resolving <strong>period-4 and period-8</strong> in the APD sequence before the onset of chaotic activation.
     </p>
     <p>
-      The Feigenbaum cascade in the <span class="tip" tabindex="0">logistic map<span class="tt">The simplest mathematical model that produces chaos: x&#x2099;&#x208A;&#x2081; = rx&#x2099;(1 &minus; x&#x2099;). As the parameter r increases, the system goes through period-doubling to chaos. It&rsquo;s the canonical example of the Feigenbaum route.</span></span> predicts that the ratios of successive bifurcation intervals converge to &delta; = 4.669... This universal constant appears across all one-dimensional maps with a quadratic maximum. Cardiac <span class="tip" tabindex="0">restitution curves<span class="tt">A plot of how long each heartbeat&rsquo;s electrical pulse lasts (APD) versus how long the tissue rested before it (diastolic interval). Its shape &mdash; a smooth curve with a single maximum &mdash; is exactly the structure that produces Feigenbaum cascades.</span></span> (APD as a function of the preceding diastolic interval) have exactly this structure: a smooth curve with a single maximum. The Feigenbaum prediction is therefore exact, not approximate.
+      The Feigenbaum cascade in the <span class="tip" tabindex="0">logistic map<span class="tt">The simplest mathematical model that produces chaos: x&#x2099;&#x208A;&#x2081; = rx&#x2099;(1 &minus; x&#x2099;). As the parameter r increases, the system goes through period-doubling to chaos. It&rsquo;s the canonical example of the Feigenbaum route.</span></span> predicts that the ratios of successive bifurcation intervals converge to &delta; = 4.669... This universal constant appears across all one-dimensional maps with a quadratic maximum. Cardiac <span class="tip" tabindex="0">restitution curves<span class="tt">A plot of how long each heartbeat&rsquo;s electrical pulse lasts (APD) versus how long the tissue rested before it (diastolic interval). Its shape &mdash; a smooth curve with a single maximum &mdash; is exactly the structure that produces Feigenbaum cascades.</span></span> (APD as a function of the preceding diastolic interval) have exactly this structure: a smooth curve with a single maximum. This places cardiac dynamics in the same universality class as the logistic map, so Feigenbaum scaling is expected on theoretical grounds &mdash; but confirming the constant to full precision in living tissue would require resolving many more bifurcations than any single experiment has so far provided.
     </p>
     <p>
       The clinical significance: period-4 and period-8 alternans precede fibrillation with high specificity. They provide a measurable early warning &mdash; the Feigenbaum cascade gives several bifurcation intervals of advance notice before the transition to chaos.
@@ -639,7 +645,7 @@ This is the multi-critical structure: temporal criticality (Feigenbaum), spatial
       <strong>Results:</strong> maxRAF = 17/17 (all reactions). maxCAF (constructively autocatalytic) = 17/17. Essential reactions: 0. The RAF is fully redundant at the single-reaction level. Minimum sustaining core: 3 reactions (PKA phosphorylation cycle: R14_PKA_phos, R15_PP1_dephos, R16_feedback).
     </p>
     <p>
-      <strong>Cascade analysis (S163g):</strong> 6 minimal 2-reaction RAFs exist, all rooted at R01 (L-type Ca<sup>2+</sup> entry) &rarr; Ca<sub>cyt</sub> hub. 20 three-reaction RAFs, of which 19 pass through R01 and 1 uses the PKA backup pathway. The structure is Griffiths-like: no single reaction is essential, but disruption propagates from root-level (class removal of all Ca entry) through the network in a cascade. The cascade structure predicts which drug combinations will produce catastrophic failure vs. manageable degradation.
+      <strong>Cascade analysis</strong> <span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus.</span></span>: 6 minimal 2-reaction RAFs exist, all rooted at R01 (L-type Ca<sup>2+</sup> entry) &rarr; Ca<sub>cyt</sub> hub. 20 three-reaction RAFs, of which 19 pass through R01 and 1 uses the PKA backup pathway. The structure is Griffiths-like: no single reaction is essential, but disruption propagates from root-level (class removal of all Ca entry) through the network in a cascade. The cascade structure predicts which drug combinations will produce catastrophic failure vs. manageable degradation.
     </p>
   </div>
 </details>
@@ -727,6 +733,7 @@ This is the multi-critical structure: temporal criticality (Feigenbaum), spatial
     <p>Ganesan, P. et al. (2025). Topological boundaries in cardiac arrhythmias. <em>Frontiers in Network Physiology</em>.</p>
     <p>Hordijk, W. &amp; Steel, M. (2017). Chasing the tail: The emergence of autocatalytic networks. <em>BioSystems</em>, 152, 1&ndash;10.</p>
     <p>Feigenbaum, M. J. (1978). Quantitative universality for a class of nonlinear transformations. <em>J. Stat. Phys.</em>, 19, 25&ndash;52.</p>
+    <p>Frank, A. &amp; Jacobs, L. A. (2026). Temporal matrix scale invariance and the classification of tipping points. arXiv:2606.02649.</p>
     <p>Kosterlitz, J. M. &amp; Thouless, D. J. (1973). Ordering, metastability and phase transitions in two-dimensional systems. <em>J. Phys. C</em>, 6, 1181.</p>
     <p>Bers, D. M. (2002). Cardiac excitation-contraction coupling. <em>Nature</em>, 415, 198&ndash;205.</p>
   </div>
@@ -749,7 +756,7 @@ This is the multi-critical structure: temporal criticality (Feigenbaum), spatial
 </div>
 
 <p class="footer-note">
-  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../../">Web Annex</a>
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../">Web Annex</a>
 </p>
 
 </div>
@@ -761,6 +768,6 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
-<script src="../../../js/annex-tracker.js"></script>
+<script src="../../js/annex-tracker.js"></script>
 </body>
 </html>

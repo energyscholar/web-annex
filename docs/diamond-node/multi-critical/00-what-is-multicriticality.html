@@ -698,7 +698,7 @@ has reached its individual threshold.
 <p class="fade-in">
 With coupling on, try setting both sliders to around 65%. Neither has reached its
 individual threshold (100%), but the system is already in the danger zone. This is the
-coupling effect: <strong>the combination is more dangerous than the sum of the parts.</strong>
+coupling effect: <strong>the combination is more dangerous than the sum of the parts.</strong><sup><a class="fn" href="#fn6" id="fnref6">6</a></sup>
 </p>
 
 <details class="technical fade-in">
@@ -774,7 +774,7 @@ Move the slider to see how the same system state appears under two detection par
     that take down entire systems &mdash; require multiple contributing causes
     approaching their thresholds simultaneously.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> These are the expensive ones. The ones
     that cost millions per hour. And they are structurally invisible to
-    independent-parameter detection.
+    independent-parameter detection &mdash; the same regime in which standard early-warning signals are known to lose skill as transitions accelerate or cascade.<sup><a class="fn" href="#fn7" id="fnref7">7</a></sup>
   </p>
 </div>
 
@@ -790,7 +790,10 @@ scaling laws appear in systems that have nothing in common except their mathemat
 structure near coupled tipping points.
 </p>
 
-<div class="example-grid fade-in">
+<details class="technical fade-in">
+  <summary><span class="detail-icon">&mdash;</span> Worked examples: five domains, one shared mathematics</summary>
+  <div class="detail-body" style="padding-top:1rem;">
+<div class="example-grid">
   <div class="example-card">
     <h4><span class="ex-icon" style="color: var(--blue);">&#9679;</span> Water</h4>
     <p>The liquid-gas <span class="tip" tabindex="0">critical point<span class="tt">Where the distinction between liquid and gas disappears &mdash; above it, there&rsquo;s only one fluid phase. Discovered experimentally in CO&#8322; in 1869.</span></span> (single) has been understood since 1869.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup>
@@ -824,6 +827,8 @@ structure near coupled tipping points.
     <div class="ex-params">Parameters: connections, memory, disk I/O</div>
   </div>
 </div>
+  </div>
+</details>
 
 <details class="technical fade-in">
   <summary><span class="detail-icon">&mdash;</span> Why "Not a Metaphor" Is a Strong Claim</summary>
@@ -857,7 +862,10 @@ Standard single-parameter monitoring has the first. Most systems lack the second
 third.
 </p>
 
-<div class="req-list fade-in">
+<details class="technical fade-in">
+  <summary><span class="detail-icon">&mdash;</span> The three capabilities, in detail</summary>
+  <div class="detail-body" style="padding-top:1rem;">
+<div class="req-list">
   <div class="req-item">
     <div class="req-num">1</div>
     <div class="req-body">
@@ -893,6 +901,8 @@ third.
     </div>
   </div>
 </div>
+  </div>
+</details>
 
 <div class="callout insight fade-in">
   <h4>The Missing Piece</h4>
@@ -928,7 +938,7 @@ to predict and most expensive to experience.
 
 <p class="fade-in">
 The mathematics of multicriticality is well-established in condensed matter physics and
-statistical mechanics, where it has been studied for over fifty years.<sup><a class="fn" href="#fn5" id="fnref5">5</a></sup> Its application to
+statistical mechanics, where it has been studied for over fifty years.<sup><a class="fn" href="#fn5" id="fnref5">5</a></sup> Recent work extends it in two directions relevant here: how systems <em>self-organize</em> toward multicritical points without external fine-tuning,<sup><a class="fn" href="#fn8" id="fnref8">8</a></sup> and how the resulting tipping points can be classified and their cascades anticipated.<sup><a class="fn" href="#fn9" id="fnref9">9</a></sup> Its application to
 infrastructure monitoring, ecosystem management, and other complex systems is the natural
 extension of universality &mdash; the principle that the mathematics of tipping points
 does not depend on what the system is made of.
@@ -937,10 +947,14 @@ does not depend on what the system is made of.
 <div class="footnotes fade-in">
   <ol>
     <li id="fn1">T. Andrews, &ldquo;On the Continuity of the Gaseous and Liquid States of Matter,&rdquo; <em>Phil. Trans. R. Soc.</em> <strong>159</strong>, 575&ndash;590 (1869). <a href="#fnref1">&uarr;</a></li>
-    <li id="fn2">F. Sciortino <em>et al.</em>, &ldquo;Liquid-liquid critical point in supercooled water,&rdquo; <em>PNAS</em> <strong>121</strong> (2024); S. You <em>et al.</em>, &ldquo;Experimental observation of the liquid-liquid critical point,&rdquo; <em>Science</em> (2026). <a href="#fnref2">&uarr;</a></li>
+    <li id="fn2">F. Sciortino <em>et al.</em>, &ldquo;Liquid-liquid critical point in supercooled water,&rdquo; <em>PNAS</em> <strong>121</strong> (2024); S. You <em>et al.</em>, &ldquo;Experimental observation of the liquid-liquid critical point,&rdquo; <em>Science</em> (2026); Li <em>et al.</em>, &ldquo;Evidence for the generic existence of two local structures in liquid water,&rdquo; <em>Nature Physics</em> (2026), doi:10.1038/s41567-026-03301-8 (reaction-pathway topology near the liquid&ndash;liquid critical point). <a href="#fnref2">&uarr;</a></li>
     <li id="fn3">M. Blume, <em>Phys. Rev.</em> <strong>141</strong>, 517 (1966); H.W.J. Capel, <em>Physica</em> <strong>32</strong>, 966 (1966). <a href="#fnref3">&uarr;</a></li>
     <li id="fn4">R.I. Cook, &ldquo;How Complex Systems Fail,&rdquo; Cognitive Technologies Laboratory, University of Chicago (2000). See especially observation 11: &ldquo;catastrophe requires multiple failures.&rdquo; <a href="#fnref4">&uarr;</a></li>
     <li id="fn5">R.B. Griffiths, &ldquo;Thermodynamics Near the Two-Fluid Critical Mixing Point in He&#179;-He&#8308;,&rdquo; <em>Phys. Rev. Lett.</em> <strong>24</strong>, 715 (1970). I.D. Lawrie &amp; S. Sarbach, &ldquo;Theory of Tricritical Points,&rdquo; in <em>Phase Transitions and Critical Phenomena</em>, Vol. 9 (1984). <a href="#fnref5">&uarr;</a></li>
+    <li id="fn6">S. Fang, Z. Wang, J. Kurths &amp; J. Fan, &ldquo;Tipping points and cascading transitions,&rdquo; arXiv:2511.01168 (2025) &mdash; on how coupled thresholds compound so the combination fails before either alone. <a href="#fnref6">&uarr;</a></li>
+    <li id="fn7">P. Ashwin, R. Bastiaansen, A. von der Heydt &amp; P. Ritchie, &ldquo;Early warning skill, extrapolation and tipping for accelerating cascades,&rdquo; <em>Proc. R. Soc. A</em> (2025). <a href="#fnref7">&uarr;</a></li>
+    <li id="fn8">S. Sormunen, T. Gross &amp; J. Saram&auml;ki, &ldquo;Self-organization to multicriticality,&rdquo; arXiv:2506.04275 (2025). <a href="#fnref8">&uarr;</a></li>
+    <li id="fn9">A. Frank &amp; L.A. Jacobs, &ldquo;Temporal matrix scale invariance and the classification of tipping points,&rdquo; arXiv:2606.02649 (2026). <a href="#fnref9">&uarr;</a></li>
   </ol>
 </div>
 

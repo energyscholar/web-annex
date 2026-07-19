@@ -211,6 +211,24 @@ p { margin-bottom: 1rem; }
   color: var(--line);
   margin-bottom: 0.5rem;
 }
+.lede-claim {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--heading);
+  margin-bottom: 1.25rem;
+}
+.lede-claim strong { color: var(--heading); }
+.wip-banner {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--amber);
+  margin-bottom: 1.75rem;
+  line-height: 1.6;
+}
+.wip-banner strong { color: var(--amber); }
 /* Tooltips */
 .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
 .tip .tt {
@@ -243,6 +261,12 @@ p { margin-bottom: 1rem; }
 
 <h1>Domain Convergence Research</h1>
 <p class="subtitle">Investigating cross-domain bridges between eleven scientific fields</p>
+
+<p class="lede-claim"><strong>The central claim:</strong> a small set of mathematical structures &mdash; criticality, topology, autocatalysis, and computation &mdash; keep reappearing, independently, across very different sciences. This collection maps those recurrences and tests which are genuine structural bridges rather than coincidences.</p>
+
+<div class="wip-banner">
+  <strong>Work in progress.</strong> This is an active investigation into multicriticality and cross-domain structure. The skeleton framework, system assignments, and bridge claims are provisional hypotheses, not established results. Items marked <span style="color:#e0a030">&#x25C6; our result</span> are this program's own not-yet-peer-reviewed computations, distinct from textbook consensus.
+</div>
 
 <p class="intro-text">This collection documents a systematic investigation into structural relationships between <span class="tip" tabindex="0">criticality<span class="tt">The study of phase transitions — sudden qualitative changes in a system's behavior at threshold values. Power laws, scale invariance, and universality are its signatures.</span></span>, <span class="tip" tabindex="0">topology<span class="tt">Mathematical properties preserved under continuous deformation. Braiding, knot invariants, and topological protection. Information stored in topology survives local noise.</span></span>, <span class="tip" tabindex="0">autocatalysis<span class="tt">A network of reactions where every catalyst is produced by the network itself. Self-sustaining systems, from campfires to cells. Formalized as RAF (Reflexively Autocatalytic Food-generated) theory.</span></span>, computation, and seven other scientific domains. The work combines interactive tutorials with computational experiments, tracking both positive findings and null results.</p>
 
@@ -294,7 +318,7 @@ p { margin-bottom: 1rem; }
 <a class="card" href="skeletons/">
   <div class="card-number">Foundation</div>
   <div class="card-title">The Four Mathematical Skeletons</div>
-  <div class="card-desc">Topology, dynamics, closure, computation &mdash; four independent mathematical frameworks that recur across eleven scientific domains. Each was independently discovered by multiple communities. Includes interactive tutorials for three skeletons (S1, S3, S4) plus the radar-chart matrix for cross-system comparison.</div>
+  <div class="card-desc">Topology, dynamics, closure, computation &mdash; four independent mathematical frameworks that recur across eleven scientific domains. Each was independently discovered by multiple communities. Includes interactive tutorials for all four skeletons (S1&ndash;S4) plus the radar-chart matrix for cross-system comparison.</div>
   <span class="card-tag tag-interactive">Interactive</span>
 </a>
 
@@ -349,7 +373,7 @@ p { margin-bottom: 1rem; }
   <li class="structural">Fibonacci anyons sit at the <span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between ordered and chaotic behavior where computation is maximized. For anyon fusion algebras, Fibonacci sits at this boundary — minimal self-catalysis, minimal universality.</span></span> for fusion algebras: minimal self-catalysis, minimal universality, golden ratio dimension growth. Analogous to K=2 in Boolean networks.</li>
   <li class="null-result">No genuine Class IV behavior in braiding phase space: unitary evolution on finite Hilbert space is linear and norm-preserving, giving <span class="tip" tabindex="0">Lyapunov exponent<span class="tt">A measure of how fast nearby trajectories diverge. Positive = chaos (trajectories separate exponentially). Zero = no chaos (trajectories stay together). Exactly zero for unitary quantum evolution.</span></span> exactly zero. The 360 "Class IV" candidates (n=3) are quasi-periodic with irrational eigenvalue phases.</li>
   <li class="structural">Bridge mechanism taxonomy: approximately 4 of 7 identified bridges operate on rule-space structural identity rather than parameter coincidence or dynamical coupling.</li>
-  <li class="structural">The AC bridge (topology &harr; autocatalysis) has physical content beyond the algebraic structural identity. Anyon emergence from the substrate (Nayak et al. 2008) IS physical generation in Kauffman's sense &mdash; the food set is energy input, the generation is collective excitation, the closure is fusion algebra. FQHE systems are already AC demonstrators; the gap is formal recognition and cross-community publication, not finding a new system.</li>
+  <li class="structural">The <span class="tip" tabindex="0">AC bridge<span class="tt">Bridge letters: A = Topology, B = Criticality, C = Autocatalysis / Closure, D = Computation. A&ndash;C links Topology and Autocatalysis / Closure.</span></span> (topology &harr; autocatalysis) has physical content beyond the algebraic structural identity. Anyon emergence from the substrate (Nayak et al. 2008) IS physical generation in Kauffman's sense &mdash; the food set is energy input, the generation is collective excitation, the closure is fusion algebra. FQHE systems are already AC demonstrators; the gap is formal recognition and cross-community publication, not finding a new system.</li>
 </ul>
 
 <div class="legend">

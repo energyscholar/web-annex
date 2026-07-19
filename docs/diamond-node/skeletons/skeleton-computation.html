@@ -57,6 +57,13 @@
   .recap-box { background: var(--card); border: 2px solid var(--s4); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
   .recap-box dt { color: var(--s4); font-weight: 600; font-size: 0.9rem; }
   .recap-box dd { color: var(--text); margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; }
+  /* Collapsible deep/secondary sections */
+  details.collapse { margin: 0; }
+  details.collapse > summary { font-size: 1.2rem; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1rem; cursor: pointer; list-style: none; }
+  details.collapse > summary::-webkit-details-marker { display: none; }
+  details.collapse > summary::before { content: '\25B8\00a0'; color: var(--muted); font-size: 0.85em; }
+  details.collapse[open] > summary::before { content: '\25BE\00a0'; }
+  details.collapse > summary:hover { color: var(--s4); }
   /* Tooltips */
   .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
   .tip .tt {
@@ -167,7 +174,7 @@
 
   <div class="bridge-box">
     <h3>The bridge to Skeleton 2</h3>
-    <p style="font-size:0.9rem">This is where Skeleton 4 (Computation) meets Skeleton 2 (Dynamics/Criticality). The <span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between ordered (frozen, predictable) and chaotic (noisy, unpredictable) behavior. Where computation is maximized &mdash; ordered enough to store information, chaotic enough to process it.</span></span> IS the critical point. Computation concentrates at criticality. This is not a metaphor &mdash; it's the same mathematical object seen from two directions.</p>
+    <p style="font-size:0.9rem">This is where Skeleton 4 (Computation) meets Skeleton 2 (Dynamics/Criticality) &mdash; the <span class="tip" tabindex="0">B&ndash;D bridge<span class="tt">Bridge letters: A = Topology, B = Criticality, C = Autocatalysis / Closure, D = Computation. B&ndash;D links Criticality and Computation.</span></span> (Criticality &harr; Computation). The <span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between ordered (frozen, predictable) and chaotic (noisy, unpredictable) behavior. Where computation is maximized &mdash; ordered enough to store information, chaotic enough to process it.</span></span> coincides with the critical point: computation concentrates at criticality. The correspondence is close and quantitative &mdash; the same mathematics viewed from two directions &mdash; though whether the two are literally identical or a tight structural analogy is exactly the kind of claim this program is still testing.</p>
     <p class="quiet" style="margin-top:0.5rem">Computation adds a new lens to criticality: the critical point isn't just where phase transitions happen. It's where <em>information processing</em> is maximized. The system computes most powerfully at exactly the point where it's about to change state.</p>
   </div>
 </section>
@@ -212,7 +219,8 @@
 
 <!-- SECTION 6: THE CONVERGENCES -->
 <section>
-  <h2>Eight fields, one framework</h2>
+  <details class="collapse">
+  <summary>Eight fields, one framework</summary>
   <p>Distributed computation was discovered and rediscovered across at least eight fields:</p>
 
   <div class="timeline">
@@ -227,11 +235,13 @@
   </div>
 
   <p class="quiet">Mathematics → automata → game theory → statistical physics → complex systems → biology → machine learning → computational theory. Eight approaches to the same insight: complex computation arises at the boundary between order and chaos.</p>
+  </details>
 </section>
 
 <!-- SECTION 7: RECAP -->
 <section>
-  <h2>Recap</h2>
+  <details class="collapse">
+  <summary>Recap</summary>
   <dl class="recap-box">
     <dt>Skeleton</dt>
     <dd>Distributed computation / universality &mdash; simple local rules producing global information processing without central control.</dd>
@@ -240,13 +250,14 @@
     <dt>Depth 2: Coordination</dt>
     <dd>The system uses its computational capacity to coordinate behavior across scales. Perception, foraging, learning. Computation <em>harnessed</em>.</dd>
     <dt>Bridge to Skeleton 2</dt>
-    <dd>Edge of chaos = critical point. Computation concentrates at criticality. This is the CB bridge generalized: Skeleton 4 and Skeleton 2 are the same mathematics seen from two directions.</dd>
+    <dd>Edge of chaos = critical point. Computation concentrates at criticality. This is the <span class="tip" tabindex="0">B&ndash;D bridge<span class="tt">Bridge letters: A = Topology, B = Criticality, C = Autocatalysis / Closure, D = Computation. B&ndash;D links Criticality and Computation.</span></span> (Criticality &harr; Computation): Skeleton 2 and Skeleton 4 as closely related mathematics seen from two directions.</dd>
     <dt>Key insight</dt>
     <dd>You can't compute in a frozen system (no information flow) or a chaotic one (no memory). The critical point is where computation lives.</dd>
     <dt>Convergence</dt>
     <dd>8 fields independently arrived at distributed computation at the critical point. Turing, von Neumann, Conway, Bak, Langton, Kauffman, reservoir computing, Wolfram.</dd>
   </dl>
-  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-closure.html" style="color:var(--s3)">&larr; Skeleton 3: Closure</a> &nbsp;&nbsp; <a href="skeleton-matrix.html" style="color:var(--muted)">Skeleton Matrix &rarr;</a></p>
+  </details>
+  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-closure.html" style="color:#4ade80">&larr; Skeleton 3: Closure</a> &nbsp;&nbsp; <a href="skeleton-matrix.html" style="color:var(--muted)">Skeleton Matrix &rarr;</a></p>
 </section>
 
 </main>

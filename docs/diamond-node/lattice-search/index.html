@@ -252,6 +252,39 @@ abbr {
 .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
 .footnotes li a { color: var(--muted); }
 .footnotes li a:hover { color: var(--line); }
+/* Collapsible sections */
+details.collapse {
+  background: var(--card);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  padding: 0 1.5rem;
+}
+details.collapse > summary {
+  cursor: pointer;
+  padding: 1rem 0;
+  color: var(--heading);
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+details.collapse > summary::-webkit-details-marker { display: none; }
+details.collapse > summary::before {
+  content: '\25B8';
+  color: var(--blue);
+  font-size: 0.9em;
+  transition: transform 0.2s;
+}
+details.collapse[open] > summary::before { transform: rotate(90deg); }
+details.collapse > summary:hover { color: var(--blue); }
+details.collapse[open] > summary { border-bottom: 1px solid #334155; margin-bottom: 1rem; }
+details.collapse > *:last-child { margin-bottom: 1.5rem; }
+/* Hypothesis / own-result marker */
+.hyp{font-size:.72em;font-weight:600;color:#e0a030;border:1px solid #e0a03055;border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;cursor:help;vertical-align:middle}
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .fade-in { opacity: 1; transform: none; transition: none; }
@@ -273,7 +306,10 @@ abbr {
 
 <p>The motivation is physical: real topological systems involve many anyons distributed in space. Complexity might emerge from the interplay between local quantum dynamics (braiding) and spatial structure (the lattice pattern), even when each local operation is simple.</p>
 
-<h2>Method</h2>
+<p><strong>Read this as a deliberately-negative control.</strong> Both models use a <span class="tip" tabindex="0">product-state approximation<span class="tt">Each site's quantum state is treated as independent — a 60×2 array rather than a 2⁶⁰ vector. Tractable, but it removes entanglement, the one quantum resource that could produce genuine complexity here.</span></span> that removes entanglement, so we expect <em>no</em> genuine complexity going in. That makes the run useful as <span class="tip" tabindex="0">classifier calibration<span class="tt">Running the method on a case whose true answer is known ("no genuine complexity") to measure how often the Wolfram-class classifier mislabels structured-but-simple behavior as complex — its false-positive rate.</span></span>: the handful of "Class IV" hits below measure the <span class="tip" tabindex="0">false-positive rate<span class="tt">The fraction of cases flagged "Class IV / complex" when the ground truth is negative. Knowing this rate is what lets us discount apparent "complexity" found by the same classifier elsewhere.</span></span> of the Wolfram-class classifier, not a discovery.</p>
+
+<details class="collapse">
+<summary>Method</summary>
 
 <div class="section-card">
 <p><strong>Lattice model.</strong> A 1D chain of 60 Fibonacci anyons. Each adjacent pair has a local 2D fusion space. At each time step:</p>
@@ -292,24 +328,30 @@ abbr {
   <li><strong>Nonlinear model:</strong> Braiding rule at each site depends on the current state of its neighbor (if P(&tau;) > threshold, use rule B; otherwise rule A). This is a true <abbr title="Cellular Automaton">CA</abbr> with state-dependent update rules.</li>
 </ul>
 
-<p><strong>Total simulations:</strong> 1,570 (50 rule pairs &times; 12 patterns &times; 2&ndash;3 configurations, plus nonlinear variants).</p>
+<p><strong>Total simulations:</strong> 1,570, split into <strong>1,300 linear-model runs</strong> (50 rule pairs &times; 12 patterns &times; 2&ndash;3 configurations) and <strong>270 nonlinear-model runs</strong>. The two models are tallied separately below, each against its own denominator.</p>
 </div>
+</details>
 
 <h2>Linear Model Results</h2>
+
+<p>Of the <strong>1,300 linear-model runs</strong>:</p>
 
 <table>
 <thead>
 <tr><th>Class</th><th>Count</th><th>Percentage</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>I (fixed)</td><td>36</td><td>2.3%</td><td>Spatially uniform convergence</td></tr>
-<tr><td>II (periodic)</td><td>1,387</td><td>88.3%</td><td>Spatiotemporal periodicity or standing waves</td></tr>
-<tr><td>III (chaotic)</td><td>93</td><td>5.9%</td><td>Domain-wall dynamics and interference</td></tr>
-<tr><td>IV (complex)</td><td class="highlight">54</td><td class="highlight">3.4%</td><td>Apparent spatiotemporal complexity</td></tr>
+<tr><td>I (fixed)</td><td>36</td><td>2.8%</td><td>Spatially uniform convergence</td></tr>
+<tr><td>II (periodic)</td><td>1,149</td><td>88.4%</td><td>Spatiotemporal periodicity or standing waves</td></tr>
+<tr><td>III (chaotic)</td><td>61</td><td>4.7%</td><td>Domain-wall dynamics and interference</td></tr>
+<tr><td>IV (complex)</td><td class="highlight">54</td><td class="highlight">4.2%</td><td>Apparent spatiotemporal complexity (54/1,300)</td></tr>
 </tbody>
 </table>
 
-<h3>Class IV distribution by spatial pattern</h3>
+<p style="font-size:0.85rem;color:var(--muted)">Denominator note: 36 + 1,149 + 61 + 54 = 1,300 linear runs. The 270 nonlinear runs (0 Class IV) are tallied separately below, so the Class IV rate is 54/1,300 &asymp; 4.2%.</p>
+
+<details class="collapse">
+<summary>Class IV distribution by spatial pattern</summary>
 
 <table>
 <thead>
@@ -328,6 +370,7 @@ abbr {
 <tr><td>Gradient</td><td>0</td><td class="zero">0.0%</td><td>Smooth variation not sufficient</td></tr>
 </tbody>
 </table>
+</details>
 
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
@@ -344,7 +387,7 @@ abbr {
 <tbody>
 <tr><td>II (periodic)</td><td>~88%</td><td>Threshold feedback creates fast lock-in</td></tr>
 <tr><td>III (chaotic)</td><td>~12%</td><td><span class="tip" tabindex="0">Period-doubling<span class="tt">A route to chaos where oscillation period successively doubles: 1→2→4→8→... Governed by Feigenbaum's universal constants (δ ≈ 4.669). The same cascade appears in dripping faucets, heart tissue, and population models.</span></span> to chaos</td></tr>
-<tr><td>IV (complex)</td><td class="zero">0%</td><td>No complex intermediate</td></tr>
+<tr><td>IV (complex)</td><td class="zero">0%</td><td>No complex intermediate (0/270)</td></tr>
 </tbody>
 </table>
 
@@ -375,7 +418,8 @@ abbr {
 <p>The null result is therefore <strong>expected and informative</strong>: it confirms that complexity in topological systems is a genuinely quantum phenomenon, not a classical one dressed in quantum language.</p>
 </div>
 
-<h2>Paths Forward</h2>
+<details class="collapse">
+<summary>Paths Forward</summary>
 
 <div class="forward-box">
 <strong>Four approaches could break through the entanglement barrier.</strong>
@@ -386,8 +430,10 @@ abbr {
   <li><strong>Smooth nonlinear feedback.</strong> Replace the binary threshold with a smooth function (e.g., tanh with adjustable steepness). The binary threshold is a singular limit that destroys intermediate behavior. A smooth feedback function might support a richer dynamical landscape.</li>
 </ol>
 </div>
+</details>
 
-<h2>Plots</h2>
+<details class="collapse">
+<summary>Plots</summary>
 
 <div class="plot-container">
 <h3>Linear model: Class IV candidates</h3>
@@ -412,6 +458,7 @@ abbr {
 <img src="lattice_nonlinear_candidates_by_pattern.png" alt="Nonlinear lattice model results by spatial pattern type. Threshold feedback overwhelms spatial structure.">
 <p class="plot-caption">Nonlinear model results grouped by spatial pattern. The threshold feedback mechanism dominates over the spatial pattern: all patterns converge to similar periodic or chaotic behavior within 20 steps.</p>
 </div>
+</details>
 
 <div class="footnotes">
 <ol>

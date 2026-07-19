@@ -233,6 +233,9 @@ input[type="range"]::-moz-range-thumb {
     transform: none; max-width: none; width: auto; }
   .tip .tt::after { display: none; }
 }
+/* Hypothesis / own-result marker */
+.hyp{font-size:.72em;font-weight:600;color:#e0a030;border:1px solid #e0a03055;border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;cursor:help;vertical-align:middle}
+
 /* Footnotes */
 .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
 .fn:hover { color: var(--line); }
@@ -307,7 +310,7 @@ Steep pressure gradients drive turbulence. Turbulence generates <span class="tip
 </p>
 
 <p>
-McMillan and colleagues (2018) identified a self-sustaining quasi-traveling-wave at the plasma edge that exists at the <strong><span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between laminar (ordered) and turbulent (chaotic) flow. Structures at this boundary are marginally stable &mdash; they persist only by continuously regenerating their own stability conditions.</span></span></strong><sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> &mdash; a structure that propagates only because it continuously creates the conditions for its own propagation. Remarkably, Huang et al. (2025) showed this cycle requires <strong>stochastic noise exceeding 100% <span class="tip" tabindex="0">signal-to-noise ratio<span class="tt">The ratio of a signal&rsquo;s strength to the background noise level. An SNR above 100% means the noise is larger than the signal &mdash; the system is more random than deterministic.</span></span></strong><sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> to sustain itself. The transport barrier is noise-stabilized: it cannot exist in a perfectly deterministic system.
+McMillan and colleagues (2018) identified a self-sustaining quasi-traveling-wave at the plasma edge that exists at the <strong><span class="tip" tabindex="0">edge of chaos<span class="tt">The boundary between laminar (ordered) and turbulent (chaotic) flow. Structures at this boundary are marginally stable &mdash; they persist only by continuously regenerating their own stability conditions.</span></span></strong><sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> &mdash; a structure that propagates only because it continuously creates the conditions for its own propagation. Remarkably, our own analysis suggests this cycle requires <strong>stochastic noise exceeding roughly 100% <span class="tip" tabindex="0">signal-to-noise ratio<span class="tt">The ratio of a signal&rsquo;s strength to the background noise level. An SNR above 100% means the noise is larger than the signal &mdash; the system is more random than deterministic.</span></span></strong><span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus.</span></span> to sustain itself.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> On this reading the transport barrier is noise-stabilized: it may not exist in a perfectly deterministic system.
 </p>
 
 <!-- ========== MAIN SVG: THE AUTOCATALYTIC LOOP ========== -->
@@ -377,8 +380,8 @@ McMillan and colleagues (2018) identified a self-sustaining quasi-traveling-wave
   <text x="400" y="212" text-anchor="middle" fill="#a855f7" font-family="system-ui" font-size="11" font-weight="600">Chaos</text>
 
   <!-- Noise requirement -->
-  <text x="400" y="378" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11" font-style="italic">Requires stochastic noise &gt; 100% SNR to sustain</text>
-  <text x="400" y="395" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">The loop is noise-stabilized &mdash; it cannot exist without randomness</text>
+  <text x="400" y="378" text-anchor="middle" fill="#475569" font-family="system-ui" font-size="11" font-style="italic">Our analysis: appears to require stochastic noise &gt; ~100% SNR to sustain</text>
+  <text x="400" y="395" text-anchor="middle" fill="#94a3b8" font-family="system-ui" font-size="11">On this reading the loop is noise-stabilized &mdash; it may not persist without randomness</text>
 </svg>
 </div>
 
@@ -485,8 +488,9 @@ McMillan and colleagues (2018) identified a self-sustaining quasi-traveling-wave
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
 <!-- ========== THE MULTI-CRITICAL STRUCTURE ========== -->
-<h2>How They Couple</h2>
-
+<details class="fade-in">
+  <summary>How They Couple</summary>
+  <div class="detail-body">
 <p>
 The three transitions are not three independent descriptions of the same plasma. They interact in a specific hierarchy:
 </p>
@@ -498,10 +502,13 @@ The <strong>autocatalytic loop</strong> creates the transport barrier &mdash; th
 <p>
 This creates a three-layer structure: autocatalysis builds the barrier, SOC governs its release dynamics, and topology provides the intervention point. The three layers interact. Magnetic islands modify the gradient profile, which changes the SOC dynamics, which alters the autocatalytic loop&rsquo;s operating point. The coupling produces behavior &mdash; like the noise-stabilized quasi-traveling-wave &mdash; that no single layer predicts.
 </p>
+  </div>
+</details>
 
 <!-- ========== THE NON-BIOLOGICAL CASE ========== -->
-<h2>Why a Plasma?</h2>
-
+<details class="fade-in">
+  <summary>Why a Plasma?</summary>
+  <div class="detail-body">
 <p>
 The first five tutorials describe biological or soft-matter systems. The tokamak pedestal demonstrates that multi-criticality is not a property of biological matter. It is a property of systems with multiple independent transitions that couple.
 </p>
@@ -513,6 +520,8 @@ The key parallel is with the <a href="05-brain.html">brain</a>. Both systems are
 <p>
 The substrates could not be more different &mdash; neurons at 37&deg;C versus hydrogen plasma at 150 million degrees. But the mathematical structure of the multi-critical coupling is the same: architecture produces robustness, topology provides control, and the coupling between them generates emergent dynamics that single-transition physics cannot predict.
 </p>
+  </div>
+</details>
 
 <!-- ========== TECHNICAL DETAILS ========== -->
 
@@ -544,7 +553,7 @@ The substrates could not be more different &mdash; neurons at 37&deg;C versus hy
       Park et al. (<em>Nature Physics</em>, 2024) used electron cyclotron emission imaging to directly observe magnetic islands forming at rational flux surfaces (q = m/n) during RMP-driven ELM suppression. The islands have measurable widths, positions, and rotation frequencies. Their formation coincides with the loss of the pedestal&rsquo;s steep gradient &mdash; the islands break the transport barrier by connecting inner and outer flux surfaces.
     </p>
     <p>
-      This is a topological transition: the magnetic field topology changes from nested, closed flux surfaces (topologically equivalent to nested tori) to a topology containing O-points and X-points (islands). The transition is discrete &mdash; you either have an island or you don&rsquo;t &mdash; and it produces a qualitative change in transport: from the ambipolar, neoclassical transport of intact surfaces to the streaming transport along the island&rsquo;s separatrix.
+      This is a topological transition: the magnetic field topology changes from nested, closed flux surfaces (topologically equivalent to nested tori) to a topology containing <span class="tip" tabindex="0">O-points and X-points<span class="tt">The two special points of a magnetic island chain: the O-point is the island&rsquo;s centre (where field lines close in a small loop), the X-point is where neighbouring field lines cross. Their appearance marks the change in magnetic topology.</span></span> (islands). The transition is discrete &mdash; you either have an island or you don&rsquo;t &mdash; and it produces a qualitative change in transport: from the ambipolar, neoclassical transport of intact surfaces to the streaming transport along the island&rsquo;s separatrix.
     </p>
     <p>
       The practical significance: ITER (the international fusion experiment under construction) plans to use RMPs for ELM control. Understanding the topological mechanism &mdash; that ELM suppression works by creating magnetic islands, not by smooth gradient modification &mdash; is essential for predicting RMP effectiveness.
@@ -602,7 +611,7 @@ The substrates could not be more different &mdash; neurons at 37&deg;C versus hy
       The QTW is self-sustaining in the sense described by the predator-prey loop: it generates the zonal flow shear that suppresses the turbulence behind it, while the turbulence ahead of it (driven by the steep gradient) provides the energy that sustains the wave. It propagates only because it continuously creates the conditions for its own propagation.
     </p>
     <p>
-      Huang et al. (2025) showed that this structure cannot exist in deterministic simulations. It requires stochastic fluctuations exceeding 100% of the mean signal. The noise provides two essential functions: (1) it seeds the turbulence ahead of the wave that the wave needs as fuel, and (2) it prevents the wave from locking into a fixed spatial pattern and decaying. The transport barrier is stabilized by noise &mdash; a counterintuitive result that echoes the role of thermal fluctuations in biological systems at the edge of chaos.
+      Our own analysis<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus.</span></span> suggests that this structure cannot persist in a purely deterministic model: it appears to require stochastic fluctuations exceeding roughly 100% of the mean signal. On this account the noise provides two essential functions: (1) it seeds the turbulence ahead of the wave that the wave needs as fuel, and (2) it prevents the wave from locking into a fixed spatial pattern and decaying. The transport barrier would then be stabilized by noise &mdash; a counterintuitive possibility that echoes the role of thermal fluctuations in biological systems at the edge of chaos.
     </p>
   </div>
 </details>
@@ -689,7 +698,7 @@ The substrates could not be more different &mdash; neurons at 37&deg;C versus hy
     <p>Chapman, S. C., Dendy, R. O. &amp; Hnat, B. (2001). A sandpile model with tokamak-like properties. <em>Phys. Rev. Lett.</em>, 86, 2814.</p>
     <p>Park, J.-K. et al. (2024). Direct observation of magnetic islands during ELM suppression. <em>Nature Physics</em>.</p>
     <p>McMillan, B. F. et al. (2018). Self-sustaining quasi-traveling-wave at the tokamak edge. <em>Phys. Plasmas</em>.</p>
-    <p>Huang, Z. et al. (2025). Noise-sustained transport barrier in tokamak edge. [SNR &gt; 100% requirement].</p>
+    <p>Noise-stabilization of the edge quasi-traveling-wave (SNR &gt; ~100%) is a finding of this research program; it has not yet been published or independently replicated.</p>
     <p>Diamond, P. H. et al. (2005). Zonal flows in plasma &mdash; a review. <em>Plasma Phys. Control. Fusion</em>, 47, R35.</p>
     <p>Wagner, F. et al. (1982). Regime of improved confinement and high beta in neutral-beam-heated divertor discharges of the ASDEX tokamak. <em>Phys. Rev. Lett.</em>, 49, 1408.</p>
     <p>Moretti, P. &amp; Mu&ntilde;oz, M. A. (2013). Griffiths phases and the stretching of criticality in brain networks. <em>Nature Communications</em>, 4, 2521.</p>
@@ -720,7 +729,7 @@ That is the research program these tutorials motivate.
     <li id="fn1">Chapman, S. C., Dendy, R. O. &amp; Hnat, B. (2001). A sandpile model with tokamak-like properties. <em>Phys. Rev. Lett.</em>, 86, 2814. SOC model of the pedestal. <a href="#fnref1">&uarr;</a></li>
     <li id="fn2">Park, J.-K. et al. (2024). Direct observation of magnetic islands during ELM suppression. <em>Nature Physics</em>. First direct imaging of islands mediating ELM control. <a href="#fnref2">&uarr;</a></li>
     <li id="fn3">McMillan, B. F. et al. (2018). Self-sustaining quasi-traveling-wave at the tokamak edge. <em>Phys. Plasmas</em>. Edge-of-chaos structure. <a href="#fnref3">&uarr;</a></li>
-    <li id="fn4">Huang, Z. et al. (2025). Noise-sustained transport barrier in tokamak edge. Stochastic noise &gt; 100% SNR required. <a href="#fnref4">&uarr;</a></li>
+    <li id="fn4">Own analysis (this research program, not yet published): the edge quasi-traveling-wave appears to require stochastic noise exceeding roughly 100% SNR to self-sustain. Awaiting formal write-up and independent replication. <a href="#fnref4">&uarr;</a></li>
     <li id="fn5">Wagner, F. et al. (1982). Regime of improved confinement in the ASDEX tokamak. <em>Phys. Rev. Lett.</em>, 49, 1408. Discovery of H-mode. <a href="#fnref5">&uarr;</a></li>
     <li id="fn6">Diamond, P. H. et al. (2005). Zonal flows in plasma &mdash; a review. <em>Plasma Phys. Control. Fusion</em>, 47, R35. <a href="#fnref6">&uarr;</a></li>
   </ol>
@@ -733,7 +742,7 @@ That is the research program these tutorials motivate.
 </div>
 
 <p class="footer-note">
-  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../../">Web Annex</a>
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../">Web Annex</a>
 </p>
 
 </div>
@@ -745,6 +754,6 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
-<script src="../../../js/annex-tracker.js"></script>
+<script src="../../js/annex-tracker.js"></script>
 </body>
 </html>

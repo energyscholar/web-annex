@@ -233,6 +233,9 @@ input[type="range"]::-moz-range-thumb {
     transform: none; max-width: none; width: auto; }
   .tip .tt::after { display: none; }
 }
+/* Hypothesis / own-result marker */
+.hyp{font-size:.72em;font-weight:600;color:#e0a030;border:1px solid #e0a03055;border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;cursor:help;vertical-align:middle}
+
 /* Footnotes */
 .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
 .fn:hover { color: var(--line); }
@@ -283,7 +286,7 @@ The 140-dataset meta-analysis consolidated evidence from EEG, MEG, two-photon im
 </p>
 
 <p>
-More remarkable: genes that push the brain toward criticality are under <strong><span class="tip" tabindex="0">positive selection<span class="tt">Evolutionary pressure favoring a trait. Genes under positive selection have accumulated more functional mutations than expected by chance, indicating that evolution has actively optimized them.</span></span></strong>. And proximity to criticality correlates with <strong><span class="tip" tabindex="0">fluid intelligence<span class="tt">The ability to reason and solve novel problems without relying on learned knowledge. Measured by pattern recognition and abstract reasoning tests. Distinct from crystallized intelligence (accumulated knowledge).</span></span></strong> (PNAS 2025)<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup>. Evolution has optimized the brain not for a particular circuit pattern, but for a particular distance from a <span class="tip" tabindex="0">phase transition<span class="tt">A sudden qualitative change in a system&rsquo;s behavior at a threshold value &mdash; like water freezing at 0&deg;C. In the brain, the transition is between ordered (synchronized) and disordered (random) neural activity.</span></span>.
+More remarkable: how close the brain sits to criticality is <strong>substantially <span class="tip" tabindex="0">heritable<span class="tt">Under genetic control &mdash; the trait&rsquo;s variation across people is partly explained by their genes, as measured by comparing identical (monozygotic) and fraternal (dizygotic) twins.</span></span></strong>, and proximity to criticality correlates with <strong><span class="tip" tabindex="0">cognitive function<span class="tt">Performance on reasoning, memory, and problem-solving tasks. The cited twin study links how near the brain operates to its critical point with general cognitive ability.</span></span></strong> (Xin et al., PNAS 2025)<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup>. Evolution has shaped the brain not for a particular circuit pattern, but for a particular distance from a <span class="tip" tabindex="0">phase transition<span class="tt">A sudden qualitative change in a system&rsquo;s behavior at a threshold value &mdash; like water freezing at 0&deg;C. In the brain, the transition is between ordered (synchronized) and disordered (random) neural activity.</span></span>.
 </p>
 
 <h3>2. Griffiths phases &mdash; extended criticality from architecture</h3>
@@ -480,10 +483,11 @@ The cortical spirals are not epiphenomena. They organize information flow: the r
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
 <!-- ========== THE COUPLING ========== -->
-<h2>Architecture as the Common Cause</h2>
-
+<details class="fade-in">
+  <summary>Architecture as the Common Cause</summary>
+  <div class="detail-body">
 <p>
-The key insight is that the same structural feature &mdash; modular-hierarchical cortical architecture &mdash; produces <strong>both</strong> the Griffiths phase and the organized topological defect dynamics. This is not a coincidence. It is a consequence of what modularity does to a dynamical system.
+The key insight we propose is that the same structural feature &mdash; modular-hierarchical cortical architecture &mdash; produces <strong>both</strong> the Griffiths phase and the organized topological defect dynamics.<span class="hyp tip" tabindex="0">&#9670; our result<span class="tt">An original, not-yet-peer-reviewed synthesis from this research program &mdash; the individual phenomena are published; the claim that one architecture is their common cause is ours.</span></span> This is not a coincidence. It is a consequence of what modularity does to a dynamical system.
 </p>
 
 <p>
@@ -497,6 +501,8 @@ Simultaneously, the boundaries between modules create the conditions for spiral 
 <p>
 This is a different type of multi-criticality from the previous tutorials. In the glass transition, two transitions couple at a bicritical point. In active matter, geometry selects between transition types. In the brain, a single architectural feature produces multiple critical phenomena simultaneously. The coupling is not between transitions &mdash; it is between the <em>mechanisms</em> that make each transition possible.
 </p>
+  </div>
+</details>
 
 <!-- ========== TECHNICAL DETAILS ========== -->
 
@@ -614,10 +620,10 @@ This is a different type of multi-criticality from the previous tutorials. In th
   </summary>
   <div class="detail-body">
     <p>
-      PNAS (2025) reported two findings linking brain criticality to genetics: (1) genes whose expression patterns correlate with proximity to criticality (measured by avalanche scaling exponents across cortical regions) are enriched for positive selection signals in the human lineage, and (2) individual variation in proximity to criticality correlates with fluid intelligence scores.
+      Xin et al. (<em>PNAS</em>, 2025) analysed resting-state fMRI from a large twin cohort &mdash; hundreds of monozygotic and dizygotic twins plus unrelated subjects &mdash; using a model-based measure of each brain&rsquo;s proximity to criticality. They reported that (1) proximity to criticality is substantially <span class="tip" tabindex="0">heritable<span class="tt">Under genetic control &mdash; how much of the variation across people is explained by their genes, estimated by comparing identical and fraternal twins.</span></span>: genetic factors shape how close the brain operates to its critical point across individual regions, functional networks, and the whole brain, and (2) individual variation in proximity to criticality relates to cognitive function.
     </p>
     <p>
-      The gene set includes ion channel subunits, synaptic plasticity mediators, and &mdash; notably &mdash; genes involved in cortical laminar organization and modular connectivity. This is consistent with the Griffiths phase mechanism: the genes that evolution selected are not those that tune a single parameter to a critical value, but those that build the modular-hierarchical architecture that produces the Griffiths phase. Evolution optimized the architecture, and criticality followed as a consequence of the architecture.
+      The heritability result is consistent with the Griffiths-phase mechanism: if criticality is a downstream consequence of modular-hierarchical architecture, then the genes that build that architecture &mdash; rather than any single parameter tuned to a knife-edge &mdash; are what selection would act on. Which specific genes are involved (ion-channel subunits, synaptic-plasticity mediators, or connectivity-shaping factors) is a natural follow-up question, but is not established by this twin-heritability study.<span class="hyp tip" tabindex="0">&#9670; our reading<span class="tt">The interpretive link between the twin-heritability result and the Griffiths-phase architecture is this research program&rsquo;s synthesis, not a claim of the cited paper.</span></span>
     </p>
   </div>
 </details>
@@ -704,7 +710,7 @@ This is a different type of multi-criticality from the previous tutorials. In th
     <p>Hengen, K. B. &amp; Shew, W. L. (2025). Neural criticality: A comprehensive meta-analysis. <em>Neuron</em>.</p>
     <p>Moretti, P. &amp; Mu&ntilde;oz, M. A. (2013). Griffiths phases and the stretching of criticality in brain networks. <em>Nature Communications</em>, 4, 2521.</p>
     <p>Xu, Y. et al. (2023). Cortical spiral waves as topological defects. <em>Nature Human Behaviour</em>.</p>
-    <p>PNAS (2025). Genetic basis of proximity to criticality in the human brain. [Positive selection + fluid intelligence correlation].</p>
+    <p>Xin, Y., Cui, Y., Yu, S. &amp; Liu, N. (2025). Genetic contributions to brain criticality and its relationship with human cognitive functions. <em>PNAS</em>, 122(26), e2417010122. doi:10.1073/pnas.2417010122.</p>
     <p>Sun, M. et al. (2025). Network topology governs cytoskeletal criticality. <em>Nature Physics</em>.</p>
     <p>Beggs, J. M. &amp; Plenz, D. (2003). Neuronal avalanches in neocortical circuits. <em>J. Neurosci.</em>, 23, 11167&ndash;11177.</p>
     <p>Touboul, J. &amp; Destexhe, A. (2017). Power-law statistics and universal scaling in the absence of criticality. <em>Phys. Rev. E</em>, 95, 012413.</p>
@@ -716,7 +722,7 @@ This is a different type of multi-criticality from the previous tutorials. In th
     <li id="fn1">Hengen, K. B. &amp; Shew, W. L. (2025). Neural criticality: A comprehensive meta-analysis. <em>Neuron</em>. 140 datasets across species, modalities, and brain states. <a href="#fnref1">&uarr;</a></li>
     <li id="fn2">Moretti, P. &amp; Mu&ntilde;oz, M. A. (2013). Griffiths phases and the stretching of criticality in brain networks. <em>Nature Communications</em>, 4, 2521. <a href="#fnref2">&uarr;</a></li>
     <li id="fn3">Xu, Y. et al. (2023). Cortical spiral waves as topological defects. <em>Nature Human Behaviour</em>. Conserved topological charge, pair creation/annihilation. <a href="#fnref3">&uarr;</a></li>
-    <li id="fn4">PNAS (2025). Genetic basis of proximity to criticality in the human brain. Positive selection on criticality-associated genes; correlation with fluid intelligence. <a href="#fnref4">&uarr;</a></li>
+    <li id="fn4">Xin, Y., Cui, Y., Yu, S. &amp; Liu, N. (2025). Genetic contributions to brain criticality and its relationship with human cognitive functions. <em>PNAS</em>, 122(26), e2417010122. doi:10.1073/pnas.2417010122. Twin-cohort fMRI: proximity to criticality is heritable and relates to cognitive function. <a href="#fnref4">&uarr;</a></li>
     <li id="fn5">Beggs, J. M. &amp; Plenz, D. (2003). Neuronal avalanches in neocortical circuits. <em>J. Neurosci.</em>, 23, 11167&ndash;11177. The founding observation. <a href="#fnref5">&uarr;</a></li>
   </ol>
 </div>
@@ -728,7 +734,7 @@ This is a different type of multi-criticality from the previous tutorials. In th
 </div>
 
 <p class="footer-note">
-  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../../">Web Annex</a>
+  Part of <a href="index.html">Multi-Critical Systems</a> &middot; <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../">Web Annex</a>
 </p>
 
 </div>
@@ -740,6 +746,6 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
-<script src="../../../js/annex-tracker.js"></script>
+<script src="../../js/annex-tracker.js"></script>
 </body>
 </html>
