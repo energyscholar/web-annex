@@ -149,13 +149,23 @@ details.acc[open]>summary .tri{transform:translateY(-1px) rotate(90deg)}
 .acc-body{padding:2px 18px 20px;border-top:1px solid var(--border)}
 .acc-body>*:first-child{margin-top:14px}
 
-/* ---- lead accordion (the credibility hook) — emphasised ---- */
+/* ---- lead accordion — emphasised ---- */
 details.lead{border:1px solid var(--teal);background:linear-gradient(180deg,var(--teal-soft),transparent 120px)}
 details.lead>summary{padding:18px 18px}
 details.lead .badge{
   font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--teal);border:1px solid var(--teal);border-radius:999px;padding:2px 8px;align-self:center;
 }
+.opencue{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);opacity:.6;align-self:center;white-space:nowrap}
+details.acc[open] .opencue{display:none}
+.tip{border-bottom:1px dotted var(--muted);cursor:help;position:relative;outline:none}
+.tip:hover .tipbox,.tip:focus .tipbox{opacity:1;visibility:visible;transform:translateY(0)}
+.tipbox{position:absolute;left:0;bottom:135%;width:min(340px,82vw);background:var(--surface);
+  border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.5;
+  font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink);opacity:0;visibility:hidden;
+  transform:translateY(4px);transition:opacity .15s,transform .15s;z-index:30;
+  box-shadow:0 10px 30px rgba(0,0,0,.22)}
 
 /* ---- tables ---- */
 .tbl-wrap{overflow-x:auto;margin:14px 0;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
@@ -266,14 +276,15 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
     <p class="byline"><b>Bruce Stephenson</b> · independent researcher · 18 July 2026 &nbsp;·&nbsp; short read, ~10 min &nbsp;·&nbsp; figures render locally</p>
   </div>
 
-  <!-- ================= LEAD: replication accordion (credibility hook) ================= -->
-  <details class="acc lead" id="lead" open>
+  <!-- ================= LEAD: replication accordion ================= -->
+  <details class="acc lead" id="lead">
     <summary>
       <span class="tri">▸</span>
       <span class="sum-txt">
         <span class="lbl">§2 · Replication of Bury 2023</span>
         <span class="hook">Your chick-heart EWS results, reproduced to the reported precision — homework done before I ask you for anything.</span>
       </span>
+      <span class="opencue">click to open</span>
       <span class="badge">verify</span>
     </summary>
     <div class="acc-body">
@@ -293,7 +304,7 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
           </tbody>
         </table>
       </div>
-      <p class="tfoot">DL AUC recomputed from your precomputed predictions — not an independent reproduction of the classifier. Every published AUC is reproduced to its reported precision (3 sig figs). ROC negatives are AR/IAAFT surrogate series matched to the pre-transition segment; AUCs carry DeLong (or bootstrap-over-records) 95% CIs, accounting for within-preparation correlation across the 23 records.</p>
+      <p class="tfoot">DL AUC recomputed from your precomputed predictions — not an independent reproduction of the classifier. Every published AUC is reproduced to its reported precision (3 sig figs) by re-scoring <b>your</b> anticipation / ROC construction over your 23 records — that is why the match is exact: these are your labels and negatives re-scored, not a re-derivation on independent negatives. (Our own forward tests in §3–§4 use AR/IAAFT surrogate negatives and report bootstrap-over-records 95% CIs clustered within preparation; the full intervals accompany this page.)</p>
       <p style="margin-top:14px"><b>Takeaway:</b> the pipeline is faithful. When it later says something, it isn't a protocol artefact — that's the only reason the rest of this page is worth your time.</p>
     </div>
   </details>
@@ -302,13 +313,13 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
   <section id="s1">
     <p class="snum"><b>§1</b> — what this is</p>
     <h2>A short read of the toolkit, from someone validating and extending it</h2>
-    <p>Three things, in order of how much you should trust them. <b>(a)</b> I reproduced your published chick-heart results — above. <b>(b)</b> An honest calibration of where our univariate eigenvalue methods stand on single period-doubling: they are <em>worse</em> than your deep-learning classifier and the standard variance / lag-1 AC baselines, and I say so plainly. <b>(c)</b> The direction I'm taking the method — a multivariate eigenvalue indicator aimed at <strong>discordant alternans</strong>, whose anti-phase mode a <em>symmetric</em> observable is structurally blind to (in the clean-swap limit). That last part is <em>simulation so far</em>, and it is labelled as such everywhere it appears.</p>
+    <p>Three things, in order of how much you should trust them. <b>(a)</b> I reproduced your published chick-heart results — above. <b>(b)</b> An honest calibration of where our univariate eigenvalue methods stand on single period-doubling: they are <em>worse</em> than your deep-learning classifier and the standard variance / lag-1 AC baselines, and I say so plainly. <b>(c)</b> The direction I'm taking the prototype method — a multivariate eigenvalue indicator aimed at <strong>discordant alternans</strong>, whose anti-phase mode a <em>symmetric</em> observable is structurally blind to (in the clean-swap limit). That last part is <em>simulation so far</em>, and it is labelled as such everywhere it appears.</p>
     <details class="acc">
       <summary><span class="tri">▸</span><span class="sum-txt"><span class="lbl">prior work — the lineage this extends</span><span class="hook">Critical slowing down, the S-map eigenvalue, and fifteen years of spatial EWS. This is a mode-resolved reading of an established idea, not a new one.</span></span></summary>
       <div class="acc-body">
         <p><b>The mechanism is critical slowing down.</b> As a bifurcation approaches, the leading eigenvalue of the linearised return map moves to the stability boundary — toward +1 at a fold, toward −1 at a flip (period-doubling); recovery from perturbations slows, and variance and lag-1 autocorrelation rise (van Nes &amp; Scheffer 2007; Scheffer et al. 2009; Dakos et al. 2012).</p>
         <p><b>The dynamical eigenvalue (DEV)</b> reads that eigenvalue directly: it is the dominant eigenvalue of the local S-map Jacobian (Sugihara 1994) estimated over a delay embedding (Takens 1981), used as an early-warning indicator by Grziwotz et al. 2023. The univariate cardiac-eigenvalue baseline I run alongside it — DE-AC (Ma &amp; Zeng 2026) — extracts the same eigenvalue from the autocorrelation. The multivariate interaction Jacobian whose spectrum the multivariate estimator reads is the multivariate S-map of Deyle et al. 2016; the move to the eigenvector of the slowest-recovering mode in multivariate systems was developed in ecology (Weinans et al. 2019).</p>
-        <p><b>Spatial EWS is a mature subfield</b> — spatial variance and skewness (Guttal &amp; Jayaprakash 2009), spatial correlation (Dakos et al. 2010), spatial-pattern methods (Kéfi et al. 2014), and a maintained toolkit (<span class="kbd">spatialwarnings</span>, Génin et al. 2018). The contribution here is <em>not</em> the claim that spatial information helps — that is established — but a <b>mode-resolved eigenvalue observable</b> that isolates the anti-phase mode a symmetric readout cannot.</p>
+        <p><b>Spatial EWS is a mature subfield</b> — spatial variance and skewness (Guttal &amp; Jayaprakash 2009), spatial correlation (Dakos et al. 2010), spatial-pattern methods (Kéfi et al. 2014), and a maintained toolkit (<span class="kbd">spatialwarnings</span>, Génin et al. 2018). The contribution here is <em>not</em> the claim that spatial information helps — that is established — but a <b>mode-resolved eigenvalue observable</b> that isolates the anti-phase mode a spatial-mean readout cannot resolve.</p>
       </div>
     </details>
   </section>
@@ -413,13 +424,13 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
     <h3>Symmetry-obstruction proof-of-concept — <span style="color:var(--coral)">not tissue</span></h3>
     <div class="callout danger">
       <div class="k">Read this as a simulation result</div>
-      <p>Two separate claims. <b>Analytic (0 runs needed):</b> under exact swap symmetry a symmetric observable — the spatial mean — projects the anti-phase mode to identically zero, so it is blind by construction (proof above). <b>Empirical:</b> in a <b>coupled two-cell restitution model</b> (15 runs — three noise levels, SD ∈ {0.5, 1.0, 2.0} ms, five seeds each) the multivariate DEV estimator resolved the anti-phase eigenvalue → −1 (dominant Re λ ≤ −0.9) in <b>all 15 runs</b>, while every mean-observable single-eigenvalue method — univariate DEV, and DE-AC on the mean — resolved it in <b>none (0 / 15)</b>. The separation is categorical, not a lead-time; two independent λ-estimators agree. The obstruction is a property of the <em>observable</em>, not of any one indicator: any symmetric readout (mean, variance, lag-1 AC, or an eigenvalue estimated from them) is odd-mode blind. <b>This is a controlled model, not tissue.</b> It demonstrates the obstruction is real and the multivariate indicator clears it; it does <em>not</em> establish anticipation on real hearts. That's §5.</p>
+      <p>Two separate claims. <b>Analytic (0 runs needed):</b> under exact swap symmetry a symmetric observable — the spatial mean — projects the anti-phase mode to identically zero, so it is blind by construction (proof above). <b>Empirical:</b> in a <b>two-cell system with a prescribed anti-phase eigenvalue driven toward −1</b> — a <span class="tip" tabindex="0">designed estimator-detectability test<span class="tipbox">Not a physiological model. In real tissue, electrotonic (diffusive) coupling <em>stabilizes</em> the anti-phase mode; discordant alternans is driven by conduction-velocity restitution in a spatially-extended cable (Echebarria &amp; Karma 2002). Here the two-cell coupling is prescribed so the anti-phase branch approaches −1, isolating the <em>observable / estimator</em> question — can a multivariate estimator resolve a mode a symmetric one cannot? — not the mechanism. The mechanism test is the cable model (§5).</span></span>, not a physiological claim (15 runs — three noise levels, SD ∈ {0.5, 1.0, 2.0} ms, five seeds each) — the multivariate DEV estimator resolved that eigenvalue (dominant Re λ ≤ −0.9) in <b>all 15 runs</b>, while every mean-observable single-eigenvalue method — univariate DEV, and DE-AC on the mean — resolved it in <b>none (0 / 15)</b>. The separation is categorical, not a lead-time; two independent λ-estimators agree. The obstruction is a property of the <em>observable</em>, not of any one indicator: the <b>spatial-mean</b> signal — and any scalar EWS computed from it (its variance, lag-1 AC, or an eigenvalue estimated from it) — is odd-mode blind. (Spatial variance / skewness across sites, by contrast, <em>do</em> register the odd mode's presence — Guttal &amp; Jayaprakash 2009; what the mode-resolved eigenvalue adds is <em>typing</em> that mode and tracking its λ → −1, which a spatial-variance scalar cannot distinguish from a fold.) <b>This is a controlled model, not tissue.</b> It demonstrates the obstruction is real and the multivariate indicator clears it; it does <em>not</em> establish anticipation on real hearts. That's §5.</p>
     </div>
 
     <details class="acc">
       <summary><span class="tri">▸</span><span class="sum-txt"><span class="lbl">details — and the honest boundary for real tissue</span></span></summary>
       <div class="acc-body">
-        <p><b>The sim:</b> two restitution cells, diffusive coupling, additive noise swept across levels; pre-registered pass/fail on "does the anti-phase eigenvalue reach −1 before the mean-observable method flags anything." Two independent λ-estimators (the S-map Jacobian eigenvalue and the DE-AC autocorrelation form) to guard against estimator-specific artefacts. S-map hyperparameters — embedding dimension E, localization weight θ, and Tikhonov ridge — were fixed a priori across the noise sweep, not tuned by forecast cross-validation, so the estimator is configured for coefficient inference rather than forecast skill (cf. Cenci et al. 2019, best-forecast ≠ best-inference).</p>
+        <p><b>The sim:</b> two restitution cells with a coupling <b>prescribed</b> so the anti-phase branch approaches −1 (a designed detectability test — see the note above; real diffusive coupling would instead stabilize that mode), additive noise swept across levels; pre-registered pass/fail on "does the multivariate estimator resolve the anti-phase eigenvalue where a mean-observable method cannot." Two independent λ-estimators (the S-map Jacobian eigenvalue and the DE-AC autocorrelation form) to guard against estimator-specific artefacts. S-map hyperparameters — embedding dimension E, localization weight θ, and Tikhonov ridge — were fixed a priori across the noise sweep, not tuned by forecast cross-validation, so the estimator is configured for coefficient inference rather than forecast skill (cf. Cenci et al. 2019, best-forecast ≠ best-inference).</p>
         <p><b>The boundary — and I want to be precise here, because it matters:</b> real discordant patterns have a <em>moving nodal line</em>, not a clean 2-region swap. So a spatial <em>mean</em> is only <b>approximately</b> blind (the cancellation isn't exact once the nodal line drifts), and a single <em>pixel</em> is <b>not blind at all</b> — it sees its own local phase. The claim is <em>not</em> "single observables see nothing." The claim is that multivariate DEV <b>resolves the multiple modes and flags the anti-phase eigenvalue earlier</b> than a single-site or mean method structurally can. That is an empirical anticipation test on real tissue — and I've now run the first attempt (§5): the staging is faithful, but this recording can't resolve the discordant regime, so the definitive test still needs the right data.</p>
       </div>
     </details>
@@ -445,7 +456,7 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
 
     <p>We sourced <b>public, spatially-resolved cardiac optical-mapping data</b> with decrementing-pacing ramps toward VF (<b>O'Shea 2022</b>: guinea-pig whole-heart, 64×64 at 500 Hz) and ran the first real-tissue test ourselves — two honest results. <b>(1) The staging is faithful:</b> our pipeline reproduces O'Shea's own APD maps (APD80 106 ms vs their 108, ΔAPD80 10.0 ms vs 10.2, restitution tracking their Fig 2b) — so when it flags something, it isn't a staging artefact. <b>(2) But this recording can't resolve the discordant regime:</b> APD becomes unmeasurable near VF — conduction block and wavebreak drop per-beat pixel validity to ~0.3 — so genuine discordant alternans can't be tracked where it matters. (Guinea-pig is also a comparatively weak discordant-alternans model — relatively flat APD restitution; the canonical DA literature is rabbit and canine — which deepens the data-adequacy limit rather than pointing at the method.) A pre-registered <em>data-inadequate null</em>, honestly a limit of the data, not a result about the method. So the definitive anti-phase test needs data with <b>clean APD through the discordant regime</b> (higher-SNR optical mapping, or a protocol that dwells in sustained discordance before block); meanwhile the mechanism is already demonstrated in the controlled two-cell simulation above, which I'm extending to a spatially-extended cable model with a known anti-phase mode.</p>
 
-    <p>If it pans out, the multivariate indicator could sit naturally alongside <b>ewstools</b>' existing indicators — a spatially-resolved, interpretable eigenvalue EWS complementing the DL classifier — but that is a decision for you as maintainer, not an assumption on my part. Complement, not competitor: yours scales and classifies; the eigenvalue is mechanistic and multi-mode.</p>
+    <p>If it pans out, the multivariate indicator could sit naturally alongside <b>ewstools</b>' existing indicators — a spatially-resolved, interpretable eigenvalue EWS complementing the DL classifier — but that is a decision for you as maintainer, not an assumption on my part.</p>
 
     <div class="callout">
       <div class="k">Where your input would matter most</div>
@@ -477,7 +488,7 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
 <footer>
   <div class="wrap">
     <section style="max-width:760px;margin:0 auto;padding:8px 0">
-  <p class="snum" style="color:var(--muted)">References &middot; grounded in the local library</p>
+  <p class="snum" style="color:var(--muted)">References</p>
 
   <style>
     details.refacc{border:1px solid var(--border);border-radius:12px;background:var(--surface);margin:12px 0;overflow:hidden;box-shadow:var(--shadow)}
@@ -558,7 +569,7 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
     </div>
   </details>
 
-  <p style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6">Every entry above traces either to the local library (extracted .md, metadata/*.json, or DOI in MANIFEST.json) or to a web-verified DOI &mdash; van&nbsp;Nes &amp; Scheffer 2007, Guttal &amp; Jayaprakash 2009, Echebarria &amp; Karma 2002, Weiss et al. 2006, Sugihara 1994, Takens 1981, and G&eacute;nin et al. 2018 confirmed against publisher records 19 Jul 2026.</p>
+  <p style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6">Every entry above was verified against publisher records &mdash; van&nbsp;Nes &amp; Scheffer 2007, Guttal &amp; Jayaprakash 2009, Echebarria &amp; Karma 2002, Weiss et al. 2006, Sugihara 1994, Takens 1981, and G&eacute;nin et al. 2018 confirmed 19 Jul 2026.</p>
     </section>
     <p class="repro">Reproducibility record (protocol, seeds, pre-registration, and the exact AUC computation for §2 and §4) accompanies this page. All figures render locally — no external resources, no tracking. · B. Stephenson, 18 Jul 2026.</p>
     <p class="repro" style="margin-top:14px"><b>Status:</b> a private pre-call brief prepared for Thomas Bury — not a joint, co-authored, or endorsed document. Any forwarded copy should be read as one researcher's working notes.</p>
