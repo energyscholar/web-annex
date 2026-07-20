@@ -210,6 +210,12 @@ figure.viz{margin:22px 0;border:1px solid var(--border);border-radius:12px;backg
 .viz-head .t{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);letter-spacing:.02em}
 .viz canvas{width:100%;display:block}
 .viz-pad{padding:8px 16px 4px}
+.anim-ctl{padding:2px 16px 6px}
+.anim-btn{font-family:var(--font-mono);font-size:12px;cursor:pointer;background:transparent;
+  color:var(--ink);border:1px solid var(--border);border-radius:6px;padding:4px 11px;transition:.15s;line-height:1.2}
+.anim-btn:hover{border-color:var(--muted)}
+.anim-btn[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:var(--paper)}
+.anim-btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 figcaption{padding:2px 16px 16px;font-size:14.5px;color:var(--muted);line-height:1.5}
 figcaption b{color:var(--ink)}
 .legend{display:flex;flex-wrap:wrap;gap:14px;padding:6px 16px 12px;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
@@ -364,6 +370,7 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
     <figure class="viz">
       <div class="viz-head"><span class="n">Fig 1</span><span class="t">the symmetry obstruction</span></div>
       <div class="viz-pad"><canvas id="cv-sym" height="230" aria-label="Two tissue sites alternating in anti-phase; their spatial mean stays perfectly flat."></canvas></div>
+      <div class="anim-ctl"><button class="anim-btn" type="button" aria-pressed="false">▶ play</button></div>
       <div class="legend">
         <span><span class="swatch line" style="background:var(--teal)"></span>site A</span>
         <span><span class="swatch line" style="background:var(--coral)"></span>site B (anti-phase)</span>
@@ -388,6 +395,7 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
     <figure class="viz">
       <div class="viz-head"><span class="n">Fig 2</span><span class="t">concordant vs discordant — which one the mean loses</span></div>
       <div class="viz-pad"><canvas id="cv-field" height="250" aria-label="Two optical-map cartoons: concordant tissue flips in unison so the mean swings; discordant tissue splits across a nodal line so the mean stays near zero."></canvas></div>
+      <div class="anim-ctl"><button class="anim-btn" type="button" aria-pressed="false">▶ play</button></div>
       <div class="legend">
         <span><span class="swatch" style="background:var(--teal)"></span>phase +</span>
         <span><span class="swatch" style="background:var(--coral)"></span>phase −</span>
@@ -401,6 +409,7 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
       <div class="viz-head"><span class="n">Fig 3</span><span class="t">eigenvalue resolution — schematic · drag toward discordance</span></div>
       <div class="viz-pad"><canvas id="cv-eig" height="300" aria-label="Complex plane with the unit circle. Multivariate DEV resolves two eigenvalues; the anti-phase one slides along the negative real axis toward minus one. A single-observable estimate sees only the in-phase eigenvalue."></canvas></div>
       <div class="ctrls">
+        <button class="anim-btn" type="button" aria-pressed="false">▶ play</button>
         <label for="eig-slider">approach to discordance
           <input type="range" id="eig-slider" min="0" max="100" value="0" aria-label="Approach to discordance">
         </label>
@@ -581,6 +590,7 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding:26px 0 60px}
 "use strict";
 var root=document.documentElement;
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+var forceStatic=false;   // render the frozen "screenshot" frame (at load + resize); every figure starts paused
 
 /* ---------- theme ---------- */
 var themeVersion=0;
@@ -619,7 +629,7 @@ function makeAnimator(cv, drawFn){
   var ctx=cv.getContext("2d");
   if(cv._h==null) cv._h=parseFloat(cv.getAttribute("height"));   // CSS height captured ONCE
   cv.style.height=cv._h+"px";
-  var a={cv:cv,ctx:ctx,visible:true,ver:-1,pal:null,dpr:0,draw:drawFn,t0:performance.now()};
+  var a={cv:cv,ctx:ctx,visible:true,paused:true,ver:-1,pal:null,dpr:0,draw:drawFn,t0:performance.now()};
   function fit(){
     var dpr=Math.min(2, window.devicePixelRatio||1);
     var wpx=Math.round(cv.clientWidth*dpr);
@@ -641,6 +651,14 @@ function makeAnimator(cv, drawFn){
     new IntersectionObserver(function(es){ es.forEach(function(e){ a.visible=e.isIntersecting; }); },
       {rootMargin:"120px"}).observe(cv);
   }
+  /* play/pause — figures start paused, showing the frozen frame; Play runs the animation */
+  var fig=cv.closest("figure"); a.btn=fig?fig.querySelector(".anim-btn"):null;
+  if(a.btn){ a.btn.addEventListener("click",function(){
+    a.paused=!a.paused;
+    a.btn.setAttribute("aria-pressed", a.paused?"false":"true");
+    a.btn.textContent=a.paused?"▶ play":"⏸ pause";
+    if(a.paused){ a.render(performance.now()); } else if(a.onplay){ a.onplay(); }
+  }); }
   return a;
 }
 
@@ -650,13 +668,13 @@ function loop(now){
   requestAnimationFrame(loop);
   if(now-last<33) return;
   last=now;
-  for(var i=0;i<animators.length;i++){ if(animators[i].visible) animators[i].render(now); }
+  for(var i=0;i<animators.length;i++){ if(animators[i].visible && !animators[i].paused) animators[i].render(now); }
 }
 function staticRenderAll(){ for(var i=0;i<animators.length;i++) animators[i].render(performance.now()); }
 
 /* redraw once on resize even if paused/reduced */
 var rz;
-window.addEventListener("resize",function(){ clearTimeout(rz); rz=setTimeout(staticRenderAll,120); });
+window.addEventListener("resize",function(){ clearTimeout(rz); rz=setTimeout(function(){ forceStatic=true; staticRenderAll(); forceStatic=false; },120); });
 
 /* ============================================================
    FIG 1 — symmetry obstruction: two anti-phase traces + flat mean
@@ -693,7 +711,7 @@ window.addEventListener("resize",function(){ clearTimeout(rz); rz=setTimeout(sta
     trace(-1, pal.coral);  // site B (anti-phase)
     // playhead + dots
     var beat;
-    if(reduce){ beat=Math.floor(N*0.5); }
+    if(reduce||forceStatic){ beat=Math.floor(N*0.5); }
     else{
       var period=6000; var ph=((now-a.t0)%period)/period; // 0..1
       var px=x0+ph*(x1-x0);
@@ -729,7 +747,7 @@ window.addEventListener("resize",function(){ clearTimeout(rz); rz=setTimeout(sta
   var a=makeAnimator(cv, function(ctx,W,H,pal,now){
     ctx.clearRect(0,0,W,H);
     var s;
-    if(reduce){ s=1; } else { var period=1600; s=(Math.floor((now-a.t0)/period)%2===0)?1:-1; }
+    if(reduce||forceStatic){ s=1; } else { var period=1600; s=(Math.floor((now-a.t0)/period)%2===0)?1:-1; }
     var teal=hex(pal.teal), coral=hex(pal.coral);
     var gap=18, padL=16, padR=16, top=30, panelW=(W-padL-padR-gap)/2, panelH=H-top-52;
     var labelY=22;
@@ -742,7 +760,7 @@ window.addEventListener("resize",function(){ clearTimeout(rz); rz=setTimeout(sta
         var phase;
         if(discordant){
           // tanh nodal line near centre, slowly drifting for realism
-          var node=0.5 + (reduce?0:0.06*Math.sin((now-a.t0)/2600));
+          var node=0.5 + ((reduce||forceStatic)?0:0.06*Math.sin((now-a.t0)/2600));
           phase = s*Math.tanh((u-node)*7); // +/- across nodal line
         } else {
           phase = s; // uniform
@@ -760,7 +778,7 @@ window.addEventListener("resize",function(){ clearTimeout(rz); rz=setTimeout(sta
       ctx.strokeStyle=pal.border; ctx.lineWidth=1; ctx.strokeRect(px+0.5,top+0.5,panelW-1,panelH-1);
       // nodal line marker
       if(discordant){
-        var node2=0.5 + (reduce?0:0.06*Math.sin((now-a.t0)/2600));
+        var node2=0.5 + ((reduce||forceStatic)?0:0.06*Math.sin((now-a.t0)/2600));
         var nx=px+node2*panelW;
         ctx.strokeStyle=pal.ink; ctx.setLineDash([4,4]); ctx.lineWidth=1.5;
         ctx.beginPath(); ctx.moveTo(nx,top); ctx.lineTo(nx,top+panelH); ctx.stroke(); ctx.setLineDash([]);
@@ -796,8 +814,8 @@ window.addEventListener("resize",function(){ clearTimeout(rz); rz=setTimeout(sta
   var slider=document.getElementById("eig-slider");
   var out=document.getElementById("eig-val");
   var manual=false, aRef=null;
-  slider.addEventListener("input",function(){ manual=true; if(reduce&&aRef) aRef.render(performance.now()); });
-  if(reduce){ slider.value=85; manual=true; }
+  slider.addEventListener("input",function(){ manual=true; if(aRef && (reduce||aRef.paused)) aRef.render(performance.now()); });
+  slider.value=90; manual=true;   // frozen "screenshot" frame: anti-phase eigenvalue near −1 (the punchline)
 
   function lamAnti(d){ return -(0.42+0.58*d); }   // -0.42 -> -1.0
   function lamIn(d){ return 0.75-0.06*d; }         // ~stable, slightly moving
@@ -864,10 +882,11 @@ window.addEventListener("resize",function(){ clearTimeout(rz); rz=setTimeout(sta
     ctx.fillText(msg, cx, H-14);
   });
   aRef=a;
+  a.onplay=function(){ manual=false; };   // Play resumes the auto-sweep
 })();
 
 /* ---------- start ---------- */
-if(reduce){ staticRenderAll(); }
-else{ requestAnimationFrame(loop); }
+forceStatic=true; staticRenderAll(); forceStatic=false;   // freeze every figure on its "screenshot" frame (all start paused)
+requestAnimationFrame(loop);                              // loop runs but skips paused figures until Play
 })();
 </script>
