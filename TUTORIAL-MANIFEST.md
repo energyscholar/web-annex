@@ -328,3 +328,13 @@ freethemath.org/
 - Citations: added Sormunen/Gross 2025, Ashwin 2025, Frank&Jacobs 2026, Fang et al. 2025, Li (Nat Phys 2026); completed Cook 2000, Guldager-Andersen 2025, de la Cotte 2025; DOWNGRADED brain PNAS (wrong-scope) + REMOVED fabricated "Huang et al. 2025".
 - Q2 "◆ our result" hypothesis markers on the program's own unpublished results (9 files).
 - Accordions (short-on-load) + many tooltips + bridge-letter tooltips (A=Topology, B=Criticality, C=Autocatalysis/Closure, D=Computation) throughout. Completeness-adjacent overclaims softened. OPSEC clean; HTML validated.
+
+---
+
+## Unlisted / Private-Share Pages
+
+Not linked from `docs/index.html` nav; robots-disallowed. Shared by direct URL only.
+
+| Page | URL | Audience | Notes |
+|------|-----|----------|-------|
+| EWS: multivariate DEV for cardiac discordant alternans | `/ews/cardiac-mv-ews/` | Thomas Bury (private pre-call brief) | Reproduces Bury 2023 chick-heart EWS + proposes multivariate eigenvalue direction. Red-teamed (8 lenses) + citation-verified. NOT a joint/endorsed doc. |

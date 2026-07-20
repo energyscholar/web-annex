@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Disallow: /ews/cardiac-mv-ews/
