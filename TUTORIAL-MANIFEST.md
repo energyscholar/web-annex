@@ -331,10 +331,10 @@ freethemath.org/
 
 ---
 
-## Unlisted / Private-Share Pages
+## Unlisted Pages
 
-Not linked from `docs/index.html` nav; robots-disallowed. Shared by direct URL only.
+Not linked from `docs/index.html` nav; robots-disallowed. Reachable by direct URL only.
 
-| Page | URL | Audience | Notes |
-|------|-----|----------|-------|
-| EWS: multivariate DEV for cardiac discordant alternans | `/ews/cardiac-mv-ews/` | Thomas Bury (private pre-call brief) | Reproduces Bury 2023 chick-heart EWS + proposes multivariate eigenvalue direction. Red-teamed (8 lenses) + citation-verified. NOT a joint/endorsed doc. |
+| Page | URL | Status | Notes |
+|------|-----|--------|-------|
+| EWS: multivariate DEV for cardiac discordant alternans | `/ews/cardiac-mv-ews/` | unlisted | Reproduces published chick-heart EWS results; proposes a multivariate eigenvalue direction. Direct URL only. |
