@@ -146,6 +146,7 @@ function setOnboard(on){document.getElementById('onboard').classList.toggle('sho
 async function submitKey(raw){
   const status=document.getElementById('status');const pass=(raw||'').trim().toLowerCase();
   if(!pass)return;
+  if(pass==='reset-dossier'){localStorage.removeItem('rw_unlocks');localStorage.removeItem('rw_onboard');location.replace(location.pathname);return;}
   if(pass==='spinward-marches'){const cur=document.getElementById('onboard').classList.contains('show');setOnboard(!cur);status.className='status ok';status.textContent=cur?'Help dismissed.':'Onboarding help shown below.';return;}
   status.className='status';status.textContent='Decrypting...';
   const r=await tryDecrypt(pass);
@@ -174,6 +175,7 @@ secs.forEach(s=>spy.observe(s));
   ACCESS CODES (plaintext — PROOF-OF-CONCEPT; hide better later)
   Playability safeguard: keys can never be lost.
   ────────────────────────────────────────────────────────────
+  reset-dossier      → relock EVERYTHING (clears saved unlocks + reloads clean)
   spinward-marches   → onboarding help toggle (given to all players up front)
   cocytus-ephemeris  → A1  Cocytus (the ideal iceteroid)
   sandoval-wreck     → A2  Scout's grave + black box
