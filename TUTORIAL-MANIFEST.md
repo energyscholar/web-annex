@@ -338,3 +338,9 @@ Not linked from `docs/index.html` nav; robots-disallowed. Reachable by direct UR
 | Page | URL | Status | Notes |
 |------|-----|--------|-------|
 | EWS: multivariate DEV for cardiac discordant alternans | `/ews/cardiac-mv-ews/` | unlisted | Reproduces published chick-heart EWS results; proposes a multivariate eigenvalue direction. Direct URL only. |
+| Rogue Worlds of the Rift (player dossier) | `/traveller/rogue-planets/` | unlisted | **Player-facing.** Survey dossier + encrypted unlock console. Hand the URL to players directly. |
+| Traveller maps | `/maps/` | unlisted | Player-facing: Collace system map, deep-space rogue-planet survey. |
+| S13 session prep | `/s13-prep/` | unlisted | **GM-only.** Arrest scenario, rogue-planet GM notes. Never link from index. |
+| S14 session prep | `/s14-prep/` | unlisted | **GM-only.** Heroes of Raschev dashboard, NPCs, presenter scenes, image prompts. Never link from index. |
+
+**Traveller rule:** all Traveller content stays unlisted — no index cards, no search entries, robots-disallowed. Obscurity is the whole security model, and GM material sits in the same tree as player material. Tracked here only.
