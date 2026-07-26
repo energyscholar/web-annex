@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Has anyone seriously studied the poised state? A guided reading path through thirty years of claim and rebuttal — Langton's edge of chaos and its deflation, the Mora–Bialek criticality hypothesis and the latent-variable objection, RAF theory, and the quantum Poised Realm that was never engaged.">
+<title>The Poised State and Its Critics</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Poised State and Its Critics">
+<meta property="og:description" content="A guided reading path through thirty years of claim and rebuttal. What each key paper claimed, what happened to it, what to watch for — and only then the pointer to the source.">
+<meta property="og:url" content="https://energyscholar.github.io/web-annex/poised-state-critics/">
+<meta property="og:image" content="https://energyscholar.github.io/web-annex/art/og/poised-state-critics.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://energyscholar.github.io/web-annex/art/og/poised-state-critics.png">
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #263548;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --muted: #475569;
+  --line: #94a3b8;
+  --dim: #334155;
+  --golden: #fbbf24;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 3.5rem 1.5rem 6rem; }
+
+h1, h2, h3, h4 {
+  font-family: 'Times New Roman', Georgia, serif;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+h1 { font-size: 2.8rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.subtitle { text-align: center; color: var(--muted); font-size: 1.1rem; margin-bottom: 3rem; font-style: italic; font-family: Georgia, serif; }
+h2 { font-size: 1.8rem; margin: 3.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dim); }
+h2 .sn { color: var(--blue); font-size: 0.9em; margin-right: 0.3em; }
+h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--line); }
+h4 { font-size: 1.08rem; margin: 1.2rem 0 0.5rem; color: var(--heading); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); }
+ul, ol { margin: 0 0 1rem 1.4rem; }
+li { margin-bottom: 0.45rem; }
+
+.lead { font-size: 1.15rem; color: var(--line); font-family: Georgia, serif; line-height: 1.8; margin-bottom: 2rem; }
+
+/* Navigation */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--dim);
+  display: flex; justify-content: center; gap: 0.3rem;
+  padding: 0.5rem 1rem; flex-wrap: wrap;
+}
+nav a {
+  color: var(--muted); text-decoration: none; font-size: 0.8rem;
+  padding: 0.25rem 0.6rem; border-radius: 4px; transition: all 0.2s;
+  white-space: nowrap;
+}
+nav a:hover, nav a.active { color: var(--heading); background: var(--dim); }
+
+/* Cards */
+.card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border: 1px solid var(--dim);
+  transition: border-color 0.3s;
+}
+.card:hover { border-color: var(--blue); }
+.card h3 { margin-top: 0; }
+.card h4 { margin-top: 0; }
+
+/* SVG containers */
+.viz { width: 100%; margin: 1.5rem 0; border-radius: 12px; overflow: hidden; background: var(--card); }
+.viz svg { width: 100%; display: block; }
+
+/* Pattern cards */
+.pattern-card {
+  background: var(--card); border-radius: 12px; padding: 1.5rem;
+  margin: 1.5rem 0; border-left: 3px solid var(--purple);
+}
+.pattern-card h4 { color: var(--purple); margin-bottom: 0.5rem; font-size: 1.1rem; }
+.pattern-card .systems { color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem; }
+
+/* Prediction / discriminator cards */
+.prediction {
+  background: var(--card); border-radius: 8px; padding: 1rem 1.2rem;
+  margin: 0.8rem 0; border-left: 3px solid var(--green);
+}
+.prediction .pred-num { color: var(--green); font-weight: 700; margin-right: 0.5rem; }
+.prediction.weak { border-left-color: var(--amber); }
+.prediction.weak .pred-num { color: var(--amber); }
+
+/* Verdict / callout boxes */
+.callout {
+  background: rgba(59,130,246,0.07); border: 1px solid var(--dim);
+  border-left: 3px solid var(--blue); border-radius: 8px;
+  padding: 1rem 1.2rem; margin: 1.4rem 0;
+}
+.callout.warn { background: rgba(245,158,11,0.07); border-left-color: var(--amber); }
+.callout.null { background: rgba(239,68,68,0.06); border-left-color: var(--red); }
+.callout.good { background: rgba(34,197,94,0.06); border-left-color: var(--green); }
+.callout p:last-child { margin-bottom: 0; }
+.callout .label {
+  display: block; font-size: 0.72rem; letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.4rem; font-weight: 700;
+}
+
+/* Math — HTML entities only, no libraries */
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); white-space: nowrap; }
+.math-block {
+  display: block; font-family: 'Times New Roman', Georgia, serif; font-style: italic;
+  color: var(--heading); text-align: center; font-size: 1.12rem;
+  margin: 1.1rem 0; padding: 0.8rem 0.6rem; background: var(--card);
+  border-radius: 8px; border: 1px solid var(--dim);
+  overflow-x: auto; overflow-y: hidden;
+}
+.math-block .note { font-style: normal; font-family: system-ui, sans-serif; font-size: 0.78rem; color: var(--muted); display: block; margin-top: 0.35rem; }
+
+/* Tables */
+.tablewrap { overflow-x: auto; margin: 1.5rem 0; }
+.scorecard { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 560px; }
+.scorecard th {
+  background: var(--dim); color: var(--heading); padding: 0.6rem 0.5rem;
+  text-align: left; font-weight: 600; vertical-align: bottom;
+}
+.scorecard td { padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--dim); vertical-align: top; }
+.scorecard tr:hover td { background: rgba(59, 130, 246, 0.05); }
+.scorecard .system-name { color: var(--heading); font-weight: 600; }
+.score-strong { color: var(--green); font-weight: 700; }
+.score-plausible { color: var(--amber); }
+.score-absent { color: var(--muted); }
+.score-dead { color: var(--red); font-weight: 600; }
+
+/* Latent-variable machine */
+.machine { background: var(--card); border: 1px solid var(--dim); border-radius: 12px; padding: 1.2rem; margin: 1.6rem 0; }
+.machine-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  gap: 0.9rem; margin-bottom: 0.9rem;
+}
+.mpanel { background: #16202f; border: 1px solid var(--dim); border-radius: 8px; padding: 0.5rem; }
+.mpanel svg { width: 100%; display: block; }
+.mpanel .cap { font-size: 0.74rem; color: var(--muted); text-align: center; margin-top: 0.35rem; line-height: 1.45; }
+.mcontrols { display: flex; gap: 0.6rem; align-items: center; justify-content: center; flex-wrap: wrap; }
+.mbtn {
+  background: var(--dim); color: var(--heading); border: 1px solid transparent; border-radius: 6px;
+  padding: 0.45rem 1.1rem; cursor: pointer; font-size: 0.88rem; font-family: inherit;
+  transition: background 0.2s, border-color 0.2s;
+}
+.mbtn:hover { background: var(--card-hover); border-color: var(--line); }
+.mbtn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.mbtn.on { background: var(--green); color: #06210f; font-weight: 700; }
+.mbtn.off { background: var(--red); color: #2b0808; font-weight: 700; }
+.mreadout { font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mreadout b { color: var(--heading); font-variant-numeric: tabular-nums; }
+
+/* Reading path */
+.readitem {
+  background: var(--card); border: 1px solid var(--dim); border-left: 3px solid var(--cyan);
+  border-radius: 8px; padding: 1.1rem 1.2rem; margin: 1rem 0;
+}
+.readitem h4 { margin: 0 0 0.15rem; color: var(--heading); font-size: 1.1rem; }
+.readitem .cite { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.6rem; }
+.readitem p { margin-bottom: 0.6rem; }
+.readitem .why { font-size: 0.94rem; }
+.readitem .why b { color: var(--cyan); }
+.chips { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.6rem; }
+.chip {
+  font-size: 0.72rem; padding: 0.16rem 0.55rem; border-radius: 999px;
+  background: var(--dim); color: var(--line); white-space: nowrap;
+}
+.chip.d1 { color: #86efac; } .chip.d2 { color: var(--golden); } .chip.d3 { color: #fca5a5; }
+.groupbar {
+  margin: 2.2rem 0 0.8rem; padding: 0.5rem 0.9rem; border-radius: 8px;
+  background: var(--dim); color: var(--heading); font-family: Georgia, serif;
+  font-size: 1.05rem; font-weight: 600;
+}
+
+/* Fade-in on scroll */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+    transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; margin-left: 0; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+.footnotes li a:hover { color: var(--line); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.45rem; }
+  /* the nav wraps to two rows below ~620px, so the container must clear more */
+  .container { padding: 5.5rem 1rem 4rem; }
+  nav { gap: 0.15rem; }
+  nav a { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+  .math-block { font-size: 1rem; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+
+<nav id="topnav">
+  <a href="#senses">Three Senses</a>
+  <a href="#act1">I &middot; Edge of Chaos</a>
+  <a href="#act2">II &middot; The Case</a>
+  <a href="#act3">III &middot; Deflation</a>
+  <a href="#act4">IV &middot; RAF</a>
+  <a href="#act5">V &middot; Poised Realm</a>
+  <a href="#verdict">Verdict</a>
+  <a href="#reading">Reading Path</a>
+</nav>
+
+<div class="container">
+
+<h1>The Poised State and Its Critics</h1>
+<p class="subtitle">A reading path through thirty years of claim and rebuttal</p>
+
+<p class="lead">
+This page exists to answer one question with evidence: <strong>has anyone seriously studied the poised state?</strong>
+</p>
+
+<p class="lead">
+It is not a survey. It is a guided reading path. For each work you get an overview first &mdash; what it claimed, what happened to it, what to watch for &mdash; and only then the pointer to the source. Nothing below assumes you have read any of these papers. If you want the shortest route, skip to <a href="#reading">the reading path</a>; everything before it exists to make that list make sense.
+</p>
+
+<p>
+The short answer, stated once so the rest can be read against it. <strong>Three different things are called &ldquo;poised&rdquo;. They have three different reception histories. One was tested and largely deflated; one is a large, live, genuinely contested field; one was neither tested nor refuted.</strong> Each component has a serious literature. The conjunction of all three has none, under any name.
+</p>
+
+<p>
+The companion page, <a href="../poised-state-survey/">Shadows of the Poised State</a>, presents the affirmative side: twelve systems scored against a five-feature framework. This page is the literature that challenges the premise of that scorecard. Read them together, in either order.
+</p>
+
+<!-- ========== SECTION 1 ========== -->
+<h2 id="senses"><span class="sn">1.</span> The term splits three ways</h2>
+
+<p>
+Almost every confusion in this literature comes from one word doing three jobs. The three senses share the English word &ldquo;poised&rdquo; and very little else &mdash; not an order parameter, not an observable, not a test. Before anything else, separate them.
+</p>
+
+<h3>(a) &ldquo;Poised between order and chaos&rdquo; &mdash; Kauffman, Boolean networks and autocatalytic sets, 1969&ndash;95</h3>
+
+<p>
+The oldest sense. A network of interacting on/off elements &mdash; genes, say &mdash; can be in an <em>ordered</em> regime, where a perturbation dies out and the system is rigid, or a <em>chaotic</em> regime, where a perturbation spreads and the system is useless for storing anything. The claim is that useful systems sit at the boundary. The lineage runs from Kauffman&rsquo;s randomly-wired macromolecular systems<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> through autocatalytic sets of proteins<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> to the book-length synthesis, <em>The Origins of Order</em>.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup>
+</p>
+
+<p>
+A cellular-automata wing was bolted on at the end of the 1980s: Langton supplied a scalar control parameter <span class="math">&lambda;</span> and the claim that computational capacity is maximised near the ordered/chaotic boundary,<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> and Packard reported an evolutionary experiment that appeared to confirm it.<sup><a class="fn" href="#fn5" id="fnref5">5</a></sup> That wing is <a href="#act1">Act I</a>, and it did not survive. The autocatalytic-set wing is <a href="#act4">Act IV</a>, and it did.
+</p>
+
+<h3>(b) &ldquo;Poised at criticality&rdquo; in living systems &mdash; the Mora&ndash;Bialek lineage, 2003&ndash;present</h3>
+
+<p>
+A different intellectual object with a different pedigree. Here you record many units at once &mdash; neurons on an electrode array, birds in a flock, positions in a protein family &mdash; estimate the joint probability distribution over network states, and ask whether the model you fit sits at a special point in <em>its own</em> parameter space. The anchors are Beggs &amp; Plenz&rsquo;s neuronal avalanches,<sup><a class="fn" href="#fn6" id="fnref6">6</a></sup> Mora &amp; Bialek&rsquo;s review,<sup><a class="fn" href="#fn7" id="fnref7">7</a></sup> and Mu&ntilde;oz&rsquo;s <em>Reviews of Modern Physics</em> Colloquium.<sup><a class="fn" href="#fn8" id="fnref8">8</a></sup>
+</p>
+
+<p>
+<strong>This is largely not Kauffman&rsquo;s claim, and it does not present itself as such.</strong> Its machinery &mdash; maximum-entropy models, a density of states, a fictitious temperature &mdash; has no Boolean-network content. In Mu&ntilde;oz&rsquo;s review Kauffman is cited specifically for gene regulatory networks, as one branch among several, not as the source of the general hypothesis. This is <a href="#act2">Act II</a> and <a href="#act3">Act III</a>, and it is unsettled.
+</p>
+
+<h3>(c) The &ldquo;Poised Realm&rdquo; &mdash; quantum &harr; classical, 2013&ndash;present</h3>
+
+<p>
+The narrowest and most recent sense: the proposal that the electronic Hamiltonians of biomolecules sit at the critical point of the <span class="tip" tabindex="0">Anderson metal&ndash;insulator transition<span class="tt">A disordered solid conducts when its electron states are spread out (metallic) and insulates when they are trapped on individual sites (localized). Turning up the disorder drives a transition between the two. At the transition itself the states are neither — they are multifractal, spread out but ragged.</span></span>, where the statistics of neighbouring energy levels are <em>semi-Poisson</em> rather than Poisson (insulating) or Wigner&ndash;Dyson (metallic), so that quantum coherence survives long enough to matter while charge transport remains possible. The flagship is Vattay, Kauffman &amp; Niiranen 2014;<sup><a class="fn" href="#fn9" id="fnref9">9</a></sup> the empirical companion is Vattay et al. 2015.<sup><a class="fn" href="#fn10" id="fnref10">10</a></sup> This is <a href="#act5">Act V</a>, and it is the most interesting result on this page.
+</p>
+
+<div class="callout">
+<span class="label">Why the split matters</span>
+<p>Because the three senses have <em>opposite</em> outcomes, they cannot be cited together as mutually supporting. Sense (a) was deflated in one wing and formalised in another; sense (b) is contested; sense (c) is untested. Any argument that treats &ldquo;the poised state&rdquo; as one well-supported idea is silently averaging a refutation, a live dispute and a blank.</p>
+</div>
+
+<!-- ========== SECTION 2 ========== -->
+<h2 id="act1"><span class="sn">2.</span> Act I &mdash; The edge of chaos, and what happened to it</h2>
+
+<h3>What was claimed</h3>
+
+<p>
+A one-dimensional <span class="tip" tabindex="0">cellular automaton<span class="tt">A line of cells, each holding 0 or 1. Every cell updates simultaneously according to a lookup table that maps the pattern in its neighbourhood to its next value. The lookup table is the &lsquo;rule&rsquo;.</span></span> is defined by a lookup table. Langton&rsquo;s <span class="math">&lambda;</span> is simply <em>the fraction of entries in that table whose output is not the quiescent state</em> &mdash; for a two-state automaton with 0 quiescent, the fraction of 1s in the table. Sweep <span class="math">&lambda;</span> from 0 upward and average behaviour is claimed to run fixed point &rarr; periodic &rarr; &ldquo;complex&rdquo; &rarr; chaotic, with the interesting regime at a critical value <span class="math">&lambda;<sub>c</sub></span>.<sup><a class="fn" href="#fn4" id="fnref4-2">4</a></sup>
+</p>
+
+<p>
+Packard then ran a genetic algorithm that evolved automata to perform a genuinely non-trivial computation &mdash; decide whether the initial line contains more 1s than 0s, a task requiring information to travel the whole lattice &mdash; and plotted a histogram of the evolved rules against <span class="math">&lambda;</span>. The histogram was bimodal, with clusters near <span class="math">&lambda; &asymp; 0.23</span> and <span class="math">&lambda; &asymp; 0.83</span>, straddling the two critical regions. It was read as evidence that evolution selects the edge of chaos.<sup><a class="fn" href="#fn5" id="fnref5-2">5</a></sup>
+</p>
+
+<h3>What happened to it</h3>
+
+<p>
+Mitchell, Hraber &amp; Crutchfield re-ran the experiment carefully.<sup><a class="fn" href="#fn11" id="fnref11">11</a></sup> Their evolved rules clustered at <span class="math">&lambda; &asymp; 0.43</span> and <span class="math">&lambda; &asymp; 0.57</span> &mdash; four times closer to <span class="math">1/2</span> than Packard&rsquo;s peaks &mdash; and <strong>the critical-<span class="math">&lambda;</span> bins were empty</strong>. They then identified three mechanisms, none of which requires any critical dynamics, that together produce the two-peaks-around-a-dip shape.
+</p>
+
+<div class="pattern-card fade-in">
+<h4>1. Task symmetry &mdash; the answer was fixed before the experiment began</h4>
+<p>The density task is invariant under exchanging 0 and 1. Suppose a competent rule had <span class="math">&lambda; &lt; 1/2</span>: more neighbourhoods map to 0 than to 1, so on some inputs that genuinely contain a majority of 1s the rule <em>reduces</em> the count of 1s and misclassifies. The mirror argument bounds it from above. So any rule that performs the task well must have <span class="math">&lambda; &asymp; 1/2</span> <em>a priori</em> &mdash; as a property of the task&rsquo;s symmetry, not of the rule&rsquo;s dynamics. This is a prediction that could have been made without running anything, and it is incompatible with the hypothesis that selection should drive <span class="math">&lambda;</span> to 0.23 or 0.83.</p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>2. Combinatorial drift &mdash; a null model that reproduces the clustering with selection switched off</h4>
+<p>The number of rules at a given <span class="math">&lambda;</span> is a binomial coefficient, <span class="math">|CA(&lambda;,n)| = C(2<sup>n</sup>, &lambda;2<sup>n</sup>)</span>, overwhelmingly concentrated at <span class="math">&lambda; = 1/2</span> with variance <span class="math">&prop; 2<sup>&minus;n</sup></span>. The paper&rsquo;s control experiment runs the identical genetic algorithm with <em>fitness never evaluated</em> and the surviving population chosen at random. It collapses onto <span class="math">&lambda; = 1/2</span> <strong>by generation 10</strong>. With selection switched on, the population is indistinguishable from that null until <strong>generation 35</strong>.</p>
+<p class="systems">This is the cleanest worked null model in the whole poised-state literature, and it costs one extra run.</p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>3. Symmetry breaking &mdash; the dip is a bifurcation of the search, not a shoulder of a transition</h4>
+<p>Around generation 20 each run commits to one of two mirror strategies: grow blocks of 1s (which needs a low-<span class="math">&lambda;</span> safety margin, so the rule does not manufacture a block from a minority input) or grow blocks of 0s (high <span class="math">&lambda;</span>). Individual runs land in one lobe only &mdash; 14 of 30 low, 16 of 30 high. <strong>The bimodal histogram is an artifact of pooling runs</strong>, not a bimodality within any population.</p>
+</div>
+
+<p>
+Two further findings matter. The evolved rules <strong>over-fit the lattice size</strong>: the best rule by strict performance (<span class="math">&lambda; &asymp; 0.54</span>) scores about 0.95 on the 149-cell lattice it was evolved on and about <strong>0.05</strong> at 999 cells &mdash; it had learned the lattice, not the computation. And the evidential gap in the original was procedural: per-bin fitness was never reported, so nobody could tell whether the critical-<span class="math">&lambda;</span> bins held <em>good</em> rules or merely <em>many</em> rules.
+</p>
+
+<div class="callout warn">
+<span class="label">Be precise about what was shown</span>
+<p>What was demonstrated to be an artifact is <strong>the genetic-algorithm and statistical methodology of one published experiment</strong> &mdash; not a property of cellular automata, and not the general hypothesis. The authors say so themselves: their results &ldquo;do not disprove the hypothesis that computational capability can be correlated with phase transitions in CA rule space&hellip; We have shown only that the published experimental support&hellip; was not reproduced.&rdquo; They also note the discrepancy with the original is not fully explained; the leading candidate &mdash; extra injected randomness and a much higher mutation rate in the original setup &mdash; rests on a personal communication and was not re-implemented.</p>
+<p>That is the honest statement. It is also, in practice, decisive: <strong>the strong form did not survive.</strong> The conceptual companion paper makes the same case against the assumed link between dynamical class, <span class="math">&lambda;</span>, and computational capability.<sup><a class="fn" href="#fn12" id="fnref12">12</a></sup></p>
+</div>
+
+<h3>What happened next &mdash; and it is not a recovery</h3>
+
+<p>
+Modern re-tests deflate the claim further rather than restoring it. In spiking microcircuits the edge predicts good parameter regions but is <em>neither necessary nor sufficient</em>.<sup><a class="fn" href="#fn13" id="fnref13">13</a></sup> On neuromorphic hardware, critical dynamics help only for tasks demanding long memory and integration, and are actively <em>harmful</em> otherwise.<sup><a class="fn" href="#fn14" id="fnref14">14</a></sup> Computational capacity can <em>decrease</em> on approach to the edge.<sup><a class="fn" href="#fn15" id="fnref15">15</a></sup> Reservoir-computing performance turns out to be governed by warm-up and nonlinearity matching rather than proximity to a critical regime.<sup><a class="fn" href="#fn16" id="fnref16">16</a></sup> The one substantial revival is in a different substrate &mdash; recurrent threshold-gate networks, where a computable critical line does track real-time computational performance.<sup><a class="fn" href="#fn17" id="fnref17">17</a></sup>
+</p>
+
+<p>
+Net: the claim survives as a <em>substrate-specific heuristic</em>. It does not survive as a law, and the specific experiment that launched it did not replicate. That the field is still publishing surveys titled &ldquo;Revisiting the edge of chaos: <em>Again?</em>&rdquo; thirty-plus years later<sup><a class="fn" href="#fn18" id="fnref18">18</a></sup> tells you something about how unevenly the deflation propagated.
+</p>
+
+<!-- ========== SECTION 3 ========== -->
+<h2 id="act2"><span class="sn">3.</span> Act II &mdash; The affirmative case</h2>
+
+<p>
+This is the strongest version of the poised-state claim, and it deserves to be understood before it is criticised. Two signatures do most of the work. Both are stated below in plain language first.
+</p>
+
+<h3>Signature 1 &mdash; Zipf&rsquo;s law, and why anyone thinks it means criticality</h3>
+
+<p>
+Record <span class="math">N</span> units, chop time into bins, and write down the on/off pattern in each bin. That pattern is a <em>state</em>. Now count how often each state occurs, sort states from most to least frequent, and plot frequency against rank on log&ndash;log axes. If the plot is a straight line of slope <span class="math">&minus;1</span> &mdash; the second-commonest state half as common as the commonest, the hundredth a hundredth as common &mdash; that is Zipf&rsquo;s law.
+</p>
+
+<p>
+Mora &amp; Bialek turn this into a thermodynamic statement in three steps.<sup><a class="fn" href="#fn7" id="fnref7-2">7</a></sup> First, <em>define</em> an energy from the observed probability, with the temperature fixed at 1 by convention:
+</p>
+
+<div class="math-block">
+E(&sigma;) = &minus; log P(&sigma;)
+<span class="note">The definition, not an assumption. The real system sits at k<sub>B</sub>T = 1 by construction; T is reintroduced later only as a probe.</span>
+</div>
+
+<p>
+Second, note that the <em>rank</em> of a state is exactly the number of states with lower energy, so <span class="math">log(rank)</span> is the entropy at that energy. Third, substitute: Zipf&rsquo;s law becomes the statement that entropy is a perfectly linear function of energy,
+</p>
+
+<div class="math-block">
+S(E) = E / &alpha; + &hellip; &nbsp;&nbsp;&rarr;&nbsp;&nbsp; for &alpha; = 1, &nbsp; S(E) = E
+<span class="note">The extensive parts of energy and entropy cancel. Slope exactly 1.</span>
+</div>
+
+<p>
+Why that is &ldquo;critical&rdquo;: reintroduce a fictitious temperature and the usual saddle point puts the system where <span class="math">dS/d&epsilon; = 1/k<sub>B</sub>T</span>. Ordinarily that picks out one temperature. Under Zipf&rsquo;s law <span class="math">dS/d&epsilon;</span> equals <span class="math">1/&alpha;</span> at <em>every</em> energy, so <span class="math">k<sub>B</sub>T = &alpha;</span> is a critical point &mdash; and because the system operates at <span class="math">k<sub>B</sub>T = 1</span>, a Zipf slope of exactly <span class="math">&minus;1</span> places it exactly there. Below it the system would freeze; above it, thermodynamic quantities would diverge.
+</p>
+
+<h3>Signature 2 &mdash; a specific heat that grows with system size</h3>
+
+<p>
+Fit a maximum-entropy model to the measured firing rates and pairwise correlations, then multiply every fitted parameter by <span class="math">1/T</span> and sweep <span class="math">T</span>. This is a purely fictitious temperature: it does not correspond to heating anything, it just reweights the model&rsquo;s configurations. Compute the specific heat,
+</p>
+
+<div class="math-block">
+C(T) = (N / T<sup>2</sup>) &middot; [ &minus; d<sup>2</sup>S/dE<sup>2</sup> ]<sup>&minus;1</sup>
+<span class="note">Zipf forces the second derivative to vanish at every energy, so C(T) is not merely peaked but divergent along the line.</span>
+</div>
+
+<p>
+The <em>evidence</em> is not the peak. It is the <strong>trend</strong>: a peak sitting at <span class="math">T = 1</span> that grows and sharpens as you include more units is the finite-size signature of a genuine divergence. In salamander retina the peak height climbs monotonically from roughly 4 at <span class="math">N = 5</span> to roughly 26 at <span class="math">N = 40</span>, with a simulated <span class="math">N = 120</span> network near 49. The rank&ndash;frequency plots likewise approach the <span class="math">&minus;1</span> line more closely as <span class="math">N</span> grows.
+</p>
+
+<h3>The dynamical wing &mdash; avalanches</h3>
+
+<p>
+Beggs &amp; Plenz recorded spontaneous activity from cortical cultures and slices on a 60-electrode array and defined an <em>avalanche</em> as a run of consecutive non-empty time bins.<sup><a class="fn" href="#fn6" id="fnref6-2">6</a></sup> The numbers are worth carrying:
+</p>
+
+<ul>
+<li>size exponent <span class="math">&alpha; = &minus;1.50 &plusmn; 0.008</span>, over roughly 90,000 avalanches, with the same value whether size is counted in electrodes or in summed signal amplitude;</li>
+<li>lifetime exponent <span class="math">&asymp; &minus;2</span>;</li>
+<li>branching parameter <span class="math">&sigma; = 1.04 &plusmn; 0.19</span> &mdash; measured <em>directly</em>, not inferred from the exponent &mdash; where <span class="math">&sigma; = 1</span> is the critical value;</li>
+<li>the cutoff is set by the array, not the tissue: cutting the array to 30 and then 15 electrodes moved the cutoff to exactly the available electrode count;</li>
+<li>blocking inhibition with picrotoxin destroys the power law, driving the exponent to <span class="math">&minus;1.95 &plusmn; 0.02</span> and adding an epileptic hump &mdash; and washout restores <span class="math">&minus;1.51 &plusmn; 0.03</span>.</li>
+</ul>
+
+<p>
+That last point is the strongest structural feature of the affirmative case: <strong>there is a knob, and turning it destroys the signature in the predicted direction</strong>. A power law that cannot be broken is a description; one that breaks when you push the system off its operating point is closer to a measurement.
+</p>
+
+<h3>The rest of the affirmative case, briefly</h3>
+
+<ul>
+<li><strong>Flocks.</strong> Correlation length in starling flocks scales <em>linearly with flock size</em>, with no intrinsic scale in the system.<sup><a class="fn" href="#fn19" id="fnref19">19</a></sup> This is a size-dependence result rather than a fit to one distribution, which makes it the cleanest scale-invariance measurement in the set &mdash; and, as <a href="#act3">Act III</a> will show, the one signature a shared external drive provably cannot fake. The maximum-entropy model of the same data sits close to its own critical point.<sup><a class="fn" href="#fn20" id="fnref20">20</a></sup></li>
+<li><strong>Retina.</strong> An explicit thermodynamics built from real retinal recordings, with a specific heat that diverges as a function of sample size.<sup><a class="fn" href="#fn21" id="fnref21">21</a></sup></li>
+<li><strong>Who tunes the knob?</strong> Two answers. Replace the critical <em>point</em> with an extended <span class="tip" tabindex="0">Griffiths phase<span class="tt">When a network is structurally heterogeneous — modules within modules, as the brain&rsquo;s connectome is — critical-like scaling can appear across a whole region of parameter space rather than at a single point. Nothing needs to be tuned precisely, because the target is wide.</span></span> produced by hierarchical modular connectivity, which dissolves the fine-tuning problem;<sup><a class="fn" href="#fn22" id="fnref22">22</a></sup> or let homeostatic mechanisms self-tune the system, making criticality an attractor rather than a coincidence.<sup><a class="fn" href="#fn23" id="fnref23">23</a></sup></li>
+<li><strong>The map.</strong> Mu&ntilde;oz&rsquo;s Colloquium is the field&rsquo;s authoritative synthesis and covers every biological scale.<sup><a class="fn" href="#fn8" id="fnref8-2">8</a></sup></li>
+</ul>
+
+<div class="callout warn">
+<span class="label">Read the affirmative review honestly</span>
+<p>Mu&ntilde;oz&rsquo;s verdict on his own field is: &ldquo;for most of the leading examples&hellip; there is not a fully convincing proof&hellip; <strong>we still do not have a &lsquo;smoking gun&rsquo;</strong>.&rdquo; His Figure 1 &mdash; the <em>first</em> figure of the review &mdash; is a plain unbiased random walk producing clean power laws with exponents <span class="math">&tau; = 4/3</span> and <span class="math">&alpha; = 3/2</span> and no critical point anywhere. He states outright that finite systems cannot be truly critical, and that <em>externally driven</em> systems are not truly critical either &mdash; for those, the best available surrogate is the <span class="tip" tabindex="0">Widom line<span class="tt">Past a critical point, the sharp transition is gone but the locus of maximum response or maximum correlation continues into the supercritical region. It is a ridge, not a point, and it is what a driven or finite system can actually sit on.</span></span>, the locus of maximal susceptibility. He also records the tautology objection against himself: fitting a rich dataset tends to return a near-critical model because that is the only region where the model can generate many scales at once.</p>
+</div>
+
+<!-- ========== SECTION 4 ========== -->
+<h2 id="act3"><span class="sn">4.</span> Act III &mdash; The deflation</h2>
+
+<p>
+The negative literature has <em>not</em> disproved criticality in living systems. What it has done is raise the evidentiary bar, and it has done so on every kind of evidence at once. The single most important result is the one below: both signatures of <a href="#act2">Act II</a> arise generically from a mechanism with no criticality, no coupling and no tuning in it at all.
+</p>
+
+<h3>The mechanism, step by step</h3>
+
+<p>
+Take <span class="math">N</span> binary units. Suppose they are <strong>conditionally independent given one unobserved variable</strong> <span class="math">h</span> &mdash; a common input, a stimulus, an arousal level, a driver. Conditional on <span class="math">h</span>, no unit knows about any other. There is no coupling between units whatsoever. What you actually measure is the average over <span class="math">h</span>:
+</p>
+
+<div class="math-block">
+P(x) = &int; dh &nbsp; p(h) &nbsp; &Pi;<sub>i</sub> p(x<sub>i</sub> | h)
+<span class="note">Conditionally independent is not marginally independent. Marginalising over h couples everything.</span>
+</div>
+
+<p>Now follow the algebra in this order. It is four steps and it is worth doing slowly.</p>
+
+<ol>
+<li><strong>For large <span class="math">N</span>, given <span class="math">h</span>, the log-probability concentrates.</strong> Almost all the states you will ever see at that <span class="math">h</span> are &ldquo;typical&rdquo; ones, and they all have nearly the same probability. Writing <span class="math">s(h)</span> for the per-unit entropy at that latent value, <span class="math">&minus;log P(x|h) &asymp; N &middot; s(h)</span>.</li>
+<li><strong>So the energy is essentially a deterministic function of <span class="math">h</span>, times <span class="math">N</span>.</strong> <span class="math">E = N &middot; s(h)</span>. Different values of <span class="math">h</span> put you at different energies; the same <span class="math">h</span> puts you at one.</li>
+<li><strong>But the number of typical states at that <span class="math">h</span> is <span class="math">exp(N &middot; s(h))</span>.</strong> That is what the entropy per unit <em>means</em>.</li>
+<li><strong>Therefore the density of states at energy <span class="math">E = N&middot;s(h)</span> is <span class="math">exp(E)</span>.</strong> Slope exactly 1. <em>Zipf falls out of the algebra.</em> And the apparent critical temperature sits at <span class="math">T = 1</span> because <span class="math">T = 1</span> <strong>is the data</strong> &mdash; it was fixed by the definition <span class="math">E = &minus;log P</span> before any physics happened.</li>
+</ol>
+
+<div class="callout">
+<span class="label">The sentence to remember</span>
+<p>A latent variable sweeps the population through a range of rates; marginalising mixes conditional distributions <em>of different entropies</em>, and that mixture alone manufactures the power law. <strong>Nothing is poised &mdash; something is merely being driven.</strong></p>
+</div>
+
+<p>
+Schwab, Nemenman &amp; Mehta proved this in five pages.<sup><a class="fn" href="#fn24" id="fnref24">24</a></sup> Their numbers are the ones to quote. Fitting the rank&ndash;frequency plot of <span class="math">N = 200</span> non-identical conditionally-independent units gives a slope of <strong><span class="math">&minus;1.012</span></strong>. Repeating with genuine quenched spin&ndash;spin interactions &mdash; conditional independence deliberately broken &mdash; gives <strong><span class="math">&minus;1.011</span></strong>. The effect is robust over <em>two orders of magnitude</em> in the width of the hidden variable&rsquo;s distribution; it fails only when that width is so small there is nothing to average over. And on real data &mdash; a single motion-sensitive blowfly neuron &mdash; a manifestly non-critical refractory-Poisson surrogate driven by the <em>same</em> stimulus reproduces the observed Zipf plot.
+</p>
+
+<p>
+Aitchison, Corradi &amp; Latham proved the mixture version in general and, importantly, supplied a diagnostic that can come back <em>negative</em>: the proportion of energy variance explained by the candidate latent variable.<sup><a class="fn" href="#fn25" id="fnref25">25</a></sup> Applied to zebrafish antibody repertoires it returned below 0.5 in 12 of 14 datasets, and Zipf&rsquo;s law held at every individual sequence length &mdash; so for that dataset the mechanism is <em>not</em> the explanation. A test that can fail, and did.
+</p>
+
+<!-- ========== THE MACHINE ========== -->
+<h3>The latent-variable machine</h3>
+
+<p>
+Everything above is one toggle. Sixteen units. Each flips on with a probability that depends on a hidden driver <span class="math">h</span> and on its own fixed bias. <strong>There are no connections between the units</strong> &mdash; look at the left panel and satisfy yourself that there is nothing linking the dots. States accumulate into a rank&ndash;frequency count in the middle panel, and the same counts appear on log&ndash;log axes on the right, against a slope&nbsp;<span class="math">&minus;1</span> guide.
+</p>
+
+<p>
+With the latent variable <strong>ON</strong>, <span class="math">h</span> drifts and the log&ndash;log points settle onto the guide line. With it <strong>OFF</strong>, <span class="math">h</span> is frozen at its mean &mdash; the units are still random, still noisy, still exactly as uncoupled &mdash; and the plot is visibly not a straight line. That single toggle is the whole teaching point.
+</p>
+
+<div class="machine">
+  <div class="machine-grid">
+
+    <div class="mpanel">
+      <svg id="lvA" viewBox="0 0 300 260" role="img" aria-label="Hidden driver value and sixteen unconnected indicator units"></svg>
+      <div class="cap"><b>Left.</b> The hidden driver <span class="math">h</span> and 16 units. No links, no lattice, no neighbours &mdash; each unit flips on its own. Watch them anyway: with the driver <b>on</b> they switch together, and with it <b>off</b> they speckle independently. <em>Nothing was connected in either case.</em></div>
+    </div>
+
+    <div class="mpanel">
+      <svg id="lvB" viewBox="0 0 300 260" role="img" aria-label="Rank frequency histogram of accumulated states"></svg>
+      <div class="cap"><b>Centre.</b> Observed states, sorted by how often they occurred. Linear axes, top 26 ranks.</div>
+    </div>
+
+    <div class="mpanel">
+      <svg id="lvC" viewBox="0 0 300 260" role="img" aria-label="Log-log rank frequency plot with slope minus one reference line"></svg>
+      <div class="cap"><b>Right.</b> The same counts on log&ndash;log axes. Dashed line = slope <span class="math">&minus;1</span>. Solid line = the fit to ranks 2&ndash;400.</div>
+    </div>
+
+  </div>
+  <div class="mcontrols">
+    <button id="lvToggle" class="mbtn on" type="button" aria-pressed="true">Latent variable: ON</button>
+    <button id="lvReset" class="mbtn" type="button">Restart sampler</button>
+    <span class="mreadout">samples <b id="lvN">0</b> &nbsp;&middot;&nbsp; distinct states <b id="lvS">0</b> &nbsp;&middot;&nbsp; fitted slope <b id="lvSlope">&mdash;</b></span>
+  </div>
+  <p style="font-size:0.8rem;color:var(--muted);margin:0.8rem 0 0;line-height:1.55;">
+    Toggling restarts the sampler, because the two conditions must not be mixed. The fit runs over ranks 2&ndash;400 and settles after roughly forty thousand samples. Expect about <span class="math">&minus;1.0</span> with the driver on, and about <span class="math">&minus;0.4</span>, shallower and visibly bent away from the guide, with it off. The gentle droop at the far right in <em>both</em> conditions is undersampling of rare states, not physics &mdash; it is the same finite-size cutoff every real avalanche distribution has.
+  </p>
+</div>
+
+<h3>What defeats it</h3>
+
+<p>
+If you want to claim criticality in a system that has an external driver, these are the four things that separate your claim from the null above. They are listed strongest first.
+</p>
+
+<div class="prediction fade-in">
+<span class="pred-num">1.</span> <strong>Condition on the measured driver.</strong> Do not treat the driver as a nuisance to be averaged over &mdash; measure it, condition on it, and ask whether criticality survives in the residuals. This is the direct test, and it is the one the null model is built to fail. Where the driver&rsquo;s variability can be stratified, the latent-variable mechanism predicts the scaling signature <em>tracks the driver&rsquo;s variance</em>; a genuine internal critical point should be comparatively insensitive to it.
+</div>
+
+<div class="prediction fade-in">
+<span class="pred-num">2.</span> <strong>Build the null explicitly and run your own pipeline on it.</strong> Simulate units that are conditionally independent given the driver &mdash; no coupling at all &mdash; then push that surrogate through your <em>exact</em> binning, thresholding, aggregation and fitting code, and see whether it reproduces your exponents. Mitchell&rsquo;s no-selection control is the model to imitate: one extra run, no new theory, and it answers the question. If the surrogate reproduces your result, the claim is not identified by the data.
+</div>
+
+<div class="prediction fade-in">
+<span class="pred-num">3.</span> <strong>Distance-resolved correlations.</strong> A single global latent variable produces correlations that <em>do not depend on separation</em> &mdash; every pair of units is coupled equally, through the driver. Genuine criticality has a diverging correlation length, so correlations decay as a power of distance and the correlation length grows with system size. This is the cheapest discriminator whenever you have array geometry, and it is the one signature a shared drive provably cannot fake.
+</div>
+
+<div class="prediction weak fade-in">
+<span class="pred-num">4.</span> <strong>Exponent structure the artifact has no reason to reproduce.</strong> A relation <em>between</em> exponents &mdash; measured independently and never constrained to agree &mdash; is far better evidence than any single exponent. <em>But flag this as the weakest of the four:</em> it is an argument until (2) is actually run, and several published null models now reproduce exponent relations too. It buys you a criterion that <em>can</em> fail, not a criterion that <em>does</em> fail for the artifact.
+</div>
+
+<h3>The worked example: an externally driven geophysical system</h3>
+
+<p>
+The closest published analogue to a slowly driven, sparsely instrumented natural system is Priesemann &amp; Shriki 2018, and it is worth reading end to end.<sup><a class="fn" href="#fn26" id="fnref26">26</a></sup> The setup: completely unconnected Poisson units, no interactions, no propagation, no transition &mdash; but the rate at which they fire wanders slowly, over one or two orders of magnitude, on timescales long compared with the events being counted.
+</p>
+
+<p>
+A <em>homogeneous</em> Poisson process cannot make a power law: its event-duration distribution is exactly exponential. But under a slowly varying drive each window behaves like its own homogeneous process with its own decay constant, and the pooled distribution is a <strong>mixture of exponentials</strong>:
+</p>
+
+<div class="math-block">
+P(x) = &int; d&lambda; &nbsp; w(&lambda;) &nbsp; e<sup>&minus;&lambda;x</sup> &nbsp;&nbsp;&sim;&nbsp;&nbsp; x<sup>&minus;&alpha;</sup> &nbsp;&nbsp;when&nbsp;&nbsp; w(&lambda;) &sim; &lambda;<sup>&alpha;&minus;1</sup>
+<span class="note">A perfect power law is impossible — that weighting cannot be normalised. An approximate one over two to three decades is easy, and comes with cutoffs on both sides.</span>
+</div>
+
+<p>
+Two results from that paper are the ones that bite:
+</p>
+
+<ul>
+<li><strong>Fixing one critical exponent delivers the other for free.</strong> Choose the rate density that makes the duration distribution come out at the critical value <span class="math">&minus;2</span>, and the size distribution arrives at <span class="math">&minus;1.5</span> without being asked. So recovering <em>both</em> canonical exponents, and their apparent mutual consistency, is not independent evidence &mdash; it is exactly what the drive-only null predicts.</li>
+<li><strong>Pooling records with different mean rates manufactures a power law.</strong> Twelve macaque recording sessions, each individually <em>not</em> a power law, sum to a clean power law of slope <span class="math">&minus;1.6</span> spanning more than two decades. That is real data, and the mechanism was triggered by an entirely ordinary analysis choice. If your aggregate combines epochs, stations, seasons or instrument eras with different mean activity, you have run the mixture mechanism yourself, with no physics involved.</li>
+</ul>
+
+<p>
+The paper cites <strong>solar flares</strong> explicitly as the textbook case of heavy-tailed statistics generated by superposing exponentials at different event rates. Anyone applying criticality machinery to the magnetosphere &mdash; an externally driven system whose driver varies over orders of magnitude on timescales far longer than the events being counted, observed through a sparse and unevenly spaced ground network &mdash; is in exactly this neighbourhood, and inherits the whole objection. The authors also give the seven-measure battery that separates a driven Poisson mixture from a genuinely critical branching process, of which the sharpest single item is the mean-size-given-duration relation: the driven null gives the <em>trivial</em> exponent 1, criticality requires the value implied by the marginal exponents.
+</p>
+
+<p>
+And they state the honest limit themselves, twice: a sufficiently sophisticated drive can reproduce anything a passive analysis measures, so <strong>only causal intervention can decide</strong>. For a system nobody can intervene on, the correct posture is to state the drive-only null explicitly, report every discriminator, and frame the result as &ldquo;not explained by the drive-only null under tests 1&ndash;4&rdquo; &mdash; never as &ldquo;the system is critical.&rdquo;
+</p>
+
+<h3>The rest of the negative case</h3>
+
+<p>Six independent lines, each attacking a different kind of evidence.</p>
+
+<div class="pattern-card fade-in">
+<h4>Latent variables reproduce the renormalisation signature too</h4>
+<p>Morrell, Sederberg &amp; Nemenman reproduce the full coarse-graining scaling signature &mdash; activity variance <span class="math">&alpha; = 1.367 &plusmn; 0.009</span>, free energy <span class="math">0.841 &plusmn; 0.009</span>, eigenvalue spectrum <span class="math">&minus;0.648 &plusmn; 0.009</span>, correlation time <span class="math">0.273 &plusmn; 0.010</span>, plus flow to a non-Gaussian fixed point &mdash; from neurons with <strong>zero cell-to-cell coupling</strong>, matching published experimental values within error.<sup><a class="fn" href="#fn27" id="fnref27">27</a></sup> The one ingredient that matters is that nearly all cells couple to latent fields, and that there are at least five of them; earlier single-latent-variable models failed for exactly that reason. The 2024 sequel extends the construction to avalanche criticality.<sup><a class="fn" href="#fn28" id="fnref28">28</a></sup></p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>Even the scaling collapse is reproducible without criticality</h4>
+<p>The accepted gold standard was never a power law alone but the full package: power-law sizes <em>and</em> durations with the right exponents <em>plus</em> collapse of average event shapes onto a universal scaling function. Touboul &amp; Destexhe obtain the entire package from <span class="math">N = 2000</span> completely independent Poisson processes sharing one fluctuating rate &mdash; size exponent 1.47, duration 1.9, and an accurate shape collapse.<sup><a class="fn" href="#fn29" id="fnref29">29</a></sup> Their earlier paper had already shown that thresholding a stochastic process yields power-law avalanches.<sup><a class="fn" href="#fn30" id="fnref30">30</a></sup> Mariani et al. go further: with <strong>all coupling set to zero</strong>, a shared slow modulation reproduces the power laws, the crackling scaling relation <em>and</em> the shape collapse &mdash; but it pins the correlation length at 1, which is precisely why correlation-length-versus-system-size is the discriminator that survives.<sup><a class="fn" href="#fn31" id="fnref31">31</a></sup></p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>Subsampling biases the estimator toward criticality</h4>
+<p>Observe a spreading process through a small subset of its units and the conventional branching-parameter estimator is badly biased. Wilting &amp; Priesemann give a subsampling-invariant estimator; applied to rat, cat and monkey it returns a reproducibly <em>subcritical</em> cortex, median <span class="math">m&#770; = 0.984</span> &mdash; neither Poisson-like nor critical, which they name the <em>reverberating</em> regime.<sup><a class="fn" href="#fn32" id="fnref32">32</a></sup> The same cat data read <span class="math">0.27</span> under the conventional estimator, and <span class="math">0.06</span> from single neurons: it would have classified cortex as asynchronous-irregular. The worst case for a fixed array is older and starker &mdash; one and the same critical model reads &ldquo;apparently supercritical&rdquo; at small electrode spacing and &ldquo;apparently subcritical&rdquo; at large.<sup><a class="fn" href="#fn33" id="fnref33">33</a></sup> The constructive fix is subsampling scaling.<sup><a class="fn" href="#fn34" id="fnref34">34</a></sup> Their review of the whole dispute is the fastest way in.<sup><a class="fn" href="#fn35" id="fnref35">35</a></sup></p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>A coarse global observable can be scale-free while its units are not</h4>
+<p>B&eacute;dard, Kr&uuml;ger &amp; Destexhe recorded global and single-unit activity <em>simultaneously</em>: the units were Poisson, the avalanches exponential, and the global <span class="math">1/f</span> spectrum was supplied by the filtering properties of the extracellular medium.<sup><a class="fn" href="#fn36" id="fnref36">36</a></sup> The scale-free behaviour was a property of the measurement chain, not of the network.</p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>The statistics themselves are weaker than assumed</h4>
+<p>Clauset, Shalizi &amp; Newman supply the maximum-likelihood + Kolmogorov&ndash;Smirnov + likelihood-ratio standard, and then apply it to 24 canonical datasets.<sup><a class="fn" href="#fn37" id="fnref37">37</a></sup> <strong>Exactly one &mdash; word frequencies in English &mdash; earns the rating &ldquo;good&rdquo;.</strong> Seven are firmly ruled out. The log-normal is not excluded for any dataset but one. Least-squares fitting on a log&ndash;log histogram, still the commonest method in practice, returns exponents off by around a full unit, with error bars that give no warning of the bias. Gerlach &amp; Altmann then show that recipe assumes independent samples and breaks under correlation: an earthquake series of <span class="math">N &asymp; 10<sup>5</sup></span> carried about <strong>75</strong> effective independent samples.<sup><a class="fn" href="#fn38" id="fnref38">38</a></sup> And Destexhe &amp; Touboul report that <strong>100% of 32,000</strong> non-critical distributions passed an information-criterion comparison of power law versus log-normal &mdash; the test does not discriminate.<sup><a class="fn" href="#fn39" id="fnref39">39</a></sup> The short, sharp summary of the whole problem is Stumpf &amp; Porter.<sup><a class="fn" href="#fn40" id="fnref40">40</a></sup></p>
+</div>
+
+<div class="pattern-card fade-in">
+<h4>Fitting can produce criticality on its own</h4>
+<p>The Fisher information of a model equals its susceptibility. Since susceptibility diverges at a critical point, maximum-likelihood inference on high-dimensional data <em>preferentially returns models near a phase transition</em> &mdash; there are simply more distinguishable models there.<sup><a class="fn" href="#fn41" id="fnref41">41</a></sup> The consequence is developed further in later work.<sup><a class="fn" href="#fn42" id="fnref42">42</a></sup><sup><a class="fn" href="#fn43" id="fnref43">43</a></sup> Related routes: random subsampling alone generates signatures of criticality in simulated networks,<sup><a class="fn" href="#fn44" id="fnref44">44</a></sup> neutral dynamics generates scale-free avalanches with no critical point,<sup><a class="fn" href="#fn45" id="fnref45">45</a></sup> non-critical neuronal systems produce power laws by other routes,<sup><a class="fn" href="#fn46" id="fnref46">46</a></sup> and the extrinsic-versus-intrinsic distinction has since been formalised directly.<sup><a class="fn" href="#fn47" id="fnref47">47</a></sup></p>
+</div>
+
+<div class="callout good">
+<span class="label">The fairest summary of the negative case</span>
+<p>It comes from the discoverer of neuronal avalanches, who wrote a paper cataloguing the objections against his own result as a dialogue.<sup><a class="fn" href="#fn48" id="fnref48">48</a></sup> He concedes the central point in one line: &ldquo;A critical system will produce power laws, yes, but power laws do not prove criticality.&rdquo; He then gives the three things that <em>do</em> go beyond power laws, and they remain the best checklist in the literature: <strong>(1) tunability through phases</strong> &mdash; a control parameter that sweeps the system from sub- to supercritical, with non-power-law distributions on either side, which the non-critical generators simply cannot do because they have no phases; <strong>(2) mathematical relations among several exponents</strong>, which single-exponent generators cannot have; <strong>(3) data collapse</strong> of avalanche shapes. Note that the deflation literature has since partly caught up with (3), which is why (1) and (2) now carry the weight.</p>
+<p>What the negative literature has actually accomplished is this: <em>&ldquo;a power law was observed&rdquo; is now worth nothing as evidence</em>, and the minimum admissible claim is a rejectable exponent relation plus a null model that fails. The question of whether cortex is critical remains open.<sup><a class="fn" href="#fn49" id="fnref49">49</a></sup></p>
+</div>
+
+<!-- ========== SECTION 5 ========== -->
+<h2 id="act4"><span class="sn">5.</span> Act IV &mdash; The one that got formalized</h2>
+
+<p>
+Amid all of this, one component of the original Kauffman programme was taken up, made rigorous, and turned into a working research field with theorems and empirical applications. It is also the component with the least contact with everything else on this page.
+</p>
+
+<h3>The claim, and the problem with it</h3>
+
+<p>
+Kauffman&rsquo;s 1986 argument is a random-graph connectivity argument: in a soup of polymers where molecules can catalyse each other&rsquo;s formation, once the catalysis probability crosses a threshold, a <em>collectively autocatalytic set</em> &mdash; a set of reactions in which every reaction is catalysed by something the set itself makes &mdash; appears almost inevitably.<sup><a class="fn" href="#fn2" id="fnref2-2">2</a></sup> It is an appealing origin-of-life story. Its problem was that &ldquo;does this system contain such a set?&rdquo; looked like a search over exponentially many subsets of reactions, and the claim itself was disputed &mdash; the counter-position being that if the catalysis probability scales inversely with the number of reactions, such sets may never appear at all.
+</p>
+
+<h3>What Hordijk &amp; Steel did</h3>
+
+<p>
+They turned the conjecture into a <em>decidable object</em>.<sup><a class="fn" href="#fn50" id="fnref50">50</a></sup> Define a catalytic reaction system as a triple &mdash; molecules, reactions, and a set of catalysis pairs &mdash; over a distinguished <em>food set</em> that the environment supplies freely. Then a subset of reactions is a <strong>RAF</strong> &mdash; reflexively autocatalytic and food-generated &mdash; if:
+</p>
+
+<ul>
+<li><strong>reflexively autocatalytic:</strong> every reaction in the subset is catalysed by at least one molecule the subset itself involves; and</li>
+<li><strong>food-generated:</strong> every reactant can be built up from the food set by reactions already in the subset.</li>
+</ul>
+
+<p>
+The algorithm avoids the exponential search entirely by <em>shrinking</em> rather than searching. Two reduction rules &mdash; delete any reaction with no available catalyst; delete any reaction whose reactants cannot be built from the food set &mdash; are applied alternately until nothing more can be removed:
+</p>
+
+<div class="math-block">
+R<sub>i+1</sub> = &delta;( &gamma;( R<sub>i</sub> ) ) ,&nbsp;&nbsp; R<sub>&infin;</sub> = &cap;<sub>i</sub> R<sub>i</sub>
+<span class="note">&gamma; enforces autocatalysis, &delta; enforces food-generation. Both are order-independent.</span>
+</div>
+
+<p>
+The theorem: a RAF exists <em>if and only if</em> <span class="math">R<sub>&infin;</sub></span> is non-empty, in which case <span class="math">R<sub>&infin;</sub></span> is the <strong>unique maximal RAF</strong>. It is computed in polynomial time &mdash; a worst case of <span class="math">O(|X||R|<sup>3</sup>)</span>, measured empirically at <span class="math">&tau; = 0.0002 |R|<sup>1.43</sup></span> &mdash; and an irreducible RAF, if one exists, in <span class="math">O(|X||R|<sup>4</sup>)</span>. That is the whole difference between a suggestive story and a research programme: <strong>the object became something you can compute, and therefore something you can be wrong about.</strong>
+</p>
+
+<h3>Where it went</h3>
+
+<ul>
+<li><strong>Structure theory.</strong> For &ldquo;elementary&rdquo; systems &mdash; where every reaction draws its reactants from the food set, which covers real laboratory networks &mdash; the entire lattice of RAFs reduces to strongly connected components of a directed graph, computable in polynomial time.<sup><a class="fn" href="#fn51" id="fnref51">51</a></sup> The same work supplies a Perron&ndash;Frobenius result in which the support of a positive left eigenvector <em>is</em> a RAF, extends the theory to carry reaction rates, and marks the boundary honestly: finding a <em>smallest</em> RAF is NP-hard, and the number of irreducible RAFs can grow exponentially.</li>
+<li><strong>Real chemistry.</strong> Two laboratory origin-of-life systems &mdash; a designed peptide network<sup><a class="fn" href="#fn52" id="fnref52">52</a></sup> and a cooperative RNA replicator network<sup><a class="fn" href="#fn53" id="fnref53">53</a></sup> &mdash; are elementary catalytic reaction systems in exactly this sense.</li>
+<li><strong>Real metabolism.</strong> The charge that RAF theory only ever describes random graphs was answered directly: RAF sets were found in reconstructed <em>ancestral metabolic networks</em> built from real biochemical data.<sup><a class="fn" href="#fn54" id="fnref54">54</a></sup></li>
+<li><strong>Dynamics and population structure.</strong> Formal models of autocatalytic sets in an RNA replicator system,<sup><a class="fn" href="#fn55" id="fnref55">55</a></sup> a birth&ndash;death process built on combinatorial innovation,<sup><a class="fn" href="#fn56" id="fnref56">56</a></sup> and an accessible book-length introduction.<sup><a class="fn" href="#fn57" id="fnref57">57</a></sup></li>
+</ul>
+
+<div class="callout">
+<span class="label">The point of this section</span>
+<p>This is the component that got a rigorous treatment &mdash; <strong>alone</strong>, and by people who touch neither topology nor criticality. In a fifteen-paper sample of the RAF literature, the vocabulary of the other two senses does not appear at all: no &ldquo;poised realm&rdquo;, no level statistics, no avalanche exponents. It is a working field that happens to descend from the same author. It is not evidence for anything else on this page, and it does not claim to be.</p>
+</div>
+
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
+
+<!-- ========== SECTION 6 ========== -->
+<h2 id="act5"><span class="sn">6.</span> Act V &mdash; The one nobody engaged</h2>
+
+<p>
+This is where the evidence is unambiguous and the finding is negative in a specific and unusual way.
+</p>
+
+<h3>The claim, in plain language</h3>
+
+<p>
+Space the energy levels of a disordered quantum system and look at the gaps between neighbours. Three shapes are possible, and they are the fingerprints of three regimes:
+</p>
+
+<div class="math-block">
+Poisson: &nbsp; P(s) = e<sup>&minus;s</sup> &nbsp;&nbsp;&middot;&nbsp;&nbsp; Wigner&ndash;Dyson: &nbsp; P(s) = (&pi;s/2) e<sup>&minus;&pi;s<sup>2</sup>/4</sup> &nbsp;&nbsp;&middot;&nbsp;&nbsp; semi-Poisson: &nbsp; P(s) = 4s e<sup>&minus;2s</sup>
+<span class="note">Localized / insulating &nbsp;&middot;&nbsp; delocalized / metallic &nbsp;&middot;&nbsp; the critical point between them.</span>
+</div>
+
+<p>
+The proposal: biomolecules sit at that critical point, without external tuning. Below it, coherence lasts but nothing can travel; above it, transport works but coherence dies at the rate the warm environment sets. Only at the transition do long coherence times and extended, transport-capable states coexist &mdash; and biology, the argument goes, lives there. Kauffman&rsquo;s framing adds that incoming photons repeatedly re-purify the system, letting it &ldquo;hover&rdquo; reversibly in a <em>Poised Realm</em> between quantum and classical.
+</p>
+
+<h3>Finding 1 &mdash; the flagship contains no test of its own claim</h3>
+
+<p>
+This is easy to miss and important. The 2014 <em>PLoS ONE</em> paper<sup><a class="fn" href="#fn9" id="fnref9-2">9</a></sup> <strong>analyses no molecules.</strong> It builds no Hamiltonian from any molecular structure. It never computes, histograms or fits a level-spacing distribution &mdash; the three formulae above appear only as cited background. The object simulated is an abstract 25-site one-dimensional model ring with quasi-periodic on-site energies. The physics chain it lays out is standard and correctly cited, and its numerics do demonstrate that the mechanism <em>exists</em> in a toy model.
+</p>
+
+<p>
+Its single empirical claim is one figure: a decay exponent of about <span class="math">&minus;0.23</span> compared with a theoretical <span class="math">&minus;1/4</span>. That agreement is a by-eye match between <em>two hand-drawn guide lines of identical slope</em> on log&ndash;log axes whose time <em>and</em> amplitude units are arbitrary for both traces, over roughly one to one-and-a-half decades of data that oscillates by up to a full log unit about the trend, with no error bar &mdash; and the only real-world input is one digitised population-decay curve for one light-harvesting complex, obtained from another group. No off-critical comparison curve is plotted on the same axes, so a reader cannot see whether a non-critical model would have looked different.
+</p>
+
+<h3>Finding 2 &mdash; the empirical claim lives in the companion, and it states no test that could fail</h3>
+
+<p>
+The molecule analysis is in the 2015 DICE proceedings companion.<sup><a class="fn" href="#fn10" id="fnref10-2">10</a></sup> Its evidential structure, item by item:
+</p>
+
+<div class="tablewrap">
+<table class="scorecard">
+<thead><tr><th>Ingredient</th><th>What the paper actually has</th></tr></thead>
+<tbody>
+<tr><td class="system-name">Molecules</td><td>18 with displayed results, of which 9 are assigned &ldquo;critical&rdquo;. A further 15 small molecules are asserted with <em>no displayed data</em>, and all 20 amino acids are classified &mdash; the paper&rsquo;s own words &mdash; &ldquo;by inspection&rdquo;, with the conclusion stated as what &ldquo;is likely&rdquo;. The multifractal analysis is shown for <strong>one</strong> molecule.</td></tr>
+<tr><td class="system-name">Level of theory</td><td><span class="score-plausible">Not density-functional theory.</span> Semi-empirical extended H&uuml;ckel, valence orbitals only, one global constant. The parameter set is never specified. The whole result is a property of that matrix, and it is never validated against a higher level of theory.</td></tr>
+<tr><td class="system-name">Unfolding</td><td>A local running average whose window is given only as a <em>range</em>, &ldquo;2&hellip;5&rdquo;. Which value produced the figures is never stated, and no sensitivity analysis is reported.</td></tr>
+<tr><td class="system-name">Non-biological control</td><td><span class="score-dead">None.</span> Their own data crosses the biological line anyway &mdash; silk and DNA read Poisson, steroids read Wigner &mdash; and this is handled by a post-hoc re-partition of biology into &ldquo;active biochemical&rdquo;, &ldquo;structural&rdquo; and &ldquo;polycyclic&rdquo;.</td></tr>
+<tr><td class="system-name">Statistical test</td><td><span class="score-dead">None.</span> The entire quantitative support is &ldquo;less than 3% error&rdquo; &mdash; a maximum deviation. No p-value, no critical value, no likelihood ratio, no confidence interval. At their own 6,328 level spacings a naive 5% Kolmogorov&ndash;Smirnov critical value would be about <strong>0.017</strong> &mdash; <em>below</em> the paper&rsquo;s own 3% bound.</td></tr>
+<tr><td class="system-name">Null model</td><td><span class="score-dead">None.</span> No surrogate spectra, no randomised Hamiltonians, no scrambled geometries, no size-matched synthetic organics. The paper&rsquo;s strongest rhetorical claim &mdash; that hitting the critical point by chance is &ldquo;astronomically&rdquo; improbable &mdash; is asserted with no ensemble defined and no probability computed.</td></tr>
+<tr><td class="system-name">Uncertainties</td><td><strong>Exactly one in the whole paper</strong>, and it is not on the criticality claim: a formal slope error on a straight line fitted to a hand-chosen scaling window.</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>
+The paper presents the absence of fitting as a strength &mdash; &ldquo;no parameter fitting is involved in the procedure&rdquo;. It is not. Zero free parameters removes the need to penalise for them; it does not supply a rejection criterion. <strong>A zero-parameter comparison with no null distribution has no rejection region at all.</strong>
+</p>
+
+<h3>Finding 3 &mdash; the reception, measured</h3>
+
+<ul>
+<li>The flagship has <strong>69 citing records</strong> in the Semantic Scholar Graph API (OpenAlex 66, Crossref 38 &mdash; the spread is indexing convention). Exactly <strong>1 of the 69</strong> is classified as &ldquo;influential&rdquo;. Twelve are self-citations, leaving 57 independent.</li>
+<li>Classifying all 69 by venue: physics/chemistry <strong>17</strong>, biology <strong>14</strong>, philosophy/theology/consciousness <strong>13</strong>, <strong>predatory or fringe 12</strong>, other or untraceable 13. The fringe bucket is nearly as large as the physics bucket, and the physics citations are overwhelmingly one-line motivational mentions.</li>
+<li>An arXiv full-text search returns <strong>exactly two documents in the entire archive</strong> containing the phrase &ldquo;poised realm&rdquo;.<sup><a class="fn" href="#fn58" id="fnref58">58</a></sup> Both are by the same author.</li>
+<li><strong>Independent technical engagement: one instance.</strong> Across all 69 citations, the only paper with neither original author performing the same calculation in the same framework is Yamanaka 2017 &mdash; Hartree&ndash;Fock and Kohn&ndash;Sham level statistics for all 20 amino acids over 10,000 molecular-dynamics structures.<sup><a class="fn" href="#fn59" id="fnref59">59</a></sup> Its verdict is a qualified partial: unoccupied orbitals intermediate between the metallic and critical forms, but for valence orbitals the universality class could not be determined. <strong>That paper has itself been cited zero times.</strong> The sole independent replication attempt was itself ignored.</li>
+<li>Three near-misses were checked and eliminated. A 2015 proceedings paper that looks like independent extension is a self-declared review with no original calculations, published in the <em>same</em> conference volume as the companion &mdash; co-location, not uptake.<sup><a class="fn" href="#fn60" id="fnref60">60</a></sup> Two essays by a prior collaborator <em>qualify</em> rather than endorse the claim &mdash; &ldquo;no obvious evolutionary reason why a protein should evolve toward a quantum-critical state&rdquo; &mdash; and report no level statistics of their own.<sup><a class="fn" href="#fn61" id="fnref61">61</a></sup><sup><a class="fn" href="#fn62" id="fnref62">62</a></sup> A fourth cites the flagship while surveying modelling tools, without testing anything.<sup><a class="fn" href="#fn63" id="fnref63">63</a></sup></li>
+<li><strong>The field&rsquo;s own authoritative review does not engage it.</strong> In Mu&ntilde;oz&rsquo;s Colloquium, the phrase &ldquo;poised realm&rdquo; occurs <strong>0</strong> times, &ldquo;metal-insulator&rdquo; <strong>0</strong>, &ldquo;quantum biology&rdquo; <strong>0</strong>. The single mention in the body is one clause inside <strong>Appendix D, subsection &ldquo;Miscellanea&rdquo;</strong> &mdash; and it cites the <em>2015 companion</em>, not the 2014 flagship. The same review cites Kauffman 25 times.<sup><a class="fn" href="#fn8" id="fnref8-3">8</a></sup></li>
+</ul>
+
+<div class="callout null">
+<span class="label">The verdict, stated precisely</span>
+<p><strong>Not refuted &mdash; unengaged. And it was never refuted partly because, as written, there is no statistic in it to fail.</strong> Both halves matter, and they are different findings. The first is about the claim&rsquo;s audience; the second is about its construction, and it is the one that should govern any future use of it.</p>
+<p><em>Why unengaged is a worse outcome for an idea than being refuted.</em> A refuted claim leaves something behind: a measurement, a method, a bound, a reason. Someone ran the experiment, and the field is better calibrated afterwards. An unengaged claim leaves nothing &mdash; and it accumulates a citation trail that <em>looks</em> like uptake from a distance, so it can be mistaken for support by anyone who counts citations without reading them. Worse, the absence of rebuttal starts to be offered as though it were evidence. It is not: <strong>a claim with no rejection region cannot be refuted by anybody</strong>, so silence about it is uninformative.</p>
+<p>The claim is not dead. It is untested, and it is <em>cheap</em> to test &mdash; dense diagonalisation at this size is a laptop job now. The decisive missing experiment is a single number: <strong>what fraction of arbitrary size-matched organic molecules also land on semi-Poisson at the same tolerance?</strong> If the answer is &ldquo;most of them&rdquo;, the claim is about large disordered molecules and not about life, and the evolutionary framing collapses without anything in the paper being wrong.</p>
+</div>
+
+<div class="callout warn">
+<span class="label">Two honesty notes on this section</span>
+<p><strong>On Yamanaka 2017.</strong> The full text could not be obtained &mdash; the publisher returns an automated-client block on a paper that two independent services report as open access. Its characterisation above therefore rests on indexing metadata and abstract-level evidence, not on a reading of the paper. It is the single most consequential gap in this account, because every claim about whether the poised-realm hypothesis was ever independently tested rests on that one paper&rsquo;s contents.</p>
+<p><strong>On the trajectory.</strong> The author&rsquo;s sole solo posting in this orbit is a philosophical extension to mind&ndash;body and free will, with no level-statistics content whatsoever.<sup><a class="fn" href="#fn64" id="fnref64">64</a></sup> Later work from the original group continues in the physics direction.<sup><a class="fn" href="#fn65" id="fnref65">65</a></sup> These are reception facts about where the idea went, not judgements about anyone.</p>
+</div>
+
+<!-- ========== SECTION 7 ========== -->
+<h2 id="verdict"><span class="sn">7.</span> The verdict</h2>
+
+<div class="tablewrap">
+<table class="scorecard">
+<thead>
+<tr><th>Sense of &ldquo;poised&rdquo;</th><th>Studied by whom</th><th>Principal critique</th><th>Current status</th><th>Verdict</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td class="system-name">(a) Edge of chaos<br><span style="font-weight:400;color:var(--muted);font-size:0.85em">CA / Boolean networks</span></td>
+  <td>Langton, Packard; re-run by Mitchell, Hraber &amp; Crutchfield; modern re-tests in reservoir computing and neuromorphic hardware</td>
+  <td>The launching experiment&rsquo;s clustering was an artifact of task symmetry, combinatorial drift and search symmetry-breaking &mdash; a no-selection control reproduces it</td>
+  <td>Survives as a substrate-specific heuristic; not as a law</td>
+  <td class="score-dead">Deflated</td>
+</tr>
+<tr>
+  <td class="system-name">(a&prime;) Autocatalytic sets<br><span style="font-weight:400;color:var(--muted);font-size:0.85em">RAF theory</span></td>
+  <td>Kauffman; formalised by Hordijk &amp; Steel; structure theory and metabolic application by Steel, Hordijk &amp; Xavier</td>
+  <td>None material. Boundaries are stated honestly (smallest RAF is NP-hard; irreducible RAFs can grow exponentially)</td>
+  <td>Working field: theorems, polynomial-time algorithms, application to reconstructed ancestral metabolism</td>
+  <td class="score-strong">Formalised</td>
+</tr>
+<tr>
+  <td class="system-name">(b) Poised at criticality<br><span style="font-weight:400;color:var(--muted);font-size:0.85em">living systems</span></td>
+  <td>Beggs &amp; Plenz, Mora &amp; Bialek, Cavagna, Tka&#269;ik, Mu&ntilde;oz &mdash; against Schwab, Aitchison, Touboul, Priesemann, Wilting, Morrell, Marsili, Clauset</td>
+  <td>Latent variables, external drive, subsampling, thresholding, binning, pooling and the inference procedure itself each reproduce the signatures without criticality</td>
+  <td>Genuinely open. The bar has moved from &ldquo;a power law was observed&rdquo; to &ldquo;a rejectable exponent relation, plus a null model that fails&rdquo;</td>
+  <td class="score-plausible">Contested</td>
+</tr>
+<tr>
+  <td class="system-name">(c) The Poised Realm<br><span style="font-weight:400;color:var(--muted);font-size:0.85em">quantum &harr; classical</span></td>
+  <td>Vattay, Kauffman &amp; Niiranen and the 2015 companion. One independent technical attempt, itself cited zero times</td>
+  <td>No control set, no statistical test, no null model, one stated uncertainty; the flagship computes no level statistics at all</td>
+  <td>Untested. Not refuted &mdash; and no rejectable statistic was ever stated</td>
+  <td class="score-absent">Unengaged</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>Has anyone studied the conjunction?</h3>
+
+<p>
+<strong>No.</strong> On the evidence assembled here, no source studies the three senses as one object, under this or any other name. Four observations support that, and each is checkable:
+</p>
+
+<ol>
+<li><strong>Only one person spans all three, and he spans them by assertion rather than by a shared formalism.</strong> Kauffman appears as author in sense (a), as author in sense (c), and as a cited founder in sense (b). But his only solo posting in the quantum orbit contains no level-statistics content at all. <em>The bridge between the strands in the literature is a person, not a method.</em></li>
+<li><strong>The closest thing to a unification stops at two of the three.</strong> Mu&ntilde;oz genuinely spans (a) and (b), with a common scaling apparatus. He touches (c) once, in an appendix subsection called &ldquo;Miscellanea&rdquo;.</li>
+<li><strong>The three share no order parameter, no observable, and no test.</strong> Sense (a) measures <span class="math">&lambda;</span> or RAF existence on a rule or reaction network; sense (b) measures avalanche exponents, specific heat, or correlation length in a many-unit recording; sense (c) measures a nearest-neighbour level-spacing distribution in an electronic Hamiltonian. Nothing derives one from another, or applies one formalism across the three.</li>
+<li><strong>The vocabulary barely travels.</strong> Two documents in the whole arXiv contain &ldquo;poised realm&rdquo;, both by the same author. Fifteen RAF papers never use it. Thirty-seven papers of biological criticality, affirmative and negative, never use it.</li>
+</ol>
+
+<div class="callout warn">
+<span class="label">State this as a limitation, not a proof</span>
+<p>This is <strong>what a literature search found</strong>, not a proof of absence. The evidence base is a 77-paper corpus assembled around five named clusters, with verified identifiers and full-text extractions for the load-bearing items &mdash; not an exhaustive search of the literature. It is strong enough to say that no <em>prominent</em> unified treatment exists in this literature. It is not strong enough to say that none exists anywhere. One specific gap is known and named: a proper forward-citation study of <em>The Origins of Order</em> has not been done, and would be the obvious next step.</p>
+</div>
+
+<h3>The constructive counterweight &mdash; what a good claim looks like</h3>
+
+<p>
+It would be easy to read everything above as a counsel of despair. It is not. There is a published standard that shows what the affirmative case looks like when it is done in a form that could fail, and it is worth studying more closely than any of the deflations.
+</p>
+
+<p>
+Fontenele et al. do not merely fit power laws.<sup><a class="fn" href="#fn66" id="fnref66">66</a></sup> They test the <strong>crackling-noise scaling relation</strong>:
+</p>
+
+<div class="math-block">
+( &tau;<sub>t</sub> &minus; 1 ) / ( &tau; &minus; 1 ) &nbsp;=&nbsp; 1 / (&sigma;&nu;z)
+<span class="note">Left side: two independent fits to the marginal size and lifetime distributions. Right side: a completely separate regression of mean size against lifetime.</span>
+</div>
+
+<p>
+The two sides come from three separately estimated exponents, from three separate fits, which are <em>never constrained to agree</em>. So the equality <strong>can fail &mdash; and it does fail almost everywhere</strong>. Rather than treating a recording as critical or not, they parameterise cortical state continuously by spiking variability and sweep it. The relation holds only in a narrow band, at intermediate variability, and at the same place an entirely independent signature &mdash; long-range temporal correlations &mdash; peaks. Exponents at that band: <span class="math">&tau; = 1.52 &plusmn; 0.09</span> and <span class="math">&tau;<sub>t</sub> = 1.7 &plusmn; 0.1</span> in rat, at <span class="math">&#10216;CV&#10217;* = 1.4 &plusmn; 0.2</span>; in freely moving mice, <span class="math">&#10216;CV&#10217;* = 1.1 &plusmn; 0.2</span>. And the second exponent falsifies the textbook universality class: <span class="math">&tau;</span> matches mean-field directed percolation, <span class="math">&tau;<sub>t</sub></span> does not.
+</p>
+
+<p>
+<strong>That is the form to imitate</strong>, and the reason is structural rather than statistical: a power-law fit <em>cannot</em> fail, because any heavy tail yields some exponent. A relation between three independently measured exponents can. Two caveats keep it honest, and both should be carried forward: the paper asserts the agreement <em>graphically</em>, via overlapping standard-deviation bands, and never quotes a numerical residual at the crossing;<sup><a class="fn" href="#fn66" id="fnref66-2">66</a></sup> and Destexhe &amp; Touboul showed that non-critical models also satisfy the same relation within a connected region of avalanche-cutoff choices, so the criterion is only as good as a cutoff policy fixed in advance.<sup><a class="fn" href="#fn39" id="fnref39-2">39</a></sup> The lesson is not &ldquo;use this test&rdquo;. It is: <em>state, before you look, the number that would have made you abandon the claim.</em>
+</p>
+
+<!-- ========== SECTION 8 ========== -->
+<h2 id="reading"><span class="sn">8.</span> The reading path</h2>
+
+<p>
+Ordered for someone who has read none of these. Every entry gives the overview first, then why you should care, then difficulty and rough reading time, then the source. Difficulty is relative to a reader comfortable with undergraduate statistical mechanics and probability, not to a specialist. Times are for a first careful pass, not a skim and not a re-read.
+</p>
+
+<div class="groupbar">Read these three first &mdash; about 7 hours, and they carry the whole argument</div>
+
+<div class="readitem fade-in">
+<h4>1. The map of the whole field</h4>
+<div class="cite">Mu&ntilde;oz (2018), &ldquo;Colloquium: Criticality and dynamical scaling in living systems&rdquo;, <em>Rev. Mod. Phys.</em> <strong>90</strong>, 031001<sup><a class="fn" href="#fn8" id="fnref8-4">8</a></sup></div>
+<p>A review that fixes what criticality is and is not, walks the evidence at every biological scale from neurons to bird flocks to gene networks, and states the objections to each case as it goes. It is the only document in this set that genuinely spans two of the three senses of &ldquo;poised&rdquo;.</p>
+<p class="why"><b>Why you care:</b> it opens with a null model. Figure 1 is an unbiased random walk producing clean power laws with the &ldquo;critical&rdquo; exponents and no critical point anywhere &mdash; the field&rsquo;s own authoritative synthesis leading with a warning against the inference it then defends. Read Sections I&ndash;III properly and Section IV selectively; Appendices A (generic scale invariance) and B (statistical criticality) are short and are where the sharpest caveats live.</p>
+<div class="chips"><span class="chip d2">Difficulty: moderate</span><span class="chip">3&ndash;4 h first pass</span><span class="chip">34 pp</span><span class="chip">Free preprint</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>2. The deflation, and the best null model in the literature</h4>
+<div class="cite">Mitchell, Hraber &amp; Crutchfield (1993), &ldquo;Revisiting the Edge of Chaos&rdquo;, <em>Complex Systems</em> <strong>7</strong>, 89&ndash;130<sup><a class="fn" href="#fn11" id="fnref11-2">11</a></sup></div>
+<p>A careful re-run of the experiment that launched &ldquo;evolution adapts toward the edge of chaos&rdquo;, finding that the reported clustering is produced by three mechanisms that have nothing to do with criticality &mdash; and demonstrating one of them with a control run in which fitness is never evaluated at all.</p>
+<p class="why"><b>Why you care:</b> this is the single most transferable methodological lesson on this page, and it is almost free of mathematics. If you read only the figures &mdash; the original histogram, the replication histogram, and the pair of no-selection / with-selection mosaics &mdash; you will have the argument. The takeaway generalises well beyond cellular automata: <em>a peak in the distribution of a control parameter over an evolved ensemble is not evidence of a critical point, because the measure on the underlying space can produce it unaided.</em></p>
+<div class="chips"><span class="chip d1">Difficulty: easy&ndash;moderate</span><span class="chip">2 h</span><span class="chip">39 pp, mostly figures</span><span class="chip">Free</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>3. The mechanism, in five pages</h4>
+<div class="cite">Schwab, Nemenman &amp; Mehta (2014), &ldquo;Zipf&rsquo;s Law and Criticality in Multivariate Data without Fine-Tuning&rdquo;, <em>Phys. Rev. Lett.</em> <strong>113</strong>, 068102<sup><a class="fn" href="#fn24" id="fnref24-2">24</a></sup></div>
+<p>The proof that Zipf&rsquo;s law &mdash; and with it the whole &ldquo;statistical criticality&rdquo; inference &mdash; arises generically whenever the observed units are coupled to one unobserved fluctuating variable. No coupling between units, no parameter tuned to anything.</p>
+<p class="why"><b>Why you care:</b> it is <a href="#act3">section 4</a> of this page in the authors&rsquo; own words, and it is short. If the saddle point and the Gärtner&ndash;Ellis argument are heavy going, read only the paragraph beginning &ldquo;If the extensive parts of the energy and entropy do not cancel&hellip;&rdquo; and Figures 2 and 3 &mdash; the physical statement and the two numbers, <span class="math">&minus;1.012</span> and <span class="math">&minus;1.011</span>, take half an hour. The second of those numbers is with genuine interactions switched on, which is the point.</p>
+<div class="chips"><span class="chip d2">Difficulty: moderate</span><span class="chip">1.5 h &middot; 30 min for the physical statement</span><span class="chip">5 pp</span><span class="chip">Free preprint</span></div>
+</div>
+
+<div class="groupbar">Then these &mdash; the affirmative case, the founding measurement, and the standards</div>
+
+<div class="readitem fade-in">
+<h4>4. The affirmative case in its own words</h4>
+<div class="cite">Mora &amp; Bialek (2011), &ldquo;Are Biological Systems Poised at Criticality?&rdquo;, <em>J. Stat. Phys.</em> <strong>144</strong>, 268&ndash;302<sup><a class="fn" href="#fn7" id="fnref7-3">7</a></sup></div>
+<p>The paper that popularised the modern hypothesis. It builds statistical mechanics directly from data across four unrelated systems &mdash; retina, protein families, antibody repertoires, bird flocks &mdash; and argues that the fitted models keep coming out at a special point in their own parameter space.</p>
+<p class="why"><b>Why you care:</b> read it <em>after</em> item 3, so that you can watch the argument being constructed with the objection already in mind &mdash; the experience is much sharper in that order. Its list of ten operational tests, scattered through the text, is the checklist a referee will hold you to. It is also unusually honest about its own limits: the authors call criticality &ldquo;a hypothesis whose most compelling tests are yet to come&rdquo; and note that the inference problem is hardest exactly near criticality, which is the regime being claimed.</p>
+<div class="chips"><span class="chip d2">Difficulty: moderate</span><span class="chip">4 h</span><span class="chip">35 pp</span><span class="chip">Free preprint</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>5. The founding measurement</h4>
+<div class="cite">Beggs &amp; Plenz (2003), &ldquo;Neuronal Avalanches in Neocortical Circuits&rdquo;, <em>J. Neurosci.</em> <strong>23</strong>, 11167&ndash;11177<sup><a class="fn" href="#fn6" id="fnref6-3">6</a></sup></div>
+<p>Spontaneous activity in cortical tissue on a 60-electrode array, parsed into cascades. Size exponent <span class="math">&minus;1.50 &plusmn; 0.008</span> over about 90,000 events; branching parameter measured directly at <span class="math">1.04 &plusmn; 0.19</span>; and a pharmacological knob that destroys the power law and then restores it on washout.</p>
+<p class="why"><b>Why you care:</b> this is the measurement everything in this field argues about, and it is a genuinely well-executed experiment &mdash; note the array-size control that shows the cutoff is instrumental, and the jitter control that shows the branching parameter is not a chance property of the firing rate. Read it for what a careful version of this claim looks like, and for the fact that two independently computed quantities cross at the critical values at the same bin width.</p>
+<div class="chips"><span class="chip d1">Difficulty: easy</span><span class="chip">1.5 h</span><span class="chip">11 pp</span><span class="chip">Open access</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>6. The standard to imitate</h4>
+<div class="cite">Fontenele et al. (2019), &ldquo;Criticality between Cortical States&rdquo;, <em>Phys. Rev. Lett.</em> <strong>122</strong>, 208101<sup><a class="fn" href="#fn66" id="fnref66-3">66</a></sup></div>
+<p>Instead of asking &ldquo;is this recording critical?&rdquo;, it parameterises cortical state continuously and asks where along that axis a <em>relation between three independently measured exponents</em> is satisfied. The answer is: in a narrow band, and nowhere else.</p>
+<p class="why"><b>Why you care:</b> this is the one paper here that a reader should take away as a template. It is short, it is dense, and it demonstrates the difference between a description and a prediction: a power-law fit cannot fail, an exponent relation can. Read it alongside its own critic (item 12) &mdash; the two together teach the real lesson, which is about pre-registering your cutoffs, not about this particular criterion.</p>
+<div class="chips"><span class="chip d2">Difficulty: moderate</span><span class="chip">1.5 h</span><span class="chip">6 pp, dense</span><span class="chip">Free repository copy</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>7. The drive-only null, worked end to end</h4>
+<div class="cite">Priesemann &amp; Shriki (2018), &ldquo;Can a time varying external drive give rise to apparent criticality in neural systems?&rdquo;, <em>PLoS Comput. Biol.</em> <strong>14</strong>, e1006081<sup><a class="fn" href="#fn26" id="fnref26-2">26</a></sup></div>
+<p>Unconnected Poisson units under a slowly wandering rate produce a mixture of exponentials that mimics a power law with the canonical critical exponents. Fully analytic, and it names the discriminators that separate the mixture from a real critical process.</p>
+<p class="why"><b>Why you care:</b> it is the closest published analogue to any externally driven natural system, and it explicitly cites solar flares as the classic case. Two things are worth the price on their own: that fixing the duration exponent at the critical value <em>delivers the size exponent for free</em>, so recovering both is not independent evidence; and Figure 6, where pooling twelve real recordings with different mean rates converts twelve non-power-laws into one clean power law. If the mixture integral in Section 5 is heavy, read Section 5&rsquo;s conclusion, the seven-measure table, and Figure 6.</p>
+<div class="chips"><span class="chip d3">Difficulty: hard in places</span><span class="chip">3 h &middot; 1 h for the essentials</span><span class="chip">29 pp</span><span class="chip">Open access</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>8. The statistics, as a reference you keep</h4>
+<div class="cite">Clauset, Shalizi &amp; Newman (2009), &ldquo;Power-Law Distributions in Empirical Data&rdquo;, <em>SIAM Review</em> <strong>51</strong>, 661&ndash;703<sup><a class="fn" href="#fn37" id="fnref37-2">37</a></sup></div>
+<p>The maximum-likelihood + Kolmogorov&ndash;Smirnov + likelihood-ratio procedure that turned &ldquo;it looks straight on log&ndash;log axes&rdquo; into something testable, applied to 24 canonical datasets.</p>
+<p class="why"><b>Why you care:</b> exactly one of those 24 &mdash; word frequencies in English &mdash; earns the rating &ldquo;good&rdquo;. The log-normal cannot be excluded for any dataset but one. Do not read this front to back; read Sections 3&ndash;5 for the method, then the two verdict tables in Section 6, and keep it open when anyone shows you a straight line. Its most useful single table shows that fitting a straight line to a log&ndash;log histogram &mdash; still the commonest method in practice &mdash; returns exponents off by around a full unit, with error bars that give no warning.</p>
+<div class="chips"><span class="chip d2">Difficulty: moderate, technical</span><span class="chip">3 h &middot; use as reference</span><span class="chip">43 pp</span><span class="chip">Free preprint</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>9. The one that got formalized</h4>
+<div class="cite">Hordijk &amp; Steel (2004), &ldquo;Detecting autocatalytic, self-sustaining sets in chemical reaction systems&rdquo;, <em>J. Theor. Biol.</em> <strong>227</strong>, 451&ndash;461<sup><a class="fn" href="#fn50" id="fnref50-2">50</a></sup></div>
+<p>The paper that turned autocatalytic closure from a suggestive story into a decidable object with a polynomial-time algorithm.</p>
+<p class="why"><b>Why you care:</b> it is discrete mathematics, not physics, and it is a complete change of register after items 1&ndash;8 &mdash; refreshing rather than taxing. Read Sections 2&ndash;3 for the definitions, Section 5 for the two reduction rules, and Theorem 6.1. The lesson that transfers: <em>the field became productive at the exact moment the central object became computable, and therefore something one could be wrong about.</em></p>
+<div class="chips"><span class="chip d2">Difficulty: moderate</span><span class="chip">2 h &middot; 45 min for the definitions and the theorem</span><span class="chip">18 pp</span><span class="chip">Free author copy</span></div>
+</div>
+
+<div class="groupbar">Optional depth &mdash; pick by what you need to defend</div>
+
+<div class="readitem fade-in">
+<h4>10. If your evidence is a shape collapse</h4>
+<div class="cite">Touboul &amp; Destexhe (2017), <em>Phys. Rev. E</em> <strong>95</strong>, 012413<sup><a class="fn" href="#fn29" id="fnref29-2">29</a></sup> &nbsp;&middot;&nbsp; Mariani et al. (2022), <em>Sci. Rep.</em> <strong>12</strong>, 10770<sup><a class="fn" href="#fn31" id="fnref31-2">31</a></sup></div>
+<p class="why">The first obtains power-law sizes, power-law durations <em>and</em> a universal shape collapse from 2000 completely independent Poisson processes sharing one fluctuating rate. The second does it with all coupling set to zero and gets the crackling relation too &mdash; but its construction pins the correlation length at 1, which is exactly why correlation length versus system size is the discriminator that survives. Read the second for that contrast; it is the cleanest statement of which signatures track coupling and which do not.</p>
+<div class="chips"><span class="chip d2">Difficulty: moderate</span><span class="chip">2 h each</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>11. If your evidence is a renormalisation-group signature</h4>
+<div class="cite">Morrell, Sederberg &amp; Nemenman (2021), <em>Phys. Rev. Lett.</em> <strong>126</strong>, 118302<sup><a class="fn" href="#fn27" id="fnref27-2">27</a></sup> &nbsp;&middot;&nbsp; Morrell &amp; Nemenman (2024), <em>eLife</em><sup><a class="fn" href="#fn28" id="fnref28-2">28</a></sup></div>
+<p class="why">Four coarse-graining exponents plus flow to a non-Gaussian fixed point, all reproduced within experimental error by neurons with zero cell-to-cell coupling. Note the condition that makes it work &mdash; at least five latent fields, coupled to nearly every cell &mdash; because it explains why earlier single-common-input models failed and is the thing to test for.</p>
+<div class="chips"><span class="chip d3">Difficulty: hard</span><span class="chip">2&ndash;3 h</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>12. If you are working from a sparse or partial array</h4>
+<div class="cite">Wilting &amp; Priesemann (2018), <em>Nat. Commun.</em> <strong>9</strong>, 2325<sup><a class="fn" href="#fn32" id="fnref32-2">32</a></sup> &nbsp;&middot;&nbsp; Destexhe &amp; Touboul (2021), <em>eNeuro</em> <strong>8</strong><sup><a class="fn" href="#fn39" id="fnref39-3">39</a></sup></div>
+<p class="why">The first: observing a spreading process through a small subset of its units biases the standard estimator badly, and the corrected estimator returns a reproducibly subcritical answer. The second is the direct critique of item 6, and shows an information-criterion test passing 32,000 out of 32,000 non-critical distributions. Read them together as &ldquo;what your instrument does to your answer&rdquo;.</p>
+<div class="chips"><span class="chip d2">Difficulty: moderate</span><span class="chip">1.5 h each</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>13. If you want the RAF strand properly</h4>
+<div class="cite">Steel, Hordijk &amp; Xavier (2019), <em>J. R. Soc. Interface</em> <strong>16</strong>, 20180808<sup><a class="fn" href="#fn51" id="fnref51-2">51</a></sup> &nbsp;&middot;&nbsp; Xavier et al. (2020), <em>Proc. R. Soc. B</em> <strong>287</strong>, 20192377<sup><a class="fn" href="#fn54" id="fnref54-2">54</a></sup></div>
+<p class="why">Structure theory first &mdash; the whole lattice of autocatalytic subsets characterised for a biochemically motivated restriction, with the hardness boundaries stated plainly &mdash; then the application to reconstructed ancestral metabolic networks, which is the answer to &ldquo;this only ever described random graphs&rdquo;. A gentler entry point is the book-length introduction.<sup><a class="fn" href="#fn57" id="fnref57-2">57</a></sup></p>
+<div class="chips"><span class="chip d2">Difficulty: moderate, discrete maths</span><span class="chip">2 h + 1.5 h</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>14. If you want to judge the Poised Realm yourself</h4>
+<div class="cite">Vattay, Kauffman &amp; Niiranen (2014), <em>PLoS ONE</em> <strong>9</strong>, e89017<sup><a class="fn" href="#fn9" id="fnref9-3">9</a></sup> &nbsp;<em>then</em>&nbsp; Vattay et al. (2015), <em>J. Phys. Conf. Ser.</em> <strong>626</strong>, 012023<sup><a class="fn" href="#fn10" id="fnref10-3">10</a></sup></div>
+<p class="why">Read them in that order, and read the <em>second</em> for the evidence. Go into the first expecting a proposal and a toy-model demonstration, not a level-statistics analysis &mdash; there is none in it, and the whole empirical content is one borrowed decay curve. Then read the companion with four questions in hand: how many molecules, is there a non-biological control, is there a statistical test, is there a null model. The exercise takes under two hours and is the fastest way to calibrate what &ldquo;unengaged&rdquo; means in practice.</p>
+<div class="chips"><span class="chip d2">Difficulty: moderate</span><span class="chip">45 min + 1 h</span><span class="chip">Both open access</span></div>
+</div>
+
+<div class="readitem fade-in">
+<h4>15. If you want the objections catalogued by the person who started it</h4>
+<div class="cite">Beggs &amp; Timme (2012), &ldquo;Being Critical of Criticality in the Brain&rdquo;, <em>Front. Physiol.</em> <strong>3</strong>, 163<sup><a class="fn" href="#fn48" id="fnref48-2">48</a></sup> &nbsp;&middot;&nbsp; Aitchison, Corradi &amp; Latham (2016), <em>PLoS Comput. Biol.</em> <strong>12</strong>, e1005110<sup><a class="fn" href="#fn25" id="fnref25-2">25</a></sup></div>
+<p class="why">The first is written as a dialogue between a believer and a sceptic by the discoverer of neuronal avalanches, and it is the most enjoyable item on this list. The second gives a diagnostic for the latent-variable mechanism that can return a <em>negative</em> verdict &mdash; and does, on one of its own datasets, which is why it is worth having.</p>
+<div class="chips"><span class="chip d1">Difficulty: easy / moderate</span><span class="chip">1 h + 2 h</span></div>
+</div>
+
+<div class="callout warn">
+<span class="label">Two things not to spend time on</span>
+<p>The solo philosophical extension of the Poised Realm to mind&ndash;body and free will contains no level-statistics content, and reading it will not tell you anything about whether the physical claim is true.<sup><a class="fn" href="#fn64" id="fnref64-2">64</a></sup> And the 2015 proceedings paper that looks like independent uptake of that claim is a self-declared review with no original calculations, published in the same conference volume &mdash; it is co-location, not confirmation.<sup><a class="fn" href="#fn60" id="fnref60-2">60</a></sup> Both are recorded here so the elimination does not have to be repeated.</p>
+</div>
+
+<div class="callout good">
+<span class="label">If you read nothing else</span>
+<p>Mu&ntilde;oz&rsquo;s Figure 1, Mitchell&rsquo;s no-selection control, and the toggle in <a href="#act3">section 4</a>. Between them they say the same thing three ways: <strong>before you can claim a system is poised, you have to state what would have shown it was merely being driven.</strong></p>
+</div>
+
+<div class="footnotes">
+  <h3 style="margin-top:0;font-size:1.1rem;">References</h3>
+  <p style="font-size:0.82rem;color:#475569;margin-bottom:0.8rem;line-height:1.5;">Every entry below corresponds to a verified bibliographic record. Where a work genuinely has no DOI &mdash; the 1988 book chapter, the 1993 and 1994 <em>Complex Systems</em> / SFI papers, and two arXiv-only postings &mdash; that is stated and the arXiv identifier or venue is given instead. No DOI has been supplied by inference.</p>
+  <ol>
+    <li id="fn1">Kauffman, S. A. (1971). Cellular Homeostasis, Epigenesis and Replication in Randomly Aggregated Macromolecular Systems. <em>Journal of Cybernetics</em>, 1(1), 71&ndash;96. doi:10.1080/01969727108545830. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Kauffman, S. A. (1986). Autocatalytic sets of proteins. <em>Journal of Theoretical Biology</em>, 119(1), 1&ndash;24. doi:10.1016/s0022-5193(86)80047-9. The random-graph connectivity argument that reflexively autocatalytic sets emerge above a catalysis threshold. <a href="#fnref2">&uarr;</a> <a href="#fnref2-2">&uarr;</a></li>
+    <li id="fn3">Kauffman, S. A. (1993). <em>The Origins of Order: Self-Organization and Selection in Evolution</em>. Oxford University Press. doi:10.1093/oso/9780195079517.001.0001. Source of the &lsquo;poised between order and chaos&rsquo; phrasing in its first sense. <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">Langton, C. G. (1990). Computation at the edge of chaos: Phase transitions and emergent computation. <em>Physica D</em>, 42(1&ndash;3), 12&ndash;37. doi:10.1016/0167-2789(90)90064-V. The canonical statement of the hypothesis and of the &lambda; parameter. <a href="#fnref4">&uarr;</a> <a href="#fnref4-2">&uarr;</a></li>
+    <li id="fn5">Packard, N. H. (1988). Adaptation toward the edge of chaos. In Kelso, Mandell &amp; Shlesinger (eds.), <em>Dynamic Patterns in Complex Systems</em>, pp. 293&ndash;301, World Scientific. <strong>The chapter has no DOI</strong>; the containing volume is doi:10.1142/0534. Bibliographic details taken from reference [24] of Mitchell, Hraber &amp; Crutchfield (1993); the experiment itself is described and re-run there. <a href="#fnref5">&uarr;</a> <a href="#fnref5-2">&uarr;</a></li>
+    <li id="fn6">Beggs, J. M. &amp; Plenz, D. (2003). Neuronal Avalanches in Neocortical Circuits. <em>Journal of Neuroscience</em>, 23(35), 11167&ndash;11177. doi:10.1523/JNEUROSCI.23-35-11167.2003. Open access via PMC6741045. <a href="#fnref6">&uarr;</a> <a href="#fnref6-2">&uarr;</a> <a href="#fnref6-3">&uarr;</a></li>
+    <li id="fn7">Mora, T. &amp; Bialek, W. (2011). Are Biological Systems Poised at Criticality? <em>Journal of Statistical Physics</em>, 144(2), 268&ndash;302. doi:10.1007/s10955-011-0229-4. arXiv:1012.2242. <a href="#fnref7">&uarr;</a> <a href="#fnref7-2">&uarr;</a> <a href="#fnref7-3">&uarr;</a></li>
+    <li id="fn8">Mu&ntilde;oz, M. A. (2018). Colloquium: Criticality and dynamical scaling in living systems. <em>Reviews of Modern Physics</em>, 90, 031001. doi:10.1103/RevModPhys.90.031001. arXiv:1712.04499. <a href="#fnref8">&uarr;</a> <a href="#fnref8-2">&uarr;</a> <a href="#fnref8-3">&uarr;</a> <a href="#fnref8-4">&uarr;</a></li>
+    <li id="fn9">Vattay, G., Kauffman, S. &amp; Niiranen, S. (2014). Quantum Biology on the Edge of Quantum Chaos. <em>PLoS ONE</em>, 9(3), e89017. doi:10.1371/journal.pone.0089017. arXiv:1202.6433. <a href="#fnref9">&uarr;</a> <a href="#fnref9-2">&uarr;</a> <a href="#fnref9-3">&uarr;</a></li>
+    <li id="fn10">Vattay, G., Salahub, D., Csabai, I., Nassimi, A. &amp; Kauffman, S. A. (2015). Quantum Criticality at the Origin of Life. <em>Journal of Physics: Conference Series</em>, 626, 012023 (DICE2014). doi:10.1088/1742-6596/626/1/012023. arXiv:1502.06880. <a href="#fnref10">&uarr;</a> <a href="#fnref10-2">&uarr;</a> <a href="#fnref10-3">&uarr;</a></li>
+    <li id="fn11">Mitchell, M., Hraber, P. T. &amp; Crutchfield, J. P. (1993). Revisiting the Edge of Chaos: Evolving Cellular Automata to Perform Computations. <em>Complex Systems</em>, 7(2), 89&ndash;130. <strong>No DOI</strong> (<em>Complex Systems</em> predates the journal&rsquo;s DOI program). arXiv:adap-org/9303003. <a href="#fnref11">&uarr;</a> <a href="#fnref11-2">&uarr;</a></li>
+    <li id="fn12">Mitchell, M., Crutchfield, J. P. &amp; Hraber, P. T. (1994). Dynamics, Computation, and the &lsquo;Edge of Chaos&rsquo;: A Re-Examination. In Cowan, Pines &amp; Meltzer (eds.), <em>Complexity: Metaphors, Models, and Reality</em>, SFI Studies Vol. 19, Addison-Wesley. <strong>No DOI</strong>. arXiv:adap-org/9306003. <a href="#fnref12">&uarr;</a></li>
+    <li id="fn13">Legenstein, R. &amp; Maass, W. (2007). Edge of chaos and prediction of computational performance for neural circuit models. <em>Neural Networks</em>, 20(3), 323&ndash;334. doi:10.1016/j.neunet.2007.04.017. <a href="#fnref13">&uarr;</a></li>
+    <li id="fn14">Cramer, B. et al. (2020). Control of criticality and computation in spiking neuromorphic networks with plasticity. <em>Nature Communications</em>, 11, 2853. doi:10.1038/s41467-020-16548-3. <a href="#fnref14">&uarr;</a></li>
+    <li id="fn15">Carroll, T. L. (2020). Do reservoir computers work best at the edge of chaos? <em>Chaos</em>, 30, 121109. doi:10.1063/5.0038163. arXiv:2012.01409. <a href="#fnref15">&uarr;</a></li>
+    <li id="fn16">Zhang, Y. &amp; Cornelius, S. P. (2023). Catch-22s of reservoir computing. <em>Physical Review Research</em>, 5, 033213. doi:10.1103/PhysRevResearch.5.033213. arXiv:2210.10211. <a href="#fnref16">&uarr;</a></li>
+    <li id="fn17">Bertschinger, N. &amp; Natschl&auml;ger, T. (2004). Real-Time Computation at the Edge of Chaos in Recurrent Neural Networks. <em>Neural Computation</em>, 16(7), 1413&ndash;1436. doi:10.1162/089976604323057443. <a href="#fnref17">&uarr;</a></li>
+    <li id="fn18">Teuscher, C. (2022). Revisiting the edge of chaos: Again? <em>BioSystems</em>, 218, 104693. doi:10.1016/j.biosystems.2022.104693. <a href="#fnref18">&uarr;</a></li>
+    <li id="fn19">Cavagna, A. et al. (2010). Scale-free correlations in starling flocks. <em>PNAS</em>, 107(26), 11865&ndash;11870. doi:10.1073/pnas.1005766107. arXiv:0911.4393. <a href="#fnref19">&uarr;</a></li>
+    <li id="fn20">Bialek, W., Cavagna, A. et al. (2012). Statistical mechanics for natural flocks of birds. <em>PNAS</em>, 109(13), 4786&ndash;4791. doi:10.1073/pnas.1118633109. arXiv:1107.0604. <a href="#fnref20">&uarr;</a></li>
+    <li id="fn21">Tka&#269;ik, G., Mora, T. et al. (2015). Thermodynamics and signatures of criticality in a network of neurons. <em>PNAS</em>, 112(37), 11508&ndash;11513. doi:10.1073/pnas.1514188112. arXiv:1407.5946. <a href="#fnref21">&uarr;</a></li>
+    <li id="fn22">Moretti, P. &amp; Mu&ntilde;oz, M. A. (2013). Griffiths phases and the stretching of criticality in brain networks. <em>Nature Communications</em>, 4, 2521. doi:10.1038/ncomms3521. arXiv:1308.6661. <a href="#fnref22">&uarr;</a></li>
+    <li id="fn23">Hesse, J. &amp; Gross, T. (2014). Self-organized criticality as a fundamental property of neural systems. <em>Frontiers in Systems Neuroscience</em>, 8, 166. doi:10.3389/fnsys.2014.00166. <a href="#fnref23">&uarr;</a></li>
+    <li id="fn24">Schwab, D. J., Nemenman, I. &amp; Mehta, P. (2014). Zipf&rsquo;s Law and Criticality in Multivariate Data without Fine-Tuning. <em>Physical Review Letters</em>, 113, 068102. doi:10.1103/PhysRevLett.113.068102. arXiv:1310.0448. <a href="#fnref24">&uarr;</a> <a href="#fnref24-2">&uarr;</a></li>
+    <li id="fn25">Aitchison, L., Corradi, N. &amp; Latham, P. E. (2016). Zipf&rsquo;s Law Arises Naturally When There Are Underlying, Unobserved Variables. <em>PLoS Computational Biology</em>, 12(12), e1005110. doi:10.1371/journal.pcbi.1005110. <a href="#fnref25">&uarr;</a> <a href="#fnref25-2">&uarr;</a></li>
+    <li id="fn26">Priesemann, V. &amp; Shriki, O. (2018). Can a time varying external drive give rise to apparent criticality in neural systems? <em>PLoS Computational Biology</em>, 14(5), e1006081. doi:10.1371/journal.pcbi.1006081. <a href="#fnref26">&uarr;</a> <a href="#fnref26-2">&uarr;</a></li>
+    <li id="fn27">Morrell, M. C., Sederberg, A. J. &amp; Nemenman, I. (2021). Latent Dynamical Variables Produce Signatures of Spatiotemporal Criticality in Large Biological Systems. <em>Physical Review Letters</em>, 126, 118302. doi:10.1103/PhysRevLett.126.118302. arXiv:2008.04435. <a href="#fnref27">&uarr;</a> <a href="#fnref27-2">&uarr;</a></li>
+    <li id="fn28">Morrell, M. C. &amp; Nemenman, I. (2024). Neural criticality from effective latent variables. <em>eLife</em>. doi:10.7554/eLife.89337. arXiv:2301.00759. <a href="#fnref28">&uarr;</a> <a href="#fnref28-2">&uarr;</a></li>
+    <li id="fn29">Touboul, J. &amp; Destexhe, A. (2017). Power-law statistics and universal scaling in the absence of criticality. <em>Physical Review E</em>, 95, 012413. doi:10.1103/PhysRevE.95.012413. arXiv:1503.08033. <a href="#fnref29">&uarr;</a> <a href="#fnref29-2">&uarr;</a></li>
+    <li id="fn30">Touboul, J. &amp; Destexhe, A. (2010). Can Power-Law Scaling and Neuronal Avalanches Arise from Stochastic Dynamics? <em>PLoS ONE</em>, 5(2), e8982. doi:10.1371/journal.pone.0008982. <a href="#fnref30">&uarr;</a></li>
+    <li id="fn31">Mariani, B., Nicoletti, G. et al. (2022). Disentangling the critical signatures of neural activity. <em>Scientific Reports</em>, 12, 10770. doi:10.1038/s41598-022-13686-0. Open access via PMC9232560. <a href="#fnref31">&uarr;</a> <a href="#fnref31-2">&uarr;</a></li>
+    <li id="fn32">Wilting, J. &amp; Priesemann, V. (2018). Inferring collective dynamical states from widely unobserved systems. <em>Nature Communications</em>, 9, 2325. doi:10.1038/s41467-018-04725-4. Open access via PMC5998151. <a href="#fnref32">&uarr;</a> <a href="#fnref32-2">&uarr;</a></li>
+    <li id="fn33">Priesemann, V., Munk, M. H. J. &amp; Wibral, M. (2009). Subsampling effects in neuronal avalanche distributions recorded in vivo. <em>BMC Neuroscience</em>, 10, 40. doi:10.1186/1471-2202-10-40. <a href="#fnref33">&uarr;</a></li>
+    <li id="fn34">Levina, A. &amp; Priesemann, V. (2017). Subsampling scaling. <em>Nature Communications</em>, 8, 15140. doi:10.1038/ncomms15140. <a href="#fnref34">&uarr;</a></li>
+    <li id="fn35">Wilting, J. &amp; Priesemann, V. (2019). 25 years of criticality in neuroscience &mdash; established results, open controversies, novel concepts. <em>Current Opinion in Neurobiology</em>, 58, 105&ndash;111. doi:10.1016/j.conb.2019.08.002. arXiv:1903.05129. <a href="#fnref35">&uarr;</a></li>
+    <li id="fn36">B&eacute;dard, C., Kr&ouml;ger, H. &amp; Destexhe, A. (2006). Does the 1/f Frequency Scaling of Brain Signals Reflect Self-Organized Critical States? <em>Physical Review Letters</em>, 97, 118102. doi:10.1103/PhysRevLett.97.118102. arXiv:q-bio/0608026. <a href="#fnref36">&uarr;</a></li>
+    <li id="fn37">Clauset, A., Shalizi, C. R. &amp; Newman, M. E. J. (2009). Power-Law Distributions in Empirical Data. <em>SIAM Review</em>, 51(4), 661&ndash;703. doi:10.1137/070710111. arXiv:0706.1062. <a href="#fnref37">&uarr;</a> <a href="#fnref37-2">&uarr;</a></li>
+    <li id="fn38">Gerlach, M. &amp; Altmann, E. G. (2019). Testing Statistical Laws in Complex Systems. <em>Physical Review Letters</em>, 122, 168301. doi:10.1103/PhysRevLett.122.168301. arXiv:1904.11624. <a href="#fnref38">&uarr;</a></li>
+    <li id="fn39">Destexhe, A. &amp; Touboul, J. D. (2021). Is There Sufficient Evidence for Criticality in Cortical Systems? <em>eNeuro</em>, 8(2), ENEURO.0551-20.2021. doi:10.1523/ENEURO.0551-20.2021. <a href="#fnref39">&uarr;</a> <a href="#fnref39-2">&uarr;</a> <a href="#fnref39-3">&uarr;</a></li>
+    <li id="fn40">Stumpf, M. P. H. &amp; Porter, M. A. (2012). Critical Truths About Power Laws. <em>Science</em>, 335(6069), 665&ndash;666. doi:10.1126/science.1216142. <a href="#fnref40">&uarr;</a></li>
+    <li id="fn41">Mastromatteo, I. &amp; Marsili, M. (2011). On the criticality of inferred models. <em>Journal of Statistical Mechanics</em>, P10012. doi:10.1088/1742-5468/2011/10/P10012. arXiv:1102.1624. <a href="#fnref41">&uarr;</a></li>
+    <li id="fn42">Marsili, M., Mastromatteo, I. &amp; Roudi, Y. (2013). On sampling and modeling complex systems. <em>Journal of Statistical Mechanics</em>, P09003. doi:10.1088/1742-5468/2013/09/P09003. arXiv:1301.3622. <a href="#fnref42">&uarr;</a></li>
+    <li id="fn43">Haimovici, A. &amp; Marsili, M. (2015). Criticality of mostly informative samples: a Bayesian model selection approach. <em>Journal of Statistical Mechanics</em>, P10013. doi:10.1088/1742-5468/2015/10/P10013. arXiv:1502.00356. <a href="#fnref43">&uarr;</a></li>
+    <li id="fn44">Nonnenmacher, M., Behrens, C. et al. (2017). Signatures of criticality arise from random subsampling in simple population models. <em>PLoS Computational Biology</em>, 13(10), e1005718. doi:10.1371/journal.pcbi.1005718. <a href="#fnref44">&uarr;</a></li>
+    <li id="fn45">Martinello, M., Hidalgo, J. et al. (2017). Neutral Theory and Scale-Free Neural Dynamics. <em>Physical Review X</em>, 7, 041071. doi:10.1103/PhysRevX.7.041071. arXiv:1703.05079. <a href="#fnref45">&uarr;</a></li>
+    <li id="fn46">Faqeeh, A., Osat, S. et al. (2019). Emergence of power laws in noncritical neuronal systems. <em>Physical Review E</em>, 100, 010401. doi:10.1103/PhysRevE.100.010401. <a href="#fnref46">&uarr;</a></li>
+    <li id="fn47">Ngampruetikorn, V., Nemenman, I. et al. (2025). Extrinsic vs intrinsic criticality in systems with many components. <em>Physical Review Research</em>, 7, 013188. doi:10.1103/PhysRevResearch.7.013188. arXiv:2309.13898. <a href="#fnref47">&uarr;</a></li>
+    <li id="fn48">Beggs, J. M. &amp; Timme, N. (2012). Being Critical of Criticality in the Brain. <em>Frontiers in Physiology</em>, 3, 163. doi:10.3389/fphys.2012.00163. Written as a dialogue by the discoverer of neuronal avalanches. <a href="#fnref48">&uarr;</a> <a href="#fnref48-2">&uarr;</a></li>
+    <li id="fn49">Priesemann, V., Wibral, M. et al. (2014). Spike avalanches in vivo suggest a driven, slightly subcritical brain state. <em>Frontiers in Systems Neuroscience</em>, 8, 108. doi:10.3389/fnsys.2014.00108. <a href="#fnref49">&uarr;</a></li>
+    <li id="fn50">Hordijk, W. &amp; Steel, M. (2004). Detecting autocatalytic, self-sustaining sets in chemical reaction systems. <em>Journal of Theoretical Biology</em>, 227(4), 451&ndash;461. doi:10.1016/j.jtbi.2003.11.020. <a href="#fnref50">&uarr;</a> <a href="#fnref50-2">&uarr;</a></li>
+    <li id="fn51">Steel, M., Hordijk, W. &amp; Xavier, J. C. (2019). Autocatalytic networks in biology: structural theory and algorithms. <em>Journal of the Royal Society Interface</em>, 16(151), 20180808. doi:10.1098/rsif.2018.0808. <a href="#fnref51">&uarr;</a> <a href="#fnref51-2">&uarr;</a></li>
+    <li id="fn52">Ashkenasy, G., Jagasia, R. et al. (2004). Design of a directed molecular network. <em>PNAS</em>, 101(30), 10872&ndash;10877. doi:10.1073/pnas.0402674101. <a href="#fnref52">&uarr;</a></li>
+    <li id="fn53">Vaidya, N., Manapat, M. L. et al. (2012). Spontaneous network formation among cooperative RNA replicators. <em>Nature</em>, 491, 72&ndash;77. doi:10.1038/nature11549. <a href="#fnref53">&uarr;</a></li>
+    <li id="fn54">Xavier, J. C., Hordijk, W., Kauffman, S., Steel, M. &amp; Martin, W. F. (2020). Autocatalytic chemical networks at the origin of metabolism. <em>Proceedings of the Royal Society B</em>, 287(1922), 20192377. doi:10.1098/rspb.2019.2377. Open access via PMC7126077. <a href="#fnref54">&uarr;</a> <a href="#fnref54-2">&uarr;</a></li>
+    <li id="fn55">Hordijk, W. &amp; Steel, M. (2013). A formal model of autocatalytic sets emerging in an RNA replicator system. <em>Journal of Systems Chemistry</em>, 4, 3. doi:10.1186/1759-2208-4-3. arXiv:1211.3473. <a href="#fnref55">&uarr;</a></li>
+    <li id="fn56">Steel, M., Hordijk, W. &amp; Kauffman, S. A. (2020). Dynamics of a birth-death process based on combinatorial innovation. <em>Journal of Theoretical Biology</em>, 491, 110187. doi:10.1016/j.jtbi.2020.110187. arXiv:1904.03290. <a href="#fnref56">&uarr;</a></li>
+    <li id="fn57">Hordijk, W., Hein, J. &amp; Steel, M. (2010). Autocatalytic Sets and the Origin of Life. <em>Entropy</em>, 12(7), 1733&ndash;1742. doi:10.3390/e12071733. <a href="#fnref57">&uarr;</a> <a href="#fnref57-2">&uarr;</a></li>
+    <li id="fn58">Vattay, G., Kauffman, S. A. et al. (2013). Evolutionary Design in Biological Quantum Computing. <strong>No DOI</strong>. arXiv:1311.4688. One of the two documents in the arXiv containing the phrase &lsquo;poised realm&rsquo;; the other is arXiv:1202.6433, the flagship preprint. <a href="#fnref58">&uarr;</a></li>
+    <li id="fn59">Yamanaka, M. (2017). Density Functional Approach and Random Matrix Theory in Protein Structures. <em>Journal of the Physical Society of Japan</em>, 86, 023801. doi:10.7566/JPSJ.86.023801. Reported open access, but the publisher blocks automated clients; full text could not be obtained for this page. <a href="#fnref59">&uarr;</a></li>
+    <li id="fn60">Prati, E. (2015). Towards room temperature solid state quantum devices at the quantum-classical boundary. <em>Journal of Physics: Conference Series</em>, 626, 012011. doi:10.1088/1742-6596/626/1/012011. Same DICE2014 proceedings volume as Vattay et al. 012023; a self-declared review with no original calculations. <a href="#fnref60">&uarr;</a> <a href="#fnref60-2">&uarr;</a></li>
+    <li id="fn61">Lindsay, S. (2018). Quantum Critical Proteins. <em>Inference: International Review of Science</em>, 4(1). <strong>No DOI</strong>; not peer-reviewed. Qualifies rather than endorses the claim. <a href="#fnref61">&uarr;</a></li>
+    <li id="fn62">Lindsay, S. (2020). Ubiquitous Electron Transport in Non-Electron Transfer Proteins. <em>Life</em>, 10(5), 72. doi:10.3390/life10050072. <a href="#fnref62">&uarr;</a></li>
+    <li id="fn63">Khmelinskii, I. &amp; Makarov, V. (2020). Analysis of quantum coherence in biology. <em>Chemical Physics</em>, 532, 110671. doi:10.1016/j.chemphys.2019.110671. <a href="#fnref63">&uarr;</a></li>
+    <li id="fn64">Kauffman, S. (2014). Beyond the Stalemate: Conscious Mind-Body &mdash; Quantum Mechanics &mdash; Free Will &mdash; Possible Panpsychism. <strong>No DOI</strong>. arXiv:1410.2127. Contains no level-statistics content. <a href="#fnref64">&uarr;</a> <a href="#fnref64-2">&uarr;</a></li>
+    <li id="fn65">Papp, E. &amp; Vattay, G. (2025). Holographic nature of critical quantum states of proteins. <em>Computational and Structural Biotechnology Journal</em>. doi:10.1016/j.csbj.2025.05.049. arXiv:2407.15101. <a href="#fnref65">&uarr;</a></li>
+    <li id="fn66">Fontenele, A. J., de Vasconcelos, N. A. P. et al. (2019). Criticality between Cortical States. <em>Physical Review Letters</em>, 122, 208101. doi:10.1103/PhysRevLett.122.208101. <a href="#fnref66">&uarr;</a> <a href="#fnref66-2">&uarr;</a> <a href="#fnref66-3">&uarr;</a></li>
+  </ol>
+</div>
+
+</div>
+
+<script>
+// ========== SCROLL ANIMATIONS ==========
+(function(){
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(function(el){ observer.observe(el); });
+})();
+
+// ========== NAV HIGHLIGHTING ==========
+(function(){
+  var sections = document.querySelectorAll('h2[id]');
+  var navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', function(){
+    var current = '';
+    sections.forEach(function(s){ if (window.scrollY >= s.offsetTop - 90) current = s.id; });
+    navLinks.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }, { passive: true });
+})();
+
+// ========== THE LATENT-VARIABLE MACHINE ==========
+(function(){
+  var NS = 'http://www.w3.org/2000/svg';
+  var svgA = document.getElementById('lvA');
+  var svgB = document.getElementById('lvB');
+  var svgC = document.getElementById('lvC');
+  if (!svgA || !svgB || !svgC) return;
+
+  var COL = { grid:'#334155', axis:'#475569', text:'#94a3b8', dim:'#64748b',
+              hi:'#f1f5f9', on:'#22c55e', off:'#ef4444', pt:'#3b82f6',
+              guide:'#fbbf24', fit:'#06b6d4', panel:'#16202f' };
+
+  // ---- deterministic PRNG so the demo looks the same every load ----
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  var rnd = mulberry32(20260726);
+  function gauss(){
+    var u = 0, v = 0;
+    while (u === 0) u = rnd();
+    while (v === 0) v = rnd();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  // ---- model ----
+  var N = 16, DRIVE_SD = 4.0, BIAS_MU = 0.3, BIAS_SD = 1.6, AR = 0.99;
+  var bias = [];
+  for (var i = 0; i < N; i++) bias.push(BIAS_MU + BIAS_SD * gauss());
+
+  var latentOn = true, h = 0, counts = new Map(), nsamp = 0, sorted = [], units = new Array(N).fill(0);
+
+  function el(tag, attrs, parent){
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function txt(parent, x, y, s, size, fill, anchor){
+    var t = el('text', { x:x, y:y, 'font-size':size, fill:fill, 'text-anchor':anchor || 'start',
+      'font-family':'system-ui, sans-serif' }, parent);
+    t.textContent = s;
+    return t;
+  }
+
+  // ---------- PANEL A : driver + unconnected units ----------
+  var hTrackY0 = 34, hTrackY1 = 96, hZeroY = (hTrackY0 + hTrackY1) / 2, hX = 150;
+  txt(svgA, 150, 18, 'hidden driver  h', 11, COL.text, 'middle');
+  el('line', { x1:40, y1:hZeroY, x2:260, y2:hZeroY, stroke:COL.grid, 'stroke-width':1, 'stroke-dasharray':'3 3' }, svgA);
+  el('line', { x1:40, y1:hTrackY0, x2:40, y2:hTrackY1, stroke:COL.axis, 'stroke-width':1 }, svgA);
+  el('line', { x1:260, y1:hTrackY0, x2:260, y2:hTrackY1, stroke:COL.axis, 'stroke-width':1 }, svgA);
+  var hBar = el('rect', { x:148, y:hZeroY - 3, width:4, height:6, rx:2, fill:COL.on }, svgA);
+  var hKnob = el('circle', { cx:150, cy:hZeroY, r:6, fill:COL.on }, svgA);
+  var hLabel = txt(svgA, 150, hTrackY1 + 15, 'h = 0.00', 10, COL.dim, 'middle');
+
+  txt(svgA, 150, 132, '16 units — no links between them', 10, COL.text, 'middle');
+  var dots = [], DR = 11, gx0 = 62, gy0 = 152, gstep = 46;
+  for (i = 0; i < N; i++){
+    var cx = gx0 + (i % 4) * gstep, cy = gy0 + Math.floor(i / 4) * gstep;
+    dots.push(el('circle', { cx:cx, cy:cy, r:DR, fill:'#1e293b', stroke:COL.axis, 'stroke-width':1.5 }, svgA));
+  }
+
+  // ---------- PANEL B : rank-frequency bars ----------
+  var BX0 = 38, BX1 = 288, BY0 = 34, BY1 = 214, NBARS = 26;
+  txt(svgB, 163, 18, 'how often each state occurred', 11, COL.text, 'middle');
+  el('line', { x1:BX0, y1:BY1, x2:BX1, y2:BY1, stroke:COL.axis, 'stroke-width':1 }, svgB);
+  el('line', { x1:BX0, y1:BY0, x2:BX0, y2:BY1, stroke:COL.axis, 'stroke-width':1 }, svgB);
+  txt(svgB, 163, 236, 'rank (most common → 26th)', 10, COL.dim, 'middle');
+  txt(svgB, 12, 124, 'count', 10, COL.dim, 'middle').setAttribute('transform', 'rotate(-90 12 124)');
+  var bars = [], bw = (BX1 - BX0) / NBARS;
+  for (i = 0; i < NBARS; i++){
+    bars.push(el('rect', { x:BX0 + i * bw + 1, y:BY1 - 1, width:Math.max(1, bw - 2), height:1, fill:COL.pt, rx:1 }, svgB));
+  }
+
+  // ---------- PANEL C : log-log ----------
+  var CX0 = 44, CX1 = 288, CY0 = 34, CY1 = 210;
+  var LOGR_MAX = 3.0;   // ranks 1 .. 1000
+  var LOGF_RANGE = 4.0; // 4 decades below the top count
+  txt(svgC, 166, 18, 'the same counts, log–log', 11, COL.text, 'middle');
+  el('line', { x1:CX0, y1:CY1, x2:CX1, y2:CY1, stroke:COL.axis, 'stroke-width':1 }, svgC);
+  el('line', { x1:CX0, y1:CY0, x2:CX0, y2:CY1, stroke:COL.axis, 'stroke-width':1 }, svgC);
+  for (i = 0; i <= 3; i++){
+    var gx = CX0 + (i / LOGR_MAX) * (CX1 - CX0);
+    el('line', { x1:gx, y1:CY0, x2:gx, y2:CY1, stroke:COL.grid, 'stroke-width':1, 'stroke-dasharray':'2 4' }, svgC);
+    txt(svgC, gx, CY1 + 14, ['1', '10', '100', '1000'][i], 9, COL.dim, 'middle');
+  }
+  for (i = 0; i <= 4; i++){
+    var gy = CY0 + (i / 4) * (CY1 - CY0);
+    el('line', { x1:CX0, y1:gy, x2:CX1, y2:gy, stroke:COL.grid, 'stroke-width':1, 'stroke-dasharray':'2 4' }, svgC);
+  }
+  txt(svgC, 166, CY1 + 30, 'rank', 10, COL.dim, 'middle');
+  txt(svgC, 14, 122, 'count', 10, COL.dim, 'middle').setAttribute('transform', 'rotate(-90 14 122)');
+  var guide = el('line', { x1:0, y1:0, x2:0, y2:0, stroke:COL.guide, 'stroke-width':1.6, 'stroke-dasharray':'6 4', opacity:0.9 }, svgC);
+  var fitLine = el('line', { x1:0, y1:0, x2:0, y2:0, stroke:COL.fit, 'stroke-width':2, opacity:0 }, svgC);
+  var ptsPath = el('path', { d:'', fill:'none', stroke:COL.pt, 'stroke-width':2.2, 'stroke-linejoin':'round', opacity:0.95 }, svgC);
+  var guideLbl = txt(svgC, CX1 - 4, CY0 + 12, 'slope −1', 9, COL.guide, 'end');
+  var fitLbl = txt(svgC, CX1 - 4, CY0 + 26, '', 9, COL.fit, 'end');
+
+  // ---------- sampling ----------
+  function step(){
+    if (latentOn) h = h * AR + gauss() * DRIVE_SD * Math.sqrt(1 - AR * AR);
+    else h = 0;
+    var key = 0;
+    for (var j = 0; j < N; j++){
+      var on = rnd() < 1 / (1 + Math.exp(-(h + bias[j])));
+      units[j] = on ? 1 : 0;
+      if (on) key |= (1 << j);
+    }
+    counts.set(key, (counts.get(key) || 0) + 1);
+    nsamp++;
+  }
+
+  function resort(){
+    sorted = Array.from(counts.values());
+    sorted.sort(function(a, b){ return b - a; });
+  }
+
+  function fitSlope(){
+    var lo = 2, hi = 400, sx = 0, sy = 0, sxx = 0, sxy = 0, n = 0;
+    for (var r = lo; r <= hi && r <= sorted.length; r++){
+      var c = sorted[r - 1];
+      if (c <= 0) continue;
+      var x = Math.log10(r), y = Math.log10(c);
+      sx += x; sy += y; sxx += x * x; sxy += x * y; n++;
+    }
+    if (n < 12) return null;
+    var den = n * sxx - sx * sx;
+    if (Math.abs(den) < 1e-9) return null;
+    var m = (n * sxy - sx * sy) / den;
+    return { m: m, b: (sy - m * sx) / n };
+  }
+
+  var elN = document.getElementById('lvN'),
+      elS = document.getElementById('lvS'),
+      elSlope = document.getElementById('lvSlope');
+
+  function render(){
+    // panel A
+    var frac = Math.max(-1, Math.min(1, h / (DRIVE_SD * 2.2)));
+    var y = hZeroY - frac * ((hTrackY1 - hTrackY0) / 2);
+    hKnob.setAttribute('cy', y);
+    hKnob.setAttribute('fill', latentOn ? COL.on : COL.off);
+    hBar.setAttribute('y', Math.min(y, hZeroY));
+    hBar.setAttribute('height', Math.max(3, Math.abs(y - hZeroY)));
+    hBar.setAttribute('fill', latentOn ? COL.on : COL.off);
+    hLabel.textContent = latentOn ? ('h = ' + h.toFixed(2)) : 'h frozen at 0.00';
+    hLabel.setAttribute('fill', latentOn ? COL.dim : COL.off);
+    for (var j = 0; j < N; j++){
+      dots[j].setAttribute('fill', units[j] ? (latentOn ? COL.on : COL.off) : '#1e293b');
+      dots[j].setAttribute('stroke', units[j] ? (latentOn ? COL.on : COL.off) : COL.axis);
+    }
+
+    // panel B
+    var top = sorted.length ? sorted[0] : 1;
+    for (var i2 = 0; i2 < NBARS; i2++){
+      var c = i2 < sorted.length ? sorted[i2] : 0;
+      var hgt = Math.max(1, (c / top) * (BY1 - BY0));
+      bars[i2].setAttribute('y', BY1 - hgt);
+      bars[i2].setAttribute('height', hgt);
+      bars[i2].setAttribute('fill', latentOn ? COL.pt : COL.off);
+    }
+
+    // panel C
+    if (sorted.length > 4){
+      var logTop = Math.log10(sorted[0]);
+      var d = '', started = false;
+      var lim = Math.min(sorted.length, 1000);
+      for (var r = 1; r <= lim; r++){
+        var cc = sorted[r - 1];
+        if (cc <= 0) break;
+        var lx = Math.log10(r), ly = logTop - Math.log10(cc);
+        if (ly > LOGF_RANGE) break;
+        var px = CX0 + (lx / LOGR_MAX) * (CX1 - CX0);
+        var py = CY0 + (ly / LOGF_RANGE) * (CY1 - CY0);
+        d += (started ? ' L ' : 'M ') + px.toFixed(1) + ' ' + py.toFixed(1);
+        started = true;
+      }
+      ptsPath.setAttribute('d', d);
+      ptsPath.setAttribute('stroke', latentOn ? COL.pt : COL.off);
+
+      // slope -1 guide anchored at rank 2
+      var gy0v = logTop - Math.log10(sorted[1] || sorted[0]);
+      var gx0v = CX0 + (Math.log10(2) / LOGR_MAX) * (CX1 - CX0);
+      var gpy0 = CY0 + (gy0v / LOGF_RANGE) * (CY1 - CY0);
+      var gdx = LOGR_MAX - Math.log10(2);
+      var gy1v = gy0v + gdx;
+      guide.setAttribute('x1', gx0v); guide.setAttribute('y1', gpy0);
+      guide.setAttribute('x2', CX1);
+      guide.setAttribute('y2', CY0 + (Math.min(gy1v, LOGF_RANGE) / LOGF_RANGE) * (CY1 - CY0));
+
+      var f = fitSlope();
+      if (f){
+        var fx1 = Math.log10(2), fx2 = Math.log10(400);
+        var fy1 = logTop - (f.m * fx1 + f.b), fy2 = logTop - (f.m * fx2 + f.b);
+        fitLine.setAttribute('x1', CX0 + (fx1 / LOGR_MAX) * (CX1 - CX0));
+        fitLine.setAttribute('y1', CY0 + (Math.max(0, Math.min(LOGF_RANGE, fy1)) / LOGF_RANGE) * (CY1 - CY0));
+        fitLine.setAttribute('x2', CX0 + (fx2 / LOGR_MAX) * (CX1 - CX0));
+        fitLine.setAttribute('y2', CY0 + (Math.max(0, Math.min(LOGF_RANGE, fy2)) / LOGF_RANGE) * (CY1 - CY0));
+        fitLine.setAttribute('opacity', 1);
+        var st = f.m.toFixed(2).replace('-', '\u2212');
+        fitLbl.textContent = 'fit ' + st;
+        elSlope.textContent = st;
+      }
+    }
+    elN.textContent = nsamp.toLocaleString('en-US');
+    elS.textContent = counts.size.toLocaleString('en-US');
+  }
+
+  function reset(){
+    counts = new Map(); nsamp = 0; sorted = []; h = 0;
+    fitLine.setAttribute('opacity', 0);
+    fitLbl.textContent = '';
+    elSlope.textContent = '\u2014';
+    ptsPath.setAttribute('d', '');
+  }
+
+  var toggleBtn = document.getElementById('lvToggle');
+  var resetBtn = document.getElementById('lvReset');
+  toggleBtn.addEventListener('click', function(){
+    latentOn = !latentOn;
+    toggleBtn.textContent = 'Latent variable: ' + (latentOn ? 'ON' : 'OFF');
+    toggleBtn.className = 'mbtn ' + (latentOn ? 'on' : 'off');
+    toggleBtn.setAttribute('aria-pressed', latentOn ? 'true' : 'false');
+    reset(); burstIfStatic();
+  });
+  resetBtn.addEventListener('click', function(){ reset(); burstIfStatic(); });
+
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var TARGET = 120000, PER_FRAME = 500, frame = 0;
+
+  function burstIfStatic(){
+    if (!reduced) return;
+    for (var k = 0; k < 60000; k++) step();
+    resort(); render();
+  }
+
+  function loop(){
+    if (nsamp < TARGET){
+      for (var k = 0; k < PER_FRAME; k++) step();
+    }
+    frame++;
+    if (frame % 10 === 0 || sorted.length === 0) resort();
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  if (reduced){ burstIfStatic(); }
+  else { requestAnimationFrame(loop); }
+})();
+</script>
+
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
+<script src="../js/annex-tracker.js"></script>
+
+</body>
+</html>

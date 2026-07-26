@@ -123,6 +123,7 @@ freethemath.org/
 | E2 | physical-systems-chart/index.html | 1999 | Physical Systems x Domain Bridge | **DONE** (S187) | 6 tips, 0 fn (chart page) |
 | E3 | poised-state-survey/index.html | 1535 | Shadows of the Poised State | **DONE** (S187) | 11 tips, 0 fn |
 | E4 | domain-convergence/index.html | 1937 | Domain Convergence — Animated Intro | **DONE** (S187) | 10 tips, 0 fn (inline citations) |
+| E5 | poised-state-critics/index.html | 1348 | The Poised State and Its Critics | **DONE** (Plan 0498) | 4 tips, 66 fn, 1 interactive (latent-variable machine) |
 
 ### F. Topology & Closure (PRIORITY 2)
 
@@ -328,6 +329,15 @@ freethemath.org/
 - Citations: added Sormunen/Gross 2025, Ashwin 2025, Frank&Jacobs 2026, Fang et al. 2025, Li (Nat Phys 2026); completed Cook 2000, Guldager-Andersen 2025, de la Cotte 2025; DOWNGRADED brain PNAS (wrong-scope) + REMOVED fabricated "Huang et al. 2025".
 - Q2 "◆ our result" hypothesis markers on the program's own unpublished results (9 files).
 - Accordions (short-on-load) + many tooltips + bridge-letter tooltips (A=Topology, B=Criticality, C=Autocatalysis/Closure, D=Computation) throughout. Completeness-adjacent overclaims softened. OPSEC clean; HTML validated.
+
+**Plan 0498 (2026-07-26): NEW page `poised-state-critics/index.html` — COMPLETE**
+- New top-level tutorial, sibling of `poised-state-survey/` and `criticality-bridges/`. Slug `poised-state-critics`. Pattern-A fixed nav + scroll-spy; house `:root` superset plus `--golden`.
+- Purpose: answer "has anyone seriously studied the poised state?" as a **guided reading path**, overview-before-primary-source, not a survey. Eight sections: the three senses of "poised" / edge-of-chaos deflation / affirmative case / the deflation + latent-variable mechanism / RAF formalisation / the quantum Poised Realm / verdict scorecard / the reading path.
+- **66 citation footnotes, 101 in-text marks.** Every footnote corresponds to a verified record in the `diamond-node-library` MANIFEST (77 papers, 5 clusters). Where a work genuinely has no DOI — Packard 1988 (book chapter), Mitchell 1993 and 1994, Vattay 2013 and Kauffman 2014 (arXiv-only), Lindsay 2018 (*Inference*, not peer-reviewed) — that is stated in the footnote and the arXiv ID or venue is given. **No DOI inferred anywhere.** Built from a token-substituting generator so footnote numbering cannot drift.
+- **Interactive centrepiece: the latent-variable machine.** Three linked procedural-SVG panels (hidden driver + 16 visibly unconnected units → rank-frequency bars → log–log plot with a slope −1 guide and a live least-squares fit over ranks 2–400) with a latent-variable ON/OFF toggle. Driver on ⇒ fitted slope ≈ −1.0; driver frozen ⇒ ≈ −0.5 and visibly curved. Seeded PRNG so the demo is reproducible; `prefers-reduced-motion` runs a single 60k-sample burst instead of the animation loop.
+- **No MathJax, no KaTeX, no LaTeX** — HTML entities plus `<sub>`/`<sup>` plus `.math` / `.math-block` serif spans, consistent with the rest of the annex.
+- Integration: hub card in `diamond-node/index.html` (Interactive Tutorials grid) + a `null-result` Key Findings entry on the unstudied conjunction; L2 card and MANIFEST entry in `docs/index.html`; sibling breadcrumb added to all four Pattern-B pages (`criticality-bridges`, `domain-convergence`, `anyon-fusion`, `physical-systems-chart`); reciprocal pointer added to the survey's framework section. New assets `art/thumbnails/poised-state-critics.svg` and `art/og/poised-state-critics.png` (1200×630).
+- OPSEC clean: red-line grep returns nothing. Public frame is "domain convergence"; the magnetosphere is used as the worked example of an externally driven system.
 
 ---
 

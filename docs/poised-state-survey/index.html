@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Twelve physical systems scored against a five-feature framework — criticality, topology, autocatalysis, computation, and braiding — revealing six cross-cutting patterns that suggest the convergence hypothesis casts observable shadows across condensed matter, biology, and materials science.">
+<meta name="description" content="Twelve physical systems scored against a five-feature framework — criticality, static topology, autocatalysis, computation, and worldline braiding — revealing six cross-cutting patterns that suggest the convergence hypothesis casts observable shadows across condensed matter, biology, and materials science.">
 <title>Shadows of the Poised State</title>
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shadows of the Poised State">
-<meta property="og:description" content="Twelve physical systems scored against a five-feature framework — criticality, topology, autocatalysis, computation, and braiding — revealing six cross-cutting patterns that suggest the convergence hypothesis casts observable shadows across condensed matter, biology, and materials science.">
+<meta property="og:description" content="Twelve physical systems scored against a five-feature framework — criticality, static topology, autocatalysis, computation, and worldline braiding — revealing six cross-cutting patterns that suggest the convergence hypothesis casts observable shadows across condensed matter, biology, and materials science.">
 <meta property="og:url" content="https://energyscholar.github.io/web-annex/poised-state-survey/">
 <meta property="og:image" content="https://energyscholar.github.io/web-annex/art/og/poised-state-survey.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -111,7 +111,7 @@ nav a:hover, nav a.active { color: var(--heading); background: var(--dim); }
 }
 .scorecard th {
   background: var(--dim); color: var(--heading); padding: 0.6rem 0.5rem;
-  text-align: left; font-weight: 600; position: sticky; top: 40px;
+  text-align: left; font-weight: 600; position: sticky; top: 40px; vertical-align: bottom;
 }
 .scorecard td { padding: 0.5rem; border-bottom: 1px solid var(--dim); }
 .scorecard tr:hover td { background: rgba(59, 130, 246, 0.05); }
@@ -239,8 +239,8 @@ This survey examines twelve candidate systems, scores them against the five-feat
   </div>
   <div class="feature-item" style="border-color: var(--blue);">
     <span class="feature-icon" style="color: var(--blue);">&#9670;</span>
-    <span class="feature-label">Topology</span>
-    <span class="feature-desc">Defects, protected states, winding numbers</span>
+    <span class="feature-label">Static Topology</span>
+    <span class="feature-desc">Defects, protected states, winding numbers &mdash; from a single snapshot</span>
   </div>
   <div class="feature-item" style="border-color: var(--green);">
     <span class="feature-icon" style="color: var(--green);">&#8635;</span>
@@ -254,12 +254,20 @@ This survey examines twelve candidate systems, scores them against the five-feat
   </div>
   <div class="feature-item" style="border-color: var(--purple);">
     <span class="feature-icon" style="color: var(--purple);">&#10006;</span>
-    <span class="feature-label">Braiding</span>
-    <span class="feature-desc">Non-trivial exchange, braid group statistics</span>
+    <span class="feature-label">Worldline Braiding</span>
+    <span class="feature-desc">Braid-group statistics of tracked excitations in 2+1D</span>
   </div>
 </div>
 
+<p><strong>Topology and braiding are not the same test.</strong> Static topology is a property of a single snapshot &mdash; the homotopy of the <em>order-parameter space</em> (winding numbers, defect charge, protected edge states). Worldline braiding is a property of a <em>history</em> &mdash; the homotopy of the <em>configuration space of n tracked excitations</em>, whose fundamental group is the braid group B<sub>n</sub> in 2+1D but only the symmetric group S<sub>n</sub> in 3+1D. Different spaces, different homotopy groups, different measurements: one needs an image, the other needs a movie.</p>
+
+<p>Braiding is therefore a <em>nested refinement</em> of topology, not an independent axis &mdash; every system scored on braiding below also scores on topology. Read the five columns as tests passed, not as five independent features.</p>
+
 <p>A system with one or two features is interesting. A system with three or more is a candidate. A system where four or five converge without anyone having noticed the convergence &mdash; that&rsquo;s a shadow of the poised state.</p>
+
+<p style="border-left:3px solid var(--amber);padding-left:1rem;color:var(--line);">
+<strong>Before you accept this scorecard, read the literature that challenges its premise.</strong> The criticality column is the most contested feature here: latent variables, external driving and subsampling each reproduce its standard signatures in systems that are demonstrably not critical. <a href="../poised-state-critics/">The Poised State and Its Critics</a> is a guided reading path through that literature, with an interactive demonstration of the central objection.
+</p>
 
 <!-- ========== SECTION 2: RADAR CHART ========== -->
 <div class="viz fade-in">
@@ -285,10 +293,10 @@ This survey examines twelve candidate systems, scores them against the five-feat
 <tr>
   <th>System</th>
   <th>Criticality</th>
-  <th>Topology</th>
+  <th>Static<br>Topology</th>
   <th>Autocatalysis</th>
   <th>Computation</th>
-  <th>Braiding</th>
+  <th>Worldline<br>Braiding</th>
   <th>Score</th>
 </tr>
 </thead>
@@ -680,7 +688,8 @@ window.addEventListener('scroll', () => {
 (function() {
   const svg = document.getElementById('radar');
   const cx = 400, cy = 270, R = 180;
-  const labels = ['Criticality', 'Topology', 'Autocatalysis', 'Computation', 'Braiding'];
+  // Two-word axis labels render as stacked tspans so they don't overrun the viewBox
+  const labels = [['Criticality'], ['Static', 'Topology'], ['Autocatalysis'], ['Computation'], ['Worldline', 'Braiding']];
   const angles = labels.map((_, i) => (i * 2 * Math.PI / 5) - Math.PI / 2);
 
   function pt(angle, r) {
@@ -712,7 +721,13 @@ window.addEventListener('scroll', () => {
     text.setAttribute('x', lx); text.setAttribute('y', ly);
     text.setAttribute('text-anchor', 'middle'); text.setAttribute('fill', '#94a3b8');
     text.setAttribute('font-size', '13'); text.setAttribute('font-family', 'system-ui');
-    text.textContent = labels[i];
+    labels[i].forEach((word, j) => {
+      const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      tspan.setAttribute('x', lx);
+      tspan.setAttribute('dy', j === 0 ? 0 : 15);
+      tspan.textContent = word;
+      text.appendChild(tspan);
+    });
     svg.appendChild(text);
   });
 

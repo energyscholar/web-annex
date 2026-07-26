@@ -409,6 +409,7 @@ abbr {
     <a href="../domain-convergence/" style="color:#f1f5f9;text-decoration:none;font-weight:600;">Domain Convergence</a>
     <a href="../criticality-bridges/" style="color:#94a3b8;text-decoration:none;">Criticality Bridges</a>
     <a href="../physical-systems-chart/" style="color:#94a3b8;text-decoration:none;">Physical Systems</a>
+    <a href="../poised-state-critics/" style="color:#94a3b8;text-decoration:none;">Poised State &amp; Critics</a>
   </div>
 </nav>
 
@@ -424,7 +425,7 @@ abbr {
     <li><a href="#clusters">Five Clusters</a></li>
     <li><a href="#bridges">Seven Bridges</a></li>
     <li><a href="#scale">Scale Invariance as Stitching</a></li>
-    <li><a href="#pylons">The Pylon Inventory</a></li>
+    <li><a href="#endpoints">The Endpoint Inventory</a></li>
     <li><a href="#ac-bridge">The AC Bridge &mdash; Structural Identity</a></li>
     <li><a href="#stack">The Emergent Stack</a></li>
   </ol>
@@ -588,19 +589,19 @@ abbr {
 <p>For the capstone bridge <strong>AC (topology &harr; autocatalysis)</strong>, scale invariance opens an intriguing corridor rather than a direct path. The CFT/<abbr title="Topological Field Theory &mdash; quantum field theory whose observables depend only on topology, not geometry">TFT</abbr> correspondence &mdash; established by Witten in 1988 &mdash; shows that every rational conformal field theory in two dimensions corresponds to a topological field theory in three dimensions. <span class="citation">(Witten 1988)</span>. This means the mathematics of critical phenomena is already formally connected to the mathematics of anyons and braiding. Whether that formal connection can be extended to encompass autocatalytic closure at the algebraic level is the central open question.</p>
 
 <!-- ======================================================================
-     SECTION 6: THE PYLON INVENTORY
+     SECTION 6: THE ENDPOINT INVENTORY
      ====================================================================== -->
 
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
-<h2 id="pylons"><span class="section-number">6.</span> The Pylon Inventory</h2>
+<h2 id="endpoints"><span class="section-number">6.</span> The Endpoint Inventory</h2>
 
-<p>Each bridge has two endpoints &mdash; call them pylons. Some pylons are well-characterized mathematical structures with established literatures. Others are theoretical proposals. Others remain speculative. An honest assessment requires inventorying what is known at each end.</p>
+<p>Each bridge has two endpoints . Some endpoints are well-characterized mathematical structures with established literatures. Others are theoretical proposals. Others remain speculative. An honest assessment requires inventorying what is known at each end.</p>
 
-<div class="svg-container" id="svg-pylons">
-  <button class="replay-btn" onclick="replayPylons()">Replay</button>
+<div class="svg-container" id="svg-endpoints">
+  <button class="replay-btn" onclick="replayEndpoints()">Replay</button>
   <svg viewBox="0 0 860 580" xmlns="http://www.w3.org/2000/svg">
-    <g id="pylon-scene"></g>
+    <g id="endpoint-scene"></g>
   </svg>
 </div>
 
@@ -608,8 +609,8 @@ abbr {
   <thead>
     <tr>
       <th>Bridge</th>
-      <th>Pylon 1</th>
-      <th>Pylon 2</th>
+      <th>Endpoint 1</th>
+      <th>Endpoint 2</th>
       <th>Status</th>
     </tr>
   </thead>
@@ -659,7 +660,7 @@ abbr {
   </tbody>
 </table>
 
-<p>Four bridges have both pylons well-characterized (CB, CD-a, BD, AC). One bridge is already partially built (AB). The fragile bridges (CD-b, BC) have at least one uncertain pylon. The AC bridge has shifted from "largest gap" to "physical identity awaiting cross-community recognition": anyon emergence (Established) IS autocatalytic generation, and FQHE systems are already demonstrators. The remaining barrier is sociological, not scientific.</p>
+<p>Four bridges have both endpoints well-characterized (CB, CD-a, BD, AC). One bridge is already partially built (AB). The fragile bridges (CD-b, BC) have at least one uncertain endpoint. The AC bridge has shifted from "largest gap" to "physical identity awaiting cross-community recognition": anyon emergence (Established) IS autocatalytic generation, and FQHE systems are already demonstrators. The remaining barrier is sociological, not scientific.</p>
 
 <!-- ======================================================================
      SECTION 7: THE AC BRIDGE
@@ -1467,14 +1468,14 @@ abbr {
   onVisible('svg-rg', drawRG);
 
   // =================================================================
-  // ANIMATION 5: PYLON INVENTORY
+  // ANIMATION 5: ENDPOINT INVENTORY
   // =================================================================
 
-  function drawPylons() {
-    const g = document.getElementById('pylon-scene');
+  function drawEndpoints() {
+    const g = document.getElementById('endpoint-scene');
     g.innerHTML = '';
 
-    const pylons = [
+    const endpoints = [
       { bridge: 'CB',   p1: 'Percolation threshold', p2: 'RAF emergence', s1: 'known', s2: 'known', y: 50, color: GREEN, p1tip: 'Percolation threshold (known)', p2tip: 'RAF emergence as phase transition (known)' },
       { bridge: 'CD-a', p1: 'Boolean network K≈2', p2: 'CA Class IV', s1: 'known', s2: 'known', y: 125, color: PURPLE, p1tip: 'Boolean network K≈2 (known)', p2tip: 'CA Class IV behavior (known)' },
       { bridge: 'CD-b', p1: 'Eigenform fixed point', p2: 'Self-referential computation', s1: 'theoretical', s2: 'theoretical', y: 200, color: PURPLE, p1tip: 'Eigenform fixed point (theoretical)', p2tip: 'Self-referential computation (theoretical)' },
@@ -1491,7 +1492,7 @@ abbr {
       emerging: GOLDEN
     };
 
-    pylons.forEach((p, i) => {
+    endpoints.forEach((p, i) => {
       const pG = svgEl('g', {});
 
       // Bridge label
@@ -1518,7 +1519,7 @@ abbr {
       });
       pG.appendChild(centerDot);
 
-      // Pylon 1 (left)
+      // Endpoint 1 (left)
       const p1G = svgEl('g', {});
       const p1Title = svgEl('title', {});
       p1Title.textContent = p.p1tip;
@@ -1550,7 +1551,7 @@ abbr {
       p1G.appendChild(p1S);
       pG.appendChild(p1G);
 
-      // Line from pylon 1 to bridge
+      // Line from endpoint 1 to bridge
       const l1 = svgEl('line', {
         x1: 300, y1: p.y + 5, x2: 408, y2: p.y + 5,
         stroke: p.color, 'stroke-width': 1, 'stroke-opacity': 0.3,
@@ -1558,7 +1559,7 @@ abbr {
       });
       pG.appendChild(l1);
 
-      // Pylon 2 (right)
+      // Endpoint 2 (right)
       const p2G = svgEl('g', {});
       const p2Title = svgEl('title', {});
       p2Title.textContent = p.p2tip;
@@ -1589,7 +1590,7 @@ abbr {
       p2G.appendChild(p2S);
       pG.appendChild(p2G);
 
-      // Line from bridge to pylon 2
+      // Line from bridge to endpoint 2
       const l2 = svgEl('line', {
         x1: 452, y1: p.y + 5, x2: 560, y2: p.y + 5,
         stroke: p.color, 'stroke-width': 1, 'stroke-opacity': 0.3,
@@ -1626,11 +1627,11 @@ abbr {
     g.appendChild(legG);
   }
 
-  function replayPylons() {
-    drawPylons();
+  function replayEndpoints() {
+    drawEndpoints();
   }
 
-  onVisible('svg-pylons', drawPylons);
+  onVisible('svg-endpoints', drawEndpoints);
 
   // =================================================================
   // ANIMATION 6: AC BRIDGE (Structural Identity)
