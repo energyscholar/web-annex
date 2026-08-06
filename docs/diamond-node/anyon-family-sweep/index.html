@@ -21,6 +21,29 @@
   --purple: #a855f7;
 }
 
+
+/* --- k=2 to k=3 self-catalysis onset animation --- */
+.kx { background: var(--card); border: 1px solid #334155; border-radius: 10px; padding: 1.1rem 1.2rem; margin: 1.5rem 0; }
+.kx-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+.kx-head h4 { font-size: 0.95rem; color: var(--heading); margin: 0 auto 0 0; }
+.kx-btn { background: #0f172a; border: 1px solid #334155; color: #94a3b8; font: inherit; font-size: 0.76rem;
+          padding: 0.22rem 0.7rem; border-radius: 5px; cursor: pointer; }
+.kx-btn:hover { border-color: var(--golden); color: var(--golden); }
+.kx-btn[aria-pressed="true"] { border-color: var(--golden); color: var(--golden); background: rgba(251,191,36,0.08); }
+.kx-btn:focus-visible { outline: 2px solid var(--golden); outline-offset: 2px; }
+.kx-hint { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.9rem; }
+.kx-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 620px) { .kx-panels { grid-template-columns: 1fr; } }
+.kx-panel { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 0.8rem; }
+.kx-panel.on { border-color: var(--golden); }
+.kx-panel h5 { font-size: 0.82rem; color: var(--heading); margin-bottom: 0.15rem; }
+.kx-panel .kx-rule { font-size: 0.74rem; color: var(--muted); font-family: 'Courier New', monospace; margin-bottom: 0.5rem; }
+.kx-panel svg { width: 100%; display: block; }
+.kx-verdict { font-size: 0.76rem; margin-top: 0.5rem; line-height: 1.5; }
+.kx-verdict.no { color: #f87171; }
+.kx-verdict.yes { color: #4ade80; }
+.kx-cap { font-size: 0.82rem; color: var(--muted); margin-top: 0.9rem; min-height: 3.2em; }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
@@ -509,6 +532,34 @@ details.collapse > *:last-child { margin-bottom: 1.5rem; }
   <li><strong>k&ge;4:</strong> Rich self-catalysis, strongly <abbr title="Reflexively Autocatalytic and Food-generated">RAF</abbr> closed, universal by braiding alone for every k except k=4 and k=8. <span class="high">Above threshold.</span></li>
 </ul>
 
+
+<div class="kx" id="kx">
+  <div class="kx-head">
+    <h4>The onset at k = 3</h4>
+    <button class="kx-btn" id="kx-btn" aria-pressed="false">&#9654; Play</button>
+    <button class="kx-btn" id="kx-reset">Reset</button>
+  </div>
+  <p class="kx-hint">Both panels run the same experiment: seed one non-abelian anyon, fuse it with itself, and follow where the products go. Watch whether the seed type ever reappears as a <em>direct</em> product of its own fusion.</p>
+
+  <div class="kx-panels">
+    <div class="kx-panel" id="kx-p2">
+      <h5>k = 2 &mdash; Ising, {1, &sigma;, &psi;}</h5>
+      <div class="kx-rule">&sigma; &times; &sigma; = 1 + &psi;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&sigma; &times; &psi; = &sigma;</div>
+      <svg id="kx-s2" viewBox="0 0 240 150" role="img" aria-label="Fusion network for Ising anyons at level k equals 2. The sigma anyon fuses with itself to give the vacuum and psi, and only regains sigma by a second step through psi — a two-step cycle, not direct self-catalysis."></svg>
+      <div class="kx-verdict no" id="kx-v2">&sigma; &times; &sigma; does not contain &sigma;.</div>
+    </div>
+
+    <div class="kx-panel" id="kx-p3">
+      <h5>k = 3 &mdash; Fibonacci, {1, &tau;}</h5>
+      <div class="kx-rule">&tau; &times; &tau; = 1 + &tau;</div>
+      <svg id="kx-s3" viewBox="0 0 240 150" role="img" aria-label="Fusion network for Fibonacci anyons at level k equals 3. The tau anyon fuses with itself to give the vacuum and tau, so tau catalyses its own production directly in a single step."></svg>
+      <div class="kx-verdict yes" id="kx-v3">&tau; &times; &tau; contains &tau;.</div>
+    </div>
+  </div>
+
+  <p class="kx-cap" id="kx-cap">Press Play. Nothing has been fused yet.</p>
+</div>
+
 <p>There is a <strong>phase transition at k=3</strong> &mdash; the onset of both self-catalysis and computational universality simultaneously. This is not coincidental: the same algebraic structure (non-trivial self-coupling in the fusion rules) enables both properties.</p>
 </div>
 </details>
@@ -671,6 +722,106 @@ The sweet spot is k=3 through k&asymp;5&ndash;6. Below k=3, the algebra is too s
 
 </div>
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
+
+<script>
+/* ============================================================
+   ANIMATION: onset of direct self-catalysis between k=2 and k=3.
+   Self-contained inline SVG + JS. Honours prefers-reduced-motion.
+   ============================================================ */
+(function () {
+  var s2 = document.getElementById('kx-s2');
+  if (!s2) return;
+  var s3 = document.getElementById('kx-s3');
+  var cap = document.getElementById('kx-cap');
+  var btn = document.getElementById('kx-btn');
+  var rst = document.getElementById('kx-reset');
+  var p2 = document.getElementById('kx-p2'), p3 = document.getElementById('kx-p3');
+
+  var GOLD = '#fbbf24', DIM = '#475569', TXT = '#cbd5e1', GRN = '#4ade80', RED = '#f87171';
+  var phase = 0, MAX = 4, timer = null;
+
+  function node(x, y, label, col, glow) {
+    var r = 17;
+    var o = '';
+    if (glow) o += '<circle cx="' + x + '" cy="' + y + '" r="' + (r + 7) + '" fill="' + col + '" opacity="0.16"/>';
+    o += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="2"/>';
+    o += '<text x="' + x + '" y="' + (y + 5) + '" text-anchor="middle" font-size="14" font-style="italic" fill="' + col + '">' + label + '</text>';
+    return o;
+  }
+  function arrow(x1, y1, x2, y2, col, on, dash) {
+    return '<path d="M' + x1 + ',' + y1 + ' L' + x2 + ',' + y2 + '" stroke="' + col +
+      '" stroke-width="' + (on ? 2.4 : 1.2) + '" opacity="' + (on ? 1 : 0.32) +
+      (dash ? '" stroke-dasharray="5 4' : '') + '" marker-end="url(#kxa)"/>';
+  }
+  var DEFS = '<defs><marker id="kxa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>';
+
+  /* k=2: sigma (top) -> {1, psi} (bottom row) -> sigma again only via psi */
+  function draw2() {
+    var o = DEFS;
+    var sx = 120, sy = 30, vx = 62, vy = 112, px = 186, py = 112;
+    var seeded = phase >= 1, fused = phase >= 2, back = phase >= 3;
+    o += arrow(sx - 12, sy + 16, vx + 8, vy - 16, DIM, fused);
+    o += arrow(sx + 12, sy + 16, px - 8, py - 16, DIM, fused);
+    o += arrow(px - 8, py - 14, sx + 14, sy + 18, GRN, back, true);
+    o += node(vx, vy, '1', fused ? TXT : DIM, false);
+    o += node(px, py, '&#968;', fused ? TXT : DIM, fused && !back);
+    o += node(sx, sy, '&#963;', seeded ? GOLD : DIM, seeded && (!fused || back));
+    o += '<text x="120" y="146" text-anchor="middle" font-size="9" fill="' + (back ? GRN : DIM) + '">two steps back to &#963;</text>';
+    s2.innerHTML = o;
+  }
+
+  /* k=3: tau -> {1, tau} : the seed is its own product */
+  function draw3() {
+    var o = DEFS;
+    var tx = 120, ty = 30, vx = 62, vy = 112, rx = 186, ry = 112;
+    var seeded = phase >= 1, fused = phase >= 2, loop = phase >= 3;
+    o += arrow(tx - 12, ty + 16, vx + 8, vy - 16, DIM, fused);
+    o += arrow(tx + 12, ty + 16, rx - 8, ry - 16, GOLD, fused);
+    if (loop)
+      o += '<path d="M' + (rx + 14) + ',' + (ry - 8) + ' C 232,60 200,26 ' + (tx + 18) + ',' + (ty + 2) +
+           '" fill="none" stroke="' + GRN + '" stroke-width="2.4" marker-end="url(#kxa)"/>';
+    o += node(vx, vy, '1', fused ? TXT : DIM, false);
+    o += node(rx, ry, '&#964;', fused ? GOLD : DIM, fused);
+    o += node(tx, ty, '&#964;', seeded ? GOLD : DIM, seeded);
+    o += '<text x="120" y="146" text-anchor="middle" font-size="9" fill="' + (loop ? GRN : DIM) + '">one step: &#964; makes &#964;</text>';
+    s3.innerHTML = o;
+  }
+
+  var CAPS = [
+    'Press Play. Nothing has been fused yet.',
+    'Seed one anyon of the non-trivial type in each theory — σ on the left, τ on the right.',
+    'Fuse the seed with a copy of itself. At k = 2 the products are the vacuum and ψ: the seed type is gone. At k = 3 the products are the vacuum and τ: the seed type is still there.',
+    'To recover σ at k = 2 you must fuse again, with ψ. That is catalytic cycling, and it needs a second species to close. At k = 3 the loop closes in one step on the seed alone — direct self-catalysis.',
+    'This is the whole of the k = 3 threshold. The same algebraic feature — a non-trivial self-coupling term in the fusion rule — is what makes τ self-catalytic and what makes its braiding dense in SU(N). Self-catalysis and computational universality switch on together, and neither is special to Fibonacci: both are generic for k ≥ 3.'
+  ];
+
+  function render() {
+    draw2(); draw3();
+    cap.textContent = CAPS[Math.min(phase, CAPS.length - 1)];
+    p3.className = 'kx-panel' + (phase >= 3 ? ' on' : '');
+  }
+  function step() { if (phase < MAX) { phase++; render(); } if (phase >= MAX) stop(); }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } btn.innerHTML = '&#9654; Play'; btn.setAttribute('aria-pressed', 'false'); }
+  function play() {
+    if (phase >= MAX) { phase = 0; render(); }
+    timer = setInterval(step, 2600);
+    btn.innerHTML = '&#10073;&#10073; Pause'; btn.setAttribute('aria-pressed', 'true');
+  }
+  btn.addEventListener('click', function () { timer ? stop() : play(); });
+  rst.addEventListener('click', function () { stop(); phase = 0; render(); });
+
+  render();
+  if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var started = false;
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting && !started) { started = true; play(); } });
+      }, { threshold: 0.3 }).observe(document.getElementById('kx'));
+    }
+  }
+})();
+</script>
+
 <script src="../../js/annex-tracker.js"></script>
 </body>
 </html>

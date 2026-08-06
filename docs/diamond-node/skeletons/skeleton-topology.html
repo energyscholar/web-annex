@@ -57,6 +57,29 @@
   .recap-box { background: var(--card); border: 2px solid var(--s1); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
   .recap-box dt { color: var(--s1); font-weight: 600; font-size: 0.9rem; }
   .recap-box dd { color: var(--text); margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; }
+
+  /* --- phi construction animation --- */
+  .phi-anim { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin: 1.75rem 0; }
+  .pa-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .pa-head h3 { font-size: 0.95rem; margin: 0 auto 0 0; color: var(--text); }
+  .pa-btn { background: #1e293b; border: 1px solid var(--border); color: var(--muted); font: inherit;
+            font-size: 0.78rem; padding: 0.25rem 0.7rem; border-radius: 5px; cursor: pointer; }
+  .pa-btn:hover { border-color: #eab308; color: #eab308; }
+  .pa-btn:focus-visible { outline: 2px solid #eab308; outline-offset: 2px; }
+  .pa-hint { margin-bottom: 0.9rem; }
+  .pa-grid { display: grid; grid-template-columns: 200px 1fr; gap: 1.25rem; align-items: start; }
+  @media (max-width: 600px) { .pa-grid { grid-template-columns: 1fr; } }
+  #pa-braid { width: 100%; max-width: 200px; }
+  .pa-side { min-width: 0; }
+  .pa-row { display: flex; justify-content: space-between; align-items: baseline;
+            border-bottom: 1px solid rgba(51,65,85,0.5); padding: 0.3rem 0; font-size: 0.82rem; }
+  .pa-k { color: var(--muted); }
+  .pa-v { font-family: 'Courier New', monospace; color: var(--text); font-weight: 600; }
+  .pa-gold { color: #eab308; }
+  #pa-conv { width: 100%; margin-top: 0.9rem; }
+  .pa-tepo { font-size: 0.78rem; color: var(--muted); font-family: 'Courier New', monospace; margin-top: 0.4rem; }
+  .pa-cap { margin: 0.9rem 0 0; min-height: 2.6em; }
+  @media (prefers-reduced-motion: reduce) { .phi-anim .pa-btn[data-auto] { display: none; } }
   .wiggle { animation: wiggle 3s ease-in-out infinite; }
   @keyframes wiggle { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(2deg) translateX(3px); } 75% { transform: rotate(-2deg) translateX(-3px); } }
   /* Collapsible deep/secondary sections */
@@ -197,6 +220,34 @@
 
   <p>The golden ratio appears because alternating braid crossings create Fibonacci growth. Each fold reaches back two steps, satisfying F(n) = F(n-1) + F(n-2). The growth rate of that recursion is &phi;.</p>
 
+
+  <!-- ===== ANIMATION: the φ construction, one crossing at a time ===== -->
+  <div class="phi-anim" id="phi-anim">
+    <div class="pa-head">
+      <h3>Watch &phi; appear</h3>
+      <button id="pa-btn" class="pa-btn" aria-pressed="false">&#9654; Play</button>
+      <button id="pa-step" class="pa-btn">Step</button>
+      <button id="pa-reset" class="pa-btn">Reset</button>
+    </div>
+    <p class="quiet pa-hint">Each crossing alternates &sigma;<sub>1</sub>, &sigma;<sub>2</sub><sup>&minus;1</sup>. The braid never repeats, and the length of the tracked strand follows the Fibonacci recursion. The ratio of successive lengths is what converges to &phi;.</p>
+
+    <div class="pa-grid">
+      <svg id="pa-braid" viewBox="0 0 200 300" role="img"
+           aria-label="An animated three-strand braid built one crossing at a time, alternating the sigma-1 and inverse sigma-2 generators. Crossings accumulate downward and the strands never return to their starting order.">
+      </svg>
+      <div class="pa-side">
+        <div class="pa-row"><span class="pa-k">crossings</span><span class="pa-v" id="pa-n">0</span></div>
+        <div class="pa-row"><span class="pa-k">F(n)</span><span class="pa-v" id="pa-f">1</span></div>
+        <div class="pa-row"><span class="pa-k">F(n) / F(n&minus;1)</span><span class="pa-v pa-gold" id="pa-r">&mdash;</span></div>
+        <svg id="pa-conv" viewBox="0 0 260 130" role="img"
+             aria-label="A convergence plot. Successive ratios of Fibonacci numbers oscillate above and below a horizontal gold line at phi equals 1.618, converging onto it.">
+        </svg>
+        <div class="pa-tepo">TEPO = log(&phi;) &asymp; <span class="pa-gold">0.481</span> per crossing</div>
+      </div>
+    </div>
+    <p class="quiet pa-cap" id="pa-cap">Press Play. The recursion has not started yet.</p>
+  </div>
+
   <p><span class="emphasis">TEPO = log(&phi;) &asymp; 0.481</span> is the <em>minimum possible</em> stretching rate for a non-repeating 3-strand braid. Less than log(&phi;) means the braid is periodic. At or above log(&phi;) means it's genuinely complex (pseudo-Anosov). The golden ratio is the exact boundary between simple and complex braiding.</p>
 </section>
 
@@ -254,7 +305,7 @@
 <section>
   <details class="collapse">
   <summary>Seven communities, one mathematics</summary>
-  <p>Like criticality (<span class="tip" tabindex="0">FACETS<span class="tt">A cross-domain survey paper cataloguing how the mathematics of criticality was independently developed across roughly a dozen scientific fields (arXiv:2601.22389).</span></span>), topological mathematics was independently rediscovered by communities that don't read each other's journals:</p>
+  <p>Like criticality (<span class="tip" tabindex="0">FACETS<span class="tt">A cross-domain survey cataloguing how the mathematics of criticality was independently developed across roughly a dozen scientific fields. Preprint, arXiv:2601.22389, with R. Macomber &mdash; under review, not yet peer-reviewed.</span></span>), topological mathematics was independently rediscovered by communities that don't read each other's journals:</p>
   <div class="timeline">
     <div class="timeline-item"><span class="timeline-year">1860s+</span><div><span class="timeline-who">Mathematicians</span><br><span class="timeline-field">Knot theory, braid groups, <span class="tip" tabindex="0">Jones polynomial<span class="tt">A knot invariant discovered by Vaughan Jones (1984) that connects knot theory to statistical mechanics. Fields Medal work that bridged pure math and physics.</span></span>. Pure abstraction.</span></div></div>
     <div class="timeline-item"><span class="timeline-year">1970s</span><div><span class="timeline-who">Thouless, Haldane, Kosterlitz</span><br><span class="timeline-field">Topological phase transitions. Condensed matter physics. Nobel 2016.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup></span></div></div>
@@ -332,7 +383,12 @@ function braidSVG(word, opts = {}) {
   for (let p = 0; p < n; p++)
     out += `<line x1="${xs[p]}" y1="${yb}" x2="${xs[p]}" y2="${h-pad}" stroke="${colors[sa[p]]}" stroke-width="${sw}" stroke-linecap="round"/>`;
 
-  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:${w}px">${out}</svg>`;
+  const _n = word.length;
+  const _desc = _n === 0
+    ? `${n} parallel strands with no crossings — the identity braid`
+    : `A ${n}-strand braid diagram read top to bottom with ${_n} crossing${_n===1?"":"s"}: `
+      + word.map(g => `strand ${g.pos+1} crosses ${g.inv ? "under" : "over"} strand ${g.pos+2}`).join(", ");
+  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:${w}px" role="img" aria-label="${_desc}">${out}</svg>`;
 }
 
 const S1 = {pos:0, inv:false};
@@ -370,6 +426,155 @@ for (let i = 0; i < fibs.length; i++) {
   </div>`;
 }
 document.getElementById('fib-bars').innerHTML = barsHTML;
+
+/* ============================================================
+   ANIMATION: the phi construction, one crossing at a time.
+   Self-contained. No dependencies. Honours prefers-reduced-motion.
+   ============================================================ */
+(function () {
+  var braid = document.getElementById('pa-braid');
+  if (!braid) return;
+  var conv   = document.getElementById('pa-conv');
+  var elN    = document.getElementById('pa-n');
+  var elF    = document.getElementById('pa-f');
+  var elR    = document.getElementById('pa-r');
+  var elCap  = document.getElementById('pa-cap');
+  var btn    = document.getElementById('pa-btn');
+  var btnStep= document.getElementById('pa-step');
+  var btnRst = document.getElementById('pa-reset');
+
+  var PHI = (1 + Math.sqrt(5)) / 2;
+  var MAX = 11;                       /* crossings drawn */
+  var COL = ['#818cf8', '#f87171', '#4ade80'];
+  var XS  = [40, 100, 160];
+  var TOP = 18, STEP = 23;
+
+  var n = 0;                          /* crossings placed  */
+  var order = [0, 1, 2];              /* which colour sits in which lane */
+  var timer = null;
+
+  function fib(k) {                   /* F(0)=1, F(1)=1, ... */
+    var a = 1, b = 1, i;
+    for (i = 0; i < k; i++) { var t = a + b; a = b; b = t; }
+    return a;
+  }
+
+  function drawBraid() {
+    var parts = [], i, lvl, o = [0, 1, 2], y, y2, pos, inv;
+    /* strands run from TOP to the current bottom */
+    var bottom = TOP + (n + 1) * STEP + 14;
+    for (lvl = 0; lvl < n; lvl++) {
+      pos = (lvl % 2 === 0) ? 0 : 1;      /* sigma1 then sigma2^-1 */
+      inv = (lvl % 2 === 1);
+      y  = TOP + lvl * STEP;
+      y2 = y + STEP;
+      for (i = 0; i < 3; i++) {
+        if (i === pos || i === pos + 1) continue;
+        parts.push('<line x1="' + XS[i] + '" y1="' + y + '" x2="' + XS[i] + '" y2="' + y2 +
+                   '" stroke="' + COL[o[i]] + '" stroke-width="4" stroke-linecap="round"/>');
+      }
+      var xa = XS[pos], xb = XS[pos + 1], mid = (y + y2) / 2;
+      var over  = inv ? o[pos + 1] : o[pos];
+      var under = inv ? o[pos] : o[pos + 1];
+      var xOver  = inv ? xb : xa, xOverEnd  = inv ? xa : xb;
+      var xUnder = inv ? xa : xb, xUnderEnd = inv ? xb : xa;
+      /* under strand, broken at the crossing */
+      parts.push('<path d="M' + xUnder + ',' + y + ' C' + xUnder + ',' + mid + ' ' + xUnderEnd + ',' + mid + ' ' + xUnderEnd + ',' + y2 +
+                 '" fill="none" stroke="' + COL[under] + '" stroke-width="4" stroke-linecap="round" stroke-dasharray="14 10"/>');
+      /* over strand, continuous */
+      parts.push('<path d="M' + xOver + ',' + y + ' C' + xOver + ',' + mid + ' ' + xOverEnd + ',' + mid + ' ' + xOverEnd + ',' + y2 +
+                 '" fill="none" stroke="' + COL[over] + '" stroke-width="4" stroke-linecap="round"/>');
+      var t = o[pos]; o[pos] = o[pos + 1]; o[pos + 1] = t;
+    }
+    /* tails */
+    y = TOP + n * STEP;
+    for (i = 0; i < 3; i++)
+      parts.push('<line x1="' + XS[i] + '" y1="' + y + '" x2="' + XS[i] + '" y2="' + bottom +
+                 '" stroke="' + COL[o[i]] + '" stroke-width="4" stroke-linecap="round"/>');
+    braid.setAttribute('viewBox', '0 0 200 ' + Math.max(300, bottom + 10));
+    braid.innerHTML = parts.join('');
+    order = o;
+  }
+
+  function drawConv() {
+    var W = 260, H = 130, L = 34, R = 8, T = 10, B = 22;
+    var lo = 1.0, hi = 2.1;
+    var yOf = function (v) { return T + (hi - v) / (hi - lo) * (H - T - B); };
+    var xOf = function (i) { return L + i / Math.max(1, MAX - 1) * (W - L - R); };
+    var p = [];
+    p.push('<line x1="' + L + '" y1="' + yOf(PHI) + '" x2="' + (W - R) + '" y2="' + yOf(PHI) +
+           '" stroke="#eab308" stroke-width="1.5" stroke-dasharray="4 3"/>');
+    p.push('<text x="' + (W - R) + '" y="' + (yOf(PHI) - 5) + '" fill="#eab308" font-size="9" text-anchor="end" font-family="monospace">&#966; = 1.618</text>');
+    p.push('<line x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + (H - B) + '" stroke="#334155" stroke-width="1"/>');
+    p.push('<line x1="' + L + '" y1="' + (H - B) + '" x2="' + (W - R) + '" y2="' + (H - B) + '" stroke="#334155" stroke-width="1"/>');
+    p.push('<text x="' + (L - 5) + '" y="' + (yOf(2.0) + 3) + '" fill="#475569" font-size="8" text-anchor="end" font-family="monospace">2.0</text>');
+    p.push('<text x="' + (L - 5) + '" y="' + (yOf(1.0) + 3) + '" fill="#475569" font-size="8" text-anchor="end" font-family="monospace">1.0</text>');
+    p.push('<text x="' + ((L + W - R) / 2) + '" y="' + (H - 6) + '" fill="#475569" font-size="8" text-anchor="middle">successive ratios</text>');
+    var pts = [], i;
+    for (i = 1; i <= n; i++) {
+      var r = fib(i) / fib(i - 1);
+      pts.push(xOf(i - 1) + ',' + yOf(Math.min(hi, Math.max(lo, r))));
+    }
+    if (pts.length > 1)
+      p.push('<polyline points="' + pts.join(' ') + '" fill="none" stroke="#818cf8" stroke-width="1.5"/>');
+    for (i = 0; i < pts.length; i++) {
+      var xy = pts[i].split(',');
+      var last = (i === pts.length - 1);
+      p.push('<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="' + (last ? 4 : 2.5) +
+             '" fill="' + (last ? '#eab308' : '#818cf8') + '"/>');
+    }
+    conv.innerHTML = p.join('');
+  }
+
+  function caption() {
+    if (n === 0) return 'Press Play. The recursion has not started yet.';
+    if (n === 1) return 'One crossing. Nothing to compare yet — the recursion needs two terms before it has a ratio.';
+    var r = fib(n) / fib(n - 1);
+    var err = Math.abs(r - PHI);
+    var side = r > PHI ? 'above' : 'below';
+    var s = 'Crossing ' + n + '. The ratio is ' + r.toFixed(4) + ', ' + side + ' φ by ' + err.toFixed(4) + '.';
+    if (n >= 4) s += ' Each new crossing overshoots the last in the opposite direction, and by less — that alternating, shrinking error is the recursion converging.';
+    if (n >= MAX) s += ' The braid is still not repeating, and it never will: that is what pseudo-Anosov means.';
+    return s;
+  }
+
+  function render() {
+    drawBraid(); drawConv();
+    elN.textContent = n;
+    elF.textContent = fib(n);
+    elR.innerHTML = n >= 1 ? (fib(n) / fib(n - 1)).toFixed(4) : '&mdash;';
+    elCap.textContent = caption();
+    braid.setAttribute('aria-label',
+      'A three-strand braid built one crossing at a time by alternating the sigma-1 and inverse sigma-2 generators. ' +
+      n + ' crossing' + (n === 1 ? '' : 's') + ' placed so far. The strands have not returned to their starting order.');
+    conv.setAttribute('aria-label',
+      'Convergence plot of successive Fibonacci ratios towards phi, 1.618. ' +
+      (n >= 1 ? 'Latest ratio ' + (fib(n) / fib(Math.max(0, n - 1))).toFixed(4) + '.' : 'No ratios plotted yet.'));
+  }
+
+  function step() { if (n < MAX) { n++; render(); } if (n >= MAX) stop(); }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } btn.innerHTML = '&#9654; Play'; btn.setAttribute('aria-pressed', 'false'); }
+  function play() {
+    if (n >= MAX) { n = 0; render(); }
+    timer = setInterval(step, 900);
+    btn.innerHTML = '&#10073;&#10073; Pause'; btn.setAttribute('aria-pressed', 'true');
+  }
+
+  btn.addEventListener('click', function () { timer ? stop() : play(); });
+  btnStep.addEventListener('click', function () { stop(); step(); });
+  btnRst.addEventListener('click', function () { stop(); n = 0; render(); });
+
+  render();
+  /* autoplay once, unless the reader has asked for reduced motion */
+  if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var started = false;
+    var io = window.IntersectionObserver ? new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting && !started) { started = true; play(); } });
+    }, { threshold: 0.35 }) : null;
+    if (io) io.observe(document.getElementById('phi-anim')); else play();
+  }
+})();
+
 </script>
 </body>
 </html>
