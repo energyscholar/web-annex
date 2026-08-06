@@ -106,7 +106,7 @@
   <p>The simplest closure: a campfire.</p>
 
   <div class="diagram">
-    <svg class="loop-svg" viewBox="0 0 360 280" style="width:100%;max-width:360px">
+    <svg class="loop-svg" viewBox="0 0 360 280" style="width:100%;max-width:360px" role="img" aria-label="The campfire. Labelled: Fire, Heat, &amp; light, Volatile, gas, Pyrolysis, Fuel, breakdown.">
       <defs>
         <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
@@ -163,7 +163,7 @@
     </div>
   </div>
 
-  <p>The campfire is an RAF. So is a metabolic network. So is the cardiac calcium signaling cycle. The mathematical structure is identical.</p>
+  <p>The campfire, a metabolic network and the cardiac calcium signaling cycle all satisfy the RAF conditions. The mathematical structure is identical.</p>
   <p class="quiet">The key insight: closure is a <span class="tip" tabindex="0">network property<span class="tt">A property of the whole system, not any individual component. You can&rsquo;t point to one reaction and say &lsquo;that&rsquo;s the closure.&rsquo; Remove any single reaction and the closure may still hold.</span></span>, not any individual reaction. You can't point to one reaction and say "that's the important one." Remove any single reaction and the RAF might still hold. Closure is a global property of the set.</p>
 </section>
 
@@ -180,8 +180,18 @@
   <h2>The cardiac RAF</h2>
   <p>Our analysis finds that the heart's calcium signaling cycle satisfies the RAF property structurally, not just as a metaphor.<span class="hyp tip" tabindex="0">&#x25C6; our result<span class="tt">An original, not-yet-peer-reviewed result from this research program &mdash; distinct from established consensus. The specific figures below (17/17 reactions, zero essential reactions) are this program's own computation on a model of the cardiac calcium cycle.</span></span></p>
 
+  <div class="diagram" style="border-left:3px solid #f59e0b;padding:0.9rem 1.1rem;text-align:left;background:rgba(245,158,11,0.06)">
+    <p class="quiet" style="margin:0"><strong style="color:#f59e0b">A caveat that applies to every claim of this shape.</strong>
+    Binary RAF existence &mdash; the yes/no question &ldquo;is this network an RAF?&rdquo; &mdash; is
+    <em>generic</em> at moderate catalysis density. Randomly generated networks acquire the property
+    routinely once enough reactions are catalyzed, so answering &ldquo;yes&rdquo; is close to no evidence at all.
+    The informative quantity is not existence but the <em>fraction of the reaction set that remains non-zero</em>
+    under perturbation &mdash; which is why the number worth reporting below is 17/17 with zero essential
+    reactions, and not the bare fact that an RAF exists.</p>
+  </div>
+
   <div class="diagram">
-    <svg viewBox="0 0 360 200" style="width:100%;max-width:360px">
+    <svg viewBox="0 0 360 200" style="width:100%;max-width:360px" role="img" aria-label="The cardiac RAF. Labelled: Ca²⁺ release, Contraction, Ion pumps, Relaxation, Ca²⁺ reuptake, Electrical signal, 17/17 reactions, Zero essential reactions.">
       <defs>
         <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
@@ -263,7 +273,7 @@
   </div>
 
   <p>Eight formalizations. Different notations, different motivations, different fields. All describe the same structural property: a network of processes that collectively produce all the catalysts they need.</p>
-  <p class="quiet">This is a <span class="tip" tabindex="0">FACETS<span class="tt">A cross-domain survey paper cataloguing how the mathematics of criticality was independently developed across roughly a dozen scientific fields (arXiv:2601.22389).</span></span>-scale convergence. Just as ~12 fields independently developed criticality mathematics, at least 6 independent lines of work arrived at closure mathematics. The convergence is invisible because each community uses different terminology.</p>
+  <p class="quiet">This is a <span class="tip" tabindex="0">FACETS<span class="tt">A cross-domain survey cataloguing how the mathematics of criticality was independently developed across roughly a dozen scientific fields. Preprint, arXiv:2601.22389, with R. Macomber &mdash; under review, not yet peer-reviewed.</span></span>-scale convergence. Just as ~12 fields independently developed criticality mathematics, at least 6 independent lines of work arrived at closure mathematics. The convergence is invisible because each community uses different terminology.</p>
   </details>
 </section>
 

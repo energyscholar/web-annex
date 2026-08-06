@@ -97,10 +97,37 @@ button.active { background: #38bdf8; color: #0f172a; }
 <span id="metrics" style="margin-left:auto;"></span>
 </div>
 
+
+<div style="background:#3b1218;border:1px solid #b4404f;border-left:4px solid #ef4444;border-radius:4px;padding:12px 14px;margin:12px 0;font-size:11px;line-height:1.65;color:#f8d7da">
+  <div style="color:#ff8189;font-weight:bold;font-size:12px;margin-bottom:6px;letter-spacing:0.04em">CORRECTION &mdash; 28 JULY 2026</div>
+  <p style="margin-bottom:8px"><b>The altitude split on this page is not an independent altitude measurement.</b>
+  Both altitude channels, I(120&nbsp;km) and I(300&nbsp;km), are computed from the <em>same</em> ground TEC
+  field through the two-layer Chapman model described below. The only altitude-dependent degree of
+  freedom in that model is the scalar auroral fraction <em>f</em>, which is itself a deterministic
+  function of the ground perturbation amplitude, applied through a fixed latitude mask. The
+  decomposition is therefore a re-expression of the ground field, not a second, independent
+  observation of it.</p>
+  <p style="margin-bottom:8px">This matters for the independence check below. A low R&sup2; between the
+  derived altitude indices and the ground index does <em>not</em> establish that the altitude channels
+  carry independent information, because the mapping from ground field to altitude channels is
+  deterministic. Two deterministic functions of one field can be weakly correlated with that field
+  and still contain nothing it does not already contain.</p>
+  <p style="margin-bottom:8px">The first write-up of this analysis <b>overclaimed on exactly this point</b>.
+  Its conclusions should not be cited; the corrected version, v2.0.0, supersedes it. The dashboard
+  below is retained because the decomposition itself is correctly implemented and its behaviour is
+  worth being able to inspect &mdash; but it should be read as a model diagnostic, not as evidence
+  about altitude structure.</p>
+  <p style="margin:0"><b style="color:#7ee787">What this page does still show.</b> The Chapman
+  decomposition is correctly implemented and internally consistent, and the dashboard is a faithful
+  view of how that model behaves across a real storm. That is a statement about the model, and it is
+  the only kind of statement this page supports. No critical exponent is claimed here, and none
+  should be inferred from it.</p>
+</div>
+
 <div class="row">
 <div class="panel" style="flex:0 0 280px;">
 <h2>Altitude Coherence Profile</h2>
-<svg id="svgAlt" width="260" height="320" viewBox="0 0 260 320"></svg>
+<svg id="svgAlt" width="260" height="320" viewBox="0 0 260 320" role="img" aria-label="Altitude Coherence Profile"></svg>
 <div class="info" style="margin-top:4px;">
 <b>Precipitation layer</b> (120 km): <span class="tip" tabindex="0">auroral electron precipitation<span class="tt">Electrons accelerated down magnetic field lines that slam into the upper atmosphere at 120 km altitude. They excite atmospheric atoms, producing the aurora. The energy deposition creates enhanced ionization at this specific altitude.</span></span><br>
 <b>F-region</b> (300 km): <span class="tip" tabindex="0">solar EUV ionization<span class="tt">Extreme ultraviolet radiation from the Sun ionizing atmospheric atoms at ~300 km altitude (the F-region). This is the 'quiet' source of ionospheric plasma — always present, varying with solar activity and local time.</span></span><br>
@@ -110,7 +137,7 @@ button.active { background: #38bdf8; color: #0f172a; }
 
 <div class="panel" style="flex:0 0 280px;">
 <h2>Phase Space: I(120 km) vs I(300 km)</h2>
-<svg id="svgPhase" width="260" height="280" viewBox="0 0 260 280"></svg>
+<svg id="svgPhase" width="260" height="280" viewBox="0 0 260 280" role="img" aria-label="Phase Space: I(120 km) vs I(300 km)"></svg>
 <div class="info" style="margin-top:4px;">
 Above diagonal: precipitation dominant<br>
 Below diagonal: F-region dominant<br>
@@ -120,7 +147,7 @@ The trajectory through this space tracks MI system state
 
 <div class="panel" style="flex:1 1 300px;">
 <h2>Time Series: Ground I + Altitude Delta</h2>
-<svg id="svgTime" width="100%" height="280" viewBox="0 0 420 280"></svg>
+<svg id="svgTime" width="100%" height="280" viewBox="0 0 420 280" role="img" aria-label="Time Series: Ground I + Altitude Delta"></svg>
 <div class="info" style="margin-top:4px;">
 Solid: ground I_N (integrated over all altitudes)<br>
 Dashed: &Delta;(120-300), positive=precipitation, negative=F-region<br>
@@ -401,7 +428,7 @@ receive precipitation.
 <div class="row">
 <div class="panel" style="flex:1 1 400px;">
 <h2>Chapman Profiles at Two Altitudes</h2>
-<svg id="svgChapman" viewBox="0 0 400 280"></svg>
+<svg id="svgChapman" viewBox="0 0 400 280" role="img" aria-label="Chapman Profiles at Two Altitudes"></svg>
 <div class="info" style="margin-top:4px;">
 Blue: Solar EUV (h<sub>max</sub>=300 km, H=60 km). Red: Precipitation (h<sub>max</sub>=120 km, H=20 km).
 Black dashed: sum. Moran's I is computed on n<sub>e</sub> at each altitude independently.
@@ -420,8 +447,8 @@ producing organized spatial patterns at 120 km that differ from the smooth F-reg
 conditions, the solar EUV gradient dominates the ionospheric density pattern, and the
 F-region at 300 km is more spatially organized than the E-region.
 <br><br>
-The switch oscillates by <b>±0.4</b> during storms and is <b>universal</b> across all events analyzed
-(9 storms, 2000–2015).
+The switch oscillates by <b>±0.4</b> during storms and is <b>consistent across all nine storms analysed</b>
+(2000–2015). Nine events is a small sample; “consistent” is the strongest word the data supports.
 </div>
 </div>
 </div>
@@ -431,11 +458,13 @@ The switch oscillates by <b>±0.4</b> during storms and is <b>universal</b> acro
 <!-- SECTION: Validation Suite (8 tests) -->
 <!-- ================================================================ -->
 <div class="section-break">
-<h2>Validation: 8 Tests, All Pass</h2>
+<h2>Internal Consistency: 8 Checks</h2>
 <p style="font-size:11px; margin-bottom:8px;">
-The decomposition method was validated against independent implementations, analytical
-constraints, and published empirical models. Every test is designed to catch a specific
-failure mode that a reviewer might flag.
+These are implementation and self-consistency checks on the decomposition: agreement with an
+independent library, analytical round-trips, and comparison against published empirical profiles.
+They establish that the model is coded correctly and conserves what it should. They do
+<em>not</em> establish that the altitude split carries independent altitude information &mdash;
+see the correction at the top of this page.
 </p>
 
 <div class="test-grid">
@@ -498,7 +527,7 @@ Across <span class="num">9 events / 107 epochs</span>:
 r(I<sub>gnd</sub>, I<sub>120</sub>) = +0.14,
 r(I<sub>gnd</sub>, I<sub>300</sub>) = −0.34,
 combined <span class="num">R² = 0.115</span>.
-The three observables are largely independent — altitude explains only ~12% of ground variance.
+The derived indices are only weakly correlated with the ground index. Note the limit of this check: because the altitude channels are a deterministic function of the ground field, weak correlation does not imply independent information.
 </div>
 
 </div>
@@ -519,7 +548,7 @@ The altitude coherence switch must be robust to three sources of uncertainty:
 <div class="sens-row">
 <div class="sens-panel">
 <h3>Bootstrap Station Subsampling</h3>
-<svg id="svgBoot" viewBox="0 0 400 240"></svg>
+<svg id="svgBoot" viewBox="0 0 400 240" role="img" aria-label="Bootstrap Station Subsampling"></svg>
 <div class="info" style="margin-top:4px;">
 200 bootstrap resamples at each station count. Shaded bands show 5th–95th percentile.
 <b style="color:#38bdf8;">Convergence at N ≥ 20:</b> std(Δ) drops below 0.10 and the sign of Δ stabilizes.
@@ -529,7 +558,7 @@ The Halloween 2003 event has 41 stations (36 with TEC) — well above the thresh
 
 <div class="sens-panel">
 <h3>Auroral Fraction Sweep (f = 0.0 – 0.7)</h3>
-<svg id="svgFsweep" viewBox="0 0 400 240"></svg>
+<svg id="svgFsweep" viewBox="0 0 400 240" role="img" aria-label="Auroral Fraction Sweep (f = 0.0 – 0.7)"></svg>
 <div class="info" style="margin-top:4px;">
 Each curve shows Δ vs f at a different storm phase (UT).
 <b style="color:#38bdf8;">Key result:</b> Δ sign is <em style="color:#88ee88;">stable from f = 0.1 to 0.5</em> at every epoch
@@ -542,7 +571,7 @@ the physically reasonable range.
 <div class="sens-row">
 <div class="sens-panel">
 <h3>Chapman Scale Height Sweep</h3>
-<svg id="svgHeight" viewBox="0 0 400 240"></svg>
+<svg id="svgHeight" viewBox="0 0 400 240" role="img" aria-label="Chapman Scale Height Sweep"></svg>
 <div class="info" style="margin-top:4px;">
 Left: H<sub>solar</sub> swept 40–80 km (default 60). Right: H<sub>precip</sub> swept 10–30 km (default 20).
 <b style="color:#38bdf8;">Δ varies by &lt; 0.01</b> across the full H<sub>solar</sub> range and by 0.03 across

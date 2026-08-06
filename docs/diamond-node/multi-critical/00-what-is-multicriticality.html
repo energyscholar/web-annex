@@ -362,6 +362,24 @@ details.technical { border-left: 3px solid var(--line); }
   .fade-in { opacity: 1; transform: none; transition: none; }
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+
+/* --- junction animation: two critical lines meeting --- */
+.jx { background: var(--card); border: 1px solid var(--dim); border-radius: 10px; padding: 1.2rem 1.3rem; margin: 1.7rem 0; }
+.jx-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+.jx-head h3 { font-size: 1rem; color: var(--heading); margin: 0 auto 0 0; }
+.jx-btn { background: var(--bg); border: 1px solid var(--dim); color: var(--line); font: inherit; font-size: 0.76rem;
+          padding: 0.22rem 0.7rem; border-radius: 5px; cursor: pointer; }
+.jx-btn:hover { border-color: var(--amber); color: var(--amber); }
+.jx-btn:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.jx-hint { font-size: 0.85rem; color: var(--line); margin-bottom: 0.9rem; }
+.jx-body { display: grid; grid-template-columns: 1.25fr 1fr; gap: 1.1rem; align-items: start; }
+@media (max-width: 640px) { .jx-body { grid-template-columns: 1fr; } }
+.jx-body svg { width: 100%; display: block; background: var(--bg); border: 1px solid var(--dim); border-radius: 8px; }
+.jx-read .jx-row { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(51,65,85,0.6); padding: 0.3rem 0; font-size: 0.82rem; }
+.jx-k { color: var(--line); } .jx-v { font-family: 'Courier New', monospace; color: var(--heading); font-weight: 600; }
+.jx-slider { width: 100%; margin-top: 0.8rem; }
+.jx-cap { font-size: 0.84rem; color: var(--line); margin-top: 0.9rem; min-height: 3.4em; }
 </style>
 </head>
 <body>
@@ -374,7 +392,7 @@ details.technical { border-left: 3px solid var(--line); }
 
 <p class="lead">
 Every complex system has tipping points &mdash; thresholds beyond which behavior changes
-abruptly. A database saturates its connection pool. A power grid loses a critical link.
+abruptly. A shallow lake flips from clear water to turbid algal bloom. A power grid loses a critical link.
 A material melts. These single tipping points are well understood. But what happens when
 <em>two tipping points interact?</em> That&rsquo;s multicriticality &mdash; and it changes
 everything about how failure works and how it can be detected.
@@ -388,8 +406,8 @@ everything about how failure works and how it can be detected.
 
 <p>
 A system approaching a single tipping point shows characteristic warning signs.
-These are called <strong><span class="tip" tabindex="0">early warning signals<span class="tt">Measurable statistical changes in a system&rsquo;s behavior that precede a major transition. Analogous to response times creeping up before a server crashes.</span></span></strong> (EWS), and they arise from a
-universal mathematical phenomenon: <strong><span class="tip" tabindex="0">critical slowing down<span class="tt">A system takes longer and longer to recover from small disturbances as it approaches a tipping point. Like a server taking progressively longer to clear its queue under increasing load.</span></span></strong>.
+These are called <strong><span class="tip" tabindex="0">early warning signals<span class="tt">Measurable statistical changes in a system&rsquo;s behavior that precede a major transition. Analogous to a lake&rsquo;s seasonal algal blooms taking a little longer to clear each year before the lake flips for good.</span></span></strong> (EWS), and they arise from a
+universal mathematical phenomenon: <strong><span class="tip" tabindex="0">critical slowing down<span class="tt">A system takes longer and longer to recover from small disturbances as it approaches a tipping point. Like a pushed swing that takes progressively longer to come back to rest as its pivot stiffens.</span></span></strong>.
 </p>
 
 <p>
@@ -436,9 +454,9 @@ become slower, larger, and more persistent. The system is losing its ability to 
   <h4>Key Insight</h4>
   <p>
     Critical slowing down is not specific to any one kind of system. It appears in
-    databases approaching connection limits, ecosystems approaching collapse, materials
+    lakes approaching eutrophication, ecosystems approaching collapse, materials
     approaching phase transitions, and power grids approaching cascade failure. The mathematics
-    is identical. This <span class="tip" tabindex="0">universality<span class="tt">The principle that the same mathematical behavior appears in wildly different systems near their tipping points. Databases, ecosystems, and magnets can share the same warning signals &mdash; not by analogy, but by mathematical necessity.</span></span> is what makes early warning signals powerful &mdash; and it
+    is identical. This <span class="tip" tabindex="0">universality<span class="tt">The principle that the same mathematical behavior appears in wildly different systems near their tipping points. Lakes, ecosystems, and magnets can share the same warning signals &mdash; not by analogy, but by mathematical necessity.</span></span> is what makes early warning signals powerful &mdash; and it
     is what multicriticality disrupts.
   </p>
 </div>
@@ -465,7 +483,7 @@ through a smooth but increasingly dramatic transformation.
 
 <div class="viz fade-in">
   <div class="viz-label">Phase Diagram &mdash; Single Critical Point</div>
-  <svg id="pd-single" viewBox="0 0 600 380" style="max-height: 380px;">
+  <svg id="pd-single" viewBox="0 0 600 380" style="max-height: 380px;" role="img" aria-label="2. The Phase Diagram. Labelled: Parameter 1 (e.g., Temperature), Parameter 2 (e.g., Pressure), Phase A, Phase B, Critical Point, Phase Boundary.">
     <!-- Background regions -->
     <defs>
       <linearGradient id="phaseA-grad" x1="0" y1="0" x2="1" y2="1">
@@ -526,8 +544,8 @@ transition is abrupt &mdash; less warning, harder to detect.
 <h2 class="fade-in"><span class="sn">3.</span> When Boundaries Collide</h2>
 
 <p class="fade-in">
-Real systems rarely have just one tipping point. A database has connection limits <em>and</em>
-memory limits <em>and</em> disk I/O limits. A material has temperature-driven transitions
+Real systems rarely have just one tipping point. A lake has a nutrient threshold <em>and</em>
+a temperature threshold <em>and</em> a light-attenuation threshold. A material has temperature-driven transitions
 <em>and</em> pressure-driven transitions <em>and</em> composition-driven transitions.
 Each threshold has its own phase boundary in the diagram.
 </p>
@@ -543,11 +561,37 @@ changes qualitatively. Different <span class="tip" tabindex="0">critical exponen
 Different warning signals.
 </p>
 
+
+<div class="jx fade-in" id="jx">
+  <div class="jx-head">
+    <h3>Where the two lines meet</h3>
+    <button class="jx-btn" id="jx-btn" aria-pressed="false">&#9654; Play</button>
+    <button class="jx-btn" id="jx-reset">Reset</button>
+  </div>
+  <p class="jx-hint">A schematic, not a specific material. Tune the second control parameter
+  <em>g</em> and walk the phase boundary. The boundary does not simply move &mdash; partway along, its
+  <em>character</em> changes. The point where it changes is the multicritical point.</p>
+
+  <div class="jx-body">
+    <svg id="jx-svg" viewBox="0 0 420 270" role="img"
+         aria-label="A schematic phase diagram with temperature on the horizontal axis and a second control parameter g on the vertical axis. A continuous, second-order transition line runs into a junction point, where it changes into a first-order, discontinuous line. A marker walks along the boundary and reports which kind of transition it is crossing."></svg>
+    <div class="jx-read">
+      <div class="jx-row"><span class="jx-k">second parameter g</span><span class="jx-v" id="jx-g">0.00</span></div>
+      <div class="jx-row"><span class="jx-k">boundary type</span><span class="jx-v" id="jx-type">continuous</span></div>
+      <div class="jx-row"><span class="jx-k">order parameter</span><span class="jx-v" id="jx-op">grows smoothly</span></div>
+      <div class="jx-row"><span class="jx-k">early warning</span><span class="jx-v" id="jx-ews">available</span></div>
+      <label for="jx-range" style="display:block;font-size:0.76rem;color:var(--line);margin-top:0.8rem">walk along the boundary</label>
+      <input type="range" id="jx-range" class="jx-slider" min="0" max="100" value="0" aria-label="Walk along the phase boundary, from the purely continuous branch, through the junction, onto the discontinuous branch">
+    </div>
+  </div>
+  <p class="jx-cap" id="jx-cap">Press Play to walk along the boundary.</p>
+</div>
+
 <div class="interactive-box fade-in">
   <h3>The Multicritical Point</h3>
   <p class="hint">Select an approach path to see how the system behaves depending on which boundary it approaches.</p>
   <div class="viz" style="margin: 1rem 0 0;">
-    <svg id="pd-multi" viewBox="0 0 600 420">
+    <svg id="pd-multi" viewBox="0 0 600 420" role="img" aria-label="The Multicritical Point. Labelled: Phase A, e.g., Normal, Phase B, e.g., Degraded, Phase C, e.g., Failed, Multicritical Point, Boundary 1.">
       <defs>
         <linearGradient id="mc-phaseA" x1="0" y1="0" x2="0.5" y2="0.5">
           <stop offset="0%" stop-color="rgba(59,130,246,0.06)"/>
@@ -678,12 +722,12 @@ has reached its individual threshold.
   </div>
 
   <div class="slider-row">
-    <label>CPU Load</label>
+    <label>Nutrient Load</label>
     <input type="range" id="param-a" min="0" max="100" value="35">
     <span class="value" id="val-a">35%</span>
   </div>
   <div class="slider-row">
-    <label>Memory Pressure</label>
+    <label>Water Temperature</label>
     <input type="range" id="param-b" min="0" max="100" value="30">
     <span class="value" id="val-b">30%</span>
   </div>
@@ -734,8 +778,8 @@ coupling effect: <strong>the combination is more dangerous than the sum of the p
 <h2 class="fade-in"><span class="sn">5.</span> What Standard Detection Misses</h2>
 
 <p class="fade-in">
-Standard monitoring systems watch parameters independently. Each parameter gets its own
-threshold, its own alarm, its own dashboard gauge. This is equivalent to assuming the
+Standard monitoring watches each parameter independently. Every parameter gets its own
+threshold, its own alarm, its own gauge. This is equivalent to assuming the
 failure boundary is a rectangle &mdash; no coupling between parameters.
 </p>
 
@@ -770,10 +814,9 @@ Move the slider to see how the same system state appears under two detection par
   <h4 class="amber">The Expensive Failures</h4>
   <p>
     Most system failures have a single dominant cause &mdash; and standard monitoring
-    catches those. But catastrophic failures &mdash; the cascading, multi-cause outages
-    that take down entire systems &mdash; require multiple contributing causes
-    approaching their thresholds simultaneously.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> These are the expensive ones. The ones
-    that cost millions per hour. And they are structurally invisible to
+    catches those. But catastrophic failures &mdash; the cascading, multi-cause collapses
+    that take down a whole system &mdash; require multiple contributing causes
+    approaching their thresholds simultaneously.<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> These are the expensive ones. And they are structurally invisible to
     independent-parameter detection &mdash; the same regime in which standard early-warning signals are known to lose skill as transitions accelerate or cascade.<sup><a class="fn" href="#fn7" id="fnref7">7</a></sup>
   </p>
 </div>
@@ -797,9 +840,19 @@ structure near coupled tipping points.
   <div class="example-card">
     <h4><span class="ex-icon" style="color: var(--blue);">&#9679;</span> Water</h4>
     <p>The liquid-gas <span class="tip" tabindex="0">critical point<span class="tt">Where the distinction between liquid and gas disappears &mdash; above it, there&rsquo;s only one fluid phase. Discovered experimentally in CO&#8322; in 1869.</span></span> (single) has been understood since 1869.<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup>
-    Experimental and computational evidence (2024&ndash;2026) for a liquid-liquid critical point creates a <strong><span class="tip" tabindex="0">tricritical<span class="tt">A specific type of multicritical point where three phase boundaries and three phases meet. The simplest and most-studied kind of multicritical point.</span></span></strong>
-    geometry where two transition lines meet.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> The <span class="tip" tabindex="0">critical exponent<span class="tt">&beta; (beta) describes how the difference between two phases vanishes as you approach the critical point. A change in &beta; means fundamentally different transition physics &mdash; not just a different system, but a different kind of transition.</span></span> changes from <span class="math">&beta;</span>&nbsp;&asymp;&nbsp;0.326
-    to <span class="math">&beta;</span>&nbsp;=&nbsp;0.25.</p>
+    Deeply supercooled water is thought to have a <em>second</em> critical point, and there is now
+    experimental evidence for it: a critical divergence near 210&nbsp;&plusmn;&nbsp;10&nbsp;K, with
+    enhanced density fluctuations and a crossover from a discontinuous to a continuous
+    transition.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup>
+    Separately, simulation work argues that water&rsquo;s ferroelectric and liquid&ndash;liquid
+    transitions are &ldquo;two facets of the same underlying phenomenon,&rdquo; which would make
+    density and polarization <em>coupled</em> rather than independent.</p>
+    <p class="ex-caveat" style="font-size:0.82rem;color:var(--line);border-left:2px solid var(--amber);padding-left:0.7rem;margin-top:0.6rem;">
+    <strong>Stated carefully, because it is easy to overstate.</strong> None of these papers
+    describes water as multicritical, bicritical or tricritical, and no multicritical exponent for
+    water is claimed here. A second critical point is not by itself a multicritical point. Water is
+    on this list as a system where <em>coupling between two order parameters</em> is under active
+    investigation &mdash; not as a confirmed example.</p>
     <div class="ex-params">Parameters: T, P, density-polarization</div>
   </div>
 
@@ -819,14 +872,9 @@ structure near coupled tipping points.
     <div class="ex-params">Parameters: prey density, predation, habitat</div>
   </div>
 
-  <div class="example-card">
-    <h4><span class="ex-icon" style="color: var(--purple);">&#9679;</span> Infrastructure</h4>
-    <p>A database under combined connection pressure and memory pressure. The failure mode
-    at pure connection saturation (timeout cascade) differs from pure memory exhaustion (OOM kill).
-    Where both approach threshold: a qualitatively different failure with no single-parameter precursor.</p>
-    <div class="ex-params">Parameters: connections, memory, disk I/O</div>
-  </div>
 </div>
+
+
   </div>
 </details>
 
@@ -893,7 +941,7 @@ third.
     <div class="req-num">3</div>
     <div class="req-body">
       <h4>Coupling Detection</h4>
-      <p>Detect <span class="tip" tabindex="0">asymmetric interactions<span class="tt">Interactions where the effect is not equal in both directions &mdash; CPU load might strongly affect memory pressure, but memory pressure might weakly affect CPU. This directional asymmetry is a hallmark of real coupling vs. coincidence.</span></span> between multiple parameters. This is what makes
+      <p>Detect <span class="tip" tabindex="0">asymmetric interactions<span class="tt">Interactions where the effect is not equal in both directions &mdash; nutrient load might strongly raise algal biomass, while algal biomass feeds back only weakly on nutrient load. This directional asymmetry is a hallmark of real coupling vs. coincidence.</span></span> between multiple parameters. This is what makes
       it <em>multi</em>critical rather than N independent single-parameter detectors. The
       coupling between parameters &mdash; how one parameter&rsquo;s gradient affects
       another&rsquo;s &mdash; is the signal that distinguishes a multicritical approach from
@@ -947,7 +995,7 @@ does not depend on what the system is made of.
 <div class="footnotes fade-in">
   <ol>
     <li id="fn1">T. Andrews, &ldquo;On the Continuity of the Gaseous and Liquid States of Matter,&rdquo; <em>Phil. Trans. R. Soc.</em> <strong>159</strong>, 575&ndash;590 (1869). <a href="#fnref1">&uarr;</a></li>
-    <li id="fn2">F. Sciortino <em>et al.</em>, &ldquo;Liquid-liquid critical point in supercooled water,&rdquo; <em>PNAS</em> <strong>121</strong> (2024); S. You <em>et al.</em>, &ldquo;Experimental observation of the liquid-liquid critical point,&rdquo; <em>Science</em> (2026); Li <em>et al.</em>, &ldquo;Evidence for the generic existence of two local structures in liquid water,&rdquo; <em>Nature Physics</em> (2026), doi:10.1038/s41567-026-03301-8 (reaction-pathway topology near the liquid&ndash;liquid critical point). <a href="#fnref2">&uarr;</a></li>
+    <li id="fn2">S. You <em>et al.</em>, &ldquo;Experimental evidence of a liquid&ndash;liquid critical point in supercooled water,&rdquo; <em>Science</em> <strong>391</strong>, 1387 (2026), doi:10.1126/science.aec0018 &mdash; reports a critical divergence at 210&nbsp;&plusmn;&nbsp;10&nbsp;K from isochoric heating of amorphous ices probed by X-ray scattering. M.G. Izzo, J. Russo &amp; G. Pastore, &ldquo;The interplay between liquid&ndash;liquid and ferroelectric phase transitions in supercooled water,&rdquo; <em>PNAS</em> <strong>121</strong>(47), e2412456121 (2024), doi:10.1073/pnas.2412456121 &mdash; argues from molecular dynamics and mean-field density functional theory that the two transitions are &ldquo;two facets of the same underlying phenomenon.&rdquo; L. Li, J. Zhong, J. Zhang, Z. Wang &amp; X.C. Zeng, &ldquo;Evidence for the generic existence of two local structures in liquid water,&rdquo; <em>Nature Physics</em> (2026), doi:10.1038/s41567-026-03301-8 &mdash; finds the interconversion pathway has three saddle points near the high-density/low-density boundary and one away from it. <em>None of these three papers uses the term multicritical, bicritical or tricritical.</em> <a href="#fnref2">&uarr;</a></li>
     <li id="fn3">M. Blume, <em>Phys. Rev.</em> <strong>141</strong>, 517 (1966); H.W.J. Capel, <em>Physica</em> <strong>32</strong>, 966 (1966). <a href="#fnref3">&uarr;</a></li>
     <li id="fn4">R.I. Cook, &ldquo;How Complex Systems Fail,&rdquo; Cognitive Technologies Laboratory, University of Chicago (2000). See especially observation 11: &ldquo;catastrophe requires multiple failures.&rdquo; <a href="#fnref4">&uarr;</a></li>
     <li id="fn5">R.B. Griffiths, &ldquo;Thermodynamics Near the Two-Fluid Critical Mixing Point in He&#179;-He&#8308;,&rdquo; <em>Phys. Rev. Lett.</em> <strong>24</strong>, 715 (1970). I.D. Lawrie &amp; S. Sarbach, &ldquo;Theory of Tricritical Points,&rdquo; in <em>Phase Transitions and Critical Phenomena</em>, Vol. 9 (1984). <a href="#fnref5">&uarr;</a></li>
@@ -1368,11 +1416,11 @@ const COUPLING = {
     ctx.fillStyle = C.line;
     ctx.font = '12px system-ui';
     ctx.textAlign = 'center';
-    ctx.fillText('CPU Load →', px(50), this.H - 8);
+    ctx.fillText('Nutrient Load →', px(50), this.H - 8);
     ctx.save();
     ctx.translate(14, py(50));
     ctx.rotate(-Math.PI / 2);
-    ctx.fillText('Memory Pressure →', 0, 0);
+    ctx.fillText('Water Temperature →', 0, 0);
     ctx.restore();
 
     // Tick labels
@@ -1511,17 +1559,17 @@ const DETECT = {
 
   draw(pct) {
     // Coupled approach: both parameters rise together along a diagonal
-    const cpuLoad = pct * 0.82;
-    const memLoad = pct * 0.78;
-    const diskLoad = pct * 0.45;
+    const nutrientLoad = pct * 0.82;
+    const tempLoad = pct * 0.78;
+    const turbidity = pct * 0.45;
 
-    this.drawGauges(cpuLoad, memLoad, diskLoad);
-    this.drawPhase(cpuLoad, memLoad, pct);
+    this.drawGauges(nutrientLoad, tempLoad, turbidity);
+    this.drawPhase(nutrientLoad, tempLoad, pct);
 
     const desc = document.getElementById('detect-desc');
-    const coupled = Math.pow(cpuLoad/100, 1.4) + Math.pow(memLoad/100, 1.4);
+    const coupled = Math.pow(nutrientLoad/100, 1.4) + Math.pow(tempLoad/100, 1.4);
     if (coupled > 1) {
-      if (cpuLoad <= 70 && memLoad <= 70) {
+      if (nutrientLoad <= 70 && tempLoad <= 70) {
         desc.innerHTML = '<span style="color:var(--red);font-weight:600;">Every gauge reads OK — but the coupled system has already crossed the multicritical boundary.</span> This is exactly the scenario standard monitoring misses.';
       } else {
         desc.innerHTML = '<span style="color:var(--red);font-weight:600;">Gauges show only moderate warnings — no alarm triggered — but the coupled system has crossed the multicritical boundary.</span> The curved boundary was crossed before any individual threshold.';
@@ -1533,14 +1581,14 @@ const DETECT = {
     }
   },
 
-  drawGauges(cpu, mem, disk) {
+  drawGauges(nutrient, temp, turbidity) {
     const ctx = this.gCtx;
     ctx.clearRect(0, 0, this.W, this.H);
 
     const gauges = [
-      { label: 'CPU', value: cpu, max: 100 },
-      { label: 'Memory', value: mem, max: 100 },
-      { label: 'Disk I/O', value: disk, max: 100 },
+      { label: 'Nutrients', value: nutrient, max: 100 },
+      { label: 'Temperature', value: temp, max: 100 },
+      { label: 'Turbidity', value: turbidity, max: 100 },
     ];
 
     const gw = (this.W - 40) / 3;
@@ -1586,7 +1634,7 @@ const DETECT = {
     });
   },
 
-  drawPhase(cpu, mem, pct) {
+  drawPhase(nutrient, temp, pct) {
     const ctx = this.pCtx;
     ctx.clearRect(0, 0, this.W, this.H);
 
@@ -1651,11 +1699,11 @@ const DETECT = {
     ctx.fillStyle = C.muted;
     ctx.font = '10px system-ui';
     ctx.textAlign = 'center';
-    ctx.fillText('CPU', px(50), this.H - 5);
+    ctx.fillText('Nutrients', px(50), this.H - 5);
     ctx.save();
     ctx.translate(10, py(50));
     ctx.rotate(-Math.PI/2);
-    ctx.fillText('Memory', 0, 0);
+    ctx.fillText('Temperature', 0, 0);
     ctx.restore();
 
     // Trail
@@ -1675,18 +1723,18 @@ const DETECT = {
     }
 
     // State point
-    const coupled = Math.pow(cpu/100, p) + Math.pow(mem/100, p);
+    const coupled = Math.pow(nutrient/100, p) + Math.pow(temp/100, p);
     const dotColor = coupled > 1 ? C.red : (coupled > 0.7 ? C.amber : C.green);
 
     ctx.beginPath();
-    ctx.arc(px(cpu), py(mem), 8, 0, Math.PI * 2);
+    ctx.arc(px(nutrient), py(temp), 8, 0, Math.PI * 2);
     ctx.fillStyle = dotColor;
     ctx.globalAlpha = 0.25;
     ctx.fill();
     ctx.globalAlpha = 1;
 
     ctx.beginPath();
-    ctx.arc(px(cpu), py(mem), 4, 0, Math.PI * 2);
+    ctx.arc(px(nutrient), py(temp), 4, 0, Math.PI * 2);
     ctx.fillStyle = dotColor;
     ctx.fill();
     ctx.strokeStyle = C.heading;
@@ -1723,6 +1771,130 @@ document.addEventListener('DOMContentLoaded', () => {
   COUPLING.init();
   DETECT.init();
 });
+
+
+
+/* ============================================================
+   ANIMATION: two critical lines meeting at a junction.
+   Deliberately schematic and material-free. It illustrates the
+   DEFINITION of a multicritical point: the place on a phase
+   boundary where the order of the transition changes because a
+   second control parameter has been tuned to a special value.
+   Classic realisation: the Blume-Capel model (fn3); the term
+   "tricritical point" is Griffiths 1970 (fn5).
+   ============================================================ */
+(function () {
+  var svg = document.getElementById('jx-svg');
+  if (!svg) return;
+  var elG = document.getElementById('jx-g'), elT = document.getElementById('jx-type'),
+      elO = document.getElementById('jx-op'), elE = document.getElementById('jx-ews'),
+      cap = document.getElementById('jx-cap'), btn = document.getElementById('jx-btn'),
+      rst = document.getElementById('jx-reset'), rng = document.getElementById('jx-range');
+
+  var W = 420, H = 270, L = 44, R = 16, T = 16, B = 34;
+  var GREEN = '#22c55e', RED = '#ef4444', AMBER = '#f59e0b', LINE = '#94a3b8',
+      DIM = '#334155', MUT = '#475569', BLUE = '#3b82f6';
+  var JUNC = 0.55;                    /* fraction of the walk at which character changes */
+  var u = 0, timer = null;
+
+  /* boundary curve in normalised coords: x(t), y(t) for t in 0..1 */
+  function bx(t) { return L + (0.12 + 0.76 * t) * (W - L - R); }
+  function by(t) { return T + (0.18 + 0.62 * Math.pow(t, 1.35)) * (H - T - B); }
+
+  function draw() {
+    var t = u / 100, o = [];
+    var jx = bx(JUNC), jy = by(JUNC);
+
+    /* axes */
+    o.push('<line x1="' + L + '" y1="' + (H - B) + '" x2="' + (W - R) + '" y2="' + (H - B) + '" stroke="' + DIM + '"/>');
+    o.push('<line x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + (H - B) + '" stroke="' + DIM + '"/>');
+    o.push('<text x="' + ((L + W - R) / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="9" fill="' + MUT + '">temperature &rarr;</text>');
+    o.push('<text x="14" y="' + ((T + H - B) / 2) + '" font-size="9" fill="' + MUT + '" transform="rotate(-90 14 ' + ((T + H - B) / 2) + ')" text-anchor="middle">second parameter g &rarr;</text>');
+
+    /* phase regions */
+    o.push('<text x="' + (L + 26) + '" y="' + (T + 24) + '" font-size="9" fill="' + BLUE + '">ordered</text>');
+    o.push('<text x="' + (W - R - 30) + '" y="' + (H - B - 14) + '" text-anchor="end" font-size="9" fill="' + LINE + '">disordered</text>');
+
+    /* the two branches of the boundary */
+    function branch(t0, t1, col, dash) {
+      var d = '', n = 40, i, tt;
+      for (i = 0; i <= n; i++) { tt = t0 + (t1 - t0) * i / n; d += (i ? 'L' : 'M') + bx(tt).toFixed(1) + ',' + by(tt).toFixed(1) + ' '; }
+      return '<path d="' + d + '" fill="none" stroke="' + col + '" stroke-width="2.4"' + (dash ? ' stroke-dasharray="7 5"' : '') + '/>';
+    }
+    o.push(branch(0, JUNC, GREEN, false));
+    o.push(branch(JUNC, 1, RED, true));
+    o.push('<text x="' + (bx(0.2) - 4) + '" y="' + (by(0.2) - 9) + '" font-size="8.5" fill="' + GREEN + '">second order &middot; continuous</text>');
+    o.push('<text x="' + (bx(0.86) + 4) + '" y="' + (by(0.86) + 15) + '" text-anchor="end" font-size="8.5" fill="' + RED + '">first order &middot; discontinuous</text>');
+
+    /* the junction */
+    var reached = t >= JUNC;
+    if (reached) o.push('<circle cx="' + jx + '" cy="' + jy + '" r="12" fill="' + AMBER + '" opacity="0.18"/>');
+    o.push('<circle cx="' + jx + '" cy="' + jy + '" r="5" fill="' + AMBER + '"/>');
+    o.push('<text x="' + (jx + 10) + '" y="' + (jy - 8) + '" font-size="9" fill="' + AMBER + '">multicritical point</text>');
+
+    /* the walker, plus the crossing it is making (perpendicular-ish tick) */
+    var wx = bx(t), wy = by(t), col = t < JUNC ? GREEN : RED;
+    o.push('<line x1="' + (wx - 16) + '" y1="' + (wy + 12) + '" x2="' + (wx + 16) + '" y2="' + (wy - 12) + '" stroke="' + col + '" stroke-width="1.2" opacity="0.7"/>');
+    o.push('<circle cx="' + wx + '" cy="' + wy + '" r="5.5" fill="' + col + '" stroke="#f1f5f9" stroke-width="1.2"/>');
+
+    /* inset: what the order parameter does on this crossing */
+    var ix = W - R - 96, iy = T + 6, iw = 84, ih = 46;
+    o.push('<rect x="' + ix + '" y="' + iy + '" width="' + iw + '" height="' + ih + '" fill="' + DIM + '" opacity="0.28" rx="4"/>');
+    var d2 = '', k, n2 = 24;
+    for (k = 0; k <= n2; k++) {
+      var f = k / n2, val;
+      if (t < JUNC) val = f < 0.5 ? 0 : Math.pow((f - 0.5) / 0.5, 0.33);
+      else val = f < 0.5 ? 0 : 1;
+      d2 += (k ? 'L' : 'M') + (ix + 5 + f * (iw - 10)).toFixed(1) + ',' + (iy + ih - 6 - val * (ih - 14)).toFixed(1) + ' ';
+    }
+    o.push('<path d="' + d2 + '" fill="none" stroke="' + col + '" stroke-width="1.8"/>');
+    o.push('<text x="' + (ix + iw / 2) + '" y="' + (iy + ih + 9) + '" text-anchor="middle" font-size="7.5" fill="' + MUT + '">order parameter across the line</text>');
+
+    svg.innerHTML = o.join('');
+
+    var g = (t * 1.0);
+    elG.textContent = g.toFixed(2);
+    elT.textContent = t < JUNC ? 'continuous' : 'discontinuous';
+    elT.style.color = col;
+    elO.textContent = t < JUNC ? 'grows smoothly' : 'jumps';
+    elE.textContent = t < JUNC ? 'available' : 'little or none';
+    elE.style.color = t < JUNC ? GREEN : RED;
+
+    var c;
+    if (t < JUNC - 0.12) c = 'On this stretch the boundary is second order. The order parameter rises continuously from zero, correlations diverge, and the system slows down measurably on the way in — so there is something to detect.';
+    else if (t < JUNC) c = 'Approaching the junction. The continuous branch is about to end.';
+    else if (t < JUNC + 0.12) c = 'Past the junction. Same boundary, different physics: the order parameter now jumps discontinuously instead of growing from zero.';
+    else c = 'This is why a multicritical point is not just two thresholds drawn near each other. Tuning the second parameter through one special value changed the order of the transition — and with it the exponents, the universality class, and whether the approach announces itself at all. A detector calibrated on the continuous branch is calibrated for the wrong transition here.';
+    cap.textContent = c;
+
+    rng.value = u;
+    svg.setAttribute('aria-label',
+      'Schematic phase diagram. A continuous second-order boundary meets a discontinuous first-order boundary at a multicritical point. The walker is currently on the ' +
+      (t < JUNC ? 'continuous branch, where the order parameter grows smoothly from zero'
+                : 'discontinuous branch, where the order parameter jumps') + '.');
+  }
+
+  function stop() { if (timer) { clearInterval(timer); timer = null; } btn.innerHTML = '&#9654; Play'; btn.setAttribute('aria-pressed', 'false'); }
+  function play() {
+    if (u >= 100) u = 0;
+    timer = setInterval(function () { u += 1.1; if (u >= 100) { u = 100; draw(); stop(); return; } draw(); }, 70);
+    btn.innerHTML = '&#10073;&#10073; Pause'; btn.setAttribute('aria-pressed', 'true');
+  }
+  btn.addEventListener('click', function () { timer ? stop() : play(); });
+  rst.addEventListener('click', function () { stop(); u = 0; draw(); });
+  rng.addEventListener('input', function () { stop(); u = +rng.value; draw(); });
+
+  draw();
+  if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var started = false;
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting && !started) { started = true; play(); } });
+      }, { threshold: 0.3 }).observe(document.getElementById('jx'));
+    }
+  }
+})();
+
 </script>
 </body>
 </html>
