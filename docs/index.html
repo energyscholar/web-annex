@@ -28,9 +28,6 @@
     ls       — list visible tutorials
     status   — current level + visit count
     manifest — show complete site manifest with all levels
-
-  Phase ∞: this CLI stub supports future expansion into a full
-  mini-shell (xterm.js) mapping the tutorial tree as a filesystem.
 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Interactive tutorials spanning magnetospheric physics, complex systems, topological quantum computation, autocatalytic closure, AI governance, and more. Each tutorial stands alone. The cross-domain pattern emerges for those who read several.">
@@ -434,7 +431,7 @@ footer {
   <div class="card-thumb"><img src="art/thumbnails/search-suppression.svg" alt="" loading="lazy"></div>
   <div class="card-title">Content-Selective Search De-Indexing <span class="card-tag tag-research">Report</span></div>
   <div class="card-desc">Reproducibility report documenting content-selective removal of specific pages from search engine indices. Four test cases and two controls across Cryptome, Substack, and Slashdot, with methodology for independent verification.</div>
-  <div class="card-meta">Published June 2026</div>
+  <div class="card-meta">Posted June 2026</div>
 </a>
 
 </div>
@@ -465,15 +462,15 @@ footer {
 
 <div class="card-grid single">
 
-<a class="card" data-level="nav" href="letters/kw-norton/">
+<a class="card" data-level="nav" href="letters/topological-protection/">
   <div class="card-title">A Note on Topological Protection</div>
   <div class="card-desc">Technical correspondence on topological protection mechanisms.</div>
 </a>
 
 </div>
 
-<!-- Traveller RPG content is UNLISTED — see TUTORIAL-MANIFEST.md "Unlisted Pages".
-     Direct URL only; robots-disallowed. Do not add cards or search entries here. -->
+<!-- Traveller RPG content is UNLISTED. Direct URL only; robots-disallowed.
+     Do not add cards or search entries here. -->
 
 <!-- ============================================================ -->
 <h2 data-level="nav">Design</h2>
@@ -507,10 +504,6 @@ footer {
   Each return visit reveals a small increment (+2 tutorials).
   The breadth reveals itself; we never claim it.
 
-  EXTENSIBILITY: The CLI input/output architecture (text input → command
-  parser → output div) is the same pattern a full shell uses. Phase ∞:
-  swap the command dispatcher for xterm.js mapping the tutorial tree as
-  a virtual filesystem. Phase ∞b: Claude API conversational interface.
 -->
 
 <div class="cli-prompt">
@@ -565,7 +558,7 @@ footer {
     {level:'nav', path:'miller-tutorial/simulation.html', title:'Miller — Interactive Simulation', tags:'interactive'},
     {level:'nav', path:'miller-tutorial/replication.html', title:'Miller — Replication Results', tags:'research'},
     {level:'nav', path:'miller-tutorial/tests.html', title:'Miller — Test Suite', tags:'tests'},
-    {level:'nav', path:'letters/kw-norton/', title:'A Note on Topological Protection', tags:'letter'},
+    {level:'nav', path:'letters/topological-protection/', title:'A Note on Topological Protection', tags:'letter'},
     {level:'nav', path:'vtt-mockups/', title:'Shared Display Mockup', tags:'design'}
   ];
 

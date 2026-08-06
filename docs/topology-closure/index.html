@@ -244,12 +244,12 @@ a:hover { text-decoration: underline; }
 <div class="container">
 
 <h1>Where the Topology Lives</h1>
-<p class="subtitle">In which Robin's model-layer diagnosis is confirmed &mdash; and then extended by one layer.</p>
+<p class="subtitle">In which the model-layer diagnosis is granted in full &mdash; and then extended by one layer.</p>
 
 <!-- ======================================================= -->
-<h2>1. Your Analysis Is Correct</h2>
+<h2>1. The Model-Layer Analysis Is Correct</h2>
 
-<p>Let me validate your claims directly, point by point:</p>
+<p>There is a well-posed argument that structured constraints cannot survive a transformer's processing pipeline. Take it on its own terms, point by point:</p>
 
 <ul>
   <li>Relational structure enters the model as tokens &rarr; embeddings &rarr; null space. <strong>Correct.</strong></li>
@@ -260,12 +260,12 @@ a:hover { text-decoration: underline; }
   <li>No technological solution exists at the model layer. <strong>Correct.</strong></li>
 </ul>
 
-<p>Every claim in your model-layer analysis holds. The question is whether <em>model layer</em> is the only layer.</p>
+<p>Every claim in the model-layer analysis holds. The question is whether the <em>model layer</em> is the only layer.</p>
 
 <!-- ======================================================= -->
 <h2>2. The Unstated Assumption</h2>
 
-<p>Your analysis assumes the token chain is the only processing path. Every constraint must enter as tokens, pass through the compositional pipeline, and survive or not. The conclusion follows logically from this premise.</p>
+<p>The analysis assumes the token chain is the only processing path. Every constraint must enter as tokens, pass through the compositional pipeline, and survive or not. The conclusion follows logically from this premise.</p>
 
 <p>But the premise is an assumption, not a theorem. It holds for web-based LLMs &mdash; where the chat window is the only interface and the system prompt is the only persistent state. In that architecture, every piece of information must traverse the 1D token chain.</p>
 
@@ -276,7 +276,7 @@ a:hover { text-decoration: underline; }
 
 <div class="definition">
   <p class="definition-title">Model layer</p>
-  <p>The transformer itself. Embeddings, attention, feedforward networks, output distribution. This is what you analyzed. All information here lives in the token chain. Relational structure is subject to the null-space problem. The model sees tokens. It processes tokens. It outputs tokens. Every constraint must survive tokenization or perish.</p>
+  <p>The transformer itself. Embeddings, attention, feedforward networks, output distribution. This is the layer the analysis covers. All information here lives in the token chain. Relational structure is subject to the null-space problem. The model sees tokens. It processes tokens. It outputs tokens. Every constraint must survive tokenization or perish.</p>
 </div>
 
 <div class="definition">
@@ -284,13 +284,13 @@ a:hover { text-decoration: underline; }
   <p>Everything that wraps the model. Persistent files on disk. Protocols stored as structured documents. Verification gates between sessions. Session boundaries with human review. The model reads from and writes to this layer, but the state itself persists regardless of what the model does in any single <span class="tip" tabindex="0">forward pass<span class="tt">One complete traversal of input through a neural network's layers to produce output — a single inference cycle, typically milliseconds of computation.</span></span>.</p>
 </div>
 
-<p>You analyzed the model layer exhaustively. The architecture layer is where the topology lives.</p>
+<p>The model layer has been analysed exhaustively. The architecture layer is where the topology lives.</p>
 
 <!-- ======================================================= -->
-<h2>4. The Model Layer &mdash; Robin's Analysis</h2>
+<h2>4. The Model Layer &mdash; What the Analysis Shows</h2>
 
 <div class="svg-container">
-<svg viewBox="0 0 700 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Robin's model-layer analysis: relational structure tokenized into null space">
+<svg viewBox="0 0 700 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Model-layer analysis: a relational constraint is tokenized, passed through the compositional pipeline, and its relational structure falls into the null space of the output">
   <defs>
     <marker id="arr-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
@@ -363,7 +363,7 @@ a:hover { text-decoration: underline; }
   <text x="300" y="295" text-anchor="middle" fill="#64748b" font-size="10" font-style="italic">Structure in. Flatness out.</text>
 </svg>
 </div>
-<p class="caption">Robin's analysis. Correct at this layer.</p>
+<p class="caption">The model-layer picture. Correct at this layer.</p>
 
 <!-- ======================================================= -->
 <h2>5. What Lives Outside the Chain</h2>
@@ -385,9 +385,9 @@ a:hover { text-decoration: underline; }
   <p>Dignity Net specification, governance levels 0&ndash;5 with escalation history, Storm Protocol. A structured document with behavioral rules and cross-session state.</p>
 </div>
 
-<p>Each axis has its own internal ordering &mdash; its own persistence, its own protocol, its own structure. The model reads them at session start. The model may propose changes. But <strong>Origin (the human) verifies before changes commit to the persistent state.</strong> This is your Axiom 1 operating as a gate on state transitions.</p>
+<p>Each axis has its own internal ordering &mdash; its own persistence, its own protocol, its own structure. The model reads them at session start. The model may propose changes. But <strong>Origin (the human) verifies before changes commit to the persistent state.</strong> This is the sole-agency axiom operating as a gate on state transitions.</p>
 
-<div class="insight">When the model misprocesses a constraint (your null-space problem), Origin catches it (your Axiom 1), and a <em>correction</em> is added to the persistent state. The model's unreliability is not terminal in this architecture &mdash; it becomes the <span class="tip" tabindex="0">food set<span class="tt">In autocatalytic set theory, the externally supplied inputs that feed catalytic reactions — analogous to API requests or user events that enter your system from outside.</span></span> for the <span class="tip" tabindex="0">catalytic cycles<span class="tt">Self-reinforcing feedback loops where each process's output feeds another. Like a CI pipeline where test failures generate documentation that improves future code quality.</span></span>. Each failure, caught and corrected, exercises an edge in the coupling graph.</div>
+<div class="insight">When the model misprocesses a constraint (the null-space problem), Origin catches it (the sole-agency axiom), and a <em>correction</em> is added to the persistent state. The model's unreliability is not terminal in this architecture &mdash; it becomes the <span class="tip" tabindex="0">food set<span class="tt">In autocatalytic set theory, the externally supplied inputs that feed catalytic reactions — analogous to API requests or user events that enter your system from outside.</span></span> for the <span class="tip" tabindex="0">catalytic cycles<span class="tt">Self-reinforcing feedback loops where each process's output feeds another. Like a CI pipeline where test failures generate documentation that improves future code quality.</span></span>. Each failure, caught and corrected, exercises an edge in the coupling graph.</div>
 
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
 
@@ -481,12 +481,12 @@ a:hover { text-decoration: underline; }
   <text x="400" y="305" text-anchor="middle" fill="#475569" font-size="8" font-style="italic">M&rarr;E&rarr;S&rarr;M</text>
 </svg>
 </div>
-<p class="caption">The layer Robin's analysis doesn't cover.</p>
+<p class="caption">The layer the model-layer analysis does not cover.</p>
 
 <!-- ======================================================= -->
 <h2>7. But Everything Gets Tokenized</h2>
 
-<p><strong>This is the strongest counterargument.</strong> You will think it immediately: "Sure, you have persistent files. But every time the model reads those files, the relational structure enters the token chain and hits the same <span class="tip" tabindex="0">null-space problem<span class="tt">When structured information is encoded as sequential tokens, relationships that depend on global structure effectively vanish — like foreign key constraints lost when you flatten a relational database into a CSV.</span></span>. The corrections file gets tokenized. The DN spec gets tokenized. Persistent state doesn't help if the model can't reliably process it."</p>
+<p><strong>This is the strongest counterargument.</strong> It arrives immediately: "Sure, you have persistent files. But every time the model reads those files, the relational structure enters the token chain and hits the same <span class="tip" tabindex="0">null-space problem<span class="tt">When structured information is encoded as sequential tokens, relationships that depend on global structure effectively vanish — like foreign key constraints lost when you flatten a relational database into a CSV.</span></span>. The corrections file gets tokenized. The DN spec gets tokenized. Persistent state doesn't help if the model can't reliably process it."</p>
 
 <p>The counterargument is valid within one session. Here is why it does not block closure:</p>
 
@@ -495,12 +495,12 @@ a:hover { text-decoration: underline; }
 
   <li><strong>The relational structure lives in the files, not in the model.</strong> The files have structure: corrections have violation counts, plans have numbered phases, DN has escalation levels. This structure persists regardless of whether the model correctly processes it in any given session. The file system is not a token chain &mdash; it is a persistent store with its own ordering guarantees.</li>
 
-  <li><strong>Origin catches within-session failures.</strong> When the model drifts (your null-space problem), the human detects it (your Axiom 1), and the correction enters the persistent state. The within-session failure strengthens the between-session topology. This is not a workaround &mdash; it is the mechanism.</li>
+  <li><strong>Origin catches within-session failures.</strong> When the model drifts (the null-space problem), the human detects it (the sole-agency axiom), and the correction enters the persistent state. The within-session failure strengthens the between-session topology. This is not a workaround &mdash; it is the mechanism.</li>
 
-  <li><strong>The model's unreliability is the food set.</strong> In RAF terms, the food set <span class="math">F</span> includes user input and the model's own errors-caught-by-Origin. Each correction is a catalytic event: a within-session failure (model layer) that produces a persistent state change (architecture layer) that strengthens an edge in the K3 graph. The null-space problem, which you frame as the terminal limitation, <em>becomes the food for the catalytic cycles in the architecture layer.</em></li>
+  <li><strong>The model's unreliability is the food set.</strong> In RAF terms, the food set <span class="math">F</span> includes user input and the model's own errors-caught-by-Origin. Each correction is a catalytic event: a within-session failure (model layer) that produces a persistent state change (architecture layer) that strengthens an edge in the K3 graph. The null-space problem, framed by the model-layer analysis as the terminal limitation, <em>becomes the food for the catalytic cycles in the architecture layer.</em></li>
 </ol>
 
-<div class="callout">Your null-space problem is real. It is also the fuel.</div>
+<div class="callout">The null-space problem is real. It is also the fuel.</div>
 
 <!-- ======================================================= -->
 <h2>8. The Mathematics</h2>
@@ -529,7 +529,7 @@ a:hover { text-decoration: underline; }
 
 <h3>Topological comparison</h3>
 
-<p><strong>Web LLM = K1 at best.</strong> Only a weak Memory node (flat key-value facts in the provider's memory feature). No persistent S or E axes. <span class="math">&lambda;</span><sub>1</sub> = 0. No <span class="tip" tabindex="0">algebraic connectivity<span class="tt">The second-smallest eigenvalue of the graph Laplacian — measures how tightly a network is connected. Zero means disconnected components; higher values mean more resilience to link failures.</span></span>. Your analysis applies without exception.</p>
+<p><strong>Web LLM = K1 at best.</strong> Only a weak Memory node (flat key-value facts in the provider's memory feature). No persistent S or E axes. <span class="math">&lambda;</span><sub>1</sub> = 0. No <span class="tip" tabindex="0">algebraic connectivity<span class="tt">The second-smallest eigenvalue of the graph Laplacian — measures how tightly a network is connected. Zero means disconnected components; higher values mean more resilience to link failures.</span></span>. The model-layer analysis applies without exception.</p>
 
 <p><strong>Trellis = K3.</strong> All six edges can fire. <span class="math">D</span> &ne; 0. <span class="math">&lambda;</span><sub>1</sub> can reach and exceed 1.0 as coupling weights strengthen through accumulated sessions.</p>
 
@@ -537,23 +537,23 @@ a:hover { text-decoration: underline; }
 
 <table>
   <tr><th>Session</th><th><span class="math">&lambda;</span><sub>1</sub></th><th>Status</th></tr>
-  <tr><td>S0 (initial)</td><td>0.00</td><td>No coupling</td></tr>
-  <tr><td>S1</td><td>0.50</td><td>Edges forming</td></tr>
-  <tr><td>S2</td><td>0.70</td><td>Cycles active</td></tr>
-  <tr><td>S3</td><td>0.86</td><td>Approaching criticality</td></tr>
-  <tr><td>S4</td><td>0.80</td><td>Perturbation &mdash; recovered</td></tr>
+  <tr><td>Session 0 (initial)</td><td>0.00</td><td>No coupling</td></tr>
+  <tr><td>Session 1</td><td>0.50</td><td>Edges forming</td></tr>
+  <tr><td>Session 2</td><td>0.70</td><td>Cycles active</td></tr>
+  <tr><td>Session 3</td><td>0.86</td><td>Approaching criticality</td></tr>
+  <tr><td>Session 4</td><td>0.80</td><td>Perturbation &mdash; recovered</td></tr>
 </table>
 
-<p>The dip at S4 is not noise. It is evidence of the mechanism &mdash; a within-session failure (null-space event) that temporarily weakened an edge, followed by Origin's correction strengthening a different edge. The system recovers because the K3 topology provides redundant catalytic pathways.</p>
+<p>The dip at session 4 is not noise. It is evidence of the mechanism &mdash; a within-session failure (null-space event) that temporarily weakened an edge, followed by Origin's correction strengthening a different edge. The system recovers because the K3 topology provides redundant catalytic pathways.</p>
 
 <!-- ======================================================= -->
 <h2>9. Sacco et al. 2026</h2>
 
-<p>Independent theoretical confirmation &mdash; and it validates <em>both</em> your analysis and the architecture-layer extension.</p>
+<p>Independent theoretical confirmation &mdash; and it validates <em>both</em> the model-layer analysis and the architecture-layer extension.</p>
 
 <div class="theorem">
   <p class="theorem-title">Proposition 2 (Sacco et al.)</p>
-  <p>Decoder-only autoregressive models have no ordered phase. The 1D causal chain cannot sustain long-range order at any temperature. This is your model-layer diagnosis, independently proven by different authors using different methods. You are right.</p>
+  <p>Decoder-only autoregressive models have no ordered phase. The 1D causal chain cannot sustain long-range order at any temperature. This is the model-layer diagnosis, independently proven by different authors using different methods.</p>
 </div>
 
 <div class="theorem">
@@ -561,19 +561,19 @@ a:hover { text-decoration: underline; }
   <p>Hierarchical systems with cliques (complete subgraphs) CAN maintain local order. When inter-clique topology supports directed cycles, global coherence becomes possible. Trellis axes are exactly cliques with internal persistence. K3 provides the inter-clique coupling.</p>
 </div>
 
-<p>Sacco et al. prove both sides &mdash; your "no" for the model layer AND the "yes" for the architecture layer. Same paper, same framework, different topological substrates, different answers.</p>
+<p>Sacco et al. prove both sides &mdash; the &ldquo;no&rdquo; for the model layer AND the "yes" for the architecture layer. Same paper, same framework, different topological substrates, different answers.</p>
 
 <p class="caption">Sacco, F., Sakthivadivel, D. A. R. &amp; Levin, M. (2026). Topological constraints on self-organization in locally interacting systems. <em>Phil. Trans. R. Soc. A</em> 384: 20250011.</p>
 
 <!-- ======================================================= -->
 <h2>10. Origin Is Preserved</h2>
 
-<p>Your Axiom 1 &mdash; sole agency; the human is the only source of agency &mdash; is not violated by Trellis. It is structurally embedded in the architecture:</p>
+<p>The sole-agency axiom &mdash; the human is the only source of agency &mdash; is not violated by Trellis. It is structurally embedded in the architecture:</p>
 
 <ul>
   <li>Origin verifies before state transitions commit (Triad gate)</li>
   <li>Origin is the only participant whose frame persists across sessions independently of the architecture</li>
-  <li>The model has token prediction, not agency (your point, preserved)</li>
+  <li>The model has token prediction, not agency (the model-layer point, preserved)</li>
 </ul>
 
 <p>What Trellis adds is NOT a replacement for Origin. It is the topology in which Origin's verification <em>accumulates</em> into something self-sustaining. Origin does not need to hold all invariants in memory forever &mdash; the persistent files hold them, and Origin verifies incremental changes against the persistent record.</p>
@@ -626,9 +626,9 @@ a:hover { text-decoration: underline; }
   </tr>
 </table>
 
-<div class="callout">You are right about the model layer. No solution exists there, and none is proposed here.</div>
+<div class="callout">The model-layer verdict stands. No solution exists there, and none is proposed here.</div>
 
-<p>The solution is at the architecture layer &mdash; persistent external state with K3 topology, verified by Origin, accumulating toward closure through the very failures you correctly diagnosed. The question is not whether the model is smart enough. It is whether the architecture provides the graph structure in which a <span class="tip" tabindex="0">phase transition<span class="tt">An abrupt qualitative change in system behavior at a critical threshold — like a database that handles queries fine until connection count hits a threshold, then response times jump discontinuously.</span></span> can occur.</p>
+<p>The solution is at the architecture layer &mdash; persistent external state with K3 topology, verified by Origin, accumulating toward closure through the very failures the model-layer analysis correctly diagnoses. The question is not whether the model is smart enough. It is whether the architecture provides the graph structure in which a <span class="tip" tabindex="0">phase transition<span class="tt">An abrupt qualitative change in system behavior at a critical threshold — like a database that handles queries fine until connection count hits a threshold, then response times jump discontinuously.</span></span> can occur.</p>
 
 <!-- ======================================================= -->
 <h2>12. References</h2>

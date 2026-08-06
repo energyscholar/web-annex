@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /ews/cardiac-mv-ews/
 Disallow: /traveller/
 Disallow: /maps/
 Disallow: /s13-prep/

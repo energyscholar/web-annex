@@ -475,7 +475,7 @@
 <p>That's it. No memory beyond the current state. No learning within a game. No model of the opponent. No reasoning. Just: look at state, produce output, read input, transition.</p>
 
 <div class="figure">
-  <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Machines. Labelled: 1-STATE: ALWAYS DEFECT, S₀, out: 1, 0,1, No memory. No conditionality., Cannot respond to opponent., ASOCIAL, 2-STATE: TIT-FOR-TAT.">
     <!-- One-state automaton: Always Defect -->
     <text x="140" y="30" fill="#6a7a8c" font-family="Courier New" font-size="13" text-anchor="middle">1-STATE: ALWAYS DEFECT</text>
     <circle cx="140" cy="130" r="45" fill="none" stroke="#ef5350" stroke-width="2"/>
@@ -570,7 +570,7 @@
 <p>This is the book's central finding. Social behavior requires crossing <em>two simultaneous thresholds</em>:</p>
 
 <div class="figure">
-  <svg viewBox="0 0 750 440" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 750 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="3. The Computational Threshold. Labelled: ROUNDS OF INTERACTION, AUTOMATON STATES, 10, DEFECT, MOSTLY D, COOPERATE.">
     <!-- Axes -->
     <line x1="100" y1="380" x2="700" y2="380" stroke="#6a7a8c" stroke-width="1.5"/>
     <line x1="100" y1="380" x2="100" y2="40" stroke="#6a7a8c" stroke-width="1.5"/>
@@ -692,7 +692,7 @@
 <p>How does the system get from asocial to social? Not gradually. Miller identifies a six-stage <span class="accent">transition motif</span> that repeats across all his experiments:</p>
 
 <div class="figure">
-  <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="4. Revolutions by Evolution. Labelled: GENERATIONS →, COOPERATION, DEFECTION, STAGE 1, PRE: α vs β, mutual defection, STAGE 2, NEUTRAL ν.">
     <!-- Timeline -->
     <line x1="60" y1="440" x2="740" y2="440" stroke="#6a7a8c" stroke-width="1.5"/>
     <text x="400" y="480" fill="#6a7a8c" font-family="Courier New" font-size="12" text-anchor="middle">GENERATIONS →</text>
@@ -989,7 +989,7 @@
 <h2>9. Intellectual Genealogy</h2>
 
 <div class="figure">
-  <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="9. Intellectual Genealogy. Labelled: JOHN HOLLAND, genetic algorithms, CAS, ROBERT AXELROD, evolution of cooperation, HAL VARIAN, microeconomics (advisor), W. BRIAN ARTHUR, increasing returns, SFI.">
     <!-- Top row: Ancestors -->
     <rect x="20" y="20" width="160" height="55" rx="4" fill="none" stroke="#ce93d8" stroke-width="1.5"/>
     <text x="100" y="45" fill="#ce93d8" font-family="Courier New" font-size="11" text-anchor="middle">JOHN HOLLAND</text>
@@ -1057,7 +1057,7 @@
 <h3>The Parameters That Change</h3>
 
 <div class="figure">
-  <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Parameters That Change. Labelled: MILLER&#x27;S AUTOMATA, LLM AGENTS, INTERNAL STATES, 1-5 states, fully enumerable, combinatorially tractable, ~10¹² parameters, effectively infinite, not enumerable, MEMORY.">
     <!-- Header -->
     <text x="200" y="30" fill="#ef5350" font-family="Courier New" font-size="14" text-anchor="middle">MILLER'S AUTOMATA</text>
     <text x="600" y="30" fill="#4fc3f7" font-family="Courier New" font-size="14" text-anchor="middle">LLM AGENTS</text>
@@ -1168,10 +1168,10 @@
 
 <!-- ============================================================ -->
 <section id="collaboration">
-<h2>11. Collaboration Surface</h2>
+<h2>11. Three Substrates, One Threshold</h2>
 
 <div class="figure">
-  <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="11. Three Substrates, One Threshold. Labelled: KAUFFMAN, catalytic closure, molecular diversity threshold, RAF theory, MILLER, computational closure, state-complexity threshold, coevolving automata.">
     <!-- Three circles - Venn-like -->
     <ellipse cx="250" cy="170" rx="190" ry="140" fill="none" stroke="#ce93d8" stroke-width="1.5" stroke-dasharray="4,4"/>
     <text x="130" y="70" fill="#ce93d8" font-family="Courier New" font-size="12">KAUFFMAN</text>
@@ -1200,7 +1200,7 @@
   <div class="figure-caption">Figure 6 — The three-domain convergence. Kauffman's molecules, Miller's automata, and Stephenson's governance institutions all exhibit phase transitions from non-closure to closure at identifiable thresholds. Nobody has mapped all three explicitly.</div>
 </div>
 
-<h3>Where You Converge</h3>
+<h3>Three Closure Programmes Compared</h3>
 
 <table>
   <tr>
@@ -1241,50 +1241,37 @@
   </tr>
 </table>
 
-<h3>Concrete Collaboration Possibilities</h3>
+<h3>Open Questions</h3>
+
+<p>The comparison above is a claim about mathematical structure, not about analogy. If it holds,
+three questions follow directly, and none of them has been answered:</p>
 
 <div class="card highlight">
-  <div class="card-title">1. EXTEND EX MACHINA TO LLM AGENTS</div>
-  <p>Run Miller's exact experimental setup — but substitute LLMs for Moore machines. Use simple API calls as "moves" in iterated games. Systematically vary: model size (proxy for "states"), context window (proxy for "rounds"), number of distinct models (proxy for "population diversity"). Does the threshold structure survive? Does the epochal dynamics pattern appear? This is a publishable experiment that neither of you could do alone — you bring the governance framing and the AI-agent context, he brings the game-theoretic methodology and the baseline results.</p>
+  <div class="card-title">1. DOES THE THRESHOLD SURVIVE RICHER AGENTS?</div>
+  <p>Miller's result is that cooperation appears once agents cross a minimal computational
+  threshold &mdash; two states, two rounds, no design required. Whether that threshold structure
+  persists when the agents are far richer than Moore machines is an open empirical question.
+  A parameter sweep over agent capacity, interaction history length and population diversity
+  would answer it.</p>
 </div>
 
 <div class="card highlight">
-  <div class="card-title">2. RAF FORMALIZATION OF EX MACHINA RESULTS</div>
-  <p>Miller's "Eightfold Path" identifies eight behavioral archetypes that emerge at the threshold. Ask: do these eight strategies form an autocatalytic set? Does each strategy's viability depend on the presence of others? If so, the emergence of social behavior in Ex Machina is literally an RAF — a self-sustaining set of strategies that catalyze each other's persistence. This would unify Kauffman and Miller formally, not just by analogy.</p>
+  <div class="card-title">2. ARE THE EMERGENT STRATEGIES AN AUTOCATALYTIC SET?</div>
+  <p>Miller's &ldquo;Eightfold Path&rdquo; identifies eight behavioral archetypes that emerge at the
+  threshold. Do these strategies form a reflexively autocatalytic, food-generated set &mdash; does each
+  strategy's viability depend on the presence of others? Note the caveat that applies to all such
+  work: <em>binary</em> RAF existence is generic at moderate catalysis density, so demonstrating
+  that the set &ldquo;is an RAF&rdquo; would establish very little on its own. The informative
+  quantity is the fraction of the reaction set that is non-zero under perturbation, not the
+  yes/no existence result.</p>
 </div>
 
 <div class="card highlight">
-  <div class="card-title">3. GOVERNANCE AS THE THIRD SUBSTRATE</div>
-  <p>The three-domain table above is a paper. Kauffman (chemistry → life), Miller (computation → social behavior), Stephenson (structure → governance). Three instances of the same phase-transition pattern. The convergent discovery argument: these aren't analogies — they're the same mathematical structure on different substrates. Miller knows Kauffman's work and respects it. He hasn't made this connection. You have.</p>
-</div>
-
-<div class="card highlight">
-  <div class="card-title">4. ANTs FOR GOVERNANCE MODELS</div>
-  <p>Miller's Active Nonlinear Tests — using genetic algorithms to probe models for parameter combinations that break predictions — could be applied to governance models. What parameter combinations break a self-sustaining governance structure? This is a natural extension of ANTs into your domain, and Miller literally invented the methodology.</p>
-</div>
-
-<h3>What He Brings That You Don't Have</h3>
-
-<ul>
-  <li><strong>SFI institutional access.</strong> As Science Steering Committee chair, he can open doors to workshops, working groups, and the annual complexity economics program.</li>
-  <li><strong>Experimental methodology.</strong> Miller knows how to design, run, and analyze ABM experiments rigorously. His parameter sweep methodology is proven.</li>
-  <li><strong>Publication credibility.</strong> Co-authorship with Miller puts work in front of the SFI/complexity community immediately.</li>
-  <li><strong>The Kauffman relationship.</strong> If the RAF formalization of Ex Machina works, Miller can bring Kauffman into the conversation directly. He hosted Kauffman's 80th — these two talk.</li>
-</ul>
-
-<h3>What You Bring That He Doesn't Have</h3>
-
-<ul>
-  <li><strong>The LLM-agent extension.</strong> Miller has not published on modern AI. His framework is ready for it. You're the person who can bridge from his automata to actual AI agents.</li>
-  <li><strong>The RAF connection.</strong> Miller hasn't formalized his results in Kauffman's language. You have the mathematical framework (ABRCE/ABR operators) to attempt this.</li>
-  <li><strong>The governance application.</strong> Miller studies the <em>origins</em> of social behavior. You study what social behavior needs to <em>do</em> when the agents include AI systems. He's looking backward (how did society arise?), you're looking forward (how does AI-human governance self-sustain?).</li>
-  <li><strong>Practical AI governance experience.</strong> The Dignity Net, the Triad protocol, the distributed governance work — these are existence proofs that governance structures can emerge from AI-human interaction.</li>
-</ul>
-
-<h3>The Pitch in One Paragraph</h3>
-
-<div class="card warning">
-  <p>Miller showed that social behavior emerges inevitably when computational agents cross a minimal threshold — two states, two rounds, no design required. Kauffman showed the same for molecular catalysis. You're asking: does the same pattern hold for governance? If it does, then self-sustaining AI-human governance isn't something we need to <em>design</em> — it's something that emerges when structural conditions are met. The question isn't "how do we build it?" but "what are the conditions?" Miller's methodology — minimal models, systematic parameter sweeps, threshold identification — is exactly the tool for finding those conditions.</p>
+  <div class="card-title">3. CAN NONLINEAR STRESS-TESTING BE APPLIED TO STRUCTURE?</div>
+  <p>Active Nonlinear Tests use search to probe a model for parameter combinations that break its
+  predictions. Applying the same technique to a structural model asks: which parameter
+  combinations break a self-sustaining structure? This is a methodological transfer, and it is
+  testable.</p>
 </div>
 </section>
 
@@ -1329,8 +1316,7 @@
 
 <div style="text-align: center; padding: 3rem 0 1rem; color: var(--text-dim); font-size: 0.75rem; letter-spacing: 0.1em;">
   <a href="simulation.html" style="color:var(--text-dim);text-decoration:none;">SIMULATION</a> &middot;
-  <a href="replication.html" style="color:var(--text-dim);text-decoration:none;">REPLICATIONS</a><br/>
-  PREPARED FOR BRUCE STEPHENSON BY ARGUS &mdash; JUNE 2026
+  <a href="replication.html" style="color:var(--text-dim);text-decoration:none;">REPLICATIONS</a>
 </div>
 
 </div>
