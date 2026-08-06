@@ -469,7 +469,7 @@
   <section id="overlay-panel">
     <h2 id="overlay-title">Select a system</h2>
     <div class="overlay-container" id="overlay-container">
-      <svg id="overlay-svg" viewBox="0 0 500 500"></svg>
+      <svg id="overlay-svg" viewBox="0 0 500 500" role="img" aria-label="Select a system"></svg>
 
       <div id="property-stack"></div>
 
@@ -657,7 +657,7 @@ function pointsStr(pts) {
 function createMiniRadar(sys) {
   const size = 200;
   const cx = 100, cy = 100, unit = 38;
-  let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+  let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Radar profile for ${sys.name}: topology ${sys.s1}, criticality ${sys.s2}, closure ${sys.s3}, computation ${sys.s4}, on a 0 to 3 scale">`;
 
   for (let d = 1; d <= 2; d++) {
     const pts = radarPoints({s1:d,s2:d,s3:d,s4:d}, cx, cy, unit);

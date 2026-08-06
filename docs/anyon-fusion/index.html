@@ -398,7 +398,7 @@ a:hover { text-decoration: underline; }
 <p>These particles are <em><span class="tip" tabindex="0">anyons<span class="tt">Quasiparticles that exist only in 2D systems. Unlike fermions or bosons, swapping two anyons can multiply the quantum state by any phase — or even apply a matrix operation.</span></span></em> &mdash; <span class="tip" tabindex="0">quasiparticles<span class="tt">Collective excitations in a material that behave like particles but emerge from many-body interactions — like a wave in a stadium crowd rather than an individual person.</span></span> that exist only in two-dimensional systems and obey exchange statistics that are neither bosonic nor fermionic. Fibonacci anyons are the simplest anyon model that supports universal quantum computation.</p>
 
 <div class="svg-container" id="particles-svg">
-<svg viewBox="0 0 500 160" width="500" height="160">
+<svg viewBox="0 0 500 160" width="500" height="160" role="img" aria-label="Two Particles, One Rule. Labelled: Vacuum, Fibonacci anyon.">
   <defs>
     <radialGradient id="vacGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="rgba(203,213,225,0.15)" />
@@ -459,7 +459,7 @@ a:hover { text-decoration: underline; }
 <p>Vacuum fused with vacuum produces vacuum. The trivial case.</p>
 
 <div class="svg-container" id="rule1-svg">
-<svg viewBox="0 0 400 100" width="400" height="100">
+<svg viewBox="0 0 400 100" width="400" height="100" role="img" aria-label="Rule 1: 1 × 1 = 1. Labelled: 1 × 1 = 1.">
   <g class="rule1-anim">
     <circle class="r1-left" cx="100" cy="50" r="12" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5" />
     <text class="r1-left" x="100" y="55" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1</text>
@@ -479,7 +479,7 @@ a:hover { text-decoration: underline; }
 <p>Vacuum acts as the identity. Fusing vacuum with <span class="math" style="color: var(--golden)">&tau;</span> leaves <span class="math" style="color: var(--golden)">&tau;</span> unchanged.</p>
 
 <div class="svg-container" id="rule2-svg">
-<svg viewBox="0 0 400 100" width="400" height="100">
+<svg viewBox="0 0 400 100" width="400" height="100" role="img" aria-label="Rule 2: 1 × τ = τ. Labelled: 1 × τ = τ.">
   <g class="rule2-anim">
     <circle class="r2-left" cx="100" cy="50" r="12" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5" />
     <text class="r2-left" x="100" y="55" text-anchor="middle" fill="#94a3b8" font-family="'Times New Roman','Georgia',serif" font-style="italic" font-size="14">1</text>
@@ -498,7 +498,7 @@ a:hover { text-decoration: underline; }
 <p>This is <em>the</em> rule. Two Fibonacci anyons fuse into a quantum superposition of vacuum and a new Fibonacci anyon. Everything else in this tutorial follows from here.</p>
 
 <div class="svg-container" id="rule3-svg">
-<svg viewBox="0 0 600 220" width="600" height="220" id="rule3-canvas">
+<svg viewBox="0 0 600 220" width="600" height="220" id="rule3-canvas" role="img" aria-label="Rule 3: τ × τ = 1 + τ. Labelled: τ × τ = 1 + τ, vacuum, anyon, superposition.">
   <defs>
     <radialGradient id="flashGrad" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="rgba(255,255,255,0.9)" />
@@ -571,7 +571,7 @@ a:hover { text-decoration: underline; }
 <p>This is exactly the Fibonacci recurrence. The total dimension of the fusion space (both charge sectors) is <span class="math">a<sub>n</sub> + b<sub>n</sub></span>.</p>
 
 <div class="svg-container" id="tree-svg">
-<svg viewBox="0 0 600 380" width="600" height="380" id="tree-canvas">
+<svg viewBox="0 0 600 380" width="600" height="380" id="tree-canvas" role="img" aria-label="The Fibonacci Connection. Labelled: τ 1, τ 2, n=2: 2 paths, τ 3, n=3: 3 paths, τ 4, n=4: 5 paths, Total paths (both charge sectors):.">
   <!-- Level 0: two tau anyons at top -->
   <g class="tree-level-0">
     <circle cx="180" cy="30" r="14" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
@@ -693,7 +693,7 @@ a:hover { text-decoration: underline; }
 </div>
 
 <div class="svg-container" id="delocal-svg">
-<svg viewBox="0 0 500 140" width="500" height="140">
+<svg viewBox="0 0 500 140" width="500" height="140" role="img" aria-label="The Fusion Space. Labelled: The information lives in the relationships, not the particles..">
   <defs>
     <radialGradient id="tauGlowSmall" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="rgba(251,191,36,0.2)" />
@@ -759,7 +759,7 @@ a:hover { text-decoration: underline; }
 <p>In three dimensions, exchanging two identical particles twice returns the system to its original state. In two dimensions, the second exchange is <em>topologically distinct</em> from the first &mdash; the worldlines form a braid, and the <span class="tip" tabindex="0">braid group<span class="tt">The mathematical group describing all possible ways to weave strands over and under each other. Unlike simple permutations, braids record the full history of which strand crossed over which.</span></span> is infinite and <span class="tip" tabindex="0">non-abelian<span class="tt">Operations whose result depends on the order they are performed — doing A then B gives a different result than B then A. This is what makes the system powerful enough for universal computation.</span></span>.</p>
 
 <div class="svg-container" id="braid-svg">
-<svg viewBox="0 0 500 220" width="500" height="220" id="braid-canvas">
+<svg viewBox="0 0 500 220" width="500" height="220" id="braid-canvas" role="img" aria-label="Braiding as Computation. Labelled: τ 1, τ 2, τ 3, Braid diagram: σ 1 (exchange τ 1 over τ 2 ), Each braid = a unitary gate on the fusion space.">
   <!-- Anyon positions (top) -->
   <g class="braid-anyons">
     <circle class="braid-a1" cx="150" cy="35" r="16" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="2" />
@@ -824,7 +824,7 @@ a:hover { text-decoration: underline; }
 <p>The central promise of topological quantum computation is <em>fault tolerance by physics</em><sup><a class="fn" href="#fn3" id="fnref3">3</a></sup>. The quantum gates are determined by the topology of the anyon worldlines &mdash; which strands cross over which &mdash; not by the precise geometric path taken.</p>
 
 <div class="svg-container" id="topo-svg">
-<svg viewBox="0 0 520 200" width="520" height="200" id="topo-canvas">
+<svg viewBox="0 0 520 200" width="520" height="200" id="topo-canvas" role="img" aria-label="Topological Protection. Labelled: Clean path, Same gate, Noisy path.">
   <!-- Left panel: clean path -->
   <g class="topo-clean" opacity="0">
     <rect x="10" y="10" width="230" height="180" rx="8" fill="rgba(34,197,94,0.05)" stroke="rgba(34,197,94,0.2)" stroke-width="1" />

@@ -64,7 +64,7 @@ svg { display: block; }
 <div class="row">
 <div class="panel" style="flex:0 0 380px;">
 <h2>Latitude / L-Shell Coherence Profile</h2>
-<svg id="svgLat" width="360" height="320" viewBox="0 0 360 320"></svg>
+<svg id="svgLat" width="360" height="320" viewBox="0 0 360 320" role="img" aria-label="Latitude / L-Shell Coherence Profile"></svg>
 <div class="info">
 Bar height = Moran's I at that latitude band<br>
 Color: green=electrojet-dominated, blue=FAC-dominated<br>
@@ -74,7 +74,7 @@ Right axis: L-shell mapping (dipole)
 
 <div class="panel" style="flex:0 0 280px;">
 <h2>Altitude Profile + Phase Space</h2>
-<svg id="svgAlt" width="260" height="320" viewBox="0 0 260 320"></svg>
+<svg id="svgAlt" width="260" height="320" viewBox="0 0 260 320" role="img" aria-label="Altitude Profile + Phase Space"></svg>
 <div class="info">
 Left: I vs altitude (2-layer <span class="tip" tabindex="0">Chapman<span class="tt">The Chapman profile describes how solar radiation is absorbed at different altitudes, producing an ionization peak. Two layers: E-region (~120 km, auroral precipitation) and F-region (~300 km, solar EUV). Each altitude's coherence reveals different current systems.</span></span>)<br>
 Blue band: F-region (300km) / Red band: precipitation (120km)
@@ -83,7 +83,7 @@ Blue band: F-region (300km) / Red band: precipitation (120km)
 
 <div class="panel" style="flex:1 1 400px;">
 <h2>Time Series: Multi-Observable</h2>
-<svg id="svgTime" width="100%" height="320" viewBox="0 0 500 320"></svg>
+<svg id="svgTime" width="100%" height="320" viewBox="0 0 500 320" role="img" aria-label="Time Series: Multi-Observable"></svg>
 <div class="info">
 Blue solid: I_N (ground) — Orange dash: Δ(120-300) — Green: coupling %<br>
 Gray bars: RMS (log scale) — Anomaly markers: * = multi-observable coincidence
@@ -93,7 +93,7 @@ Gray bars: RMS (log scale) — Anomaly markers: * = multi-observable coincidence
 
 <div class="panel">
 <h2>Meridional Cross-Section: L-shell × Altitude</h2>
-<svg id="svgMerid" width="100%" height="180" viewBox="0 0 700 180"></svg>
+<svg id="svgMerid" width="100%" height="180" viewBox="0 0 700 180" role="img" aria-label="Meridional Cross-Section: L-shell × Altitude"></svg>
 <div class="info">
 Horizontal: L-shell (equatorial distance). Vertical: altitude. Color intensity = coherence at that (L, alt) cell.
 Green = high Moran's I. The <span class="tip" tabindex="0">current sheet thickness<span class="tt">The spatial extent (in L-shell) over which the current sheet maintains coherent structure. A thin, coherent current sheet (narrow green band) indicates concentrated energy storage. Broadening suggests disruption or energy release.</span></span> appears as the width of the coherent band.
