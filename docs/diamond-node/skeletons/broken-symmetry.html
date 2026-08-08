@@ -202,6 +202,22 @@
       <span class="tip" tabindex="0">phasons<span class="tt">The Goldstone mode of a quasicrystal: a rearrangement of the tiling that costs no energy in the ideal case, because it corresponds to sliding the cut through the higher-dimensional lattice.</span></span>
       in a quasicrystal are all the same fact in different clothes.</li>
   </ul>
+  <!-- ===== G3: Mexican hat and the Goldstone mode ===== -->
+  <div class="figure" id="hat-fig">
+    <div class="fig-head">
+      <h3>The two directions out of a ground state</h3>
+      <button id="hat-play" class="fig-btn" aria-pressed="false">&#9654; Around the brim</button>
+      <button id="hat-kick" class="fig-btn">Kick it up the wall</button>
+      <button id="hat-reset" class="fig-btn">Reset</button>
+    </div>
+    <p class="fig-hint">The potential is symmetric under every rotation. The ball cannot sit at the top, so it
+      picks a point on the brim &mdash; and the moment it does, the symmetry is gone from the state but not from
+      the potential. Watch the energy readout in each of the two directions it can then move.</p>
+    <svg id="hat-svg" viewBox="0 0 620 278" role="img"
+         aria-label="A Mexican-hat potential drawn in three-quarter view, with a ball resting in the circular brim. An energy readout compares motion around the brim, which costs nothing, with motion up the wall, which costs energy."></svg>
+    <p class="fig-cap" id="hat-cap">Press a button. The ball is sitting in the brim, in one arbitrarily chosen ground state.</p>
+  </div>
+
   <p>
   Everything in the rest of this page is a consequence of one thing: <code>G/H</code> is a <em>space</em>, and spaces
   have shape.
@@ -368,6 +384,42 @@
   patience will remove it. Topological protection is exactly this and nothing more.
   </p>
 
+  <!-- ===== G1: the Mermin map ===== -->
+  <div class="figure" id="mm-fig">
+    <div class="fig-head">
+      <h3>The Mermin map</h3>
+      <button id="mm-play" class="fig-btn" aria-pressed="false">&#9654; Walk the loop</button>
+      <button id="mm-step" class="fig-btn">Step</button>
+      <button id="mm-shrink" class="fig-btn">Try to shrink it</button>
+      <button id="mm-charge" class="fig-btn">Flip to &minus;&frac12;</button>
+      <button id="mm-reset" class="fig-btn">Reset</button>
+    </div>
+    <p class="fig-hint">Left: the director field of a nematic around a &plusmn;&frac12; disclination, with a
+      loop you can move. Right: the order-parameter manifold <code>RP&sup2;</code>, drawn as a hemisphere seen
+      from above &mdash; its rim is the equator, and <strong>points on opposite sides of the rim are the same
+      point</strong>, because a director has no arrow. As the marker walks the loop, its image traces a path on
+      the right. <strong>Move the loop off the core and watch the path change character.</strong></p>
+
+    <div class="two-panel">
+      <svg id="mm-field" viewBox="0 0 300 300" role="img"
+           aria-label="A nematic director field around a half-integer disclination, drawn as short rods on a grid, with a circular loop and a marker travelling around it."></svg>
+      <svg id="mm-rp2" viewBox="0 0 300 300" role="img"
+           aria-label="The order-parameter manifold RP squared drawn as a disc whose rim is the equator, with antipodal rim points marked as identified, and the traced image of the loop drawn on it."></svg>
+    </div>
+
+    <div class="fig-controls">
+      <label for="mm-x">loop x<input id="mm-x" type="range" min="-100" max="100" value="0" step="1"></label>
+      <label for="mm-y">loop y<input id="mm-y" type="range" min="-100" max="100" value="0" step="1"></label>
+      <label for="mm-r">radius<input id="mm-r" type="range" min="25" max="105" value="72" step="1"></label>
+    </div>
+    <div class="fig-readout">
+      <div><b>encloses the core</b> <span id="mm-enc">yes</span></div>
+      <div><b>director winding</b> <span id="mm-wind">&mdash;</span></div>
+      <div><b>class in &pi;&#8321;(RP&sup2;)</b> <span id="mm-class">&mdash;</span></div>
+    </div>
+    <p class="fig-cap" id="mm-cap">Press <em>Walk the loop</em>. Nothing has been traced yet.</p>
+  </div>
+
   <div class="scroll-x">
   <table class="data">
     <thead><tr><th>System</th><th>Defect</th><th>Classified by</th></tr></thead>
@@ -456,6 +508,85 @@
   Ask any of them the question &ldquo;are these two systems topologically the same?&rdquo; and they answer about
   different objects. There is no common category in which the answers can be compared.
   </p>
+
+  <p>
+  The fourth row is the one that most people have not seen worked, and it is worth a minute because it also
+  closes the loop back to section 1. A quasicrystal is not a badly-behaved crystal. It is a
+  <em>periodic</em> crystal in a higher dimension, sliced at an irrational angle and seen edge-on.
+  </p>
+
+  <!-- ===== G2: cut and project ===== -->
+  <div class="figure" id="cp-fig">
+    <div class="fig-head">
+      <h3>Cut and project, and the phason</h3>
+      <button id="cp-play" class="fig-btn" aria-pressed="false">&#9654; Slide the strip</button>
+      <button id="cp-step" class="fig-btn">Step</button>
+      <button id="cp-reset" class="fig-btn">Reset</button>
+    </div>
+    <p class="fig-hint">A perfectly periodic square lattice. A strip through it at an irrational slope
+      (<code>1/&phi;</code>). Project every lattice point inside the strip onto the line and you get a
+      quasiperiodic sequence of two spacings &mdash; long and short, in the ratio &phi;, never repeating.
+      Now <strong>slide the strip sideways</strong>. Points swap in and out, the sequence rearranges, and
+      nothing costs anything: that is a <em>phason</em>, the Goldstone mode of the extra broken translations.</p>
+    <svg id="cp-svg" viewBox="0 0 620 400" role="img"
+         aria-label="A square lattice with a narrow strip drawn through it at an irrational slope. Lattice points inside the strip are highlighted and projected onto a line, producing a quasiperiodic sequence of long and short intervals shown as a ruler below."></svg>
+    <div class="fig-readout">
+      <div><b>window offset</b> <span id="cp-off">0.00</span></div>
+      <div><b>long/short</b> <span id="cp-ratio">&mdash;</span></div>
+      <div><b>phason flips</b> <span id="cp-flips">0</span></div>
+    </div>
+    <p class="fig-cap" id="cp-cap">Press <em>Slide the strip</em>. The sequence below is the current slice.</p>
+  </div>
+
+  <p class="quiet">
+  Notice what that invariant is <em>about</em>: not a defect, not a ground-state count, not an embedding &mdash;
+  a window in a space the material does not live in. It answers a question the other three do not ask.
+  </p>
+
+  <!-- ===== G4: four invariants, four panels ===== -->
+  <div class="figure" id="q4-fig">
+    <div class="fig-head">
+      <h3>Four invariants, four different questions</h3>
+      <button id="q4-play" class="fig-btn" aria-pressed="false">&#9654; Play all four</button>
+      <button id="q4-step" class="fig-btn">Step</button>
+      <button id="q4-cut" class="fig-btn">Cut the chain</button>
+      <button id="q4-reset" class="fig-btn">Reset</button>
+    </div>
+    <p class="fig-hint">Each panel animates its own classification. Read the question under each one: they are
+      not the same question asked at four depths. <strong>That is F3.</strong></p>
+    <div class="quad">
+      <div class="quad-cell">
+        <h4>1 &middot; Mermin homotopy</h4>
+        <div class="q-sub">nematics, cardiac, BZ, tokamak, brain, development</div>
+        <svg id="q4-a" viewBox="0 0 260 140" role="img"
+             aria-label="A miniature director field with a loop around a defect, beside the rim of the RP squared disc showing the traced image covering half the rim."></svg>
+        <div class="q-read" id="q4-ra">&mdash;</div>
+      </div>
+      <div class="quad-cell">
+        <h4>2 &middot; Topological order</h4>
+        <div class="q-sub">FQHE, anyons</div>
+        <svg id="q4-b" viewBox="0 0 260 140" role="img"
+             aria-label="One, two and three handled surfaces drawn in turn, with a marker travelling the two independent cycles of each and a counter showing the ground-state degeneracy three to the power of the genus."></svg>
+        <div class="q-read" id="q4-rb">&mdash;</div>
+      </div>
+      <div class="quad-cell">
+        <h4>3 &middot; Knot invariants</h4>
+        <div class="q-sub">protein folding</div>
+        <svg id="q4-c" viewBox="0 0 260 140" role="img"
+             aria-label="A trefoil knot being continuously deformed, with an Alexander polynomial readout that does not change under the deformation."></svg>
+        <div class="q-read" id="q4-rc">&mdash;</div>
+      </div>
+      <div class="quad-cell">
+        <h4>4 &middot; Cut and project</h4>
+        <div class="q-sub">quasicrystals</div>
+        <svg id="q4-d" viewBox="0 0 260 140" role="img"
+             aria-label="A miniature lattice with a sliding strip and the quasiperiodic sequence it projects out, rearranging as the strip moves."></svg>
+        <div class="q-read" id="q4-rd">&mdash;</div>
+      </div>
+    </div>
+    <p class="fig-cap" id="q4-cap">Press <em>Play all four</em>. Then read the four questions and ask what
+      would have to be true for them to be one question.</p>
+  </div>
 
   <div class="callout open">
     <h4>An open problem for this framework, in its own voice</h4>
@@ -719,6 +850,592 @@
 
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:720px;margin-left:auto;margin-right:auto;padding-left:2rem;padding-right:2rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
 <script src="../../js/annex-tracker.js"></script>
+
+<script>
+/* ============================================================================
+   Four animations, each showing a mechanism the surrounding prose asserts.
+   Self-contained: inline SVG built from vanilla JS, no dependencies, no build.
+   Every one honours prefers-reduced-motion by never autoplaying, and every
+   control is a real <button> or <input> so it is keyboard reachable.
+   ========================================================================== */
+(function () {
+'use strict';
+
+var REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+var PHI = (1 + Math.sqrt(5)) / 2;
+var C = { s1:'#818cf8', s2:'#f87171', s3:'#4ade80', s4:'#facc15', gold:'#eab308',
+          dim:'#475569', border:'#334155', muted:'#94a3b8', text:'#e2e8f0', bg:'#1e293b' };
+
+function el(id) { return document.getElementById(id); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+/* A play/pause/step controller shared by all four figures. */
+function Anim(o) {
+  var timer = null;
+  function paint() { o.frame(); }
+  function step() { o.tick(); paint(); }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+    if (o.btn) { o.btn.innerHTML = o.playLabel; o.btn.setAttribute('aria-pressed', 'false'); }
+  }
+  function play() {
+    if (timer) return;
+    timer = setInterval(step, o.period || 70);
+    if (o.btn) { o.btn.innerHTML = '&#10073;&#10073; Pause'; o.btn.setAttribute('aria-pressed', 'true'); }
+  }
+  function toggle() { timer ? stop() : play(); }
+  var api = { play: play, stop: stop, step: step, paint: paint, toggle: toggle,
+              running: function () { return !!timer; } };
+  if (o.btn) o.btn.addEventListener('click', toggle);
+  if (o.stepBtn) o.stepBtn.addEventListener('click', function () { stop(); step(); });
+  if (o.resetBtn) o.resetBtn.addEventListener('click', function () { stop(); o.reset(); paint(); });
+  /* autoplay once on first view, unless the reader asked for reduced motion */
+  if (!REDUCED && o.root) {
+    var started = false;
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting && !started) { started = true; play(); } });
+      }, { threshold: 0.3 }).observe(o.root);
+    } else { play(); }
+  }
+  return api;
+}
+
+/* ==========================================================================
+   G3 — the Mexican hat, and the two directions out of a ground state.
+   ======================================================================== */
+(function () {
+  var svg = el('hat-svg'); if (!svg) return;
+  var cap = el('hat-cap');
+  var CXo = 215, CYo = 186, RS = 92, KY = 0.40, ZS = 56, RMAX = 1.55;
+
+  var st = { th: -0.6, r: 1, mode: 'idle', ph: 0 };
+  function V(r) { var d = r * r - 1; return d * d; }
+  function proj(r, th) {
+    return [CXo + r * RS * Math.cos(th), CYo + r * RS * Math.sin(th) * KY - V(r) * ZS];
+  }
+  function ring(r, colour, w, dash) {
+    var pts = [], k;
+    for (k = 0; k <= 48; k++) { var p = proj(r, k / 48 * Math.PI * 2); pts.push(p[0].toFixed(1) + ',' + p[1].toFixed(1)); }
+    return '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + colour +
+           '" stroke-width="' + w + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + '/>';
+  }
+  function spoke(th) {
+    var pts = [], k;
+    for (k = 0; k <= 24; k++) { var p = proj(RMAX * k / 24, th); pts.push(p[0].toFixed(1) + ',' + p[1].toFixed(1)); }
+    return '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#243350" stroke-width="1"/>';
+  }
+  function bar(x, y, w, frac, colour, label, value) {
+    return '<text x="' + x + '" y="' + (y - 7) + '" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">' + label + '</text>' +
+           '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="3" fill="#16233b" stroke="' + C.border + '"/>' +
+           '<rect x="' + x + '" y="' + y + '" width="' + (w * Math.max(0, Math.min(1, frac))).toFixed(1) + '" height="10" rx="3" fill="' + colour + '"/>' +
+           '<text x="' + (x + w + 6) + '" y="' + (y + 9) + '" font-size="10" fill="' + C.text + '" font-family="monospace">' + value + '</text>';
+  }
+  function draw() {
+    var o = [], i, r;
+    for (i = 0; i < 16; i++) o.push(spoke(i / 16 * Math.PI * 2));
+    for (r = 0.18; r <= RMAX + 0.001; r += 0.137) o.push(ring(r, '#2c3e63', 1));
+    o.push(ring(1, C.gold, 2, '5 4'));
+    /* the chosen ground state and the two directions out of it */
+    var p = proj(st.r, st.th);
+    var pb = proj(1, st.th + 0.42), pb2 = proj(1, st.th - 0.42);
+    o.push('<path d="M' + pb2[0].toFixed(1) + ',' + pb2[1].toFixed(1) + ' L' + pb[0].toFixed(1) + ',' + pb[1].toFixed(1) +
+           '" stroke="' + C.s3 + '" stroke-width="2.5" fill="none" opacity="0.75"/>');
+    var pu = proj(Math.min(RMAX, st.r + 0.45), st.th);
+    o.push('<path d="M' + p[0].toFixed(1) + ',' + p[1].toFixed(1) + ' L' + pu[0].toFixed(1) + ',' + pu[1].toFixed(1) +
+           '" stroke="' + C.s2 + '" stroke-width="2" fill="none" opacity="0.7" stroke-dasharray="3 3"/>');
+    o.push('<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="8" fill="' + C.s2 + '" stroke="#fecaca" stroke-width="1.5"/>');
+    /* labels */
+    o.push('<text x="215" y="20" font-size="11" fill="' + C.muted + '" text-anchor="middle" font-family="system-ui,sans-serif">G = every rotation of this potential</text>');
+    o.push('<text x="215" y="268" font-size="11" fill="' + C.gold + '" text-anchor="middle" font-family="system-ui,sans-serif">G/H = the brim: a circle of equally good ground states</text>');
+    o.push('<text x="' + (p[0] + 14).toFixed(1) + '" y="' + (p[1] + 4).toFixed(1) + '" font-size="10" fill="' + C.text + '" font-family="system-ui,sans-serif">the state</text>');
+    /* readout panel */
+    var e = V(st.r);
+    o.push('<line x1="405" y1="48" x2="405" y2="236" stroke="' + C.border + '"/>');
+    o.push(bar(425, 100, 120, 0, C.s3, 'around the brim &#8212; along G/H', '&Delta;E = 0.00'));
+    o.push(bar(425, 155, 120, e / 1.6, C.s2, 'up the wall &#8212; across G/H', '&Delta;E = ' + e.toFixed(2)));
+    o.push('<text x="425" y="62" font-size="11" fill="' + C.text + '" font-family="system-ui,sans-serif">Cost of moving:</text>');
+    o.push('<text x="425" y="195" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">One direction is free.</text>');
+    o.push('<text x="425" y="209" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">That free direction is</text>');
+    o.push('<text x="425" y="223" font-size="10" fill="' + C.s3 + '" font-family="system-ui,sans-serif">the Goldstone mode.</text>');
+    svg.innerHTML = o.join('');
+    svg.setAttribute('aria-label',
+      'A Mexican-hat potential in three-quarter view. The ball sits at radius ' + st.r.toFixed(2) +
+      ' in the brim. Moving around the brim costs no energy; the current cost of the radial displacement is ' +
+      e.toFixed(2) + ' in units where the centre of the hat is 1.');
+  }
+  function tick() {
+    if (st.mode === 'idle') st.mode = 'brim';        /* playing means moving */
+    if (st.mode === 'brim') { st.th += 0.055; }
+    else if (st.mode === 'radial') {
+      st.ph += 0.17;
+      st.r = 1 + 0.45 * Math.sin(st.ph) * Math.exp(-st.ph * 0.11);
+      if (st.ph > 26) { st.ph = 0; st.r = 1; st.mode = 'brim'; }
+    }
+    caption();
+  }
+  function caption() {
+    if (st.mode === 'brim')
+      cap.textContent = 'The ball is sliding around the brim. It is visiting a different ground state every ' +
+        'frame, and the energy readout does not move at all — every point of G/H is equally good. A slow, ' +
+        'long-wavelength version of exactly this motion is a Goldstone mode.';
+    else if (st.mode === 'radial')
+      cap.textContent = 'Pushed radially, the ball is climbing out of G/H, and the energy readout rises with ' +
+        'it. A restoring force pulls it straight back. Across the manifold is costly; along it is free — and ' +
+        'that asymmetry is the whole content of "the symmetry is broken".';
+    else
+      cap.textContent = 'The ball is sitting in the brim, in one arbitrarily chosen ground state. The potential ' +
+        'is still perfectly symmetric. The state is not.';
+  }
+  var anim = Anim({ root: el('hat-fig'), btn: el('hat-play'), resetBtn: el('hat-reset'),
+    period: 60, frame: draw, tick: tick,
+    reset: function () { st.th = -0.6; st.r = 1; st.mode = 'idle'; st.ph = 0; caption(); } });
+  el('hat-play').addEventListener('click', function () { if (st.mode === 'idle') { st.mode = 'brim'; caption(); } });
+  el('hat-kick').addEventListener('click', function () { st.mode = 'radial'; st.ph = 0; caption(); anim.play(); });
+  caption(); draw();
+})();
+
+/* ==========================================================================
+   G1 — the Mermin map. A loop in the material, its image in RP^2, and an
+   attempt to shrink that image.
+   ======================================================================== */
+(function () {
+  var fld = el('mm-field'); if (!fld) return;
+  var rp2 = el('mm-rp2'), cap = el('mm-cap');
+  var W = 300, MID = 150, SC = 88, RD = 100, K = 64;
+
+  var st = { s: 0.5, lx: 0, ly: 0, lr: 0.72, i: 0, u: 0, mode: 'sweep' };
+
+  function dirAngle(x, y) { return st.s * Math.atan2(y, x); }
+  function sx(x) { return MID + x * SC; }
+  function sy(y) { return MID - y * SC; }
+  function encloses() { return Math.sqrt(st.lx * st.lx + st.ly * st.ly) < st.lr; }
+
+  /* the image path: director angle, unwrapped, sampled around the loop */
+  function betas() {
+    var b = [], prev = null, acc = 0, k;
+    for (k = 0; k <= K; k++) {
+      var t = k / K * Math.PI * 2;
+      var x = st.lx + st.lr * Math.cos(t), y = st.ly + st.lr * Math.sin(t);
+      var th = Math.atan2(y, x);
+      if (prev !== null) { var d = th - prev; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; acc += d; }
+      else { acc = th; }
+      prev = th;
+      b.push(st.s * acc);
+    }
+    return b;
+  }
+  function drawField() {
+    var o = [], gi, gj;
+    for (gi = -5; gi <= 5; gi++) for (gj = -5; gj <= 5; gj++) {
+      var x = gi * 0.27, y = gj * 0.27;
+      if (Math.sqrt(x * x + y * y) < 0.13) continue;
+      var a = dirAngle(x, y), L = 9;
+      var dx = Math.cos(a) * L, dy = Math.sin(a) * L;
+      o.push('<line x1="' + (sx(x) - dx).toFixed(1) + '" y1="' + (sy(y) + dy).toFixed(1) +
+             '" x2="' + (sx(x) + dx).toFixed(1) + '" y2="' + (sy(y) - dy).toFixed(1) +
+             '" stroke="#5b6ebd" stroke-width="2.2" stroke-linecap="round"/>');
+    }
+    o.push('<circle cx="' + MID + '" cy="' + MID + '" r="5" fill="' + C.gold + '"/>');
+    o.push('<text x="' + MID + '" y="' + (MID + 20) + '" font-size="9.5" fill="' + C.gold + '" text-anchor="middle" font-family="system-ui,sans-serif">defect core</text>');
+    /* the loop */
+    o.push('<circle cx="' + sx(st.lx).toFixed(1) + '" cy="' + sy(st.ly).toFixed(1) + '" r="' + (st.lr * SC).toFixed(1) +
+           '" fill="none" stroke="' + (encloses() ? C.s3 : C.muted) + '" stroke-width="2" stroke-dasharray="6 4"/>');
+    /* the marker and the director there */
+    var t = st.i / K * Math.PI * 2;
+    var mx = st.lx + st.lr * Math.cos(t), my = st.ly + st.lr * Math.sin(t);
+    var a2 = dirAngle(mx, my), L2 = 13;
+    o.push('<line x1="' + (sx(mx) - Math.cos(a2) * L2).toFixed(1) + '" y1="' + (sy(my) + Math.sin(a2) * L2).toFixed(1) +
+           '" x2="' + (sx(mx) + Math.cos(a2) * L2).toFixed(1) + '" y2="' + (sy(my) - Math.sin(a2) * L2).toFixed(1) +
+           '" stroke="' + C.gold + '" stroke-width="3.4" stroke-linecap="round"/>');
+    o.push('<circle cx="' + sx(mx).toFixed(1) + '" cy="' + sy(my).toFixed(1) + '" r="3.5" fill="' + C.gold + '"/>');
+    o.push('<text x="8" y="17" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">the material: director field, charge ' +
+           (st.s > 0 ? '+' : '&minus;') + '&#189;</text>');
+    fld.innerHTML = o.join('');
+    fld.setAttribute('aria-label', 'A nematic director field around a charge ' + (st.s > 0 ? 'plus' : 'minus') +
+      ' one-half disclination. A circular loop ' + (encloses() ? 'encloses' : 'does not enclose') +
+      ' the defect core, and a marker has travelled ' + Math.round(st.i / K * 100) + ' per cent of the way round it.');
+  }
+  function drawRP2() {
+    var o = [], k, pal = ['#f472b6', '#38bdf8', '#a3e635', '#fbbf24', '#c084fc', '#fb923c'];
+    o.push('<circle cx="' + MID + '" cy="' + MID + '" r="' + RD + '" fill="#16233b" stroke="' + C.border + '" stroke-width="1"/>');
+    o.push('<circle cx="' + MID + '" cy="' + MID + '" r="' + RD + '" fill="none" stroke="' + C.muted + '" stroke-width="2"/>');
+    /* antipodal identification ticks: a pair of the same colour is ONE point */
+    for (k = 0; k < 6; k++) {
+      var a = k / 6 * Math.PI, col = pal[k];
+      [a, a + Math.PI].forEach(function (aa) {
+        o.push('<line x1="' + (MID + Math.cos(aa) * (RD - 7)).toFixed(1) + '" y1="' + (MID - Math.sin(aa) * (RD - 7)).toFixed(1) +
+               '" x2="' + (MID + Math.cos(aa) * (RD + 7)).toFixed(1) + '" y2="' + (MID - Math.sin(aa) * (RD + 7)).toFixed(1) +
+               '" stroke="' + col + '" stroke-width="2.5" stroke-linecap="round"/>');
+      });
+    }
+    /* the traced image */
+    var b = betas(), pts = [], n = st.i;
+    var contractible = !encloses();
+    for (k = 0; k <= n; k++) {
+      var sgm = n > 0 ? k / n : 0;
+      var rr, ang = b[k];
+      if (contractible) rr = 1; else rr = (1 - st.u) + st.u * Math.abs(Math.cos(Math.PI * sgm));
+      var px = MID + Math.cos(ang) * RD * rr, py = MID - Math.sin(ang) * RD * rr;
+      if (contractible && st.u > 0) {
+        var x0 = MID + Math.cos(b[0]) * RD, y0 = MID - Math.sin(b[0]) * RD;
+        px = px + (x0 - px) * st.u; py = py + (y0 - py) * st.u;
+      }
+      pts.push(px.toFixed(1) + ',' + py.toFixed(1));
+    }
+    if (pts.length > 1)
+      o.push('<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + C.gold +
+             '" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>');
+    if (pts.length) {
+      var f = pts[0].split(','), l = pts[pts.length - 1].split(',');
+      o.push('<circle cx="' + f[0] + '" cy="' + f[1] + '" r="4.5" fill="' + C.s3 + '"/>');
+      o.push('<circle cx="' + l[0] + '" cy="' + l[1] + '" r="4.5" fill="' + C.s2 + '"/>');
+    }
+    o.push('<text x="8" y="17" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">RP&#178;: the rim is the equator</text>');
+    o.push('<text x="150" y="285" font-size="9.5" fill="' + C.muted + '" text-anchor="middle" font-family="system-ui,sans-serif">matching ticks are the SAME point (n &#8801; &#8722;n)</text>');
+    rp2.innerHTML = o.join('');
+    var netB = b[st.i] - b[0];
+    rp2.setAttribute('aria-label', 'The order parameter manifold RP squared as a disc whose rim is the equator, ' +
+      'with six pairs of antipodal rim ticks marked as identified. The traced image of the loop covers ' +
+      (Math.abs(netB) / Math.PI).toFixed(2) + ' of a half turn around the rim' +
+      (st.u > 0 ? ', and is currently being deformed inwards' : '') + '.');
+  }
+  function readouts() {
+    var enc = encloses(), b = betas();
+    var net = b[st.i] - b[0];
+    el('mm-enc').textContent = enc ? 'yes' : 'no';
+    el('mm-enc').style.color = enc ? C.s3 : C.muted;
+    el('mm-wind').innerHTML = st.i < K ? (net / Math.PI).toFixed(2) + ' &times; &pi;'
+      : (enc ? (st.s > 0 ? '+&#189; turn' : '&minus;&#189; turn') : '0');
+    var cls = (st.i >= K) ? (enc ? 'non-trivial' : 'trivial') : '&mdash;';
+    el('mm-class').innerHTML = cls;
+    el('mm-class').style.color = (st.i >= K && enc) ? C.s2 : (st.i >= K ? C.s3 : C.text);
+  }
+  function caption() {
+    var enc = encloses();
+    if (st.mode === 'sweep' && st.i < K) {
+      cap.textContent = 'The marker is walking the loop. At each step the director there is a point on the rim ' +
+        'of RP², and the gold path is the record of where it has been.';
+    } else if (st.mode === 'shrink' || st.mode === 'snap') {
+      cap.textContent = enc
+        ? 'Watch the path. It is being pulled inwards as hard as the deformation allows — and its two ends are ' +
+          'pinned to antipodal rim points, which are the same point of RP². The path closes, but it cannot be ' +
+          'made shorter than a diameter, and it springs back. That is what non-contractible means, and it is ' +
+          'why the defect cannot be removed.'
+        : 'No defect inside the loop, so the image never went anywhere: the path collapses to a point without ' +
+          'resistance. The director field inside this loop can be combed flat.';
+    } else {
+      cap.textContent = enc
+        ? 'One trip round the loop, and the director has turned by half a turn — so the image runs from a rim ' +
+          'point to its antipode, which is the SAME point of RP². A closed loop. Now press "Try to shrink it".'
+        : 'The loop does not enclose the core. The director wobbles and comes back, so the image is a closed ' +
+          'path that never left its starting neighbourhood. Press "Try to shrink it" and compare.';
+    }
+  }
+  function draw() { drawField(); drawRP2(); readouts(); caption(); }
+  function tick() {
+    if (st.mode === 'sweep') { if (st.i < K) st.i++; else st.mode = 'done'; }
+    else if (st.mode === 'shrink') {
+      st.u = Math.min(1, st.u + 0.055);
+      if (st.u >= 1) st.mode = encloses() ? 'snap' : 'held';
+    } else if (st.mode === 'snap') {
+      st.u = Math.max(0, st.u - 0.10);
+      if (st.u <= 0) st.mode = 'done';
+    }
+  }
+  function reset() { st.i = 0; st.u = 0; st.mode = 'sweep'; }
+  var anim = Anim({ root: el('mm-fig'), btn: el('mm-play'), stepBtn: el('mm-step'), resetBtn: el('mm-reset'),
+                    period: 70, frame: draw, tick: tick, reset: reset });
+  el('mm-shrink').addEventListener('click', function () {
+    st.i = K; st.u = 0; st.mode = 'shrink'; anim.play();
+  });
+  el('mm-charge').addEventListener('click', function () {
+    st.s = -st.s;
+    this.innerHTML = st.s > 0 ? 'Flip to &minus;&frac12;' : 'Flip to +&frac12;';
+    reset(); draw();
+  });
+  ['mm-x', 'mm-y', 'mm-r'].forEach(function (id) {
+    el(id).addEventListener('input', function () {
+      st.lx = el('mm-x').value / 100 * 1.05;
+      st.ly = el('mm-y').value / 100 * 1.05;
+      st.lr = el('mm-r').value / 100;
+      reset(); draw();
+    });
+  });
+  draw();
+})();
+
+/* ==========================================================================
+   G2 — cut and project, and the phason.
+   ======================================================================== */
+function cutProject(svg, opt) {
+  var A = Math.atan(1 / PHI), ca = Math.cos(A), sa = Math.sin(A);
+  var WIN = ca + sa;                     /* projection of the unit cell */
+  var st = { off: 0.06, dir: 1, flips: 0, seq: '' };
+
+  function slice() {
+    var pts = [], i, j;
+    for (i = 0; i < opt.N; i++) for (j = 0; j < opt.N; j++) {
+      var perp = -sa * i + ca * j;
+      if (perp >= st.off && perp < st.off + WIN) pts.push({ i: i, j: j, t: ca * i + sa * j, p: perp });
+    }
+    pts.sort(function (a, b) { return a.t - b.t; });
+    return pts;
+  }
+  /* The finite lattice churns at its two ends as the strip slides, which is an
+     artifact of the lattice being finite and not a phason. Read the sequence
+     off a fixed interior window instead, so what the counter counts is real. */
+  function win(pts) { return pts.filter(function (p) { return p.t >= opt.t0 && p.t <= opt.t1; }); }
+  function letters(pts) {
+    var s = '', k;
+    for (k = 1; k < pts.length; k++) s += (pts[k].t - pts[k - 1].t) > (ca + sa) / 2 ? 'L' : 'S';
+    return s;
+  }
+  function draw() {
+    var all = slice(), pts = win(all), seq = letters(pts), o = [], i, j;
+    var X0 = opt.x0, Y0 = opt.y0, g = opt.g, CLIP = 'cpclip-' + opt.uid;
+    function P(x, y) { return [X0 + x * g, Y0 - y * g]; }
+    var lx0 = X0 - g, ly0 = Y0 - (opt.N - 0.2) * g, lw = (opt.N + 0.2) * g, lh = (opt.N + 0.2) * g;
+    o.push('<defs><clipPath id="' + CLIP + '"><rect x="' + lx0.toFixed(1) + '" y="' + ly0.toFixed(1) +
+           '" width="' + lw.toFixed(1) + '" height="' + lh.toFixed(1) + '"/></clipPath></defs>');
+    /* the lattice */
+    for (i = 0; i < opt.N; i++) for (j = 0; j < opt.N; j++) {
+      var q = P(i, j);
+      o.push('<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="' + (opt.small ? 1.4 : 2) + '" fill="#33415580"/>');
+    }
+    /* the strip: two lines of direction u, offset along the perpendicular */
+    function stripLine(off) {
+      var base = [-sa * off, ca * off], t0 = -2, t1 = opt.N * 1.9;
+      var a = P(base[0] + ca * t0, base[1] + sa * t0), b = P(base[0] + ca * t1, base[1] + sa * t1);
+      return 'M' + a[0].toFixed(1) + ',' + a[1].toFixed(1) + ' L' + b[0].toFixed(1) + ',' + b[1].toFixed(1);
+    }
+    o.push('<g clip-path="url(#' + CLIP + ')">');
+    o.push('<path d="' + stripLine(st.off) + '" stroke="' + C.gold + '" stroke-width="1.4" fill="none" opacity="0.85"/>');
+    o.push('<path d="' + stripLine(st.off + WIN) + '" stroke="' + C.gold + '" stroke-width="1.4" fill="none" opacity="0.85"/>');
+    /* the projection line itself (the physical space) */
+    o.push('<path d="' + stripLine(st.off + WIN / 2) + '" stroke="' + C.s1 + '" stroke-width="1" fill="none" stroke-dasharray="3 3" opacity="0.7"/>');
+    o.push('</g>');
+    /* accepted points and their projections */
+    var mid = st.off + WIN / 2;
+    pts.forEach(function (pt) {
+      var q = P(pt.i, pt.j);
+      var fx = -sa * mid + ca * pt.t, fy = ca * mid + sa * pt.t;
+      var f = P(fx, fy);
+      o.push('<line x1="' + q[0].toFixed(1) + '" y1="' + q[1].toFixed(1) + '" x2="' + f[0].toFixed(1) + '" y2="' + f[1].toFixed(1) +
+             '" stroke="#818cf855" stroke-width="1"/>');
+      o.push('<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="' + (opt.small ? 2.6 : 3.6) + '" fill="' + C.s1 + '"/>');
+      o.push('<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + (opt.small ? 1.6 : 2.2) + '" fill="' + C.gold + '"/>');
+    });
+    /* the 1-D sequence, as a ruler */
+    if (pts.length > 1) {
+      var t0 = pts[0].t, t1 = pts[pts.length - 1].t;
+      var RX = opt.rx, RW = opt.rw, RY = opt.ry;
+      var sc = RW / (t1 - t0 || 1);
+      o.push('<line x1="' + RX + '" y1="' + RY + '" x2="' + (RX + RW) + '" y2="' + RY + '" stroke="' + C.border + '" stroke-width="1"/>');
+      for (i = 0; i < pts.length; i++) {
+        var x = RX + (pts[i].t - t0) * sc;
+        o.push('<line x1="' + x.toFixed(1) + '" y1="' + (RY - 7) + '" x2="' + x.toFixed(1) + '" y2="' + (RY + 7) + '" stroke="' + C.gold + '" stroke-width="1.6"/>');
+        if (i > 0) {
+          var xp = RX + (pts[i - 1].t - t0) * sc, isL = seq[i - 1] === 'L';
+          o.push('<line x1="' + xp.toFixed(1) + '" y1="' + (RY + 12) + '" x2="' + x.toFixed(1) + '" y2="' + (RY + 12) +
+                 '" stroke="' + (isL ? C.gold : C.s1) + '" stroke-width="' + (isL ? 4 : 4) + '" stroke-linecap="butt" opacity="0.85"/>');
+        }
+      }
+      if (!opt.small)
+        o.push('<text x="' + RX + '" y="' + (RY + 34) + '" font-size="10" fill="' + C.muted + '" font-family="monospace">' +
+               esc(seq.slice(0, 46)) + '</text>');
+    }
+    if (!opt.small) {
+      o.push('<text x="' + opt.x0 + '" y="18" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">a periodic 2-D lattice &#8212; the strip has slope 1/&#966;</text>');
+      o.push('<text x="' + opt.rx + '" y="' + (opt.ry - 22) + '" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">what the slice projects: a quasiperiodic sequence, gold = long, indigo = short</text>');
+    }
+    svg.innerHTML = o.join('');
+    var nl = (seq.match(/L/g) || []).length, ns = (seq.match(/S/g) || []).length;
+    svg.setAttribute('aria-label', 'A square lattice with a strip of irrational slope one over phi drawn through it. ' +
+      pts.length + ' lattice points fall inside the strip and project onto the line as a sequence of ' + nl +
+      ' long and ' + ns + ' short intervals. The window offset is ' + st.off.toFixed(2) + '.');
+    return { seq: seq, nl: nl, ns: ns, n: pts.length };
+  }
+  return {
+    tick: function () {
+      var before = letters(slice());
+      st.off += 0.011;
+      if (st.off > 1.0) st.off -= 1.0;
+      var after = letters(slice());
+      if (before !== after && before.length === after.length) st.flips++;
+      st.seq = after;
+    },
+    draw: draw,
+    reset: function () { st.off = 0.06; st.flips = 0; },
+    state: st
+  };
+}
+
+(function () {
+  var svg = el('cp-svg'); if (!svg) return;
+  var cap = el('cp-cap'), lastSeq = null, flashed = 0;
+  var cp = cutProject(svg, { N: 13, g: 22, x0: 34, y0: 300, rx: 30, rw: 560, ry: 348, small: false });
+  function frame() {
+    var r = cp.draw();
+    el('cp-off').textContent = cp.state.off.toFixed(2);
+    el('cp-ratio').textContent = r.ns ? (r.nl / r.ns).toFixed(3) + '  (φ = 1.618)' : '—';
+    el('cp-flips').textContent = cp.state.flips;
+    if (lastSeq !== null && r.seq !== lastSeq) flashed = 5;
+    lastSeq = r.seq;
+    if (flashed > 0) {
+      flashed--;
+      cap.textContent = 'There — the sequence just rearranged. Two tiles swapped places and nothing about the ' +
+        'energy changed, because sliding the strip sideways moves through a continuum of equally good ' +
+        'quasicrystals. That rearrangement is a phason: the Goldstone mode of the translations broken in the ' +
+        'directions the material does not occupy.';
+    } else {
+      cap.textContent = 'The strip is sliding. Points cross in and out of it, and the projected sequence ' +
+        'rearranges — but the long-to-short ratio stays at φ and the sequence never becomes periodic. The ' +
+        'invariant here is the window, and it lives in a space the material is not in.';
+    }
+  }
+  Anim({ root: el('cp-fig'), btn: el('cp-play'), stepBtn: el('cp-step'), resetBtn: el('cp-reset'),
+         period: 110, frame: frame, tick: cp.tick, reset: function () { cp.reset(); lastSeq = null; flashed = 0; } });
+  frame();
+})();
+
+/* ==========================================================================
+   G4 — four invariants, four panels, four different questions.
+   ======================================================================== */
+(function () {
+  var a = el('q4-a'); if (!a) return;
+  var b = el('q4-b'), c = el('q4-c'), d = el('q4-d'), cap = el('q4-cap');
+  var st = { n: 0, cut: 0, cutting: false };
+
+  /* --- panel A: a Mermin loop, in miniature --- */
+  function drawA() {
+    var o = [], gi, gj, MIDX = 66, MIDY = 70, S = 21;
+    for (gi = -2; gi <= 2; gi++) for (gj = -2; gj <= 2; gj++) {
+      var x = gi, y = gj;
+      if (!x && !y) continue;
+      var ang = 0.5 * Math.atan2(y, x), L = 7.5;
+      o.push('<line x1="' + (MIDX + x * S - Math.cos(ang) * L).toFixed(1) + '" y1="' + (MIDY - y * S + Math.sin(ang) * L).toFixed(1) +
+             '" x2="' + (MIDX + x * S + Math.cos(ang) * L).toFixed(1) + '" y2="' + (MIDY - y * S - Math.sin(ang) * L).toFixed(1) +
+             '" stroke="#5b6ebd" stroke-width="2" stroke-linecap="round"/>');
+    }
+    o.push('<circle cx="' + MIDX + '" cy="' + MIDY + '" r="3.5" fill="' + C.gold + '"/>');
+    o.push('<circle cx="' + MIDX + '" cy="' + MIDY + '" r="42" fill="none" stroke="' + C.s3 + '" stroke-width="1.6" stroke-dasharray="5 4"/>');
+    var t = (st.n % 60) / 60 * Math.PI * 2;
+    o.push('<circle cx="' + (MIDX + Math.cos(t) * 42).toFixed(1) + '" cy="' + (MIDY - Math.sin(t) * 42).toFixed(1) + '" r="3.5" fill="' + C.gold + '"/>');
+    /* the rim of RP^2 and the traced half */
+    var RX = 190, RY = 70, RR = 45;
+    o.push('<circle cx="' + RX + '" cy="' + RY + '" r="' + RR + '" fill="#16233b" stroke="' + C.muted + '" stroke-width="1.6"/>');
+    var pts = [], k, frac = (st.n % 60) / 60;
+    for (k = 0; k <= 40; k++) {
+      var bb = 0.5 * (k / 40) * frac * Math.PI * 2;
+      pts.push((RX + Math.cos(bb) * RR).toFixed(1) + ',' + (RY - Math.sin(bb) * RR).toFixed(1));
+    }
+    o.push('<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + C.gold + '" stroke-width="3.5" stroke-linecap="round"/>');
+    [0, Math.PI].forEach(function (aa, ix) {
+      o.push('<line x1="' + (RX + Math.cos(aa) * (RR - 5)).toFixed(1) + '" y1="' + (RY - Math.sin(aa) * (RR - 5)).toFixed(1) +
+             '" x2="' + (RX + Math.cos(aa) * (RR + 5)).toFixed(1) + '" y2="' + (RY - Math.sin(aa) * (RR + 5)).toFixed(1) +
+             '" stroke="#f472b6" stroke-width="2.5"/>');
+    });
+    o.push('<text x="' + RX + '" y="' + (RY + RR + 16) + '" font-size="8.5" fill="' + C.muted + '" text-anchor="middle" font-family="system-ui,sans-serif">the two pink ticks are one point</text>');
+    a.innerHTML = o.join('');
+    a.setAttribute('aria-label', 'A miniature director field with a loop around a defect core, beside the rim of RP squared. ' +
+      'The traced image currently covers ' + Math.round(frac * 100) + ' per cent of the half turn from a rim point to its antipode.');
+    el('q4-ra').innerHTML = 'Q: can this defect be combed away?<br>&pi;&#8321;(RP&sup2;) = Z&#8322; &middot; class: non-trivial &rarr; no';
+  }
+
+  /* --- panel B: ground-state degeneracy on genus g --- */
+  function drawB() {
+    var o = [], g = 1 + Math.floor(st.n / 45) % 3;
+    var total = 130, w = 76, x0 = 130 - (g * w) / 2 + w / 2;
+    for (var k = 0; k < g; k++) {
+      var cx = x0 + k * w;
+      o.push('<ellipse cx="' + cx + '" cy="62" rx="42" ry="30" fill="none" stroke="' + C.s1 + '" stroke-width="2"/>');
+      o.push('<ellipse cx="' + cx + '" cy="62" rx="17" ry="9" fill="none" stroke="' + C.s1 + '" stroke-width="2" opacity="0.7"/>');
+    }
+    /* the two independent cycles on the first handle */
+    var t = (st.n % 45) / 45, cx0 = x0;
+    o.push('<ellipse cx="' + cx0 + '" cy="62" rx="29.5" ry="19" fill="none" stroke="' + C.s3 + '" stroke-width="2" stroke-dasharray="5 4"/>');
+    o.push('<ellipse cx="' + (cx0 + 29.5) + '" cy="62" rx="8" ry="16" fill="none" stroke="' + C.s2 + '" stroke-width="2" stroke-dasharray="5 4"/>');
+    if (t < 0.5) {
+      var th = t * 2 * Math.PI * 2;
+      o.push('<circle cx="' + (cx0 + Math.cos(th) * 29.5).toFixed(1) + '" cy="' + (62 - Math.sin(th) * 19).toFixed(1) + '" r="4" fill="' + C.s3 + '"/>');
+    } else {
+      var th2 = (t - 0.5) * 2 * Math.PI * 2;
+      o.push('<circle cx="' + (cx0 + 29.5 + Math.cos(th2) * 8).toFixed(1) + '" cy="' + (62 - Math.sin(th2) * 16).toFixed(1) + '" r="4" fill="' + C.s2 + '"/>');
+    }
+    o.push('<text x="130" y="16" font-size="9" fill="' + C.muted + '" text-anchor="middle" font-family="system-ui,sans-serif">genus ' + g +
+           ' &#8212; two independent cycles per handle</text>');
+    o.push('<text x="130" y="124" font-size="11" fill="' + C.gold + '" text-anchor="middle" font-family="monospace">ground states = 3^' + g + ' = ' + Math.pow(3, g) + '</text>');
+    b.innerHTML = o.join('');
+    b.setAttribute('aria-label', 'A surface of genus ' + g + ' with the two independent cycles of its first handle drawn, ' +
+      'and a counter showing three to the power ' + g + ' equals ' + Math.pow(3, g) + ' degenerate ground states.');
+    el('q4-rb').innerHTML = 'Q: how many ground states does the surface allow?<br>no local order parameter exists &middot; nothing is broken';
+  }
+
+  /* --- panel C: a knot invariant, unchanged by deformation --- */
+  function drawC() {
+    var o = [], CXk = 130, CYk = 66, R = 25, ph = st.n * 0.09, u = st.cut;
+    function pt(t) {
+      var kx = Math.sin(t) + 2 * Math.sin(2 * t), ky = Math.cos(t) - 2 * Math.cos(2 * t);
+      var wob = 1 + 0.10 * Math.sin(3 * t + ph);
+      kx *= wob; ky *= wob;
+      /* morph to a round circle when the chain is cut and rejoined */
+      var ux = 2.6 * Math.cos(t), uy = 2.6 * Math.sin(t);
+      return [CXk + (kx * (1 - u) + ux * u) * R * 0.62, CYk + (ky * (1 - u) + uy * u) * R * 0.62];
+    }
+    /* six arcs drawn in an alternating order, each with a background halo, so
+       the later arc passes visibly OVER the earlier one at each crossing */
+    var order = [0, 2, 4, 1, 3, 5];
+    order.forEach(function (seg) {
+      var pts = [], k;
+      for (k = 0; k <= 22; k++) {
+        var t = (seg + k / 22) * Math.PI * 2 / 6;
+        var p = pt(t); pts.push(p[0].toFixed(1) + ',' + p[1].toFixed(1));
+      }
+      o.push('<polyline points="' + pts.join(' ') + '" fill="none" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>');
+      o.push('<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + (u > 0.5 ? C.muted : C.s3) + '" stroke-width="3" stroke-linecap="round"/>');
+    });
+    o.push('<text x="130" y="14" font-size="9" fill="' + C.muted + '" text-anchor="middle" font-family="system-ui,sans-serif">' +
+           (u > 0.5 ? 'cut and rejoined &#8212; now an unknot' : 'deforming continuously &#8212; no cutting') + '</text>');
+    o.push('<text x="130" y="130" font-size="11" fill="' + (u > 0.5 ? C.muted : C.gold) + '" text-anchor="middle" font-family="monospace">' +
+           (u > 0.5 ? '&#916;(t) = 1' : '&#916;(t) = t &#8722; 1 + t&#8315;&#185;') + '</text>');
+    c.innerHTML = o.join('');
+    c.setAttribute('aria-label', (u > 0.5 ? 'An unknotted loop, after the chain was cut and rejoined; its Alexander polynomial is 1.'
+      : 'A trefoil knot being continuously deformed. Its shape changes every frame but its Alexander polynomial stays t minus 1 plus t inverse.'));
+    el('q4-rc').innerHTML = 'Q: is this chain knotted?<br>changes only when the chain is <b>cut</b>';
+  }
+
+  /* --- panel D: cut and project, in miniature --- */
+  var cpd = cutProject(d, { N: 9, g: 11, x0: 16, y0: 104, rx: 12, rw: 236, ry: 128, small: true });
+  function drawD() {
+    cpd.draw();
+    el('q4-rd').innerHTML = 'Q: what tiling does this slice produce?<br>the invariant is a window in a higher dimension';
+  }
+
+  function frame() { drawA(); drawB(); drawC(); drawD(); }
+  function tick() {
+    st.n++;
+    cpd.tick();
+    if (st.cutting) st.cut = Math.min(1, st.cut + 0.06);
+  }
+  var anim = Anim({ root: el('q4-fig'), btn: el('q4-play'), stepBtn: el('q4-step'), resetBtn: el('q4-reset'),
+    period: 90, frame: frame, tick: tick,
+    reset: function () { st.n = 0; st.cut = 0; st.cutting = false; cpd.reset(); cap.textContent = defaultCap; } });
+  var defaultCap = 'Four panels, four animations, four different questions. Nothing in this framework shows ' +
+    'that they are one question asked at four depths — and the matrix scores them as if they were.';
+  el('q4-cut').addEventListener('click', function () {
+    st.cutting = true; anim.play();
+    cap.textContent = 'The chain was cut. That — and only that — moved the knot invariant. Continuous ' +
+      'deformation never did. Compare with panel 1, where the invariant changes only if a defect is created ' +
+      'or destroyed, and with panel 2, where it changes only if the surface changes genus. Three different ' +
+      'notions of "the same", and no dictionary between them.';
+  });
+  cap.textContent = defaultCap;
+  frame();
+})();
+
+})();
+</script>
 
 </body>
 </html>
