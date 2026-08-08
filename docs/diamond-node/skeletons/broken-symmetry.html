@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Broken symmetry — Anderson's account of emergence — surveyed across twelve multi-skeleton systems. A sweep of about forty documented symmetry breakings finds every one on Dynamics or on the Topology-Dynamics edge, none on Closure or Computation. Where topology is shallow it turns out to be the defect classification of a broken symmetry (Mermin 1979). But the topology column holds at least four incompatible classifying invariants, which is a problem for the framework, not a result of it.">
+<title>Broken Symmetry and the S1&times;S2 Edge</title>
+<style>
+  :root { --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #e2e8f0; --muted: #94a3b8; --dim: #475569;
+          --s1: #818cf8; --s2: #f87171; --s3: #4ade80; --s4: #facc15; --gold: #eab308; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.7; }
+  nav { padding: 1rem 2rem; font-size: 0.85rem; }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--text); }
+  header { max-width: 720px; margin: 0 auto; padding: 0 2rem 1rem; }
+  header h1 { font-size: 1.8rem; font-weight: 700; color: var(--s2); line-height: 1.3; }
+  header .sub { color: var(--muted); font-size: 1rem; margin-top: 0.25rem; }
+  main { max-width: 720px; margin: 0 auto; padding: 0 2rem 4rem; }
+  section { margin-top: 3rem; }
+  h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { font-size: 0.98rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--text); }
+  p { margin-bottom: 1rem; color: var(--text); }
+  ul, ol { margin: 0 0 1rem 1.25rem; }
+  li { margin-bottom: 0.4rem; }
+  .quiet { color: var(--muted); font-size: 0.9rem; }
+  .emphasis { color: var(--s2); font-weight: 600; }
+  .lead { font-size: 1.02rem; }
+  a.inline { color: var(--s1); }
+
+  .wip { max-width: 720px; margin: 0 auto 1rem; padding: 0 2rem; }
+  .wip-box { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 8px;
+             padding: 0.75rem 1rem; font-size: 0.8rem; color: #fbbf24; }
+
+  table.data { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.84rem; }
+  table.data th { text-align: left; color: var(--muted); font-weight: 500; padding: 0.45rem 0.6rem;
+                  border-bottom: 1px solid var(--border); vertical-align: bottom; }
+  table.data td { padding: 0.45rem 0.6rem; border-bottom: 1px solid rgba(51,65,85,0.4); vertical-align: top; }
+  table.data td.sys { color: var(--text); font-weight: 600; white-space: nowrap; }
+  table.data code { font-family: 'Courier New', monospace; font-size: 0.95em; color: var(--s1); }
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .loc { font-family: 'Courier New', monospace; font-size: 0.78rem; padding: 0.05rem 0.35rem; border-radius: 4px; white-space: nowrap; }
+  .loc-s2 { color: var(--s2); background: rgba(248,113,113,0.12); }
+  .loc-edge { color: #c4b5fd; background: rgba(129,140,248,0.14); }
+  .loc-none { color: var(--dim); background: rgba(71,85,105,0.18); }
+
+  .callout { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--s2);
+             border-radius: 8px; padding: 1rem 1.15rem; margin: 1.5rem 0; font-size: 0.9rem; }
+  .callout.warn { border-left-color: var(--gold); }
+  .callout.open { border-left-color: var(--s1); }
+  .callout h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em;
+                color: var(--muted); margin-bottom: 0.5rem; font-weight: 600; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .figure { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin: 1.75rem 0; }
+  .fig-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .fig-head h3 { font-size: 0.95rem; margin: 0 auto 0 0; color: var(--text); }
+  .fig-btn { background: #16233b; border: 1px solid var(--border); color: var(--muted); font: inherit;
+             font-size: 0.78rem; padding: 0.25rem 0.7rem; border-radius: 5px; cursor: pointer; }
+  .fig-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .fig-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .fig-btn[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+  .fig-cap { margin: 0.9rem 0 0; font-size: 0.86rem; color: var(--muted); min-height: 3.4em; }
+  .fig-hint { margin-bottom: 0.9rem; font-size: 0.85rem; color: var(--muted); }
+  .fig-controls { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-top: 0.75rem; font-size: 0.78rem; color: var(--muted); }
+  .fig-controls label { display: flex; align-items: center; gap: 0.35rem; }
+  .fig-controls input[type=range] { width: 110px; accent-color: var(--gold); }
+  .fig-readout { display: flex; gap: 1.25rem; flex-wrap: wrap; font-family: 'Courier New', monospace;
+                 font-size: 0.8rem; margin-top: 0.75rem; }
+  .fig-readout b { color: var(--muted); font-weight: 400; }
+  .fig-readout span { color: var(--text); font-weight: 700; }
+  .two-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+  @media (max-width: 620px) { .two-panel { grid-template-columns: 1fr; } }
+  .quad { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 620px) { .quad { grid-template-columns: 1fr; } }
+  .quad-cell { background: rgba(15,23,42,0.55); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; }
+  .quad-cell h4 { font-size: 0.8rem; color: var(--s1); margin-bottom: 0.15rem; }
+  .quad-cell .q-sub { font-size: 0.72rem; color: var(--dim); margin-bottom: 0.5rem; }
+  .quad-cell .q-read { font-family: 'Courier New', monospace; font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; min-height: 2.4em; }
+  .figure svg { display: block; width: 100%; height: auto; }
+
+  .status-key { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; font-size: 0.8rem; }
+  .status-key div { display: flex; align-items: center; gap: 0.4rem; color: var(--muted); }
+  .sk-swatch { width: 26px; height: 0; border-top-width: 3px; border-top-style: solid; }
+  .sk-est { border-top-color: #4ade80; }
+  .sk-phen { border-top-color: #fbbf24; border-top-style: dashed; }
+  .sk-cand { border-top-color: #64748b; border-top-style: dotted; }
+
+  /* Tooltips */
+  .tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+  .tip .tt {
+    display: none; position: absolute; bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a2744; border: 1px solid var(--muted); border-radius: 8px;
+    padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+    color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+    line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    text-align: left; letter-spacing: normal; text-transform: none;
+  }
+  .tip .tt::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--muted);
+  }
+  .tip:hover .tt, .tip:focus .tt { display: block; }
+  @media (max-width: 640px) {
+    .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto;
+      transform: none; max-width: none; width: auto; }
+    .tip .tt::after { display: none; }
+  }
+  /* Footnotes */
+  .fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+  .fn:hover { color: var(--text); }
+  .footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .footnotes ol { padding-left: 1.5rem; }
+  .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+  .footnotes li a { color: var(--muted); }
+  .footnotes li a:hover { color: var(--text); }
+  details.collapse { margin: 0; }
+  details.collapse > summary { font-size: 1.2rem; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1rem; cursor: pointer; list-style: none; }
+  details.collapse > summary::-webkit-details-marker { display: none; }
+  details.collapse > summary::before { content: '\25B8\00a0'; color: var(--muted); font-size: 0.85em; }
+  details.collapse[open] > summary::before { content: '\25BE\00a0'; }
+  details.collapse > summary:hover { color: var(--s2); }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0s !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav><a href="index.html">&larr; Mathematical Skeletons</a></nav>
+
+<div class="wip">
+  <div class="wip-box">
+    <strong>Work in progress.</strong> Everything on this page is a provisional reading under review, not
+    a settled result. The sweep it reports is a survey of published phenomena, assembled by hand, and its
+    counts are soft. <a href="index.html" style="color:#fbbf24">Context</a>
+  </div>
+</div>
+
+<header>
+  <h1>Broken Symmetry and the S1&times;S2 Edge</h1>
+  <p class="sub">Anderson's account of emergence &mdash; where it reaches, and where it stops.</p>
+</header>
+
+<main>
+
+<section>
+  <p class="lead">
+  This series claims that four mathematical structures &mdash; topology, dynamics, closure, computation
+  &mdash; recur across physical systems. There is an older and far better-established account of where
+  emergent properties come from, and it has one structure, not four:
+  <span class="tip" tabindex="0">broken symmetry<span class="tt">A system whose governing law is symmetric under some transformation, but whose actual state is not. The law does not pick a direction; the system does.</span></span>.
+  Philip Anderson's <em>More is Different</em><sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> is the
+  canonical statement of it, and for fifty years it has been the default answer.
+  </p>
+  <p>
+  So the honest question for this framework is not whether broken symmetry is important. It is:
+  <strong>where does broken symmetry sit relative to the four skeletons?</strong> Is it a fifth structure
+  we have missed, is it a rival account of the same ground, or is it something inside the structure we
+  already drew? A sweep of roughly forty documented symmetry breakings across the twelve
+  <span class="tip" tabindex="0">multi-skeleton systems<span class="tt">The twelve systems in the matrix that carry two or more skeletons: ecosystem, machine learning, protein folding, active nematics, tokamak plasma, brain, FQHE, quasicrystal, cardiac tissue, immune system, development, and the BZ reaction.</span></span>
+  in the matrix returned an answer, and then returned a second, less comfortable one that this page also has to report.
+  </p>
+  <p>
+  What follows is five findings. The first two support the framework. The third is a serious problem for
+  it. The fourth names two systems that defeat broken symmetry outright. The fifth is a rival explanation
+  of the framework's own headline number, generated from the framework's own data, which we have not been
+  able to rule out.
+  </p>
+</section>
+
+<!-- ============================================================ 1 -->
+<section>
+  <h2>1. What broken symmetry is</h2>
+  <p>
+  A magnet is the textbook case. The physics of a lump of iron does not prefer any direction in space
+  &mdash; rotate the whole experiment and every law reads the same. Cool it below the Curie temperature
+  anyway and the spins line up along <em>some</em> direction. The law kept its symmetry; the state threw
+  it away. That gap is the whole phenomenon.
+  </p>
+  <p>
+  Anderson's argument was that this gap is where new physics enters. Once a direction is chosen, the
+  system acquires properties &mdash; rigidity, a definite orientation, a restoring force &mdash; that no
+  amount of analysis of a single atom would predict. <em>More is different</em> because the collective
+  state has less symmetry than the parts.
+  </p>
+  <p>
+  Two pieces of vocabulary carry the rest of this page.
+  </p>
+  <ul>
+    <li><strong>G and H.</strong> <code>G</code> is the symmetry group of the disordered state &mdash; everything the law
+      allows. <code>H</code> is what survives the choice: the subgroup that still leaves the ordered state
+      alone. The set of equally-good ordered states is the quotient <code>G/H</code>, called the
+      <span class="tip" tabindex="0">order-parameter manifold<span class="tt">The space of all the different ordered states the system could equally well have fallen into. For a magnet in three dimensions it is the sphere of directions the magnetisation could point; every point on it is an equally valid ground state.</span></span>.
+      For a three-dimensional magnet, <code>G</code> is all rotations, <code>H</code> is the rotations about the chosen
+      axis, and <code>G/H</code> is a sphere.</li>
+    <li><strong>Goldstone modes.</strong> Moving <em>along</em> <code>G/H</code> costs no energy &mdash; every point on it is an
+      equally good ground state. So a slow, long-wavelength twist from one ground state to a neighbouring
+      one is almost free, and appears as a gapless excitation.<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup>
+      Spin waves in a magnet, phonons in a crystal, and &mdash; as section 5 gets to &mdash;
+      <span class="tip" tabindex="0">phasons<span class="tt">The Goldstone mode of a quasicrystal: a rearrangement of the tiling that costs no energy in the ideal case, because it corresponds to sliding the cut through the higher-dimensional lattice.</span></span>
+      in a quasicrystal are all the same fact in different clothes.</li>
+  </ul>
+  <p>
+  Everything in the rest of this page is a consequence of one thing: <code>G/H</code> is a <em>space</em>, and spaces
+  have shape.
+  </p>
+</section>
+
+<!-- ============================================================ 2 -->
+<section>
+  <h2>2. Where it shows up in these systems</h2>
+  <p>
+  The sweep went system by system through the twelve multi-skeleton entries in the
+  <a class="inline" href="skeleton-matrix.html">matrix</a> and collected documented symmetry breakings from
+  the published literature on each. It found about forty. The table lists them by system, with where each
+  one sits in the four-skeleton picture.
+  </p>
+
+  <div class="callout warn">
+    <h4>Granularity caveat &mdash; read this before the table</h4>
+    <p>
+    &ldquo;About forty&rdquo; is a soft number and it should be treated as one. Whether the cardiac spiral core and
+    the chirality of that spiral are one breaking or two is a judgement call, and a different reviewer would
+    reasonably return 32 or 50. <strong>The count is soft. The pattern is not</strong> &mdash; the distribution
+    across skeletons does not change under any regrouping we tried, because no regrouping moves an instance
+    from one skeleton to another.
+    </p>
+  </div>
+
+  <div class="scroll-x">
+  <table class="data">
+    <thead>
+      <tr><th>System</th><th>Documented symmetry breakings</th><th>Sits on</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sys">Development</td>
+        <td>Anterior&ndash;posterior axis; dorsal&ndash;ventral axis; left&ndash;right chirality; the segmentation clock (continuous time-translation &rarr; discrete); Turing-type digit patterning; planar cell polarity; the gastrulation site; cell-fate choice among equivalent cells</td>
+        <td><span class="loc loc-s2">S2</span> <span class="loc loc-edge">S1&times;S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Cardiac</td>
+        <td>Planar wave &rarr; spiral (the core breaks translation and rotation); spiral chirality; alternans (period doubling breaks discrete time-translation); discordant alternans (nodal lines break the spatial symmetry of the alternans phase)</td>
+        <td><span class="loc loc-s2">S2</span> <span class="loc loc-edge">S1&times;S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">BZ reaction</td>
+        <td>Homogeneous &rarr; oscillatory (Hopf); Turing patterning; spiral core and its chirality; pacemaker nucleation breaking translation</td>
+        <td><span class="loc loc-s2">S2</span> <span class="loc loc-edge">S1&times;S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Active nematics</td>
+        <td>Isotropic &rarr; nematic (rotational); spontaneous flow transition; &plusmn;&frac12; disclination unbinding into active turbulence; nematic &rarr; polar ordering where it occurs</td>
+        <td><span class="loc loc-s2">S2</span> <span class="loc loc-edge">S1&times;S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Tokamak plasma</td>
+        <td>L&ndash;H transition and the pedestal (radial translation); magnetic islands from broken axisymmetry; the sawtooth crash (helical symmetry); zonal-flow generation from symmetric turbulence</td>
+        <td><span class="loc loc-s2">S2</span> <span class="loc loc-edge">S1&times;S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Brain</td>
+        <td>Orientation pinwheels in V1 (rotational symmetry of the feature map); ocular dominance columns (translation); perceptual bistability resolving to one percept; travelling cortical waves</td>
+        <td><span class="loc loc-s2">S2</span> <span class="loc loc-edge">S1&times;S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Quasicrystal</td>
+        <td>Liquid &rarr; quasicrystal, breaking translation <em>and</em> rotation; selection of an icosahedral orientation; the phason degree of freedom left behind by the extra broken translations</td>
+        <td><span class="loc loc-s2">S2</span> <span class="loc loc-edge">S1&times;S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Protein folding</td>
+        <td>Coil &rarr; globule; the handedness of the &alpha;-helix; the glassy, ergodicity-breaking part of the folding funnel</td>
+        <td><span class="loc loc-s2">S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Machine learning</td>
+        <td>Symmetry breaking of the loss landscape at the interpolation threshold; neural collapse of the feature geometry; mode collapse in generative training</td>
+        <td><span class="loc loc-s2">S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Ecosystem</td>
+        <td>Vegetation banding (Turing-type, breaking translation); competitive exclusion among near-equivalent competitors</td>
+        <td><span class="loc loc-s2">S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">Immune</td>
+        <td>Germinal-centre competition resolving to a dominant clone; the self/non-self discrimination threshold</td>
+        <td><span class="loc loc-s2">S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys">FQHE</td>
+        <td>Only one, and it is a <em>different phase</em> from the topologically ordered one: the nematic and stripe phases in higher Landau levels break rotational symmetry. The fractional plateaus themselves break nothing &mdash; see section 6.</td>
+        <td><span class="loc loc-s2">S2</span></td>
+      </tr>
+      <tr>
+        <td class="sys" style="color:var(--muted)">Magnets<br><span class="quiet" style="font-size:0.72rem">(comparator, one skeleton)</span></td>
+        <td class="quiet">Paramagnet &rarr; ferromagnet. One breaking. The purest instance in the entire set, and section 7 is about why that matters.</td>
+        <td><span class="loc loc-s2">S2</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============================================================ 3 -->
+<section>
+  <h2>3. F1 &mdash; broken symmetry is an edge, not a fifth skeleton</h2>
+  <p>
+  Read the right-hand column. <strong>Every instance in the sweep sits inside S2 (Dynamics / Criticality) or
+  on the S1&times;S2 edge. None sits on S3 (Closure). None sits on S4 (Computation).</strong>
+  </p>
+  <p>
+  That is a clean result and it has a clean reading: broken symmetry is not a fifth vertex of the
+  tetrahedron that we forgot to draw. It is <em>what the S1&times;S2 edge is made of</em>. A symmetry breaks
+  (that is the dynamics), and the order parameter it leaves behind has a shape, and the defects in that
+  shape are the topology. One phenomenon, sitting across two skeletons.
+  </p>
+
+  <div class="callout">
+    <h4>The near-misses, named honestly</h4>
+    <p>
+    S3 and S4 are not empty because nobody looked. There are three candidates, and all three fail for the
+    same reason.
+    </p>
+    <ul style="margin-bottom:0.6rem">
+      <li><strong>Machine learning:</strong> the permutation symmetry of hidden units in a layer. Real, and really broken by training.</li>
+      <li><strong>Brain:</strong> the permutation symmetry of neurons within an assembly.</li>
+      <li><strong>Immune:</strong> the permutation symmetry of clones in a naive repertoire, broken by clonal selection.</li>
+    </ul>
+    <p>
+    Each of these is a symmetry of the <em>substrate</em> &mdash; of which physical unit plays which role.
+    None is a symmetry of the closure relation or of the computation being performed. Relabel every hidden
+    unit and the network computes the identical function; relabel every clone and the repertoire covers the
+    identical antigen space. A symmetry whose breaking changes nothing about the structure in question is
+    not a symmetry breaking <em>of</em> that structure.
+    </p>
+    <p>
+    We are stating this as a caveat rather than burying it, because it is the honest version and it is more
+    interesting than a clean sweep. If someone finds a genuine symmetry of a closure relation &mdash; not of
+    its substrate &mdash; that breaks, F1 is in trouble and we would like to know.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ 4 -->
+<section>
+  <h2>4. F2 &mdash; where topology is shallow, it is the defect classification of a broken symmetry</h2>
+  <p>
+  This is not our result. It is David Mermin's, from 1979, and it is one of the cleanest theorems in
+  condensed matter physics.<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup>
+  </p>
+  <p>
+  <strong>The claim:</strong> defects in an ordered medium are classified by the
+  <span class="tip" tabindex="0">homotopy groups<span class="tt">Homotopy groups count the holes in a space by asking which loops (or spheres) inside it can be shrunk to a point and which cannot. &pi;&#8321; counts loops; &pi;&#8322; counts spheres.</span></span>
+  of the order-parameter manifold <code>G/H</code>. Point defects in two dimensions and line defects in three are
+  classified by <code>&pi;&#8321;(G/H)</code>; point defects in three dimensions by <code>&pi;&#8322;(G/H)</code>. Not
+  approximately, not heuristically &mdash; the homotopy class of the loop is a conserved label, and a defect
+  carrying a non-trivial one <em>cannot be removed by any continuous rearrangement</em>.
+  </p>
+  <p>
+  The mechanism is worth understanding directly, because it turns an abstract group into a picture. Draw a
+  loop in the material around the defect. At every point of that loop the order parameter has some value, so
+  the loop traces out a path in <code>G/H</code>. If that path can be shrunk to a point inside <code>G/H</code>, the defect can
+  be combed away. If it cannot, the defect is stuck &mdash; and no local surgery, no annealing, no amount of
+  patience will remove it. Topological protection is exactly this and nothing more.
+  </p>
+
+  <div class="scroll-x">
+  <table class="data">
+    <thead><tr><th>System</th><th>Defect</th><th>Classified by</th></tr></thead>
+    <tbody>
+      <tr><td class="sys">Active nematics</td><td>&plusmn;&frac12; disclinations</td><td><code>&pi;&#8321;(RP&sup2;) = Z&#8322;</code></td></tr>
+      <tr><td class="sys">Cardiac tissue</td><td>Phase singularity at a spiral core</td><td><code>&pi;&#8321;(S&sup1;) = Z</code><sup><a class="fn" href="#fn4" id="fnref4">4</a></sup></td></tr>
+      <tr><td class="sys">BZ reaction</td><td>Spiral core</td><td><code>&pi;&#8321;(S&sup1;) = Z</code></td></tr>
+      <tr><td class="sys">Tokamak plasma</td><td>Magnetic islands</td><td>Field-line topology change from broken axisymmetry</td></tr>
+      <tr><td class="sys">Brain (V1)</td><td>Orientation pinwheels</td><td>Defects of a broken rotational symmetry <em>in the feature map</em><sup><a class="fn" href="#fn5" id="fnref5">5</a></sup></td></tr>
+      <tr><td class="sys">Development</td><td>Planar-cell-polarity vortices, Turing defects</td><td><code>&pi;&#8321;</code> of the polarity manifold</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>
+  <strong>What this costs the framework.</strong> In every row above, the topology present in the system is
+  <em>downstream</em> of a symmetry breaking. It is not an independent structure that happens to co-occur with
+  criticality; it is the defect classification of the ordering. That makes &ldquo;topology recurs across domains&rdquo;
+  a weaker claim than it looks. Six of the systems in the matrix carry topology at depth 1 for what is,
+  on this reading, a single reason: they ordered, and ordering leaves defects.
+  </p>
+
+  <div class="callout warn">
+    <h4>The weakest row, flagged rather than hidden</h4>
+    <p>
+    The V1 pinwheel case is not a defect in physical space. It is a defect in a <em>feature map</em> &mdash; a
+    chart of which cortical location prefers which stimulus orientation. The mathematics of the defect is the
+    same, but the order parameter is a measured tuning property of neurons, not a physical field with a
+    Hamiltonian and a free energy. Whether Mermin's classification applies with full force to a map that
+    develops under activity-dependent plasticity is genuinely open. Treat that row as the weakest one in the
+    table.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ 5 -->
+<section>
+  <h2>5. F3 &mdash; the topology column holds at least four incompatible invariants</h2>
+  <p>
+  This is the most important thing on this page and the least comfortable, so we will state it flatly
+  before softening anything.
+  </p>
+  <p class="lead">
+  <span class="emphasis">The systems in the matrix scored as &ldquo;topological&rdquo; are not all topological in the same
+  sense.</span> There are at least four different classifying invariants involved. They do not classify the same
+  objects. They do not agree on when two systems are equivalent. And they are not depths, aspects, or
+  special cases of one another.
+  </p>
+
+  <div class="scroll-x">
+  <table class="data">
+    <thead><tr><th>Invariant</th><th>Systems</th><th>What it classifies</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="sys">Mermin homotopy defects<br><code>&pi;<sub>n</sub>(G/H)</code></td>
+        <td>Nematics, cardiac, BZ, tokamak, brain, development</td>
+        <td>Defects of a <strong>broken</strong> symmetry</td>
+      </tr>
+      <tr>
+        <td class="sys">Topological order<br>(modular tensor category)</td>
+        <td>FQHE, anyons<sup><a class="fn" href="#fn6" id="fnref6">6</a></sup></td>
+        <td>Ground-state degeneracy on a surface, and anyon statistics. <strong>No symmetry is broken</strong></td>
+      </tr>
+      <tr>
+        <td class="sys">Knot and link invariants<br>of a 1-D embedding</td>
+        <td>Protein folding<sup><a class="fn" href="#fn8" id="fnref8">8</a></sup></td>
+        <td>Entanglement of a chain in 3-space</td>
+      </tr>
+      <tr>
+        <td class="sys">Cut-and-project from a<br>higher-dimensional lattice</td>
+        <td>Quasicrystals<sup><a class="fn" href="#fn9" id="fnref9">9</a></sup></td>
+        <td>Aperiodic order. <strong>More</strong> symmetry broken than a crystal, not less</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>
+  Put the four side by side and the incompatibility is immediate. A Mermin defect requires a broken symmetry;
+  topological order requires that <em>no</em> symmetry be broken and no local order parameter exist. A knot
+  invariant classifies a curve's embedding and is indifferent to whether anything ordered at all. Cut-and-project
+  classifies a tiling by the geometry of a slice through a lattice in a higher dimension, and the quasicrystal
+  is the one case here where the ordered state has <em>less</em> symmetry than a crystal does, not more.
+  </p>
+  <p>
+  Ask any of them the question &ldquo;are these two systems topologically the same?&rdquo; and they answer about
+  different objects. There is no common category in which the answers can be compared.
+  </p>
+
+  <div class="callout open">
+    <h4>An open problem for this framework, in its own voice</h4>
+    <p>
+    The series currently encodes the first-versus-second split &mdash; Mermin defects at depth 1, topological
+    order at depth 2 &mdash; as a <em>depth</em>: a score of 1 against a score of 2. That encoding says these are
+    the same kind of thing, more or less of it. <strong>They are not. It is a difference of kind, recorded as a
+    difference of degree.</strong>
+    </p>
+    <p style="margin-bottom:0">
+    So either somebody shows that these four are aspects of one classification &mdash; which would be a real
+    result and we would very much like to see it &mdash; <strong>or &ldquo;topology&rdquo; is not one skeleton</strong>, and
+    the S1 column in the matrix is at least two columns wearing one label. We do not know which. We are not
+    going to pretend the scoring settles it.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ 6 -->
+<section>
+  <h2>6. F4 &mdash; two systems defeat broken symmetry outright, from opposite sides</h2>
+  <p>
+  Section 3 found broken symmetry everywhere it looked. Two systems in the matrix are where it fails, and
+  they fail in opposite directions. Both already have pages in the wider series; neither is currently flagged
+  as special, and both should be.
+  </p>
+
+  <h3>FQHE and topological order &mdash; order with no symmetry to break</h3>
+  <p>
+  Landau's theory says: to have a phase transition, break a symmetry; to tell two phases apart, find a local
+  order parameter. The fractional quantum Hall states<sup><a class="fn" href="#fn7" id="fnref7">7</a></sup>
+  refuse both. States at different filling fractions have <em>identical</em> symmetry, and no local measurement
+  anywhere in the bulk distinguishes them. There is nothing for Landau's tool to grip.
+  </p>
+  <p>
+  What does distinguish them is global: the number of degenerate ground states depends on the
+  <span class="tip" tabindex="0">genus<span class="tt">The number of handles on a surface. A sphere has genus 0, a doughnut genus 1, a two-holed doughnut genus 2. Topological order shows up as a ground-state count that depends on this number.</span></span>
+  of the surface the system lives on, and the excitations braid with fractional statistics. This is the founding
+  statement of the topological-order field.<sup><a class="fn" href="#fn6">6</a></sup> Order without symmetry
+  breaking, and it took a new invariant to see it.
+  </p>
+
+  <h3>Glass &mdash; a broken symmetry that is an artifact of the calculation</h3>
+  <p>
+  The glass transition is the mirror image. The theory that describes it best speaks of
+  <span class="tip" tabindex="0">replica symmetry breaking<span class="tt">A technique in which one analyses n identical copies (&ldquo;replicas&rdquo;) of a disordered system and takes n to zero. In the spin-glass solution the symmetry among the replicas is broken &mdash; but the replicas are a calculational device, not physical copies.</span></span><sup><a class="fn" href="#fn10" id="fnref10">10</a></sup>,
+  and that phrase has misled a great many readers. The broken symmetry is the permutation symmetry
+  <em>of the replicas</em> &mdash; of copies introduced to make an average tractable. It is a feature of the
+  calculation.
+  </p>
+  <p>
+  Physically, a glass has <strong>no broken spatial symmetry and no order parameter</strong>. A snapshot of a glass
+  is statistically indistinguishable from a snapshot of the liquid it froze out of. What happens is
+  <span class="tip" tabindex="0">ergodicity breaking<span class="tt">The system stops exploring its full configuration space on any accessible timescale. It is trapped in one region &mdash; not because a symmetry was broken, but because the barriers became insurmountable.</span></span>:
+  the system stops exploring, without ever having chosen a direction.
+  </p>
+
+  <div class="callout">
+    <h4>Why these two matter more than the other fourteen</h4>
+    <p style="margin-bottom:0">
+    Anyone claiming to succeed Landau theory has to explain the two cases Landau theory cannot handle: order
+    without a broken symmetry (FQHE), and rigidity without order (glass). These are the two most informative
+    systems in the matrix for testing any framework, including this one, and they are currently scored as
+    ordinary rows.
+    </p>
+  </div>
+
+  <h3 id="fqhe-closure">A correction to the FQHE row, and why it was made this way</h3>
+  <p>
+  The matrix used to score FQHE as carrying closure (S3) at depth 1, on the strength of the description
+  &ldquo;self-generated anyons&rdquo;. It no longer does: that cell is now <code>0</code>. Two reasons, and the second is
+  the one that actually decided it.
+  </p>
+  <p>
+  <strong>First, the conservative reading of closure.</strong> Closure in this series means a self-sustaining
+  network that produces its own components from a
+  <span class="tip" tabindex="0">food set<span class="tt">The set of molecules available freely from the environment. A reflexively autocatalytic and food-generated (RAF) set is one where every reaction is catalysed from within the set and every component can be built up from the food set.</span></span>
+  &mdash; the RAF condition.<sup><a class="fn" href="#fn11" id="fnref11">11</a></sup> Anyons are excitations
+  created by externally perturbing the medium; they are not a food-generated production network. The steel-man
+  for the old value is real and should not be buried: Fibonacci fusion
+  <code>&tau; &times; &tau; = 1 + &tau;</code> genuinely does regenerate &tau; from &tau;, which is closure in
+  the fusion-category sense, and &ldquo;anyon fusion as a RAF&rdquo; remains an open candidate connection in this
+  series &mdash; it is why the cell was ever a 1. But the fusion algebra closing on itself is a statement about
+  an algebra, not about a network of physical components producing each other from a food set.
+  </p>
+  <div class="callout warn">
+    <h4>Second, and decisively: the predictor was frozen before the analysis</h4>
+    <p style="margin-bottom:0">
+    Two copies of this matrix disagreed on that cell. One of them had been committed to version control and
+    frozen as the predictor for an analysis <em>before</em> that analysis was run; the other had not. Editing a
+    frozen predictor after seeing results is post-hoc tuning, and it is a drift signal no matter how defensible
+    the new value looks. So the frozen copy wins by default and the unfrozen copy is the one that gets
+    corrected &mdash; which is the direction the change went here, and it would have gone that way even if the
+    argument above had come out the other side. That is the entire reason for freezing a predictor, in one
+    concrete instance.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ 7 -->
+<section>
+  <h2>7. F5 &mdash; a rival explanation of stack height, offered against ourselves</h2>
+  <p>
+  The matrix scores each system by
+  <span class="tip" tabindex="0">stack height<span class="tt">How many of the nine emergent properties a system carries: four skeletons at two depths each, plus physical realisation. The framework's headline number.</span></span>:
+  how many of the nine emergent properties it carries. Development tops the table at 7. The framework's reading
+  of that is that Development carries more distinct mathematical structures than anything else in the set.
+  </p>
+  <p>
+  Count symmetry breakings instead and a competing account appears, built entirely out of the framework's own
+  data:
+  </p>
+
+  <div class="scroll-x">
+  <table class="data">
+    <thead><tr><th>System</th><th>Symmetry breakings in the sweep</th><th>Stack height</th></tr></thead>
+    <tbody>
+      <tr><td class="sys">Development</td><td>~8</td><td>7</td></tr>
+      <tr><td class="sys">Cardiac</td><td>~4</td><td>6</td></tr>
+      <tr><td class="sys">BZ reaction</td><td>~4</td><td>6</td></tr>
+      <tr><td class="sys">Immune</td><td>~2</td><td>5</td></tr>
+      <tr><td class="sys">Brain</td><td>~4</td><td>5</td></tr>
+      <tr><td class="sys" style="color:var(--gold)">Magnets</td><td style="color:var(--gold)">1</td><td style="color:var(--gold)">1</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>
+  <span class="emphasis">Magnets are the purest broken-symmetry system in the entire set and they have a stack
+  height of 1.</span> That single fact is what makes the rival account interesting rather than trivial. It is not
+  that broken symmetry predicts stack height by volume &mdash; a system with one enormous, perfectly clean
+  breaking sits at the bottom of the table.
+  </p>
+  <p>
+  What separates the high-stack systems is <em>not</em> that more distinct structures are present. It is that
+  <strong>breaking recurs &mdash; at different scales, sequentially, each one acting on the state the last one
+  left behind.</strong> Development breaks a symmetry, then breaks another symmetry of the result, then another,
+  eight times over, at scales from the whole embryo down to a pair of adjacent cells. A magnet breaks one
+  symmetry, magnificently, once, and stops.
+  </p>
+  <p>
+  The idea that what happens where two symmetry-breaking transitions <em>meet</em> is its own object of study
+  is not new &mdash; it is the classical theory of
+  <span class="tip" tabindex="0">bicritical points<span class="tt">A point in a phase diagram where two distinct ordered phases and the disordered phase all meet, so that two different symmetry breakings become degenerate. The behaviour there belongs to neither transition alone.</span></span><sup><a class="fn" href="#fn16" id="fnref16">16</a></sup>,
+  and it is a reasonable place to look for what a cascade actually is.
+  </p>
+
+  <div class="callout open">
+    <h4>We are not resolving this</h4>
+    <p>
+    On this reading, &ldquo;stack height&rdquo; may be measuring the <em>depth of a symmetry-breaking cascade</em> and
+    reporting it as a count of independent structures. If that is right, the four skeletons would be four ways
+    of describing what a cascade leaves behind, rather than four independent things &mdash; a considerably
+    weaker claim than the one this series makes.
+    </p>
+    <p style="margin-bottom:0">
+    We cannot currently distinguish the two accounts with the data in the matrix, because every high-stack
+    system in it is also a deep-cascade system. That is a confound, not a finding, and the next section says
+    what would break it. A page that cannot name the strongest objection to itself is not worth reading; this
+    is ours.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ 8 -->
+<section>
+  <h2>8. What would settle it</h2>
+  <p>
+  Two of the five findings above are open. Here is what evidence would decide each, so that this page can be
+  checked rather than believed.
+  </p>
+
+  <h3>For F3 &mdash; is &ldquo;topology&rdquo; one skeleton or several?</h3>
+  <ul>
+    <li><strong>Settled in favour of one skeleton</strong> by a construction that recovers Mermin defect classes,
+      modular tensor categories, knot invariants and cut-and-project windows as special cases of a single
+      classification, with the specialisation map written down. Not an analogy &mdash; a map.</li>
+    <li><strong>Settled against</strong> by finding two systems that the matrix scores identically on S1 but which
+      no invariant relates: same score, no shared classifying structure, and no prediction that transfers from
+      one to the other. One clean pair would do it.</li>
+    <li><strong>Sharpened either way</strong> by asking what the S1 score is supposed to predict. If a depth-2
+      S1 score predicts something a depth-1 score does not &mdash; some measurable, in some system &mdash; then
+      the depth encoding is doing work and the incompatibility is survivable. If nobody can name that
+      measurable, the column is bookkeeping.</li>
+  </ul>
+
+  <h3>For F5 &mdash; cascade depth, or independent structures?</h3>
+  <ul>
+    <li><strong>The decisive case is a system with a high stack and a shallow cascade</strong> &mdash; many distinct
+      skeleton-properties, but few sequential symmetry breakings. The framework predicts such systems exist. The
+      rival account predicts they do not. Neither of us has one, and the matrix contains no example. Finding
+      one settles it in the framework's favour.</li>
+    <li><strong>The reverse case</strong> &mdash; a deep cascade with a low stack &mdash; would settle it the other
+      way. Magnets are not it: one breaking, one stack.</li>
+    <li><strong>Failing either</strong>, the honest report is that the two accounts are observationally equivalent
+      on the present data, and the stack-height number should be quoted with that caveat attached.</li>
+  </ul>
+
+  <div class="callout open">
+    <h4>And a note on the S1&times;S2 edge grading</h4>
+    <p style="margin-bottom:0">
+    Findings F1 and F2 together are the reason the <a class="inline" href="skeleton-matrix.html">matrix</a> now
+    grades the S1&times;S2 edge as <em>established</em> and grades self-organised criticality and the edge of
+    chaos as <em>phenomena</em>. &ldquo;Established&rdquo; there means one specific thing: <strong>a classification theorem
+    exists</strong>. Mermin 1979 is such a theorem and it is forty-seven years old. Self-organised
+    criticality<sup><a class="fn" href="#fn12" id="fnref12">12</a></sup> and the edge of
+    chaos<sup><a class="fn" href="#fn13" id="fnref13">13</a></sup> are real, named, repeatedly observed &mdash;
+    and have no classifying invariant behind them; in the edge-of-chaos case the &lambda; parameter that was
+    supposed to be the invariant was deflated in 1993<sup><a class="fn" href="#fn14" id="fnref14">14</a></sup>
+    and nothing replaced it. The S1&times;S4 edge keeps its grade for the same reason the S1&times;S2 edge gains
+    one: Kitaev's construction<sup><a class="fn" href="#fn15" id="fnref15">15</a></sup> is a theorem, not an
+    observation. That is a re-grading of <em>evidence class</em>, not of importance, and it is the
+    reading this series takes, not a claim about community consensus.
+    </p>
+  </div>
+</section>
+
+<section>
+  <details class="collapse">
+  <summary>Recap</summary>
+  <div style="background:var(--card);border:2px solid var(--s2);border-radius:10px;padding:1.5rem;margin:1.5rem 0">
+  <dl>
+    <dt style="color:var(--s2);font-weight:600;font-size:0.9rem">F1</dt>
+    <dd style="margin:0.25rem 0 0.75rem;font-size:0.9rem">~40 documented symmetry breakings, all on S2 or the S1&times;S2 edge, none on S3 or S4. Broken symmetry is what the S1&times;S2 edge is made of, not a fifth skeleton. The S3/S4 near-misses are substrate symmetries.</dd>
+    <dt style="color:var(--s2);font-weight:600;font-size:0.9rem">F2</dt>
+    <dd style="margin:0.25rem 0 0.75rem;font-size:0.9rem">Where topology is shallow it is Mermin's defect classification of a broken symmetry &mdash; downstream of the ordering, not independent of it. This weakens &ldquo;topology recurs&rdquo;.</dd>
+    <dt style="color:var(--s2);font-weight:600;font-size:0.9rem">F3</dt>
+    <dd style="margin:0.25rem 0 0.75rem;font-size:0.9rem">Four incompatible invariants share the S1 column. Recorded as a difference of degree; it is a difference of kind. Open problem.</dd>
+    <dt style="color:var(--s2);font-weight:600;font-size:0.9rem">F4</dt>
+    <dd style="margin:0.25rem 0 0.75rem;font-size:0.9rem">FQHE has order with no broken symmetry. Glass has rigidity with no order. Both defeat Landau theory, from opposite sides.</dd>
+    <dt style="color:var(--s2);font-weight:600;font-size:0.9rem">F5</dt>
+    <dd style="margin:0.25rem 0 0;font-size:0.9rem">Stack height may be measuring cascade depth. Magnets: one breaking, stack 1. Unresolved, and confounded in the present data.</dd>
+  </dl>
+  </div>
+  </details>
+  <p style="text-align:center; margin-top:2rem;"><a href="skeleton-computation.html" style="color:var(--s4)">&larr; Skeleton 4: Computation</a> &nbsp;&nbsp; <a href="skeleton-matrix.html" style="color:var(--muted)">Skeleton Matrix &rarr;</a></p>
+</section>
+
+</main>
+
+<div class="footnotes" style="max-width:720px;margin:2rem auto 0;padding:1rem 2rem 0;border-top:1px solid #334155">
+  <ol>
+    <li id="fn1">Anderson, P. W. (1972). More is different. <em>Science</em>, 177(4047), 393&ndash;396. <a href="https://doi.org/10.1126/science.177.4047.393">doi:10.1126/science.177.4047.393</a> <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Goldstone, J. (1961). Field theories with &laquo;superconductor&raquo; solutions. <em>Il Nuovo Cimento</em>, 19, 154&ndash;164. <a href="https://doi.org/10.1007/BF02812722">doi:10.1007/BF02812722</a> <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Mermin, N. D. (1979). The topological theory of defects in ordered media. <em>Reviews of Modern Physics</em>, 51, 591&ndash;648. <a href="https://doi.org/10.1103/RevModPhys.51.591">doi:10.1103/RevModPhys.51.591</a> <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">Winfree, A. T. (1972). Spiral waves of chemical activity. <em>Science</em>, 175(4022), 634&ndash;636. <a href="https://doi.org/10.1126/science.175.4022.634">doi:10.1126/science.175.4022.634</a> <a href="#fnref4">&uarr;</a></li>
+    <li id="fn5">Bonhoeffer, T. &amp; Grinvald, A. (1991). Iso-orientation domains in cat visual cortex are arranged in pinwheel-like patterns. <em>Nature</em>, 353, 429&ndash;431. <a href="https://doi.org/10.1038/353429a0">doi:10.1038/353429a0</a> <a href="#fnref5">&uarr;</a></li>
+    <li id="fn6">Wen, X.-G. (1990). Topological orders in rigid states. <em>Int. J. Mod. Phys. B</em>, 4, 239&ndash;271. <a href="https://doi.org/10.1142/S0217979290000139">doi:10.1142/S0217979290000139</a>. Wen, X.-G. &amp; Niu, Q. (1990). Ground-state degeneracy of the fractional quantum Hall states. <em>Phys. Rev. B</em>, 41, 9377. <a href="https://doi.org/10.1103/PhysRevB.41.9377">doi:10.1103/PhysRevB.41.9377</a>. Review: Wen, X.-G. (2017). Colloquium: Zoo of quantum-topological phases of matter. <em>Rev. Mod. Phys.</em>, 89, 041004. <a href="https://doi.org/10.1103/RevModPhys.89.041004">doi:10.1103/RevModPhys.89.041004</a> (arXiv:1610.03911). <a href="#fnref6">&uarr;</a></li>
+    <li id="fn7">Tsui, D. C., St&ouml;rmer, H. L. &amp; Gossard, A. C. (1982). Two-dimensional magnetotransport in the extreme quantum limit. <em>Phys. Rev. Lett.</em>, 48, 1559. <a href="https://doi.org/10.1103/PhysRevLett.48.1559">doi:10.1103/PhysRevLett.48.1559</a> <a href="#fnref7">&uarr;</a></li>
+    <li id="fn8">Taylor, W. R. (2000). A deeply knotted protein structure and how it might fold. <em>Nature</em>, 406, 916&ndash;919. <a href="https://doi.org/10.1038/35022623">doi:10.1038/35022623</a> <a href="#fnref8">&uarr;</a></li>
+    <li id="fn9">Shechtman, D., Blech, I., Gratias, D. &amp; Cahn, J. W. (1984). Metallic phase with long-range orientational order and no translational symmetry. <em>Phys. Rev. Lett.</em>, 53, 1951. <a href="https://doi.org/10.1103/PhysRevLett.53.1951">doi:10.1103/PhysRevLett.53.1951</a>. Cut-and-project construction: Duneau, M. &amp; Katz, A. (1985). Quasiperiodic patterns. <em>Phys. Rev. Lett.</em>, 54, 2688. <a href="https://doi.org/10.1103/PhysRevLett.54.2688">doi:10.1103/PhysRevLett.54.2688</a> <a href="#fnref9">&uarr;</a></li>
+    <li id="fn10">Parisi, G. (1979). Infinite number of order parameters for spin-glasses. <em>Phys. Rev. Lett.</em>, 43, 1754. <a href="https://doi.org/10.1103/PhysRevLett.43.1754">doi:10.1103/PhysRevLett.43.1754</a> <a href="#fnref10">&uarr;</a></li>
+    <li id="fn11">Hordijk, W. &amp; Steel, M. (2004). Detecting autocatalytic, self-sustaining sets in chemical reaction systems. <em>J. Theor. Biol.</em>, 227, 451&ndash;461. <a href="https://doi.org/10.1016/j.jtbi.2003.11.020">doi:10.1016/j.jtbi.2003.11.020</a>. Originating idea: Kauffman, S. A. (1986). Autocatalytic sets of proteins. <em>J. Theor. Biol.</em>, 119, 1&ndash;24. <a href="https://doi.org/10.1016/S0022-5193(86)80047-9">doi:10.1016/S0022-5193(86)80047-9</a> <a href="#fnref11">&uarr;</a></li>
+    <li id="fn12">Bak, P., Tang, C. &amp; Wiesenfeld, K. (1987). Self-organized criticality: an explanation of 1/<em>f</em> noise. <em>Phys. Rev. Lett.</em>, 59, 381&ndash;384. <a href="https://doi.org/10.1103/PhysRevLett.59.381">doi:10.1103/PhysRevLett.59.381</a> <a href="#fnref12">&uarr;</a></li>
+    <li id="fn13">Langton, C. G. (1990). Computation at the edge of chaos: phase transitions and emergent computation. <em>Physica D</em>, 42, 12&ndash;37. <a href="https://doi.org/10.1016/0167-2789(90)90064-V">doi:10.1016/0167-2789(90)90064-V</a> <a href="#fnref13">&uarr;</a></li>
+    <li id="fn14">Mitchell, M., Hraber, P. T. &amp; Crutchfield, J. P. (1993). Revisiting the edge of chaos: evolving cellular automata to perform computations. <em>Complex Systems</em>, 7, 89&ndash;130. <a href="https://arxiv.org/abs/adap-org/9303003">arXiv:adap-org/9303003</a> <a href="#fnref14">&uarr;</a></li>
+    <li id="fn15">Kitaev, A. (2003). Fault-tolerant quantum computation by anyons. <em>Annals of Physics</em>, 303, 2&ndash;30. <a href="https://doi.org/10.1016/S0003-4916(02)00018-0">doi:10.1016/S0003-4916(02)00018-0</a> (arXiv:quant-ph/9707021). The S1&times;S4 edge, unchanged by any of this. <a href="#fnref15">&uarr;</a></li>
+    <li id="fn16">Fisher, M. E. &amp; Nelson, D. R. (1974). Spin flop, supersolids, and bicritical and tetracritical points. <em>Phys. Rev. Lett.</em>, 32, 1350. <a href="https://doi.org/10.1103/PhysRevLett.32.1350">doi:10.1103/PhysRevLett.32.1350</a> &mdash; the classical treatment of what happens where two symmetry-breaking transitions meet. <a href="#fnref16">&uarr;</a></li>
+  </ol>
+</div>
+
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem;max-width:720px;margin-left:auto;margin-right:auto;padding-left:2rem;padding-right:2rem"><a href="index.html" style="color:#94a3b8;text-decoration:none">&larr; Mathematical Skeletons</a> &middot; <a href="../index.html" style="color:#94a3b8;text-decoration:none">Domain Convergence Research</a> &middot; <a href="../../" style="color:#94a3b8;text-decoration:none">Web Annex</a></div>
+<script src="../../js/annex-tracker.js"></script>
+
+</body>
+</html>
