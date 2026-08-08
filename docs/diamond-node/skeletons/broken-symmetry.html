@@ -762,6 +762,25 @@
   and it is a reasonable place to look for what a cascade actually is.
   </p>
 
+  <!-- ===== G6: the cascade, and the rival account ===== -->
+  <div class="figure" id="g6-fig">
+    <div class="fig-head">
+      <h3>A cascade, and what it might be measuring</h3>
+      <button id="g6-play" class="fig-btn" aria-pressed="false">&#9654; Break the next symmetry</button>
+      <button id="g6-step" class="fig-btn">Step</button>
+      <button id="g6-reset" class="fig-btn">Reset</button>
+    </div>
+    <p class="fig-hint">Development, one breaking at a time. Each step acts on the state the last one left
+      behind, and each kills a named group. Watch the surviving symmetry shrink &mdash; and then compare the
+      chart: instances of breaking against stack height, across the systems in the matrix.</p>
+    <svg id="g6-seq" viewBox="0 0 620 210" role="img"
+         aria-label="A developmental sequence in five stages, from a spherically symmetric egg through the anterior-posterior, dorsal-ventral and left-right axes to somite segmentation, each stage annotated with the symmetry group that dies at that step."></svg>
+    <svg id="g6-chart" viewBox="0 0 620 190" role="img"
+         aria-label="A chart comparing documented symmetry breakings against stack height for six systems, showing that magnets have one breaking and a stack of one while development has about eight breakings and a stack of seven."></svg>
+    <p class="fig-cap" id="g6-cap">Press <em>Break the next symmetry</em>. The embryo starts spherically
+      symmetric, and every step from here is irreversible.</p>
+  </div>
+
   <div class="callout open">
     <h4>We are not resolving this</h4>
     <p>
@@ -900,11 +919,15 @@ function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').re
 /* A play/pause/step controller shared by all four figures. */
 function Anim(o) {
   var timer = null;
+  /* Remember the button's authored label so pausing restores it. Each figure
+     labels its play button for what it does — "Around the brim", "Walk the
+     loop", "Break the next symmetry" — so there is no single default. */
+  var playLabel = o.btn ? o.btn.innerHTML : '';
   function paint() { o.frame(); }
   function step() { o.tick(); paint(); }
   function stop() {
     if (timer) { clearInterval(timer); timer = null; }
-    if (o.btn) { o.btn.innerHTML = o.playLabel; o.btn.setAttribute('aria-pressed', 'false'); }
+    if (o.btn) { o.btn.innerHTML = playLabel; o.btn.setAttribute('aria-pressed', 'false'); }
   }
   function play() {
     if (timer) return;
@@ -1571,6 +1594,109 @@ function cutProject(svg, opt) {
       'nothing will, no matter where you put the probe. Measure around the cycle again.';
   });
   cap.textContent = defCap;
+  draw();
+})();
+
+/* ==========================================================================
+   G6 — the developmental cascade, and the rival reading of stack height.
+   ======================================================================== */
+(function () {
+  var seq = el('g6-seq'); if (!seq) return;
+  var chart = el('g6-chart'), cap = el('g6-cap');
+
+  var STAGES = [
+    { name: 'egg', kills: '&mdash;', left: 'SO(3)', note: 'Spherically symmetric. Every direction is equivalent, and nothing yet distinguishes one axis from another.' },
+    { name: 'A&ndash;P axis', kills: 'SO(3) &rarr; SO(2)', left: 'SO(2)', note: 'One axis is chosen. Rotations about it survive; every other rotation is gone. Head and tail now mean something.' },
+    { name: 'D&ndash;V axis', kills: 'SO(2) &rarr; Z&#8322;', left: 'Z&#8322;', note: 'A second axis breaks the remaining rotations down to a single mirror. Back and front now mean something — but left and right are still interchangeable.' },
+    { name: 'L&ndash;R asymmetry', kills: 'Z&#8322; &rarr; 1', left: '1', note: 'The mirror dies too. The heart goes to one side. Nothing continuous and nothing discrete is left of the original rotational symmetry.' },
+    { name: 'somites', kills: 'translation &rarr; Z', left: 'Z', note: 'A different symmetry now breaks, along the axis the first step created: the segmentation clock turns continuous translation into a discrete repeat. This one could not have happened first.' }
+  ];
+  var st = { i: 0 };
+
+  function embryo(cx, cy, k, active) {
+    var o = [], col = active ? C.s2 : '#3f4d6b', lw = active ? 2.2 : 1.6;
+    o.push('<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (k === 0 ? 26 : 30) + '" ry="' + (k === 0 ? 26 : 20) +
+           '" fill="#16233b" stroke="' + col + '" stroke-width="' + lw + '"/>');
+    if (k >= 1) {   /* A-P axis */
+      o.push('<line x1="' + (cx - 34) + '" y1="' + cy + '" x2="' + (cx + 34) + '" y2="' + cy + '" stroke="' + (active ? C.gold : '#5a4a26') + '" stroke-width="1.8"/>');
+      o.push('<text x="' + (cx + 38) + '" y="' + (cy + 3) + '" font-size="8" fill="' + (active ? C.gold : '#5a4a26') + '" font-family="system-ui,sans-serif">P</text>');
+    }
+    if (k >= 2) {   /* D-V axis */
+      o.push('<line x1="' + cx + '" y1="' + (cy - 26) + '" x2="' + cx + '" y2="' + (cy + 26) + '" stroke="' + (active ? C.s3 : '#2c4a35') + '" stroke-width="1.8"/>');
+    }
+    if (k >= 3) {   /* L-R: something sits off-centre */
+      o.push('<circle cx="' + (cx - 11) + '" cy="' + (cy - 6) + '" r="5" fill="' + (active ? '#f472b6' : '#5c3247') + '"/>');
+    }
+    if (k >= 4) {   /* somites */
+      for (var s = -2; s <= 2; s++)
+        o.push('<line x1="' + (cx + s * 11) + '" y1="' + (cy - 17) + '" x2="' + (cx + s * 11) + '" y2="' + (cy + 17) +
+               '" stroke="' + (active ? C.s1 : '#333f66') + '" stroke-width="1.4"/>');
+    }
+    return o.join('');
+  }
+
+  function drawSeq() {
+    var o = [], k;
+    for (k = 0; k < STAGES.length; k++) {
+      var cx = 68 + k * 122, active = k <= st.i;
+      o.push(embryo(cx, 74, k, active));
+      o.push('<text x="' + cx + '" y="120" font-size="10" fill="' + (active ? C.text : C.dim) +
+             '" text-anchor="middle" font-family="system-ui,sans-serif">' + STAGES[k].name + '</text>');
+      o.push('<text x="' + cx + '" y="136" font-size="9" fill="' + (active ? C.s2 : C.dim) +
+             '" text-anchor="middle" font-family="monospace">' + STAGES[k].kills + '</text>');
+      if (k < STAGES.length - 1)
+        o.push('<text x="' + (cx + 61) + '" y="79" font-size="14" fill="' + (k < st.i ? C.muted : '#334155') + '" text-anchor="middle">&#8594;</text>');
+    }
+    o.push('<text x="14" y="18" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">what still survives: <tspan fill="' + C.gold + '" font-family="monospace">' + STAGES[st.i].left + '</tspan></text>');
+    o.push('<foreignObject x="14" y="150" width="592" height="54"><div xmlns="http://www.w3.org/1999/xhtml" style="font:400 11px system-ui,sans-serif;color:#94a3b8;line-height:1.5">' +
+           STAGES[st.i].note + '</div></foreignObject>');
+    seq.innerHTML = o.join('');
+    seq.setAttribute('aria-label', 'A developmental cascade in five stages. Stage ' + (st.i + 1) + ' of 5, ' +
+      STAGES[st.i].name.replace(/&[a-z]+;/g, '-') + '. The symmetry killed at this step is ' +
+      STAGES[st.i].kills.replace(/&[a-z0-9#]+;/g, ' ') + ', and what survives is ' + STAGES[st.i].left + '.');
+  }
+
+  var ROWS = [
+    { n: 'Development', br: 8, stack: 7 },
+    { n: 'Cardiac',     br: 4, stack: 6 },
+    { n: 'BZ reaction', br: 4, stack: 6 },
+    { n: 'Brain',       br: 4, stack: 5 },
+    { n: 'Immune',      br: 2, stack: 5 },
+    { n: 'Magnets',     br: 1, stack: 1, hi: true }
+  ];
+  function drawChart() {
+    var o = [], k, X = 108, W = 420, H = 21;
+    o.push('<text x="14" y="16" font-size="10" fill="' + C.muted + '" font-family="system-ui,sans-serif">documented symmetry breakings (gold) against stack height (indigo)</text>');
+    for (k = 0; k < ROWS.length; k++) {
+      var r = ROWS[k], y = 34 + k * H;
+      o.push('<text x="' + (X - 8) + '" y="' + (y + 8) + '" font-size="10" fill="' + (r.hi ? C.gold : C.muted) +
+             '" text-anchor="end" font-family="system-ui,sans-serif">' + r.n + '</text>');
+      o.push('<rect x="' + X + '" y="' + (y - 1) + '" width="' + (r.br / 9 * W).toFixed(1) + '" height="7" rx="2" fill="' + C.gold + '" opacity="0.85"/>');
+      o.push('<rect x="' + X + '" y="' + (y + 7) + '" width="' + (r.stack / 9 * W).toFixed(1) + '" height="7" rx="2" fill="' + C.s1 + '" opacity="0.85"/>');
+      o.push('<text x="' + (X + W + 8) + '" y="' + (y + 9) + '" font-size="9" fill="' + C.dim + '" font-family="monospace">' + r.br + ' / ' + r.stack + '</text>');
+    }
+    o.push('<text x="' + X + '" y="' + (34 + ROWS.length * H + 14) + '" font-size="10" fill="' + C.gold + '" font-family="system-ui,sans-serif">' +
+           'Magnets: the purest broken-symmetry system in the set, and the shortest stack.</text>');
+    chart.innerHTML = o.join('');
+    chart.setAttribute('aria-label', 'A chart of documented symmetry breakings against stack height for six systems: ' +
+      ROWS.map(function (r) { return r.n + ', ' + r.br + ' breakings, stack ' + r.stack; }).join('; ') +
+      '. Magnets are the purest broken-symmetry system in the set and have the shortest stack.');
+  }
+
+  function draw() { drawSeq(); drawChart(); cap.innerHTML = capText(); }
+  function capText() {
+    if (st.i === 0) return 'The embryo starts spherically symmetric. Every step from here acts on what the last ' +
+      'step produced, which is what makes this a cascade rather than a list.';
+    if (st.i < STAGES.length - 1) return 'Step ' + st.i + '. Each breaking is possible only because the previous ' +
+      'one happened — there is no dorsal&ndash;ventral axis until there is an axis to be dorsal to.';
+    return 'Five steps, and the last one breaks a symmetry along an axis that the first one created. Development ' +
+      'does this about eight times. Magnets do it once. If what the stack-height score is really counting is the ' +
+      'depth of this cascade rather than the number of independent structures present, the chart below looks the ' +
+      'same either way — which is exactly why the present data cannot decide between the two readings.';
+  }
+  Anim({ root: el('g6-fig'), btn: el('g6-play'), stepBtn: el('g6-step'), resetBtn: el('g6-reset'), period: 1500,
+         frame: draw, tick: function () { st.i = (st.i + 1) % STAGES.length; },
+         reset: function () { st.i = 0; } });
   draw();
 })();
 
