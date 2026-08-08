@@ -1,7 +1,7 @@
 {
   "recorded": "2026-08-08",
   "totals": {
-    "pages": 56,
+    "pages": 57,
     "failingPages": 20,
     "jsErrors": 0,
     "resources": 0,
@@ -23,6 +23,13 @@
       "svg": 0,
       "ovf": 1,
       "mot": 0
+    },
+    "docs/ai-governance/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 0,
+      "mot": 1
     },
     "docs/criticality-bridges/index.html": {
       "js": 0,
@@ -51,13 +58,6 @@
       "svg": 0,
       "ovf": 1,
       "mot": 0
-    },
-    "docs/magnetosphere-tutorial/index.html": {
-      "js": 0,
-      "res": 0,
-      "svg": 0,
-      "ovf": 0,
-      "mot": 1
     },
     "docs/magnetospheric-tomography/altitude-coherence.html": {
       "js": 0,

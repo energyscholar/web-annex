@@ -532,7 +532,7 @@
          aria-label="A square lattice with a narrow strip drawn through it at an irrational slope. Lattice points inside the strip are highlighted and projected onto a line, producing a quasiperiodic sequence of long and short intervals shown as a ruler below."></svg>
     <div class="fig-readout">
       <div><b>window offset</b> <span id="cp-off">0.00</span></div>
-      <div><b>long/short</b> <span id="cp-ratio">&mdash;</span></div>
+      <div><b>L : S counts</b> <span id="cp-ratio">&mdash;</span></div>
       <div><b>phason flips</b> <span id="cp-flips">0</span></div>
     </div>
     <p class="fig-cap" id="cp-cap">Press <em>Slide the strip</em>. The sequence below is the current slice.</p>
@@ -1258,15 +1258,21 @@ function cutProject(svg, opt) {
   }
   return {
     tick: function () {
-      var before = letters(slice());
-      st.off += 0.011;
-      if (st.off > 1.0) st.off -= 1.0;
-      var after = letters(slice());
-      if (before !== after && before.length === after.length) st.flips++;
+      var before = letters(win(slice()));
+      st.off += 0.006 * st.dir;
+      /* bounce rather than wrap: wrapping would jump the pattern discontinuously */
+      if (st.off > 1.05) { st.off = 1.05; st.dir = -1; }
+      if (st.off < 0.02) { st.off = 0.02; st.dir = 1; }
+      var after = letters(win(slice()));
+      /* a phason flip is a rearrangement at fixed tile count: same number of
+         tiles, different order. A change of length is a tile entering or
+         leaving the fixed reading window, which is not a flip. */
+      st.flipped = (before !== after && before.length === after.length);
+      if (st.flipped) st.flips++;
       st.seq = after;
     },
     draw: draw,
-    reset: function () { st.off = 0.06; st.flips = 0; },
+    reset: function () { st.off = 0.06; st.dir = 1; st.flips = 0; st.flipped = false; },
     state: st
   };
 }
@@ -1274,13 +1280,14 @@ function cutProject(svg, opt) {
 (function () {
   var svg = el('cp-svg'); if (!svg) return;
   var cap = el('cp-cap'), lastSeq = null, flashed = 0;
-  var cp = cutProject(svg, { N: 13, g: 22, x0: 34, y0: 300, rx: 30, rw: 560, ry: 348, small: false });
+  var cp = cutProject(svg, { N: 13, g: 22, x0: 34, y0: 300, rx: 30, rw: 560, ry: 348,
+                             t0: 3.2, t1: 13.6, uid: 'main', small: false });
   function frame() {
     var r = cp.draw();
-    el('cp-off').textContent = cp.state.off.toFixed(2);
-    el('cp-ratio').textContent = r.ns ? (r.nl / r.ns).toFixed(3) + '  (φ = 1.618)' : '—';
+    el('cp-off').textContent = cp.state.off.toFixed(3);
+    el('cp-ratio').textContent = r.ns ? r.nl + ' : ' + r.ns + '  = ' + (r.nl / r.ns).toFixed(3) : '—';
     el('cp-flips').textContent = cp.state.flips;
-    if (lastSeq !== null && r.seq !== lastSeq) flashed = 5;
+    if (cp.state.flipped) flashed = 6;
     lastSeq = r.seq;
     if (flashed > 0) {
       flashed--;
@@ -1290,7 +1297,8 @@ function cutProject(svg, opt) {
         'directions the material does not occupy.';
     } else {
       cap.textContent = 'The strip is sliding. Points cross in and out of it, and the projected sequence ' +
-        'rearranges — but the long-to-short ratio stays at φ and the sequence never becomes periodic. The ' +
+        'rearranges. The two spacings never change — their lengths are in the ratio φ exactly — and the ' +
+        'count of them tends to φ as the window grows, but the sequence never becomes periodic. The ' +
         'invariant here is the window, and it lives in a space the material is not in.';
     }
   }
@@ -1406,7 +1414,8 @@ function cutProject(svg, opt) {
   }
 
   /* --- panel D: cut and project, in miniature --- */
-  var cpd = cutProject(d, { N: 9, g: 11, x0: 16, y0: 104, rx: 12, rw: 236, ry: 128, small: true });
+  var cpd = cutProject(d, { N: 9, g: 11, x0: 16, y0: 104, rx: 12, rw: 236, ry: 128,
+                                  t0: 2.2, t1: 9.2, uid: 'mini', small: true });
   function drawD() {
     cpd.draw();
     el('q4-rd').innerHTML = 'Q: what tiling does this slice produce?<br>the invariant is a window in a higher dimension';

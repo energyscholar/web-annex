@@ -54,7 +54,9 @@ const CONCURRENCY = Number(valOf('--jobs') || 4);
 const NAV_TIMEOUT = 30_000;
 const EVAL_TIMEOUT = 20_000;
 const MOTION_SETTLE_MS = 1200;   // let first paint / one-shot renders finish
-const MOTION_WATCH_MS = 2600;    // then watch this long for movement
+const MOTION_SAMPLES = 4;        // then take this many frame signatures...
+const MOTION_GAP_MS = 900;       // ...this far apart,
+const MOTION_MIN_CHANGES = 2;    // and call it animation only if this many intervals move.
 
 /* ---------------------------------------------------------------- puppeteer */
 
@@ -202,10 +204,23 @@ async function checkPage(browser, file) {
          vacuously. Sweep the whole page, then come back to the top. */
       await p2.evaluate(SCROLL_SWEEP);
       await new Promise((r) => setTimeout(r, MOTION_SETTLE_MS));
-      const a = await p2.evaluate(SNAPSHOT);
-      await new Promise((r) => setTimeout(r, MOTION_WATCH_MS));
-      const b = await p2.evaluate(SNAPSHOT);
-      if (a !== b) fail.motion = `page still animates under prefers-reduced-motion (${a} -> ${b})`;
+      /* A single before/after comparison cannot tell a running animation from a
+         one-shot settle — a lazy render finishing, a font swapping, a counter
+         ticking once. Both look like "the page changed". Sample several times
+         instead and require the change to be SUSTAINED: an animation moves in
+         every interval, a settle moves in exactly one. Without this the check
+         fires at random and a gate that fails at random is worse than none. */
+      const sig = [];
+      for (let i = 0; i < MOTION_SAMPLES; i++) {
+        if (i) await new Promise((r) => setTimeout(r, MOTION_GAP_MS));
+        sig.push(await p2.evaluate(SNAPSHOT));
+      }
+      let changes = 0;
+      for (let i = 1; i < sig.length; i++) if (sig[i] !== sig[i - 1]) changes++;
+      if (changes >= MOTION_MIN_CHANGES) {
+        fail.motion = `still animating under prefers-reduced-motion: ${changes}/${sig.length - 1} ` +
+          `intervals moved (${sig.join(' -> ')})`;
+      }
     } catch (e) {
       fail.motion = 'HARNESS: ' + String(e.message).slice(0, 200);
     } finally {
