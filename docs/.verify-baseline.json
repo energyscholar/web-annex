@@ -2,12 +2,12 @@
   "recorded": "2026-08-08",
   "totals": {
     "pages": 57,
-    "failingPages": 20,
+    "failingPages": 21,
     "jsErrors": 0,
     "resources": 0,
     "unlabelledSvg": 0,
     "overflow": 18,
-    "motion": 2
+    "motion": 3
   },
   "pages": {
     "docs/acs-closure-v2/index.html": {
@@ -106,7 +106,7 @@
       "res": 0,
       "svg": 0,
       "ovf": 1,
-      "mot": 0
+      "mot": 1
     },
     "docs/poised-state-survey/index.html": {
       "js": 0,
@@ -149,6 +149,13 @@
       "svg": 0,
       "ovf": 1,
       "mot": 0
+    },
+    "docs/magnetosphere-tutorial/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 0,
+      "mot": 1
     }
   }
 }

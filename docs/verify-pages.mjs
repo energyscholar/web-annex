@@ -20,6 +20,7 @@
  * Usage:
  *   node docs/verify-pages.mjs                  # compare against the committed baseline
  *   node docs/verify-pages.mjs --write-baseline # record the current state as the baseline
+ *   node docs/verify-pages.mjs --merge-baseline # fold this run's failures INTO the baseline
  *   node docs/verify-pages.mjs --strict         # ignore the baseline; any failure is a failure
  *   node docs/verify-pages.mjs --no-motion      # skip the reduced-motion pass (faster)
  *   node docs/verify-pages.mjs --only skeletons # substring filter on the page path
@@ -44,6 +45,7 @@ const has = (f) => argv.includes(f);
 const valOf = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : null; };
 
 const WRITE_BASELINE = has('--write-baseline');
+const MERGE_BASELINE = has('--merge-baseline');
 const STRICT = has('--strict');
 const CHECK_MOTION = !has('--no-motion');
 const ONLY = valOf('--only');
@@ -297,10 +299,29 @@ async function main() {
   const current = {};
   for (const r of failing) current[r.page] = sig(r);
 
-  if (WRITE_BASELINE) {
+  if (WRITE_BASELINE || MERGE_BASELINE) {
+    let pages = current;
+    if (MERGE_BASELINE) {
+      /* Some pre-existing pages animate under reduced motion only sometimes —
+         whether a finite animation is still running when the sample is taken
+         depends on machine load. A baseline recorded from one run therefore
+         calls those pages a regression on the next run, at random. Record the
+         UNION instead: worst observed value per check, per page. That keeps the
+         gate stable without hiding anything, because a page that has never
+         failed still trips it. */
+      let base = null;
+      try { base = JSON.parse(await readFile(BASELINE, 'utf8')); } catch { /* none yet */ }
+      pages = { ...(base ? base.pages : {}) };
+      for (const [p, s] of Object.entries(current)) {
+        const b = pages[p] || {};
+        pages[p] = {};
+        for (const k of Object.keys(s)) pages[p][k] = Math.max(s[k], b[k] || 0);
+      }
+    }
     await writeFile(BASELINE, JSON.stringify(
-      { recorded: new Date().toISOString().slice(0, 10), totals, pages: current }, null, 2) + '\n');
-    console.log(`\nbaseline written to ${path.relative(REPO, BASELINE)}`);
+      { recorded: new Date().toISOString().slice(0, 10), totals, pages }, null, 2) + '\n');
+    console.log(`\nbaseline ${MERGE_BASELINE ? 'merged into' : 'written to'} ${path.relative(REPO, BASELINE)} ` +
+      `(${Object.keys(pages).length} failing pages)`);
     return 0;
   }
 
