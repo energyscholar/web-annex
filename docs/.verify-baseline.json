@@ -1,0 +1,154 @@
+{
+  "recorded": "2026-08-08",
+  "totals": {
+    "pages": 56,
+    "failingPages": 20,
+    "jsErrors": 0,
+    "resources": 0,
+    "unlabelledSvg": 0,
+    "overflow": 18,
+    "motion": 2
+  },
+  "pages": {
+    "docs/acs-closure-v2/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/acs-closure/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/criticality-bridges/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/diamond-node/braiding-search/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/diamond-node/lattice-search/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/domain-convergence/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/magnetosphere-tutorial/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 0,
+      "mot": 1
+    },
+    "docs/magnetospheric-tomography/altitude-coherence.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/magnetospheric-tomography/current-sheet-3d.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/magnetospheric-tomography/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/maps/rogue-planets.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/miller-tutorial/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/miller-tutorial/replication.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/physical-systems-chart/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/poised-state-survey/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 0,
+      "mot": 1
+    },
+    "docs/s13-prep/arrest-scenario.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/s13-prep/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/s13-prep/rogue-planets-gm.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/search-suppression/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    },
+    "docs/structure-from-topology/index.html": {
+      "js": 0,
+      "res": 0,
+      "svg": 0,
+      "ovf": 1,
+      "mot": 0
+    }
+  }
+}
