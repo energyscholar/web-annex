@@ -259,15 +259,42 @@
   }
 
   .edge-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     font-size: 0.75rem;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.55rem;
     opacity: 0.4;
   }
 
+  .edge-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
   .edge-row.active { opacity: 1; }
+
+  /* Evidence class, not importance. See the scoring notes at the top of the page. */
+  .edge-status {
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.05rem 0.35rem;
+    border-radius: 3px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .st-est  { color: #4ade80; background: rgba(74,222,128,0.12);  border: 1px solid rgba(74,222,128,0.35); }
+  .st-phen { color: #fbbf24; background: rgba(251,191,36,0.12);  border: 1px dashed rgba(251,191,36,0.5); }
+  .st-cand { color: #94a3b8; background: rgba(148,163,184,0.10); border: 1px dotted rgba(148,163,184,0.5); }
+
+  .edge-ground {
+    font-size: 0.64rem;
+    color: var(--dim);
+    line-height: 1.45;
+    margin: 0.1rem 0 0 0.9rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--card-border);
+  }
 
   .edge-dots {
     display: flex;
@@ -403,6 +430,19 @@
     flex-shrink: 0;
   }
 
+  #legend-evidence {
+    margin-top: 0.9rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--card-border);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+  #legend-evidence .legend-item { align-items: flex-start; gap: 0.5rem; }
+  #legend-evidence .edge-status { flex-shrink: 0; }
+
   /* --- Tooltip --- */
   .axis-label {
     font-size: 11px;
@@ -444,6 +484,36 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition-duration: 0s !important; }
   }
+
+  /* --- scoring notes --- */
+  .scoring-notes {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .scoring-notes > summary {
+    cursor: pointer;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    list-style: none;
+  }
+  .scoring-notes > summary::-webkit-details-marker { display: none; }
+  .scoring-notes > summary::before { content: '\25B8\00a0'; color: var(--muted); }
+  .scoring-notes[open] > summary::before { content: '\25BE\00a0'; }
+  .scoring-notes h4 { font-size: 0.8rem; color: var(--text); margin: 1rem 0 0.4rem; }
+  .scoring-notes p, .scoring-notes ul { margin: 0 0 0.6rem; line-height: 1.6; }
+  .scoring-notes ul { padding-left: 1.1rem; }
+  .scoring-notes li { margin-bottom: 0.25rem; }
+  .scoring-notes code { font-family: 'Courier New', monospace; color: #c4b5fd; }
+  .scoring-notes a { color: #818cf8; }
+  .notes-table { width: 100%; border-collapse: collapse; margin: 0.5rem 0 0.9rem; font-size: 0.74rem; display: block; overflow-x: auto; }
+  .notes-table th { text-align: left; color: var(--dim); font-weight: 500; padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--card-border); }
+  .notes-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(51,65,85,0.4); vertical-align: top; }
 </style>
 </head>
 <body>
@@ -453,6 +523,60 @@
   <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:8px;padding:0.75rem 1rem;font-size:0.8rem;color:#fbbf24;margin-bottom:1rem">
     <strong>Work in progress.</strong> Skeleton assignments and depth scores are provisional hypotheses, not established results. <a href="index.html" style="color:#fbbf24">Context</a>
   </div>
+
+  <details class="scoring-notes">
+    <summary>Notes on the scoring, and two corrections made on 2026-08-07</summary>
+
+    <h4>1 &mdash; Edge status is now an evidence class, and the grades have changed</h4>
+    <p>The <code>status</code> on each pairwise edge used to be a two-valued field, <em>established</em> or
+    <em>candidate</em>, and it conflated two different things: how well attested an interaction is, and how
+    well <em>classified</em> it is. It is now three-valued, and it grades only the second.</p>
+    <ul>
+      <li><strong>established</strong> &mdash; a classification theorem exists. That is all the word means here.
+        It is not a claim about community consensus or about importance.</li>
+      <li><strong>phenomenon</strong> &mdash; observed, named, repeatedly reproduced, and real; but no invariant
+        classifies it.</li>
+      <li><strong>candidate</strong> &mdash; a proposed connection, neither classified nor agreed as observed.</li>
+    </ul>
+    <p>On that definition three grades change:</p>
+    <table class="notes-table">
+      <tr><th>Edge</th><th>Was</th><th>Now</th><th>Ground</th></tr>
+      <tr><td>S1&times;S2 &mdash; protected criticality</td><td>candidate</td><td><strong>established</strong></td>
+        <td>Mermin 1979 classifies defects in an ordered medium by the homotopy groups of G/H. A classification theorem, and 47 years old.</td></tr>
+      <tr><td>S2&times;S3 &mdash; self-organised criticality</td><td>established</td><td><strong>phenomenon</strong></td>
+        <td>Bak, Tang &amp; Wiesenfeld 1987 is an observation, reproduced very widely. No invariant classifies it.</td></tr>
+      <tr><td>S2&times;S4 &mdash; edge of chaos</td><td>established</td><td><strong>phenomenon</strong></td>
+        <td>Langton 1990 proposed &lambda; as the invariant; Mitchell, Hraber &amp; Crutchfield 1993 deflated it and nothing replaced it.</td></tr>
+    </table>
+    <p>S1&times;S4 keeps <em>established</em> &mdash; Kitaev 2003 is a construction. S1&times;S3 and S3&times;S4 remain
+    candidates. This is the reading this series takes, with its evidence stated so it can be argued with; it is
+    not a claim that the field has settled the question. The full argument, with citations, is on
+    <a href="broken-symmetry.html">Broken Symmetry and the S1&times;S2 Edge</a>.</p>
+
+    <h4>2 &mdash; FQHE no longer scores closure (S3: 1 &rarr; 0)</h4>
+    <p>Two copies of this matrix disagreed about one cell: whether the fractional quantum Hall state carries
+    closure. This copy said 1; the copy frozen in version control as the predictor for an analysis said 0. The
+    tutorial now matches the frozen predictor. <strong>Stack height is computed from the scores, so FQHE's stack
+    follows automatically; no stack number was edited by hand.</strong></p>
+    <p><strong>The conservative reading.</strong> Closure in this series means a self-sustaining network that
+    produces its own components from a food set &mdash; the RAF condition of Hordijk &amp; Steel 2004, after
+    Kauffman 1986. Anyons are excitations created by externally perturbing the medium. They are not a
+    food-generated production network.</p>
+    <p><strong>The steel-man for the old value, which is real.</strong> Fibonacci fusion
+    <code>&tau; &times; &tau; = 1 + &tau;</code> does regenerate &tau; from &tau;, which is closure in the
+    fusion-category sense, and &ldquo;anyon fusion as a RAF&rdquo; remains an open candidate connection in this
+    series &mdash; it is the S1&times;S3 edge above, and it is why this cell was ever a 1. What it is not is a
+    network of physical components producing each other from a food set.</p>
+    <p><strong>The reason that actually decided it.</strong> The frozen copy was committed <em>before</em> the
+    analysis that used it. Editing a frozen predictor after seeing results is post-hoc tuning, and it is a drift
+    signal however defensible the new value looks. So the frozen copy wins by default and the unfrozen copy is
+    the one that gets corrected &mdash; which would have been the outcome even if the argument above had gone the
+    other way. Anyone publishing an analysis against this matrix should state which scoring they used.</p>
+    <p><strong>One knock-on, not yet fixed.</strong> The <em>Inert</em> face below still names FQHE as its
+    example. On the corrected scoring FQHE no longer sits on that face, so that example is stale. It has been
+    left alone rather than quietly rewritten, because changing it is a separate judgement from the one made
+    here.</p>
+  </details>
 </div>
 
 <header>
@@ -506,6 +630,18 @@
       <div class="legend-item"><div class="legend-swatch" style="background:var(--s3)"></div>S3 Closure</div>
       <div class="legend-item"><div class="legend-swatch" style="background:var(--s4)"></div>S4 Computation</div>
     </div>
+
+    <div id="legend-evidence">
+      <div style="grid-column:1/-1;font-size:0.62rem;color:var(--dim);margin-bottom:0.15rem">
+        Edge evidence class &mdash; what the claim rests on, <em>not</em> how important it is:
+      </div>
+      <div class="legend-item"><span class="edge-status st-est" style="margin-left:0">theorem</span>
+        <span><strong>established</strong> &mdash; a classification theorem exists</span></div>
+      <div class="legend-item"><span class="edge-status st-phen" style="margin-left:0">observed</span>
+        <span><strong>phenomenon</strong> &mdash; observed, named and real; no classifying invariant</span></div>
+      <div class="legend-item"><span class="edge-status st-cand" style="margin-left:0">candidate</span>
+        <span><strong>candidate</strong> &mdash; a proposed connection, neither classified nor agreed as observed</span></div>
+    </div>
   </section>
 </main>
 
@@ -521,7 +657,7 @@ const SYSTEMS = [
   {id:'nematics',      name:'Active Nematics',  s1:1, s2:2, s3:0, s4:0, g:false, desc:'Topological defect dynamics'},
   {id:'tokamak',       name:'Tokamak Plasma',   s1:1, s2:2, s3:0, s4:0, g:false, desc:'Transport barriers + MHD'},
   {id:'brain',         name:'Brain',            s1:1, s2:2, s3:0, s4:2, g:false, desc:'Criticality + neural coordination'},
-  {id:'fqhe',          name:'FQHE / Anyons',    s1:2, s2:1, s3:1, s4:0, g:true,  desc:'Topological order + self-generated anyons'},
+  {id:'fqhe',          name:'FQHE / Anyons',    s1:2, s2:1, s3:0, s4:0, g:true,  desc:'Topological order; anyonic excitations'},
   {id:'quasicrystal',  name:'Quasicrystal',     s1:2, s2:1, s3:0, s4:0, g:true,  desc:'Aperiodic topological matter'},
   {id:'cardiac',       name:'Cardiac',          s1:1, s2:2, s3:2, s4:0, g:false, desc:'Self-creating excitable medium'},
   {id:'immune',        name:'Immune',           s1:0, s2:1, s3:2, s4:2, g:false, desc:'Adaptive self-creating defense'},
@@ -548,13 +684,30 @@ const LAYERS = [
   {name:'Physical reality',  code:'G',   type:'G', p1:"It's in matter. Right now.",            skel:'g',  depth:1, color:'#e2e8f0'},
 ];
 
+/* Edge status is an EVIDENCE CLASS, not a measure of importance:
+     established — a classification theorem exists
+     phenomenon  — observed, named and real, but with no classifying invariant
+     candidate   — a proposed connection, neither classified nor agreed as observed
+   Re-graded 2026-08-07; the argument is on broken-symmetry.html. */
+const EDGE_STATUS = {
+  established: {label:'theorem',   cls:'st-est'},
+  phenomenon:  {label:'observed',  cls:'st-phen'},
+  candidate:   {label:'candidate', cls:'st-cand'},
+};
+
 const EDGES = [
-  {s:['s2','s3'], name:'Self-organized criticality', short:'SOC',  desc:'Bak 1987', status:'established'},
-  {s:['s1','s4'], name:'Topological quantum computation', short:'TQC', desc:'Kitaev 2003', status:'established'},
-  {s:['s2','s4'], name:'Edge of chaos', short:'EoC', desc:'Langton 1990', status:'established'},
-  {s:['s1','s2'], name:'Protected criticality', short:'PC',  desc:'Topological phase transitions', status:'candidate'},
-  {s:['s1','s3'], name:'Topological closure', short:'TC',  desc:'AC bridge (anyon fusion as RAF)', status:'candidate'},
-  {s:['s3','s4'], name:'Generative computation', short:'GC',  desc:'Boolean networks + autocatalysis', status:'candidate'},
+  {s:['s2','s3'], name:'Self-organized criticality', short:'SOC',  desc:'Bak 1987 &mdash; observed, no classifying invariant', status:'phenomenon',
+   ground:'Bak, Tang &amp; Wiesenfeld 1987. Robustly observed across many systems, and no invariant says which systems must show it.'},
+  {s:['s1','s4'], name:'Topological quantum computation', short:'TQC', desc:'Kitaev 2003 &mdash; construction', status:'established',
+   ground:'Kitaev 2003 constructs fault-tolerant computation from anyon braiding. A theorem, not an observation.'},
+  {s:['s2','s4'], name:'Edge of chaos', short:'EoC', desc:'Langton 1990 &mdash; &lambda; deflated 1993', status:'phenomenon',
+   ground:'Langton 1990 proposed &lambda; as the invariant. Mitchell, Hraber &amp; Crutchfield 1993 deflated it, and nothing has replaced it.'},
+  {s:['s1','s2'], name:'Protected criticality', short:'PC',  desc:'Mermin 1979 &mdash; defect classification', status:'established',
+   ground:'Mermin 1979 classifies defects in an ordered medium by the homotopy groups of G/H. A classification theorem, 47 years old.'},
+  {s:['s1','s3'], name:'Topological closure', short:'TC',  desc:'AC bridge (anyon fusion as RAF)', status:'candidate',
+   ground:'A proposed connection. Neither classified nor agreed as an observation.'},
+  {s:['s3','s4'], name:'Generative computation', short:'GC',  desc:'Boolean networks + autocatalysis', status:'candidate',
+   ground:'A proposed connection. Neither classified nor agreed as an observation.'},
 ];
 
 const FACES = [
@@ -874,12 +1027,16 @@ function updateEdgePanel(systems) {
       const skel = SKELETONS.find(sk => sk.id === s);
       return `<div class="edge-dot" style="background:${skel.color}"></div>`;
     }).join('');
-    const statusMark = edge.status === 'established' ? '' : ' *';
+    const st = EDGE_STATUS[edge.status] || EDGE_STATUS.candidate;
     html += `
       <div class="edge-row ${isActive ? 'active' : ''}">
-        <div class="edge-dots">${dots}</div>
-        <span class="edge-name">${edge.short}</span>
-        <span style="font-size:0.7rem;color:var(--muted)">${edge.name}${statusMark}</span>
+        <div class="edge-line">
+          <div class="edge-dots">${dots}</div>
+          <span class="edge-name">${edge.short}</span>
+          <span style="font-size:0.7rem;color:var(--muted)">${edge.name}</span>
+          <span class="edge-status ${st.cls}">${st.label}</span>
+        </div>
+        <div class="edge-ground">${edge.ground}</div>
       </div>
     `;
   });
