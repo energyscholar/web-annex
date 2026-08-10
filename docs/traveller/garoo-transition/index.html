@@ -8,47 +8,49 @@
 <title>The Unmasking of Garoo — Institute of Polity Studies, University of Mora</title>
 <meta name="description" content="An investigative account of the collapse of the Health Directorate on Garoo (0130) and the provisional order that has replaced it.">
 <style>
-:root{--bg:#0b0e16;--card:#131a29;--text:#c3cbd9;--heading:#f1f5f9;--muted:#5b6b85;--line:#1e293b;--golden:#fbbf24;--cyan:#38bdf8;
-      --s1:#3987e5;--s2:#d95926;--grid:#243247}
+:root{--bg:#0b0e16;--card:#131a29;--text:#c3cbd9;--heading:#f1f5f9;--muted:#5b6b85;--line:#1e293b;--golden:#fbbf24;--cyan:#38bdf8;--s1:#3987e5;--s2:#d95926}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:Georgia,'Times New Roman',serif;line-height:1.75}
+body{background:var(--bg);color:var(--text);font-family:Georgia,'Times New Roman',serif;line-height:1.72}
 a{color:var(--cyan)}
 .masthead{border-bottom:2px solid var(--line);background:rgba(11,14,22,.96);padding:.85rem 1rem}
-.masthead .inner{max-width:820px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;font-family:system-ui,sans-serif}
+.masthead .inner{max-width:780px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;font-family:system-ui,sans-serif}
 .mark{display:flex;align-items:center;gap:.6rem}
 .masthead .org{color:var(--golden);font-weight:700;letter-spacing:.06em;font-size:.8rem;text-transform:uppercase;line-height:1.3}
 .masthead .series{color:var(--muted);font-size:.74rem;letter-spacing:.04em}
-.container{max-width:820px;margin:0 auto;padding:2.4rem 1.15rem 5rem}
-h1{color:var(--heading);font-size:2.5rem;line-height:1.14;letter-spacing:-.02em;margin-bottom:.6rem}
-.standfirst{color:var(--heading);font-size:1.18rem;line-height:1.6;margin-bottom:1.4rem;opacity:.92}
-.byline{color:var(--muted);font-size:.86rem;font-family:system-ui,sans-serif;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:.7rem 0;margin-bottom:2.2rem}
+.container{max-width:780px;margin:0 auto;padding:2.2rem 1.15rem 4rem}
+h1{color:var(--heading);font-size:2.4rem;line-height:1.14;letter-spacing:-.02em;margin-bottom:.6rem}
+.standfirst{color:var(--heading);font-size:1.16rem;line-height:1.58;margin-bottom:1.3rem;opacity:.92}
+.byline{color:var(--muted);font-size:.84rem;font-family:system-ui,sans-serif;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:.65rem 0;margin-bottom:2rem}
 .byline strong{color:var(--text)}
-h2{color:var(--heading);font-size:1.42rem;margin:2.8rem 0 .9rem;font-family:system-ui,sans-serif;letter-spacing:-.01em}
-p{margin-bottom:1.15rem}
-blockquote{border-left:3px solid var(--golden);padding:.2rem 0 .2rem 1.1rem;margin:1.5rem 0;color:var(--heading);font-style:italic}
-.pull{color:var(--golden);font-size:1.15rem;line-height:1.5;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.1rem 0;margin:2rem 0;font-style:italic}
-figure{margin:2.4rem 0;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1.2rem 1.1rem 1rem}
-figcaption{font-family:system-ui,sans-serif;font-size:.82rem;color:var(--muted);margin-top:.7rem;line-height:1.55}
+.brief{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--golden);border-radius:6px;padding:1.15rem 1.35rem;margin:0 0 2.2rem;font-family:system-ui,sans-serif;font-size:.94rem;line-height:1.62}
+.brief h2{color:var(--golden);font-size:.76rem;letter-spacing:.11em;text-transform:uppercase;margin:0 0 .8rem;border:0;padding:0}
+.brief ul{list-style:none;margin:0}
+.brief li{padding-left:1.1rem;position:relative;margin-bottom:.55rem;color:var(--text)}
+.brief li::before{content:"▸";position:absolute;left:0;color:var(--muted)}
+.brief b{color:var(--heading)}
+.brief .kicker{margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--line);color:var(--heading)}
+h2{color:var(--heading);font-size:1.34rem;margin:2.4rem 0 .8rem;font-family:system-ui,sans-serif;letter-spacing:-.01em}
+p{margin-bottom:1.05rem}
+blockquote{border-left:3px solid var(--golden);padding:.2rem 0 .2rem 1.1rem;margin:1.4rem 0;color:var(--heading);font-style:italic}
+figure{margin:2.1rem 0;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1.1rem 1rem .9rem}
+figcaption{font-family:system-ui,sans-serif;font-size:.81rem;color:var(--muted);margin-top:.6rem;line-height:1.55}
 figcaption b{color:var(--text)}
-.fig-title{font-family:system-ui,sans-serif;color:var(--heading);font-size:.95rem;font-weight:600;margin-bottom:.15rem}
-.fig-sub{font-family:system-ui,sans-serif;color:var(--muted);font-size:.79rem;margin-bottom:.9rem}
-.legend{display:flex;gap:1.1rem;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:.78rem;color:var(--text);margin-bottom:.6rem}
+.fig-title{font-family:system-ui,sans-serif;color:var(--heading);font-size:.92rem;font-weight:600}
+.fig-sub{font-family:system-ui,sans-serif;color:var(--muted);font-size:.78rem;margin-bottom:.8rem}
+.legend{display:flex;gap:1.1rem;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:.77rem;color:var(--text);margin-bottom:.5rem}
 .legend span{display:flex;align-items:center;gap:.4rem}
 .swatch{width:11px;height:11px;border-radius:2px;display:inline-block}
 svg{display:block;width:100%;height:auto;overflow:visible}
-details{margin-top:.8rem;font-family:system-ui,sans-serif;font-size:.8rem}
+details{margin-top:.7rem;font-family:system-ui,sans-serif;font-size:.79rem}
 details summary{color:var(--muted);cursor:pointer}
-table{border-collapse:collapse;margin-top:.7rem;font-size:.78rem;width:100%}
-th,td{border:1px solid var(--line);padding:.28rem .5rem;text-align:right;color:var(--text)}
-th{color:var(--muted);font-weight:600;text-align:right}
+table{border-collapse:collapse;margin-top:.6rem;font-size:.77rem;width:100%}
+th,td{border:1px solid var(--line);padding:.26rem .5rem;text-align:right;color:var(--text)}
+th{color:var(--muted);font-weight:600}
 th:first-child,td:first-child{text-align:left}
-.chron{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1.2rem 1.3rem;margin:2rem 0;font-family:system-ui,sans-serif;font-size:.9rem;line-height:1.6}
-.chron h3{color:var(--golden);font-size:.8rem;letter-spacing:.09em;text-transform:uppercase;margin-bottom:.9rem}
-.chron dt{color:var(--heading);font-weight:600;margin-top:.75rem}
-.note{background:#0f1523;border:1px solid var(--line);border-left:3px solid var(--muted);border-radius:4px;padding:1rem 1.2rem;margin:2.2rem 0;font-size:.9rem;font-family:system-ui,sans-serif;color:var(--muted)}
+.note{background:#0f1523;border:1px solid var(--line);border-left:3px solid var(--muted);border-radius:4px;padding:.9rem 1.15rem;margin:2rem 0;font-size:.87rem;font-family:system-ui,sans-serif;color:var(--muted)}
 .note strong{color:var(--text)}
-footer{border-top:1px solid var(--line);margin-top:3.5rem;padding-top:1.2rem;color:var(--muted);font-size:.8rem;font-family:system-ui,sans-serif}
-@media(max-width:600px){h1{font-size:1.9rem}.standfirst{font-size:1.05rem}}
+footer{border-top:1px solid var(--line);margin-top:3rem;padding-top:1.1rem;color:var(--muted);font-size:.79rem;font-family:system-ui,sans-serif}
+@media(max-width:600px){h1{font-size:1.85rem}.standfirst{font-size:1.04rem}}
 </style>
 </head>
 <body>
@@ -64,92 +66,82 @@ footer{border-top:1px solid var(--line);margin-top:3.5rem;padding-top:1.2rem;col
     </svg>
     <span class="org">Institute of Polity Studies<br>University of Mora</span>
   </div>
-  <span class="series">Frontier Governance Papers &middot; Occasional Series 44</span>
+  <span class="series">Frontier Governance Papers &middot; No. 44</span>
 </div></div>
 
 <div class="container">
 
 <h1>The Unmasking of Garoo</h1>
-<p class="standfirst">For nine decades the Health Directorate governed a world on the principle that sickness was a choice, and therefore a crime. It did not fall to an invasion, a famine, or a war. It fell because a great many of the wrong people got a rash.</p>
+<p class="standfirst">For ninety years the Health Directorate governed a world on the principle that sickness was a choice, and therefore a crime. It did not fall to an invasion, a famine, or a war. It fell because a great many of the wrong people got a rash.</p>
 
 <div class="byline">
   By <strong>Dr. Halle Ostrom</strong>, Investigative Fellow &middot; Institute of Polity Studies, University of Mora<br>
-  Filed from Garoo Highport (0130) &middot; Third revision, cleared for circulation
+  Filed from Garoo Highport (0130)
 </div>
 
-<p>The Autarchy of Garoo was, until quite recently, the most orderly polity in this arm of the Marches. It achieved this by a simple instrument. Illness was legally defined as a failure of personal discipline; visible illness was a public failure, and therefore an offence. The Health Police — properly the Directorate of Public Vitality, though nobody called it that — enforced the definition with ceremonial scalpels, sonic disruptors, and an absolute discretion that no court reviewed.</p>
-
-<p>I have spent four months on and above this world assembling an account of how that ended. I will say at the outset that I have not established a cause for the event that began it, and that I do not find the official explanation credible. What follows is what can be documented.</p>
+<div class="brief">
+<h2>In brief — for those who will read no further</h2>
+<ul>
+<li><b>Garoo's Health Directorate is gone.</b> Ninety years of arresting people for being visibly ill, ended in under eight months.</li>
+<li><b>It was not overthrown. It stopped being obeyed.</b></li>
+<li>It began with a rash — <b>several thousand cases, all among the ruling class, all within nine days.</b> Not contagious. Never explained.</li>
+<li>Faced with a visibly ill governing class, the Health Police <b>arrested nobody</b> — while continuing to detain people in the lower districts for eczema, shaving rash, and in one confirmed case, <b>freckles</b>.</li>
+<li>The population's response was to <b>put on masks</b>, which were illegal for everyone except the Health Police.</li>
+<li>Roughly <b>400 dead</b>, the great majority of them Health Police. A provisional council of forty-one now governs, and agrees on very little.</li>
+<li class="kicker"><b>For visiting shipmasters:</b> Garoo is no longer the world it was. The vitality statutes are suspended, the starport is being run by a mercenary co-operative on its own initiative, and <b>there is no functioning customs regime</b>. What replaces the Directorate is not yet decided, and some of the candidates are worse.</li>
+</ul>
+</div>
 
 <h2>An affliction with no vector</h2>
 
-<p>In the early part of last year, a dermatological condition appeared in the upper residential terraces of Garoo's three arcologies. It was not serious. It was, by every clinical account I have obtained, cosmetic — an eruption of inflamed pustular lesions across the face, neck and hands, persisting six to eleven weeks and resolving without treatment or scarring.</p>
+<p>Early last year a skin condition appeared in the upper terraces of Garoo's three arcologies. It was trivial — inflamed lesions on face, neck and hands, six to eleven weeks, resolving without treatment. Three things about it matter.</p>
 
-<p>Three features of it are worth the reader's attention.</p>
+<p>It was <em>not infectious</em>. No vector was ever established, and it never reached the service levels or the manufactories, though those populations share air, water and transit with the households affected.</p>
 
-<p>The first is that it was <em>not infectious</em>. No vector was ever established. It did not spread to the service levels, the manufactories, or the refugee terraces, though those populations share air, water and transit with the households that were affected. Whatever it was, it did not move from person to person.</p>
+<p>Onset was <em>simultaneous</em> — not sequential, as an outbreak would be, but across unconnected households within about nine days. A clinician now serving on the provisional council's medical board described it to me as "less like a contagion than like a clock going off."</p>
 
-<p>The second is that onset was <em>simultaneous</em>. Not sequential, as an outbreak would be — simultaneous, across households with no contact, in a window of about nine days. One clinician I interviewed, who asked not to be named and who is now serving on the provisional council's medical board, described it to me as "less like a contagion than like a clock going off."</p>
+<p>And it was <em>confined by class</em>: Directorate officers, senior administrators, the mercantile families, the Autarch's extended court. Several thousand people. Nobody else.</p>
 
-<p>The third is that it was <em>confined by class</em>. The affected were, almost without exception, the households of Directorate officers, senior arcology administrators, the mercantile families, and the Autarch's own extended court. Several thousand people. Nobody else.</p>
+<p>The popular explanation, then and now, is diet — that the governing class ate richly and slept badly and brought it on themselves. It does not account for the timing, and nobody who has offered it to me has tried to make it.</p>
 
-<p>The explanation offered at the time, and still the popular one here, was diet — that the governing class ate richly and slept badly and had brought it on themselves, which is very nearly the only sentence in ninety years that the Directorate never said out loud. I record it because it is what people believe. It does not account for the timing, and nobody who has offered it to me has tried to make it.</p>
-
-<p>The Directorate's own inquiry considered and dismissed a number of theories. Its file lists them: diet, water reticulation in the upper terraces, an industrial contaminant, a consignment of offworld goods that had cleared customs some weeks earlier, and sabotage. The first four were each "closed as unproductive." Only the fifth was pursued, and I will come to what was done with it. I have requested the underlying customs manifests four times and been refused four times, most recently by an office that no longer exists.</p>
-
-<div class="pull">The law had one sentence for a visible eruption: it was a crime against the state. The law did not have a second sentence for what to do when the state was the one erupting.</div>
+<p>The Directorate's inquiry listed five theories: diet, water reticulation in the upper terraces, an industrial contaminant, a consignment of offworld goods that had cleared customs some weeks earlier, and sabotage. The first four were closed as unproductive. Only the fifth was pursued, and I will come to what was done with it. I have requested the customs manifests four times and been refused four times, most recently by an office that no longer exists.</p>
 
 <h2>The law that was never for them</h2>
 
-<p>Here is what the Directorate did, faced with several thousand visibly ill members of the governing class.</p>
-
-<p>Nothing.</p>
+<p>Faced with several thousand visibly ill members of the governing class, the Directorate did nothing. No detentions in the upper terraces. No certificates revoked. No exemption announced, no statute amended, and no explanation given.</p>
 
 <figure>
   <div class="fig-title">Vitality enforcement actions, by district</div>
-  <div class="fig-sub">Recorded detentions per month. Directorate station logs, Arco-1 to Arco-3, recovered and partially fire-damaged.</div>
+  <div class="fig-sub">Recorded detentions per month. Directorate station logs, Arco-1 to Arco-3.</div>
   <div class="legend">
     <span><i class="swatch" style="background:#d95926"></i>Lower districts</span>
     <span><i class="swatch" style="background:#3987e5"></i>Upper terraces</span>
   </div>
-  <svg viewBox="0 0 660 260" role="img" aria-label="Enforcement actions per month. Lower districts rise from 910 to 1240 then collapse. Upper terraces fall from 44 to zero at month 3 and stay at zero.">
+  <svg viewBox="0 0 660 250" role="img" aria-label="Enforcement per month. Lower districts rise from 910 to 1240 then collapse. Upper terraces fall to zero at month 3 and remain there.">
     <g stroke="#243247" stroke-width="1">
-      <line x1="52" y1="30" x2="640" y2="30"/><line x1="52" y1="76" x2="640" y2="76"/>
-      <line x1="52" y1="122" x2="640" y2="122"/><line x1="52" y1="168" x2="640" y2="168"/>
-      <line x1="52" y1="214" x2="640" y2="214"/>
+      <line x1="52" y1="34" x2="640" y2="34"/><line x1="52" y1="79" x2="640" y2="79"/>
+      <line x1="52" y1="124" x2="640" y2="124"/><line x1="52" y1="169" x2="640" y2="169"/><line x1="52" y1="205" x2="640" y2="205"/>
     </g>
     <g fill="#5b6b85" font-family="system-ui,sans-serif" font-size="11" text-anchor="end">
-      <text x="44" y="34">1,250</text><text x="44" y="80">1,000</text>
-      <text x="44" y="126">750</text><text x="44" y="172">500</text><text x="44" y="218">0</text>
+      <text x="44" y="38">1,250</text><text x="44" y="83">1,000</text><text x="44" y="128">750</text><text x="44" y="173">500</text><text x="44" y="209">0</text>
     </g>
     <g fill="#5b6b85" font-family="system-ui,sans-serif" font-size="11" text-anchor="middle">
-      <text x="70" y="236">M1</text><text x="151" y="236">M2</text><text x="232" y="236">M3</text>
-      <text x="313" y="236">M4</text><text x="394" y="236">M5</text><text x="475" y="236">M6</text>
-      <text x="556" y="236">M7</text><text x="637" y="236">M8</text>
+      <text x="70" y="228">M1</text><text x="151" y="228">M2</text><text x="232" y="228">M3</text><text x="313" y="228">M4</text>
+      <text x="394" y="228">M5</text><text x="475" y="228">M6</text><text x="556" y="228">M7</text><text x="637" y="228">M8</text>
     </g>
-    <!-- onset marker -->
-    <line x1="151" y1="24" x2="151" y2="214" stroke="#5b6b85" stroke-width="1" stroke-dasharray="3 3" opacity=".8"/>
-    <text x="156" y="22" fill="#5b6b85" font-family="system-ui,sans-serif" font-size="10.5">onset</text>
-    <!-- lower districts -->
+    <line x1="151" y1="28" x2="151" y2="205" stroke="#5b6b85" stroke-width="1" stroke-dasharray="3 3" opacity=".8"/>
+    <text x="157" y="26" fill="#5b6b85" font-family="system-ui,sans-serif" font-size="10.5">onset</text>
     <polyline fill="none" stroke="#d95926" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
-      points="70,46 151,39 232,26 313,10 394,-16 475,52 556,175 637,214"/>
-    <g fill="#d95926">
-      <circle cx="70" cy="46" r="4.5"/><circle cx="151" cy="39" r="4.5"/><circle cx="232" cy="26" r="4.5"/>
-      <circle cx="394" cy="-16" r="4.5"/><circle cx="475" cy="52" r="4.5"/><circle cx="556" cy="175" r="4.5"/><circle cx="637" cy="214" r="4.5"/>
-    </g>
-    <!-- upper terraces -->
+      points="70,50 151,44 232,30 313,15 394,-8 475,56 556,167 637,205"/>
+    <g fill="#d95926"><circle cx="70" cy="50" r="4.5"/><circle cx="151" cy="44" r="4.5"/><circle cx="232" cy="30" r="4.5"/><circle cx="475" cy="56" r="4.5"/><circle cx="556" cy="167" r="4.5"/><circle cx="637" cy="205" r="4.5"/></g>
     <polyline fill="none" stroke="#3987e5" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
-      points="70,206 151,207 232,214 313,214 394,214 475,214 556,214 637,214"/>
-    <g fill="#3987e5">
-      <circle cx="70" cy="206" r="4.5"/><circle cx="151" cy="207" r="4.5"/><circle cx="232" cy="214" r="4.5"/>
-      <circle cx="637" cy="214" r="4.5"/>
-    </g>
-    <text x="392" y="203" fill="#3987e5" font-family="system-ui,sans-serif" font-size="11.5" text-anchor="middle">zero, for six consecutive months</text>
+      points="70,197 151,198 232,205 313,205 394,205 475,205 556,205 637,205"/>
+    <g fill="#3987e5"><circle cx="70" cy="197" r="4.5"/><circle cx="151" cy="198" r="4.5"/><circle cx="232" cy="205" r="4.5"/><circle cx="637" cy="205" r="4.5"/></g>
+    <text x="400" y="195" fill="#3987e5" font-family="system-ui,sans-serif" font-size="11.5" text-anchor="middle">zero, for six consecutive months</text>
   </svg>
-  <figcaption><b>Note the divergence at onset.</b> Enforcement in the lower districts <i>rose</i> through the affected period, peaking at 1,240 detentions in month 5. Enforcement in the upper terraces fell to two in month 3 and to zero thereafter. No exemption was announced, no statute amended, and no explanation given. The lines converge in month 8 only because by then the Directorate had ceased to function anywhere.</figcaption>
+  <figcaption><b>Note the divergence at onset.</b> Enforcement in the lower districts <i>rose</i> through the affected period, peaking at 1,240 in month 5. In the upper terraces it fell to two in month 3 and to zero thereafter. The lines meet in month 8 only because by then the Directorate had ceased to function anywhere.</figcaption>
   <details><summary>View data table</summary>
-    <table><thead><tr><th>Month</th><th>Lower districts</th><th>Upper terraces</th></tr></thead>
-    <tbody>
+    <table><thead><tr><th>Month</th><th>Lower</th><th>Upper</th></tr></thead><tbody>
       <tr><td>M1</td><td>910</td><td>44</td></tr><tr><td>M2</td><td>945</td><td>39</td></tr>
       <tr><td>M3</td><td>1,020</td><td>2</td></tr><tr><td>M4</td><td>1,105</td><td>0</td></tr>
       <tr><td>M5</td><td>1,240</td><td>0</td></tr><tr><td>M6</td><td>880</td><td>0</td></tr>
@@ -158,135 +150,55 @@ footer{border-top:1px solid var(--line);margin-top:3.5rem;padding-top:1.2rem;col
   </details>
 </figure>
 
-<p>No detentions were recorded in the upper terraces during the affected period. No sanitary certificates were revoked. No households were placed under the vitality restrictions that had, in the same calendar year, been applied to eleven thousand people in the lower districts for conditions substantially less visible — in several documented instances, for eczema, for shaving rash, and in one case which I have confirmed from three sources, for freckles.</p>
-
-<p>The Directorate did not announce an exemption. It did not amend the statute. It simply did not enforce, and it did not explain why not.</p>
-
-<p>I want to be precise about the scale of what this revealed, because it is easy to state and hard to feel. Garoo's population had been taught for three generations that illness was moral failure and that enforcement was mercy — that the scalpel was applied to the sick for the sake of the well. Then the entire apparatus of that teaching stood in public with its face visibly broken out, and arrested nobody.</p>
+<p>For three generations this world was taught that illness was moral failure and that the scalpel was applied to the sick for the sake of the well. Then the entire apparatus of that teaching stood in public with its face visibly broken out, and arrested nobody.</p>
 
 <h2>The masking</h2>
 
-<p>Under the vitality statutes, face coverings were prohibited to the general population. Concealment of the face was concealment of one's condition and was itself an offence. The single exception was the Directorate's own senior officers, whose masks were an emblem of rank and were worn precisely because they did not have to justify themselves.</p>
+<p>Face coverings were prohibited to the general population — concealing your face concealed your condition, and was itself an offence. The sole exception was the Directorate's senior officers, whose masks were a badge of rank.</p>
 
-<p>So when the governing class wanted to hide their faces, they had exactly two options: break the law, or claim the privilege.</p>
+<p>So the governing class had two options: break the law, or claim the privilege. Many claimed the privilege. Masks appeared on merchants, on administrators, on the Autarch's cousins, and the Health Police — who had arrested a woman in Arco-3 that same month for a covered cheek — said nothing.</p>
 
-<p>Many claimed the privilege. Masks appeared on people who had never held Directorate rank — on merchants, on administrators, on the Autarch's cousins — and the Health Police, who arrested a woman in Arco-3 the same month for a covered cheek, said nothing.</p>
+<p>On the ninth of the fifth month, the shift crews leaving the Arco-2 manufactories came out masked. Perhaps a third of them. They carried nothing and chanted nothing. They walked home. The Directorate arrested a hundred and forty. <strong>The following shift came out masked in its entirety.</strong></p>
 
-<p>What happened next was not organised, and I have found no evidence that anyone planned it. On the ninth of the tenth month, the shift crews leaving the Arco-2 manufactories came out masked. Not all of them; perhaps a third. They were not carrying anything and they did not chant. They walked home.</p>
-
-<p>The Directorate arrested one hundred and forty of them. The following shift came out masked in its entirety.</p>
-
-<blockquote>"You have to understand what it meant. For ninety years they told us that covering your face was a lie you told about your own body. And then they covered theirs. So we thought — all right. We'll lie too. Let's all lie together and see who has the nerve to say it."<br>— Arco-2 lift technician, interviewed under condition of anonymity</blockquote>
+<blockquote>"For ninety years they told us that covering your face was a lie you told about your own body. And then they covered theirs. So we thought — all right. We'll lie too. Let's all lie together and see who has the nerve to say it."<br>— Arco-2 lift technician</blockquote>
 
 <h2>The police who stopped policing</h2>
 
-<figure>
-  <div class="fig-title">Detentions against holding capacity</div>
-  <div class="fig-sub">Monthly detentions, all districts, against total Directorate holding capacity of approximately 4,000.</div>
-  <svg viewBox="0 0 660 250" role="img" aria-label="Monthly detentions against a holding capacity of 4000. Months 1 to 4 stay near 1000. Month 5 reaches 6420 and month 6 reaches 19240, far above capacity.">
-    <g stroke="#243247" stroke-width="1">
-      <line x1="62" y1="24" x2="640" y2="24"/><line x1="62" y1="70" x2="640" y2="70"/>
-      <line x1="62" y1="116" x2="640" y2="116"/><line x1="62" y1="162" x2="640" y2="162"/><line x1="62" y1="208" x2="640" y2="208"/>
-    </g>
-    <g fill="#5b6b85" font-family="system-ui,sans-serif" font-size="11" text-anchor="end">
-      <text x="54" y="28">20,000</text><text x="54" y="74">15,000</text><text x="54" y="120">10,000</text>
-      <text x="54" y="166">5,000</text><text x="54" y="212">0</text>
-    </g>
-    <g fill="#d95926">
-      <rect x="82" y="199" width="58" height="9" rx="3"/>
-      <rect x="164" y="199" width="58" height="9" rx="3"/>
-      <rect x="246" y="199" width="58" height="9" rx="3"/>
-      <rect x="328" y="198" width="58" height="10" rx="3"/>
-      <rect x="410" y="149" width="58" height="59" rx="4"/>
-      <rect x="492" y="31" width="58" height="177" rx="4"/>
-    </g>
-    <line x1="62" y1="171" x2="640" y2="171" stroke="#3987e5" stroke-width="2" stroke-dasharray="6 4"/>
-    <text x="640" y="166" fill="#3987e5" font-family="system-ui,sans-serif" font-size="11" text-anchor="end">holding capacity ≈ 4,000</text>
-    <g fill="#5b6b85" font-family="system-ui,sans-serif" font-size="11" text-anchor="middle">
-      <text x="111" y="228">M1</text><text x="193" y="228">M2</text><text x="275" y="228">M3</text>
-      <text x="357" y="228">M4</text><text x="439" y="228">M5</text><text x="521" y="228">M6</text>
-    </g>
-    <text x="521" y="26" fill="#c3cbd9" font-family="system-ui,sans-serif" font-size="11.5" text-anchor="middle">19,240</text>
-    <text x="439" y="144" fill="#c3cbd9" font-family="system-ui,sans-serif" font-size="11.5" text-anchor="middle">6,420</text>
-  </svg>
-  <figcaption><b>The Directorate did not lose an argument. It ran out of rooms.</b> Detentions in month 6 exceeded holding capacity by a factor of roughly five. Prisoners were released within hours of arrest simply to make space, which meant that by the end of that month being detained had stopped meaning anything at all.</figcaption>
-  <details><summary>View data table</summary>
-    <table><thead><tr><th>Month</th><th>Detentions</th><th>Capacity</th></tr></thead>
-    <tbody>
-      <tr><td>M1</td><td>954</td><td>4,000</td></tr><tr><td>M2</td><td>984</td><td>4,000</td></tr>
-      <tr><td>M3</td><td>1,022</td><td>4,000</td></tr><tr><td>M4</td><td>1,105</td><td>4,000</td></tr>
-      <tr><td>M5</td><td>6,420</td><td>4,000</td></tr><tr><td>M6</td><td>19,240</td><td>4,000</td></tr>
-    </tbody></table>
-  </details>
-</figure>
+<p>By the sixth month the Directorate had detained more than nineteen thousand people against a holding capacity of about four thousand, and was releasing them within hours simply to make room. Being arrested had stopped meaning anything.</p>
 
-<p>The institution then came apart along a fault that had always been in it. The Health Police were recruited overwhelmingly from the lower terraces — the same districts supplying the masked shifts — and officered from the upper. Junior enforcement personnel began declining to execute detention orders. This was not, initially, a matter of principle; several officers I interviewed described it as arithmetic. There was nowhere to put anyone.</p>
+<p>The institution then split along a fault that had always been in it: the Health Police were recruited from the lower terraces and officered from the upper. Junior personnel began refusing detention orders — initially, several told me, not on principle but on arithmetic. There was nowhere to put anyone.</p>
 
-<p>The single episode that everyone on this world can date precisely occurred at the Arco-1 transit concourse, where a Directorate line was ordered to clear a masked crowd of several thousand with sonic disruptors. The order was given three times. It was not carried out. The senior officer present — masked, and by every account visibly afflicted himself — put up his weapon and walked off the concourse, and his line went with him.</p>
+<p>Everyone here can date the hinge precisely. At the Arco-1 transit concourse a Directorate line was ordered three times to clear a masked crowd with sonic disruptors. It was not carried out. The senior officer present — masked, and by every account visibly afflicted himself — put up his weapon and walked off the concourse, and his line went with him.</p>
 
-<p>There was violence afterwards, and I will not minimise it. Directorate stations were burned in all three arcologies. At least four hundred people died in the following six weeks, the great majority of them Health Police caught individually and killed by crowds. A number of them were the junior personnel who had refused their orders. The distinction between the officers who had administered the statutes and the constables who had merely enforced them was not one the crowds were interested in making, and I have not met anyone here who defends what was done, or anyone who is surprised by it.</p>
-
-<p>The Autarch's court dispersed over roughly a fortnight. The Directorate was formally dissolved by an instrument issued in the Autarch's name, though whether it was issued by the Autarch is one of the several things about that period nobody will discuss with an offworlder.</p>
-
-<div class="chron">
-<h3>Reconstructed chronology</h3>
-<dl>
-<dt>Weeks 1–3 &middot; the consignment</dt>
-<dd>Imported goods clear Garoo customs. Unremarkable at the time; noted here only because the Directorate's inquiry later considered and dismissed it.</dd>
-<dt>Weeks 7–9 &middot; onset</dt>
-<dd>Simultaneous appearance of the condition across unconnected upper-terrace households. No vector established. No spread beyond the affected class.</dd>
-<dt>Months 2–4 &middot; the silence</dt>
-<dd>No enforcement in the upper terraces. Enforcement continues, and rises, in the lower districts. No exemption announced.</dd>
-<dt>Month 4 &middot; the privilege</dt>
-<dd>Directorate masks appear on persons holding no Directorate rank.</dd>
-<dt>Month 5, day 9 &middot; the first masked shift</dt>
-<dd>Arco-2 manufactory crews leave work masked. 140 detained. The next shift masks entirely.</dd>
-<dt>Months 5–6 &middot; capacity failure</dt>
-<dd>19,000+ detained against 4,000 places. Releases within hours. Junior enforcement personnel begin declining orders.</dd>
-<dt>Month 6 &middot; the Arco-1 concourse</dt>
-<dd>A dispersal order refused three times. The line withdraws.</dd>
-<dt>Months 6–8 &middot; collapse and reprisal</dt>
-<dd>Stations burned in all three arcologies. ~400 dead, mostly Health Police. Court disperses. Directorate formally dissolved.</dd>
-</dl>
-</div>
+<p>What followed was ugly and I will not minimise it. Stations burned in all three arcologies; at least four hundred people died over six weeks, the great majority of them Health Police caught individually by crowds. A number were the junior constables who had refused their orders. Nobody here defends what was done. Nobody here is surprised by it.</p>
 
 <h2>What is there now</h2>
 
-<p>A provisional council sits in Arco-1. It has forty-one members and no agreed method of choosing the forty-second. Its authority is accepted in the arcologies, contested in the agricultural belt, and simply absent in the orbital and outsystem holdings, where the Summersun Mercenary Co-operative continues to run the starport very much as it did before, on the reasonable grounds that nobody has told it to stop and the traffic still needs handling.</p>
+<p>A provisional council of forty-one sits in Arco-1. Its authority is accepted in the arcologies, contested in the agricultural belt, and simply absent in orbit, where the Summersun Mercenary Co-operative still runs the starport on the reasonable grounds that nobody has told it to stop and the traffic still needs handling.</p>
 
-<p>The vitality statutes are suspended, not repealed. The medical infrastructure they justified — which was, it should be said, genuinely excellent — is intact and substantially unstaffed, because a great many of the people who ran it have left, been killed, or are declining to identify themselves as having run it.</p>
+<p>The vitality statutes are suspended, not repealed. The medical infrastructure they justified — genuinely excellent — is intact and largely unstaffed. Three factions matter: those who want repeal, those who want the statutes amended and kept and who argue, not without evidence, that a world this dense will have an epidemic within a decade without them, and the remnants of the Directorate, who retain their training and much of their equipment and are currently doing nothing at all, in a manner a good many people here find more alarming than if they were doing something.</p>
 
-<p>Three factions are worth naming. The council's dominant bloc are lower-terrace organisers who want the statutes repealed outright. A second bloc, drawn from the surviving administrative class, wants them retained in amended form, and argues — not without evidence — that a world of this density with this atmosphere will have an epidemic within the decade without them. The third are the remnants of the Directorate, who have not disappeared, who retain their training and a good deal of their equipment, and who are currently doing nothing at all in a manner that a number of people here find more alarming than if they were doing something.</p>
-
-<p>Offworld traffic has increased sharply. Garoo has spent ninety years as a place that ships avoided where they could, and it is now a place with a starport, no functioning customs regime, and an acute shortage of almost everything. What is arriving is not, in the main, humanitarian.</p>
-
-<div class="pull">Garoo is not dangerous in the way it was. It is dangerous in a new way, and nobody here — including me — can tell you yet what shape that will take.</div>
+<p>Traffic is up sharply. Garoo has spent ninety years as a world ships avoided, and is now a world with a starport, no customs regime, and an acute shortage of almost everything. What is arriving is not, in the main, humanitarian.</p>
 
 <h2>The agitators who were not there</h2>
 
-<p>Throughout the affected period the Directorate's public position was that the condition had been introduced deliberately by offworld agitators. This was the Directorate's public position about a great many things, including several documented instances in which the accused could be shown to have been elsewhere, or not to exist.</p>
+<p>Throughout, the Directorate's public position was that the condition had been introduced by offworld agitators. A persistent strand of opinion here — which I do not share — holds that the agitators were specific and named: the offworld crew known from the popular broadcasts as the <em>Heroes of Raschev</em>.</p>
 
-<p>A persistent strand of opinion on this world — which I met in every arcology, and which I do not share — holds that the agitators were specific, and named. The claim is that Garoo was brought down by the offworld crew known from the popular broadcasts as the <em>Heroes of Raschev</em>.</p>
+<p>The entire basis for this is one recording, circulated by the Directorate in the Autarchy's final year, purporting to show one of that crew — the Aslan, Ora — assassinating the Autarch. It played continuously for weeks. A warrant followed.</p>
 
-<p>I want to deal with this properly, because it is widely believed and because it is nonsense.</p>
+<p><strong>The recording is a fabrication.</strong> That is not my finding but the Directorate's own forensic section's, in an internal assessment I have read in the recovered Arco-2 files, dated eleven days after the broadcast first aired. It was never published. The broadcast was never withdrawn. The warrant was never cancelled, and I understand at least one such warrant remains outstanding against a party the council cannot locate and appears disinclined to look for.</p>
 
-<p>The entire evidentiary basis for it is a single recording. In the final year of the Autarchy the Directorate circulated a broadcast which purported to show one of that crew — the Aslan, Ora — in the act of assassinating the Autarch. It was played continuously for some weeks. A warrant followed. On this world it is still, in some quarters, treated as settled fact.</p>
+<p>When that assessment surfaced during the collapse — early, because the forensic section was among the first to stop taking orders — it did the Directorate more damage than the accusation had ever done to the accused. People who had believed the recording did not conclude they had been mistaken. They concluded they had been <em>managed</em>, and had probably been managed about everything else.</p>
 
-<p><strong>The recording is a fabrication.</strong> This is not my finding. It is the finding of the Directorate's own forensic section, whose internal assessment I have read in the recovered Arco-2 files: the sequence is synthetic, the assessment is unambiguous, and it is dated eleven days after the broadcast first aired. The assessment was never published. The broadcast was never withdrawn. The warrant was never cancelled, and I understand at least one such warrant remains outstanding against a party the provisional council cannot locate and appears disinclined to look for.</p>
-
-<p>It is characteristic of this period that the state manufactured proof of a crime, was privately told within a fortnight that its proof was manufactured, and went on broadcasting it anyway. When that assessment surfaced during the collapse — and it surfaced early, because the forensic section was one of the first to stop taking orders — it did the Directorate more damage than the original accusation had ever done to the accused. People who had believed the recording did not conclude that they had been mistaken. They concluded that they had been managed, and that they had probably been managed about everything else.</p>
-
-<p>So the offworld-agitator theory can be dismissed, and I dismiss it. Those who still hold it are reasoning backwards from a video they have been told is false and have decided not to believe. A fabricated proof is not evidence of anything except the character of whoever fabricated it.</p>
-
-<p>I would add only this, and then leave it. The fabrication was thorough, it was official, and it was aimed at exactly the question a historian would most like answered. Whether any offworlder had any hand in what happened on this world is now a question that cannot be settled either way, by me or by anyone, because the only evidence ever offered for it was invented by a government with every reason to invent it. That is not the same as an answer of no. It is the permanent absence of an answer, which the Directorate purchased for itself and, in the end, could not spend.</p>
+<p>So the theory can be dismissed, and I dismiss it. A fabricated proof is evidence of nothing except the character of whoever fabricated it. I add only this. The fabrication was thorough, official, and aimed at precisely the question a historian would most like answered. Whether any offworlder had a hand in what happened here cannot now be settled either way, by me or by anyone, because the only evidence ever offered was invented by a government with every reason to invent it. <strong>That is not the same as an answer of no.</strong> It is the permanent absence of an answer — which the Directorate bought for itself and, in the end, could not spend.</p>
 
 <div class="note">
-<strong>A note on method and its limits.</strong> This account rests on 61 interviews, the Directorate's own detention logs for the relevant period (recovered from the Arco-2 station and partially fire-damaged), the forensic section's internal assessments, provisional council minutes, and Highport traffic records. <strong>It does not rest on customs data, which I was unable to obtain.</strong> The origin of the condition remains unestablished. I am aware of four theories in circulation on this world and I find none of them supported. I would caution readers against the assumption that a small cause cannot have a large effect; the historical literature on this point is not encouraging, and a polity which has staked everything on a single claim about the world is a polity with a single point of failure. What that failure will be is not usually predictable in advance, and is often, in retrospect, embarrassing.
+<strong>Method.</strong> 61 interviews; the Directorate's own detention logs (recovered, partially fire-damaged); forensic section assessments; provisional council minutes; Highport traffic records. <strong>Not customs data, which I could not obtain.</strong> The origin of the condition remains unestablished; I know of four theories in circulation here and find none supported. I would caution readers against assuming a small cause cannot have a large effect. A polity that has staked everything on a single claim about the world is a polity with a single point of failure, and what that failure turns out to be is rarely predictable and often, in retrospect, embarrassing.
 </div>
 
 <footer>
-Institute of Polity Studies, University of Mora &middot; Frontier Governance Papers, Occasional Series 44.<br>
-Circulated to subscribing institutions and to the Travellers' Aid Society reading rooms. Not for republication in the Sword Worlds Confederation.
+Institute of Polity Studies, University of Mora &middot; Frontier Governance Papers No. 44.<br>
+Circulated to subscribing institutions and Travellers' Aid Society reading rooms. Not for republication in the Sword Worlds Confederation.
 </footer>
 
 </div>
