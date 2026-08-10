@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /traveller/
+Disallow: /traveller/garoo-transition/
 Disallow: /maps/
 Disallow: /s13-prep/
 Disallow: /s14-prep/
