@@ -49,22 +49,29 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 <div class="t">◆ ORACLE — PERSONAL CORRESPONDENCE BACKLOG</div>
 <div class="row"><span class="k">ORIGIN</span><span>Raschev · private relay · M. ALIYEV, compound administration</span></div>
 <div class="row"><span class="k">ADDRESSEE</span><span>Master and crew, ISS <i>Astral Dawn</i>, jointly</span></div>
-<div class="row"><span class="k">HELD</span><span>Undeliverable — addressee beyond routed space</span></div>
-<div class="row"><span class="k">RELEASED</span><span>On re-entry to routed space. <b>Ordered oldest first.</b></span></div>
+<div class="row"><span class="k">ROUTING</span><span>Multi-distribution · 31 replicas · TTL-purged on delivery ack</span></div>
+<div class="row"><span class="k">DELIVERED</span><span>Bowman relay · <b>entire backlog, single handover</b> · ordered oldest first</span></div>
 </div>
 
 <div class="warnbar">
-⚠ <b>These messages were written over a period of months and could not be delivered.</b> They are released in the order sent, not the order written to. <b>Every one of them is out of date.</b> As you travel coreward the backlog will continue to release, and later items will be fresher — but none will be current. There is no faster return path.
+⚠ <b>This is the whole backlog, handed over at once.</b> Imperial mail does not follow you — it is
+<b>replicated ahead of you</b>. Each item was copied to every relay between Raschev and the frontier
+(31 replicas is standard), and each copy sits there until a delivery acknowledgement propagates back
+or its TTL expires, whereupon it purges itself. It is a cheap system and a very good one.<br><br>
+⛔ <b>The consequence: these reached Collace after you had already left it</b>, and have been waiting
+on the Bowman relay ever since. They were written over roughly four months and <b>every one of them
+is out of date.</b> The most recent is six weeks old.<br><br>
+✉ <b>You can answer.</b> A reply entered here replicates the same way and will find Vince — in its
+own time, and no faster than these found you.
 </div>
 
-<div class="batch">▚ Batch released at Bowman &middot; oldest &middot; ~5 months in transit</div>
-
+<div class="batch">▚ Bowman relay &middot; complete backlog &middot; <span style="color:var(--amber)">5 items, oldest first</span></div>
 <div class="msg">
 <div class="mh"><span><b>M. Aliyev</b> · routine compound report</span><span class="age">≈5 months old</span></div>
 <p>All well. The rains came late but they came. The new dormitory block is roofed and Signe has opinions about the kitchen which she expresses daily.</p>
 <p>Kira is settled in the east wing and asks after Von Sydo more often than she admits to. She is well. Everything is as it should be there and you are not to worry about it.</p>
 <p>Offworld news, for what it is worth: Garoo has had another change of government. The Health Police are gone — properly gone this time, by all accounts — and there is some sort of council. My uncle says he will believe it when the freight schedules stop changing. Nobody here is sorry. Thomas cried when he heard, and then would not talk about it.</p>
-<p>The audit is still coming. Vince still will not say what he thinks it is looking for.</p>
+<p>Dr. Heiyoao came out to the compound again about his slow ships. He has three now on the plate — he had two — and he still cannot tell me what is aboard any of them, only that they are not under power and have not been for a very long time. He gets a look when he talks about it. Vince listens to him more than he lets on.</p>
 <div class="sig">— M.A.</div>
 </div>
 
@@ -76,11 +83,9 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 <div class="sig">— M.A.</div>
 </div>
 
-<div class="batch">▚ Batch released at Flammarion &middot; ~3 months in transit &middot; <span style="color:var(--amber)">THE LETTER</span></div>
-
 <div class="letter">
 
-<div class="plabel">Part 1 of 3 — cover note · <b>M. Aliyev</b> · ≈3 months old</div>
+<div class="plabel">Part 1 of 3 — cover note · <b>M. Aliyev</b> · ≈4 months old</div>
 <div class="part">
 <p>There are Garoovian warships over Raschev. Four we can see. They came in five weeks ago and they have not moved, and nobody has fired at anything, and I have run out of ways to describe how strange it is to get used to something like that.</p>
 <p>My uncle has written you a letter. He started it four times. The first three are in the fire and I read two of them before they went, which he does not know either.</p>
@@ -159,10 +164,8 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 
 </div>
 
-<div class="batch">▚ Batch released approaching Raschev &middot; ~1–2 months in transit</div>
-
 <div class="msg">
-<div class="mh"><span><b>M. Aliyev</b></span><span class="age">≈2 months old</span></div>
+<div class="mh"><span><b>M. Aliyev</b></span><span class="age">≈10 weeks old</span></div>
 <p>Third convoy loaded. Fourth requested, and Vince has said yes before the Council could meet, which Fost is calling a coup and which was probably the correct decision made in the wrong way.</p>
 <p>Two things you should know.</p>
 <p>Their crews have started coming down. Not armed — shore leave, of all things, at Loka field. They pay for what they take, in that currency, and the shopkeepers take it now because refusing an armed man's money is a different thing from refusing a banker's. Some of them are very young. One of them apologised to me.</p>
@@ -171,7 +174,7 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 </div>
 
 <div class="msg last">
-<div class="mh"><span><b>M. Aliyev</b></span><span class="age">≈5 weeks old &middot; most recent</span></div>
+<div class="mh"><span><b>M. Aliyev</b></span><span class="age">≈6 weeks old &middot; most recent</span></div>
 <p>Short one — the courier is already loading.</p>
 <p>The eastern district is short and we are moving stores from the south to cover it. It will be tight and it will not be a famine, whatever Fost says in the hall.</p>
 <p>Kira is well. She asks whether you are coming. I have told her I do not know, which is true, and that you would if you could, which I believe.</p>
@@ -181,9 +184,11 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 </div>
 
 <div class="gap">
-<b>◆ NO FURTHER TRAFFIC IN QUEUE ◆</b>
-Nothing has been received from this relay in five weeks.<br>
-ORACLE cannot distinguish between a sender who has not written, a courier that has not run, and a relay that is no longer transmitting.
+<b>◇ NOTHING NEWER EXISTS TO DELIVER</b>
+The Bowman relay holds no further traffic for this addressee. That is not silence from Raschev —
+it is <b>distance</b>. Six weeks is the floor: nothing sent since has had time to replicate this far
+out. Whatever has happened there in the last six weeks has happened, and is on its way, and will
+arrive after you have already decided what to do about it.
 </div>
 
 <div class="ftr">
