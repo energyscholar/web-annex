@@ -28,6 +28,15 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 .msg.big p{margin-bottom:1rem}
 .sig{margin-top:1.2rem;color:var(--head)}
 .sig .r{color:var(--muted);font-size:.82rem;font-family:ui-monospace,monospace}
+.letter{border:1px solid var(--line);border-left:3px solid var(--green);background:var(--panel);border-radius:4px;margin-bottom:1.1rem;overflow:hidden}
+.plabel{background:#0d1420;border-bottom:1px solid var(--line);padding:.5rem .95rem;font-size:.72rem;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-family:ui-monospace,monospace}
+.plabel b{color:var(--head)}
+.part{padding:1.15rem 1.4rem}
+.part.core{font-family:Georgia,serif;font-size:16.5px;line-height:1.78;padding:1.6rem 1.7rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.part.core p{margin-bottom:1rem}
+.part p{margin-bottom:.85rem}
+.part.ps{background:#140f12}
+.part.ps .plabel{color:var(--red)}
 .gap{border:1px dashed #3a2a12;background:#150f06;color:#c9a86a;padding:1.3rem 1.4rem;margin:1.6rem 0;font-size:.86rem;line-height:1.7;text-align:center}
 .gap b{color:var(--amber);display:block;font-size:1rem;margin-bottom:.5rem;letter-spacing:.06em}
 .ftr{color:var(--muted);font-size:.74rem;border-top:1px solid var(--line);padding-top:.9rem;margin-top:2rem;line-height:1.6}
@@ -67,20 +76,21 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 <div class="sig">— M.A.</div>
 </div>
 
-<div class="batch">▚ Batch released at Flammarion &middot; ~3–4 months in transit</div>
+<div class="batch">▚ Batch released at Flammarion &middot; ~3 months in transit &middot; <span style="color:var(--amber)">THE LETTER</span></div>
 
-<div class="msg">
-<div class="mh"><span><b>M. Aliyev</b> · URGENT</span><span class="age">≈3½ months old</span></div>
-<p>There are Garoovian warships in orbit.</p>
-<p>They came in six days ago and have not moved. Nobody has fired at anything. They have asked for the freight schedule to be honoured and they have said they will pay in the new currency, and when Vince said no they did not leave.</p>
-<p>I do not know what this is. Six days ago I would have told you Garoo had no interest in us beyond dinner.</p>
-<p>Do not do anything about this. I am telling you because you would want to be told. Vince is composing something and it will take him a week because he keeps starting again.</p>
-<div class="sig">— M.A.</div>
+<div class="letter">
+
+<div class="plabel">Part 1 of 3 — cover note · <b>M. Aliyev</b> · ≈3 months old</div>
+<div class="part">
+<p>There are Garoovian warships over Raschev. Four we can see. They came in five weeks ago and they have not moved, and nobody has fired at anything, and I have run out of ways to describe how strange it is to get used to something like that.</p>
+<p>My uncle has written you a letter. He started it four times. The first three are in the fire and I read two of them before they went, which he does not know either.</p>
+<p><b>I am sending it exactly as he wrote it.</b> I have not tidied it and I have not softened it, and where it rambles, it rambles, because that is what it cost him.</p>
+<p>I have put something of my own at the end. He has not seen it and will not. Read that part too.</p>
+<div class="sig">— Marta</div>
 </div>
 
-<div class="msg big">
-<div class="mh"><span><b>Vince Aliyev</b> · Raschev · sent at his own cost</span><span class="age">≈3 months old</span></div>
-
+<div class="plabel">Part 2 of 3 — <b>Vince Aliyev</b> · Raschev · sent at his own cost</div>
+<div class="part core">
 <p>Friends,</p>
 
 <p>I have started this letter four times. I will send this one whatever it looks like, because the courier leaves tonight and the next is in eleven days.</p>
@@ -117,7 +127,7 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 
 <p>Garoo has never sold us a starship. Not once, not at any price, and I have asked three times in my life. They build them — that great port of theirs turns out hulls for half the subsector — and they have always found a reason. When I was younger I thought it was money. It is not money. They have simply never wanted this world to have a ship of its own, and now four of theirs are sitting over my head and I understand the policy rather better than I did.</p>
 
-<p>We could afford one now, I think. Not easily. But the district factors tell me that ten credits from every soul on Raschev would buy something real, and there are twenty million of us. That is not a proposal. It is just a thing I have been turning over, and there is no one here to say it to.</p>
+<p>We could afford one now, I think. Not easily, and not without an argument that would last a year. But we are not the world we were when I last asked, and I find I mind the refusal more than I used to. That is not a proposal. It is just a thing I have been turning over, and there is no one here to say it to.</p>
 
 <p>So I am asking. I have never asked you for anything.</p>
 
@@ -132,14 +142,21 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 <div class="sig"><span style="font-size:1.05rem">Vince Aliyev</span><br><span class="r">Raschev</span></div>
 </div>
 
-<div class="msg pvt">
-<div class="mh"><span><b>M. Aliyev</b> · appended · not shown to the sender</span><span class="age">≈3 months old</span></div>
+<div class="plabel" style="color:#e0928a">Part 3 of 3 — appended · <b>not shown to the sender</b></div>
+<div class="part ps">
 <p>He will not write down the part that matters, so I will.</p>
 <p>When Garoo wanted you, they came to him. Not politely. They had names, they had the warrant, and they had a great deal to offer a small world. He sat in that room for two hours and told them he had never heard of you.</p>
 <p>He has never once mentioned it to you and he would be furious that I have. He does not think of it as something you owe him. He thinks of it as something he did.</p>
-<p>I am telling you because I want you to understand what it cost him to write "I am asking," and because if you cannot come, he will need to hear that from you and not from silence.</p>
-<p>One more thing, which is mine and not his. Their commander is frightened. I stood behind him during the second transmission and I have seen frightened people. Whatever is happening on Garoo, that woman is more afraid of going home empty than she is of us.</p>
+<p>I am telling you because I want you to understand what it cost him to write <i>I am asking</i>, and because if you cannot come, he will need to hear that from you and not from silence.</p>
+<p>Now the part that is mine and not his, and I have thought about whether to write it for a week.</p>
+<p><b>Their commander asked to see me alone.</b> Not my uncle. Me. She sent a junior officer to the compound gate with a written request, which I think she did so that it could be refused without anyone losing anything.</p>
+<p>We sat in the port office for an hour and she did not read me a statement. She asked me what Raschev <i>wants</i>. Not what we would settle for — she was quite particular about the difference. What we want. She asked me twice, as though she expected me to have an answer ready and was disappointed that I did not.</p>
+<p>Then she told me, more or less directly, that she has nothing to give us. No money, no goods worth the name, and — this is the part I keep turning over — <b>no authority to agree to anything that is not on her list.</b> She said she has sent three requests home for instructions and had two acknowledgements and no instructions.</p>
+<p>So she is not what the statement made her sound like. She is a woman who has been sent a very long way with guns and no purse, and told not to come back with a refusal. She is bargaining because she has to bring <i>something</i> home, and she does not know what to bargain with, and she was asking a farmer's niece because there was nobody else to ask.</p>
+<p>I do not know what to do with that. But I know it is worth more than the four ships, and I am not going to put it in a letter my uncle reads, because he would go and shout at her, and she is the only person up there who has asked us a question.</p>
 <div class="sig">— Marta</div>
+</div>
+
 </div>
 
 <div class="batch">▚ Batch released approaching Raschev &middot; ~1–2 months in transit</div>
