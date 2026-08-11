@@ -39,6 +39,21 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 .part.ps .plabel{color:var(--red)}
 .gap{border:1px dashed #3a2a12;background:#150f06;color:#c9a86a;padding:1.3rem 1.4rem;margin:1.6rem 0;font-size:.86rem;line-height:1.7;text-align:center}
 .gap b{color:var(--amber);display:block;font-size:1rem;margin-bottom:.5rem;letter-spacing:.06em}
+.msg,.letter{margin-bottom:.55rem}
+details>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  align-items:baseline;padding:.72rem 1rem;font-size:.79rem;font-family:ui-monospace,monospace;
+  letter-spacing:.04em;color:var(--text);transition:background .12s}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"▸";color:var(--muted);margin-right:.55rem;flex-shrink:0;transition:transform .15s;display:inline-block}
+details[open]>summary::before{transform:rotate(90deg);color:var(--green)}
+details>summary:hover{background:#161d2b}
+details>summary b{color:var(--head);font-weight:700}
+details>summary .subj{color:var(--text);flex:1 1 auto}
+details>summary .age{color:var(--amber);font-size:.73rem;flex-shrink:0}
+details[open]>summary{border-bottom:1px solid var(--line)}
+details.msg>.bd{padding:1.1rem 1.3rem .3rem}
+details.letter>summary{border-left:0}
+details.letter[open]>summary{background:#0d1420}
 .ftr{color:var(--muted);font-size:.74rem;border-top:1px solid var(--line);padding-top:.9rem;margin-top:2rem;line-height:1.6}
 </style>
 </head>
@@ -46,149 +61,99 @@ body{background:var(--bg);color:var(--text);font-family:ui-monospace,"SF Mono",M
 <div class="wrap">
 
 <div class="hdr">
-<div class="t">◆ ORACLE — PERSONAL CORRESPONDENCE BACKLOG</div>
-<div class="row"><span class="k">ORIGIN</span><span>Raschev · private relay · M. ALIYEV, compound administration</span></div>
-<div class="row"><span class="k">ADDRESSEE</span><span>Master and crew, ISS <i>Astral Dawn</i>, jointly</span></div>
-<div class="row"><span class="k">ROUTING</span><span>Multi-distribution · 31 replicas · TTL-purged on delivery ack</span></div>
-<div class="row"><span class="k">DELIVERED</span><span>Bowman relay · <b>entire backlog, single handover</b> · ordered oldest first</span></div>
+<div class="t">◆ ORACLE — CORRESPONDENCE BACKLOG</div>
+<div class="row"><span class="k">FROM</span><span>Raschev · M. Aliyev, compound administration</span></div>
+<div class="row"><span class="k">TO</span><span>Master and crew, ISS <i>Astral Dawn</i></span></div>
+<div class="row"><span class="k">HELD AT</span><span>Bowman relay · 11 pc from origin · <b>5 items, oldest first</b></span></div>
 </div>
 
 <div class="warnbar">
-⚠ <b>This is the whole backlog, handed over at once.</b> Imperial mail does not follow you — it is
-<b>replicated ahead of you</b>. Each item was copied to every relay between Raschev and the frontier
-(31 replicas is standard), and each copy sits there until a delivery acknowledgement propagates back
-or its TTL expires, whereupon it purges itself. It is a cheap system and a very good one.<br><br>
-⛔ <b>The consequence: these reached Collace after you had already left it</b>, and have been waiting
-on the Bowman relay ever since. They were written over roughly four months and <b>every one of them
-is out of date.</b> The most recent is six weeks old.<br><br>
-✉ <b>You can answer.</b> A reply entered here replicates the same way and will find Vince — in its
-own time, and no faster than these found you.
+⚠ <b>Complete backlog, one handover.</b> Missed you at Collace. Oldest is five months, newest ten weeks.
+<b>None of it is current.</b>
 </div>
 
-<div class="batch">▚ Bowman relay &middot; complete backlog &middot; <span style="color:var(--amber)">5 items, oldest first</span></div>
-<div class="msg">
-<div class="mh"><span><b>M. Aliyev</b> · routine compound report</span><span class="age">≈5 months old</span></div>
-<p>All well. The rains came late but they came. The new dormitory block is roofed and Signe has opinions about the kitchen which she expresses daily.</p>
-<p>Kira is settled in the east wing and asks after Von Sydo more often than she admits to. She is well. Everything is as it should be there and you are not to worry about it.</p>
-<p>Offworld news, for what it is worth: Garoo has had another change of government. The Health Police are gone — properly gone this time, by all accounts — and there is some sort of council. My uncle says he will believe it when the freight schedules stop changing. Nobody here is sorry. Thomas cried when he heard, and then would not talk about it.</p>
-<p>Dr. Heiyoao came out to the compound again about his slow ships. He has three now on the plate — he had two — and he still cannot tell me what is aboard any of them, only that they are not under power and have not been for a very long time. He gets a look when he talks about it. Vince listens to him more than he lets on.</p>
+<details class="msg">
+<summary><span class="subj"><b>M. Aliyev</b> — compound report — all well; Heiyoao has a third ship</span><span class="age">≈5 months</span></summary>
+<div class="bd">
+<p>All well. Rains came late but came. Signe has opinions about the new kitchen and shares them daily.</p>
+<p>Kira is settled in the east wing and asks after Von Sydo more often than she admits.</p>
+<p>Garoo has changed government again — the Health Police are gone, properly this time, and there is some sort of council. Nobody here is sorry. Thomas cried when he heard and would not say why.</p>
+<p>Dr. Heiyoao was out again about his slow ships. He has three now; he had two. Still cannot say what is aboard, only that they are not under power and have not been for a long time. Vince listens to him more than he lets on.</p>
 <div class="sig">— M.A.</div>
 </div>
-
-<div class="msg">
-<div class="mh"><span><b>M. Aliyev</b> · compound report</span><span class="age">≈4½ months old</span></div>
-<p>A commercial matter, which I mention because my uncle is in a temper about it and you will hear about it eventually anyway.</p>
-<p>Garoo has paid for this quarter's shipments in a new currency. Not the old one — the old one is not money any more. The new one is issued by whatever is governing them now. Three brokers in Loka have refused it outright and the fourth accepted it and is regretting it publicly.</p>
-<p>Vince's view is that Garoo will sort itself out, as it always has, and that we should keep loading the ships and settle the accounts later — which is, to be fair to him, exactly what we have always done. Councillor Fost's view is that we are giving away a harvest for paper. This is the first time I have ever thought Fost had a point, which I have not said to anyone but you.</p>
+</details>
+<details class="msg">
+<summary><span class="subj"><b>M. Aliyev</b> — Garoo has paid in a new currency</span><span class="age">≈4½ months</span></summary>
+<div class="bd">
+<p>Garoo paid this quarter in a new currency. The old one is not money any more. Three brokers in Loka refused it outright; the fourth took it and is regretting it publicly.</p>
+<p>Vince says they will sort themselves out as they always have, and we should keep loading and settle later — which is, to be fair, what we have always done. Councillor Fost says we are giving away a harvest for paper.</p>
+<p>First time I have thought Fost had a point. I have not said so to anyone but you.</p>
 <div class="sig">— M.A.</div>
 </div>
+</details>
+<details class="letter">
+<summary><span class="subj">⚑ <b>V. Aliyev</b> — personal, urgent — <i>relayed by M. Aliyev, with an appendix</i></span><span class="age">≈4 months</span></summary>
 
-<div class="letter">
-
-<div class="plabel">Part 1 of 3 — cover note · <b>M. Aliyev</b> · ≈4 months old</div>
+<div class="plabel">1 of 3 — cover · <b>M. Aliyev</b> · ≈4 months</div>
 <div class="part">
-<p>There are Garoovian warships over Raschev. Four we can see. They came in five weeks ago and they have not moved, and nobody has fired at anything, and I have run out of ways to describe how strange it is to get used to something like that.</p>
-<p>My uncle has written you a letter. He started it four times. The first three are in the fire and I read two of them before they went, which he does not know either.</p>
-<p><b>I am sending it exactly as he wrote it.</b> I have not tidied it and I have not softened it, and where it rambles, it rambles, because that is what it cost him.</p>
-<p>I have put something of my own at the end. He has not seen it and will not. Read that part too.</p>
+<p>There are Garoovian warships over Raschev. Four we can see. Five weeks now, and nobody has fired at anything.</p>
+<p>My uncle has written to you. He started it four times; the first three went in the fire and I read two of them, which he does not know.</p>
+<p><b>I am sending it exactly as he wrote it.</b> I have added something at the end. He has not seen it and will not. Read that part too.</p>
 <div class="sig">— Marta</div>
 </div>
 
-<div class="plabel">Part 2 of 3 — <b>Vince Aliyev</b> · Raschev · sent at his own cost</div>
+<div class="plabel">2 of 3 — <b>Vince Aliyev</b> · sent at his own cost</div>
 <div class="part core">
 <p>Friends,</p>
-
-<p>I have started this letter four times. I will send this one whatever it looks like, because the courier leaves tonight and the next is in eleven days.</p>
-
-<p>There are Garoovian warships over Raschev.</p>
-
-<p>Four that we can see from the observatory at Loka, and their commander says there are others we cannot. I have no way to check that. We have telescopes and weather satellites. That is what we have.</p>
-
-<p>They arrived without announcement and took station where they could be seen from the ground, which I am told is deliberate. Their commander — she gave a name, I will not put it in a letter — read me a statement. It was not a negotiation. She said the food ships would be loaded as they have always been loaded, on the schedule they have always kept, and that payment would be made in the new currency of the Provisional Authority of Garoo.</p>
-
-<p>I told her that no bank on this world will take that currency, that no one here knows what it is worth, and that our people cannot eat a promise. She said she understood, and repeated the statement. I believe she did understand. I do not think she was permitted to say anything else.</p>
-
-<p>Then she named Power One.</p>
-
-<p>You will remember it — the fusion station on the rock off the northwest coast, that the Imperials built for us and then stopped paying for. It lights Loka and most of the peninsula. She did not threaten our cities and she did not threaten our people. She named the power station, and she said she hoped it would not be necessary, and I believe that too. It is a very careful sort of threat. It is the threat of a person who does not want to be a monster and has been given no other instrument.</p>
-
-<p>We have loaded two convoys. I authorised it, and I want to be clear with you about what that did and did not cost, because the offworld version of this will be wrong.</p>
-
-<p>We were going to send that food anyway. We have sent Garoo our surplus every season for three hundred years. There is nowhere else for it to go and no one else who wants it. Loading those ships was not a sacrifice and no one on this world went hungry. <b>The problem is that nobody has paid us.</b></p>
-
-<p>Their commander has promised payment. She has offered paper — receipts, drafts, an instrument she called a bond of the Provisional Authority — and some goods in trade, which were not nothing but were not much. I do not think she is lying. I think she has been sent here without money and told not to come back without the cargo.</p>
-
-<p>We can carry this about a year. I have run the figures with the district factors and that is the honest number. A year of harvests handed over against paper. After that the farmers will stop planting the surplus, because a man who is not paid twice will not plant a third time, and no speech of mine will change his arithmetic. So this is not a famine and it is not next month. It is a debt with a fuse on it, and the fuse is about a year long.</p>
-
-<p>What it has cost me is every argument I have with Councillor Fost from now until I die. He says, in public, that I cannot protect this world. He is right. That is what makes it hard to answer him.</p>
-
-<p>Now I will tell you what I do not understand, in case you can make sense of it where I cannot.</p>
-
-<p>Garoo is not starving. I have seen their agricultural returns for thirty years; they grow more food in those fungus galleries than we do in our whole southern belt. What we send them is not their bread. It is their delicacies. It is what their rich people used to eat on a holiday. And they have brought warships to take it.</p>
-
-<p>I have read what the offworld journals say about their revolution. Some hundreds dead, a police force dissolved, a council of forty-one that cannot agree on the time of day. It reads like a bad month in a small country. It does not read like a reason to point guns at farmers over preserved fruit. Something is being left out and I do not have the education to work out what.</p>
-
-<p>There is one more thing, and I put it here only because I am tired and it has been on my mind for thirty years.</p>
-
-<p>Garoo has never sold us a starship. Not once, not at any price, and I have asked three times in my life. They build them — that great port of theirs turns out hulls for half the subsector — and they have always found a reason. When I was younger I thought it was money. It is not money. They have simply never wanted this world to have a ship of its own, and now four of theirs are sitting over my head and I understand the policy rather better than I did.</p>
-
-<p>We could afford one now, I think. Not easily, and not without an argument that would last a year. But we are not the world we were when I last asked, and I find I mind the refusal more than I used to. That is not a proposal. It is just a thing I have been turning over, and there is no one here to say it to.</p>
-
+<p>Four Garoovian warships hold station over Loka where the whole city can see them. Their commander read me a statement. It was not a negotiation. The food ships will be loaded on the usual schedule, and payment will be made in the new currency of the Provisional Authority.</p>
+<p>I told her no bank here will take it. She said she understood, and read the statement again. I believe she did understand, and that she was not permitted to say anything else.</p>
+<p>Then she named Power One. Not our cities, not our people — the fusion station that lights the peninsula. She said she hoped it would not be necessary. It is a very careful sort of threat, made by someone given no other instrument.</p>
+<p>Now hear the part the offworld journals will get wrong. <b>We were going to send that food anyway.</b> We have sent Garoo our surplus every season for three hundred years; there is nowhere else for it to go. Nobody here has gone hungry. <b>The problem is that nobody has paid us.</b></p>
+<p>She has offered paper, and some goods that were not nothing but were not much. I think she was sent here without money and told not to come back empty.</p>
+<p>We can carry this about a year. After that the farmers stop planting the surplus, and no speech of mine will change that arithmetic. So it is not a famine and it is not next month. It is a debt with a year-long fuse.</p>
+<p>One other thing, which I put here because I am tired. Garoo has never sold us a starship. Not once, at any price, and I have asked three times in my life. They build them for half the subsector. I used to think it was money. It is not money. Now four of theirs sit over my head and I understand the policy better than I did.</p>
 <p>So I am asking. I have never asked you for anything.</p>
-
-<p><b>Bring warships.</b> Bring whatever you have and whatever you can borrow. You have friends in the Imperial service and I do not. You have a ship that fights and this world has never had one and never expected to need one. If four of their vessels are all there is, then perhaps one of yours standing between them and the harbour is enough to make somebody in that fleet ask a question they have not been asked.</p>
-
-<p>And if I am wrong about that, come anyway, and tell me what to do instead. I would rather be corrected by you than be right on my own.</p>
-
-<p>Your land is safe. Your compound is untouched — they have not come near the island and I have not drawn their attention to it. Thomas and Bob are well. The Aslan pair keep watch on the approaches and will not be talked out of it.</p>
-
-<p>I know what I am asking, and roughly what it costs. Come if you can.</p>
-
+<p><b>Bring warships.</b> Bring whatever you have or can borrow. You have friends in the Imperial service and I do not. Perhaps one hull standing between them and the harbour makes somebody in that fleet ask a question they have not been asked.</p>
+<p>And if I am wrong, come anyway and tell me what to do instead. I would rather be corrected by you than right on my own.</p>
+<p>Your land is safe. Your compound is untouched. Thomas and Bob are well, and the Aslan pair watch the approaches and will not be talked out of it.</p>
 <div class="sig"><span style="font-size:1.05rem">Vince Aliyev</span><br><span class="r">Raschev</span></div>
 </div>
 
-<div class="plabel" style="color:#e0928a">Part 3 of 3 — appended · <b>not shown to the sender</b></div>
+<div class="plabel" style="color:#e0928a">3 of 3 — appended · <b>not shown to the sender</b></div>
 <div class="part ps">
-<p>He will not write down the part that matters, so I will.</p>
-<p>When Garoo wanted you, they came to him. Not politely. They had names, they had the warrant, and they had a great deal to offer a small world. He sat in that room for two hours and told them he had never heard of you.</p>
-<p>He has never once mentioned it to you and he would be furious that I have. He does not think of it as something you owe him. He thinks of it as something he did.</p>
-<p>I am telling you because I want you to understand what it cost him to write <i>I am asking</i>, and because if you cannot come, he will need to hear that from you and not from silence.</p>
-<p>Now the part that is mine and not his, and I have thought about whether to write it for a week.</p>
-<p><b>Their commander asked to see me alone.</b> Not my uncle. Me. She sent a junior officer to the compound gate with a written request, which I think she did so that it could be refused without anyone losing anything.</p>
-<p>We sat in the port office for an hour and she did not read me a statement. She asked me what Raschev <i>wants</i>. Not what we would settle for — she was quite particular about the difference. What we want. She asked me twice, as though she expected me to have an answer ready and was disappointed that I did not.</p>
-<p>Then she told me, more or less directly, that she has nothing to give us. No money, no goods worth the name, and — this is the part I keep turning over — <b>no authority to agree to anything that is not on her list.</b> She said she has sent three requests home for instructions and had two acknowledgements and no instructions.</p>
-<p>So she is not what the statement made her sound like. She is a woman who has been sent a very long way with guns and no purse, and told not to come back with a refusal. She is bargaining because she has to bring <i>something</i> home, and she does not know what to bargain with, and she was asking a farmer's niece because there was nobody else to ask.</p>
-<p>I do not know what to do with that. But I know it is worth more than the four ships, and I am not going to put it in a letter my uncle reads, because he would go and shout at her, and she is the only person up there who has asked us a question.</p>
+<p>He will not write the part that matters, so I will.</p>
+<p>When Garoo wanted you, they came to him. They had names, they had the warrant, and they had a great deal to offer a small world. He sat with them two hours and said he had never heard of you. He has never mentioned it and would be furious that I have. He does not think of it as something you owe him.</p>
+<p>Now the part that is mine. <b>Their commander asked to see me alone.</b> Not my uncle — me, by written request, so that it could be refused quietly.</p>
+<p>She did not read me a statement. She asked what Raschev <i>wants</i> — not what we would settle for; she was particular about the difference. She asked twice, as though she expected an answer ready.</p>
+<p>Then she told me she has nothing to give. No money, no goods worth the name, and <b>no authority to agree to anything not on her list.</b> Three requests home, two acknowledgements, no instructions.</p>
+<p>So she is not what the statement made her sound like. She is bargaining because she must bring something home, and she does not know what with, and she was asking a farmer's niece because there was no one else to ask.</p>
+<p>I have not told my uncle. He would go and shout at her, and she is the only person up there who has asked us a question.</p>
 <div class="sig">— Marta</div>
 </div>
 
-</div>
+</details>
 
-<div class="msg">
-<div class="mh"><span><b>M. Aliyev</b></span><span class="age">≈10 weeks old</span></div>
-<p>Third convoy loaded. Fourth requested, and Vince has said yes before the Council could meet, which Fost is calling a coup and which was probably the correct decision made in the wrong way.</p>
-<p>Two things you should know.</p>
-<p>Their crews have started coming down. Not armed — shore leave, of all things, at Loka field. They pay for what they take, in that currency, and the shopkeepers take it now because refusing an armed man's money is a different thing from refusing a banker's. Some of them are very young. One of them apologised to me.</p>
-<p>And Thomas has asked me twice for permission to use his comms. I have said no twice. I am no longer certain I am right about that, and I would very much like you to be here to tell me.</p>
+<details class="msg">
+<summary><span class="subj"><b>M. Aliyev</b> — third convoy; their crews are coming down</span><span class="age">≈3 months</span></summary>
+<div class="bd">
+<p>Third convoy loaded, fourth requested. Vince said yes before the Council could meet, which Fost is calling a coup and which was probably right done wrongly.</p>
+<p>Their crews have started coming down on shore leave, of all things. They pay in that currency and the shopkeepers take it now, because refusing an armed man's money is different from refusing a banker's. Some of them are very young. One apologised to me.</p>
+<p>Thomas has asked twice for permission to use his comms. I have said no twice. I am no longer sure I am right.</p>
 <div class="sig">— M.A.</div>
 </div>
-
-<div class="msg last">
-<div class="mh"><span><b>M. Aliyev</b></span><span class="age">≈6 weeks old &middot; most recent</span></div>
-<p>Short one — the courier is already loading.</p>
-<p>The eastern district is short and we are moving stores from the south to cover it. It will be tight and it will not be a famine, whatever Fost says in the hall.</p>
-<p>Kira is well. She asks whether you are coming. I have told her I do not know, which is true, and that you would if you could, which I believe.</p>
-<p>Eric has stopped sleeping in the house. He will not say why and Signe will not say either. I have known those two eleven years and this is the first time neither of them will tell me something.</p>
-<p>Come home if you can.</p>
+</details>
+<details class="msg last">
+<summary><span class="subj"><b>M. Aliyev</b> — nothing has changed</span><span class="age">≈10 weeks &middot; most recent</span></summary>
+<div class="bd">
+<p>Courier is loading, so: nothing has changed, which is its own kind of news. The ships are still there. The fourth convoy went up.</p>
+<p>Vince has stopped asking whether you received his letter. That is not the same as having stopped hoping, and I want you to know the difference.</p>
 <div class="sig">— M.A.</div>
 </div>
-
+</details>
 <div class="gap">
-<b>◇ NOTHING NEWER EXISTS TO DELIVER</b>
-The Bowman relay holds no further traffic for this addressee. That is not silence from Raschev —
-it is <b>distance</b>. Six weeks is the floor: nothing sent since has had time to replicate this far
-out. Whatever has happened there in the last six weeks has happened, and is on its way, and will
-arrive after you have already decided what to do about it.
+<b>◇ NOTHING NEWER TO DELIVER</b>
+Ten weeks is the floor — nothing sent since has had time to cross eleven parsecs of frontier.
+Whatever has happened there since has happened, and is on its way, and will arrive after you have decided.
 </div>
 
 <div class="ftr">
