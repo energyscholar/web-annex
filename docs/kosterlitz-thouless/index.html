@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==== PHYSICS EDITORIAL STANDARD - read before editing any claim in this file ====
+  Every physics claim here is held to one standard:
+    precluded     = a specific law or theorem prohibits it.  NAME THE LAW.
+    not precluded = no known law prohibits it. It may be undemonstrated, unlikely, or need many
+                    unverified steps - but physics does not forbid it.
+  "No one has done this" is an engineering status report, NOT a physics argument.
+
+  Specific to THIS page - the traps that bite in Kosterlitz-Thouless writing:
+    K1  BKT requires (a) two dimensions, (b) a CONTINUOUS symmetry, (c) therefore a LOGARITHMIC
+        defect interaction. Change any one and it is a different transition. Discrete symmetry in
+        2D gives an ordinary critical point; continuous symmetry in 3D gives ordinary 3D XY.
+    K2  There is NO symmetry breaking and NO local order parameter at this transition. That is the
+        point of it, not an omission. Mermin-Wagner FORBIDS the order; the transition happens anyway.
+    K3  The low-temperature phase is critical at EVERY temperature - a line of fixed points, not a
+        tuned point. Do not describe T_KT as "the critical point" as though the phase below it were
+        ordinary.
+    K4  The transition is INFINITE order. Every derivative of the free energy is continuous. It is
+        not second order. The correlation length has an ESSENTIAL singularity, not a power law -
+        quoting a nu for BKT is a category error.
+    K5  Biological and driven analogues (cardiac spirals, active nematics, defect-mediated
+        turbulence) are NOT equilibrium BKT. The defect-unbinding PICTURE transfers; the equilibrium
+        machinery - universal jump, Kosterlitz recursion - does not transfer without argument.
+        Flag every such application as an analogy under test.
+    K6  Credit Berezinskii. The transition is properly BKT; he published the vortex argument in
+        1971-72, independently and first.
+==== end physics editorial standard ==== -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A phase transition with no order parameter and no broken symmetry — how vortex unbinding drives the Berezinskii–Kosterlitz–Thouless transition, from the two-line free-energy argument to the Kosterlitz flow, the universal jump, and two-step melting.">
+<title>Kosterlitz&ndash;Thouless for the Working Mathematician</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kosterlitz–Thouless for the Working Mathematician">
+<meta property="og:description" content="A phase transition with no order parameter and no broken symmetry — vortex unbinding, the Kosterlitz flow, the universal jump, and why the whole low-temperature phase is critical.">
+<meta property="og:url" content="https://energyscholar.github.io/web-annex/kosterlitz-thouless/">
+<meta property="og:image" content="https://energyscholar.github.io/web-annex/art/og/kosterlitz-thouless.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://energyscholar.github.io/web-annex/art/og/kosterlitz-thouless.png">
+<style>
+:root {
+  --bg: #0f172a; --card: #1e293b; --text: #cbd5e1; --heading: #f1f5f9;
+  --blue: #3b82f6; --green: #22c55e; --amber: #f59e0b; --red: #ef4444;
+  --golden: #fbbf24; --muted: #475569; --line: #94a3b8; --purple: #a855f7;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.7; padding: 2rem 1rem; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { color: var(--heading); font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+h2 { color: var(--heading); font-size: 1.6rem; margin-top: 3rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #334155; }
+h3 { color: var(--heading); font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+p { margin-bottom: 1rem; }
+.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 2rem; }
+.definition, .theorem, .warn { background: var(--card); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+.definition { border-left: 4px solid var(--blue); }
+.theorem { border-left: 4px solid var(--purple); }
+.warn { border-left: 4px solid var(--red); }
+.definition-title, .theorem-title, .warn-title { font-weight: 700; margin-bottom: 0.5rem; }
+.definition-title { color: var(--blue); }
+.theorem-title { color: var(--purple); }
+.warn-title { color: var(--red); }
+.math { font-family: 'Times New Roman', 'Georgia', serif; font-style: italic; color: var(--heading); }
+.math-block { font-family: 'Times New Roman', 'Georgia', serif; font-style: italic; color: var(--heading); display: block; text-align: center; margin: 1rem 0; font-size: 1.15rem; }
+code { background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 0.15rem 0.4rem; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.9em; color: var(--green); }
+.svg-container { background: var(--card); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; text-align: center; overflow-x: auto; }
+.svg-container svg { max-width: 100%; height: auto; }
+.figcap { color: var(--muted); font-size: 0.85rem; margin-top: 0.9rem; text-align: left; line-height: 1.55; }
+.figcap b { color: var(--line); }
+table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--card); border-radius: 8px; overflow: hidden; }
+th { background: #334155; color: var(--heading); padding: 0.75rem 1rem; text-align: left; font-size: 0.9rem; }
+td { padding: 0.7rem 1rem; border-top: 1px solid #334155; font-size: 0.9rem; vertical-align: top; }
+td.n { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; white-space: nowrap; }
+.callout { background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; text-align: center; font-size: 1.15rem; color: var(--heading); }
+ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.3rem; }
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400; color: var(--text); width: max-content; max-width: 300px; z-index: 100; line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4); text-align: left; }
+.tip .tt::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line); }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) { .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto; transform: none; max-width: none; width: auto; } .tip .tt::after { display: none; } }
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+
+.ax   { stroke: #64748b; stroke-width: 1.2; fill: none; }
+.gl   { stroke: #334155; stroke-width: 1; fill: none; }
+.lbl  { fill: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.lbl-s{ fill: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+.lbl-h{ fill: #f1f5f9; font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; }
+.spin { stroke: #94a3b8; stroke-width: 2; stroke-linecap: round; }
+.spinP{ stroke: #f59e0b; stroke-width: 2.2; stroke-linecap: round; }
+.spinM{ stroke: #3b82f6; stroke-width: 2.2; stroke-linecap: round; }
+.traj { stroke: #94a3b8; stroke-width: 1.6; fill: none; }
+.sep  { stroke: #a855f7; stroke-width: 2.6; fill: none; }
+.fixline { stroke: #22c55e; stroke-width: 4; }
+
+@keyframes flowdot { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes sep2 { 0%,42%{opacity:0} 50%,92%{opacity:1} 100%{opacity:0} }
+@keyframes sep1 { 0%{opacity:1} 42%,100%{opacity:0} }
+@keyframes drift { 0%{transform:translate(0,0)} 100%{transform:translate(96px,-30px)} }
+@keyframes drift2{ 0%{transform:translate(0,0)} 100%{transform:translate(-96px,30px)} }
+@keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+@keyframes cross { 0%,45%{opacity:.15} 55%,100%{opacity:1} }
+@keyframes cross2{ 0%,45%{opacity:1} 55%,100%{opacity:.15} }
+.fd  { offset-rotate: 0deg; animation: flowdot 6s linear infinite; }
+.fd2 { offset-rotate: 0deg; animation: flowdot 6s linear infinite; animation-delay: 2s; }
+.fd3 { offset-rotate: 0deg; animation: flowdot 6s linear infinite; animation-delay: 4s; }
+.bound   { animation: sep1 8s ease-in-out infinite; }
+.unbound { animation: sep2 8s ease-in-out infinite; }
+.dr  { animation: drift 8s ease-in-out infinite alternate; }
+.dr2 { animation: drift2 8s ease-in-out infinite alternate; }
+.pl  { animation: pulse 2.6s ease-in-out infinite; }
+.cA  { animation: cross2 7s ease-in-out infinite; }
+.cB  { animation: cross 7s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .fd,.fd2,.fd3,.dr,.dr2,.pl { animation: none; }
+  .bound,.unbound,.cA,.cB { animation: none; opacity: 1; }
+}
+</style>
+</head>
+<body>
+<nav style="max-width:900px;margin:0 auto;padding:1rem 1.5rem 0;font-size:0.9rem;">
+  <a href="../diamond-node/" style="color:#94a3b8;text-decoration:none;">&larr; Domain Convergence Research</a>
+</nav>
+<div class="container">
+
+<h1>Kosterlitz&ndash;Thouless for the Working Mathematician</h1>
+<p class="subtitle">A phase transition with no order parameter, no broken symmetry, and no ordered phase &mdash; in which the defects turn out to be the physics.</p>
+
+<p>Every phase transition you were taught works the same way: a symmetry breaks, an order parameter turns
+on, and something diverges as a power law. This one does none of that. There is no order parameter, no
+symmetry is broken, and a theorem forbids the ordered phase from existing at all. And yet there is a
+sharp, experimentally confirmed transition, with a parameter-free prediction that was measured and
+found correct. It won a Nobel prize in 2016.</p>
+
+<h2>1. The problem: a theorem says there is nothing to see</h2>
+
+<div class="theorem">
+  <div class="theorem-title">Mermin&ndash;Wagner&ndash;Hohenberg (1966)</div>
+  <p style="margin-bottom:0">A <strong>continuous</strong> symmetry cannot be spontaneously broken at any
+  temperature <span class="math">T &gt; 0</span> in <span class="math">d &le; 2</span> dimensions with
+  short-range interactions. Long-wavelength fluctuations &mdash; Goldstone modes &mdash; destroy the
+  order.<a href="#fn1" class="fn" id="fnref1">1</a></p>
+</div>
+
+<p>Take the two-dimensional <span class="tip" tabindex="0">XY model<span class="tt">Spins that are unit vectors confined to a plane, so each is described by one angle θ. The symmetry is a global rotation of every angle — continuous, and therefore covered by Mermin–Wagner.</span></span>:
+planar spins on a lattice, each described by one angle, with</p>
+
+<span class="math-block">H = &minus;J &sum;<sub>&lang;ij&rang;</sub> cos(&theta;<sub>i</sub> &minus; &theta;<sub>j</sub>)</span>
+
+<p>Mermin&ndash;Wagner says there is no ferromagnetic phase at any positive temperature. So the model
+should be boring &mdash; disordered everywhere, no transition. Except that thin superfluid films,
+thin-film superconductors and two-dimensional magnets all show something sharp happening at a definite
+temperature.</p>
+
+<p><strong>Both facts are true.</strong> Resolving that is the whole subject.</p>
+
+<h2>2. Spin waves: the low-temperature phase is <em>critical</em></h2>
+
+<p>At low temperature neighbouring angles differ little, so expand the cosine:</p>
+
+<span class="math-block">H &asymp; (J/2) &sum;<sub>&lang;ij&rang;</sub> (&theta;<sub>i</sub> &minus; &theta;<sub>j</sub>)&sup2; &rarr; (J/2) &int; d&sup2;r |&nabla;&theta;|&sup2;</span>
+
+<p>A free Gaussian field. Two things follow immediately, and they point in opposite directions.</p>
+
+<p><strong>First</strong>, the mean-square angle fluctuation diverges logarithmically with system size.
+That is Mermin&ndash;Wagner, confirmed: no true long-range order.</p>
+
+<p><strong>Second</strong>, compute the correlation function anyway:</p>
+
+<span class="math-block">&lang;<b>s</b>(0)&middot;<b>s</b>(r)&rang; &sim; (a/r)<sup>&eta;(T)</sup>,&nbsp;&nbsp;&nbsp; &eta;(T) = k<sub>B</sub>T / 2&pi;J</span>
+
+<p>That is a <strong>power law</strong>, not an exponential. Correlations do not survive to infinity, but
+they do not die off at any finite length either &mdash; they decay algebraically, with an exponent that
+<em>varies continuously with temperature</em>.</p>
+
+<div class="callout">
+The low-temperature phase is neither ordered nor disordered. It is <strong>critical at every
+temperature</strong> &mdash; an entire phase of scale-invariant states.
+</div>
+
+<p>In renormalization-group language, this is a <strong>line of fixed points</strong>, and it is what
+makes BKT structurally unlike anything in the standard catalogue. There is no tuning to a critical
+point here; criticality is the generic condition of the whole phase.<a href="#fn6" class="fn" id="fnref6">6</a></p>
+
+<p>But the spin-wave calculation cannot be the whole story: it assumed <span class="math">&theta;</span>
+is a smooth single-valued field. It is not.</p>
+
+<h2>3. Vortices &mdash; what smoothness forgot</h2>
+
+<p>The angle <span class="math">&theta;</span> lives on a circle, so going once around a closed loop it
+may return to itself having wound by <span class="math">2&pi;n</span> for any integer
+<span class="math">n</span>. That integer cannot change continuously. It is
+<span class="math">&pi;<sub>1</sub>(S<sup>1</sup>) = &#8484;</span>, the same invariant that classifies
+superfluid vortices and cardiac spiral cores.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 260" role="img" aria-label="Three planar spin configurations: a smooth spin wave with no winding, a vortex of winding number plus one whose spins circulate, and an antivortex of winding number minus one with a saddle-like pattern.">
+  <text class="lbl-h" x="40" y="24">spin wave &mdash; n = 0</text>
+  <g class="spin">
+    <line x1="50" y1="80" x2="76" y2="74"/><line x1="100" y1="80" x2="126" y2="70"/><line x1="150" y1="80" x2="174" y2="66"/>
+    <line x1="50" y1="130" x2="76" y2="126"/><line x1="100" y1="130" x2="126" y2="120"/><line x1="150" y1="130" x2="176" y2="118"/>
+    <line x1="50" y1="180" x2="76" y2="178"/><line x1="100" y1="180" x2="126" y2="172"/><line x1="150" y1="180" x2="176" y2="168"/>
+  </g>
+  <text class="lbl-s" x="40" y="222">smooth, single-valued</text>
+  <text class="lbl-s" x="40" y="238">no topological content</text>
+
+  <text class="lbl-h" x="300" y="24">vortex &mdash; n = +1</text>
+  <g class="spinP">
+    <line x1="370" y1="60"  x2="340" y2="60"/>
+    <line x1="425" y1="75"  x2="404" y2="54"/>
+    <line x1="440" y1="130" x2="440" y2="100"/>
+    <line x1="425" y1="185" x2="404" y2="206"/>
+    <line x1="370" y1="200" x2="340" y2="200"/>
+    <line x1="315" y1="185" x2="336" y2="206"/>
+    <line x1="300" y1="130" x2="300" y2="100"/>
+    <line x1="315" y1="75"  x2="336" y2="54"/>
+  </g>
+  <circle cx="370" cy="130" r="6" fill="#f59e0b" class="pl"/>
+  <circle cx="370" cy="130" r="74" fill="none" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+  <text class="lbl-s" x="300" y="238">&theta; winds by +2&pi; around the core</text>
+
+  <text class="lbl-h" x="600" y="24">antivortex &mdash; n = &minus;1</text>
+  <g class="spinM">
+    <line x1="660" y1="60"  x2="690" y2="60"/>
+    <line x1="715" y1="75"  x2="694" y2="54"/>
+    <line x1="730" y1="130" x2="700" y2="130"/>
+    <line x1="715" y1="185" x2="694" y2="206"/>
+    <line x1="660" y1="200" x2="690" y2="200"/>
+    <line x1="605" y1="185" x2="626" y2="206"/>
+    <line x1="590" y1="130" x2="620" y2="130"/>
+    <line x1="605" y1="75"  x2="626" y2="54"/>
+  </g>
+  <circle cx="660" cy="130" r="6" fill="#3b82f6" class="pl"/>
+  <circle cx="660" cy="130" r="74" fill="none" stroke="#3b82f6" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+  <text class="lbl-s" x="590" y="238">&theta; winds by &minus;2&pi; &mdash; a saddle</text>
+</svg>
+<div class="figcap"><b>Figure 1 &mdash; the objects the smooth theory cannot see.</b> Walk the dashed loop
+and add up how far the spin turns. Zero for the spin wave; <span class="math">+2&pi;</span> for the
+vortex; <span class="math">&minus;2&pi;</span> for the antivortex. The winding number is an integer, so
+it cannot be removed by any continuous deformation &mdash; you can only annihilate a vortex against an
+antivortex.</div>
+</div>
+
+<h2>4. The two-line argument that gives the transition</h2>
+
+<p>This is the heart of the subject and it fits on a napkin. Kosterlitz and Thouless, 1973 &mdash; and
+Berezinskii, independently and first, in 1971.<a href="#fn2" class="fn" id="fnref2">2</a></p>
+
+<p>Put <em>one</em> vortex in a system of size <span class="math">L</span> with lattice spacing
+<span class="math">a</span>. Integrating the gradient energy of the winding field over the plane gives a
+logarithm:</p>
+
+<span class="math-block">E = &pi;J ln(L/a) + E<sub>core</sub></span>
+
+<p>The energy <em>diverges</em> with system size &mdash; a single vortex looks forbidden. But count the
+entropy. The core can sit at any of about <span class="math">(L/a)&sup2;</span> places:</p>
+
+<span class="math-block">S = k<sub>B</sub> ln(L/a)&sup2; = 2k<sub>B</sub> ln(L/a)</span>
+
+<p>The entropy diverges logarithmically too &mdash; <em>with the same functional form</em>. So compare
+them in the free energy, and the logarithms factor out:</p>
+
+<div class="theorem">
+  <div class="theorem-title">The Kosterlitz&ndash;Thouless estimate</div>
+  <span class="math-block">F = E &minus; TS = (&pi;J &minus; 2k<sub>B</sub>T) ln(L/a)</span>
+  <p style="margin-bottom:0.6rem">The sign of the bracket decides everything.</p>
+  <ul style="margin-bottom:0.6rem">
+    <li><span class="math">k<sub>B</sub>T &lt; &pi;J/2</span> &rarr; <span class="math">F &gt; 0</span>: a free vortex costs infinite free energy. Vortices survive only in <strong>bound &plusmn; pairs</strong>, whose energy is finite.</li>
+    <li><span class="math">k<sub>B</sub>T &gt; &pi;J/2</span> &rarr; <span class="math">F &lt; 0</span>: entropy wins, and the system <strong>spontaneously proliferates free vortices</strong>.</li>
+  </ul>
+  <span class="math-block">k<sub>B</sub>T<sub>KT</sub> = &pi;J / 2</span>
+</div>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 300" role="img" aria-label="Energy and entropy terms both growing logarithmically with system size, with the entropy line steepening as temperature rises until it overtakes the energy line at the transition temperature, and a second panel showing a bound vortex-antivortex pair separating into free defects.">
+  <line class="ax" x1="70" y1="250" x2="370" y2="250"/>
+  <line class="ax" x1="70" y1="250" x2="70" y2="40"/>
+  <text class="lbl" x="250" y="274">ln(L/a) &rarr;</text>
+  <text class="lbl" x="24" y="52">F</text>
+
+  <line x1="70" y1="250" x2="360" y2="90" stroke="#f59e0b" stroke-width="2.5"/>
+  <text class="lbl" x="300" y="82" fill="#f59e0b">E = &pi;J ln(L/a)</text>
+
+  <line class="cA" x1="70" y1="250" x2="360" y2="150" stroke="#3b82f6" stroke-width="2.5"/>
+  <text class="lbl cA" x="286" y="166" fill="#3b82f6">TS, T &lt; T&#8342;&#8348;</text>
+  <line class="cB" x1="70" y1="250" x2="360" y2="46" stroke="#ef4444" stroke-width="2.5"/>
+  <text class="lbl cB" x="248" y="44" fill="#ef4444">TS, T &gt; T&#8342;&#8348;</text>
+
+  <text class="lbl-s" x="70" y="292">below: E wins, pairs bind &nbsp;&middot;&nbsp; above: TS wins, vortices free</text>
+
+  <g class="bound">
+    <text class="lbl-h" x="470" y="40">T &lt; T&#8342;&#8348; &mdash; bound pair</text>
+    <circle cx="600" cy="150" r="9" fill="#f59e0b"/>
+    <circle cx="650" cy="150" r="9" fill="#3b82f6"/>
+    <line x1="609" y1="150" x2="641" y2="150" stroke="#a855f7" stroke-width="2.5"/>
+    <ellipse cx="625" cy="150" rx="52" ry="34" fill="none" stroke="#a855f7" stroke-width="1.2" stroke-dasharray="4 4"/>
+    <text class="lbl-s" x="470" y="230">a dipole &mdash; finite energy, screens nothing at long range</text>
+    <text class="lbl-s" x="470" y="248">correlations still decay as a power law</text>
+  </g>
+  <g class="unbound">
+    <text class="lbl-h" x="470" y="40">T &gt; T&#8342;&#8348; &mdash; unbound</text>
+    <circle class="dr"  cx="580" cy="150" r="9" fill="#f59e0b"/>
+    <circle class="dr2" cx="670" cy="150" r="9" fill="#3b82f6"/>
+    <text class="lbl-s" x="470" y="230">free charges &mdash; the vortex gas screens</text>
+    <text class="lbl-s" x="470" y="248">correlations now decay exponentially</text>
+  </g>
+</svg>
+<div class="figcap"><b>Figure 2 &mdash; energy against entropy, and what it does to a pair.</b> Both terms
+scale as <span class="math">ln(L/a)</span>, so the competition is decided by a pure number rather than by
+the system size. Raise <span class="math">T</span> and the entropy line pivots upward past the energy
+line; at that instant bound pairs come apart and the system fills with free vortices.</div>
+</div>
+
+<h3>The Coulomb gas, which is the same problem</h3>
+
+<p>Two vortices with winding numbers <span class="math">n<sub>i</sub></span>,
+<span class="math">n<sub>j</sub></span> separated by <span class="math">r</span> interact as</p>
+
+<span class="math-block">E<sub>ij</sub> = &minus;2&pi;J n<sub>i</sub>n<sub>j</sub> ln(r<sub>ij</sub>/a)</span>
+
+<p>which is exactly the two-dimensional Coulomb interaction, with winding number playing the role of
+electric charge. So the XY model maps onto a <strong>neutral two-dimensional Coulomb gas</strong>, and the
+BKT transition becomes something very familiar: a <strong>dielectric-to-conductor transition</strong>.
+Below it, charges are bound into dipoles that only polarize; above it, free charges screen. Everything
+that follows can be read in either language.</p>
+
+<h2>5. The Kosterlitz flow</h2>
+
+<p>The napkin argument ignores that other pairs polarize and screen the pair you are pulling apart. Doing
+that properly is a renormalization group problem in two coupling constants:</p>
+
+<ul>
+  <li><span class="math">K = J/k<sub>B</sub>T</span> &mdash; the <strong>stiffness</strong>, how expensive it is to twist the field;</li>
+  <li><span class="math">y = e<sup>&minus;&beta;E<sub>core</sub></sup></span> &mdash; the vortex <strong>fugacity</strong>, how cheap it is to make one.</li>
+</ul>
+
+<div class="definition">
+  <div class="definition-title">The Kosterlitz recursion relations</div>
+  <span class="math-block">dK<sup>&minus;1</sup>/d&#8467; = 4&pi;&sup3;y&sup2; + O(y<sup>4</sup>)</span>
+  <span class="math-block">dy/d&#8467; = (2 &minus; &pi;K)&thinsp;y + O(y&sup3;)</span>
+  <p style="margin-bottom:0">with <span class="math">&#8467; = ln b</span> the logarithm of the rescaling
+  factor. Vortices soften the stiffness; the stiffness controls whether vortices multiply.</p>
+</div>
+
+<p>Now read the second equation. If <span class="math">K &gt; 2/&pi;</span> the bracket is negative and
+<span class="math">y</span> flows to zero: vortices are irrelevant and are renormalized away. If
+<span class="math">K &lt; 2/&pi;</span> the bracket is positive and <span class="math">y</span> grows
+without bound: vortices take over. The whole half-line <span class="math">y = 0</span>,
+<span class="math">K &ge; 2/&pi;</span> is <strong>fixed</strong>.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 420" role="img" aria-label="Kosterlitz flow diagram in the plane of vortex fugacity against inverse stiffness, showing a line of fixed points along the horizontal axis for stiffness above two over pi, a separatrix entering the endpoint, trajectories flowing down onto the fixed line on one side and running away to large fugacity on the other.">
+  <line class="ax" x1="70" y1="350" x2="770" y2="350"/>
+  <line class="ax" x1="70" y1="350" x2="70" y2="40"/>
+  <text class="lbl" x="700" y="376">K&#8315;&sup1; &rarr;</text>
+  <text class="lbl" x="20" y="52">y</text>
+  <text class="lbl-s" x="20" y="68">fugacity</text>
+
+  <line class="fixline" x1="70" y1="350" x2="380" y2="350"/>
+  <text class="lbl" x="110" y="330" fill="#22c55e">line of fixed points</text>
+  <text class="lbl-s" x="110" y="312" fill="#22c55e">the whole low-T phase is critical</text>
+
+  <circle cx="380" cy="350" r="9" fill="#a855f7" class="pl"/>
+  <text class="lbl-h" x="352" y="382">K&#8315;&sup1; = &pi;/2</text>
+  <text class="lbl-s" x="330" y="398">the transition &mdash; T&#8342;&#8348;</text>
+
+  <path class="sep" d="M150 150 C 250 250, 330 320, 380 350"/>
+  <text class="lbl" x="132" y="140" fill="#a855f7">separatrix</text>
+
+  <path class="traj" d="M200 130 C 250 200, 280 300, 300 348"/>
+  <path class="traj" d="M260 100 C 300 180, 330 290, 348 348"/>
+  <path class="traj" d="M420 120 C 480 180, 560 120, 640 60"/>
+  <path class="traj" d="M440 220 C 520 250, 600 190, 680 110"/>
+  <path class="traj" d="M400 300 C 470 320, 560 280, 660 190"/>
+
+  <circle class="fd"  r="5" fill="#22c55e" style="offset-path: path('M200 130 C 250 200, 280 300, 300 348');"/>
+  <circle class="fd2" r="5" fill="#22c55e" style="offset-path: path('M260 100 C 300 180, 330 290, 348 348');"/>
+  <circle class="fd"  r="5" fill="#ef4444" style="offset-path: path('M420 120 C 480 180, 560 120, 640 60');"/>
+  <circle class="fd3" r="5" fill="#ef4444" style="offset-path: path('M400 300 C 470 320, 560 280, 660 190');"/>
+
+  <text class="lbl" x="470" y="60" fill="#ef4444">y grows &mdash; vortices proliferate</text>
+  <text class="lbl-s" x="470" y="78" fill="#ef4444">correlations become exponential</text>
+  <text class="lbl" x="150" y="180" fill="#22c55e">y &rarr; 0 &mdash; vortices irrelevant</text>
+  <text class="lbl-s" x="150" y="198" fill="#22c55e">flows onto the fixed line, at a NEW K</text>
+</svg>
+<div class="figcap"><b>Figure 3 &mdash; the flow, and why this transition is unlike the others.</b> There is
+no isolated critical fixed point. There is a <b>line</b> of them, and the transition happens where that
+line <em>terminates</em>. A system below <span class="math">T<sub>KT</sub></span> does not flow <em>to</em>
+a critical point &mdash; it flows onto the critical line at a renormalized stiffness and stays critical.
+The hyperbolic geometry near the endpoint is what produces the essential singularity below.</div>
+</div>
+
+<h2>6. Consequences you can measure</h2>
+
+<h3>An essential singularity, not a power law</h3>
+
+<p>Because the flow near the endpoint is marginal rather than hyperbolic in the usual sense, the
+correlation length does not diverge as a power. Approaching from above, with
+<span class="math">t = (T &minus; T<sub>KT</sub>)/T<sub>KT</sub></span>:</p>
+
+<span class="math-block">&xi; &sim; exp(b / &radic;t)</span>
+
+<div class="warn">
+  <div class="warn-title">There is no &nu; for BKT</div>
+  <p style="margin-bottom:0">Quoting a correlation-length exponent for this transition is a category
+  error. The divergence is <strong>faster than any power law</strong>, and the transition is of
+  <strong>infinite order</strong> &mdash; every derivative of the free energy is continuous through it.
+  This is also the single easiest experimental signature to check: plot
+  <span class="math">ln &xi;</span> against <span class="math">t<sup>&minus;1/2</sup></span> and look for
+  a straight line, where an ordinary critical point would give a straight line on
+  <span class="math">ln &xi;</span> versus <span class="math">ln t</span>.</p>
+</div>
+
+<h3>The universal jump &mdash; a prediction with no free parameters</h3>
+
+<p>At the transition the renormalized stiffness takes the value <span class="math">K<sub>R</sub> = 2/&pi;</span>
+exactly, and then drops discontinuously to zero. For a superfluid film that becomes a statement about the
+superfluid density with nothing adjustable in it:<a href="#fn3" class="fn" id="fnref3">3</a></p>
+
+<span class="math-block">&rho;<sub>s</sub>(T<sub>KT</sub><sup>&minus;</sup>) / T<sub>KT</sub> = 2m&sup2;k<sub>B</sub> / &pi;&#8463;&sup2;</span>
+
+<p>Every quantity on the right is a constant of nature. The film&rsquo;s thickness, its substrate, its
+disorder &mdash; none of it enters. And at the transition the correlation exponent is pinned:
+<span class="math">&eta;(T<sub>KT</sub>) = 1/4</span>, which follows immediately from
+<span class="math">&eta; = k<sub>B</sub>T/2&pi;J</span> evaluated at
+<span class="math">k<sub>B</sub>T<sub>KT</sub> = &pi;J/2</span>.</p>
+
+<p>Bishop and Reppy measured it in 1978 with helium films on an oscillating substrate, and found the
+jump where it was predicted.<a href="#fn4" class="fn" id="fnref4">4</a></p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 280" role="img" aria-label="Superfluid density plotted against temperature, falling smoothly and then dropping discontinuously to zero exactly where it crosses the universal straight line proportional to temperature.">
+  <line class="ax" x1="90" y1="230" x2="750" y2="230"/>
+  <line class="ax" x1="90" y1="230" x2="90" y2="40"/>
+  <text class="lbl" x="660" y="256">T &rarr;</text>
+  <text class="lbl" x="34" y="52">&rho;&#8347;</text>
+
+  <line x1="90" y1="230" x2="620" y2="70" stroke="#a855f7" stroke-width="2" stroke-dasharray="6 4"/>
+  <text class="lbl" x="470" y="60" fill="#a855f7">the universal line</text>
+  <text class="lbl-s" x="470" y="78" fill="#a855f7">&rho;&#8347;/T = 2m&sup2;k&#8331;/&pi;&#8463;&sup2;</text>
+
+  <path d="M110 76 C 250 96, 360 128, 470 172" stroke="#22c55e" stroke-width="3" fill="none"/>
+  <line x1="470" y1="172" x2="470" y2="230" stroke="#ef4444" stroke-width="3" stroke-dasharray="5 4"/>
+  <circle cx="470" cy="172" r="6" fill="#ef4444" class="pl"/>
+  <line x1="470" y1="230" x2="740" y2="230" stroke="#64748b" stroke-width="3"/>
+
+  <text class="lbl-h" x="440" y="258">T&#8342;&#8348;</text>
+  <text class="lbl" x="500" y="150" fill="#ef4444">the jump</text>
+  <text class="lbl-s" x="500" y="168" fill="#ef4444">discontinuous, and universal</text>
+  <text class="lbl-s" x="120" y="118">the transition happens exactly where</text>
+  <text class="lbl-s" x="120" y="134">the measured curve meets the universal line</text>
+</svg>
+<div class="figcap"><b>Figure 4 &mdash; the universal jump.</b> The superfluid density falls smoothly, then
+vanishes discontinuously &mdash; and it does so precisely where it crosses a line fixed entirely by
+fundamental constants. No fitting parameter anywhere. This is about as sharp as a prediction in
+condensed matter gets, and it was confirmed.</div>
+</div>
+
+<h2>7. KTHNY &mdash; running the machinery twice</h2>
+
+<p>Two-dimensional melting applies the same argument to a crystal, where there are <em>two</em> kinds of
+defect and therefore two transitions.<a href="#fn5" class="fn" id="fnref5">5</a></p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 240" role="img" aria-label="Three phases of two-dimensional melting: a crystal with quasi-long-range positional order, an intermediate hexatic phase with only orientational order after dislocations unbind, and an isotropic liquid after disclinations unbind.">
+  <g>
+    <text class="lbl-h" x="40" y="26">crystal</text>
+    <g fill="#22c55e">
+      <circle cx="60" cy="70" r="5"/><circle cx="100" cy="70" r="5"/><circle cx="140" cy="70" r="5"/><circle cx="180" cy="70" r="5"/>
+      <circle cx="80" cy="105" r="5"/><circle cx="120" cy="105" r="5"/><circle cx="160" cy="105" r="5"/><circle cx="200" cy="105" r="5"/>
+      <circle cx="60" cy="140" r="5"/><circle cx="100" cy="140" r="5"/><circle cx="140" cy="140" r="5"/><circle cx="180" cy="140" r="5"/>
+    </g>
+    <text class="lbl-s" x="40" y="180">quasi-LRO positional</text>
+    <text class="lbl-s" x="40" y="196">LRO orientational</text>
+  </g>
+  <g fill="#94a3b8">
+    <polygon points="252,105 236,99 236,111"/>
+  </g>
+  <text class="lbl-s" x="222" y="80">dislocations</text>
+  <text class="lbl-s" x="222" y="94">unbind</text>
+
+  <g>
+    <text class="lbl-h" x="300" y="26">hexatic</text>
+    <g fill="#f59e0b">
+      <circle cx="320" cy="66" r="5"/><circle cx="366" cy="76" r="5"/><circle cx="404" cy="62" r="5"/><circle cx="446" cy="80" r="5"/>
+      <circle cx="336" cy="112" r="5"/><circle cx="384" cy="104" r="5"/><circle cx="424" cy="118" r="5"/><circle cx="462" cy="106" r="5"/>
+      <circle cx="316" cy="150" r="5"/><circle cx="360" cy="146" r="5"/><circle cx="408" cy="156" r="5"/><circle cx="450" cy="144" r="5"/>
+    </g>
+    <g class="spin" stroke="#f59e0b">
+      <line x1="320" y1="176" x2="344" y2="168"/><line x1="368" y1="176" x2="392" y2="168"/><line x1="416" y1="176" x2="440" y2="168"/>
+    </g>
+    <text class="lbl-s" x="300" y="200">no positional order left</text>
+    <text class="lbl-s" x="300" y="216">quasi-LRO orientational &mdash; bonds still aligned</text>
+  </g>
+  <g fill="#94a3b8">
+    <polygon points="516,105 500,99 500,111"/>
+  </g>
+  <text class="lbl-s" x="486" y="80">disclinations</text>
+  <text class="lbl-s" x="486" y="94">unbind</text>
+
+  <g>
+    <text class="lbl-h" x="570" y="26">isotropic liquid</text>
+    <g fill="#3b82f6">
+      <circle cx="596" cy="74" r="5"/><circle cx="660" cy="62" r="5"/><circle cx="714" cy="86" r="5"/><circle cx="762" cy="66" r="5"/>
+      <circle cx="614" cy="126" r="5"/><circle cx="672" cy="112" r="5"/><circle cx="736" cy="130" r="5"/>
+      <circle cx="588" cy="158" r="5"/><circle cx="654" cy="164" r="5"/><circle cx="722" cy="156" r="5"/><circle cx="770" cy="128" r="5"/>
+    </g>
+    <text class="lbl-s" x="570" y="200">no order of any kind</text>
+    <text class="lbl-s" x="570" y="216">exponential decay</text>
+  </g>
+</svg>
+<div class="figcap"><b>Figure 5 &mdash; two-step melting.</b> A 2D crystal does not melt in one go. Unbinding
+dislocations destroys positional order and leaves the <b>hexatic</b> phase, which still remembers bond
+directions. Unbinding disclinations destroys that too. <b>Both steps are BKT transitions</b>, and the
+intermediate phase is a genuine prediction of the theory that was subsequently found in colloidal
+monolayers.</div>
+</div>
+
+<h2>8. Where it applies, and where it does not</h2>
+
+<table>
+  <tr><th>System</th><th>Defect</th><th>Status</th></tr>
+  <tr><td>2D superfluid &#8308;He film</td><td>vortex, &pi;&#8321;(S&sup1;) = &#8484;</td><td>confirmed &mdash; universal jump measured</td></tr>
+  <tr><td>Thin-film superconductor, JJ array</td><td>flux vortex</td><td>confirmed</td></tr>
+  <tr><td>2D colloidal crystal</td><td>dislocation, disclination</td><td>KTHNY confirmed, hexatic observed</td></tr>
+  <tr><td>Trapped 2D Bose gas</td><td>vortex</td><td>observed as a crossover<a href="#fn7" class="fn" id="fnref7">7</a></td></tr>
+  <tr><td>2D nematic film</td><td>&plusmn;&frac12; disclination</td><td>applies &mdash; continuous symmetry, log interaction</td></tr>
+  <tr><td>3D superfluid (&lambda;-point)</td><td>vortex <em>loops</em></td><td>⛔ different &mdash; ordinary 3D XY critical point</td></tr>
+  <tr><td>2D Ising</td><td>domain wall</td><td>⛔ discrete symmetry &mdash; ordinary critical point</td></tr>
+  <tr><td>Cardiac spirals, active nematics</td><td>&pi;&#8321; defects</td><td>⚠ driven, not equilibrium &mdash; analogy under test</td></tr>
+</table>
+
+<div class="warn">
+  <div class="warn-title">The three conditions, and what breaks if you drop one</div>
+  <p style="margin-bottom:0">BKT needs <strong>two dimensions</strong>, a <strong>continuous
+  symmetry</strong>, and therefore a <strong>logarithmic</strong> interaction between defects &mdash; the
+  logarithm is what makes energy and entropy scale identically, which is the whole trick. In three
+  dimensions vortices are loops and the transition becomes ordinary 3D XY. With a discrete symmetry there
+  are no Goldstone modes, order survives, and you get an ordinary critical point. Neither is BKT.</p>
+</div>
+
+<h2>9. Why this transition matters more than its applications</h2>
+
+<p>BKT was the first phase transition understood to be <strong>topological</strong>: driven by a
+homotopy invariant rather than by a symmetry, with no local order parameter anywhere in the description.
+That is now a large field &mdash; topological insulators, topological order, anyons &mdash; and this was
+the opening move. Thouless, Haldane and Kosterlitz shared the 2016 Nobel Prize for it.<a href="#fn8" class="fn" id="fnref8">8</a></p>
+
+<p>For anyone studying convergence across domains, though, the structurally interesting feature is a
+different one:</p>
+
+<div class="callout">
+The low-temperature phase is critical <strong>everywhere</strong>, not at a tuned point.<br>
+Criticality here has <strong>codimension zero</strong>.
+</div>
+
+<p>Almost every other route to critical behaviour requires setting a parameter to a precise value, which
+raises an awkward question whenever criticality is claimed in a natural system: <em>who tuned it?</em>
+BKT dissolves that question. A system in the low-temperature phase is critical without anything having
+been arranged &mdash; it is the generic condition of an entire region of parameter space. Any system that
+can fall into that region gets scale invariance for free.</p>
+
+<p>And the theorem that forbids the ordered phase is the same one that creates the critical phase.
+Mermin&ndash;Wagner is usually taught as a no-go result. Here it is constructive: <strong>because
+long-range order is impossible, quasi-long-range order is what you get instead</strong>, and
+quasi-long-range order is critical.</p>
+
+<div class="warn">
+  <div class="warn-title">Before borrowing this for a biological system</div>
+  <p style="margin-bottom:0">Quasi-two-dimensional systems with <span class="math">&pi;&#8321;</span>
+  defects are everywhere in biology &mdash; spiral waves in cardiac tissue, pinwheels in visual cortex,
+  &plusmn;&frac12; defects in active nematic films. The defect-unbinding <em>picture</em> is suggestive
+  and worth pursuing. But those systems are <strong>driven and dissipative</strong>, not in thermal
+  equilibrium, and the equilibrium machinery on this page &mdash; the universal jump, the Kosterlitz
+  recursion, the free-energy argument itself &mdash; assumes a Boltzmann distribution that a driven system
+  does not have. Driven defect proliferation is typically an <em>absorbing-state</em> transition with
+  ordinary power-law exponents instead. <strong>The discriminating measurement is cheap:</strong> essential
+  scaling <span class="math">&xi; &sim; exp(b/&radic;t)</span> means BKT; a power law means it is
+  something else. Measure before assuming.</p>
+</div>
+
+<h2>10. What to remember</h2>
+
+<ol>
+  <li>Mermin&ndash;Wagner forbids long-range order in 2D with continuous symmetry &mdash; and there is still a sharp transition.</li>
+  <li>Spin waves give power-law correlations with a temperature-dependent exponent: an entire <em>critical phase</em>, a line of RG fixed points.</li>
+  <li>Vortices are the missing degrees of freedom, classified by <span class="math">&pi;&#8321;(S&sup1;) = &#8484;</span>.</li>
+  <li>Energy and entropy of a single vortex both scale as <span class="math">ln(L/a)</span>. Their competition gives <span class="math">k<sub>B</sub>T<sub>KT</sub> = &pi;J/2</span> on one line.</li>
+  <li>The transition is vortex-pair unbinding &mdash; equivalently, a 2D Coulomb gas going from dielectric to conductor.</li>
+  <li>The Kosterlitz flow has a <em>line</em> of fixed points that terminates; the transition is where it ends.</li>
+  <li>Infinite order, essential singularity <span class="math">&xi; &sim; exp(b/&radic;t)</span>. There is no <span class="math">&nu;</span>.</li>
+  <li>The stiffness jump at the transition is universal, and <span class="math">&eta; = 1/4</span> exactly.</li>
+  <li>Two dimensions, continuous symmetry, logarithmic interaction. Drop one and it is a different transition.</li>
+  <li>Criticality at codimension zero &mdash; which is the only kind a system can find without being tuned.</li>
+</ol>
+
+<div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid #334155;color:var(--muted);font-size:0.9rem;">
+  <p style="margin-bottom:0.5rem;"><strong>Related.</strong>
+  <a href="../renormalization-group/" style="color:#94a3b8;">The Renormalization Group for the Working Mathematician</a> &mdash;
+  fixed points, relevant directions and universality, of which the Kosterlitz flow is the most unusual example.
+  <a href="../acs-closure-v2/" style="color:#94a3b8;">Autocatalytic Closure for the Working Mathematician</a> &mdash;
+  the other threshold phenomenon, in a combinatorial setting.</p>
+  <p style="margin-bottom:0;">Kosterlitz&ndash;Thouless for the Working Mathematician &mdash; B. Stephenson, 2026.</p>
+</div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn1">Mermin, N. D. &amp; Wagner, H. (1966). <em>Phys. Rev. Lett.</em> <strong>17</strong>:1133. doi:10.1103/PhysRevLett.17.1133; Hohenberg, P. C. (1967). <em>Phys. Rev.</em> <strong>158</strong>:383. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Berezinskii, V. L. (1971). <em>Sov. Phys. JETP</em> <strong>32</strong>:493; (1972) <strong>34</strong>:610. Kosterlitz, J. M. &amp; Thouless, D. J. (1973). <em>J. Phys. C</em> <strong>6</strong>:1181. doi:10.1088/0022-3719/6/7/010 <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Nelson, D. R. &amp; Kosterlitz, J. M. (1977). Universal jump in the superfluid density. <em>Phys. Rev. Lett.</em> <strong>39</strong>:1201. doi:10.1103/PhysRevLett.39.1201 <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">Bishop, D. J. &amp; Reppy, J. D. (1978). Study of the superfluid transition in two-dimensional &#8308;He films. <em>Phys. Rev. Lett.</em> <strong>40</strong>:1727. doi:10.1103/PhysRevLett.40.1727 <a href="#fnref4">&uarr;</a></li>
+    <li id="fn5">Halperin, B. I. &amp; Nelson, D. R. (1978). <em>Phys. Rev. Lett.</em> <strong>41</strong>:121; Young, A. P. (1979). <em>Phys. Rev. B</em> <strong>19</strong>:1855. <a href="#fnref5">&uarr;</a></li>
+    <li id="fn6">Kosterlitz, J. M. (1974). The critical properties of the two-dimensional xy model. <em>J. Phys. C</em> <strong>7</strong>:1046. doi:10.1088/0022-3719/7/6/005 <a href="#fnref6">&uarr;</a></li>
+    <li id="fn7">Hadzibabic, Z., Kr&uuml;ger, P., Cheneau, M., Battelier, B. &amp; Dalibard, J. (2006). Berezinskii&ndash;Kosterlitz&ndash;Thouless crossover in a trapped atomic gas. <em>Nature</em> <strong>441</strong>:1118. doi:10.1038/nature04851 <a href="#fnref7">&uarr;</a></li>
+    <li id="fn8">Nobel Prize in Physics 2016 &mdash; Thouless, Haldane and Kosterlitz, &ldquo;for theoretical discoveries of topological phase transitions and topological phases of matter&rdquo;. <a href="#fnref8">&uarr;</a></li>
+  </ol>
+</div>
+
+</div>
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
+<script src="../js/annex-tracker.js"></script>
+</body>
+</html>

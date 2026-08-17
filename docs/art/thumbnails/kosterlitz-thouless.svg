@@ -1,0 +1,36 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+
+  <!-- bound pair -->
+  <g stroke="#f59e0b" stroke-width="1.4" stroke-linecap="round" fill="none">
+    <line x1="46" y1="20" x2="32" y2="20"/><line x1="60" y1="34" x2="60" y2="20"/>
+    <line x1="46" y1="48" x2="32" y2="48"/><line x1="32" y1="34" x2="32" y2="48"/>
+  </g>
+  <circle cx="46" cy="34" r="4" fill="#f59e0b"/>
+  <g stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round" fill="none">
+    <line x1="76" y1="20" x2="90" y2="20"/><line x1="90" y1="34" x2="76" y2="34"/>
+    <line x1="76" y1="48" x2="90" y2="48"/><line x1="62" y1="34" x2="76" y2="34"/>
+  </g>
+  <circle cx="76" cy="34" r="4" fill="#3b82f6"/>
+  <ellipse cx="61" cy="34" rx="30" ry="19" fill="none" stroke="#a855f7" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="61" y="70" text-anchor="middle" fill="#a855f7" font-size="8" font-family="system-ui">bound</text>
+
+  <!-- arrow / transition -->
+  <path d="M 100 34 L 128 34" stroke="#475569" stroke-width="1.2"/>
+  <polygon points="132,34 124,30 124,38" fill="#475569"/>
+  <text x="116" y="24" text-anchor="middle" fill="#ef4444" font-size="8" font-family="Georgia" font-style="italic">T&#8342;&#8348;</text>
+
+  <!-- unbound -->
+  <circle cx="158" cy="22" r="4" fill="#f59e0b"/>
+  <circle cx="212" cy="50" r="4" fill="#3b82f6"/>
+  <circle cx="196" cy="20" r="4" fill="#f59e0b"/>
+  <circle cx="152" cy="52" r="4" fill="#3b82f6"/>
+  <text x="182" y="70" text-anchor="middle" fill="#ef4444" font-size="8" font-family="system-ui">free vortices</text>
+
+  <!-- flow line of fixed points -->
+  <line x1="230" y1="46" x2="262" y2="46" stroke="#22c55e" stroke-width="3"/>
+  <circle cx="262" cy="46" r="4" fill="#a855f7"/>
+  <path d="M 240 22 C 250 32, 258 40, 262 46" stroke="#a855f7" stroke-width="1" fill="none"/>
+  <text x="246" y="66" text-anchor="middle" fill="#22c55e" font-size="7.5" font-family="system-ui">fixed line</text>
+  <text x="246" y="16" text-anchor="middle" fill="#94a3b8" font-size="7.5" font-family="Georgia" font-style="italic">&#951; = &#188;</text>
+</svg>
