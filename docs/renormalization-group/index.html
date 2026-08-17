@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==== PHYSICS EDITORIAL STANDARD - read before editing any claim in this file ====
+  Every physics claim here is held to one standard:
+    precluded     = a specific law or theorem prohibits it.  NAME THE LAW.
+    not precluded = no known law prohibits it. It may be undemonstrated, unlikely, or need many
+                    unverified steps - but physics does not forbid it.
+  "No one has done this" is an engineering status report, NOT a physics argument.
+  "Not precluded" is weaker than "plausible" and much weaker than "supported".
+
+  Specific to THIS page - the traps that bite in renormalization-group writing:
+    R1  Universality is NOT "everything is the same". A universality class is indexed by a SHORT
+        list - dimensionality, order-parameter symmetry, interaction range - and systems agree
+        only when those agree. Never let "shared exponents" become "shared mechanism".
+    R2  STATIC and DYNAMIC exponents are classified SEPARATELY. Statics by (d, n, range);
+        the dynamic exponent z by conservation laws and mode couplings (Hohenberg & Halperin,
+        Rev. Mod. Phys. 49, 435, 1977). Two systems CAN share beta and differ in z with no
+        contradiction. Do not report that as an anomaly.
+    R3  RG requires a fixed point and a diverging correlation length. First-order transitions
+        have neither. No scale invariance, no universality, no exponents.
+    R4  The epsilon-expansion is an ASYMPTOTIC series, not a convergent one. Order-epsilon numbers
+        at epsilon = 1 are illustrative, not predictive - say so whenever one is quoted.
+    R5  There is NO Landau-Ginzburg-Wilson theory for topological phase transitions, because
+        topological order has no local order parameter. This is stated in print by three
+        independent sources - see the "Where the RG does not reach" section. Do not imply the
+        machinery extends there.
+==== end physics editorial standard ==== -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How throwing away detail on purpose explains why a magnet, a fluid and a percolating network share the same numbers — the renormalization group, from Kadanoff blocking to fixed points, relevant directions, and the limits of the method.">
+<title>The Renormalization Group for the Working Mathematician</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Renormalization Group for the Working Mathematician">
+<meta property="og:description" content="How throwing away detail on purpose explains why a magnet, a fluid and a percolating network share the same numbers — from Kadanoff blocking to fixed points, relevant directions, and the limits of the method.">
+<meta property="og:url" content="https://energyscholar.github.io/web-annex/renormalization-group/">
+<meta property="og:image" content="https://energyscholar.github.io/web-annex/art/og/renormalization-group.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://energyscholar.github.io/web-annex/art/og/renormalization-group.png">
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --golden: #fbbf24;
+  --muted: #475569;
+  --line: #94a3b8;
+  --purple: #a855f7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 { color: var(--heading); font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+h2 { color: var(--heading); font-size: 1.6rem; margin-top: 3rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #334155; }
+h3 { color: var(--heading); font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+p { margin-bottom: 1rem; }
+
+.subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 2rem; }
+
+.definition, .theorem, .warn {
+  background: var(--card); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0;
+}
+.definition { border-left: 4px solid var(--blue); }
+.theorem { border-left: 4px solid var(--purple); }
+.warn { border-left: 4px solid var(--red); }
+
+.definition-title, .theorem-title, .warn-title {
+  font-weight: 700; color: var(--heading); margin-bottom: 0.5rem;
+}
+.definition-title { color: var(--blue); }
+.theorem-title { color: var(--purple); }
+.warn-title { color: var(--red); }
+
+.math { font-family: 'Times New Roman', 'Georgia', serif; font-style: italic; color: var(--heading); }
+.math-block {
+  font-family: 'Times New Roman', 'Georgia', serif; font-style: italic; color: var(--heading);
+  display: block; text-align: center; margin: 1rem 0; font-size: 1.15rem;
+}
+
+code {
+  background: #0f172a; border: 1px solid #334155; border-radius: 4px;
+  padding: 0.15rem 0.4rem; font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em; color: var(--green);
+}
+
+.svg-container {
+  background: var(--card); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;
+  text-align: center; overflow-x: auto;
+}
+.svg-container svg { max-width: 100%; height: auto; }
+.figcap { color: var(--muted); font-size: 0.85rem; margin-top: 0.9rem; text-align: left; line-height: 1.55; }
+.figcap b { color: var(--line); }
+
+table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: var(--card); border-radius: 8px; overflow: hidden; }
+th { background: #334155; color: var(--heading); padding: 0.75rem 1rem; text-align: left; font-size: 0.9rem; }
+td { padding: 0.7rem 1rem; border-top: 1px solid #334155; font-size: 0.9rem; vertical-align: top; }
+td.n { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; white-space: nowrap; }
+
+.callout {
+  background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; text-align: center;
+  font-size: 1.15rem; color: var(--heading);
+}
+
+ol, ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.3rem; }
+
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; letter-spacing: normal; text-transform: none;
+}
+.tip .tt::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--line);
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto; transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #334155; }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.footnotes li a { color: var(--muted); }
+
+/* ---- SVG primitives ---- */
+.ax    { stroke: #64748b; stroke-width: 1.2; fill: none; }
+.gl    { stroke: #334155; stroke-width: 1; fill: none; }
+.lbl   { fill: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.lbl-s { fill: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+.lbl-h { fill: #f1f5f9; font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; }
+.up    { fill: #f59e0b; }
+.dn    { fill: #3b82f6; }
+.traj  { stroke: #94a3b8; stroke-width: 1.6; fill: none; }
+.sep   { stroke: #a855f7; stroke-width: 2.4; fill: none; }
+.fp-c  { fill: #a855f7; }
+.fp-s  { fill: #22c55e; }
+.fp-u  { fill: #ef4444; }
+.blk   { fill: none; stroke: #22c55e; stroke-width: 1.6; }
+
+/* ---- animations ---- */
+@keyframes flowdot { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes fadecycle3 {
+  0%,4%   { opacity: 0; }
+  8%,30%  { opacity: 1; }
+  34%,100%{ opacity: 0; }
+}
+@keyframes fadecycle3b {
+  0%,34%  { opacity: 0; }
+  38%,63% { opacity: 1; }
+  67%,100%{ opacity: 0; }
+}
+@keyframes fadecycle3c {
+  0%,67%  { opacity: 0; }
+  71%,96% { opacity: 1; }
+  100%    { opacity: 0; }
+}
+@keyframes grow  { 0%{ r: 6; opacity:.9 } 100%{ r: 62; opacity:.05 } }
+@keyframes pulse { 0%,100%{ opacity:.35 } 50%{ opacity:1 } }
+@keyframes marchx { from { transform: translateX(0); } to { transform: translateX(-64px); } }
+@keyframes swapA { 0%,45%{ opacity:1 } 55%,100%{ opacity:.15 } }
+@keyframes swapB { 0%,45%{ opacity:.15 } 55%,100%{ opacity:1 } }
+
+.st1 { animation: fadecycle3  9s ease-in-out infinite; }
+.st2 { animation: fadecycle3b 9s ease-in-out infinite; }
+.st3 { animation: fadecycle3c 9s ease-in-out infinite; }
+.grow1 { animation: grow 4s ease-out infinite; }
+.grow2 { animation: grow 4s ease-out infinite; animation-delay: 1.3s; }
+.grow3 { animation: grow 4s ease-out infinite; animation-delay: 2.6s; }
+.pulse { animation: pulse 2.4s ease-in-out infinite; }
+.march { animation: marchx 3s linear infinite; }
+.swapA { animation: swapA 6s ease-in-out infinite; }
+.swapB { animation: swapB 6s ease-in-out infinite; }
+.fd    { offset-rotate: 0deg; animation: flowdot 5s linear infinite; }
+.fd2   { offset-rotate: 0deg; animation: flowdot 5s linear infinite; animation-delay: 1.7s; }
+.fd3   { offset-rotate: 0deg; animation: flowdot 5s linear infinite; animation-delay: 3.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .st1,.st2,.st3 { animation: none; opacity: 1; }
+  .grow1,.grow2,.grow3,.pulse,.march,.swapA,.swapB,.fd,.fd2,.fd3 { animation: none; }
+  svg animate, svg animateTransform { animation-play-state: paused; }
+}
+</style>
+</head>
+<body>
+<nav style="max-width:900px;margin:0 auto;padding:1rem 1.5rem 0;font-size:0.9rem;">
+  <a href="../diamond-node/" style="color:#94a3b8;text-decoration:none;">&larr; Domain Convergence Research</a>
+</nav>
+<div class="container">
+
+<h1>The Renormalization Group for the Working Mathematician</h1>
+<p class="subtitle">In which throwing away detail, on purpose and repeatedly, turns out to be the whole idea.</p>
+
+<p>In about 1977 a post-graduate mentor was asked by a nine-year-old what the cutting-edge fields in
+advanced mathematics were. He answered: <em>renormalization group theory &mdash; and it will probably
+win a Nobel prize.</em> Kenneth Wilson collected it in 1982. The method collected a second one in 2004.
+This page is what he was pointing at.</p>
+
+<h2>1. The question that needed answering</h2>
+
+<p>Water boils. A magnet loses its magnetism at the Curie point. A random network of pipes suddenly
+percolates. A forest fire either dies out or spreads forever. These systems share no ingredients: one is
+molecules with dipole interactions, one is electron spins, one is pure graph combinatorics.</p>
+
+<p>Near their transitions, they share <em>numbers</em>.</p>
+
+<p>Measure how the order parameter grows below the transition and you get a power law with an exponent
+<span class="math">&beta;</span>. Measure how the susceptibility diverges and you get
+<span class="math">&gamma;</span>. Measure how far correlations reach and you get
+<span class="math">&nu;</span>. Wildly different microscopic systems return <em>the same values</em>,
+often to several decimal places. Liquid&ndash;gas and uniaxial magnets: same numbers. This is
+<span class="tip" tabindex="0">universality<span class="tt">Different microscopic systems exhibiting identical critical exponents and scaling functions. Not a coincidence and not an analogy — a consequence of what survives repeated coarse-graining.</span></span>,
+and before 1971 nobody could explain it.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 300" role="img" aria-label="Four different microscopic systems - an Ising magnet, a lattice gas, a percolation network and a binary alloy - with arrows converging through successive coarse-grainings onto a single fixed point, from which one set of exponents emerges.">
+  <text class="lbl-h" x="20" y="24">microscopic models</text>
+  <text class="lbl-h" x="330" y="24">repeated coarse-graining</text>
+  <text class="lbl-h" x="640" y="24">one fixed point</text>
+
+  <g class="lbl">
+    <text x="20" y="72">uniaxial magnet</text>
+    <text x="20" y="122">liquid&ndash;gas</text>
+    <text x="20" y="172">binary alloy</text>
+    <text x="20" y="222">lattice gas</text>
+  </g>
+  <g fill="#f59e0b">
+    <circle cx="170" cy="66" r="7"/><circle cx="170" cy="116" r="7"/>
+    <circle cx="170" cy="166" r="7"/><circle cx="170" cy="216" r="7"/>
+  </g>
+
+  <path id="fp1" class="traj" d="M180 66  C 320 66, 420 120, 640 148"/>
+  <path id="fp2" class="traj" d="M180 116 C 320 116, 430 134, 640 148"/>
+  <path id="fp3" class="traj" d="M180 166 C 320 166, 430 158, 640 148"/>
+  <path id="fp4" class="traj" d="M180 216 C 320 216, 420 178, 640 148"/>
+
+  <circle class="fd"  r="4.5" fill="#22c55e" style="offset-path: path('M180 66  C 320 66, 420 120, 640 148');"/>
+  <circle class="fd2" r="4.5" fill="#22c55e" style="offset-path: path('M180 116 C 320 116, 430 134, 640 148');"/>
+  <circle class="fd"  r="4.5" fill="#22c55e" style="offset-path: path('M180 166 C 320 166, 430 158, 640 148');"/>
+  <circle class="fd3" r="4.5" fill="#22c55e" style="offset-path: path('M180 216 C 320 216, 420 178, 640 148');"/>
+
+  <circle class="fp-c pulse" cx="648" cy="148" r="13"/>
+  <text class="lbl-h" x="672" y="144">K*</text>
+  <text class="lbl-s" x="672" y="162">the fixed point</text>
+
+  <text class="lbl" x="600" y="238">&nu; = 0.62997</text>
+  <text class="lbl" x="600" y="258">&beta; = 0.32642</text>
+  <text class="lbl" x="600" y="278">&gamma; = 1.23708</text>
+  <text class="lbl-s" x="600" y="212">3D Ising class:</text>
+</svg>
+<div class="figcap"><b>Figure 1 &mdash; the universality funnel.</b> Four microscopic models that share no
+physical ingredients flow, under repeated coarse-graining, to the same fixed point &mdash; and inherit
+its exponents. The 3D Ising values shown are from the conformal bootstrap.<a href="#fn5" class="fn" id="fnref5">5</a>
+The whole of this page is an explanation of that arrow.</div>
+</div>
+
+<h2>2. Why criticality is the special case</h2>
+
+<p>The key object is the <span class="tip" tabindex="0">correlation length<span class="tt">The distance over which fluctuations remain statistically related. Below it, the system looks correlated; beyond it, independent. Written ξ (xi).</span></span>
+<span class="math">&xi;</span>: the distance over which one part of the system still &ldquo;knows about&rdquo;
+another. Away from a transition it is a few lattice spacings, and the system looks like independent
+patches. As you tune towards the critical point it diverges:</p>
+
+<span class="math-block">&xi; &sim; |t|<sup>&minus;&nu;</sup>,&nbsp;&nbsp;&nbsp; t = (T &minus; T<sub>c</sub>) / T<sub>c</sub></span>
+
+<p>At <span class="math">t = 0</span> there is no characteristic length left. Fluctuations exist at every
+scale simultaneously, nested in one another, and a photograph of the system zoomed by any factor is
+statistically the same photograph. The system is <strong>scale invariant</strong>.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 220" role="img" aria-label="Three panels showing correlated regions growing as temperature approaches the critical point, until at the critical point the correlated blobs fill the whole system at all sizes.">
+  <g>
+    <rect x="30" y="40" width="200" height="150" class="gl" fill="#0f172a"/>
+    <text class="lbl" x="30" y="30">T &gt;&gt; T&#8348;</text>
+    <g fill="#3b82f6" opacity="0.75">
+      <circle cx="70" cy="80" r="7"/><circle cx="130" cy="65" r="6"/><circle cx="190" cy="95" r="7"/>
+      <circle cx="90" cy="140" r="6"/><circle cx="160" cy="150" r="7"/><circle cx="60" cy="170" r="5"/>
+    </g>
+    <text class="lbl-s" x="30" y="208">&xi; &asymp; a few sites</text>
+  </g>
+  <g>
+    <rect x="300" y="40" width="200" height="150" class="gl" fill="#0f172a"/>
+    <text class="lbl" x="300" y="30">T &rarr; T&#8348;</text>
+    <g fill="#a855f7" opacity="0.5">
+      <circle cx="360" cy="90" r="26"/><circle cx="440" cy="130" r="30"/><circle cx="330" cy="160" r="18"/>
+    </g>
+    <text class="lbl-s" x="300" y="208">&xi; growing</text>
+  </g>
+  <g>
+    <rect x="570" y="40" width="200" height="150" class="gl" fill="#0f172a"/>
+    <text class="lbl" x="570" y="30">T = T&#8348;</text>
+    <circle class="grow1" cx="640" cy="105" fill="#fbbf24"/>
+    <circle class="grow2" cx="700" cy="140" fill="#fbbf24"/>
+    <circle class="grow3" cx="660" cy="160" fill="#fbbf24"/>
+    <circle cx="670" cy="115" r="52" fill="none" stroke="#fbbf24" stroke-width="1" opacity="0.35"/>
+    <circle cx="670" cy="115" r="30" fill="none" stroke="#fbbf24" stroke-width="1" opacity="0.5"/>
+    <circle cx="670" cy="115" r="14" fill="none" stroke="#fbbf24" stroke-width="1" opacity="0.7"/>
+    <text class="lbl-s" x="570" y="208">&xi; = &infin; &mdash; every scale at once</text>
+  </g>
+</svg>
+<div class="figcap"><b>Figure 2 &mdash; the correlation length diverges.</b> Away from criticality the
+system is a mosaic of independent patches. At the critical point the patches are of every size at once
+and no scale is preferred. Scale invariance is what makes the next step legal.</div>
+</div>
+
+<div class="warn">
+  <div class="warn-title">The condition, stated once and enforced throughout</div>
+  <p style="margin-bottom:0">Everything below requires <span class="math">&xi; &rarr; &infin;</span>.
+  A <strong>first-order</strong> transition &mdash; ice to water, most condensation, and quite possibly
+  many transitions that look critical from a distance &mdash; has a finite correlation length, latent
+  heat, and coexisting phases. There is no scale invariance, so there is no fixed point, no universality
+  and no exponents. <strong>Ask whether a transition is continuous before reaching for any of this.</strong></p>
+</div>
+
+<h2>3. Kadanoff&rsquo;s idea: throw away detail on purpose</h2>
+
+<p>Leo Kadanoff, 1966. If the system looks the same at every scale, then <em>describe it at a coarser
+scale and see what happens to the description.</em></p>
+
+<p>Take a lattice of Ising spins. Group them into blocks of side <span class="math">b</span>. Replace
+each block by a single spin, by majority rule. Now shrink all lengths by <span class="math">b</span> so
+the new lattice has the same spacing as the old one. You have a system of the same <em>type</em> &mdash;
+spins on a lattice &mdash; but with different interaction strengths.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 280" role="img" aria-label="Block-spin coarse-graining in three stages: a fine lattice of up and down spins is partitioned into 3-by-3 blocks, each block is replaced by its majority spin, and the result is rescaled to a lattice of the original spacing.">
+  <text class="lbl-h" x="20" y="22">stage 1 &mdash; the fine lattice</text>
+  <g class="st1">
+    <g>
+      <!-- fine lattice of spins -->
+      <g fill="#f59e0b">
+        <circle cx="40" cy="60" r="6"/><circle cx="70" cy="60" r="6"/><circle cx="130" cy="60" r="6"/>
+        <circle cx="40" cy="90" r="6"/><circle cx="100" cy="90" r="6"/><circle cx="160" cy="90" r="6"/>
+        <circle cx="70" cy="120" r="6"/><circle cx="130" cy="120" r="6"/><circle cx="190" cy="120" r="6"/>
+        <circle cx="40" cy="150" r="6"/><circle cx="100" cy="150" r="6"/><circle cx="220" cy="150" r="6"/>
+        <circle cx="70" cy="180" r="6"/><circle cx="160" cy="180" r="6"/><circle cx="190" cy="180" r="6"/>
+        <circle cx="40" cy="210" r="6"/><circle cx="130" cy="210" r="6"/><circle cx="220" cy="210" r="6"/>
+      </g>
+      <g fill="#3b82f6">
+        <circle cx="100" cy="60" r="6"/><circle cx="160" cy="60" r="6"/><circle cx="190" cy="60" r="6"/><circle cx="220" cy="60" r="6"/>
+        <circle cx="70" cy="90" r="6"/><circle cx="130" cy="90" r="6"/><circle cx="190" cy="90" r="6"/><circle cx="220" cy="90" r="6"/>
+        <circle cx="40" cy="120" r="6"/><circle cx="100" cy="120" r="6"/><circle cx="160" cy="120" r="6"/><circle cx="220" cy="120" r="6"/>
+        <circle cx="70" cy="150" r="6"/><circle cx="130" cy="150" r="6"/><circle cx="160" cy="150" r="6"/><circle cx="190" cy="150" r="6"/>
+        <circle cx="40" cy="180" r="6"/><circle cx="100" cy="180" r="6"/><circle cx="130" cy="180" r="6"/><circle cx="220" cy="180" r="6"/>
+        <circle cx="70" cy="210" r="6"/><circle cx="100" cy="210" r="6"/><circle cx="160" cy="210" r="6"/><circle cx="190" cy="210" r="6"/>
+      </g>
+    </g>
+    <text class="lbl-s" x="20" y="250">a = lattice spacing &nbsp;&middot;&nbsp; &xi; = 27a</text>
+  </g>
+
+  <g class="st2">
+    <text class="lbl-h" x="300" y="22">stage 2 &mdash; block by majority</text>
+    <g class="blk">
+      <rect x="26" y="46" width="90" height="90"/><rect x="116" y="46" width="90" height="90"/>
+      <rect x="26" y="136" width="90" height="90"/><rect x="116" y="136" width="90" height="90"/>
+    </g>
+    <text class="lbl" x="300" y="80">each 3&times;3 block &rarr; one spin</text>
+    <text class="lbl" x="300" y="106">by majority rule</text>
+    <text class="lbl-s" x="300" y="140">detail below scale 3a is</text>
+    <text class="lbl-s" x="300" y="158">integrated out &mdash; gone for good</text>
+  </g>
+
+  <g class="st3">
+    <text class="lbl-h" x="560" y="22">stage 3 &mdash; rescale lengths by b</text>
+    <g fill="#f59e0b"><circle cx="600" cy="90" r="9"/><circle cx="680" cy="150" r="9"/></g>
+    <g fill="#3b82f6"><circle cx="680" cy="90" r="9"/><circle cx="600" cy="150" r="9"/></g>
+    <text class="lbl" x="560" y="200">same lattice spacing a,</text>
+    <text class="lbl" x="560" y="222">new couplings K&prime;,</text>
+    <text class="lbl" x="560" y="244">and &xi;&prime; = &xi;/b = 9a</text>
+  </g>
+</svg>
+<div class="figcap"><b>Figure 3 &mdash; one step of the renormalization group.</b> Block, average, rescale.
+The system that comes out is the same <em>kind</em> of system with different coupling constants, and its
+correlation length has been divided by <span class="math">b</span>. Repeating this is the entire method.
+Notice what is <em>lost</em>: everything below the block size, permanently. That loss is not a defect
+&mdash; it is the mechanism.</div>
+</div>
+
+<div class="definition">
+  <div class="definition-title">Definition &mdash; the RG transformation</div>
+  <p style="margin-bottom:0.6rem">Let <span class="math">K = (K<sub>1</sub>, K<sub>2</sub>, &hellip;)</span>
+  be the full set of coupling constants describing a system &mdash; nearest-neighbour coupling,
+  next-nearest, four-spin terms, everything the symmetry allows. A coarse-graining by factor
+  <span class="math">b</span> defines a map</p>
+  <span class="math-block">K&prime; = R<sub>b</sub>(K)</span>
+  <p style="margin-bottom:0">The map is not invertible &mdash; information was discarded &mdash; so
+  <span class="math">R<sub>b</sub></span> forms a <strong>semigroup</strong>, not a group:
+  <span class="math">R<sub>b</sub> &compfn; R<sub>b&prime;</sub> = R<sub>bb&prime;</sub></span>.
+  <em>The name &ldquo;renormalization group&rdquo; is, strictly, a misnomer that stuck.</em></p>
+</div>
+
+<h2>4. Fixed points, and what flows where</h2>
+
+<p>Iterating <span class="math">R<sub>b</sub></span> traces a trajectory through the space of all possible
+couplings. The interesting points are the ones that do not move:</p>
+
+<div class="definition">
+  <div class="definition-title">Definition &mdash; fixed point</div>
+  <span class="math-block">K* = R<sub>b</sub>(K*)</span>
+  <p style="margin-bottom:0">A system sitting at <span class="math">K*</span> is unchanged by
+  coarse-graining: it looks identical at every scale. Since each step divides the correlation length by
+  <span class="math">b</span>, a fixed point must have <span class="math">&xi;* = &xi;*/b</span>, so
+  <strong><span class="math">&xi;*</span> is either 0 or &infin;</strong>. The <span class="math">&xi; = 0</span>
+  fixed points are the boring ones &mdash; perfect order and perfect disorder. The
+  <span class="math">&xi; = &infin;</span> fixed point <em>is</em> the critical point.</p>
+</div>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 400" role="img" aria-label="Flow diagram in a two-dimensional space of coupling constants, showing a stable low-temperature fixed point, a stable high-temperature fixed point, an unstable critical fixed point between them, and the critical surface separating the basins of attraction, with dots flowing along trajectories.">
+  <line class="ax" x1="60" y1="350" x2="770" y2="350"/>
+  <line class="ax" x1="60" y1="350" x2="60" y2="40"/>
+  <text class="lbl" x="700" y="374">K&#8321;</text>
+  <text class="lbl" x="26" y="52">K&#8322;</text>
+
+  <!-- critical surface (separatrix) -->
+  <path class="sep" d="M120 40 C 240 140, 300 250, 330 350"/>
+  <text class="lbl" x="150" y="70" fill="#a855f7">critical surface</text>
+  <text class="lbl-s" x="150" y="88" fill="#a855f7">&xi; = &infin; on this line</text>
+
+  <!-- trajectories toward the ordered fixed point (left) -->
+  <path class="traj" d="M200 330 C 170 300, 140 260, 120 210" opacity="0.8"/>
+  <path class="traj" d="M250 300 C 200 260, 160 230, 120 210" opacity="0.8"/>
+  <path class="traj" d="M170 130 C 150 160, 130 190, 120 210" opacity="0.8"/>
+  <!-- trajectories toward the disordered fixed point (right) -->
+  <path class="traj" d="M400 320 C 500 300, 600 270, 690 250" opacity="0.8"/>
+  <path class="traj" d="M420 180 C 520 200, 610 230, 690 250" opacity="0.8"/>
+  <path class="traj" d="M380 90  C 480 150, 600 220, 690 250" opacity="0.8"/>
+  <!-- along the critical surface into the critical fixed point -->
+  <path class="traj" d="M128 60  C 200 130, 260 200, 296 268" opacity="0.9" stroke="#a855f7"/>
+  <path class="traj" d="M330 348 C 318 320, 306 296, 298 274" opacity="0.9" stroke="#a855f7"/>
+
+  <circle class="fd"  r="5" fill="#22c55e" style="offset-path: path('M400 320 C 500 300, 600 270, 690 250');"/>
+  <circle class="fd2" r="5" fill="#22c55e" style="offset-path: path('M420 180 C 520 200, 610 230, 690 250');"/>
+  <circle class="fd3" r="5" fill="#22c55e" style="offset-path: path('M250 300 C 200 260, 160 230, 120 210');"/>
+  <circle class="fd2" r="5" fill="#a855f7" style="offset-path: path('M128 60 C 200 130, 260 200, 296 268');"/>
+
+  <circle class="fp-s" cx="120" cy="210" r="10"/>
+  <text class="lbl-h" x="20" y="234">T = 0</text>
+  <text class="lbl-s" x="20" y="252">ordered</text>
+  <text class="lbl-s" x="20" y="268">&xi; = 0, stable</text>
+
+  <circle class="fp-s" cx="690" cy="250" r="10"/>
+  <text class="lbl-h" x="706" y="242">T = &infin;</text>
+  <text class="lbl-s" x="706" y="260">disordered</text>
+  <text class="lbl-s" x="706" y="276">&xi; = 0, stable</text>
+
+  <circle class="fp-c pulse" cx="298" cy="270" r="12"/>
+  <text class="lbl-h" x="316" y="266">K*</text>
+  <text class="lbl-s" x="316" y="284">critical, &xi; = &infin;</text>
+  <text class="lbl-s" x="316" y="300">UNSTABLE &mdash; one way out</text>
+</svg>
+<div class="figcap"><b>Figure 4 &mdash; the flow.</b> Almost every starting system flows to a boring
+fixed point: perfectly ordered or perfectly disordered. The critical fixed point sits on a
+<b>separatrix</b> &mdash; the critical surface &mdash; and is <em>unstable</em>. That instability is why
+you have to <em>tune</em> a system to criticality: temperature must be set to a particular value to land
+on the surface. <b>Codimension is the number of knobs you must set.</b> One relevant direction, one knob,
+codimension 1.</div>
+</div>
+
+<h2>5. Linearize, and universality falls out</h2>
+
+<p>Near the fixed point write <span class="math">K = K* + &delta;K</span> and linearize:</p>
+
+<span class="math-block">&delta;K&prime; = M &delta;K,&nbsp;&nbsp; M<sub>ij</sub> = &part;K&prime;<sub>i</sub>/&part;K<sub>j</sub> at K*</span>
+
+<p>Diagonalize <span class="math">M</span>. Its eigenvalues are conventionally written
+<span class="math">&lambda;<sub>i</sub> = b<sup>y<sub>i</sub></sup></span>, and the eigenvectors are the
+<em>scaling directions</em>. Three cases, and everything hangs on them:</p>
+
+<table>
+  <tr><th>Case</th><th>Name</th><th>Behaviour under coarse-graining</th><th>Consequence</th></tr>
+  <tr><td class="n">y<sub>i</sub> &gt; 0</td><td><strong>relevant</strong></td><td>grows; the flow runs away from the fixed point</td><td>must be tuned to zero to reach criticality &mdash; one knob each</td></tr>
+  <tr><td class="n">y<sub>i</sub> &lt; 0</td><td><strong>irrelevant</strong></td><td>shrinks; the flow forgets it</td><td><strong>this is universality</strong> &mdash; the microscopic details live here</td></tr>
+  <tr><td class="n">y<sub>i</sub> = 0</td><td>marginal</td><td>undecided at linear order</td><td>needs higher order; can give logarithms</td></tr>
+</table>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 300" role="img" aria-label="Two-dimensional diagram at a fixed point with one relevant direction along which arrows point outward and one irrelevant direction along which arrows point inward, with several starting points converging onto the relevant axis.">
+  <circle class="fp-c" cx="410" cy="150" r="11"/>
+  <text class="lbl-h" x="424" y="146">K*</text>
+
+  <line class="ax" x1="120" y1="150" x2="700" y2="150" stroke="#ef4444" stroke-width="2"/>
+  <line class="ax" x1="410" y1="30"  x2="410" y2="270" stroke="#22c55e" stroke-width="2"/>
+
+  <text class="lbl" x="600" y="140" fill="#ef4444">relevant &mdash; y &gt; 0</text>
+  <text class="lbl-s" x="600" y="176" fill="#ef4444">flow runs AWAY</text>
+  <text class="lbl" x="424" y="52" fill="#22c55e">irrelevant &mdash; y &lt; 0</text>
+  <text class="lbl-s" x="424" y="70" fill="#22c55e">flow runs IN</text>
+
+  <g fill="#ef4444">
+    <polygon points="690,150 674,144 674,156"/><polygon points="130,150 146,144 146,156"/>
+  </g>
+  <g fill="#22c55e">
+    <polygon points="410,140 404,124 416,124"/><polygon points="410,160 404,176 416,176"/>
+  </g>
+
+  <path class="traj" d="M220 60  C 300 100, 340 130, 500 152" opacity="0.85"/>
+  <path class="traj" d="M250 250 C 320 210, 350 172, 520 154" opacity="0.85"/>
+  <path class="traj" d="M600 50  C 560 100, 540 130, 560 149" opacity="0.85"/>
+  <circle class="fd"  r="4.5" fill="#94a3b8" style="offset-path: path('M220 60 C 300 100, 340 130, 500 152');"/>
+  <circle class="fd2" r="4.5" fill="#94a3b8" style="offset-path: path('M250 250 C 320 210, 350 172, 520 154');"/>
+
+  <text class="lbl-s" x="120" y="290">Three systems with completely different microscopic couplings collapse onto the same relevant axis &mdash;</text>
+  <text class="lbl-s" x="120" y="290" dy="16">after which they are indistinguishable, and share every exponent.</text>
+</svg>
+<div class="figcap"><b>Figure 5 &mdash; why universality is not a coincidence.</b> Irrelevant directions
+contract under the flow. Two systems differing only in irrelevant couplings become the same system after
+enough steps. <b>What survives is only the relevant directions</b>, and there are very few of them.</div>
+</div>
+
+<div class="callout">
+A universality class is fixed by a short list: <strong>spatial dimensionality</strong>,
+<strong>the symmetry and number of components of the order parameter</strong>, and
+<strong>the range of the interactions</strong>. Everything else is irrelevant &mdash; technically,
+not rhetorically.
+</div>
+
+<h3>Exponents are eigenvalues</h3>
+
+<p>For a system with one thermal relevant direction <span class="math">y<sub>t</sub></span> and one
+magnetic one <span class="math">y<sub>h</sub></span>, in dimension <span class="math">d</span>, all the
+familiar exponents are arithmetic on those two numbers:</p>
+
+<table>
+  <tr><th>Exponent</th><th>In terms of eigenvalues</th><th>What it measures</th></tr>
+  <tr><td class="n">&nu;</td><td class="n">1 / y<sub>t</sub></td><td>divergence of the correlation length</td></tr>
+  <tr><td class="n">&alpha;</td><td class="n">2 &minus; d/y<sub>t</sub></td><td>specific-heat singularity</td></tr>
+  <tr><td class="n">&beta;</td><td class="n">(d &minus; y<sub>h</sub>) / y<sub>t</sub></td><td>growth of the order parameter</td></tr>
+  <tr><td class="n">&gamma;</td><td class="n">(2y<sub>h</sub> &minus; d) / y<sub>t</sub></td><td>divergence of susceptibility</td></tr>
+  <tr><td class="n">&delta;</td><td class="n">y<sub>h</sub> / (d &minus; y<sub>h</sub>)</td><td>response at the critical isotherm</td></tr>
+  <tr><td class="n">&eta;</td><td class="n">d + 2 &minus; 2y<sub>h</sub></td><td>anomalous dimension of the correlator</td></tr>
+</table>
+
+<p>Two independent numbers generate six exponents, which is why they obey identities &mdash; Rushbrooke
+<span class="math">&alpha; + 2&beta; + &gamma; = 2</span>, Widom
+<span class="math">&gamma; = &beta;(&delta;&minus;1)</span>, Fisher
+<span class="math">&gamma; = &nu;(2&minus;&eta;)</span>, and hyperscaling
+<span class="math">2 &minus; &alpha; = d&nu;</span>. <strong>These were empirical puzzles before the RG
+and are corollaries after it.</strong> That is the single most convincing thing the theory did.</p>
+
+<div class="warn">
+  <div class="warn-title">Hyperscaling is the one that breaks</div>
+  <p style="margin-bottom:0">The first three relations follow from the two-eigenvalue structure alone.
+  <span class="math">2 &minus; &alpha; = d&nu;</span> additionally assumes the free energy scales purely
+  as <span class="math">&xi;<sup>&minus;d</sup></span>, and it <strong>fails</strong> above the upper
+  critical dimension, in the presence of dangerous irrelevant variables, and in random-field systems.
+  A measured hyperscaling violation is therefore <em>informative</em>, not necessarily an error &mdash;
+  but it does rule out the simple picture.</p>
+</div>
+
+<h2>6. Worked example A &mdash; the 1D Ising chain, exactly</h2>
+
+<p>This one you can do by hand in ten minutes, and it is honest: it produces a real answer and the answer
+is &ldquo;no phase transition&rdquo;.</p>
+
+<p>Take a chain with coupling <span class="math">K = J/k<sub>B</sub>T</span>. Sum out every second spin
+&mdash; <span class="tip" tabindex="0">decimation<span class="tt">A real-space RG in which a subset of degrees of freedom is summed over exactly, leaving an effective model for the rest. Exact in 1D; approximate in higher dimensions.</span></span>,
+with <span class="math">b = 2</span>. For the middle spin <span class="math">&sigma;<sub>2</sub></span>
+between neighbours <span class="math">&sigma;<sub>1</sub>, &sigma;<sub>3</sub></span>:</p>
+
+<span class="math-block">&sum;<sub>&sigma;<sub>2</sub>=&plusmn;1</sub> e<sup>K(&sigma;<sub>1</sub>&sigma;<sub>2</sub> + &sigma;<sub>2</sub>&sigma;<sub>3</sub>)</sup> = 2 cosh(K(&sigma;<sub>1</sub>+&sigma;<sub>3</sub>))</span>
+
+<p>Demand that this equal <span class="math">e<sup>g + K&prime;&sigma;<sub>1</sub>&sigma;<sub>3</sub></sup></span>.
+Taking the two cases <span class="math">&sigma;<sub>1</sub>&sigma;<sub>3</sub> = &plusmn;1</span> and
+dividing:</p>
+
+<div class="theorem">
+  <div class="theorem-title">The 1D Ising recursion</div>
+  <span class="math-block">K&prime; = &frac12; ln cosh(2K)</span>
+  <p style="margin-bottom:0">Fixed points: <span class="math">K* = 0</span> (infinite temperature) and
+  <span class="math">K* = &infin;</span> (zero temperature). <strong>Nothing in between.</strong></p>
+</div>
+
+<p>Check the stability. For small <span class="math">K</span>,
+<span class="math">cosh(2K) &asymp; 1 + 2K&sup2;</span> so
+<span class="math">K&prime; &asymp; K&sup2; &lt; K</span> &mdash; the flow moves towards zero. For large
+<span class="math">K</span>, <span class="math">cosh(2K) &asymp; e<sup>2K</sup>/2</span> so
+<span class="math">K&prime; &asymp; K &minus; &frac12;ln2</span> &mdash; it <em>decreases by a constant
+each step</em> and eventually falls to zero too.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 200" role="img" aria-label="A one-dimensional flow line for the 1D Ising coupling, with arrows everywhere pointing toward the zero-coupling fixed point at the left and away from the infinite-coupling fixed point at the right.">
+  <line class="ax" x1="80" y1="110" x2="740" y2="110" stroke-width="2"/>
+  <circle class="fp-s" cx="80" cy="110" r="10"/>
+  <circle class="fp-u" cx="740" cy="110" r="10"/>
+  <text class="lbl-h" x="56" y="146">K* = 0</text>
+  <text class="lbl-s" x="42" y="164">T = &infin;, stable</text>
+  <text class="lbl-h" x="694" y="146">K* = &infin;</text>
+  <text class="lbl-s" x="676" y="164">T = 0, unstable</text>
+  <g fill="#94a3b8" class="march">
+    <polygon points="200,110 216,104 216,116"/><polygon points="264,110 280,104 280,116"/>
+    <polygon points="328,110 344,104 344,116"/><polygon points="392,110 408,104 408,116"/>
+    <polygon points="456,110 472,104 472,116"/><polygon points="520,110 536,104 536,116"/>
+    <polygon points="584,110 600,104 600,116"/><polygon points="648,110 664,104 664,116"/>
+    <polygon points="712,110 728,104 728,116"/>
+  </g>
+  <text class="lbl" x="300" y="70">every finite temperature flows to disorder</text>
+  <text class="lbl-s" x="300" y="90">&there4; no ordered phase at any T &gt; 0 in one dimension</text>
+</svg>
+<div class="figcap"><b>Figure 6 &mdash; the 1D Ising flow.</b> Both fixed points are at
+<span class="math">&xi; = 0</span> or unreachable; there is no critical fixed point at finite coupling,
+so there is no phase transition. This reproduces a known exact result &mdash; and it shows the RG
+returning a <em>negative</em> answer cleanly, which is how you know the method has content.</div>
+</div>
+
+<h2>7. Worked example B &mdash; Wilson, Fisher, and dimension as a dial</h2>
+
+<p>The 1966 picture was physically compelling and computationally stuck. Wilson&rsquo;s move (1971) was to
+coarse-grain in <em>momentum</em> space instead: integrate out field modes in a shell between
+<span class="math">&Lambda;/b</span> and <span class="math">&Lambda;</span>, then rescale. Applied to the
+<span class="math">&phi;<sup>4</sup></span> theory this gives flow equations for the mass and quartic
+coupling that can actually be solved &mdash; perturbatively, in an unexpected small parameter.</p>
+
+<p>Wilson and Fisher, 1972: treat the <strong>dimension itself</strong> as continuous and expand around
+four. Write <span class="math">d = 4 &minus; &epsilon;</span>.</p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 260" role="img" aria-label="Two flow lines on the quartic coupling axis. Above four dimensions the Gaussian fixed point at the origin is stable and controls the transition. Below four dimensions the Gaussian fixed point becomes unstable and a new Wilson-Fisher fixed point appears at positive coupling and takes over stability.">
+  <g class="swapA">
+    <text class="lbl-h" x="60" y="40">d &gt; 4</text>
+    <line class="ax" x1="60" y1="90" x2="380" y2="90" stroke-width="2"/>
+    <circle class="fp-s" cx="90" cy="90" r="9"/>
+    <text class="lbl-s" x="66" y="118">Gaussian</text>
+    <text class="lbl-s" x="66" y="134">STABLE</text>
+    <g fill="#94a3b8">
+      <polygon points="200,90 184,84 184,96"/><polygon points="270,90 254,84 254,96"/><polygon points="340,90 324,84 324,96"/>
+    </g>
+    <text class="lbl" x="200" y="66">u &rarr; 0 : mean-field exponents are exact</text>
+  </g>
+
+  <g class="swapB">
+    <text class="lbl-h" x="440" y="40">d &lt; 4</text>
+    <line class="ax" x1="440" y1="90" x2="760" y2="90" stroke-width="2"/>
+    <circle class="fp-u" cx="470" cy="90" r="9"/>
+    <circle class="fp-c pulse" cx="640" cy="90" r="11"/>
+    <text class="lbl-s" x="446" y="118">Gaussian</text>
+    <text class="lbl-s" x="446" y="134">UNSTABLE</text>
+    <text class="lbl-s" x="606" y="118">Wilson&ndash;Fisher</text>
+    <text class="lbl-s" x="606" y="134">STABLE, u* ~ &epsilon;</text>
+    <g fill="#94a3b8">
+      <polygon points="540,90 524,84 524,96"/><polygon points="590,90 574,84 574,96"/>
+      <polygon points="700,90 716,84 716,96"/><polygon points="750,90 766,84 766,96"/>
+    </g>
+    <text class="lbl" x="470" y="66">a new fixed point takes over and sets the exponents</text>
+  </g>
+
+  <text class="lbl-s" x="60" y="200">Upper critical dimension d&#8348; = 4 for this class. Above it, fluctuations are irrelevant and</text>
+  <text class="lbl-s" x="60" y="218">mean-field theory is exact. Below it, fluctuations are relevant and mean-field is wrong.</text>
+  <text class="lbl-s" x="60" y="236">The exchange of stability at d = 4 is the whole content of the epsilon-expansion.</text>
+</svg>
+<div class="figcap"><b>Figure 7 &mdash; exchange of stability at four dimensions.</b> The Gaussian fixed
+point hands control to the Wilson&ndash;Fisher fixed point as dimension drops below four. Because the new
+fixed point sits at <span class="math">u* &sim; &epsilon;</span>, everything about it can be computed as a
+series in <span class="math">&epsilon;</span>.</div>
+</div>
+
+<p>For the one-component (Ising) case the results begin</p>
+
+<span class="math-block">&nu; = &frac12; + &epsilon;/12 + O(&epsilon;&sup2;),&nbsp;&nbsp;&nbsp;&nbsp; &eta; = &epsilon;&sup2;/54 + O(&epsilon;&sup3;)</span>
+
+<div class="warn">
+  <div class="warn-title">Read the small print on that number</div>
+  <p style="margin-bottom:0">In three dimensions <span class="math">&epsilon; = 1</span>, which is not
+  small. First order gives <span class="math">&nu; &asymp; 0.583</span> against a true value of
+  <span class="math">0.62997</span> &mdash; about 7% off. The series is
+  <strong>asymptotic, not convergent</strong>; adding terms naively eventually makes it worse, and the
+  good modern values come from resummation or from the conformal bootstrap, not from truncating this.
+  The <span class="math">&epsilon;</span>-expansion is a <em>proof of mechanism</em>, not a calculator.</p>
+</div>
+
+<h3>Exponents across a few classes</h3>
+
+<table>
+  <tr><th>Universality class</th><th class="n">&beta;</th><th class="n">&gamma;</th><th class="n">&nu;</th><th>Notes</th></tr>
+  <tr><td>Mean field / Landau</td><td class="n">1/2</td><td class="n">1</td><td class="n">1/2</td><td>exact for d &gt; 4</td></tr>
+  <tr><td>2D Ising (Onsager, exact)</td><td class="n">1/8</td><td class="n">7/4</td><td class="n">1</td><td>&alpha; = 0 (logarithmic)</td></tr>
+  <tr><td>3D Ising (bootstrap)</td><td class="n">0.32642</td><td class="n">1.23708</td><td class="n">0.62997</td><td>the most precisely known non-trivial class<a href="#fn5" class="fn">5</a></td></tr>
+  <tr><td>2D percolation (exact)</td><td class="n">5/36</td><td class="n">43/18</td><td class="n">4/3</td><td>geometric, no Hamiltonian needed</td></tr>
+  <tr><td>Directed percolation (1+1)</td><td class="n">0.2765</td><td>&mdash;</td><td class="n">&nu;<sub>&perp;</sub> 1.0970</td><td>the generic absorbing-state class<a href="#fn6" class="fn">6</a></td></tr>
+</table>
+
+<h2>8. The different renormalization groups</h2>
+
+<p>&ldquo;The RG&rdquo; names a strategy, not a single algorithm. The strategy is: <em>define a
+coarse-graining, follow what it does to the description, find the fixed points.</em> A dozen quite
+different machines implement it.</p>
+
+<table>
+  <tr><th>Flavour</th><th>Coarse-graining is&hellip;</th><th>Best at</th><th>Origin</th></tr>
+  <tr><td><strong>Real-space / block-spin</strong></td><td>grouping sites, majority rule</td><td>intuition; exact in 1D by decimation</td><td>Kadanoff 1966</td></tr>
+  <tr><td><strong>Momentum-shell (Wilsonian)</strong></td><td>integrating out a shell of high-<span class="math">k</span> modes</td><td>the <span class="math">&epsilon;</span>-expansion; critical exponents</td><td>Wilson 1971<a href="#fn1" class="fn" id="fnref1">1</a></td></tr>
+  <tr><td><strong>Field-theoretic</strong></td><td>changing the renormalization scale <span class="math">&mu;</span>; beta functions</td><td>particle physics; running couplings</td><td>Gell-Mann &amp; Low 1954; Callan, Symanzik 1970</td></tr>
+  <tr><td><strong>Functional / exact (FRG)</strong></td><td>a flowing effective action <span class="math">&Gamma;<sub>k</sub></span></td><td>non-perturbative problems; no small parameter needed</td><td>Wetterich 1993</td></tr>
+  <tr><td><strong>Numerical RG</strong></td><td>iterative diagonalization of a discretized bath</td><td>impurity problems &mdash; it solved the Kondo problem</td><td>Wilson 1975</td></tr>
+  <tr><td><strong>DMRG</strong></td><td>keeping the highest-weight eigenstates of the reduced density matrix</td><td>1D quantum chains, to machine precision</td><td>White 1992<a href="#fn2" class="fn" id="fnref2">2</a></td></tr>
+  <tr><td><strong>Tensor-network / MERA / TNR</strong></td><td>removing short-range <em>entanglement</em>, then coarse-graining</td><td>quantum states; flows in wavefunction space</td><td>Vidal 2007; Evenbly &amp; Vidal 2015</td></tr>
+  <tr><td><em>Conformal bootstrap</em></td><td><em>not an RG at all</em></td><td>the most precise exponents we have; uses only symmetry and consistency</td><td>Rattazzi et al. 2008</td></tr>
+</table>
+
+<p>The last row is there deliberately. The bootstrap gets better numbers than any RG by never
+coarse-graining anything &mdash; it imposes conformal symmetry and crossing consistency and squeezes the
+allowed region until one point is left. Worth knowing that the RG is the <em>explanatory</em> framework
+and no longer the most precise <em>computational</em> one.</p>
+
+<h3>Beta functions, and the second Nobel</h3>
+
+<p>In the field-theoretic version one tracks how a coupling depends on the energy scale at which you
+measure it:</p>
+
+<span class="math-block">&beta;(g) = &mu; &part;g/&part;&mu;</span>
+
+<p>The sign is everything. In QED <span class="math">&beta; &gt; 0</span>: the coupling grows with
+energy. In QCD the non-abelian gluon self-interaction flips it &mdash;
+<span class="math">&beta; &lt; 0</span> &mdash; so the coupling <em>shrinks</em> at high energy and quarks
+behave as if free when probed hard. That is <strong>asymptotic freedom</strong>, and it is why the RG
+collected a second Nobel prize in 2004.<a href="#fn3" class="fn" id="fnref3">3</a></p>
+
+<div class="svg-container">
+<svg viewBox="0 0 820 250" role="img" aria-label="Two running-coupling curves against energy scale. The QED coupling rises with energy while the QCD coupling falls toward zero at high energy, illustrating asymptotic freedom.">
+  <line class="ax" x1="80" y1="200" x2="760" y2="200"/>
+  <line class="ax" x1="80" y1="200" x2="80" y2="30"/>
+  <text class="lbl" x="640" y="226">energy scale &mu; &rarr;</text>
+  <text class="lbl" x="30" y="42">g</text>
+
+  <path d="M110 168 C 300 160, 520 130, 750 70" stroke="#ef4444" stroke-width="2.5" fill="none"/>
+  <text class="lbl" x="600" y="60" fill="#ef4444">QED &nbsp; &beta; &gt; 0</text>
+  <text class="lbl-s" x="600" y="78" fill="#ef4444">coupling grows &mdash; Landau pole</text>
+
+  <path d="M110 60 C 260 130, 430 172, 750 190" stroke="#22c55e" stroke-width="2.5" fill="none"/>
+  <text class="lbl" x="520" y="176" fill="#22c55e">QCD &nbsp; &beta; &lt; 0</text>
+  <text class="lbl-s" x="520" y="194" fill="#22c55e">asymptotic freedom</text>
+  <circle class="fd" r="5" fill="#22c55e" style="offset-path: path('M110 60 C 260 130, 430 172, 750 190');"/>
+  <circle class="fd2" r="5" fill="#ef4444" style="offset-path: path('M110 168 C 300 160, 520 130, 750 70');"/>
+
+  <text class="lbl-s" x="110" y="240">A zero of &beta;(g) is a fixed point. A negative slope through it means the coupling is driven there at high energy.</text>
+</svg>
+<div class="figcap"><b>Figure 8 &mdash; running couplings.</b> Same mathematics as the critical-phenomena
+flow, different application: here the flow parameter is energy rather than block size. <b>Fixed points of
+<span class="math">&beta;</span> are scale-invariant theories in both readings.</b></div>
+</div>
+
+<h2>9. Where the renormalization group does <em>not</em> reach</h2>
+
+<p>A tutorial that only sells the method is not useful. Four boundaries, all sharp.</p>
+
+<h3>First-order transitions</h3>
+<p>No diverging correlation length, no scale invariance, no fixed point. There is nothing for the RG to
+compute. Before applying any of this, establish that the transition is continuous.</p>
+
+<h3>Systems with no local order parameter</h3>
+<p>The Landau&ndash;Ginzburg&ndash;Wilson framework begins by writing a free energy as a functional of a
+<em>local</em> order parameter. <span class="tip" tabindex="0">Topological order<span class="tt">A gapped quantum phase distinguished by no local measurement — no symmetry broken, no local order parameter. Classified instead by anyon content and modular data.</span></span>
+is defined by not having one. Three independent sources state the consequence in print:</p>
+<ul>
+  <li>Burnell: <em>&ldquo;A general framework comparable to the Landau-Ginzburg-Wilson theory for
+      symmetry-breaking transitions is not currently known.&rdquo;</em><a href="#fn7" class="fn" id="fnref7">7</a></li>
+  <li>Eli&euml;ns, Romers &amp; Bais: <em>&ldquo;the inherent nonlocality of the order parameters obstructs
+      the adaptation of conventional field theoretical methods to study e.g. critical exponents.&rdquo;</em><a href="#fn8" class="fn" id="fnref8">8</a></li>
+  <li>Kong concedes the categorical machinery gives the phase before and the phase after, but neither the
+      Hamiltonian nor the transition.<a href="#fn9" class="fn" id="fnref9">9</a></li>
+</ul>
+<p>Tensor-network RG does flow in wavefunction space and does find fixed points &mdash; but there is no
+scaling theory around them, so there are no exponents. <strong>This is an open problem, precisely
+stated, not an oversight.</strong></p>
+
+<h3>Combinatorial and computational structures</h3>
+<p>An autocatalytic set is a set-theoretic object: reflexively autocatalytic and food-generated, or not.
+There is no scale parameter, no coarse-graining that preserves closure in a controlled way, and hence no
+RG. Computation is worse: the natural invariant &mdash; Turing degree &mdash; is degenerate, since almost
+everything non-trivial is universal. The nearest thing to an exception is coarse-graining of cellular
+automata.<a href="#fn10" class="fn" id="fnref10">10</a></p>
+
+<h3>Statics and dynamics are different classifications</h3>
+<p>This one causes real confusion, so it gets its own box.</p>
+
+<div class="warn">
+  <div class="warn-title">&beta; and z are indexed by different things</div>
+  <p>Static exponents are fixed by dimensionality, order-parameter symmetry and interaction range. The
+  <strong>dynamic</strong> exponent <span class="math">z</span> &mdash; relating relaxation time to length,
+  <span class="math">&tau; &sim; &xi;<sup>z</sup></span> &mdash; is fixed by something else entirely:
+  <strong>conservation laws and mode couplings</strong>. Hohenberg and Halperin classified dynamics into
+  separate models A, B, C&hellip; for exactly this reason.<a href="#fn4" class="fn" id="fnref4">4</a>
+  A non-conserved order parameter gives <span class="math">z &asymp; 2.17</span>; a conserved one gives
+  <span class="math">z = 4</span> &mdash; with <em>identical static exponents</em>.</p>
+  <p style="margin-bottom:0"><strong>So two systems sharing <span class="math">&beta;</span> while
+  differing in <span class="math">z</span> is not an anomaly and not a partial failure. It is what the
+  theory predicts.</strong> Their static classification agrees and their dynamic classification does not.
+  Reporting that as a puzzle means the two classifications have been silently merged.</p>
+</div>
+
+<h2>10. Is the RG the mechanism of domain convergence?</h2>
+
+<p>Partly, and the boundary is worth being exact about &mdash; because &ldquo;different domains share
+numbers&rdquo; is precisely the observation the RG was built to explain, and precisely the observation
+that is easiest to over-claim.</p>
+
+<p><strong>What the RG genuinely delivers.</strong> A mechanism &mdash; not an analogy &mdash; by which
+systems with unrelated microphysics end up with identical critical behaviour. The convergence is real,
+it is derivable, and it comes with an <em>index</em>: the short list of dimensionality, symmetry and
+range. Two systems converge <strong>if and only if</strong> those agree.</p>
+
+<p><strong>What it does not deliver.</strong> Convergence of anything else. Sharing a universality class
+means sharing exponents and scaling functions &mdash; it does <em>not</em> mean sharing a mechanism, a
+structure, or a vocabulary. Two systems in the 3D Ising class have nothing else in common, and that is
+the point of the theorem rather than a limitation of it.</p>
+
+<div class="callout">
+The renormalization group explains why unrelated systems share <strong>numbers</strong>.<br>
+It says nothing whatever about why they should share <strong>structure</strong>.
+</div>
+
+<p>So: as a candidate mechanism for domain convergence, the RG is the strongest one available, and it
+comes with a built-in test. If two domains are claimed to converge, the RG says to check whether their
+dimensionality, order-parameter symmetry and interaction range agree &mdash; and if they do not, the
+shared numbers need a different explanation. It also says which quantities <em>should</em> transfer
+(static exponents) and which have no business transferring (dynamic ones, absent matching conservation
+laws). <strong>That asymmetry is a prediction, and it is checkable.</strong></p>
+
+<h2>11. What to remember</h2>
+
+<ol>
+  <li>Criticality means the correlation length diverges and no scale is special.</li>
+  <li>Coarse-grain, rescale, repeat. The map on couplings is the renormalization group &mdash; a semigroup, because information is destroyed at each step.</li>
+  <li>Fixed points are scale-invariant theories. Critical points are the unstable ones.</li>
+  <li>Linearize about the fixed point. Relevant directions must be tuned; irrelevant ones are forgotten.</li>
+  <li>Universality is the forgetting. The class is indexed by dimension, symmetry, and range &mdash; nothing else.</li>
+  <li>Exponents are eigenvalues, which is why they satisfy identities.</li>
+  <li>Static and dynamic exponents belong to different classifications. Do not merge them.</li>
+  <li>No diverging correlation length, no local order parameter, or no scale parameter at all &mdash; then no RG.</li>
+</ol>
+
+<div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid #334155;color:var(--muted);font-size:0.9rem;">
+<p style="margin-bottom:0.5rem;"><strong>Coda.</strong></p>
+<p>Around 1977, a nine-year-old on a college campus asked his mentor what was cutting-edge in advanced
+mathematics. The answer was renormalization group theory, with the prediction that it would win a Nobel
+prize.</p>
+<p>Kenneth Wilson received the 1982 Nobel Prize in Physics <em>&ldquo;for his theory for critical
+phenomena in connection with phase transitions&rdquo;</em>. The prediction was right within five years.
+It was right a second time in 2004, when Gross, Politzer and Wilczek received the prize for asymptotic
+freedom &mdash; a statement about the sign of a beta function, and therefore also a renormalization-group
+result.</p>
+<p style="margin-bottom:0"><em>Written for Bruce Stephenson, and for Bruce A Metzger, who was right.</em></p>
+</div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn1">Wilson, K. G. (1971). Renormalization group and critical phenomena I &amp; II. <em>Phys. Rev. B</em> <strong>4</strong>:3174 and 3184. doi:10.1103/PhysRevB.4.3174 <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">White, S. R. (1992). Density matrix formulation for quantum renormalization groups. <em>Phys. Rev. Lett.</em> <strong>69</strong>:2863. doi:10.1103/PhysRevLett.69.2863 <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Gross, D. J. &amp; Wilczek, F. (1973). <em>Phys. Rev. Lett.</em> <strong>30</strong>:1343; Politzer, H. D. (1973). <em>Phys. Rev. Lett.</em> <strong>30</strong>:1346. Nobel Prize in Physics 2004. <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">Hohenberg, P. C. &amp; Halperin, B. I. (1977). Theory of dynamic critical phenomena. <em>Rev. Mod. Phys.</em> <strong>49</strong>:435. doi:10.1103/RevModPhys.49.435 <a href="#fnref4">&uarr;</a></li>
+    <li id="fn5">Kos, F., Poland, D., Simmons-Duffin, D. &amp; Vichi, A. (2016). Precision islands in the Ising and O(N) models. <em>JHEP</em> <strong>08</strong>:036. doi:10.1007/JHEP08(2016)036 <a href="#fnref5">&uarr;</a></li>
+    <li id="fn6">Hinrichsen, H. (2000). Non-equilibrium critical phenomena and phase transitions into absorbing states. <em>Adv. Phys.</em> <strong>49</strong>:815. doi:10.1080/00018730050198152 <a href="#fnref6">&uarr;</a></li>
+    <li id="fn7">Burnell, F. J. (2018). Anyon condensation and its applications. <em>Annu. Rev. Condens. Matter Phys.</em> <strong>9</strong>:307. doi:10.1146/annurev-conmatphys-033117-054154 <a href="#fnref7">&uarr;</a></li>
+    <li id="fn8">Eli&euml;ns, I. S., Romers, J. C. &amp; Bais, F. A. (2014). Diagrammatics for Bose condensation in anyon theories. <em>Phys. Rev. B</em> <strong>90</strong>:195130. doi:10.1103/PhysRevB.90.195130 <a href="#fnref8">&uarr;</a></li>
+    <li id="fn9">Kong, L. (2014). Anyon condensation and tensor categories. <em>Nucl. Phys. B</em> <strong>886</strong>:436. doi:10.1016/j.nuclphysb.2014.07.003 <a href="#fnref9">&uarr;</a></li>
+    <li id="fn10">Israeli, N. &amp; Goldenfeld, N. (2004). Computational irreducibility and the predictability of complex physical systems. <em>Phys. Rev. Lett.</em> <strong>92</strong>:074105. doi:10.1103/PhysRevLett.92.074105 <a href="#fnref10">&uarr;</a></li>
+  </ol>
+</div>
+
+</div>
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
+<script src="../js/annex-tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+  <g fill="#f59e0b">
+    <circle cx="22" cy="20" r="3"/><circle cx="38" cy="28" r="3"/><circle cx="22" cy="36" r="3"/>
+    <circle cx="54" cy="20" r="3"/><circle cx="38" cy="44" r="3"/><circle cx="54" cy="52" r="3"/>
+  </g>
+  <g fill="#3b82f6">
+    <circle cx="38" cy="20" r="3"/><circle cx="22" cy="28" r="3"/><circle cx="54" cy="28" r="3"/>
+    <circle cx="38" cy="36" r="3"/><circle cx="54" cy="36" r="3"/><circle cx="22" cy="44" r="3"/>
+    <circle cx="54" cy="44" r="3"/><circle cx="22" cy="52" r="3"/><circle cx="38" cy="52" r="3"/>
+  </g>
+  <rect x="14" y="12" width="24" height="24" fill="none" stroke="#22c55e" stroke-width="1"/>
+  <rect x="38" y="12" width="24" height="24" fill="none" stroke="#22c55e" stroke-width="1"/>
+  <rect x="14" y="36" width="24" height="24" fill="none" stroke="#22c55e" stroke-width="1"/>
+  <rect x="38" y="36" width="24" height="24" fill="none" stroke="#22c55e" stroke-width="1"/>
+
+  <path d="M 72 36 L 96 36" stroke="#475569" stroke-width="1.2"/>
+  <polygon points="100,36 92,32 92,40" fill="#475569"/>
+
+  <g fill="#f59e0b"><circle cx="116" cy="26" r="5"/><circle cx="134" cy="46" r="5"/></g>
+  <g fill="#3b82f6"><circle cx="134" cy="26" r="5"/><circle cx="116" cy="46" r="5"/></g>
+
+  <path d="M 150 36 L 174 36" stroke="#475569" stroke-width="1.2"/>
+  <polygon points="178,36 170,32 170,40" fill="#475569"/>
+
+  <path d="M 190 18 C 212 26, 228 32, 244 36" stroke="#94a3b8" stroke-width="1" fill="none"/>
+  <path d="M 190 54 C 212 46, 228 40, 244 36" stroke="#94a3b8" stroke-width="1" fill="none"/>
+  <path d="M 190 36 L 244 36" stroke="#94a3b8" stroke-width="1" fill="none"/>
+  <circle cx="248" cy="36" r="6" fill="#a855f7"/>
+  <text x="258" y="26" fill="#a855f7" font-size="9" font-family="Georgia" font-style="italic">K*</text>
+
+  <text x="140" y="72" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui" font-style="italic">block, rescale, repeat &#8594; the fixed point</text>
+</svg>
