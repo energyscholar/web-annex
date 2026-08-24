@@ -583,7 +583,7 @@ footer.foot p{max-width:70ch}
           <tr><td>Sandcaster</td><td class="n">&times;6</td></tr>
           <tr><td>Advanced missile rack</td><td class="n">&times;2</td></tr>
           <tr><td>Missiles &bull; smart</td><td class="n">24</td></tr>
-          <tr><td>Ion barbette &bull; 7D &times;3</td><td class="n">medium</td></tr>
+          <tr><td>Ion barbette &bull; 7D &times;3</td><td class="n">long</td></tr>
           <tr><td>Particle barbette &bull; 4D &times;3</td><td class="n">v. long</td></tr>
           <tr><td>Hardpoints committed</td><td class="n">6 / 6</td></tr>
         </tbody></table></div></div>
@@ -725,13 +725,17 @@ footer.foot p{max-width:70ch}
       <caption>Barbettes &mdash; the kill weapons</caption>
       <thead><tr><th>Mount</th><th>Range</th><th class="num">Damage</th><th>Upgrades</th><th>Gunner</th></tr></thead>
       <tbody>
-        <tr><td class="sys">Ion</td><td class="dsc">Medium</td><td class="num">7D &times;3</td><td class="dsc">High yield, long range</td><td class="dsc">Anemone Lindqvist (Gunner-2), AG-1 &ldquo;Alpha&rdquo;</td></tr>
-        <tr><td class="sys">Particle</td><td class="dsc">Very long</td><td class="num">4D &times;3</td><td class="dsc">High yield, intense focus</td><td class="dsc">Marina DeVeillter (Gunner-6), AG-2 &ldquo;Beta&rdquo;</td></tr>
+        <tr><td class="sys">Ion</td><td class="dsc"><strong>Long</strong><br><span style="font-size:12px;color:var(--dim)">base Medium, +1 band</span></td><td class="num">7D &times;3</td><td class="dsc">High yield, long range</td><td class="dsc">Anemone Lindqvist (Gunner-2), AG-1 &ldquo;Alpha&rdquo;</td></tr>
+        <tr><td class="sys">Particle</td><td class="dsc"><strong>Very long</strong><br><span style="font-size:12px;color:var(--dim)">already at the cap</span></td><td class="num">4D &times;3</td><td class="dsc">High yield, intense focus &mdash; AP+2</td><td class="dsc">Marina DeVeillter (Gunner-6), AG-2 &ldquo;Beta&rdquo;</td></tr>
       </tbody>
     </table>
   </div>
 
-  <p class="prose">The ion barbette drains power rather than breaching hull, and it ignores armour entirely; a solid hit strips a target's reserves and takes its systems offline for the round. The particle barbette carries a radiation effect and reaches further than anything the pack has ever brought against her.</p>
+  <p class="prose">The ion barbette drains power rather than breaching hull, and it ignores armour entirely; a solid hit strips a target's reserves and takes its systems offline for the round. An ion cannon is a <strong>Medium</strong>-range weapon as built &mdash; this one reaches to <strong>Long</strong>, because the Long Range advantage raises a weapon by one band. The particle barbette carries a radiation effect and already sits at Very Long, the ceiling that advantage cannot pass, which is why it took Intense Focus instead and cuts armour at AP+2.</p>
+
+  <div class="note">
+    <p><strong>Both barbettes are refitted to the limit and no further.</strong> A weapon may be advanced at most three Tech Levels, buying one advantage per level. The ion cannon is TL-12 as designed; High&nbsp;Yield costs one advantage and Long&nbsp;Range costs two, so three advantages put it at <strong>TL-15</strong> &mdash; precisely the ship's Tech Level, with nothing left over. The particle barbette is TL-11; High&nbsp;Yield and Intense&nbsp;Focus come to the same three advantages and land it at TL-14. Neither mount can be improved again without a higher-TL yard.</p>
+  </div>
 
   <div class="note">
     <p><strong>Standing doctrine.</strong> The particle barbette is the primary kill weapon. Against a powered target the gunnery chief takes a called shot at the power plant &mdash; Gunner-6 plus Fire&nbsp;Control/4 less the called-shot penalty, and armour piercing from intense focus. Simulation puts a plant knockout at one to two rounds at medium range. A ship with no power is a prize; a ship blown apart is paperwork.</p>
@@ -1038,7 +1042,7 @@ footer.foot p{max-width:70ch}
     {n:'Pulse laser',      on:[1,1,1,1,1,0,0], best:3},
     {n:'Sandcaster',       on:[1,1,1,0,0,0,0], best:1},
     {n:'Advanced missile', on:[0,1,1,1,1,1,1], best:5},
-    {n:'Ion barbette',     on:[1,1,1,1,0,0,0], best:3},
+    {n:'Ion barbette',     on:[1,1,1,1,1,0,0], best:4},
     {n:'Particle barbette',on:[0,1,1,1,1,1,0], best:5}
   ];
   var bg = document.getElementById('bandgrid');
