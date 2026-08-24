@@ -53,7 +53,8 @@ body{
   font-family:"Chakra Petch",system-ui,sans-serif; font-weight:700;
   font-size:11.5px; letter-spacing:.22em; text-transform:uppercase;
   text-align:center; padding:7px 12px; color:var(--alert);
-  background:var(--alert-wash); border-block:1px solid rgba(194,69,61,.35);
+  background:linear-gradient(var(--alert-wash),var(--alert-wash)),var(--ground);
+  border-block:1px solid rgba(194,69,61,.35);
 }
 .classbar.top{
   position:sticky; top:0; z-index:60; backdrop-filter:blur(8px);
@@ -422,21 +423,24 @@ footer.foot p{max-width:70ch}
     </div>
 
     <figure style="margin:16px 0 20px">
-      <svg class="shipsvg" viewBox="0 0 960 356" role="img" aria-label="Side profile of the Astral Dawn: a forward disk housing the Green Space garden, a short neck, a long main fuselage with four pop-up triple turrets and two barbettes, a subcraft dock beneath the fuselage and the armoured pinnace in a cradle on top.">
+      <svg class="shipsvg" viewBox="0 0 960 356" role="img" aria-label="Side elevation of the Astral Dawn: a forward drum housing the Green Space garden, seen side-on as a rectangle because its axis runs dorsal to ventral; a short neck; a long main fuselage with four pop-up triple turrets and two barbettes; a subcraft dock beneath the fuselage and the armoured pinnace in a cradle on top.">
         <defs>
           <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"></path>
           </marker>
         </defs>
 
-        <!-- forward disk — the Green Space -->
-        <ellipse class="disk" cx="132" cy="175" rx="34" ry="78"></ellipse>
-        <ellipse class="disk-green" cx="132" cy="175" rx="21" ry="57"></ellipse>
-        <line class="hullline" x1="132" y1="118" x2="132" y2="232"></line>
+        <!-- forward disk — the Green Space. A VERTICAL-AXIS cylinder: side-on it reads as a
+             rectangle, because the circular faces are seen edge-on. -->
+        <rect class="disk" x="48" y="126" width="176" height="98" rx="7"></rect>
+        <rect class="disk-green" x="60" y="146" width="152" height="58" rx="3"></rect>
+        <!-- curvature of the drum, and the three garden deck lines -->
+        <path class="hullline" d="M88,128 L88,222 M136,127 L136,223 M184,128 L184,222"></path>
+        <path class="hullline" d="M52,156 L220,156 M52,175 L220,175 M52,194 L220,194"></path>
+        <path class="hullline" d="M48,137 L224,137 M48,213 L224,213" opacity=".18"></path>
 
         <!-- neck -->
-        <path class="hullshape" d="M162,146 L242,136 L242,214 L162,204 Z"></path>
-        <path class="hullline" d="M186,142 L186,208 M212,139 L212,211"></path>
+        <path class="hullshape" d="M222,150 L242,138 L242,212 L222,200 Z"></path>
 
         <!-- main fuselage -->
         <path class="hullshape" d="M240,138 L268,122 L810,116 L858,134 L858,216 L810,234 L268,228 Z"></path>
@@ -489,8 +493,8 @@ footer.foot p{max-width:70ch}
         <path class="tick" d="M690,50 L690,90" marker-end="url(#ar)"></path>
         <text class="svgtext acc" x="690" y="44" text-anchor="middle">ARMOURED PINNACE &bull; DORSAL CRADLE</text>
 
-        <path class="tick" d="M132,84 L132,95" marker-end="url(#ar)"></path>
-        <text class="svgtext acc" x="132" y="78" text-anchor="middle">GREEN SPACE &bull; FORWARD DISK</text>
+        <path class="tick" d="M136,84 L136,122" marker-end="url(#ar)"></path>
+        <text class="svgtext acc" x="135" y="78" text-anchor="middle">GREEN SPACE &bull; FORWARD DISK</text>
 
         <path class="tick" d="M365,86 L365,90 L300,90 L300,100" marker-end="url(#ar)"></path>
         <path class="tick" d="M365,90 L430,90 L430,98"></path>
@@ -511,7 +515,7 @@ footer.foot p{max-width:70ch}
 
         <text class="svgtext" x="20" y="350">GENERAL ARRANGEMENT &bull; 600 t SEMI-STREAMLINED &bull; 6 OF 6 HARDPOINTS COMMITTED</text>
       </svg>
-      <figcaption>The Bastien-class silhouette: the forward disk carries the Green Space garden, the subcraft dock sits beneath the main fuselage, and the armoured pinnace rides a cradle on top of the hull. Every mount shown is pop-up and sits flush in transit.</figcaption>
+      <figcaption>The Bastien-class silhouette. The forward drum carries the Green Space garden; its axis runs dorsal to ventral, so in side elevation the disk presents as a rectangle and only shows its circular plan from above or below. The subcraft dock sits beneath the main fuselage and the armoured pinnace rides a cradle on top of the hull. Every mount shown is pop-up and sits flush in transit.</figcaption>
     </figure>
 
     <div class="tsfcols">
@@ -632,7 +636,7 @@ footer.foot p{max-width:70ch}
       </div></details>
 
       <details><summary>Deckplan <span class="why">&mdash; general arrangement</span></summary><div>
-        <p class="cnote" style="font-size:12.5px;line-height:1.7">Forward, the <strong style="color:var(--accent);font-weight:500">disk</strong> &mdash; the Green Space, a hydroponic garden and the only part of the ship with a horizon. A short neck joins it to the main fuselage, which carries the bridge, staterooms, barracks, the medical bay and the low-berth banks, with the drive section aft. The <strong style="color:var(--accent);font-weight:500">subcraft dock</strong> is beneath the fuselage in the standard position for the class; the armoured pinnace rides a cradle on top of the hull. Full deckplan is held under separate cover.</p>
+        <p class="cnote" style="font-size:12.5px;line-height:1.7">Forward, the <strong style="color:var(--accent);font-weight:500">drum</strong> &mdash; the Green Space, a hydroponic garden and the only part of the ship with a horizon. It is a cylinder standing on end, its axis running dorsal to ventral, so the garden decks are stacked broad and shallow and the whole section reads as a rectangle from alongside. A short neck joins it to the main fuselage, which carries the bridge, staterooms, barracks, the medical bay and the low-berth banks, with the drive section aft. The <strong style="color:var(--accent);font-weight:500">subcraft dock</strong> is beneath the fuselage in the standard position for the class; the armoured pinnace rides a cradle on top of the hull. Full deckplan is held under separate cover.</p>
       </div></details>
     </div>
   </div>
