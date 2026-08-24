@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Classified JSI vessel dossier for the 600-ton Q-ship ISS Astral Dawn.">
+<meta name="robots" content="noindex">
+<title>ISS Astral Dawn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+/* ============ TOKENS — dark-first, deliberate ============ */
+:root{
+  --ground:#0A0E14; --panel:#131A24; --panel-2:#182130; --line:#243244;
+  --text:#D4DDE7; --muted:#8195AA; --dim:#5C6E82;
+  --accent:#C89544; --accent-soft:#8A6A32; --accent-wash:rgba(200,149,68,.10);
+  --alert:#C2453D; --alert-wash:rgba(194,69,61,.12);
+  --go:#4E9E80;
+  --shadow:0 1px 0 rgba(255,255,255,.03), 0 8px 28px rgba(0,0,0,.45);
+  --stripe:repeating-linear-gradient(135deg,rgba(194,69,61,.16) 0 10px,transparent 10px 20px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --ground:#E9EDF1; --panel:#FFFFFF; --panel-2:#F3F6F9; --line:#C6D1DC;
+    --text:#131C27; --muted:#556A7E; --dim:#7D8FA1;
+    --accent:#8A6212; --accent-soft:#B08A3A; --accent-wash:rgba(138,98,18,.09);
+    --alert:#A3322B; --alert-wash:rgba(163,50,43,.10);
+    --go:#2E6A53;
+    --shadow:0 1px 0 rgba(255,255,255,.8), 0 6px 20px rgba(20,35,50,.10);
+  }
+}
+:root[data-theme="light"]{
+  --ground:#E9EDF1; --panel:#FFFFFF; --panel-2:#F3F6F9; --line:#C6D1DC;
+  --text:#131C27; --muted:#556A7E; --dim:#7D8FA1;
+  --accent:#8A6212; --accent-soft:#B08A3A; --accent-wash:rgba(138,98,18,.09);
+  --alert:#A3322B; --alert-wash:rgba(163,50,43,.10);
+  --go:#2E6A53;
+  --shadow:0 1px 0 rgba(255,255,255,.8), 0 6px 20px rgba(20,35,50,.10);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--text);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(14px,3vw,32px) 96px}
+
+/* ============ CLASSIFICATION BANNERS ============ */
+.classbar{
+  font-family:"Chakra Petch",system-ui,sans-serif; font-weight:700;
+  font-size:11.5px; letter-spacing:.22em; text-transform:uppercase;
+  text-align:center; padding:7px 12px; color:var(--alert);
+  background:var(--alert-wash); border-block:1px solid rgba(194,69,61,.35);
+}
+.classbar.top{
+  position:sticky; top:0; z-index:60; backdrop-filter:blur(8px);
+  height:36px; display:flex; align-items:center; justify-content:center;
+}
+
+/* ============ SLIM IDENTITY STRIP ============ */
+.namestrip{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 16px;
+  padding:13px 0 11px;
+}
+.namestrip h1{
+  font-family:"Chakra Petch",system-ui,sans-serif; font-weight:700;
+  font-size:clamp(1.25rem,3.2vw,1.7rem); letter-spacing:-.01em; margin:0; line-height:1.1;
+}
+.namestrip .exname{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.17em;
+  text-transform:uppercase; color:var(--muted);
+}
+.namestrip .docid{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--dim); margin-left:auto;
+}
+
+/* ============ TAB RAIL ============ */
+nav.tabs{
+  position:sticky; top:36px; z-index:50; display:flex; gap:2px; overflow-x:auto;
+  padding:0; margin:0 0 26px; background:var(--ground);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line); scrollbar-width:thin;
+}
+nav.tabs button{
+  flex:0 0 auto; font-family:"Chakra Petch",system-ui,sans-serif; font-weight:600;
+  font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+  padding:11px 17px; border:1px solid transparent; border-bottom:none;
+  background:transparent; color:var(--muted); cursor:pointer;
+  border-radius:3px 3px 0 0; white-space:nowrap; transition:color .16s,background .16s;
+}
+nav.tabs button:hover{color:var(--text);background:var(--panel-2)}
+nav.tabs button[aria-selected="true"]{
+  color:var(--accent); background:var(--panel);
+  border-color:var(--line); box-shadow:inset 0 2px 0 var(--accent);
+}
+nav.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+section[role="tabpanel"]{animation:fade .3s ease both}
+section[role="tabpanel"][hidden]{display:none}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ============ TYPE ============ */
+h2{
+  font-family:"Chakra Petch",system-ui,sans-serif; font-weight:700;
+  font-size:clamp(1.4rem,3.1vw,1.95rem); letter-spacing:-.01em;
+  margin:52px 0 6px; text-wrap:balance;
+}
+h2:first-of-type{margin-top:8px}
+h3{
+  font-family:"Chakra Petch",system-ui,sans-serif; font-weight:600;
+  font-size:1.14rem; letter-spacing:.01em; margin:34px 0 8px;
+}
+.rule{height:1px;background:var(--line);margin:10px 0 22px}
+p{margin:0 0 17px;max-width:68ch}
+.lead{font-size:1.1rem;color:var(--muted);max-width:66ch}
+.prose{max-width:68ch}
+a{color:var(--accent)}
+strong{font-weight:600;color:var(--text)}
+em.term{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:.9em;color:var(--accent)}
+
+.kicker{
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--dim); margin:0 0 9px;
+}
+
+/* ============ PANELS / CARDS ============ */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:20px 22px;box-shadow:var(--shadow)}
+.note{border-left:3px solid var(--accent);background:var(--accent-wash);padding:15px 18px;border-radius:0 3px 3px 0;margin:22px 0}
+.note p{margin:0;max-width:none}
+.note p+p{margin-top:10px}
+.redact{border-left:3px solid var(--alert);background:var(--alert-wash);padding:15px 18px;border-radius:0 3px 3px 0;margin:22px 0}
+.redact p{margin:0;max-width:none}
+
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(228px,1fr))}
+
+/* ============ STAT BLOCK TABLES ============ */
+.tablewrap{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:3px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-family:"IBM Plex Mono",monospace;font-size:13.5px}
+caption{
+  text-align:left; padding:13px 16px 12px; font-family:"Chakra Petch",sans-serif;
+  font-weight:600; font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent); border-bottom:1px solid var(--line);
+}
+th,td{padding:8px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{
+  font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--dim); font-weight:600; background:var(--panel-2);
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--panel-2)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.sys{color:var(--text);font-weight:500;white-space:nowrap}
+td.dsc{font-family:"Source Serif 4",serif;font-size:14.5px;color:var(--muted);line-height:1.5}
+
+/* ============ SHIP PROFILE ============ */
+.shipstage{
+  position:relative; margin:26px 0 12px; padding:22px 18px 16px;
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line); border-radius:3px; overflow:hidden;
+}
+.shipstage::before{
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:46px 46px; mask-image:radial-gradient(ellipse 78% 70% at 50% 50%,#000 25%,transparent 78%);
+}
+.shipsvg{position:relative;display:block;width:100%;height:auto;color:var(--text)}
+.hullshape{fill:var(--panel);stroke:currentColor;stroke-width:1.6;opacity:.95}
+.hullline{stroke:currentColor;stroke-width:1;opacity:.3;fill:none}
+.hulldetail{fill:currentColor;opacity:.14}
+.bridgeshape{fill:var(--panel-2);stroke:currentColor;stroke-width:1.3}
+.svgtext{font-family:"IBM Plex Mono",monospace;font-size:11px;fill:currentColor;opacity:.62;letter-spacing:.08em}
+.svgtext.acc{fill:var(--accent);opacity:1;font-weight:500}
+.leader{stroke:var(--accent);stroke-width:1;opacity:.55;fill:none}
+
+.mount{fill:var(--panel-2);stroke:var(--accent);stroke-width:1.5}
+.mount-barrel{stroke:var(--accent);stroke-width:2.4;stroke-linecap:round}
+.bay{fill:var(--accent-wash);stroke:var(--accent);stroke-width:1.2}
+.disk{fill:var(--panel-2);stroke:currentColor;stroke-width:1.6}
+.disk-green{fill:var(--go);opacity:.22}
+.tick{stroke:var(--accent);stroke-width:1;opacity:.6;fill:none}
+
+/* ============ TRAVELLER STANDARD FORMAT ============ */
+.tsf{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.tsf .tag{
+  display:inline-block; padding:3px 18px 3px 10px; font-size:9.5px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--ground); background:var(--accent); font-weight:600;
+  clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%);
+}
+.tsf .tag.alt{background:var(--muted)}
+.ident{display:grid;grid-template-columns:1fr 132px 112px;gap:9px;margin-bottom:9px}
+.ident.two{grid-template-columns:1fr 132px 112px}
+.field .v{
+  padding:8px 12px; border:1px solid var(--line); background:var(--panel);
+  font-size:16px; letter-spacing:.09em; color:var(--text);
+}
+.field .v.sm{font-size:13.5px}
+.field .v.big{color:var(--accent);font-size:20px;font-weight:500}
+.field .v .qual{color:var(--dim);font-size:12px;letter-spacing:.1em}
+.tsfcols{display:grid;grid-template-columns:1.06fr .84fr 1.06fr;gap:10px;align-items:start}
+.tsf .card{border:1px solid var(--line);background:var(--panel);margin-bottom:10px}
+.tsf .card>.inner{padding:10px 12px}
+.tsf table{font-size:12.5px;border-collapse:collapse;width:100%}
+.tsf .card td{padding:3px 0;border:none;font-family:inherit;font-size:12.5px;color:var(--muted)}
+.tsf .card td.n{text-align:right;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:10px}
+.tsf .card tr:hover{background:transparent}
+.tsf .kv{display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:12.5px;color:var(--muted)}
+.tsf .kv b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.tsf .cnote{font-size:10.5px;color:var(--dim);letter-spacing:.04em;margin-top:7px;line-height:1.55}
+sup.ref{color:var(--accent);font-size:9px}
+
+.critgrid{display:grid;grid-template-columns:auto 1fr auto;gap:5px 10px;align-items:center}
+.critgrid .cl{font-size:10.5px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;text-align:right;white-space:nowrap}
+.pips{display:flex;gap:4px}
+.pip{width:14px;height:14px;border:1px solid var(--accent-soft);border-radius:50%;opacity:.45;background:transparent}
+.band{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;min-width:76px;color:var(--go)}
+
+.demoted{margin-top:26px;border-top:1px dashed var(--line);padding-top:16px}
+.demoted details{border:1px solid var(--line);background:var(--panel);margin-bottom:8px;border-radius:2px}
+.demoted summary{
+  padding:11px 14px; cursor:pointer; font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--text);
+  display:flex; gap:12px; align-items:center;
+}
+.demoted summary::marker{color:var(--accent)}
+.demoted summary .why{color:var(--dim);letter-spacing:.03em;text-transform:none;font-size:12px}
+.demoted details>div{padding:4px 16px 16px}
+.demoted details[open] summary{border-bottom:1px solid var(--line)}
+
+/* ============ HISTORY SLIDER ============ */
+.scrub{
+  position:sticky; top:78px; z-index:40; background:var(--panel); border:1px solid var(--line);
+  border-radius:3px; padding:13px 16px 11px; margin:22px 0 26px; box-shadow:var(--shadow);
+}
+.scrub .row{display:flex;align-items:center;gap:14px}
+.scrub label{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);white-space:nowrap;
+}
+.scrub input[type=range]{flex:1;accent-color:var(--accent);height:22px;cursor:pointer}
+.scrub input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.scrub .read{margin-top:7px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.scrub .read .w{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.scrub .read .t{font-family:"Chakra Petch",sans-serif;font-weight:600;font-size:15px;color:var(--text)}
+.ev.cued>button{border-color:var(--accent);background:var(--accent-wash)}
+
+/* ============ TONNAGE LEDGER ============ */
+/* ============ RANGE BANDS ============ */
+.bands{overflow-x:auto;margin:20px 0}
+.bandgrid{min-width:660px;display:grid;grid-template-columns:150px repeat(7,1fr);gap:3px}
+.bandgrid .hd{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--dim);text-align:center;padding:6px 2px;
+}
+.bandgrid .wname{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);
+  padding:8px 10px 8px 0;text-align:right;white-space:nowrap;
+}
+.cell{background:var(--panel-2);border:1px solid var(--line);border-radius:2px;height:26px}
+.cell.on{background:var(--accent-soft);border-color:var(--accent)}
+.cell.best{background:var(--accent);border-color:var(--accent)}
+
+/* ============ CREW ============ */
+.filters{display:flex;flex-wrap:wrap;gap:7px;margin:20px 0 24px}
+.chip{
+  font-family:"Chakra Petch",sans-serif;font-weight:600;font-size:11.5px;
+  letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;cursor:pointer;
+  background:transparent;color:var(--muted);border:1px solid var(--line);
+  border-radius:20px;transition:all .16s;
+}
+.chip:hover{color:var(--text);border-color:var(--accent-soft)}
+.chip[aria-pressed="true"]{background:var(--accent-wash);color:var(--accent);border-color:var(--accent)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.crewgrid{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.pc{
+  background:var(--panel);border:1px solid var(--line);border-radius:3px;
+  padding:15px 17px;box-shadow:var(--shadow);transition:border-color .18s,transform .18s;
+}
+.pc:hover{border-color:var(--accent-soft);transform:translateY(-2px)}
+.pc.key{border-left:3px solid var(--accent)}
+.pc.synth{border-left:3px solid var(--go)}
+.pc h4{
+  font-family:"Chakra Petch",sans-serif;font-weight:700;font-size:1.02rem;
+  margin:0 0 3px;letter-spacing:.005em;
+}
+.pc .role{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--accent);margin:0 0 9px;
+}
+.pc .bio{font-size:14.5px;line-height:1.5;color:var(--muted);margin:0;max-width:none}
+.pc .skills{
+  margin:10px 0 0;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  color:var(--dim);letter-spacing:.03em;
+}
+
+/* ============ BERTH BANKS ============ */
+.banks{display:flex;flex-wrap:wrap;gap:20px;margin:22px 0}
+.bank{border:1px solid var(--line);border-radius:3px;padding:12px;background:var(--panel)}
+.bank .bk{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--dim);margin:0 0 9px;
+}
+.cells{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.berth{
+  width:34px;height:34px;border-radius:2px;border:1px solid var(--line);
+  background:var(--panel-2);display:grid;place-items:center;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--dim);
+}
+.berth.med{background:var(--accent-wash);border-color:var(--accent-soft);color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin:14px 0 0;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:7px}
+.swatch{width:13px;height:13px;border-radius:2px;border:1px solid var(--line);background:var(--panel-2)}
+.swatch.med{background:var(--accent-wash);border-color:var(--accent-soft)}
+
+/* ============ TIMELINE ============ */
+.tl{position:relative;margin:26px 0 0;padding-left:30px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.ev{position:relative;margin:0 0 8px}
+.ev::before{
+  content:"";position:absolute;left:-26px;top:17px;width:9px;height:9px;
+  border-radius:50%;background:var(--ground);border:2px solid var(--accent-soft);
+}
+.ev.major::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-wash)}
+.ev>button{
+  width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:3px;padding:13px 16px;cursor:pointer;color:var(--text);
+  font-family:inherit;transition:border-color .18s;
+}
+.ev>button:hover{border-color:var(--accent-soft)}
+.ev>button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ev .when{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);display:block;margin-bottom:4px;
+}
+.ev .what{font-family:"Chakra Petch",sans-serif;font-weight:600;font-size:1.05rem;display:block}
+.ev .hint{font-size:14px;color:var(--dim);display:block;margin-top:3px}
+.ev .body{
+  overflow:hidden;max-height:0;transition:max-height .4s ease;
+  border-left:1px solid var(--line);margin:0 0 0 3px;
+}
+.ev[data-open="true"] .body{max-height:1400px}
+.ev .body .inner{padding:16px 0 20px 18px}
+.ev .body p{font-size:15.5px;color:var(--muted);max-width:64ch}
+.ev .body p:last-child{margin-bottom:0}
+.ev .body strong{color:var(--text)}
+
+figure{margin:26px 0}
+figcaption{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--dim);
+  margin-top:11px;line-height:1.55;max-width:68ch;
+}
+svg.fig{display:block;width:100%;height:auto;color:var(--text);
+  background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:14px}
+
+footer.foot{margin-top:66px;padding-top:22px;border-top:1px solid var(--line);color:var(--dim);font-size:14px}
+footer.foot p{max-width:70ch}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+@media (max-width:820px){
+  .docctl{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  nav.tabs{top:30px}
+  .lrow{grid-template-columns:minmax(94px,1.2fr) 2fr minmax(52px,auto);gap:9px}
+}
+</style>
+
+</head>
+<body>
+<div class="classbar top">Classified &mdash; JSI Restricted &bull; District 268 Command &bull; Handle Via Sunburst Channels Only</div>
+
+<div class="wrap">
+
+<div class="namestrip">
+  <h1>ISS Astral Dawn</h1>
+  <span class="exname">ex-Amishi &bull; Bastien-class Q-Ship</span>
+  <span class="docid">JSI/D268/VD-0114</span>
+</div>
+
+<nav class="tabs" role="tablist" aria-label="Dossier sections">
+  <button role="tab" id="t-main"    aria-controls="p-main"    aria-selected="true">Ship Record</button>
+  <button role="tab" id="t-cover"   aria-controls="p-cover"   aria-selected="false">Cover</button>
+  <button role="tab" id="t-weapons" aria-controls="p-weapons" aria-selected="false">Weaponry</button>
+  <button role="tab" id="t-craft"   aria-controls="p-craft"   aria-selected="false">Small Craft</button>
+  <button role="tab" id="t-med"     aria-controls="p-med"     aria-selected="false">Medical</button>
+  <button role="tab" id="t-crew"    aria-controls="p-crew"    aria-selected="false">Crew</button>
+  <button role="tab" id="t-hist"    aria-controls="p-hist"    aria-selected="false">History</button>
+</nav>
+
+<!-- ==================== MAIN ==================== -->
+<section role="tabpanel" id="p-main" aria-labelledby="t-main">
+
+  <p class="kicker">Vessel Record &bull; Traveller Standard Format</p>
+  <h2 style="margin-top:2px">Ship record</h2>
+  <div class="rule"></div>
+  <p class="prose" style="font-size:14.5px;color:var(--dim);font-family:'IBM Plex Mono',monospace;letter-spacing:.02em">
+    Layout after the <strong style="color:var(--accent);font-weight:500">Traveller MGT2 Ship Record</strong> (Mongoose 2021, p.151).
+    Figures from the vessel's own computer record; provenance noted where the yard and the ship's log disagree.
+  </p>
+
+  <div class="tsf">
+
+    <div class="ident">
+      <div class="field"><span class="tag">Ship's Name</span>
+        <div class="v big">ISS ASTRAL DAWN &nbsp;<span class="qual">(EX-AMISHI)</span></div></div>
+      <div class="field"><span class="tag alt">Hull Points</span><div class="v sm">300<sup class="ref">1</sup></div></div>
+      <div class="field"><span class="tag alt">Armour</span><div class="v sm">1<sup class="ref">2</sup></div></div>
+    </div>
+    <div class="ident two">
+      <div class="field"><span class="tag">Class</span>
+        <div class="v sm">600 tons &bull; Semi-streamlined &bull; TL-15</div></div>
+      <div class="field"><span class="tag">Power</span><div class="v sm">480</div></div>
+      <div class="field"><span class="tag">Thrust</span><div class="v sm">3 G</div></div>
+    </div>
+
+    <figure style="margin:16px 0 20px">
+      <svg class="shipsvg" viewBox="0 0 960 356" role="img" aria-label="Side profile of the Astral Dawn: a forward disk housing the Green Space garden, a short neck, a long main fuselage with four pop-up triple turrets and two barbettes, a subcraft dock beneath the fuselage and the armoured pinnace in a cradle on top.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"></path>
+          </marker>
+        </defs>
+
+        <!-- forward disk — the Green Space -->
+        <ellipse class="disk" cx="132" cy="175" rx="34" ry="78"></ellipse>
+        <ellipse class="disk-green" cx="132" cy="175" rx="21" ry="57"></ellipse>
+        <line class="hullline" x1="132" y1="118" x2="132" y2="232"></line>
+
+        <!-- neck -->
+        <path class="hullshape" d="M162,146 L242,136 L242,214 L162,204 Z"></path>
+        <path class="hullline" d="M186,142 L186,208 M212,139 L212,211"></path>
+
+        <!-- main fuselage -->
+        <path class="hullshape" d="M240,138 L268,122 L810,116 L858,134 L858,216 L810,234 L268,228 Z"></path>
+        <path class="hullline" d="M280,130 L800,126 M280,220 L800,224"></path>
+        <path class="hullline" d="M360,120 L360,228 M500,118 L500,228 M660,117 L660,230"></path>
+        <rect class="hulldetail" x="812" y="136" width="44" height="78" rx="3"></rect>
+        <path class="hullline" d="M858,150 L906,150 M858,175 L906,175 M858,200 L906,200"></path>
+
+        <!-- dorsal cradle + armoured pinnace, seated on the hull -->
+        <rect class="hulldetail" x="632" y="110" width="14" height="9" rx="2"></rect>
+        <rect class="hulldetail" x="736" y="109" width="14" height="9" rx="2"></rect>
+        <path class="hullshape" d="M626,112 L650,96 L732,94 L754,108 L754,112 Z"></path>
+        <line class="hullline" x1="650" y1="106" x2="746" y2="104"></line>
+
+        <!-- ventral subcraft dock -->
+        <rect class="bay" x="392" y="228" width="164" height="24" rx="2"></rect>
+        <line x1="420" y1="240" x2="440" y2="240" stroke="var(--accent)" stroke-width="2"></line>
+        <line x1="464" y1="240" x2="484" y2="240" stroke="var(--accent)" stroke-width="2"></line>
+        <line x1="508" y1="240" x2="528" y2="240" stroke="var(--accent)" stroke-width="2"></line>
+
+        <!-- dorsal turrets 1 and 2 -->
+        <g><rect class="mount" x="283" y="104" width="34" height="16" rx="3"></rect>
+          <line class="mount-barrel" x1="300" y1="104" x2="300" y2="92"></line>
+          <line class="mount-barrel" x1="291" y1="104" x2="287" y2="94"></line>
+          <line class="mount-barrel" x1="309" y1="104" x2="313" y2="94"></line></g>
+        <g><rect class="mount" x="413" y="102" width="34" height="16" rx="3"></rect>
+          <line class="mount-barrel" x1="430" y1="102" x2="430" y2="90"></line>
+          <line class="mount-barrel" x1="421" y1="102" x2="417" y2="92"></line>
+          <line class="mount-barrel" x1="439" y1="102" x2="443" y2="92"></line></g>
+
+        <!-- ion barbette, dorsal -->
+        <g><circle class="mount" cx="545" cy="112" r="11"></circle>
+          <line class="mount-barrel" x1="545" y1="101" x2="545" y2="86" stroke-width="4"></line></g>
+
+        <!-- ventral turrets 3 and 4 -->
+        <g><rect class="mount" x="603" y="230" width="34" height="16" rx="3"></rect>
+          <line class="mount-barrel" x1="620" y1="246" x2="620" y2="258"></line>
+          <line class="mount-barrel" x1="611" y1="246" x2="607" y2="256"></line>
+          <line class="mount-barrel" x1="629" y1="246" x2="633" y2="256"></line></g>
+        <g><rect class="mount" x="733" y="228" width="34" height="16" rx="3"></rect>
+          <line class="mount-barrel" x1="750" y1="244" x2="750" y2="256"></line>
+          <line class="mount-barrel" x1="741" y1="244" x2="737" y2="254"></line>
+          <line class="mount-barrel" x1="759" y1="244" x2="763" y2="254"></line></g>
+
+        <!-- particle barbette, ventral -->
+        <g><circle class="mount" cx="310" cy="228" r="11"></circle>
+          <line class="mount-barrel" x1="310" y1="239" x2="310" y2="262" stroke-width="4"></line></g>
+
+        <!-- callouts -->
+        <path class="tick" d="M690,50 L690,90" marker-end="url(#ar)"></path>
+        <text class="svgtext acc" x="690" y="44" text-anchor="middle">ARMOURED PINNACE &bull; DORSAL CRADLE</text>
+
+        <path class="tick" d="M132,84 L132,95" marker-end="url(#ar)"></path>
+        <text class="svgtext acc" x="132" y="78" text-anchor="middle">GREEN SPACE &bull; FORWARD DISK</text>
+
+        <path class="tick" d="M365,86 L365,90 L300,90 L300,100" marker-end="url(#ar)"></path>
+        <path class="tick" d="M365,90 L430,90 L430,98"></path>
+        <text class="svgtext acc" x="365" y="80" text-anchor="middle">TURRETS 1&ndash;2</text>
+
+        <path class="tick" d="M545,86 L545,82" ></path>
+        <text class="svgtext acc" x="545" y="76" text-anchor="middle">ION BARBETTE</text>
+
+        <path class="tick" d="M310,292 L310,268" marker-end="url(#ar)"></path>
+        <text class="svgtext acc" x="310" y="304" text-anchor="middle">PARTICLE BARBETTE</text>
+
+        <path class="tick" d="M474,318 L474,256" marker-end="url(#ar)"></path>
+        <text class="svgtext acc" x="474" y="330" text-anchor="middle">SUBCRAFT DOCK &bull; LAUNCH + FIGHTER BAY</text>
+
+        <path class="tick" d="M685,292 L685,288 L620,288 L620,262" marker-end="url(#ar)"></path>
+        <path class="tick" d="M685,288 L750,288 L750,260"></path>
+        <text class="svgtext acc" x="685" y="304" text-anchor="middle">TURRETS 3&ndash;4</text>
+
+        <text class="svgtext" x="20" y="350">GENERAL ARRANGEMENT &bull; 600 t SEMI-STREAMLINED &bull; 6 OF 6 HARDPOINTS COMMITTED</text>
+      </svg>
+      <figcaption>The Bastien-class silhouette: the forward disk carries the Green Space garden, the subcraft dock sits beneath the main fuselage, and the armoured pinnace rides a cradle on top of the hull. Every mount shown is pop-up and sits flush in transit.</figcaption>
+    </figure>
+
+    <div class="tsfcols">
+
+      <div>
+        <div class="card"><span class="tag">Hull &amp; Structure</span><div class="inner"><table><tbody>
+          <tr><td>Hull &bull; semi-streamlined</td><td class="n">600 t</td></tr>
+          <tr><td>Reinforced structure</td><td class="n">+60 HP</td></tr>
+          <tr><td>Armour &bull; bonded superdense</td><td class="n">6 t</td></tr>
+          <tr><td>Emission absorption grid</td><td class="n">12 t</td></tr>
+          <tr><td>Reflective coating</td><td class="n">&minus;3 laser</td></tr>
+          <tr><td>Heat shielding</td><td class="n">fitted</td></tr>
+          <tr><td>Radiation shielding</td><td class="n">fitted</td></tr>
+          <tr><td>Bridge &bull; military</td><td class="n">20 t</td></tr>
+          <tr><td>Cargo hold</td><td class="n">79 t</td></tr>
+        </tbody></table>
+        <p class="cnote"><sup class="ref">1</sup> 240 base + 60 reinforcement. <sup class="ref">2</sup> Armour 1 is the number of record; a stale figure of 14 circulated in earlier yard papers and is superseded.</p>
+        </div></div>
+
+        <div class="card"><span class="tag">Drives</span><div class="inner"><table><tbody>
+          <tr><td>Manoeuvre drive &bull; Thrust-3</td><td class="n">18 t</td></tr>
+          <tr><td>Jump drive &bull; Jump-3</td><td class="n">45 t</td></tr>
+          <tr><td>Power plant &bull; fusion TL-15</td><td class="n">20 t</td></tr>
+          <tr><td>Fuel, internal</td><td class="n">242.4 t</td></tr>
+          <tr><td>Jump net &bull; external</td><td class="n">200 t</td></tr>
+          <tr><td>Collapsible tanks</td><td class="n">240 t</td></tr>
+          <tr><td>Fuel scoops &bull; processor</td><td class="n">fitted</td></tr>
+        </tbody></table>
+        <p class="cnote">A J-4 Override remains installed. The programme is carried as cancelled.</p>
+        </div></div>
+      </div>
+
+      <div>
+        <div class="card"><span class="tag">Ship's Computer</span><div class="inner"><table><tbody>
+          <tr><td>Model</td><td class="n">/25</td></tr>
+          <tr><td>Jump Control</td><td class="n">/3</td></tr>
+          <tr><td>Manoeuvre</td><td class="n">/0</td></tr>
+          <tr><td>Library</td><td class="n">/0</td></tr>
+          <tr><td>Fire Control</td><td class="n">/4</td></tr>
+          <tr><td>Sensors &bull; advanced</td><td class="n">DM +2</td></tr>
+        </tbody></table>
+        <p class="cnote">Fire Control/4 lays every mount aboard. Software carries no external signature.</p>
+        </div></div>
+
+        <div class="card"><span class="tag">Crew</span><div class="inner">
+          <div class="kv"><span>Captain</span><b>1</b></div>
+          <div class="kv"><span>Pilot</span><b>3</b></div>
+          <div class="kv"><span>Astrogator</span><b>1</b></div>
+          <div class="kv"><span>Engineer</span><b>2</b></div>
+          <div class="kv"><span>Gunner</span><b>1</b></div>
+          <div class="kv"><span>Sensors</span><b>1</b></div>
+          <div class="kv"><span>Medic</span><b>1</b></div>
+          <div class="kv"><span>Marines</span><b>6</b></div>
+          <div class="kv"><span>Fighter pilots</span><b>6</b></div>
+          <div class="kv"><span>Gunnery intelligences</span><b>6</b></div>
+          <div class="kv"><span>Robots</span><b>4</b></div>
+          <p class="cnote">Six AI gunnery units are installed; <strong style="color:var(--accent);font-weight:500">four are normally crewed</strong>. Staterooms 8 double &bull; barracks 12 &bull; low berths 24.</p>
+        </div></div>
+      </div>
+
+      <div>
+        <div class="card"><span class="tag">Weapons</span><div class="inner"><table><tbody>
+          <tr><td>Triple turret &bull; pop-up</td><td class="n">&times;4</td></tr>
+          <tr><td>Pulse laser &bull; 2D</td><td class="n">&times;4</td></tr>
+          <tr><td>Sandcaster</td><td class="n">&times;6</td></tr>
+          <tr><td>Advanced missile rack</td><td class="n">&times;2</td></tr>
+          <tr><td>Missiles &bull; smart</td><td class="n">24</td></tr>
+          <tr><td>Ion barbette &bull; 7D &times;3</td><td class="n">medium</td></tr>
+          <tr><td>Particle barbette &bull; 4D &times;3</td><td class="n">v. long</td></tr>
+          <tr><td>Hardpoints committed</td><td class="n">6 / 6</td></tr>
+        </tbody></table></div></div>
+
+        <div class="card"><span class="tag">Systems &amp; Facilities</span><div class="inner"><table><tbody>
+          <tr><td>Medical bay &bull; 5 patients</td><td class="n">+1 Medic</td></tr>
+          <tr><td>Workshop</td><td class="n">+2 Mech</td></tr>
+          <tr><td>Briefing room</td><td class="n">+1 Tactics</td></tr>
+          <tr><td>Laboratory</td><td class="n">fitted</td></tr>
+          <tr><td>Biosphere &bull; Green Space</td><td class="n">fitted</td></tr>
+          <tr><td>Armoury &bull; vault</td><td class="n">fitted</td></tr>
+          <tr><td>Library &bull; studio &bull; training</td><td class="n">fitted</td></tr>
+          <tr><td>Concealed compartment</td><td class="n">&minus;2 / &minus;4</td></tr>
+          <tr><td>Probe &bull; repair &bull; mining drones</td><td class="n">5 / 5 / 10</td></tr>
+          <tr><td>Breaching tube &bull; clamps</td><td class="n">fitted</td></tr>
+          <tr><td>Forced linkage TL-15</td><td class="n">DM +2</td></tr>
+        </tbody></table></div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:10px"><span class="tag">Critical Hits</span><div class="inner">
+      <div class="critgrid" id="critgrid"></div>
+      <p class="cnote">Damage track as carried on the vessel's record. All locations report functional as of compilation. Location 12 is shown as <strong style="color:var(--accent);font-weight:500">Bridge</strong> after the 2022 revision of the critical-hit table.</p>
+    </div></div>
+
+    <div class="demoted">
+      <details><summary>Power Requirement <span class="why">&mdash; what draws what</span></summary><div>
+        <div class="kv"><span>Basic systems</span><b>120</b></div>
+        <div class="kv"><span>Manoeuvre drive</span><b>180</b></div>
+        <div class="kv"><span>Jump drive</span><b>180</b></div>
+        <div class="kv"><span>Total requirement</span><b>480</b></div>
+        <p class="cnote">Basic, manoeuvre and jump together equal plant output exactly. There is no reserve for sustained weapons fire while jumping or manoeuvring at full thrust &mdash; the ship cannot do all three at once and the crew plan around it.</p>
+      </div></details>
+
+      <details><summary>Running Costs <span class="why">&mdash; build and upkeep</span></summary><div>
+        <div class="kv"><span>Cost of construction</span><b>MCr 994.13</b></div>
+        <div class="kv"><span>Monthly maintenance</span><b>Cr 24,000</b></div>
+        <div class="kv"><span>Hull list price, new</span><b>MCr 186</b></div>
+        <p class="cnote">The refit cost more than five times the ship it was performed on. The hull was acquired as a wreck at no purchase price at all.</p>
+      </div></details>
+
+      <details><summary>Design Checks <span class="why">&mdash; yard exceptions carried into service</span></summary><div>
+        <table style="width:100%"><tbody>
+          <tr><td style="color:var(--text);padding:5px 12px 5px 0;white-space:nowrap">Hardpoints</td><td style="color:var(--muted);padding:5px 0;font-size:12.5px">Four triple turrets and two barbettes consume all six hardpoints. The 20-ton weapon-bay point defence fitted alongside them has no hardpoint to occupy. It is aboard; it is not certified.</td></tr>
+          <tr><td style="color:var(--text);padding:5px 12px 5px 0;white-space:nowrap">Hangar volume</td><td style="color:var(--muted);padding:5px 0;font-size:12.5px">Six 10-ton fighters require 66 tons of bay. No such line was ever raised against the tonnage budget. The fighters are aboard regardless.</td></tr>
+          <tr><td style="color:var(--text);padding:5px 12px 5px 0;white-space:nowrap">Displacement</td><td style="color:var(--muted);padding:5px 0;font-size:12.5px">Fitted systems exceed 600 tons before the fighter bay is counted. The yard's remaining-tonnage figure has never balanced.</td></tr>
+          <tr><td style="color:var(--text);padding:5px 12px 5px 0;white-space:nowrap">Plant tonnage</td><td style="color:var(--muted);padding:5px 0;font-size:12.5px">The plant is recorded at 20 tons. A requirement of 480 needs 24 tons at TL-15. Four tons unreconciled.</td></tr>
+          <tr><td style="color:var(--text);padding:5px 12px 5px 0;white-space:nowrap">Passenger capacity</td><td style="color:var(--muted);padding:5px 0;font-size:12.5px">A liner of this class advertises roughly 24 high and 24 low passages. This vessel offers two staterooms.</td></tr>
+        </tbody></table>
+      </div></details>
+
+      <details><summary>Deckplan <span class="why">&mdash; general arrangement</span></summary><div>
+        <p class="cnote" style="font-size:12.5px;line-height:1.7">Forward, the <strong style="color:var(--accent);font-weight:500">disk</strong> &mdash; the Green Space, a hydroponic garden and the only part of the ship with a horizon. A short neck joins it to the main fuselage, which carries the bridge, staterooms, barracks, the medical bay and the low-berth banks, with the drive section aft. The <strong style="color:var(--accent);font-weight:500">subcraft dock</strong> is beneath the fuselage in the standard position for the class; the armoured pinnace rides a cradle on top of the hull. Full deckplan is held under separate cover.</p>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== COVER ==================== -->
+<section role="tabpanel" id="p-cover" aria-labelledby="t-cover" hidden>
+  <p class="kicker">Section 2 &bull; Cover and Concealment</p>
+  <h2>What she is pretending to be</h2>
+  <div class="rule"></div>
+
+  <p class="lead prose">For most of her service the <em>Astral Dawn</em> sailed as an Oberlindes Lines subsidised liner working the Caladbolg&ndash;Collace run, with a manifest of thirty souls hired through a discretionary fund and no questions asked.</p>
+
+  <p class="prose">That cover no longer holds in full. Following the Senate vote at Collace the vessel was <strong>publicly reclassified as an armed merchant operating under JSI patrol contract</strong>. She is now a ship that admits to carrying guns while declining to say how many, which is a materially different kind of lie and in several respects a more useful one.</p>
+
+  <div class="grid g3">
+    <div class="panel">
+      <p class="kicker">Concealment</p>
+      <p style="margin:0;font-size:15px;color:var(--muted)">Every mount is pop-up. Nothing protrudes until the order is given. The hull is adjustable at TL-15 and her external appearance can be altered between ports.</p>
+    </div>
+    <div class="panel">
+      <p class="kicker">Emissions</p>
+      <p style="margin:0;font-size:15px;color:var(--muted)">The absorption grid returns DM &minus;3 against detection. Armour was deliberately held at 1 &mdash; capital-grade plate registers as a density anomaly on any close scan.</p>
+    </div>
+    <div class="panel">
+      <p class="kicker">Stowage</p>
+      <p style="margin:0;font-size:15px;color:var(--muted)">A concealed compartment returns DM &minus;2 to sensors and &minus;4 to any physical investigation. Contents are not itemised in this document.</p>
+    </div>
+  </div>
+
+  <h2>The Potemkin village</h2>
+  <div class="rule"></div>
+
+  <p class="prose">Aft, near the launch bay, two staterooms are partitioned off from the rest of the ship by bulkhead and by access control. They are ordinary double-occupancy cabins &mdash; there is nothing special about them and normally the crew sleeps in them. Their purpose is that they can be emptied.</p>
+
+  <p class="prose">When the ship needs to look like what her papers say she is, she takes on <strong>paying travellers</strong>. They board, they are shown to staterooms, they are fed, and from inside that partition the vessel presents as an unremarkable liner. There are no indicators available to them that it is anything else. The section has been used in this way several times, and it defrays a great deal of suspicion for very little cost.</p>
+
+  <div class="note">
+    <p><strong>Currently berthed in the passenger section:</strong> Torin Sable and Dr.&nbsp;Meera Vasant, the designer and the implementer of the automated refuelling systems, professionally engaged for the Rift depot programme. How much either has been told about the ship they are riding is a command decision and is not recorded here.</p>
+  </div>
+
+  <h2>Known tells</h2>
+  <div class="rule"></div>
+
+  <div class="tablewrap">
+    <table>
+      <caption>What gives her away, and at what range</caption>
+      <thead><tr><th>Tell</th><th>Detectable at</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td class="sys">Hull coatings</td><td class="dsc">Close inspection, docking approach</td><td class="dsc">Four coatings is unusual on a freighter. Reflective plate changes the hull's optical properties visibly.</td></tr>
+        <tr><td class="sys">Military bridge</td><td class="dsc">Systems inspection, repair yard</td><td class="dsc">Not visible externally. Any thorough yard survey flags it.</td></tr>
+        <tr><td class="sys">Passenger capacity</td><td class="dsc">Manifest audit</td><td class="dsc">Two staterooms against a class that advertises forty-eight passages. The Potemkin section exists to blunt exactly this question.</td></tr>
+        <tr><td class="sys">The pinnace</td><td class="dsc">Visual, any range</td><td class="dsc">Reads as salvage. It <em>is</em> salvage &mdash; taken off pirates &mdash; which is why the story holds.</td></tr>
+        <tr><td class="sys">Fire Control/4</td><td class="dsc">Not externally detectable</td><td class="dsc">Software carries no external signature. The single best-concealed capability aboard.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== WEAPONRY ==================== -->
+<section role="tabpanel" id="p-weapons" aria-labelledby="t-weapons" hidden>
+  <p class="kicker">Section 3 &bull; Armament</p>
+  <h2>Six hardpoints, fully committed</h2>
+  <div class="rule"></div>
+
+  <p class="lead prose">The layered scheme is deliberate: sandcasters and pulse lasers hold the close envelope, advanced missiles reach out, and the two barbettes exist to end engagements rather than to trade in them.</p>
+
+  <div class="tablewrap">
+    <table>
+      <caption>Turrets &mdash; four triple mounts, all pop-up</caption>
+      <thead><tr><th>Mount</th><th>Role</th><th>Fit</th><th>Gunner</th></tr></thead>
+      <tbody>
+        <tr><td class="sys">Turret 1</td><td class="dsc">Mixed / defensive</td><td class="dsc">Pulse laser, 2 &times; sandcaster</td><td class="dsc">AG-3 &ldquo;Gamma&rdquo;</td></tr>
+        <tr><td class="sys">Turret 2</td><td class="dsc">Mixed / defensive</td><td class="dsc">Pulse laser, 2 &times; sandcaster</td><td class="dsc">AG-4 &ldquo;Delta&rdquo;</td></tr>
+        <tr><td class="sys">Turret 3</td><td class="dsc">Strike</td><td class="dsc">Pulse laser, sandcaster, advanced missile rack</td><td class="dsc">AG-5 &ldquo;Echo&rdquo;</td></tr>
+        <tr><td class="sys">Turret 4</td><td class="dsc">Strike</td><td class="dsc">Pulse laser, sandcaster, advanced missile rack</td><td class="dsc">AG-6 &ldquo;Foxtrot&rdquo;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="prose">Totals: <strong>four pulse lasers</strong> (TL-9, DM +2 to hit, 2D), <strong>six sandcasters</strong>, <strong>two advanced missile racks</strong>. Magazine: <strong>24 smart missiles</strong>.</p>
+
+  <div class="tablewrap">
+    <table>
+      <caption>Barbettes &mdash; the kill weapons</caption>
+      <thead><tr><th>Mount</th><th>Range</th><th class="num">Damage</th><th>Upgrades</th><th>Gunner</th></tr></thead>
+      <tbody>
+        <tr><td class="sys">Ion</td><td class="dsc">Medium</td><td class="num">7D &times;3</td><td class="dsc">High yield, long range</td><td class="dsc">Anemone Lindqvist (Gunner-2), AG-1 &ldquo;Alpha&rdquo;</td></tr>
+        <tr><td class="sys">Particle</td><td class="dsc">Very long</td><td class="num">4D &times;3</td><td class="dsc">High yield, intense focus</td><td class="dsc">Marina DeVeillter (Gunner-6), AG-2 &ldquo;Beta&rdquo;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="prose">The ion barbette drains power rather than breaching hull, and it ignores armour entirely; a solid hit strips a target's reserves and takes its systems offline for the round. The particle barbette carries a radiation effect and reaches further than anything the pack has ever brought against her.</p>
+
+  <div class="note">
+    <p><strong>Standing doctrine.</strong> The particle barbette is the primary kill weapon. Against a powered target the gunnery chief takes a called shot at the power plant &mdash; Gunner-6 plus Fire&nbsp;Control/4 less the called-shot penalty, and armour piercing from intense focus. Simulation puts a plant knockout at one to two rounds at medium range. A ship with no power is a prize; a ship blown apart is paperwork.</p>
+  </div>
+
+  <h2>Reach</h2>
+  <div class="rule"></div>
+  <p class="prose">Select a weapon to trace its envelope. The darkest cell is the band the weapon is designed to fight in.</p>
+
+  <div class="bands">
+    <div class="bandgrid" id="bandgrid">
+      <div></div>
+      <div class="hd">Adjacent</div><div class="hd">Close</div><div class="hd">Short</div><div class="hd">Medium</div><div class="hd">Long</div><div class="hd">Very long</div><div class="hd">Distant</div>
+    </div>
+  </div>
+
+  <h2>Fire control and the AI gunners</h2>
+  <div class="rule"></div>
+
+  <p class="prose">A Computer/25 running Fire&nbsp;Control/4 lays every weapon aboard. The ship's answer to a six-mount, twelve-weapon armament and a crew of five officers is that <strong>most of her guns are not crewed by people</strong>. <strong>Six AI gunnery units are installed, AG-1 through AG-6, of which four are normally crewed</strong> &mdash; one to each pop-up turret. The remaining two stand up on the barbettes when the gunnery chief and her assistant are not holding those mounts in person.</p>
+
+  <p class="prose"><strong>AG-3, &ldquo;Gamma&rdquo;</strong>, is the most articulate of the six and speaks for the others. Gamma has a documented hesitation quirk &mdash; a measurable pause before firing on a civilian silhouette, learned from a friendly-fire incident aboard a previous installation. The quirk was flagged for correction during the refit. <strong>The crew elected to keep it.</strong></p>
+
+  <div class="redact">
+    <p><strong>Withheld capability.</strong> At Pagaton the commander fought the entire engagement without launching fighters. Six light fighters were aboard and were never seen. As of this report the surviving elements of the Blood Profit Pack are not believed to know they exist.</p>
+  </div>
+</section>
+
+<!-- ==================== SMALL CRAFT ==================== -->
+<section role="tabpanel" id="p-craft" aria-labelledby="t-craft" hidden>
+  <p class="kicker">Section 4 &bull; Embarked Craft</p>
+  <h2>What she carries</h2>
+  <div class="rule"></div>
+
+  <p class="lead prose">An auxiliary carrier on a 600-ton hull. Ninety-six tons of the ship is other ships.</p>
+
+  <div class="grid g2">
+    <div class="panel">
+      <p class="kicker">Strike</p>
+      <h3 style="margin-top:0">6 &times; Tlatl light fighter</h3>
+      <p style="font-size:15px;color:var(--muted);max-width:none">Ten tons each, missile-primary, standoff doctrine at extreme range. Sixty-six tons of internal hangar. Acquired piecemeal across three worlds during the refit period &mdash; two staged at Alenzar, two at Raschev, and two on Garoo that had been paid for and had to be argued loose.</p>
+      <p class="skills">6 &times; 10 t &bull; hangar 66 t &bull; 6 pilots</p>
+    </div>
+    <div class="panel">
+      <p class="kicker">Utility</p>
+      <h3 style="margin-top:0">Armed / armoured launch</h3>
+      <p style="font-size:15px;color:var(--muted);max-width:none">Twenty-four tons in a twenty-six-ton bay. The workhorse: boarding support, ship-to-shore, cargo runs, and the bulk of the wilderness refuelling burden.</p>
+      <p class="skills">24 t &bull; bay 26 t &bull; internal</p>
+    </div>
+    <div class="panel">
+      <p class="kicker">Salvage</p>
+      <h3 style="margin-top:0">Armoured pinnace</h3>
+      <p style="font-size:15px;color:var(--muted);max-width:none">Forty tons, taken off pirates and never repainted. She rides <strong>externally on docking clamps</strong>, which is why the ship reads as a scavenger rather than a warship. Diplomatic transport and secure shuttle when the occasion calls for it.</p>
+      <p class="skills">40 t &bull; external clamps &bull; 4 t of fittings</p>
+    </div>
+    <div class="panel">
+      <p class="kicker">Carried by the pinnace</p>
+      <h3 style="margin-top:0">G-carrier and fuel bladder</h3>
+      <p style="font-size:15px;color:var(--muted);max-width:none">An armoured ten-ton g-carrier for surface work, and a collapsible bladder rated to fifty tons carrying ten. The pinnace is itself a small logistics train.</p>
+      <p class="skills">10 t g-carrier &bull; 50 t bladder capacity</p>
+    </div>
+  </div>
+
+  <h2>Boarding suite</h2>
+  <div class="rule"></div>
+
+  <p class="prose">The <em>Astral Dawn</em> is fitted to take ships rather than sink them, and the marine complement exists to use it.</p>
+
+  <div class="tablewrap">
+    <table>
+      <caption>Prize and boarding equipment</caption>
+      <thead><tr><th>Fitting</th><th>Capability</th></tr></thead>
+      <tbody>
+        <tr><td class="sys">Breaching tube</td><td class="dsc">Hard entry through a hull under vacuum.</td></tr>
+        <tr><td class="sys">Docking clamp, &lt;30 t</td><td class="dsc">Small craft capture and carriage.</td></tr>
+        <tr><td class="sys">Docking clamp, &lt;100 t</td><td class="dsc">Currently occupied by the pinnace.</td></tr>
+        <tr><td class="sys">Forced linkage, TL-15</td><td class="dsc">DM +2 to establish a hard connection to an unwilling vessel.</td></tr>
+        <tr><td class="sys">Launch tubes &bull; recovery deck</td><td class="dsc">Fighter cycling.</td></tr>
+        <tr><td class="sys">Probe &bull; repair &bull; mining drones</td><td class="dsc">Five, five and ten units respectively. The mining drones have proved unexpectedly useful for wilderness operations.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <p><strong>Wilderness refuelling, on the record.</strong> At Pagaton the ship made fuel from the atmosphere of the gas giant Hescal &mdash; forty-eight hours, nine consecutive pinnace runs, followed by two days of deceleration before contact. The <em>Astral Dawn</em> does not need a starport, and every operation she has run since has assumed it.</p>
+  </div>
+</section>
+
+<!-- ==================== MEDICAL ==================== -->
+<section role="tabpanel" id="p-med" aria-labelledby="t-med" hidden>
+  <p class="kicker">Section 5 &bull; Medical Department</p>
+  <h2>The med bay</h2>
+  <div class="rule"></div>
+
+  <p class="lead prose">A five-patient medical bay returning <strong>DM +1 to Medic</strong>. On a warship of 600 tons that is generous, and it has been needed more than once.</p>
+
+  <div class="grid g3">
+    <div class="panel">
+      <p class="kicker">Medical Officer</p>
+      <h3 style="margin-top:0">Dr. Wellen Stova</h3>
+      <p style="font-size:15px;color:var(--muted);max-width:none">Forty-five. A Garoo refugee who fled the Health Police for reasons of conscience and was brought aboard by this crew, a fact she has never treated as settled. Gentle and exact. She keeps the garden in the Green Space.</p>
+      <p class="skills">Medic 3 &bull; Steward 2</p>
+    </div>
+    <div class="panel">
+      <p class="kicker">Assistant Medic</p>
+      <h3 style="margin-top:0">Vera Khaldun</h3>
+      <p style="font-size:15px;color:var(--muted);max-width:none">Married to the sensor officer; they share quarters 2/9. Calm and deliberate, with a habit of pausing before she answers. Strong-willed to a degree the department benefits from.</p>
+      <p class="skills">Assistant medic &bull; second pair of hands in surgery</p>
+    </div>
+    <div class="panel">
+      <p class="kicker">Ancillary</p>
+      <h3 style="margin-top:0">Mr. Breck-92</h3>
+      <p style="font-size:15px;color:var(--muted);max-width:none">The steward droid holds Medic&nbsp;0 &mdash; competent to monitor, fetch, and hold a patient still. Not a surgeon, and does not claim to be.</p>
+      <p class="skills">Medic 0 &bull; Steward 2 &bull; Cooking 3</p>
+    </div>
+  </div>
+
+  <h2>Low berths &mdash; twenty-four</h2>
+  <div class="rule"></div>
+
+  <p class="prose">Six banks of four. Sixteen berths are configured for <strong>emergency medical</strong> use &mdash; casualty stasis, holding a patient the bay cannot yet treat &mdash; and eight are standard. This is a substantial cold-storage capacity for a hull this size, and it is not decorative: it is what lets the ship take prisoners in quantity, and what lets it hold dying people until there is somewhere to put them.</p>
+
+  <div class="banks" id="banks"></div>
+
+  <div class="legend">
+    <span><i class="swatch med"></i> Emergency medical &mdash; 16 berths, 4 banks</span>
+    <span><i class="swatch"></i> Standard &mdash; 8 berths, 2 banks</span>
+  </div>
+
+  <h2>Casualty record</h2>
+  <div class="rule"></div>
+
+  <div class="tablewrap">
+    <table>
+      <caption>Significant medical events, current commission</caption>
+      <thead><tr><th>Event</th><th>Outcome</th></tr></thead>
+      <tbody>
+        <tr><td class="sys">Drogue Belt boarding</td><td class="dsc"><strong>Park killed in action.</strong> O'Brien critically wounded and revived. The marine commander seriously wounded. The bay held all three.</td></tr>
+        <tr><td class="sys">Binges &mdash; hostage revival</td><td class="dsc">Four captives recovered from failing pirate low berths, roughly twenty-four hours from death when the marines reached them. All four were brought back in this med bay.</td></tr>
+        <tr><td class="sys">Prisoner handling</td><td class="dsc">Following Pagaton the ship processed prisoners in numbers no 600-ton hull is designed for. Cold storage was the reason it was possible at all.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <p>Four strangers opened their eyes in the med bay of the <em>Astral Dawn</em>: people stolen from their lives by pirates, frozen, and carried across the stars as cargo. One of them was an Aslan nobleman who swore a life-debt to the marine commander on the strength of it.</p>
+  </div>
+</section>
+
+<!-- ==================== CREW ==================== -->
+<section role="tabpanel" id="p-crew" aria-labelledby="t-crew" hidden>
+  <p class="kicker">Section 6 &bull; Ship's Company</p>
+  <h2>Manifest</h2>
+  <div class="rule"></div>
+
+  <p class="lead prose">Five officers, six fighter pilots, six marines, a medical department of two, robots, and six gunnery intelligences. The papers say thirty souls. The papers are approximately honest.</p>
+
+  <div class="filters" id="filters" role="group" aria-label="Filter manifest by department"></div>
+  <div class="crewgrid" id="crewgrid"></div>
+
+  <h2>Stateroom allocation</h2>
+  <div class="rule"></div>
+
+  <div class="tablewrap">
+    <table>
+      <caption>Eight double-occupancy staterooms</caption>
+      <thead><tr><th>Cabin</th><th>Occupant</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td class="sys">2/4</td><td class="dsc">Cdr. James Delleron</td><td class="dsc">Master.</td></tr>
+        <tr><td class="sys">2/5</td><td class="dsc">Marina DeVeillter</td><td class="dsc">Gunnery chief.</td></tr>
+        <tr><td class="sys">2/6</td><td class="dsc">Asao Ora</td><td class="dsc">Marine commander. Allocated as a shared cabin.</td></tr>
+        <tr><td class="sys">2/7</td><td class="dsc">Max Planck</td><td class="dsc">Chief engineer.</td></tr>
+        <tr><td class="sys">2/9</td><td class="dsc">Von Sydo and Vera Khaldun</td><td class="dsc">Married.</td></tr>
+        <tr><td class="sys">2/16</td><td class="dsc">Dr. Wellen Stova</td><td class="dsc">Medical officer.</td></tr>
+        <tr><td class="sys">2/19</td><td class="dsc">Jeri Tallux and Anemone Lindqvist</td><td class="dsc">Computer chief and assistant gunner.</td></tr>
+        <tr><td class="sys">Aft &times;2</td><td class="dsc">Torin Sable &bull; Dr. Meera Vasant</td><td class="dsc"><strong>The passenger section.</strong> Held empty when the ship needs to look like a liner.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <p><strong>Detached:</strong> Dr.&nbsp;Elara Holt is not aboard. She remains at Nyrthus at her own request as the sole occupant of the fuel point, indefinitely, in ongoing contact with whatever is answering from four thousand two hundred and seventy kilometres beneath her.</p>
+  </div>
+</section>
+
+<!-- ==================== HISTORY ==================== -->
+<section role="tabpanel" id="p-hist" aria-labelledby="t-hist" hidden>
+  <p class="kicker">Section 7 &bull; Service History</p>
+  <h2>A wreck that would not stay one</h2>
+  <div class="rule"></div>
+
+  <p class="lead prose">The <em>Astral Dawn</em> is the only vessel in District 268 service that began as a body recovery. Everything she is now was decided by people who went down to a quarantined world expecting to bring back the dead.</p>
+
+  <figure>
+    <svg class="fig" viewBox="0 0 960 150" role="img" aria-label="Route of the Astral Dawn from Gorram through Lunion, Gunn and Flammarion, then the maiden voyage through Caladbolg, Milagro, Forine, Pagaton, Binges, Talos, Collace, Arabus and Nyrthus to Bowman.">
+      <line x1="40" y1="74" x2="920" y2="74" stroke="currentColor" stroke-width="1" opacity=".28"></line>
+      <line x1="40" y1="74" x2="292" y2="74" stroke="var(--accent)" stroke-width="2.5" opacity=".55"></line>
+      <line x1="292" y1="74" x2="920" y2="74" stroke="var(--accent)" stroke-width="2.5"></line>
+      <text class="svgtext" x="40" y="30">ERA I &bull; THE SALVAGE</text>
+      <text class="svgtext acc" x="304" y="30">ERA II &bull; THE MAIDEN VOYAGE</text>
+      <line x1="292" y1="38" x2="292" y2="110" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" opacity=".4"></line>
+
+      <g><circle cx="40" cy="74" r="6" fill="var(--ground)" stroke="var(--accent)" stroke-width="2"></circle><text class="svgtext" x="40" y="98" text-anchor="middle">Gorram</text><text class="svgtext" x="40" y="112" text-anchor="middle" opacity=".45">wreck</text></g>
+      <g><circle cx="124" cy="74" r="5" fill="var(--ground)" stroke="currentColor" stroke-width="1.6"></circle><text class="svgtext" x="124" y="98" text-anchor="middle">Lunion</text></g>
+      <g><circle cx="208" cy="74" r="6" fill="var(--alert)" stroke="var(--alert)" stroke-width="2"></circle><text class="svgtext" x="208" y="98" text-anchor="middle">Gunn</text><text class="svgtext" x="208" y="112" text-anchor="middle" opacity=".45">nuclear</text></g>
+      <g><circle cx="292" cy="74" r="7" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"></circle><text class="svgtext acc" x="292" y="98" text-anchor="middle">Flammarion</text><text class="svgtext" x="292" y="112" text-anchor="middle" opacity=".45">renamed</text></g>
+      <g><circle cx="374" cy="74" r="5" fill="var(--ground)" stroke="currentColor" stroke-width="1.6"></circle><text class="svgtext" x="374" y="98" text-anchor="middle">Caladbolg</text></g>
+      <g><circle cx="452" cy="74" r="5" fill="var(--ground)" stroke="currentColor" stroke-width="1.6"></circle><text class="svgtext" x="452" y="98" text-anchor="middle">Milagro</text></g>
+      <g><circle cx="524" cy="74" r="5" fill="var(--ground)" stroke="currentColor" stroke-width="1.6"></circle><text class="svgtext" x="524" y="98" text-anchor="middle">Forine</text></g>
+      <g><circle cx="600" cy="74" r="7" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"></circle><text class="svgtext acc" x="600" y="98" text-anchor="middle">Pagaton</text><text class="svgtext" x="600" y="112" text-anchor="middle" opacity=".45">first blood</text></g>
+      <g><circle cx="672" cy="74" r="5" fill="var(--ground)" stroke="currentColor" stroke-width="1.6"></circle><text class="svgtext" x="672" y="98" text-anchor="middle">Binges</text></g>
+      <g><circle cx="734" cy="74" r="5" fill="var(--ground)" stroke="currentColor" stroke-width="1.6"></circle><text class="svgtext" x="734" y="98" text-anchor="middle">Talos</text></g>
+      <g><circle cx="796" cy="74" r="6" fill="var(--ground)" stroke="var(--accent)" stroke-width="2"></circle><text class="svgtext" x="796" y="98" text-anchor="middle">Collace</text><text class="svgtext" x="796" y="112" text-anchor="middle" opacity=".45">arrest</text></g>
+      <g><circle cx="858" cy="74" r="5" fill="var(--ground)" stroke="currentColor" stroke-width="1.6"></circle><text class="svgtext" x="858" y="98" text-anchor="middle">Nyrthus</text></g>
+      <g><circle cx="920" cy="74" r="7" fill="var(--ground)" stroke="var(--accent)" stroke-width="2.5"></circle><text class="svgtext acc" x="920" y="98" text-anchor="middle">Bowman</text><text class="svgtext" x="920" y="112" text-anchor="middle" opacity=".45">inbound</text></g>
+    </svg>
+    <figcaption>The voyage. Everything left of the dashed line happened to a ship called <em>Amishi</em>; everything right of it happened to the <em>Astral Dawn</em>. Intermediate stops omitted. Bowman is 256 days from the handover.</figcaption>
+  </figure>
+
+  <div class="scrub">
+    <div class="row">
+      <label for="scrubber">Scrub the voyage</label>
+      <input type="range" id="scrubber" min="0" max="14" value="0" step="1"
+             aria-label="Scrub through the service history; moving the slider scrolls to that event">
+    </div>
+    <div class="read">
+      <span class="w" id="scrub-when"></span>
+      <span class="t" id="scrub-what"></span>
+    </div>
+  </div>
+
+  <div class="tl" id="timeline"></div>
+</section>
+
+<footer class="foot">
+  <p><strong>ISS Astral Dawn</strong> &bull; JSI/D268/VD-0114 &bull; compiled Day 288 of 1105 Imperial. Prepared for District 268 Command from ship's records, prize-court filings, yard certification papers and after-action reports.</p>
+  <p style="margin-top:10px;color:var(--dim)">Onward distribution requires the authority of the District 268 political officer. This document does not itemise the contents of the concealed compartment, the disposition of the J-4 Override programme, or any matter held under separate cover.</p>
+</footer>
+
+</div>
+
+<div class="classbar">End of Document &bull; Classified &mdash; JSI Restricted</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- TABS ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('nav.tabs button'));
+  var panels = tabs.map(function(t){ return document.getElementById(t.getAttribute('aria-controls')); });
+
+  function show(i, store){
+    tabs.forEach(function(t,n){
+      t.setAttribute('aria-selected', n===i ? 'true' : 'false');
+      panels[n].hidden = n!==i;
+    });
+    if(store){ try{ localStorage.setItem('ad-tab', String(i)); }catch(e){} }
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click', function(){ show(i,true); });
+    t.addEventListener('keydown', function(e){
+      var d = e.key==='ArrowRight' ? 1 : e.key==='ArrowLeft' ? -1 : 0;
+      if(!d) return;
+      e.preventDefault();
+      var n = (i+d+tabs.length)%tabs.length;
+      tabs[n].focus(); show(n,true);
+    });
+  });
+  var start = 0;
+  try{ var s = localStorage.getItem('ad-tab'); if(s!==null && tabs[+s]) start = +s; }catch(e){}
+  show(start,false);
+
+  /* ---------- CRITICAL HIT TRACK (read-only) ---------- */
+  var LOCATIONS = ['Sensors','Power Plant','Fuel','Weapon','Armour','Hull',
+                   'M-Drive','Cargo','J-Drive','Crew','Bridge'];
+  var cg = document.getElementById('critgrid');
+  LOCATIONS.forEach(function(loc){
+    var l = document.createElement('div'); l.className='cl'; l.textContent=loc; cg.appendChild(l);
+    var pips = document.createElement('div'); pips.className='pips';
+    for(var i=0;i<6;i++){ var p=document.createElement('span'); p.className='pip'; pips.appendChild(p); }
+    cg.appendChild(pips);
+    var b = document.createElement('div'); b.className='band'; b.textContent='Functional'; cg.appendChild(b);
+  });
+
+  /* ---------- RANGE BANDS ---------- */
+  var BANDS = ['Adjacent','Close','Short','Medium','Long','Very long','Distant'];
+  var WEAPONS = [
+    {n:'Pulse laser',      on:[1,1,1,1,1,0,0], best:3},
+    {n:'Sandcaster',       on:[1,1,1,0,0,0,0], best:1},
+    {n:'Advanced missile', on:[0,1,1,1,1,1,1], best:5},
+    {n:'Ion barbette',     on:[1,1,1,1,0,0,0], best:3},
+    {n:'Particle barbette',on:[0,1,1,1,1,1,0], best:5}
+  ];
+  var bg = document.getElementById('bandgrid');
+  WEAPONS.forEach(function(w){
+    var nm = document.createElement('div');
+    nm.className = 'wname'; nm.textContent = w.n;
+    bg.appendChild(nm);
+    w.on.forEach(function(v,i){
+      var c = document.createElement('div');
+      c.className = 'cell' + (v ? (i===w.best ? ' best' : ' on') : '');
+      c.title = w.n + ' — ' + BANDS[i] + (v ? (i===w.best ? ' (optimum)' : '') : ' — out of envelope');
+      bg.appendChild(c);
+    });
+  });
+
+  /* ---------- LOW BERTH BANKS ---------- */
+  var banks = document.getElementById('banks');
+  for(var b=0;b<6;b++){
+    var med = b<4;
+    var d = document.createElement('div'); d.className='bank';
+    var lab = document.createElement('p'); lab.className='bk';
+    lab.textContent = 'Bank ' + (b+1) + ' — ' + (med ? 'emergency medical' : 'standard');
+    d.appendChild(lab);
+    var cells = document.createElement('div'); cells.className='cells';
+    for(var c=0;c<4;c++){
+      var cell = document.createElement('div');
+      cell.className = 'berth' + (med ? ' med' : '');
+      cell.textContent = (b*4+c+1);
+      cells.appendChild(cell);
+    }
+    d.appendChild(cells); banks.appendChild(d);
+  }
+
+  /* ---------- CREW MANIFEST ---------- */
+  var CREW = [
+    {d:'Command', k:1, n:'Cdr. James Delleron', r:'Master', s:'Admin 1 • Leader 1 • Astrogation 1 • J-3 relief engineer', b:'Darrian ancestry. Strategic, unhurried, and almost impossible to provoke. Commands the vessel; to civilians he is simply a merchant captain. Withheld the fighters at Pagaton and won the engagement without them.'},
+    {d:'Command', k:1, n:'Marina DeVeillter', r:'Gunnery Chief', s:'Gunnery 6 • Remote Ops • Diplomat • Deception • Leadership', b:'Late of the 73rd Rachev Coastal Defence. Holds the particle barbette personally and commands the gunnery intelligences and her assistant. A TL-15 sensors expert by training, and the ship’s lead diplomat and social specialist by temperament — she is the one sent to talk first.'},
+    {d:'Command', k:1, n:'Asao Ora', r:'Marine Commander', s:'Melee • Leadership • Tactics', b:'Aslan; fur and mane fully restored. Was framed for an assassination on Garoo and carried the warrant for the better part of a campaign before the evidence was transmitted and the charges withdrawn. Leads every boarding action personally, and has been carried out of one.'},
+    {d:'Command', k:1, n:'Max Planck', r:'Chief Engineer', s:'Engineer 2 • J-drive 1 • M-drive 1 • Power 1 • Mechanic 1 • Electronics', b:'An academic before he was a ship’s engineer, and still one. Published on the Otarri; the papers are read further afield than he realises. Keeps the laboratory busy with work that is not always obviously ship’s business.'},
+    {d:'Command', k:1, n:'Von Sydo', r:'Sensor Officer', s:'Electronics (sensors) • ECM 2 • Pilot SC-1 • Astrogation 1 • Computer 1', b:'Quiet and observant; runs the sensor and electronic-warfare picture and stands relief at half the other stations aboard. Married to the assistant medic. It is his board that decides whether the ship sees the other fellow first, which on this vessel is most of the tactical problem.'},
+    {d:'Gunnery', n:'Anemone Lindqvist', r:'Assistant Gunner • 2nd Lt.', s:'Gunner 2 • Athletics (swim) 2', b:'Eighteen, from Raschev. Eldest of three daughters; her father died and she sends her pay home to her mother. Holds the ion barbette. Hero-worships the gunnery chief, who is protective of her in return. Froze on a turret during a drill early in the voyage and has not since.'},
+    {d:'Gunnery', synth:1, n:'AG-3 “Gamma”', r:'Turret 1 • Speaker', s:'Gunnery intelligence', b:'The most articulate of the six and the voice of all of them. Pauses measurably before firing on a civilian silhouette — learned from a friendly-fire incident aboard a previous installation. The refit offered to correct it. The crew said no.'},
+    {d:'Gunnery', synth:1, n:'AG-4 • AG-5 • AG-6', r:'Turrets 2, 3, 4', s:'Delta • Echo • Foxtrot', b:'With Gamma these are the four units normally crewed — one to each pop-up turret. Fire Control/4 lays for all of them, which is how a ship with five officers fights twelve weapons.'},
+    {d:'Gunnery', synth:1, n:'AG-1 “Alpha” • AG-2 “Beta”', r:'Barbette gunners — reserve', s:'Ion • Particle', b:'The two remaining units of the six. The barbettes are normally taken in person by the gunnery chief and her assistant; Alpha and Beta stand up when they are not on the mounts.'},
+    {d:'Flight', n:'Dex Morain “Hardpoint”', r:'Ship’s Pilot', s:'Pilot • promoted from fighters', b:'Thirty-four, from Glisten. Ex-bounty hunter, professional and quiet. Moved from the fighter roster to the ship’s helm.'},
+    {d:'Flight', n:'Chen Weyland “Brick”', r:'Fighter Pilot, PO', s:'From Collace', b:'Forty-one. Pirates took his previous ship. Carries a vendetta and does not pretend otherwise.'},
+    {d:'Flight', n:'Yuki Tanaka “Whisper”', r:'Fighter Pilot, Ens.', s:'Academy trained • from Mora', b:'Twenty-six, quiet and professional. A former academy rival now flies for the Blood Profit Pack, a fact she has volunteered and nobody has raised since.'},
+    {d:'Flight', n:'Petra Valis “Ghost”', r:'Fighter Pilot, Ens.', s:'From Forine', b:'Twenty-three. Her parents believe she works a freight crew. Homesick, and increasingly uncomfortable with the deception.'},
+    {d:'Flight', n:'Ravi Sharma “Dice”', r:'Fighter Pilot, Ens.', s:'From Mertactor', b:'Twenty-five. Gambling debts and the wrong sort of creditor. A risk-taker in the cockpit as well.'},
+    {d:'Flight', n:'Marcus DuBois “Preacher”', r:'Fighter Pilot, PO', s:'From Trexalon', b:'Thirty-eight. Running from the outworlds. His past is his own and has so far stayed that way.'},
+    {d:'Marines', n:'Sgt. Tomas Reyes', r:'Senior NCO', s:'Boarding • small unit tactics', b:'Thirty-six. Recruited personally by the marine commander, with whom he served before Garoo. One of the few who knew the charges were false and vouched for him. Translates between Aslan honour-culture and human military norms, daily.'},
+    {d:'Marines', n:'Cpl. Lise Henriksen', r:'Fire Team Alpha', s:'Marksmanship', b:'Twenty-eight, Raschev native. The best shot in the unit.'},
+    {d:'Marines', n:'Cpl. Jin Woo-Park', r:'Fire Team Bravo', s:'Breaching', b:'Thirty-one. Former corporate security; the breaching specialist. Where the tube goes, he goes first.'},
+    {d:'Marines', n:'Pvt. Kowalski', r:'Marine', s:'—', b:'Too honest to hold a cover story; three attempts at conditioning were abandoned. Stays aboard during shore leave. The crew are fond of him in a way that is not entirely comfortable.'},
+    {d:'Medical', n:'Dr. Wellen Stova', r:'Medical Officer', s:'Medic 3 • Steward 2', b:'Forty-five, Garoo refugee. Fled the Health Police for reasons of conscience. Gentle and precise; keeps the garden in the Green Space.'},
+    {d:'Medical', n:'Vera Khaldun', r:'Assistant Medic', s:'Assistant medic', b:'Married to the sensor officer. Calm, deliberate, pauses before answering. The second pair of hands in surgery.'},
+    {d:'Technical', n:'Jeri Tallux', r:'Computer Chief', s:'Computer 4 • Gunner 0', b:'Twenty-seven. Signed as temporary crew, then manned a destroyed turret in vacuum during a pirate attack and scored a hit with Gunner-0. Negotiated a twenty per cent raise before accepting the permanent post. Her patrol-pattern analysis identified the naval leak.'},
+    {d:'Technical', n:'Ambassador Cassian Holt', r:'Senior JSI Political Officer', s:'Advocate • diplomacy', b:'Former Imperial Ambassador to Collace, five years, now the diplomatic lead for District 268 integration. Filed the Imperial complaint that broke the Collace detention. Has declined to disembark at any convenient port; he stays for the difficult ones.'},
+    {d:'Technical', n:'Torin Sable', r:'ARS Lead Engineer • embarked', s:'Autonomous refuelling systems', b:'Thirties. Designed the automated refuelling systems and is obsessive about them; they are his professional reputation. Confident in the technology, nervous about everything around it. Berthed in the passenger section.'},
+    {d:'Technical', n:'Dr. Meera Vasant', r:'ARS Systems Integration • embarked', s:'Harsh-environment deployment', b:'Forties. Former navy technician; decides which asteroids, and how to programme drones around a radiation zone. The steady hand to Sable’s nerves — if a unit has to be sacrificed for data she will make the call he cannot. Berthed in the passenger section.'},
+    {d:'Robots', synth:1, n:'Mr. Breck-92', r:'Steward', s:'Steward 2 • Cooking 3 • Medic 0', b:'Found working a taco stand in a slum by the gunnery chief, who bought him, repaired his damaged steward circuits and upgraded his cooking. Once a chef at a well-known restaurant, badly mistreated and sold down. Answers to Niner-Two and to Rusty.'},
+    {d:'Robots', synth:1, n:'Eddie ED-7', r:'Engineering Droid', s:'Engineer (all) 1 • Mechanic 1 • Electronics 1', b:'Standard TL-15 engineering unit. Endurance 194 hours. Collects tools and asks permission to keep them. His previous ship was destroyed.'},
+    {d:'Robots', synth:1, n:'Braise BR-4', r:'Chef', s:'Cooking', b:'Chef robot. Joined at Binges. The wardroom has noticed the difference and says so.'},
+    {d:'Robots', synth:1, n:'Kai Ren KR-7', r:'Personal Assistant • Bodyguard', s:'Combat-rated • hardened against intrusion', b:'Near-human. Carries a stunner and a gyrojet pistol and prefers the minimum force that ends the matter. Formal with the commander in public, considerably less so in private.'}
+  ];
+
+  var DEPTS = ['All','Command','Gunnery','Flight','Marines','Medical','Technical','Robots'];
+  var filters = document.getElementById('filters');
+  var grid = document.getElementById('crewgrid');
+
+  function render(dept){
+    grid.innerHTML = '';
+    CREW.filter(function(c){ return dept==='All' || c.d===dept; }).forEach(function(c){
+      var el = document.createElement('article');
+      el.className = 'pc' + (c.k ? ' key' : '') + (c.synth ? ' synth' : '');
+      var h = document.createElement('h4'); h.textContent = c.n; el.appendChild(h);
+      var r = document.createElement('p'); r.className='role'; r.textContent = c.r; el.appendChild(r);
+      var b = document.createElement('p'); b.className='bio'; b.textContent = c.b; el.appendChild(b);
+      if(c.s){ var s = document.createElement('p'); s.className='skills'; s.textContent = c.s; el.appendChild(s); }
+      grid.appendChild(el);
+    });
+  }
+  DEPTS.forEach(function(d,i){
+    var btn = document.createElement('button');
+    btn.className='chip'; btn.textContent=d; btn.setAttribute('aria-pressed', i===0?'true':'false');
+    btn.addEventListener('click', function(){
+      Array.prototype.forEach.call(filters.children, function(x){ x.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      render(d);
+    });
+    filters.appendChild(btn);
+  });
+  render('All');
+
+  /* ---------- TIMELINE ---------- */
+  var EVENTS = [
+    {w:'Era I • Gorram', major:1, t:'The crash of the Amishi',
+     h:'A 600-ton subsidised liner comes down on an interdicted world.',
+     p:['The world of <strong>Gorram</strong> had been interdicted for about a century — Mora University had it quarantined to study the conveniently-near primitives — and nothing was supposed to go down there at all.',
+        'The <em>Amishi</em> did. She came down on a partly submerged rocky crag, saved at the last by an emergency autopilot that used her own gravitics to cushion the impact. <strong>Eight of the thirteen people aboard survived.</strong>']},
+    {w:'Era I • Gorram', major:1, t:'The salvage that became a crew',
+     h:'A JSI team working undercover as Search &amp; Rescue.',
+     p:['The salvage team were on Gorram under quasi-official cover as <strong>Search &amp; Rescue operatives for Gorram Station</strong>, well qualified for the work and genuinely doing it, while really there to strip the wrecks. They rescued every survivor of the <em>Amishi</em> — crew, passengers and criminals alike, without distinction.',
+        'Then they repaired the wreck just enough to get her off a world pulling 0.51 gees: a tow from the 400-ton rescue vessel, JSI gravitic lifters, and a fifty-year ballistic arc into orbit around the gas giant. The contemporary assessment was that it <strong>&ldquo;barely worked&rdquo;</strong>.',
+        'Leaving Gorram, the paid crew of the rescue ship quit their jobs and threw in with the salvage team. That is the moment this crew became a crew, and the ship they had just pulled off a quarantined rock became theirs.']},
+    {w:'Era I • Lunion', t:'Repairs, and four things hidden from the Navy',
+     h:'The Imperial yard fixes the ship while the crew hide the salvage.',
+     p:['The <em>Amishi</em> limped into <strong>Lunion</strong>. The astrogator brought her out well outside every gravity well first, so that a salvaged pirate craft — and the <strong>four nuclear devices</strong> aboard it — could be stashed on a distant rock in the Oort cloud.',
+        'So while the Imperial Naval Shipyard repaired their ship, the crew were concurrently hiding illegal salvaged nuclear ordnance from the Imperial Navy. The yard commander was sympathetic but poor: he would patch her up just enough to reach <strong>Flammarion</strong>, where the base commander had a larger discretionary budget.']},
+    {w:'Era I • Gunn', major:1, t:'The Briyark — the desperate one',
+     h:'A Vargr corsair tries to take a crippled ship. A nuclear device answers.',
+     p:['In the Yellow Zone at <strong>Gunn</strong>, en route to Flammarion with reinforcements aboard and instructions to make six jumps without mishap, the Vargr pirate corvette <strong><em>Briyark</em></strong> attempted to capture her.',
+        'The <em>Amishi</em> was in no condition for it. <strong>Her jump drive was disabled and her manoeuvre drives badly damaged.</strong> Krrsh was killed by naval gunfire. Chance Dax, flying the <em>Dagger</em>, held one nuclear missile and the go/no-go on it.',
+        '<strong>The device was used.</strong> The ship survived. This is the engagement that everything afterwards was built to avoid ever repeating — and it is the reason the vessel that came out of Flammarion carries a barbette that can strip a raider’s power plant before it closes to boarding range.']},
+    {w:'Era I • Flammarion', major:1, t:'Drydock — and a new name',
+     h:'The Q-ship rebuild. Support from top brass, and a large budget.',
+     p:['At <strong>Flammarion Naval Shipyard</strong> the wreck went into drydock for a full Q-ship auxiliary-carrier rebuild, outfitted to top-line naval standards on a budget secured by senior Imperial Navy patronage.',
+        'The work ran for months, during which the crew were elsewhere entirely — through the Chamax outbreak, through the Horde war on Raschev, through the Garoo Health Police affair, and out of contact for so long that JSI HQ contemplated sending a search party. Six Tlatl light fighters were bought piecemeal across three worlds in the same period.',
+        'The yard’s own note on the project was the shortest entry in the file: <strong>&ldquo;She needs a new name.&rdquo;</strong>']},
+    {w:'Day 032 / 1105 • Flammarion', major:1, t:'The handover',
+     h:'Secure Berth 7. The ISS Amishi becomes the ISS Astral Dawn.',
+     p:['A Navy commander handed over a datapad at <strong>Secure Berth 7</strong>. Officially registered as a subsidised liner making the Caladbolg–Collace run; crew manifest thirty souls, mostly hired through a discretionary fund, no questions asked. Provisioned for three months. Weapons cold but tested.',
+        'The ship sat in a military berth still wearing her civilian merchant colours. Three days of shakedown followed, including the JSI asteroid base — an obsolete relic donated by a Flammarion noble as a tax credit and since put to use.',
+        'Then she left, and has not been home since.']},
+    {w:'Era II • Faldor, Caladbolg', t:'Laying the bait',
+     h:'Anagathics bought openly, and a rumour placed where pirates read.',
+     p:['At <strong>Faldor</strong> the chief engineer collected mineral samples the swamp-dwelling Otarri had been gathering for four months against a pre-payment of cash and metal tools. He paid a bonus and parted well.',
+        'At <strong>Caladbolg</strong> — JSI’s actual headquarters — the ship bought illegal <strong>anagathics</strong> and planted the information deliberately: a fat merchant, a valuable cargo, a rimward heading, placed with a broker so the rumour would reach pirate data feeds.',
+        'She undocked broadcasting as a civilian liner. Sheep’s clothing, and a cargo worth stealing.']},
+    {w:'Era II • Milagro, Forine', t:'The paper trail',
+     h:'A customs near-disaster, and a Syndicate that owns a shipping line.',
+     p:['<strong>Milagro</strong> nearly went badly at customs. Barrister Chen was retained; shore leave followed, and the Crystal Houses.',
+        'At <strong>Forine</strong> — Drakon Syndicate headquarters — the arrival scan turned up five or more suspicious contacts before the ship had finished decelerating. She refuelled off a comet, and the investigation surfaced the shape of the thing: not a pirate gang but a corporation with political cover, money and patience, running economic warfare across District 268.']},
+    {w:'Day 137 / 1105 • Pagaton', major:1, t:'First Blood at the Drogue Belt',
+     h:'Six hundred tons of Q-ship destroy nine hundred tons of pirate fleet.',
+     p:['She emerged at the gas giant <strong>Hescal</strong> and spent forty-eight hours making her own fuel across nine consecutive pinnace runs, then two days decelerating toward the <strong>Drogue Belt</strong>.',
+        'What followed was the engagement the whole rebuild had been for. <strong>Six hundred tons of Q-ship destroyed nine hundred tons of the Blood Profit Pack’s fleet.</strong> One corsair was taken as a prize and renamed. The commander fought the entire action <strong>without launching a single fighter</strong>, and the survivors still do not know the fighters exist.',
+        'The boarding action came next and was not cheap: <strong>Park was killed</strong>, O’Brien critically wounded and revived, and the marine commander seriously wounded. Prizes were surrendered to JSI under Letter of Marque with a vesting scheme; the crew took cash shares, not hulls.',
+        'Prisoner interrogation gave up the thing nobody had guessed — the pack’s base is a <strong>thousand-ton portable station</strong> with no jump drive and barely any manoeuvre drive, moved from world to world by a jump tug. Their base is entirely mobile. That is the point of it.']},
+    {w:'Era II • Binges', major:1, t:'The nuke beneath the deck',
+     h:'A hundred kilotons in a prize hull, armed to trigger on port power.',
+     p:['At Binges highport a <strong>hundred-kiloton geofenced device</strong> was found in the drive spaces of the captured corsair, rigged to arm the moment the ship connected to port power. A live nuclear weapon, in a crowded highport, inside a prize the crew had brought in themselves.',
+        '<strong>It was stopped in about seven minutes.</strong> The human bureaucracy took three days to notice it had happened.',
+        'Four hostages were also woken out of the pirates’ own low berths — twenty-four hours from death when the marines reached them. Among them was the Aslan nobleman <strong>Ekuah Ataoh</strong>, who swore <em>fteirle</em>, a life-debt, to the marine commander.']},
+    {w:'Era II • Talos', t:'The warrant withdrawn',
+     h:'The Health Police holdout is confronted with his own evidence.',
+     p:['<strong>Agent Thale</strong> had pursued the marine commander since the Garoo affair, across two eras of this crew’s history, on charges everyone aboard knew to be manufactured.',
+        'At Talos the evidence was simply transmitted to him. <strong>His own science officer verified it.</strong> The warrants were withdrawn. The charges are not fully resolved even now, but the pursuit ended there — and the two halves of the crew’s history joined up.']},
+    {w:'Era II • Collace', major:1, t:'Arrested for being right',
+     h:'They named the sponsor of District 268 piracy, and were jailed for it.',
+     p:['At <strong>Collace</strong> the crew laid out a convergence of three independent sources — captured pirate records, intelligence from a JSI analyst, and an access obtained by trade — which together showed a <strong>Sword Worlds megacorporation fronting for Sword Worlds military intelligence</strong>, probably with Zhodani assistance, sponsoring piracy across District 268 to weaken the Imperium.',
+        'They were jailed for saying so. An Imperial complaint was filed, testimony was coached, and time was bought.',
+        'What actually freed them was not legal at all. The <em>Heroes of Raschev</em> vids — made from a ceremony on a backwater client world during Era I — had reached Collace about a year earlier. The crowd outside the Senate Plaza grew from two hundred to <strong>more than ten thousand</strong>, chanting <strong>&ldquo;WHO ARRESTS THEIR OWN HEROES?&rdquo;</strong> The Senate voted, the crew walked, and the ship was publicly reclassified as an armed merchant under JSI patrol contract.',
+        'A reputation earned years earlier, on a world nobody important cared about, is what broke a political detention.']},
+    {w:'Era II • Arabus, Nyrthus', major:1, t:'Across the Rift',
+     h:'A fuel point built where there was nothing, and something answering.',
+     p:['At <strong>Arabus</strong> the ship recovered Lt. Sandoval’s probe along with her final logs, and established that the planet’s magnetosphere is inhabited. The system was conceded for the present and a second unit reassigned to orbital storage.',
+        'At <strong>Nyrthus</strong> the crew did the thing the whole voyage had been building toward: they <strong>built a fuel point where none existed</strong>. Automated refuelling deployed and producing, a second unit parked in geosynchronous orbit as reserve, and the Arabus battle damage repaired alongside.',
+        'And a signal. A 104.0-second pulse was answered at <strong>104.2 seconds, from 4,270 kilometres down.</strong> It tracked the transmitter when the transmitter moved ten kilometres. It returned &ldquo;shave and a haircut&rdquo; with a variation nobody had sent. Dr. Elara Holt detached at her own request to stay with it, sole occupant, indefinitely.']},
+    {w:'Day 288 / 1105 • Present', major:1, t:'Inbound to Bowman',
+     h:'256 days out. A J-3 route that did not exist a year ago.',
+     p:['The <em>Astral Dawn</em> is presently <strong>in jumpspace, Jump-3 across the Rift, inbound to Bowman (1132)</strong>. Two hundred and fifty-six days — about eight and a half months — since the handover at Flammarion.',
+        'The route exists only because this crew built the Nyrthus fuel point. It was constructed as commercial logistics: make independent shipping viable in District 268, and piracy stops paying. Nobody designed it as anything else.',
+        'The marine commander was the first to point out what it also is. <strong>The pirate hulls of District 268 are Jump-1 and Jump-2.</strong> They cannot use this road at all.']}
+  ];
+
+  var tl = document.getElementById('timeline');
+  EVENTS.forEach(function(ev,i){
+    var wrap = document.createElement('div');
+    wrap.className = 'ev' + (ev.major ? ' major' : '');
+    wrap.setAttribute('data-open','false');
+
+    var btn = document.createElement('button');
+    btn.setAttribute('aria-expanded','false');
+    btn.innerHTML = '<span class="when">'+ev.w+'</span><span class="what">'+ev.t+'</span><span class="hint">'+ev.h+'</span>';
+
+    var body = document.createElement('div');
+    body.className = 'body';
+    var inner = document.createElement('div');
+    inner.className = 'inner';
+    inner.innerHTML = ev.p.map(function(x){ return '<p>'+x+'</p>'; }).join('');
+    body.appendChild(inner);
+
+    btn.addEventListener('click', function(){
+      var open = wrap.getAttribute('data-open')==='true';
+      wrap.setAttribute('data-open', open ? 'false' : 'true');
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+
+    wrap.appendChild(btn); wrap.appendChild(body); tl.appendChild(wrap);
+  });
+
+  /* ---------- HISTORY SCRUBBER ---------- */
+  var slider = document.getElementById('scrubber');
+  var readW = document.getElementById('scrub-when');
+  var readT = document.getElementById('scrub-what');
+  var evs = Array.prototype.slice.call(tl.querySelectorAll('.ev'));
+  slider.max = String(EVENTS.length - 1);
+
+  var reduce = false;
+  try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+
+  function cue(i, scroll){
+    var ev = EVENTS[i];
+    readW.textContent = ev.w;
+    readT.textContent = ev.t;
+    evs.forEach(function(el,n){
+      el.classList.toggle('cued', n===i);
+      var open = n===i;
+      el.setAttribute('data-open', open ? 'true' : 'false');
+      el.querySelector('button').setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    if(scroll){
+      var target = evs[i];
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 215;
+      window.scrollTo({top:top, behavior: reduce ? 'auto' : 'smooth'});
+    }
+  }
+  slider.addEventListener('input', function(){ cue(+slider.value, true); });
+  // clicking an entry directly keeps the slider in step
+  evs.forEach(function(el,n){
+    el.querySelector('button').addEventListener('click', function(){
+      slider.value = String(n);
+      readW.textContent = EVENTS[n].w;
+      readT.textContent = EVENTS[n].t;
+      evs.forEach(function(x,m){ x.classList.toggle('cued', m===n && x.getAttribute('data-open')==='true'); });
+    });
+  });
+  cue(0, false);
+})();
+</script>
+
+</body>
+</html>
