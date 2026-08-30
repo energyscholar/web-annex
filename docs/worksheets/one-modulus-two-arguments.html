@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Worksheet 1: one fusion ring, four modular tensor categories, and why the golden ratio alone cannot tell them apart.">
+<title>One Modulus, Two Arguments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* shared worksheet house style */
+:root{--bg:#0b1120;--bg-raise:#111a2e;--bg-sunk:#080d19;--ink:#dde5f2;--ink-soft:#97a6bf;--ink-faint:#6a7893;--rule:#1e2942;--rule-lit:#2c3a5c;--coral:#ef7a6d;--indigo:#7d93f0;--violet:#b98cf5;--amber:#e0b054}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;font-size:17px;line-height:1.68;-webkit-font-smoothing:antialiased}
+.rail{border-bottom:1px solid var(--rule);background:var(--bg-sunk);padding:12px 24px;display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.04em}
+.rail .series{color:var(--ink-faint);text-transform:uppercase;letter-spacing:.14em}
+.rail a{color:var(--ink-soft);text-decoration:none;border-bottom:1px solid transparent}
+.rail a:hover{color:var(--ink);border-bottom-color:var(--rule-lit)}
+.rail a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
+.rail .here{color:var(--violet)}
+.page{padding:0 24px 110px}
+.col{max-width:34em;margin:0 auto}
+.wide{max-width:50em;margin:38px auto}
+header.top{padding:76px 0 30px}
+.kicker{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin:0 0 20px}
+h1{font-family:Spectral,Georgia,serif;font-weight:600;font-size:clamp(2.3rem,5.5vw,3.4rem);line-height:1.06;letter-spacing:-.015em;margin:0 0 20px;text-wrap:balance}
+.dek{font-family:Spectral,Georgia,serif;font-size:1.24rem;line-height:1.52;color:var(--ink-soft);font-weight:300;margin:0}
+.dek em{color:var(--ink);font-style:italic}
+h2{font-family:Spectral,Georgia,serif;font-size:1.72rem;font-weight:600;line-height:1.16;letter-spacing:-.01em;margin:62px 0 6px;text-wrap:balance}
+h2 .n{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:9px}
+h3{font-size:1.02rem;font-weight:600;margin:34px 0 8px}
+p{margin:0 0 18px}
+a{color:var(--violet);text-underline-offset:2px}
+strong{font-weight:600;color:#f0f5ff}
+em{color:var(--ink)}
+.m{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.9em;color:var(--ink)}
+.eq{font-family:"IBM Plex Mono",ui-monospace,monospace;background:var(--bg-raise);border:1px solid var(--rule);border-left:2px solid var(--violet);padding:15px 18px;margin:22px 0;font-size:.95rem;overflow-x:auto;line-height:1.5}
+.eq .where{display:block;font-family:"IBM Plex Sans",sans-serif;font-size:.82rem;color:var(--ink-faint);margin-top:9px}
+blockquote{margin:24px 0;padding-left:18px;border-left:2px solid var(--rule-lit);color:var(--ink-soft);font-family:Spectral,Georgia,serif;font-size:1.06rem;font-style:italic}
+blockquote .attrib{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-style:normal;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-top:10px}
+.note{border:1px solid var(--rule);background:var(--bg-raise);border-radius:3px;padding:18px 20px;margin:26px 0}
+.note .tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:9px}
+.note.is-yours{border-left:2px solid var(--indigo)}.note.is-yours .tag{color:var(--indigo)}
+.note.is-caution{border-left:2px solid var(--amber)}.note.is-caution .tag{color:var(--amber)}
+.note.is-crit{border-left:2px solid var(--coral)}.note.is-crit .tag{color:var(--coral)}
+.note p:last-child{margin-bottom:0}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:480px}
+caption{text-align:left;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);padding-bottom:11px}
+th,td{text-align:left;padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;border-bottom:1px solid var(--rule-lit);white-space:nowrap}
+tbody th{font-weight:600;white-space:nowrap}
+td.n,th.n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+ul,ol{margin:0 0 18px;padding-left:20px}
+li{margin-bottom:9px}
+figure{margin:0}
+figcaption{font-size:.84rem;color:var(--ink-faint);margin-top:14px;line-height:1.5}
+svg{display:block;width:100%;height:auto}
+footer{margin:70px auto 0;max-width:34em;border-top:1px solid var(--rule);padding-top:26px;color:var(--ink-faint);font-size:.86rem}
+</style>
+<style id="figkit">
+.fig{margin:40px auto;max-width:50em}
+.fig-frame{background:var(--bg-sunk);border:1px solid var(--rule);border-radius:4px;padding:18px 20px 20px}
+.fig-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.fig-label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+.playbtn{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--bg-raise);color:var(--ink-soft);border:1px solid var(--rule-lit);border-radius:3px;padding:5px 11px;cursor:pointer;transition:.15s;white-space:nowrap}
+.playbtn:hover{color:var(--ink);border-color:var(--violet)}
+.playbtn:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.fig figcaption{font-size:.85rem;color:var(--ink-faint);margin-top:14px;line-height:1.55}
+.fig figcaption strong{color:var(--ink-soft)}
+.paused *{animation-play-state:paused!important}
+svg text{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.sv-lab{font-size:11px;fill:var(--ink-faint)}
+.sv-key{font-size:12px;fill:var(--ink)}
+@media (prefers-reduced-motion:reduce){.fig *{animation:none!important}}
+</style>
+<script id="figkit-js">
+(function(){
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.__figs = [];
+  function wire(){
+    document.querySelectorAll(".fig[data-anim]").forEach(function(fig){
+      var btn = fig.querySelector(".playbtn");
+      if(!btn) return;
+      var playing = !reduced;
+      function apply(){
+        fig.classList.toggle("paused", !playing);
+        btn.textContent = playing ? "❚❚ Pause" : "▶ Play";
+        btn.setAttribute("aria-pressed", playing ? "true" : "false");
+        window.__figs.forEach(function(f){ if(f.el === fig) f.playing = playing; });
+      }
+      btn.addEventListener("click", function(){ playing = !playing; apply(); });
+      apply();
+    });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", wire);
+  else wire();
+  window.__reducedMotion = reduced;
+})();
+</script>
+<style id="t4css">
+/* ---- F2 power iteration ---- */
+@keyframes ratioPop{0%,4%{opacity:0;transform:translateY(6px)}10%,92%{opacity:1;transform:translateY(0)}100%{opacity:1;transform:translateY(0)}}
+.rdot{opacity:0;animation:ratioPop 7s infinite}
+@keyframes fibGrow{0%,3%{transform:scaleY(0)}12%,92%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+.fbar{transform-origin:0 100%;animation:fibGrow 7s infinite}
+
+/* ---- F3 roots ---- */
+@keyframes drawIn{to{stroke-dashoffset:0}}
+.parab{stroke-dasharray:900;stroke-dashoffset:900;animation:drawIn 3s ease-out infinite alternate}
+@keyframes rootPulse{0%,100%{r:5}50%{r:8}}
+.rootdot{animation:rootPulse 2.4s ease-in-out infinite}
+
+/* ---- F5 Reidemeister ---- */
+@keyframes r1undo{0%,18%{transform:scale(1);opacity:1}42%,58%{transform:scale(.02) translateY(0);opacity:.15}82%,100%{transform:scale(1);opacity:1}}
+.r1curl{transform-origin:100px 74px;animation:r1undo 5s ease-in-out infinite}
+@keyframes thetaFlash{0%,36%{opacity:0;transform:scale(.7)}48%,62%{opacity:1;transform:scale(1)}74%,100%{opacity:0;transform:scale(.7)}}
+.thetabadge{transform-origin:100px 128px;opacity:0;animation:thetaFlash 5s ease-in-out infinite}
+@keyframes r2poke{0%,15%{transform:translateX(0)}45%,60%{transform:translateX(34px)}90%,100%{transform:translateX(0)}}
+.r2move{animation:r2poke 5s ease-in-out infinite}
+@keyframes r3slide{0%,15%{transform:translateY(0)}45%,62%{transform:translateY(38px)}90%,100%{transform:translateY(0)}}
+.r3move{animation:r3slide 5s ease-in-out infinite}
+@keyframes okFlash{0%,40%{opacity:.25}55%,72%{opacity:1}88%,100%{opacity:.25}}
+.okbadge{animation:okFlash 5s ease-in-out infinite}
+
+/* ---- F6 Gauss sum ---- */
+@keyframes gsDraw{0%,4%{stroke-dashoffset:var(--len)}22%,100%{stroke-dashoffset:0}}
+@keyframes gsDraw2{0%,26%{stroke-dashoffset:var(--len)}48%,100%{stroke-dashoffset:0}}
+@keyframes gsDraw3{0%,54%{stroke-dashoffset:var(--len)}76%,100%{stroke-dashoffset:0}}
+.gs1{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:gsDraw 9s ease-out infinite}
+.gs2{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:gsDraw2 9s ease-out infinite}
+.gs3{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:gsDraw3 9s ease-out infinite}
+@keyframes gsFade{0%,58%{opacity:0}78%,100%{opacity:1}}
+.gsres{opacity:0;animation:gsFade 9s ease-out infinite}
+
+/* ---- F7 gap closing ---- */
+@keyframes gapClose{0%,20%{transform:scaleY(1)}50%{transform:scaleY(.04)}80%,100%{transform:scaleY(1)}}
+.gapband{transform-origin:center 104px;animation:gapClose 6s ease-in-out infinite}
+@keyframes nuFlip{0%,44%{opacity:1}56%,100%{opacity:0}}
+@keyframes nuFlip2{0%,44%{opacity:0}56%,100%{opacity:1}}
+.nu0{animation:nuFlip 6s steps(1) infinite}
+.nu1{opacity:0;animation:nuFlip2 6s steps(1) infinite}
+
+/* ---- F1 fusion tree ---- */
+@keyframes chanPulse{0%,100%{opacity:.35}50%{opacity:1}}
+.chanA{animation:chanPulse 3.6s ease-in-out infinite}
+.chanB{animation:chanPulse 3.6s ease-in-out infinite;animation-delay:1.8s}
+
+/* --- scope note, added on publication --- */
+.scope{border:1px solid var(--rule-lit);background:var(--bg-raise);border-radius:4px;padding:17px 19px;margin:24px 0 28px}
+.scope .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:9px}
+.scope p{margin:0 0 10px;font-size:.93rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.scope p:last-child{margin-bottom:0}
+.scope a{color:var(--violet)}
+.prereq{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;color:var(--ink-faint);border-left:2px solid var(--rule-lit);padding:2px 0 2px 14px;margin:0 0 26px;line-height:1.7;max-width:none}
+.prereq b{color:var(--ink-soft);font-weight:500}
+.srcs{border:1px solid var(--rule);background:var(--bg-sunk);border-radius:4px;padding:16px 18px;margin:30px 0 0}
+.srcs .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--indigo,#7d93f0);display:block;margin-bottom:9px}
+.srcs p{margin:0 0 9px;font-size:.88rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.srcs p:last-child{margin-bottom:0}
+</style>
+</head>
+<body>
+<nav class="rail">
+  <span class="series">Worksheets · anyon algebra by hand</span>
+  <a href="./">Index</a>
+  <a href="golden-arithmetic.html">Lab · Golden Arithmetic</a>
+  <a href="row-times-column.html">Lab · Row Times Column</a>
+  <a href="verlinde-by-hand.html">Lab · Verlinde by Hand</a>
+  <a href="five-derivations.html">Paper course · Five Derivations</a>
+  <span class="here">1 · One Modulus, Two Arguments</span>
+  <a href="the-phase-you-pick-up.html">2 · The Phase You Pick Up</a>
+  <a href="what-the-modulus-forgets.html">3 · What the Modulus Forgets</a>
+  <a href="where-the-integers-come-from.html">4 · Where the Integers Come From</a>
+</nav>
+
+<div class="page">
+  <header class="top col">
+    <p class="kicker">Tutorial 1 · fusion rings, modular categories, and the edge</p>
+    <h1>One Modulus,<br>Two Arguments</h1>
+    <p class="dek">Two different physical theories share the Fibonacci fusion rule. One is a universal quantum computer. The other is a critical point. <em>The fusion algebra cannot tell them apart</em> — and that is not a defect, it is the content.</p>
+  </header>
+
+  <div class="col">
+<div class="scope">
+  <span class="st">What this is</span>
+  <p><strong>A worksheet, not a result.</strong> The mathematics on this page is standard topological quantum
+  computation, roughly 1984&ndash;2009. None of it is new. <em>&ldquo;It was simply new to my hands. I had read it
+  for years and never computed with it, and those turn out to be different states of knowing.&rdquo;</em> These
+  sheets exist to move a reader from the first state to the second, and they make no claim of their own.</p>
+  <p><strong>The method is predict&ndash;then&ndash;check.</strong> Every input box, drill and gate here is built for one
+  move: write down what you think the number is <em>before</em> you reveal it. Numbers are sourced to a paper
+  where a paper says them, and marked unchecked where none does &mdash; a sheet whose whole method is
+  <em>check it yourself</em> cannot ask you to take its own arithmetic on trust.</p>
+  <p>If you are coming from an operator formalism, you may want to ask of every quantity here what the declared
+  observable is, and what mapping puts it into the domain before the algebra acts. That is a fair question, and
+  these sheets sit upstream of it &mdash; the arithmetic of <span class="m">d&sup2; = d + 1</span> is the same
+  arithmetic whichever way it is answered. They take no position on it. <a href="./#scope">The full note is on the index.</a></p>
+</div>
+
+<p class="prereq"><b>Prerequisites:</b> the Golden Arithmetic lab (&phi;, and the identity &phi;&sup2; = &phi; + 1). Derivation 1 (Galois conjugation) opens Section 3 and Derivation 3 (the central charge) opens Section 6 &mdash; both are in the <a href="five-derivations.html">paper course</a>. <b>No Berry phase anywhere in this one.</b></p>
+
+    <p><strong>Start from a number.</strong> The rule <span class="m">&tau; &otimes; &tau; = 1 &oplus; &tau;</span>
+    gives the matrix <span class="m">[[0, 1], [1, 1]]</span>, whose largest eigenvalue is
+    <span class="m">&phi; = 1.618&hellip;</span> &mdash; the same &phi; the Golden Arithmetic lab reduces by hand.
+    This tutorial is about exactly one thing: what that single number does, and does not, tell you about the
+    theory it came out of. The answer is that four different theories hand you the same &phi;, and separating
+    them takes data the matrix does not contain.</p>
+
+    <h2><span class="n">Section 1</span>A fusion ring is just a matrix of non-negative integers</h2>
+    <p>Start with the thing that is <em>not</em> in dispute. Anyon types combine, and the rule for combining them is bookkeeping: if you bring type <span class="m">a</span> next to type <span class="m">b</span>, what can you get?</p>
+    <p>The Fibonacci rule has two objects — the vacuum <span class="m">1</span> and one nontrivial anyon <span class="m">&tau;</span> — and exactly one interesting line.</p>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 1 — the only rule there is</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 210" role="img" aria-label="Two fusion trees. Two tau strands meet at a vertex and emerge as the vacuum, or as another tau.">
+        <g class="chanA">
+          <path d="M90 180 C90 140 150 140 150 108" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M210 180 C210 140 150 140 150 108" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M150 108 L150 52" fill="none" stroke="#6a7893" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="7 6"/>
+          <circle cx="150" cy="108" r="6" fill="#0b1120" stroke="#b98cf5" stroke-width="2.5"/>
+          <text x="90" y="199" class="sv-key" text-anchor="middle" fill="#b98cf5">&tau;</text>
+          <text x="210" y="199" class="sv-key" text-anchor="middle" fill="#b98cf5">&tau;</text>
+          <text x="150" y="42" class="sv-key" text-anchor="middle" fill="#6a7893">1</text>
+          <text x="150" y="22" class="sv-lab" text-anchor="middle">annihilate</text>
+        </g>
+        <line x1="310" y1="30" x2="310" y2="190" stroke="#1e2942"/>
+        <text x="310" y="205" class="sv-lab" text-anchor="middle" fill="#6a7893">or</text>
+        <g class="chanB">
+          <path d="M410 180 C410 140 470 140 470 108" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M530 180 C530 140 470 140 470 108" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M470 108 L470 52" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="470" cy="108" r="6" fill="#0b1120" stroke="#b98cf5" stroke-width="2.5"/>
+          <text x="410" y="199" class="sv-key" text-anchor="middle" fill="#b98cf5">&tau;</text>
+          <text x="530" y="199" class="sv-key" text-anchor="middle" fill="#b98cf5">&tau;</text>
+          <text x="470" y="42" class="sv-key" text-anchor="middle" fill="#b98cf5">&tau;</text>
+          <text x="470" y="22" class="sv-lab" text-anchor="middle">survive</text>
+        </g>
+      </svg>
+      <figcaption><strong>&tau; &otimes; &tau; = 1 &oplus; &tau;.</strong> Two &tau;'s fuse either to nothing or back to a &tau; — two channels, and no others. Every number in this tutorial descends from this one line. Nothing here is continuous; nothing here is a phase.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <p>Write that as a matrix whose entries count the ways each outcome can occur:</p>
+    <div class="eq">N<sub>&tau;</sub> = [[0, 1], [1, 1]]<span class="where">Rows and columns indexed by (1, &tau;). Every entry is a non-negative integer — it counts channels.</span></div>
+    <p>This matrix is the <strong>fusion ring</strong>. It is combinatorics. It contains no phases, no complex numbers, no notion of unitarity, and no physics beyond "what can fuse to what."</p>
+
+    <h3>The modulus falls out immediately</h3>
+    <p>A non-negative integer matrix has a largest real eigenvalue — its <strong>Perron&ndash;Frobenius eigenvalue</strong>. Apply <span class="m">N<sub>&tau;</sub></span> over and over and watch what the ratio does.</p>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 2 — the ring hands you &phi;, whether you ask or not</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 240" role="img" aria-label="Successive ratios of Fibonacci numbers oscillating and converging to the golden ratio.">
+        <line x1="50" y1="97.3" x2="580" y2="97.3" stroke="#b98cf5" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="588" y="94" class="sv-lab" fill="#b98cf5" text-anchor="end">&phi; = 1.6180</text>
+        <line x1="50" y1="205" x2="580" y2="205" stroke="#1e2942"/>
+        <line x1="50" y1="30" x2="50" y2="205" stroke="#1e2942"/>
+        <text x="42" y="44" class="sv-lab" text-anchor="end">2.0</text>
+        <text x="42" y="194" class="sv-lab" text-anchor="end">1.0</text>
+        <text x="315" y="230" class="sv-lab" text-anchor="middle">iterations of N&#8202;&tau; applied to (1, 0)</text>
+        <g fill="#ef7a6d">
+          <circle class="rdot" cx="60"  cy="190"   r="5" style="animation-delay:0s"/>
+          <circle class="rdot" cx="125" cy="40"    r="5" style="animation-delay:.35s"/>
+          <circle class="rdot" cx="190" cy="115"   r="5" style="animation-delay:.7s"/>
+          <circle class="rdot" cx="255" cy="90"    r="5" style="animation-delay:1.05s"/>
+          <circle class="rdot" cx="320" cy="100"   r="5" style="animation-delay:1.4s"/>
+          <circle class="rdot" cx="385" cy="96.3"  r="5" style="animation-delay:1.75s"/>
+          <circle class="rdot" cx="450" cy="97.7"  r="5" style="animation-delay:2.1s"/>
+          <circle class="rdot" cx="515" cy="97.15" r="5" style="animation-delay:2.45s"/>
+        </g>
+        <g class="sv-lab" fill="#6a7893" text-anchor="middle" font-size="10">
+          <text x="60"  y="182">1/1</text><text x="125" y="32">2/1</text>
+          <text x="190" y="107">3/2</text><text x="255" y="82">5/3</text>
+          <text x="320" y="118">8/5</text><text x="385" y="114">13/8</text>
+          <text x="450" y="115">21/13</text><text x="515" y="115">34/21</text>
+        </g>
+      </svg>
+      <figcaption>Ratios of consecutive Fibonacci numbers, oscillating around <strong>&phi;</strong> and closing on it. The Perron&ndash;Frobenius eigenvalue is <em>forced</em> — fixed by the integer matrix alone, with no further input. This is the magnitude. And knowing &phi; tells you <strong>nothing else about the theory</strong>. That last clause is the whole tutorial.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <h2><span class="n">Section 2</span>Two roots, one polynomial</h2>
+    <p>A fusion ring is not yet a physical theory. To get one you must assign each object an actual <strong>quantum dimension</strong> <span class="m">d<sub>a</sub></span>, behaving multiplicatively under fusion. Consistency forces <span class="m">d<sub>&tau;</sub></span> to satisfy the <em>same</em> quadratic the matrix does — and a quadratic has two roots.</p>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 3 — d&sup2; = d + 1 has two solutions, and both are legal</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 220" role="img" aria-label="The parabola d squared minus d minus one, crossing zero at minus one over phi and at phi.">
+        <line x1="40" y1="140" x2="590" y2="140" stroke="#2c3a5c"/>
+        <polyline class="parab" points="60,57.5 122.5,110 170.2,140 247.5,170 310,177.5 372.5,170 449.75,140 497.5,110 560,57.5"
+                  fill="none" stroke="#7d93f0" stroke-width="2.5" stroke-linecap="round"/>
+        <circle class="rootdot" cx="170.2" cy="140" r="5" fill="#ef7a6d"/>
+        <circle class="rootdot" cx="449.75" cy="140" r="5" fill="#b98cf5" style="animation-delay:1.2s"/>
+        <line x1="170.2" y1="140" x2="170.2" y2="176" stroke="#ef7a6d" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="449.75" y1="140" x2="449.75" y2="176" stroke="#b98cf5" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="170.2" y="196" class="sv-key" fill="#ef7a6d" text-anchor="middle">&minus;1/&phi;</text>
+        <text x="170.2" y="212" class="sv-lab" fill="#ef7a6d" text-anchor="middle">&minus;0.618</text>
+        <text x="449.75" y="196" class="sv-key" fill="#b98cf5" text-anchor="middle">&phi;</text>
+        <text x="449.75" y="212" class="sv-lab" fill="#b98cf5" text-anchor="middle">+1.618</text>
+        <text x="247.5" y="132" class="sv-lab" text-anchor="middle">0</text>
+        <text x="596" y="136" class="sv-lab" text-anchor="end" fill="#6a7893">d</text>
+      </svg>
+      <figcaption>The two roots are <strong>&phi;</strong> (positive &mdash; a real count of states, so a <em>unitary</em> theory) and <strong>&minus;1/&phi;</strong> (negative &mdash; not a count of anything, so <em>non-unitary</em>). The negative branch is not a curiosity: it is the <strong>Yang&ndash;Lee edge singularity</strong>, a real critical point that appears when the Ising model is given an imaginary magnetic field.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <div class="note is-crit">
+      <span class="tag">The refinement worth taking away</span>
+      <p><strong>Perron&ndash;Frobenius dimension and quantum dimension are two different things, and unitarity is precisely the condition that they agree.</strong> The PF dimension is &phi; in both theories &mdash; a property of the <em>ring</em>. The quantum dimension is &phi; <em>or</em> &minus;1/&phi; &mdash; a property of the <em>category</em>. The slogan "you cannot derive an argument from a modulus" is sharper than it first sounds: the modulus does not even fix the dimension, only the polynomial the dimension solves.</p>
+    </div>
+
+    <h2><span class="n">Section 3</span>What extra data turns a ring into a category</h2>
+    <p>To pin down a full <strong>modular tensor category</strong> &mdash; the object that <em>is</em> a topological order &mdash; you need the fusion ring, the quantum dimensions, the <strong>twists</strong> <span class="m">&theta;<sub>a</sub> = e<sup>2&pi;i h<sub>a</sub></sup></span>, and the S and T matrices. The ring is the magnitude. <strong>The twists are the argument.</strong> Four categories sit above one ring:</p>
+  </div>
+
+  <figure class="fig">
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 4 — one fusion ring, four theories</span></div>
+      <svg viewBox="0 0 620 300" role="img" aria-label="A two by two grid of the four modular categories carrying the Fibonacci fusion rule.">
+        <text x="175" y="26" class="sv-lab" text-anchor="middle" fill="#6a7893">CHIRALITY +</text>
+        <text x="430" y="26" class="sv-lab" text-anchor="middle" fill="#6a7893">CHIRALITY &minus;</text>
+        <text x="34" y="105" class="sv-lab" text-anchor="middle" fill="#7d93f0" transform="rotate(-90 34 105)">UNITARY</text>
+        <text x="34" y="228" class="sv-lab" text-anchor="middle" fill="#ef7a6d" transform="rotate(-90 34 228)">NON-UNITARY</text>
+
+        <rect x="55" y="42" width="240" height="118" fill="#16224a" stroke="#2c3a5c"/>
+        <text x="72" y="72" class="sv-key" fill="#7d93f0" font-size="15">Fibonacci</text>
+        <text x="72" y="97" class="sv-lab" fill="#dde5f2">d&#8202;&tau; = &phi;&#8195;h&#8202;&tau; = 2/5</text>
+        <text x="72" y="118" class="sv-lab" fill="#dde5f2">c&#8331; = 14/5</text>
+        <text x="72" y="143" class="sv-lab" fill="#b98cf5">universal quantum computer</text>
+
+        <rect x="310" y="42" width="240" height="118" fill="#131c33" stroke="#2c3a5c"/>
+        <text x="327" y="72" class="sv-key" fill="#7d93f0" font-size="15">Fibonacci-bar</text>
+        <text x="327" y="97" class="sv-lab" fill="#dde5f2">d&#8202;&tau; = &phi;&#8195;h&#8202;&tau; = 3/5</text>
+        <text x="327" y="118" class="sv-lab" fill="#dde5f2">c&#8331; = &minus;14/5</text>
+        <text x="327" y="143" class="sv-lab" fill="#6a7893">the mirror image</text>
+
+        <rect x="310" y="172" width="240" height="118" fill="#2a1a1c" stroke="#2c3a5c"/>
+        <text x="327" y="202" class="sv-key" fill="#ef7a6d" font-size="15">Yang&ndash;Lee</text>
+        <text x="327" y="227" class="sv-lab" fill="#dde5f2">d&#8202;&tau; = &minus;1/&phi;&#8195;h&#8202;&tau; = &minus;1/5</text>
+        <text x="327" y="248" class="sv-lab" fill="#dde5f2">c&#8331; = &minus;22/5</text>
+        <text x="327" y="273" class="sv-lab" fill="#ef7a6d">a critical point</text>
+
+        <rect x="55" y="172" width="240" height="118" fill="#1d1517" stroke="#2c3a5c"/>
+        <text x="72" y="202" class="sv-key" fill="#ef7a6d" font-size="15">Yang&ndash;Lee-bar</text>
+        <text x="72" y="227" class="sv-lab" fill="#dde5f2">d&#8202;&tau; = &minus;1/&phi;&#8195;h&#8202;&tau; = 1/5</text>
+        <text x="72" y="248" class="sv-lab" fill="#dde5f2">c&#8331; = 22/5</text>
+        <text x="72" y="273" class="sv-lab" fill="#6a7893">its mirror</text>
+      </svg>
+      <figcaption>Read the cells: <span class="m">h<sub>&tau;</sub></span> takes the four values 1/5, 2/5, 3/5, 4/5 &mdash; all distinct &mdash; and the four central charges are distinct too. <strong>The theories are separated on every invariant except the fusion ring itself.</strong> That is the sense in which the modulus forgets.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <div class="note is-caution">
+      <span class="tag">Falsifier check &mdash; the paper arrived, and the answer SPLITS</span>
+      <p><strong>&#10003; The claim survives, and gets a better name.</strong> Rowell&ndash;Stong&ndash;Wang say it in their own introduction: <em>"the Galois conjugate of the Fibonacci theory is the Yang-Lee theory, which is non-unitary."</em> <strong>Galois action provably fixes the fusion matrices</strong> &mdash; a named group action that holds the ring rigid while moving everything else. That is "one modulus, two arguments" as a theorem rather than an observation. The two dimensions are the roots of RSW's own Theorem 3.1 at m = 1.</p>
+      <p><strong>&#9888; But the twist column below is NOT sourced.</strong> No source consulted for this page supports <span class="m">h<sub>&tau;</sub> = &minus;1/5</span>, <span class="m">&theta;<sub>&tau;</sub></span> or <span class="m">c<sub>&minus;</sub> = &minus;22/5</span> for Yang&ndash;Lee. Freedman never writes a central charge or the word <em>twist</em>; Sanno 2022 gives the numbers but <strong>flags the topological spin as a conjecture</strong>; and &mdash; the surprise &mdash; <strong>Cardy 1985 never prints h = &minus;1/5, and Cardy 2023 prints neither c nor h.</strong> Both are routinely cited for exactly those values. The numbers are folklore-correct and unverified here.</p>
+    </div>
+
+    <h2><span class="n">Section 4</span>What Rowell&ndash;Stong&ndash;Wang actually does</h2>
+    <p>The paper is <strong>Rowell, Stong &amp; Wang, "On classification of modular tensor categories"</strong> (Comm. Math. Phys. 292, 2009; arXiv:0712.1377). It gives a <strong>complete classification of MTCs of low rank</strong> &mdash; rank meaning the number of anyon types.</p>
+    <p>The method is what matters. Rather than constructing categories and hoping to find them all, they turn the consistency conditions into <strong>Diophantine constraints</strong> and solve them. Number theory does the classifying, and the output is a finite explicit list at each low rank <em>together with a proof that nothing else exists.</em></p>
+    <blockquote>Admissible quantum dimensions below 2 are exactly 2cos(&pi;/n): 1, &radic;2, &phi;, &radic;3, 1.8019, &hellip; There is nothing between &radic;2 and &phi;. The spectrum is discrete, so the gap is forbidden by representation theory &mdash; which is precisely the Gell-Mann situation, where the classification itself forbids the intermediate case.<span class="attrib">a note made before reading Rowell&ndash;Stong&ndash;Wang</span></blockquote>
+    <p>That instinct was right, and RSW is its stronger form: the Jones index theorem constrains the <em>dimensions</em>, RSW classifies the <em>categories</em>. Both make an empty slot rigorous instead of rhetorical.</p>
+
+    <div class="note is-caution">
+      <span class="tag">&#9888;&#9888; The trap in citing RSW &mdash; read this before quoting a number from it</span>
+      <p><strong>RSW classify UNITARY modular tensor categories.</strong> Yang&ndash;Lee fails their Frobenius&ndash;Perron criterion and <strong>does not appear in their tables at all.</strong></p>
+      <p>So RSW cannot be cited for a Yang&ndash;Lee value, and it cannot be cited for the count of four categories over this fusion ring &mdash; that count includes non-unitary members its classification excludes by construction. Reaching into a table for the number you want, when the table was built to leave that case out, is a citation error and not a shortcut.</p>
+      <p><strong>What RSW does give you here is the Galois statement</strong>, quoted above, which is in the introduction and is about the pair rather than about either member's twist.</p>
+    </div>
+
+    <div class="note is-crit">
+      <span class="tag">A hard constraint that changes what to look for</span>
+      <p>Freedman's <em>Galois Conjugates of Topological Phases</em>, Theorem IV.5, is a <strong>proof that no gapped Hermitian Lieb&ndash;Robinson Hamiltonian has a Yang&ndash;Lee phase as its ground state &mdash; in any gauge.</strong> Sanno 2022 cites it and routes around it with an open dissipative system.</p>
+      <p>Non-unitary is not merely unusual here. It is <em>excluded</em> from gapped Hermitian ground states by theorem. If one hoped to find a naturally occurring Yang&ndash;Lee medium, the obvious route is closed, and the open-system route is the one Sanno had to take.</p>
+    </div>
+
+    <h2><span class="n">Section 5</span>Reidemeister isn't one thing, and the split is the physics</h2>
+    <p>Knot theory treats the Reidemeister moves as <em>the invariance group</em> &mdash; what survives a wiggle. That is right for knots. It is <strong>not</strong> right for anyons, because anyon worldlines are not curves but <strong>ribbons</strong>, carrying a framing.</p>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 5 — two moves hold, one charges you</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 250" role="img" aria-label="Three Reidemeister moves animated. R1 removes a curl and incurs a twist factor theta. R2 and R3 are free.">
+        <text x="100" y="24" class="sv-lab" text-anchor="middle" fill="#ef7a6d">R1 &mdash; CURL</text>
+        <g class="r1curl">
+          <path d="M100 40 L100 62" fill="none" stroke="#ef7a6d" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M100 62 C136 62 136 104 100 104 C74 104 74 76 96 68" fill="none" stroke="#ef7a6d" stroke-width="3.5" stroke-linecap="round"/>
+        </g>
+        <path d="M100 104 L100 150" fill="none" stroke="#ef7a6d" stroke-width="3.5" stroke-linecap="round"/>
+        <g class="thetabadge">
+          <rect x="58" y="166" width="84" height="26" rx="3" fill="#2a1a1c" stroke="#ef7a6d"/>
+          <text x="100" y="184" class="sv-key" fill="#ef7a6d" text-anchor="middle" font-size="13">&times; &theta;&#8202;&tau;</text>
+        </g>
+        <text x="100" y="216" class="sv-lab" text-anchor="middle" fill="#ef7a6d">NOT free</text>
+        <text x="100" y="234" class="sv-lab" text-anchor="middle" fill="#6a7893">the twist is an observable</text>
+
+        <line x1="205" y1="30" x2="205" y2="230" stroke="#1e2942"/>
+        <text x="310" y="24" class="sv-lab" text-anchor="middle" fill="#7d93f0">R2 &mdash; POKE</text>
+        <path d="M270 44 L270 150" fill="none" stroke="#7d93f0" stroke-width="3.5" stroke-linecap="round"/>
+        <g class="r2move">
+          <path d="M350 44 C350 80 306 80 306 97" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M306 97 C306 114 350 114 350 150" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+        </g>
+        <g class="okbadge"><text x="310" y="216" class="sv-lab" text-anchor="middle" fill="#7d93f0">free</text></g>
+
+        <line x1="415" y1="30" x2="415" y2="230" stroke="#1e2942"/>
+        <text x="518" y="24" class="sv-lab" text-anchor="middle" fill="#7d93f0">R3 &mdash; SLIDE</text>
+        <path d="M470 48 L566 132" fill="none" stroke="#7d93f0" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M566 48 L522 86" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M508 98 L470 132" fill="none" stroke="#b98cf5" stroke-width="3.5" stroke-linecap="round"/>
+        <g class="r3move"><path d="M470 152 L566 152" fill="none" stroke="#e0b054" stroke-width="3.5" stroke-linecap="round"/></g>
+        <g class="okbadge"><text x="518" y="216" class="sv-lab" text-anchor="middle" fill="#7d93f0">free</text></g>
+      </svg>
+      <figcaption><strong>R2 and R3 hold in any ribbon category</strong> &mdash; which is what makes the braid group representation well defined, and that representation is the phase. <strong>R1 does not hold.</strong> Removing a curl multiplies the amplitude by the twist <span class="m">&theta;<sub>a</sub></span>. In the crossings above, the under-strand is drawn as two paths with a gap and the over-strand whole on top.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <div class="note is-crit">
+      <span class="tag">The point</span>
+      <p><strong>R1's failure is not a defect in the classification. It is an observable.</strong> The amount by which R1 fails <em>is</em> the topological spin &mdash; the same <span class="m">&theta;<sub>&tau;</sub></span> that distinguishes the four cells of Fig. 4.</p>
+      <p>R2/R3-invariance gives the braid representation, the phase. The fusion matrix's PF eigenvalue gives &phi;, the magnitude. <strong>R1 is the move that couples them.</strong></p>
+    </div>
+
+    <h2><span class="n">Section 6</span>The Gauss sum is the weld</h2>
+    <p>Magnitude and phase do not stay separate. In any modular tensor category one identity ties them together:</p>
+    <div class="eq">&Sigma;<sub>a</sub> d<sub>a</sub>&sup2; &theta;<sub>a</sub> = &#119967; &middot; e<sup>2&pi;i c<sub>&minus;</sub>/8</sup><span class="where">&#119967; = total quantum dimension. Sum over all anyon types.</span></div>
+    <p>Dimensions weighted by twists on the left; a single number &mdash; the <strong>chiral central charge</strong>, a criticality quantity living on the gapless boundary &mdash; on the right. For Fibonacci the sum has just two terms, and you can watch them land.</p>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 6 — two arrows that compute a central charge</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 300" role="img" aria-label="Complex plane. Two vectors added tip to tail land exactly on a circle of radius D at angle 126 degrees.">
+        <circle cx="250" cy="215" r="104.6" fill="none" stroke="#2c3a5c" stroke-width="1" stroke-dasharray="4 5"/>
+        <line x1="60" y1="215" x2="470" y2="215" stroke="#1e2942"/>
+        <line x1="250" y1="30" x2="250" y2="290" stroke="#1e2942"/>
+        <text x="478" y="211" class="sv-lab" fill="#6a7893">Re</text>
+        <text x="256" y="38" class="sv-lab" fill="#6a7893">Im</text>
+        <path class="gs1" style="--len:55" d="M250 215 L305 215" fill="none" stroke="#6a7893" stroke-width="3" stroke-linecap="round"/>
+        <text x="277" y="234" class="sv-lab" fill="#6a7893" text-anchor="middle">d&#8321;&sup2;&theta;&#8321; = 1</text>
+        <path class="gs2" style="--len:144" d="M305 215 L188.5 130.4" fill="none" stroke="#b98cf5" stroke-width="3" stroke-linecap="round"/>
+        <text x="272" y="160" class="sv-lab" fill="#b98cf5" text-anchor="middle">d&#8202;&tau;&sup2;&theta;&#8202;&tau; = &phi;&sup2;e&#8202;&#8305;&#8202;&#185;&#8308;&#8308;&#176;</text>
+        <path class="gs3" style="--len:105" d="M250 215 L188.5 130.4" fill="none" stroke="#ef7a6d" stroke-width="4" stroke-linecap="round"/>
+        <g class="gsres">
+          <circle cx="188.5" cy="130.4" r="5.5" fill="#ef7a6d"/>
+          <text x="150" y="112" class="sv-key" fill="#ef7a6d" text-anchor="middle" font-size="13">&#119967; &ang;126&deg;</text>
+          <text x="150" y="130" class="sv-lab" fill="#ef7a6d" text-anchor="middle">= 1.902</text>
+          <rect x="330" y="238" width="256" height="46" rx="3" fill="#1d1517" stroke="#ef7a6d"/>
+          <text x="458" y="257" class="sv-lab" fill="#dde5f2" text-anchor="middle">126&deg; = 2&pi;c&#8331;/8 &nbsp;&rArr;&nbsp; c&#8331; = 14/5</text>
+          <text x="458" y="275" class="sv-lab" fill="#6a7893" text-anchor="middle">the central charge, read off two arrows</text>
+        </g>
+      </svg>
+      <figcaption>Add the two terms tip to tail. The resultant lands <strong>exactly</strong> on the dashed circle of radius <span class="m">&#119967; = &radic;(1+&phi;&sup2;) = 1.902</span>, at <strong>126&deg;</strong> &mdash; and 126&deg; is <span class="m">2&pi;c&#8331;/8</span> for <span class="m">c&#8331; = 14/5</span>. Two arrows, drawn from braiding and fusion data, produce the central charge of a conformal field theory living on the boundary. <em>Every number in this figure was computed and checked while drawing it.</em></figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <p>So the bulk's braiding data determines the boundary's critical theory. <strong>"The edge between topology and criticality" reads literally.</strong></p>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 7 — one motif, two base spaces</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 760 300" role="img" aria-label="Left: parameter space, where an invariant changes only through a gap closing. Right: real space, where a gapped bulk carries a gapless edge with no transition.">
+        <text x="0" y="16" class="sv-lab" fill="#6a7893" letter-spacing="1.6">BASE SPACE = PARAMETER</text>
+        <rect x="0" y="34" width="150" height="140" fill="#16224a" stroke="#2c3a5c"/>
+        <rect x="190" y="34" width="150" height="140" fill="#221a3a" stroke="#2c3a5c"/>
+        <g class="gapband"><rect x="152" y="34" width="36" height="140" fill="#3a1f22"/></g>
+        <line x1="170" y1="26" x2="170" y2="182" stroke="#ef7a6d" stroke-width="2" stroke-dasharray="5 4"/>
+        <text x="75" y="98" class="sv-key" fill="#7d93f0" text-anchor="middle">&nu; = 0</text>
+        <text x="75" y="118" class="sv-lab" text-anchor="middle">gapped</text>
+        <text x="265" y="98" class="sv-key" fill="#b98cf5" text-anchor="middle">&nu; = 1</text>
+        <text x="265" y="118" class="sv-lab" text-anchor="middle">gapped</text>
+        <text x="170" y="200" class="sv-lab" fill="#ef7a6d" text-anchor="middle">gap closes</text>
+        <text x="170" y="216" class="sv-lab" fill="#ef7a6d" text-anchor="middle">critical</text>
+        <line x1="0" y1="248" x2="340" y2="248" stroke="#2c3a5c"/>
+        <polygon points="340,248 332,244 332,252" fill="#2c3a5c"/>
+        <text x="0" y="270" class="sv-lab" fill="#97a6bf">tune a coupling &rarr;</text>
+        <text x="0" y="290" class="sv-lab" fill="#6a7893">seam / gate &mdash; criticality only at the transition</text>
+
+        <text x="420" y="16" class="sv-lab" fill="#6a7893" letter-spacing="1.6">BASE SPACE = REAL</text>
+        <rect x="420" y="34" width="300" height="140" fill="#221a3a" stroke="#2c3a5c"/>
+        <line x1="720" y1="34" x2="720" y2="174" stroke="#ef7a6d" stroke-width="3"/>
+        <text x="565" y="96" class="sv-key" fill="#b98cf5" text-anchor="middle">gapped bulk</text>
+        <text x="565" y="118" class="sv-lab" text-anchor="middle">{ d&#8202;a , &theta;&#8202;a }</text>
+        <text x="565" y="140" class="sv-lab" text-anchor="middle">no transition anywhere</text>
+        <text x="738" y="104" class="sv-lab" fill="#ef7a6d" transform="rotate(90 738 104)" text-anchor="middle">gapless edge CFT</text>
+        <path d="M565 186 L565 206 L700 206 L700 192" fill="none" stroke="#2c3a5c"/>
+        <polygon points="700,182 695,192 705,192" fill="#2c3a5c"/>
+        <text x="565" y="228" class="sv-lab" fill="#97a6bf" text-anchor="middle">&Sigma; d&sup2;&theta; fixes c&#8331;</text>
+        <text x="420" y="270" class="sv-lab" fill="#97a6bf">bulk&ndash;boundary &rarr;</text>
+        <text x="420" y="290" class="sv-lab" fill="#6a7893">criticality in a phase that never transitions</text>
+      </svg>
+      <figcaption><strong>One motif, two base spaces.</strong> Left: an invariant changes only by passing through a gap closing (watch the red band pinch shut). Right, a second instance: a gapped topological order carries a gapless critical theory on its physical boundary, with the bulk data fixing the boundary's central charge, while <em>nothing transitions at all.</em> Same coupling motif, different base space.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <div class="srcs">
+      <span class="st">Sources</span>
+      <p><strong>Checked against the paper itself:</strong> Rowell, Stong &amp; Wang, <em>On classification of
+      modular tensor categories</em> (Comm. Math. Phys. 292, 2009; arXiv:0712.1377) &mdash; for the low-rank
+      classification, for the 2cos(&pi;/n) spectrum, and for the Galois pairing quoted in Section 4, which is in
+      their introduction. Freedman <em>et al.</em>, <em>Galois Conjugates of Topological Phases</em>, for Theorem
+      IV.5. Sanno <em>et al.</em> (2022) for the open-system route, including its own flag that the topological
+      spin there is a conjecture. Cardy (1985) and Cardy (2023) were opened specifically to check the
+      Yang&ndash;Lee twist values, and <strong>neither contains them</strong> &mdash; which is why Section 3 marks
+      that column unsourced rather than citing Cardy for it, as is commonly done.</p>
+      <p><strong>Stated on reputation, not checked here:</strong> Kitaev, Wen, Read&ndash;Green and Verlinde for
+      bulk&ndash;boundary and the Gauss sum; Fisher for the Yang&ndash;Lee edge; Freedman&ndash;Larsen&ndash;Wang
+      for density &rArr; universality; the Jones index theorem. The mathematics is standard; the attributions are
+      the soft part.</p>
+      <p><strong>No DOIs appear anywhere in this document, deliberately.</strong> Citations get opened, not
+      remembered &mdash; which is the same discipline the sheet asks of you with its numbers.</p>
+    </div>
+
+    <footer>
+      <p>Tutorial 1 of four. Figures added 28 August 2026; every animated figure carries its own play/pause control. Fig. 6's geometry was computed and verified, not sketched: the resultant really does land on the circle at 126&deg;.</p>
+    </footer>
+  </div>
+</div>
+</body>
+</html>

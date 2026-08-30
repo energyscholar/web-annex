@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive worksheet: matrix multiplication one cell at a time, up to eigenvectors and the Perron–Frobenius eigenvalue.">
+<title>Row Times Column</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#0b1120;--bg-raise:#111a2e;--bg-sunk:#080d19;--ink:#dde5f2;--ink-soft:#97a6bf;--ink-faint:#6a7893;--rule:#1e2942;--rule-lit:#2c3a5c;--coral:#ef7a6d;--indigo:#7d93f0;--violet:#b98cf5;--amber:#e0b054;--good:#5fbf8f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.rail{border-bottom:1px solid var(--rule);background:var(--bg-sunk);padding:12px 24px;display:flex;flex-wrap:wrap;gap:6px 20px;align-items:baseline;font-family:"IBM Plex Mono",monospace;font-size:11.5px}
+.rail .series{color:var(--ink-faint);text-transform:uppercase;letter-spacing:.14em}
+.rail a{color:var(--ink-soft);text-decoration:none}.rail a:hover{color:var(--ink)}
+.rail .here{color:var(--violet)}
+.wrap{max-width:52em;margin:0 auto;padding:56px 24px 100px}
+h1{font-family:Spectral,Georgia,serif;font-size:2.6rem;font-weight:600;letter-spacing:-.015em;margin:0 0 12px;line-height:1.06}
+.dek{font-family:Spectral,Georgia,serif;font-size:1.18rem;color:var(--ink-soft);margin:0 0 8px;line-height:1.5}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin:0 0 18px}
+h2{font-family:Spectral,Georgia,serif;font-size:1.5rem;font-weight:600;margin:54px 0 10px;letter-spacing:-.01em}
+h2 .n{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:7px}
+h3{font-size:.98rem;font-weight:600;margin:26px 0 8px}
+p{margin:0 0 16px;max-width:44em}
+.m{font-family:"IBM Plex Mono",monospace;font-size:.9em}
+.panel{background:var(--bg-sunk);border:1px solid var(--rule);border-radius:4px;padding:20px 22px;margin:22px 0}
+.btn{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;background:var(--bg-raise);color:var(--ink-soft);border:1px solid var(--rule-lit);border-radius:3px;cursor:pointer;margin:0 6px 6px 0}
+.btn:hover{color:var(--ink);border-color:var(--violet)}
+.btn.primary{color:var(--violet);border-color:var(--violet)}
+.btn:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+
+/* matrix rendering */
+.mrow{display:flex;gap:26px;align-items:center;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.mat{display:inline-grid;grid-template-columns:repeat(2,58px);gap:5px;padding:9px 12px;position:relative}
+.mat::before,.mat::after{content:"";position:absolute;top:0;bottom:0;width:9px;border:2px solid var(--rule-lit)}
+.mat::before{left:0;border-right:none;border-radius:3px 0 0 3px}
+.mat::after{right:0;border-left:none;border-radius:0 3px 3px 0}
+.cell{height:38px;display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:.95rem;font-variant-numeric:tabular-nums;border-radius:2px;transition:.15s}
+.cell input{width:100%;height:100%;background:var(--bg);border:1px solid var(--rule);border-radius:2px;color:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:.9rem;text-align:center}
+.cell input:focus{outline:2px solid var(--violet);outline-offset:1px}
+.cell.prod{background:var(--bg-raise);border:1px solid var(--rule);cursor:pointer}
+.cell.prod:hover,.cell.prod.active{background:#2a2143;color:var(--violet);border-color:var(--violet)}
+.cell.hlrow{background:#16224a;color:var(--indigo)}
+.cell.hlcol{background:#2a1a1c;color:var(--coral)}
+.mlabel{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-faint);text-align:center;margin-top:6px}
+.op{font-family:Spectral,serif;font-size:1.6rem;color:var(--ink-faint)}
+
+.working{font-family:"IBM Plex Mono",monospace;font-size:.95rem;background:var(--bg-raise);border-left:2px solid var(--violet);padding:14px 16px;margin:18px 0;overflow-x:auto;white-space:nowrap}
+.working .r{color:var(--indigo)}
+.working .c{color:var(--coral)}
+.working .eq{color:var(--ink-faint)}
+.working .res{color:var(--violet);font-weight:500}
+
+table.step{width:100%;border-collapse:collapse;font-family:"IBM Plex Mono",monospace;font-size:.88rem;margin-top:10px}
+table.step th{text-align:right;padding:8px 12px 8px 0;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;border-bottom:1px solid var(--rule-lit)}
+table.step th:first-child{text-align:left}
+table.step td{text-align:right;padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+table.step td:first-child{text-align:left;color:var(--ink-faint)}
+.scroll{overflow-x:auto}
+
+.note{border:1px solid var(--rule);background:var(--bg-raise);border-radius:3px;padding:16px 18px;margin:22px 0;border-left:2px solid var(--amber)}
+.note .t{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:8px}
+.note.crit{border-left-color:var(--coral)}.note.crit .t{color:var(--coral)}
+.note.good{border-left-color:var(--indigo)}.note.good .t{color:var(--indigo)}
+.note p:last-child{margin-bottom:0}
+.mark{font-family:"IBM Plex Mono",monospace;font-size:.88rem;margin-left:8px}
+.mark.ok{color:var(--good)}.mark.no{color:var(--coral)}
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--rule);color:var(--ink-faint);font-size:.85rem}
+
+/* --- scope note, added on publication --- */
+.scope{border:1px solid var(--rule-lit);background:var(--bg-raise);border-radius:4px;padding:17px 19px;margin:24px 0 28px}
+.scope .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:9px}
+.scope p{margin:0 0 10px;font-size:.93rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.scope p:last-child{margin-bottom:0}
+.scope a{color:var(--violet)}
+.prereq{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;color:var(--ink-faint);border-left:2px solid var(--rule-lit);padding:2px 0 2px 14px;margin:0 0 26px;line-height:1.7;max-width:none}
+.prereq b{color:var(--ink-soft);font-weight:500}
+.srcs{border:1px solid var(--rule);background:var(--bg-sunk);border-radius:4px;padding:16px 18px;margin:30px 0 0}
+.srcs .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--indigo,#7d93f0);display:block;margin-bottom:9px}
+.srcs p{margin:0 0 9px;font-size:.88rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.srcs p:last-child{margin-bottom:0}
+</style>
+</head>
+<body>
+<nav class="rail">
+  <span class="series">Worksheets · anyon algebra by hand</span>
+  <a href="./">Index</a>
+  <a href="golden-arithmetic.html">Lab · Golden Arithmetic</a>
+  <span class="here">Lab · Row Times Column</span>
+  <a href="verlinde-by-hand.html">Lab · Verlinde by Hand</a>
+  <a href="five-derivations.html">Paper course · Five Derivations</a>
+  <a href="one-modulus-two-arguments.html">1 · One Modulus, Two Arguments</a>
+  <a href="the-phase-you-pick-up.html">2 · The Phase You Pick Up</a>
+  <a href="what-the-modulus-forgets.html">3 · What the Modulus Forgets</a>
+  <a href="where-the-integers-come-from.html">4 · Where the Integers Come From</a>
+</nav>
+
+<div class="wrap">
+  <p class="kicker">Interactive lab · the operation itself</p>
+  <h1>Row Times Column</h1>
+  <p class="dek">Matrix multiplication is one rule applied four times. Click any answer cell and the page shows you exactly which numbers made it.</p>
+
+<div class="scope">
+  <span class="st">What this is</span>
+  <p><strong>A worksheet, not a result.</strong> The mathematics on this page is standard topological quantum
+  computation, roughly 1984&ndash;2009. None of it is new. <em>&ldquo;It was simply new to my hands. I had read it
+  for years and never computed with it, and those turn out to be different states of knowing.&rdquo;</em> These
+  sheets exist to move a reader from the first state to the second, and they make no claim of their own.</p>
+  <p><strong>The method is predict&ndash;then&ndash;check.</strong> Every input box, drill and gate here is built for one
+  move: write down what you think the number is <em>before</em> you reveal it. Numbers are sourced to a paper
+  where a paper says them, and marked unchecked where none does &mdash; a sheet whose whole method is
+  <em>check it yourself</em> cannot ask you to take its own arithmetic on trust.</p>
+  <p>If you are coming from an operator formalism, you may want to ask of every quantity here what the declared
+  observable is, and what mapping puts it into the domain before the algebra acts. That is a fair question, and
+  these sheets sit upstream of it &mdash; the arithmetic of <span class="m">d&sup2; = d + 1</span> is the same
+  arithmetic whichever way it is answered. They take no position on it. <a href="./#scope">The full note is on the index.</a></p>
+</div>
+
+<p class="prereq"><b>Prerequisites:</b> none. Pairs with the Golden Arithmetic lab; either order works.</p>
+
+  <div class="note crit">
+    <span class="t">First — a thing that was making this harder than it is</span>
+    <p><strong>The Verlinde formula is not matrix multiplication.</strong> It is a sum of products of <em>individual entries</em> — you never multiply a matrix by anything. That is why hunting for the matrix-multiply step didn't work: there isn't one.</p>
+    <p>Matrix multiplication turns up in the machinery <em>around</em> Verlinde — diagonalisation, eigenvalues, repeated application. That's what this page is for. Learn it here, and both pages stop having a hole in them.</p>
+  </div>
+
+  <h2><span class="n">Section 1</span>One rule, applied four times</h2>
+  <p>To get the entry in <strong>row i, column j</strong> of the answer: take <strong>row i of the left matrix</strong>, <strong>column j of the right matrix</strong>, multiply them together term by term, and add.</p>
+  <p>That's it. The whole operation is that sentence, repeated once per answer cell.</p>
+
+  <div class="panel">
+    <div class="mrow">
+      <div>
+        <div class="mat" id="matA"></div>
+        <div class="mlabel">A</div>
+      </div>
+      <span class="op">×</span>
+      <div>
+        <div class="mat" id="matB"></div>
+        <div class="mlabel">B</div>
+      </div>
+      <span class="op">=</span>
+      <div>
+        <div class="mat" id="matC"></div>
+        <div class="mlabel">A B — click a cell</div>
+      </div>
+    </div>
+    <div class="working" id="working">Click any cell of the answer to see how it is built.</div>
+    <div style="margin-top:14px">
+      <button class="btn primary" id="pFib">Fibonacci fusion matrix</button>
+      <button class="btn" id="pId">Identity</button>
+      <button class="btn" id="pSwap">Swap</button>
+      <button class="btn" id="pRand">Random</button>
+    </div>
+  </div>
+
+  <div class="note good">
+    <span class="t">Read the colours</span>
+    <p>When a cell is selected, the <span style="color:var(--indigo)">row it came from</span> lights up in A and the <span style="color:var(--coral)">column it came from</span> lights up in B. Every answer cell uses exactly one row and one column. Nothing else in either matrix touches it.</p>
+  </div>
+
+  <h2><span class="n">Section 2</span>Now you do it</h2>
+  <p>Same two matrices. The answers are blank — fill them in and check.</p>
+  <div class="panel">
+    <div class="mrow">
+      <div><div class="mat" id="qA"></div><div class="mlabel">A</div></div>
+      <span class="op">×</span>
+      <div><div class="mat" id="qB"></div><div class="mlabel">B</div></div>
+      <span class="op">=</span>
+      <div><div class="mat" id="qC"></div><div class="mlabel">your answer</div></div>
+    </div>
+    <div style="margin-top:14px">
+      <button class="btn primary" id="qCheck">Check</button>
+      <button class="btn" id="qNew">New numbers</button>
+      <span class="mark" id="qMark"></span>
+    </div>
+  </div>
+
+  <h2><span class="n">Section 3</span>Order matters</h2>
+  <p>For ordinary numbers <span class="m">3 × 5 = 5 × 3</span>. For matrices this usually <strong>fails</strong>. <span class="m">AB</span> and <span class="m">BA</span> are different operations, because the rows and columns swap roles.</p>
+  <div class="panel">
+    <div class="mrow">
+      <div><div class="mat" id="cAB"></div><div class="mlabel">A B</div></div>
+      <span class="op" style="font-size:1.2rem">vs</span>
+      <div><div class="mat" id="cBA"></div><div class="mlabel">B A</div></div>
+    </div>
+    <p style="text-align:center;margin:14px 0 0;font-family:'IBM Plex Mono',monospace;font-size:.92rem" id="commute"></p>
+  </div>
+
+  <h2><span class="n">Section 4</span>A matrix times a vector — and doing it again</h2>
+  <p>A vector is just a matrix one column wide, so the same rule applies. This is the case that matters for what you will see in tutorial 1: apply the Fibonacci fusion matrix over and over to a starting vector.</p>
+
+  <div class="panel">
+    <div class="scroll">
+      <table class="step">
+        <thead><tr><th>step</th><th>vector</th><th>arithmetic</th><th>ratio v₂/v₁</th></tr></thead>
+        <tbody id="powRows"></tbody>
+      </table>
+    </div>
+    <p style="margin:16px 0 0;font-size:.92rem;color:var(--ink-soft)">The components are the Fibonacci numbers, and the ratio walks toward <span class="m">φ = 1.618034</span>. <strong>You are watching the Perron–Frobenius eigenvalue appear</strong> — no algebra, just the same rule applied eight times.</p>
+  </div>
+
+  <h2><span class="n">Section 5</span>Eigenvectors — the directions that survive</h2>
+  <p>Most vectors get turned as well as stretched. A few come out pointing exactly the way they went in, only longer or shorter. Those are <strong>eigenvectors</strong>, and the stretch factor is the <strong>eigenvalue</strong>: <span class="m">N v = λ v</span>.</p>
+  <div class="panel">
+    <div class="mrow">
+      <div><div class="mat" id="eN"></div><div class="mlabel">N (Fibonacci fusion)</div></div>
+      <span class="op">×</span>
+      <div><div class="mat" id="eV" style="grid-template-columns:58px"></div><div class="mlabel">your vector</div></div>
+      <span class="op">=</span>
+      <div><div class="mat" id="eR" style="grid-template-columns:58px"></div><div class="mlabel">result</div></div>
+    </div>
+    <p style="text-align:center;margin:14px 0 0;font-family:'IBM Plex Mono',monospace;font-size:.92rem" id="eigVerdict"></p>
+    <div style="margin-top:14px;text-align:center">
+      <button class="btn primary" id="ev1">Try (1, φ)</button>
+      <button class="btn" id="ev2">Try (1, −1/φ)</button>
+      <button class="btn" id="ev3">Try (1, 0)</button>
+    </div>
+  </div>
+
+  <div class="note good">
+    <span class="t">Where this lands</span>
+    <p>Those two eigenvalues — <span class="m">φ</span> and <span class="m">−1/φ</span> — are the same two numbers the Verlinde lab reads off the columns of the S-matrix as <span class="m">S<sub>τx</sub>/S<sub>0x</sub></span>. That is not a coincidence: <strong>the columns of S are the eigenvectors of the fusion matrix.</strong> Verlinde's theorem is precisely the statement that one matrix, S, diagonalises them all at once.</p>
+    <p>So the arithmetic on this page and the arithmetic on that one are the same arithmetic, seen from two sides.</p>
+  </div>
+
+  <footer>
+    Companion lab, built 29 August 2026 after the Verlinde lab turned out to assume an operation it never actually uses. Every number computed live; edit any white box and the page follows.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var PHI = (1+Math.sqrt(5))/2;
+  var A = [[0,1],[1,1]], B = [[1,2],[3,4]];
+  var qa = [[2,1],[0,3]], qb = [[1,4],[2,1]];
+  var evec = [1, PHI];
+  var sel = null;
+
+  function mul(M,N){
+    var R=[[0,0],[0,0]];
+    for(var i=0;i<2;i++)for(var j=0;j<2;j++)R[i][j]=M[i][0]*N[0][j]+M[i][1]*N[1][j];
+    return R;
+  }
+  function f(v){ return Math.abs(v-Math.round(v))<1e-9 ? String(Math.round(v)) : v.toFixed(3); }
+
+  function drawStatic(host, M, cls){
+    host.innerHTML="";
+    for(var i=0;i<2;i++)for(var j=0;j<2;j++){
+      var d=document.createElement("div");
+      d.className="cell "+(cls||"");
+      d.dataset.i=i; d.dataset.j=j;
+      d.textContent=f(M[i][j]);
+      host.appendChild(d);
+    }
+  }
+  function drawInputs(host, M, onchange){
+    host.innerHTML="";
+    for(var i=0;i<2;i++)for(var j=0;j<2;j++){
+      (function(i,j){
+        var w=document.createElement("div"); w.className="cell";
+        var inp=document.createElement("input");
+        inp.type="number"; inp.step="any"; inp.value=M[i][j];
+        inp.setAttribute("aria-label","row "+(i+1)+" column "+(j+1));
+        inp.addEventListener("input",function(){ M[i][j]=+inp.value||0; onchange(); });
+        w.appendChild(inp); host.appendChild(w);
+      })(i,j);
+    }
+  }
+  function drawVec(host, v, editable, onchange){
+    host.innerHTML="";
+    for(var i=0;i<2;i++){
+      (function(i){
+        var w=document.createElement("div"); w.className="cell";
+        if(editable){
+          var inp=document.createElement("input");
+          inp.type="number"; inp.step="any"; inp.value=+v[i].toFixed(6);
+          inp.setAttribute("aria-label","component "+(i+1));
+          inp.addEventListener("input",function(){ v[i]=+inp.value||0; onchange(); });
+          w.appendChild(inp);
+        } else w.textContent = f(v[i]);
+        host.appendChild(w);
+      })(i);
+    }
+  }
+
+  /* ---------- Section 1 ---------- */
+  function renderS1(){
+    var C = mul(A,B);
+    drawInputs(document.getElementById("matA"), A, renderS1);
+    drawInputs(document.getElementById("matB"), B, renderS1);
+    var host = document.getElementById("matC");
+    drawStatic(host, C, "prod");
+    Array.prototype.forEach.call(host.children,function(cell){
+      cell.tabIndex = 0;
+      cell.addEventListener("click",function(){ pick(+cell.dataset.i, +cell.dataset.j); });
+      cell.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(+cell.dataset.i,+cell.dataset.j);} });
+    });
+    if(sel) pick(sel[0], sel[1]); else renderS3();
+  }
+  function pick(i,j){
+    sel=[i,j];
+    var ca=document.getElementById("matA").children, cb=document.getElementById("matB").children, cc=document.getElementById("matC").children;
+    Array.prototype.forEach.call(ca,function(c,k){ c.classList.toggle("hlrow", Math.floor(k/2)===i); });
+    Array.prototype.forEach.call(cb,function(c,k){ c.classList.toggle("hlcol", (k%2)===j); });
+    Array.prototype.forEach.call(cc,function(c,k){ c.classList.toggle("active", k===i*2+j); });
+    var t1=A[i][0]*B[0][j], t2=A[i][1]*B[1][j];
+    document.getElementById("working").innerHTML =
+      "row "+(i+1)+" of A &nbsp;<span class='r'>("+f(A[i][0])+", "+f(A[i][1])+")</span>&nbsp; · &nbsp;column "+(j+1)+" of B &nbsp;<span class='c'>("+f(B[0][j])+", "+f(B[1][j])+")</span><br>"+
+      "<span class='eq'>=</span> <span class='r'>"+f(A[i][0])+"</span>×<span class='c'>"+f(B[0][j])+"</span> <span class='eq'>+</span> <span class='r'>"+f(A[i][1])+"</span>×<span class='c'>"+f(B[1][j])+"</span>"+
+      " <span class='eq'>=</span> "+f(t1)+" + "+f(t2)+" <span class='eq'>=</span> <span class='res'>"+f(t1+t2)+"</span>";
+    renderS3();
+  }
+
+  /* ---------- Section 2 ---------- */
+  function renderS2(){
+    drawStatic(document.getElementById("qA"), qa);
+    drawStatic(document.getElementById("qB"), qb);
+    var host=document.getElementById("qC"); host.innerHTML="";
+    for(var i=0;i<2;i++)for(var j=0;j<2;j++){
+      var w=document.createElement("div"); w.className="cell";
+      var inp=document.createElement("input");
+      inp.type="number"; inp.step="any"; inp.placeholder="?";
+      inp.dataset.i=i; inp.dataset.j=j;
+      inp.setAttribute("aria-label","answer row "+(i+1)+" column "+(j+1));
+      w.appendChild(inp); host.appendChild(w);
+    }
+    document.getElementById("qMark").textContent="";
+  }
+  document.getElementById("qCheck").addEventListener("click",function(){
+    var T=mul(qa,qb), ok=true, filled=false;
+    Array.prototype.forEach.call(document.getElementById("qC").querySelectorAll("input"),function(inp){
+      var i=+inp.dataset.i, j=+inp.dataset.j;
+      if(inp.value===""){ ok=false; return; }
+      filled=true;
+      if(Math.abs(+inp.value - T[i][j])>1e-6) ok=false;
+    });
+    var m=document.getElementById("qMark");
+    if(!filled){ m.textContent="fill in all four"; m.className="mark"; }
+    else if(ok){ m.textContent="✓ all four correct"; m.className="mark ok"; }
+    else { m.textContent="✗ not yet — answer is ["+f(T[0][0])+" "+f(T[0][1])+" ; "+f(T[1][0])+" "+f(T[1][1])+"]"; m.className="mark no"; }
+  });
+  document.getElementById("qNew").addEventListener("click",function(){
+    function r(){ return Math.floor(Math.random()*7)-2; }
+    qa=[[r(),r()],[r(),r()]]; qb=[[r(),r()],[r(),r()]];
+    renderS2();
+  });
+
+  /* ---------- Section 3 ---------- */
+  function renderS3(){
+    var AB=mul(A,B), BA=mul(B,A);
+    drawStatic(document.getElementById("cAB"), AB);
+    drawStatic(document.getElementById("cBA"), BA);
+    var same=true;
+    for(var i=0;i<2;i++)for(var j=0;j<2;j++) if(Math.abs(AB[i][j]-BA[i][j])>1e-9) same=false;
+    document.getElementById("commute").innerHTML = same
+      ? "<span style='color:var(--indigo)'>These two happen to be equal — A and B commute. That is the exception, not the rule.</span>"
+      : "<span style='color:var(--coral)'>Different. A B ≠ B A — order changes the answer.</span>";
+  }
+
+  /* ---------- Section 4 ---------- */
+  function renderS4(){
+    var N=[[0,1],[1,1]], v=[1,0], rows=document.getElementById("powRows");
+    rows.innerHTML="";
+    for(var s=1;s<=8;s++){
+      var nv=[N[0][0]*v[0]+N[0][1]*v[1], N[1][0]*v[0]+N[1][1]*v[1]];
+      var tr=document.createElement("tr");
+      tr.innerHTML="<td>"+s+"</td><td>("+f(nv[0])+", "+f(nv[1])+")</td>"+
+        "<td style='color:var(--ink-faint)'>(0·"+f(v[0])+"+1·"+f(v[1])+", 1·"+f(v[0])+"+1·"+f(v[1])+")</td>"+
+        "<td>"+(nv[0]!==0 ? (nv[1]/nv[0]).toFixed(6) : "—")+"</td>";
+      rows.appendChild(tr);
+      v=nv;
+    }
+  }
+
+  /* ---------- Section 5 ---------- */
+  function renderS5(){
+    var N=[[0,1],[1,1]];
+    drawStatic(document.getElementById("eN"), N);
+    drawVec(document.getElementById("eV"), evec, true, renderS5);
+    var r=[N[0][0]*evec[0]+N[0][1]*evec[1], N[1][0]*evec[0]+N[1][1]*evec[1]];
+    drawVec(document.getElementById("eR"), r, false, function(){});
+    var out=document.getElementById("eigVerdict");
+    if(Math.abs(evec[0])<1e-9 && Math.abs(evec[1])<1e-9){ out.textContent="enter a non-zero vector"; return; }
+    var l0 = Math.abs(evec[0])>1e-9 ? r[0]/evec[0] : null;
+    var l1 = Math.abs(evec[1])>1e-9 ? r[1]/evec[1] : null;
+    var lam = (l0!==null?l0:l1);
+    var aligned = (l0===null||l1===null) ? false : Math.abs(l0-l1)<1e-6;
+    out.innerHTML = aligned
+      ? "<span style='color:var(--violet)'>Same direction — this IS an eigenvector. λ = "+lam.toFixed(6)+"</span>"
+      : "<span style='color:var(--ink-faint)'>Turned as well as stretched — not an eigenvector. The two components scaled by "+
+        (l0!==null?l0.toFixed(4):"—")+" and "+(l1!==null?l1.toFixed(4):"—")+".</span>";
+  }
+  document.getElementById("ev1").addEventListener("click",function(){ evec=[1,PHI]; renderS5(); });
+  document.getElementById("ev2").addEventListener("click",function(){ evec=[1,-1/PHI]; renderS5(); });
+  document.getElementById("ev3").addEventListener("click",function(){ evec=[1,0]; renderS5(); });
+
+  /* presets */
+  document.getElementById("pFib").addEventListener("click",function(){ A=[[0,1],[1,1]]; B=[[0,1],[1,1]]; sel=null; renderS1(); });
+  document.getElementById("pId").addEventListener("click",function(){ B=[[1,0],[0,1]]; renderS1(); });
+  document.getElementById("pSwap").addEventListener("click",function(){ B=[[0,1],[1,0]]; renderS1(); });
+  document.getElementById("pRand").addEventListener("click",function(){
+    function r(){ return Math.floor(Math.random()*7)-2; }
+    A=[[r(),r()],[r(),r()]]; B=[[r(),r()],[r(),r()]]; renderS1();
+  });
+
+  renderS1(); renderS2(); renderS4(); renderS5();
+})();
+</script>
+</body>
+</html>

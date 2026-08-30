@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Worksheet 3: Verlinde as a directed map, its four-element fibre, and where complex zeros turn into a measurable magnitude.">
+<title>What the Modulus Forgets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* shared worksheet house style */
+:root{--bg:#0b1120;--bg-raise:#111a2e;--bg-sunk:#080d19;--ink:#dde5f2;--ink-soft:#97a6bf;--ink-faint:#6a7893;--rule:#1e2942;--rule-lit:#2c3a5c;--coral:#ef7a6d;--indigo:#7d93f0;--violet:#b98cf5;--amber:#e0b054}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;font-size:17px;line-height:1.68;-webkit-font-smoothing:antialiased}
+.rail{border-bottom:1px solid var(--rule);background:var(--bg-sunk);padding:12px 24px;display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.04em}
+.rail .series{color:var(--ink-faint);text-transform:uppercase;letter-spacing:.14em}
+.rail a{color:var(--ink-soft);text-decoration:none;border-bottom:1px solid transparent}
+.rail a:hover{color:var(--ink);border-bottom-color:var(--rule-lit)}
+.rail a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
+.rail .here{color:var(--violet)}
+.page{padding:0 24px 110px}
+.col{max-width:34em;margin:0 auto}
+.wide{max-width:50em;margin:38px auto}
+header.top{padding:76px 0 30px}
+.kicker{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin:0 0 20px}
+h1{font-family:Spectral,Georgia,serif;font-weight:600;font-size:clamp(2.3rem,5.5vw,3.4rem);line-height:1.06;letter-spacing:-.015em;margin:0 0 20px;text-wrap:balance}
+.dek{font-family:Spectral,Georgia,serif;font-size:1.24rem;line-height:1.52;color:var(--ink-soft);font-weight:300;margin:0}
+.dek em{color:var(--ink);font-style:italic}
+h2{font-family:Spectral,Georgia,serif;font-size:1.72rem;font-weight:600;line-height:1.16;letter-spacing:-.01em;margin:62px 0 6px;text-wrap:balance}
+h2 .n{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:9px}
+h3{font-size:1.02rem;font-weight:600;margin:34px 0 8px}
+p{margin:0 0 18px}
+a{color:var(--violet);text-underline-offset:2px}
+strong{font-weight:600;color:#f0f5ff}
+em{color:var(--ink)}
+.m{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.9em;color:var(--ink)}
+.eq{font-family:"IBM Plex Mono",ui-monospace,monospace;background:var(--bg-raise);border:1px solid var(--rule);border-left:2px solid var(--violet);padding:15px 18px;margin:22px 0;font-size:.95rem;overflow-x:auto;line-height:1.5}
+.eq .where{display:block;font-family:"IBM Plex Sans",sans-serif;font-size:.82rem;color:var(--ink-faint);margin-top:9px}
+blockquote{margin:24px 0;padding-left:18px;border-left:2px solid var(--rule-lit);color:var(--ink-soft);font-family:Spectral,Georgia,serif;font-size:1.06rem;font-style:italic}
+blockquote .attrib{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-style:normal;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-top:10px}
+.note{border:1px solid var(--rule);background:var(--bg-raise);border-radius:3px;padding:18px 20px;margin:26px 0}
+.note .tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:9px}
+.note.is-yours{border-left:2px solid var(--indigo)}.note.is-yours .tag{color:var(--indigo)}
+.note.is-caution{border-left:2px solid var(--amber)}.note.is-caution .tag{color:var(--amber)}
+.note.is-crit{border-left:2px solid var(--coral)}.note.is-crit .tag{color:var(--coral)}
+.note p:last-child{margin-bottom:0}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:480px}
+caption{text-align:left;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);padding-bottom:11px}
+th,td{text-align:left;padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;border-bottom:1px solid var(--rule-lit);white-space:nowrap}
+tbody th{font-weight:600;white-space:nowrap}
+td.n,th.n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+ul,ol{margin:0 0 18px;padding-left:20px}
+li{margin-bottom:9px}
+figure{margin:0}
+figcaption{font-size:.84rem;color:var(--ink-faint);margin-top:14px;line-height:1.5}
+svg{display:block;width:100%;height:auto}
+footer{margin:70px auto 0;max-width:34em;border-top:1px solid var(--rule);padding-top:26px;color:var(--ink-faint);font-size:.86rem}
+</style>
+<style>
+.fig{margin:40px auto;max-width:50em}
+.fig-frame{background:var(--bg-sunk);border:1px solid var(--rule);border-radius:4px;padding:18px 20px 20px}
+.fig-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.fig-label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+.playbtn{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--bg-raise);color:var(--ink-soft);border:1px solid var(--rule-lit);border-radius:3px;padding:5px 11px;cursor:pointer}
+.playbtn:hover{color:var(--ink);border-color:var(--violet)}
+.playbtn:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.fig figcaption{font-size:.85rem;color:var(--ink-faint);margin-top:14px;line-height:1.55}
+.fig figcaption strong{color:var(--ink-soft)}
+.paused *{animation-play-state:paused!important}
+svg text{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.sv-lab{font-size:11px;fill:#6a7893}
+.sv-key{font-size:12px;fill:#dde5f2}
+@media (prefers-reduced-motion:reduce){.fig *{animation:none!important}}
+@keyframes lyStage1{0%,26%{opacity:1}34%,100%{opacity:0}}
+@keyframes lyStage2{0%,30%{opacity:0}38%,59%{opacity:1}67%,100%{opacity:0}}
+@keyframes lyStage3{0%,63%{opacity:0}71%,100%{opacity:1}}
+.ly1{animation:lyStage1 11s infinite}
+.ly2{opacity:0;animation:lyStage2 11s infinite}
+.ly3{opacity:0;animation:lyStage3 11s infinite}
+@keyframes pinchFlash{0%,78%{opacity:0;r:4}88%{opacity:1;r:11}100%{opacity:0;r:4}}
+.pinch{opacity:0;animation:pinchFlash 11s infinite}
+@keyframes jonesPop{0%,3%{opacity:0;transform:translateY(8px)}9%,94%{opacity:1;transform:translateY(0)}100%{opacity:1}}
+.jdot{opacity:0;animation:jonesPop 8s infinite}
+@keyframes gapGlow{0%,100%{opacity:.2}50%{opacity:.65}}
+.jgap{animation:gapGlow 3.4s ease-in-out infinite}
+@keyframes fibDrop{0%,8%{transform:translateY(-26px);opacity:0}22%,92%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:1}}
+.fdot{animation:fibDrop 7s infinite}
+@keyframes arrowDash{to{stroke-dashoffset:0}}
+.vArrow{stroke-dasharray:200;stroke-dashoffset:200;animation:arrowDash 2.4s ease-out infinite alternate}
+
+/* --- scope note, added on publication --- */
+.scope{border:1px solid var(--rule-lit);background:var(--bg-raise);border-radius:4px;padding:17px 19px;margin:24px 0 28px}
+.scope .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:9px}
+.scope p{margin:0 0 10px;font-size:.93rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.scope p:last-child{margin-bottom:0}
+.scope a{color:var(--violet)}
+.prereq{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;color:var(--ink-faint);border-left:2px solid var(--rule-lit);padding:2px 0 2px 14px;margin:0 0 26px;line-height:1.7;max-width:none}
+.prereq b{color:var(--ink-soft);font-weight:500}
+.srcs{border:1px solid var(--rule);background:var(--bg-sunk);border-radius:4px;padding:16px 18px;margin:30px 0 0}
+.srcs .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--indigo,#7d93f0);display:block;margin-bottom:9px}
+.srcs p{margin:0 0 9px;font-size:.88rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.srcs p:last-child{margin-bottom:0}
+</style>
+<script>
+(function(){var r=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function w(){document.querySelectorAll(".fig[data-anim]").forEach(function(f){var b=f.querySelector(".playbtn");if(!b)return;var p=!r;
+function a(){f.classList.toggle("paused",!p);b.textContent=p?"❚❚ Pause":"▶ Play";b.setAttribute("aria-pressed",p?"true":"false");}
+b.addEventListener("click",function(){p=!p;a();});a();});}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",w);else w();})();
+</script>
+</head>
+<body>
+<nav class="rail">
+  <span class="series">Worksheets · anyon algebra by hand</span>
+  <a href="./">Index</a>
+  <a href="golden-arithmetic.html">Lab · Golden Arithmetic</a>
+  <a href="row-times-column.html">Lab · Row Times Column</a>
+  <a href="verlinde-by-hand.html">Lab · Verlinde by Hand</a>
+  <a href="five-derivations.html">Paper course · Five Derivations</a>
+  <a href="one-modulus-two-arguments.html">1 · One Modulus, Two Arguments</a>
+  <a href="the-phase-you-pick-up.html">2 · The Phase You Pick Up</a>
+  <span class="here">3 · What the Modulus Forgets</span>
+  <a href="where-the-integers-come-from.html">4 · Where the Integers Come From</a>
+</nav>
+
+<div class="page">
+  <header class="top col">
+    <p class="kicker">Tutorial 3 · Verlinde, fibres, and the Lee–Yang answer</p>
+    <h1>What the<br>Modulus Forgets</h1>
+    <p class="dek">Braiding determines fusion. Fusion does not determine braiding. <em>The relation between the two runs one way, there is a 1988 theorem for it, and the asymmetry turns out to be more useful than a symmetry would have been.</em></p>
+  </header>
+
+  <div class="col">
+
+<div class="scope">
+  <span class="st">What this is</span>
+  <p><strong>A worksheet, not a result.</strong> The mathematics on this page is standard topological quantum
+  computation, roughly 1984&ndash;2009. None of it is new. <em>&ldquo;It was simply new to my hands. I had read it
+  for years and never computed with it, and those turn out to be different states of knowing.&rdquo;</em> These
+  sheets exist to move a reader from the first state to the second, and they make no claim of their own.</p>
+  <p><strong>The method is predict&ndash;then&ndash;check.</strong> Every input box, drill and gate here is built for one
+  move: write down what you think the number is <em>before</em> you reveal it. Numbers are sourced to a paper
+  where a paper says them, and marked unchecked where none does &mdash; a sheet whose whole method is
+  <em>check it yourself</em> cannot ask you to take its own arithmetic on trust.</p>
+  <p>If you are coming from an operator formalism, you may want to ask of every quantity here what the declared
+  observable is, and what mapping puts it into the domain before the algebra acts. That is a fair question, and
+  these sheets sit upstream of it &mdash; the arithmetic of <span class="m">d&sup2; = d + 1</span> is the same
+  arithmetic whichever way it is answered. They take no position on it. <a href="./#scope">The full note is on the index.</a></p>
+</div>
+
+<p class="prereq"><b>Prerequisites:</b> tutorial 1 for the four categories over one ring, and the Verlinde by Hand lab for the formula itself. Sections 1, 2 and 4 also want Derivation 1 (Galois conjugation); <b>Section 3 assumes Derivation 4</b>, the two-spin Lee&ndash;Yang calculation, from the <a href="five-derivations.html">paper course</a>. No Berry phase anywhere in this one.</p>
+
+    <p><strong>Start from a number.</strong> The Fibonacci fusion ring has largest eigenvalue
+    <span class="m">&phi;</span>. So does the Yang&ndash;Lee one. Same number, two theories &mdash; one a universal
+    quantum computer, the other a critical point. This tutorial is about what that coincidence actually is: not a
+    failure of the arithmetic, but a map that runs in one direction only, with a four-element fibre sitting over
+    the ring.</p>
+
+    <div class="note is-caution">
+      <span class="tag">The statement, and its other half</span>
+      <p><em>"You cannot derive an argument from a modulus."</em> True &mdash; and it is only <strong>half</strong>
+      of a statement. The other half is a 1988 theorem.</p>
+      <p><strong>You can derive the modulus from the argument.</strong> Fusion is computable from braiding. The map
+      runs one way, it is not symmetric, and the asymmetry is the structure.</p>
+    </div>
+
+    <h2><span class="n">Section 1</span>Verlinde's formula</h2>
+
+    <p>The modular data of a topological order is a pair of matrices, <span class="m">S</span> and <span class="m">T</span>, indexed by anyon types. <span class="m">T</span> is diagonal and carries the twists <span class="m">θ<sub>a</sub></span>. <span class="m">S</span> encodes the braiding — the amplitude for one anyon's worldline to link another's.</p>
+
+    <p>Verlinde's theorem (1988) says the fusion coefficients are <em>not</em> independent input. They are computed from <span class="m">S</span>:</p>
+
+    <div class="eq">N<sub>ab</sub><sup>c</sup> = Σ<sub>x</sub> ( S<sub>ax</sub> S<sub>bx</sub> S*<sub>cx</sub> ) / S<sub>0x</sub><span class="where">The fusion rules — non-negative integers — fall out of a matrix of braiding phases. 0 denotes the vacuum.</span></div>
+
+    <p>The mechanism underneath is clean: <strong><span class="m">S</span> simultaneously diagonalises all the fusion matrices.</strong> The fusion ring's structure constants are recovered from the eigenvalue data of the braiding. The integers are shadows of the phases.</p>
+
+    <div class="note is-crit">
+      <span class="tag">The claim, stated exactly</span>
+      <p><strong>Braiding determines fusion. Fusion does not determine braiding.</strong></p>
+      <p>The magnitude is a function of the phase. The phase is not a function of the magnitude. Both halves are
+      theorems — Verlinde for the forward direction, and the four-categories-one-ring fact from tutorial 1 for the
+      failure of the converse.</p>
+    </div>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 1 — the arrow runs one way</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 200" role="img" aria-label="An arrow from braiding to fusion labelled Verlinde. The return arrow is crossed out.">
+        <rect x="30" y="52" width="200" height="96" rx="4" fill="#16224a" stroke="#7d93f0"/>
+        <text x="130" y="86" class="sv-key" fill="#7d93f0" text-anchor="middle" font-size="14">braiding</text>
+        <text x="130" y="110" class="sv-lab" text-anchor="middle">the S-matrix</text>
+        <text x="130" y="128" class="sv-lab" text-anchor="middle">phases, continuous</text>
+
+        <rect x="390" y="52" width="200" height="96" rx="4" fill="#2a1a1c" stroke="#ef7a6d"/>
+        <text x="490" y="86" class="sv-key" fill="#ef7a6d" text-anchor="middle" font-size="14">fusion</text>
+        <text x="490" y="110" class="sv-lab" text-anchor="middle">N&#8202;ab&#8202;&#7580;</text>
+        <text x="490" y="128" class="sv-lab" text-anchor="middle">integers, rigid</text>
+
+        <path class="vArrow" d="M240 88 L378 88" fill="none" stroke="#b98cf5" stroke-width="3"/>
+        <polygon points="386,88 374,82 374,94" fill="#b98cf5"/>
+        <text x="310" y="76" class="sv-lab" fill="#b98cf5" text-anchor="middle">VERLINDE 1988</text>
+        <text x="310" y="60" class="sv-lab" fill="#b98cf5" text-anchor="middle">determines</text>
+
+        <path d="M378 122 L242 122" fill="none" stroke="#3b4844" stroke-width="2.5" stroke-dasharray="6 5"/>
+        <polygon points="234,122 246,116 246,128" fill="#3b4844"/>
+        <line x1="292" y1="108" x2="328" y2="136" stroke="#ef7a6d" stroke-width="2.5"/>
+        <line x1="328" y1="108" x2="292" y2="136" stroke="#ef7a6d" stroke-width="2.5"/>
+        <text x="310" y="160" class="sv-lab" fill="#6a7893" text-anchor="middle">no inverse — four categories share one ring</text>
+      </svg>
+      <figcaption><strong>The relation is directed, and that is the whole finding.</strong> Fusion is computable from braiding: S simultaneously diagonalises every fusion matrix, and the integers fall out. Nothing runs the other way — the ring is a shadow, and several theories cast the same one.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+
+    <h2><span class="n">Section 2</span>So you are looking for a fibre, not a point</h2>
+
+    <p>Set the map up properly. Let <span class="m">𝔐</span> be the set of modular data and <span class="m">𝔉</span> the set of fusion rings. Verlinde gives a map</p>
+
+    <div class="eq">V : 𝔐 → 𝔉<span class="where">Every topological order has a fusion ring. Different orders may share one.</span></div>
+
+    <p>It is tempting to ask whether <span class="m">V</span> has a point where the two sides <em>coincide</em>. It cannot: they live in different sets. Categories are not rings.</p>
+
+    <p>The well-posed version of the question is about the <strong>fibre</strong>:</p>
+
+    <div class="eq">V<sup>−1</sup>(R) = { all modular data whose fusion ring is R }<span class="where">For R = the Fibonacci ring, this fibre has exactly four elements.</span></div>
+
+    <div class="note is-crit">
+      <span class="tag">⚠ Corrected after reading the paper — RSW does NOT give you this fibre</span>
+      <p><strong>RSW classify <em>unitary</em> modular tensor categories.</strong> Yang–Lee fails their Frobenius–Perron criterion and does not appear in their tables at all. So the count of four over this fusion ring is <strong>not an RSW result</strong> — it includes non-unitary members their classification excludes by construction. Citing RSW §5.3 for it would be reaching into a table for a number the table was built to leave out.</p>
+      <p><strong>What RSW does give, in its own introduction, is the pairing:</strong> <em>"the Galois conjugate of the Fibonacci theory is the Yang-Lee theory, which is non-unitary."</em> Galois action <strong>provably fixes the fusion matrices</strong> — a named group action holding the ring rigid while everything else moves. That is stronger than a fibre count, because it is a mechanism rather than a tally.</p>
+      <p>A fibre with <strong>one</strong> point would be a fusion ring that <em>does</em> determine its braiding — a place where the modulus forgets nothing. Those exist. Finding which rings have singleton fibres is a sharper question, and it is answerable from the same paper.</p>
+    </div>
+
+    <p>So the object you were reaching for is real, but it is a <em>set</em>, and its size is the measure of how much the modulus forgets. Fibre size 1 means no information lost. Fibre size 4, as here, means the ring throws away exactly two binary choices: which root, and which chirality.</p>
+
+    <div class="note is-crit">
+      <span class="tag">And one hard physical constraint on the non-unitary half</span>
+      <p>Freedman's <em>Galois Conjugates of Topological Phases</em>, Theorem IV.5, <strong>proves</strong> that no gapped Hermitian Lieb–Robinson Hamiltonian has a Yang–Lee phase as its ground state, in any gauge. The mechanism is a <strong>signature obstruction</strong>: the Galois-conjugated braid representation is dense in a noncompact SU(p,q) preserving a <em>mixed-signature</em> form, while a unitary theory preserves a <em>definite</em> one — and no conjugation bridges them, because eigenvalue moduli are conjugation-invariant.</p>
+      <p>The authors signpost the exit themselves: §V says the Lieb–Robinson tools simply are not available for <strong>non-Hermitian</strong> Hamiltonians, and Sanno 2022 takes that route with an open dissipative system. ⇒ <strong>Any claim that a Yang–Lee phase could be physically realised must carry "in an open / non-Hermitian system", or it is refuted.</strong> Narrower than "Yang–Lee is impossible" — and narrower than how the result is usually repeated.</p>
+    </div>
+
+    <h2><span class="n">Section 3</span>Where argument really does become modulus</h2>
+
+    <p>There <em>is</em> a place where phase data turns into magnitude data, and it is on the criticality side.</p>
+
+    <p><strong>Lee–Yang zeros.</strong> Take a finite system and treat the partition function as a polynomial in fugacity or in the magnetic field. It has zeros. For real physical parameters the partition function is strictly positive, so the zeros live at <em>complex</em> values — pure argument data, with no direct physical meaning at finite size.</p>
+
+    <p>Yang and Lee's insight (1952): as the system size goes to infinity, the zeros migrate. <strong>A phase transition occurs precisely where the zeros pinch the real axis.</strong> The free energy is analytic everywhere the zeros are not, and singular exactly where they arrive.</p>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 3 — where argument becomes modulus</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 340" role="img" aria-label="Zeros of the partition function on a circle in the complex plane. As system size grows the gap on the real axis closes and the zeros pinch it.">
+        <circle cx="310" cy="170" r="120" fill="none" stroke="#2c3a5c" stroke-width="1" stroke-dasharray="4 5"/>
+        <line x1="150" y1="170" x2="480" y2="170" stroke="#1e2942"/>
+        <line x1="310" y1="26" x2="310" y2="314" stroke="#1e2942"/>
+        <text x="492" y="166" class="sv-lab">Re</text>
+        <text x="318" y="36" class="sv-lab">Im</text>
+
+        <g class="ly1" fill="#7d93f0">
+          <circle cx="378.8" cy="71.7" r="5"/><circle cx="378.8" cy="268.3" r="5"/>
+          <circle cx="310" cy="50" r="5"/><circle cx="310" cy="290" r="5"/>
+          <circle cx="241.2" cy="71.7" r="5"/><circle cx="241.2" cy="268.3" r="5"/>
+          <circle cx="197.2" cy="129" r="5"/><circle cx="197.2" cy="211" r="5"/>
+          <text x="310" y="325" class="sv-lab" fill="#7d93f0" text-anchor="middle">N = 8 — a wide gap on the real axis</text>
+        </g>
+        <g class="ly2" fill="#b98cf5">
+          <circle cx="413.9" cy="110" r="4.5"/><circle cx="413.9" cy="230" r="4.5"/>
+          <circle cx="378.8" cy="71.7" r="4.5"/><circle cx="378.8" cy="268.3" r="4.5"/>
+          <circle cx="330.8" cy="51.8" r="4.5"/><circle cx="330.8" cy="288.2" r="4.5"/>
+          <circle cx="278.9" cy="54.1" r="4.5"/><circle cx="278.9" cy="285.9" r="4.5"/>
+          <circle cx="225.1" cy="85.1" r="4.5"/><circle cx="225.1" cy="254.9" r="4.5"/>
+          <circle cx="194.1" cy="138.9" r="4.5"/><circle cx="194.1" cy="201.1" r="4.5"/>
+          <text x="310" y="325" class="sv-lab" fill="#b98cf5" text-anchor="middle">N = 16 — the zeros crowd toward the axis</text>
+        </g>
+        <g class="ly3" fill="#ef7a6d">
+          <circle cx="428.2" cy="149.2" r="4"/><circle cx="428.2" cy="190.8" r="4"/>
+          <circle cx="416" cy="113.7" r="4"/><circle cx="416" cy="226.3" r="4"/>
+          <circle cx="393.4" cy="83.7" r="4"/><circle cx="393.4" cy="256.3" r="4"/>
+          <circle cx="362.6" cy="62.2" r="4"/><circle cx="362.6" cy="277.8" r="4"/>
+          <circle cx="326.7" cy="51.2" r="4"/><circle cx="326.7" cy="288.8" r="4"/>
+          <circle cx="289.2" cy="51.8" r="4"/><circle cx="289.2" cy="288.2" r="4"/>
+          <circle cx="250" cy="66.1" r="4"/><circle cx="250" cy="273.9" r="4"/>
+          <circle cx="218.1" cy="92.9" r="4"/><circle cx="218.1" cy="247.1" r="4"/>
+          <circle cx="197.2" cy="129" r="4"/><circle cx="197.2" cy="211" r="4"/>
+          <text x="310" y="325" class="sv-lab" fill="#ef7a6d" text-anchor="middle">N → ∞ — they pinch, and the free energy goes singular</text>
+        </g>
+        <circle class="pinch" cx="430" cy="170" fill="none" stroke="#e0b054" stroke-width="2.5"/>
+        <text x="452" y="146" class="sv-lab" fill="#e0b054">Yang–Lee edge</text>
+        <text x="452" y="162" class="sv-lab" fill="#e0b054">c = −22/5</text>
+      </svg>
+      <figcaption><strong>The zeros live at complex parameter values — pure argument, with no direct physical meaning at finite size.</strong> Observables are real. The transition happens exactly where the first becomes the second. The endpoint of the arc, where the zeros stop, is the <strong>Yang–Lee edge singularity</strong> — a critical point in its own right, described by a non-unitary CFT. Which is the fourth row of tutorial 1's table: <em>the two tutorials close a loop.</em></figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+
+    <div class="note is-crit">
+      <span class="tag">The answer to your question, in the form the question actually has</span>
+      <p>Complex zeros are <em>argument</em>. A divergent susceptibility is <em>modulus</em> — a real, measurable magnitude. The critical point is the locus where the first becomes the second. <strong>Phase information is converted into magnitude information at, and only at, criticality.</strong></p>
+    </div>
+
+    <p>And the endpoint of the arc of zeros is itself a critical point with its own exponents: the <strong>Yang–Lee edge singularity</strong>, described by a non-unitary conformal field theory with <span class="m">c = −22/5</span>.</p>
+
+    <p>Which is the fourth row of tutorial 1's table. <strong>The two tutorials close a loop.</strong> The non-unitary partner of Fibonacci is not an exotic curiosity dragged in for symmetry — it is the field theory of the place where complex zeros touch the real axis.</p>
+
+    <h2><span class="n">Section 4</span>Two cautions before the weekend</h2>
+
+    <h3>The weld can vanish without the power vanishing</h3>
+
+    <p>Tutorial 1 made <span class="m">c<sub>−</sub></span> the weld between magnitude and phase, via the Gauss sum. Do not promote it to the carrier of computational power.</p>
+
+    <p><strong>Doubled Fibonacci</strong> — the Levin–Wen string-net built from Fib ⊗ Fib-bar — has <span class="m">c<sub>−</sub> = 14/5 − 14/5 = 0</span>. It is non-chiral. It has no chiral edge mode at all. And it is <strong>still universal for quantum computation.</strong></p>
+
+    <p>So <span class="m">c<sub>−</sub> = 0</span> with full computational power. The Gauss sum can return a trivial phase while the braid representation stays dense. If you were forming an intuition that the weld measures the power, break it now rather than at 2 a.m. on Sunday.</p>
+
+    <h3>The fusion side is rigid, and that is why no continuous path exists</h3>
+
+    <p>Could you deform continuously from Fibonacci to Yang–Lee, passing through a coincidence? No — and the obstruction is worth naming precisely.</p>
+
+    <p>The two dimensions are the roots of <span class="m">d² = d + 1</span>, whose discriminant is <strong>5</strong>. Not zero, so the roots never collide. To make them collide you would have to deform the polynomial, which means deforming the fusion ring itself — but <strong>fusion coefficients are non-negative integers.</strong> Integers do not deform continuously.</p>
+
+    <div class="note is-caution">
+      <span class="tag">An asymmetry worth taking seriously</span>
+      <p>Fusion is <strong>discrete and rigid</strong> — integer structure constants, no continuous deformations. Braiding lives on continuous groups. That is a real structural difference between the two, and it may be more load-bearing than the phase/magnitude framing that leads people to it.</p>
+      <p>It also explains why the fibre is finite. A rigid base with a continuous total space would give infinite fibres; the finiteness says the modular data is quantised too.</p>
+    </div>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 4 — points on a line</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 215" role="img" aria-label="The admissible quantum dimensions below two, two cosine pi over n, marked as discrete points on a continuous line, with a visible gap between root two and phi.">
+        <rect class="jgap" x="267.1" y="92" width="101.9" height="36" fill="#3a1f22"/>
+        <line x1="50" y1="110" x2="578" y2="110" stroke="#2c3a5c" stroke-width="1.5"/>
+        <polygon points="586,110 574,105 574,115" fill="#2c3a5c"/>
+
+        <g fill="#b98cf5">
+          <circle class="jdot" cx="60"   cy="110" r="6"   style="animation-delay:0s"/>
+          <circle class="jdot" cx="267.1" cy="110" r="6"  style="animation-delay:.5s"/>
+          <circle class="jdot" cx="369"   cy="110" r="7"  style="animation-delay:1s"/>
+          <circle class="jdot" cx="426"   cy="110" r="5.5" style="animation-delay:1.5s"/>
+          <circle class="jdot" cx="461"   cy="110" r="5"  style="animation-delay:1.9s"/>
+          <circle class="jdot" cx="483.9" cy="110" r="4.5" style="animation-delay:2.2s"/>
+          <circle class="jdot" cx="499.7" cy="110" r="4"  style="animation-delay:2.45s"/>
+          <circle class="jdot" cx="511.1" cy="110" r="3.6" style="animation-delay:2.65s"/>
+          <circle class="jdot" cx="519.5" cy="110" r="3.2" style="animation-delay:2.8s"/>
+          <circle class="jdot" cx="525.9" cy="110" r="2.9" style="animation-delay:2.92s"/>
+        </g>
+        <circle cx="560" cy="110" r="6" fill="none" stroke="#6a7893" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+        <g class="sv-lab" text-anchor="middle">
+          <text x="60"   y="140" fill="#dde5f2">1</text>
+          <text x="267.1" y="140" fill="#dde5f2">√2</text>
+          <text x="369"   y="140" fill="#b98cf5" font-size="13">φ</text>
+          <text x="426"   y="140" fill="#dde5f2">√3</text>
+          <text x="560"   y="140" fill="#6a7893">2</text>
+          <text x="60"   y="158" fill="#6a7893" font-size="9.5">n=3</text>
+          <text x="267.1" y="158" fill="#6a7893" font-size="9.5">n=4</text>
+          <text x="369"   y="158" fill="#6a7893" font-size="9.5">n=5</text>
+          <text x="426"   y="158" fill="#6a7893" font-size="9.5">n=6</text>
+          <text x="560"   y="158" fill="#6a7893" font-size="9.5">limit</text>
+        </g>
+        <text x="318" y="80" class="sv-lab" fill="#ef7a6d" text-anchor="middle">nothing lives here</text>
+        <text x="318" y="184" class="sv-lab" fill="#6a7893" text-anchor="middle">admissible quantum dimensions below 2 are exactly 2cos(π/n)</text>
+        <text x="318" y="202" class="sv-lab" fill="#6a7893" text-anchor="middle">discrete points, accumulating at 2 — never a continuum</text>
+      </svg>
+      <figcaption>The Jones index theorem says the admissible dimensions below 2 are exactly 2cos(π/n) — a discrete set embedded in a continuum. There is <em>nothing</em> between √2 and φ, and the gap is forbidden by representation theory rather than merely unobserved. The same shape recurs in the fibres — finite sets over each ring — and along SU(2)<sub>k</sub>, where universality switches on and off by level.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+
+    <h2><span class="n">Section 5</span>Multicriticality is a different question</h2>
+
+    <p>Plainly: a multicritical point is where <em>two or more independent tuning conditions are met simultaneously</em> — two order parameters going critical together, or in the topological setting two distinct gap-closings coinciding. Those are real objects and they are worth chasing.</p>
+
+    <p>But that is <strong>not</strong> the same as fusion and braiding "becoming one." Multicriticality is about codimension in a parameter space. The fusion–braiding relation is about a map between two different kinds of mathematical object. Conflating them will cost you a weekend.</p>
+
+    <p>The honest version of the question: <em>is there a system where tuning to a multicritical point causes the fibre to degenerate</em> — where two of the four categories become indistinguishable in the observable data? That is well posed, and it is not obviously answered.</p>
+
+    <h2><span class="n">Section 6</span>Three things you can actually check</h2>
+
+    <ol>
+      <li><strong>Compute the Verlinde formula by hand for the Fibonacci S-matrix.</strong> Two objects, a 2×2 matrix. You should recover N<sub>ττ</sub><sup>1</sup> = N<sub>ττ</sub><sup>τ</sup> = 1 and nothing else. Doing it once makes "fusion is a shadow of braiding" stop being a slogan.</li>
+      <li><strong>Find a fusion ring whose fibre is a single point.</strong> If the modulus sometimes forgets nothing, the interesting question becomes <em>what property of a ring controls how much it forgets</em>.</li>
+      <li><strong>Look up whether the Yang–Lee edge exponent has ever been measured</strong> in a physical system. A non-unitary critical point with a known central charge is an unusually sharp experimental target, and a sharp target is the cheapest thing to check a claim against.</li>
+    </ol>
+
+    <div class="srcs">
+      <span class="st">Sources</span>
+      <p><strong>Checked against the paper itself:</strong> Rowell, Stong &amp; Wang (arXiv:0712.1377) for the
+      Galois pairing and for what their classification does and does not cover; Freedman <em>et al.</em>,
+      <em>Galois Conjugates of Topological Phases</em>, for Theorem IV.5 and the signature obstruction; Sanno
+      <em>et al.</em> (2022) for the open-system route; Fisher (1978) for the edge singularity.</p>
+      <p><strong>Stated on reputation, not checked here:</strong> Verlinde (1988); Yang &amp; Lee (1952);
+      Levin&ndash;Wen for the doubled theories; the Jones index theorem. <strong>None of the mathematics here is
+      new</strong>, and the only assembly is reading V as a map and asking about its fibres — which is a
+      restatement, not a result.</p>
+      <p>Section 1's directional claim is the solid part. <strong>Section 3's loop-closing and Section 5's
+      reframing were reconstructed rather than read from a source</strong> — read the papers before building on
+      either.</p>
+    </div>
+
+    <footer>
+      <p>Tutorial 3 of four. Written 28 August 2026, for a quiet weekend. Write down what changes <em>before</em> checking whether it survives; the two operations spoil each other.</p>
+    </footer>
+  </div>
+</div>
+</body>
+</html>

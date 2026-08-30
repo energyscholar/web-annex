@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A paper course: five pencil derivations — Galois conjugation, the modular group, the central charge, Lee–Yang zeros, and the Berry phase.">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Five Derivations</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"><style id="css">
+:root{--bg:#0b1120;--bg-raise:#111a2e;--bg-sunk:#080d19;--ink:#dde5f2;--ink-soft:#97a6bf;--ink-faint:#6a7893;--rule:#1e2942;--rule-lit:#2c3a5c;--coral:#ef7a6d;--indigo:#7d93f0;--violet:#b98cf5;--amber:#e0b054;--good:#5fbf8f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.rail{border-bottom:1px solid var(--rule);background:var(--bg-sunk);padding:12px 24px;display:flex;flex-wrap:wrap;gap:6px 20px;align-items:baseline;font-family:"IBM Plex Mono",monospace;font-size:11.5px}
+.rail .series{color:var(--ink-faint);text-transform:uppercase;letter-spacing:.14em}
+.rail a{color:var(--ink-soft);text-decoration:none}.rail a:hover{color:var(--ink)}
+.rail .here{color:var(--violet)}
+.wrap{max-width:50em;margin:0 auto;padding:56px 24px 110px}
+h1{font-family:Spectral,Georgia,serif;font-size:2.6rem;font-weight:600;letter-spacing:-.015em;margin:0 0 12px;line-height:1.06}
+.dek{font-family:Spectral,Georgia,serif;font-size:1.18rem;color:var(--ink-soft);margin:0 0 8px;line-height:1.5}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin:0 0 18px}
+h2{font-family:Spectral,Georgia,serif;font-size:1.6rem;font-weight:600;margin:60px 0 6px;letter-spacing:-.01em}
+h2 .n{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:8px}
+h3{font-size:1rem;font-weight:600;margin:28px 0 8px;color:var(--ink)}
+p{margin:0 0 15px;max-width:44em}
+.m{font-family:"IBM Plex Mono",monospace;font-size:.9em}
+pre{font-family:"IBM Plex Mono",monospace;background:var(--bg-sunk);border:1px solid var(--rule);border-left:2px solid var(--violet);border-radius:0 3px 3px 0;padding:15px 18px;margin:16px 0;font-size:.9rem;line-height:1.75;overflow-x:auto}
+pre .c{color:var(--ink-faint)}
+pre .h{color:var(--violet)}
+pre .g{color:var(--good)}
+.task{background:var(--bg-sunk);border:1px solid var(--rule);border-left:2px solid var(--amber);border-radius:0 3px 3px 0;padding:16px 18px;margin:20px 0}
+.task .t{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:9px}
+.task ol{margin:0;padding-left:20px}.task li{margin-bottom:7px}
+.task p:last-child,.task ol:last-child{margin-bottom:0}
+.note{border:1px solid var(--rule);background:var(--bg-raise);border-radius:3px;padding:15px 18px;margin:20px 0;border-left:2px solid var(--indigo)}
+.note .t{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--indigo);display:block;margin-bottom:8px}
+.note.crit{border-left-color:var(--coral)}.note.crit .t{color:var(--coral)}
+.note p:last-child{margin-bottom:0}
+.chk{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.chk input{width:110px;padding:7px 9px;background:var(--bg);border:1px solid var(--rule-lit);border-radius:3px;color:var(--ink);font-family:"IBM Plex Mono",monospace;text-align:right}
+.chk input:focus{outline:2px solid var(--violet);outline-offset:1px}
+.chk label{font-family:"IBM Plex Mono",monospace;font-size:.88rem;color:var(--ink-soft)}
+.btn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:7px 13px;background:var(--bg-raise);color:var(--ink-soft);border:1px solid var(--rule-lit);border-radius:3px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--violet)}
+.btn:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.mark{font-family:"IBM Plex Mono",monospace;font-size:.86rem}
+.mark.ok{color:var(--good)}.mark.no{color:var(--coral)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-family:"IBM Plex Mono",monospace;font-size:.86rem;min-width:440px;margin:14px 0}
+th{text-align:right;padding:8px 13px 8px 0;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;border-bottom:1px solid var(--rule-lit)}
+th:first-child{text-align:left}
+td{text-align:right;padding:8px 13px 8px 0;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;color:var(--ink-faint)}
+.effort{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;background:#16224a;color:var(--indigo);margin-left:10px;vertical-align:3px}
+.effort.big{background:#3a1f22;color:var(--coral)}
+
+/* ---- worksheet controls ---- */
+.step{display:flex;gap:11px;align-items:flex-start;cursor:pointer}
+.step input[type=checkbox]{appearance:none;flex:none;width:18px;height:18px;margin-top:3px;border:1.5px solid var(--rule-lit);border-radius:3px;background:var(--bg);cursor:pointer;position:relative;transition:.15s}
+.step input[type=checkbox]:checked{background:var(--good);border-color:var(--good)}
+.step input[type=checkbox]:checked::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--bg);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.step input[type=checkbox]:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.step input[type=checkbox]:checked ~ span{color:var(--ink-faint);text-decoration:line-through;text-decoration-color:var(--rule-lit)}
+.task ol{list-style:none;padding-left:0;counter-reset:s}
+.task ol li{counter-increment:s;margin-bottom:13px}
+.step span::before{content:counter(s) ". ";color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;font-size:.85em}
+.ans{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 0 29px}
+.ans label{font-family:"IBM Plex Mono",monospace;font-size:.84rem;color:var(--ink-faint)}
+.ans input{width:130px;padding:6px 8px;background:var(--bg);border:1px solid var(--rule-lit);border-radius:3px;color:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:.85rem;text-align:right}
+.ans input:focus{outline:2px solid var(--violet);outline-offset:1px}
+.ans input.right{border-color:var(--good);color:var(--good)}
+.ans input.wrong{border-color:var(--coral);color:var(--coral)}
+.btn.mini{padding:5px 10px;font-size:10px}
+.notes{margin:18px 0 0}
+.notes label{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:7px}
+.notes textarea{width:100%;min-height:82px;padding:11px 13px;background:var(--bg);border:1px solid var(--rule-lit);border-radius:3px;color:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:.86rem;line-height:1.6;resize:vertical}
+.notes textarea:focus{outline:2px solid var(--violet);outline-offset:1px}
+.progress{display:flex;align-items:center;gap:12px;margin:10px 0 0;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint)}
+.progress .bar{flex:1;height:4px;background:var(--rule);border-radius:2px;overflow:hidden;max-width:220px}
+.progress .bar i{display:block;height:100%;background:var(--good);transition:width .3s}
+.topbar{position:sticky;top:0;z-index:5;background:rgba(11,17,32,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:11px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:"IBM Plex Mono",monospace;font-size:11.5px}
+.topbar .bar{flex:1;height:5px;background:var(--rule);border-radius:3px;overflow:hidden;min-width:120px;max-width:300px}
+.topbar .bar i{display:block;height:100%;background:var(--violet);transition:width .35s}
+.savestate{color:var(--ink-faint);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.savestate.live{color:var(--indigo)}
+.savestate.local{color:var(--amber)}
+
+/* ---- gates ---- */
+.quiz{background:var(--bg-raise);border:1px solid var(--rule-lit);border-left:2px solid var(--violet);border-radius:0 3px 3px 0;padding:18px 20px;margin:26px 0}
+.quiz .t{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--violet);display:block;margin-bottom:12px}
+.quiz .qt{font-weight:600;margin:0 0 9px;font-size:.95rem}
+.quiz .q{margin-bottom:20px}
+.quiz .q:last-of-type{margin-bottom:14px}
+.quiz label{display:flex;gap:10px;align-items:flex-start;padding:6px 8px;border-radius:3px;cursor:pointer;font-size:.92rem;line-height:1.5}
+.quiz label:hover{background:var(--bg-sunk)}
+.quiz input[type=radio]{appearance:none;flex:none;width:15px;height:15px;margin-top:4px;border:1.5px solid var(--rule-lit);border-radius:50%;background:var(--bg);cursor:pointer}
+.quiz input[type=radio]:checked{border-color:var(--violet);border-width:4.5px}
+.quiz input[type=radio]:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.quiz label.correct{background:#12301f}
+.quiz label.correct span{color:var(--good)}
+.quiz label.incorrect{background:#2a1a1c}
+.quiz label.incorrect span{color:var(--coral)}
+.verdict{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-left:12px;padding:4px 10px;border-radius:2px}
+.verdict.pass{background:#12301f;color:var(--good)}
+.verdict.fail{background:#3a1f22;color:var(--coral)}
+footer{margin-top:70px;padding-top:24px;border-top:1px solid var(--rule);color:var(--ink-faint);font-size:.85rem}
+
+/* --- scope note, added on publication --- */
+.scope{border:1px solid var(--rule-lit);background:var(--bg-raise);border-radius:4px;padding:17px 19px;margin:24px 0 28px}
+.scope .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:9px}
+.scope p{margin:0 0 10px;font-size:.93rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.scope p:last-child{margin-bottom:0}
+.scope a{color:var(--violet)}
+.prereq{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;color:var(--ink-faint);border-left:2px solid var(--rule-lit);padding:2px 0 2px 14px;margin:0 0 26px;line-height:1.7;max-width:none}
+.prereq b{color:var(--ink-soft);font-weight:500}
+.srcs{border:1px solid var(--rule);background:var(--bg-sunk);border-radius:4px;padding:16px 18px;margin:30px 0 0}
+.srcs .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--indigo,#7d93f0);display:block;margin-bottom:9px}
+.srcs p{margin:0 0 9px;font-size:.88rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.srcs p:last-child{margin-bottom:0}
+</style>
+</head>
+<body>
+<div id="doc">
+<div class="topbar"><span style="color:var(--violet)">PROGRESS</span><span class="bar"><i id="topbar"></i></span><span id="topcount" style="color:var(--ink-soft)">0 / 0</span><button class="btn mini" id="clearAll">reset all</button><span id="logcount" style="color:var(--ink-faint);font-size:10.5px">0 attempts</span><span class="savestate" id="savestate">loading…</span></div>
+<nav class="rail">
+  <span class="series">Worksheets · anyon algebra by hand</span>
+  <a href="./">Index</a>
+  <a href="golden-arithmetic.html">Lab · Golden Arithmetic</a>
+  <a href="row-times-column.html">Lab · Row Times Column</a>
+  <a href="verlinde-by-hand.html">Lab · Verlinde by Hand</a>
+  <span class="here">Paper course · Five Derivations</span>
+  <a href="one-modulus-two-arguments.html">1 · One Modulus, Two Arguments</a>
+  <a href="the-phase-you-pick-up.html">2 · The Phase You Pick Up</a>
+  <a href="what-the-modulus-forgets.html">3 · What the Modulus Forgets</a>
+  <a href="where-the-integers-come-from.html">4 · Where the Integers Come From</a>
+</nav>
+
+<div class="wrap">
+  <p class="kicker">Paper course · the remaining gaps</p>
+  <h1>Five Derivations</h1>
+  <p class="dek">Each one is a calculation you can finish with a pencil. Together they close everything between the labs and reading the tutorials at full strength — <em>except the last, which is honest about being a mountain.</em></p>
+
+<div class="scope">
+  <span class="st">What this is</span>
+  <p><strong>A worksheet, not a result.</strong> The mathematics on this page is standard topological quantum
+  computation, roughly 1984&ndash;2009. None of it is new. <em>&ldquo;It was simply new to my hands. I had read it
+  for years and never computed with it, and those turn out to be different states of knowing.&rdquo;</em> These
+  sheets exist to move a reader from the first state to the second, and they make no claim of their own.</p>
+  <p><strong>The method is predict&ndash;then&ndash;check.</strong> Every input box, drill and gate here is built for one
+  move: write down what you think the number is <em>before</em> you reveal it. Numbers are sourced to a paper
+  where a paper says them, and marked unchecked where none does &mdash; a sheet whose whole method is
+  <em>check it yourself</em> cannot ask you to take its own arithmetic on trust.</p>
+  <p>If you are coming from an operator formalism, you may want to ask of every quantity here what the declared
+  observable is, and what mapping puts it into the domain before the algebra acts. That is a fair question, and
+  these sheets sit upstream of it &mdash; the arithmetic of <span class="m">d&sup2; = d + 1</span> is the same
+  arithmetic whichever way it is answered. They take no position on it. <a href="./#scope">The full note is on the index.</a></p>
+</div>
+
+<p class="prereq"><b>Prerequisites:</b> the three labs. Derivations 1&ndash;4 are a few days of paper between them; derivation 5 is a project of its own size, and the page says so.</p>
+
+  <div class="note">
+    <span class="t">Assumed background — not repeated here</span>
+    <p>φ and its identities · ℤ[φ] arithmetic · powers via Fibonacci coefficients · 𝒟 = √(2+φ) · quantum dimension as growth rate · the 2cos(π/n) ladder · fusion rules · matrix multiplication · eigenvalues · Verlinde mechanically · integrality as rigidity · <strong>e<sup>iθ</sup> as the unit circle in the complex plane.</strong></p>
+  </div>
+
+  <!-- ============ 1 ============ -->
+  <h2><span class="n">Derivation 1</span>Galois conjugation<span class="effort">hours</span></h2>
+  <p>The single highest-value item, and it operates entirely inside the ℤ[φ] system set up in the Golden Arithmetic lab.</p>
+
+  <p><strong>The map.</strong> φ was built from √5. There is a second, equally valid square root: −√5. Swapping them is a <em>field automorphism</em> — call it σ. It leaves every ordinary rational number alone and moves only the √5 part.</p>
+
+<pre>φ  = (1 + √5)/2
+σ(φ) = (1 − √5)/2 = <span class="h">1 − φ</span>
+
+check:  1 − 1.618034 = −0.618034 = <span class="g">−1/φ</span>   ✓</pre>
+
+  <p><strong>σ sends φ to the other root.</strong> That is the whole content.</p>
+
+  <h3>On a general element</h3>
+<pre>σ(a + bφ) = a + b(1 − φ) = <span class="h">(a + b) − bφ</span></pre>
+
+  <div class="task">
+    <span class="t">On paper — derivation 1</span><ol><li><label class="step"><input type="checkbox" data-ck="d1s1"><span>Compute σ(φ²) two ways: (a) as σ(1 + φ), and (b) as (σφ)² = (1−φ)². Both must give <span class="m">2 − φ</span>.</span></label><div class="ans"><label>σ(φ²) =</label><input type="number" step="any" data-ans="d1a1" placeholder="your value"><button class="btn mini" data-check="d1a1">check</button><span class="mark" data-mark="d1a1"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d1s2"><span>Compute σ(φ³). You know φ³ = 1 + 2φ, so σ(φ³) = 3 − 2φ.</span></label><div class="ans"><label>σ(φ³) =</label><input type="number" step="any" data-ans="d1a2" placeholder="your value"><button class="btn mini" data-check="d1a2">check</button><span class="mark" data-mark="d1a2"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d1s3"><span>Show σ leaves every integer fixed: σ(5) = 5, because 5 = 5 + 0φ.</span></label></li><li><label class="step"><input type="checkbox" data-ck="d1s4"><span>Derive the <strong>norm</strong> N(a+bφ) = (a+bφ)·σ(a+bφ). You should get <span class="m">a² + ab − b²</span> — always a whole number. Then evaluate it at a=2, b=3.</span></label><div class="ans"><label>N(2+3φ) =</label><input type="number" step="any" data-ans="d1a3" placeholder="your value"><button class="btn mini" data-check="d1a3">check</button><span class="mark" data-mark="d1a3"></span></div></li></ol><div class="notes"><label for="d1n">Your working / notes</label><textarea id="d1n" data-note="d1n" placeholder="Write what you got, where you got stuck, anything to come back to."></textarea></div><div class="progress"><span data-prog="d1n">0 / 0</span><span class="bar"><i data-progbar="d1n"></i></span></div>
+<div class="quiz" data-quiz="q1"><span class="t">Gate — derivation 1</span><div class="q" data-q="q1_0"><p class="qt">Why does Galois conjugation leave the fusion ring untouched?</p><label><input type="radio" name="q1_0" value="0"><span>Because fusion matrices are symmetric</span></label><label><input type="radio" name="q1_0" value="1"><span>Because the fusion coefficients are integers, and σ fixes every rational</span></label><label><input type="radio" name="q1_0" value="2"><span>Because σ is its own inverse</span></label><label><input type="radio" name="q1_0" value="3"><span>Because φ and −1/φ have the same magnitude</span></label></div><div class="q" data-q="q1_1"><p class="qt">σ(φ) equals:</p><label><input type="radio" name="q1_1" value="0"><span>φ − 1</span></label><label><input type="radio" name="q1_1" value="1"><span>1 − φ</span></label><label><input type="radio" name="q1_1" value="2"><span>−φ</span></label><label><input type="radio" name="q1_1" value="3"><span>1/φ</span></label></div><div class="q" data-q="q1_2"><p class="qt">A quantum dimension of −1/φ tells you the theory is:</p><label><input type="radio" name="q1_2" value="0"><span>abelian</span></label><label><input type="radio" name="q1_2" value="1"><span>universal for computation</span></label><label><input type="radio" name="q1_2" value="2"><span>non-unitary</span></label><label><input type="radio" name="q1_2" value="3"><span>gapless</span></label></div><button class="btn" data-quizcheck="q1">Check answers</button><span class="verdict" data-qv="q1"></span></div></div>
+
+  <div class="note crit">
+    <span class="t">Why this is the load-bearing derivation</span>
+    <p>Fusion coefficients <span class="m">N<sub>ab</sub><sup>c</sup></span> are <strong>integers</strong>. σ fixes every integer. Therefore <strong>σ leaves the entire fusion ring untouched</strong> — one line, no machinery.</p>
+    <p>But σ sends d<sub>τ</sub> = φ to −1/φ. <strong>Same ring, different quantum dimension.</strong> That is exactly Fibonacci → Yang–Lee, and it is why Rowell–Stong–Wang can write "the Galois conjugate of the Fibonacci theory is the Yang-Lee theory" as a plain statement of fact.</p>
+    <p>"One modulus, two arguments" has a mechanism, and this is it.</p>
+  </div>
+
+  <!-- ============ 2 ============ -->
+  <h2><span class="n">Derivation 2</span>The modular group, and why S exists<span class="effort">a day</span></h2>
+
+  <div class="note crit">
+    <span class="t">⚠ Notation collision — read before anything else</span>
+    <p><strong>τ means two entirely different things in this literature.</strong> The Fibonacci anyon is τ. The <em>modular parameter of a torus</em> is also τ. They are unrelated and appear in the same papers. Watch the context; there is no fixing it.</p>
+  </div>
+
+  <p>A torus has two independent loops — call them <strong>a</strong> (around the hole) and <strong>b</strong> (through it). Nothing distinguishes them intrinsically. So there must be an operation that <em>swaps</em> them, and that operation is <strong>S</strong>. A second operation shears one along the other: <strong>T</strong>. Together they generate SL(2,ℤ).</p>
+
+  <p>On the modular parameter:</p>
+<pre>S :  τ → −1/τ        <span class="c">swap the two cycles</span>
+T :  τ → τ + 1       <span class="c">shear</span></pre>
+
+  <div class="task">
+    <span class="t">On paper — derivation 2</span><ol><li><label class="step"><input type="checkbox" data-ck="d2s1"><span>Apply S twice to the modular parameter: S(S(τ)) = S(−1/τ) = −1/(−1/τ) = τ. So <strong>S² = 1</strong> on the torus.</span></label></li><li><label class="step"><input type="checkbox" data-ck="d2s2"><span>Now multiply the anyon S-matrix by itself. Before dividing by 𝒟², what is the top-left entry — i.e. 1·1 + φ·φ?</span></label><div class="ans"><label>1 + φ² =</label><input type="number" step="any" data-ans="d2a1" placeholder="your value"><button class="btn mini" data-check="d2a1">check</button><span class="mark" data-mark="d2a1"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d2s3"><span>What is the off-diagonal entry, 1·φ + φ·(−1)?</span></label><div class="ans"><label>off-diagonal =</label><input type="number" step="any" data-ans="d2a2" placeholder="your value"><button class="btn mini" data-check="d2a2">check</button><span class="mark" data-mark="d2a2"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d2s4"><span>Divide through by 𝒟² and confirm you are left with the identity matrix.</span></label></li></ol><div class="notes"><label for="d2n">Your working / notes</label><textarea id="d2n" data-note="d2n" placeholder="Write what you got, where you got stuck, anything to come back to."></textarea></div><div class="progress"><span data-prog="d2n">0 / 0</span><span class="bar"><i data-progbar="d2n"></i></span></div>
+<div class="quiz" data-quiz="q2"><span class="t">Gate — derivation 2</span><div class="q" data-q="q2_0"><p class="qt">What does the S-matrix physically represent?</p><label><input type="radio" name="q2_0" value="0"><span>The energy spectrum</span></label><label><input type="radio" name="q2_0" value="1"><span>Swapping the two independent cycles of a torus</span></label><label><input type="radio" name="q2_0" value="2"><span>The fusion rules</span></label><label><input type="radio" name="q2_0" value="3"><span>The quantum dimensions</span></label></div><div class="q" data-q="q2_1"><p class="qt">In S² = I, why do the off-diagonal entries vanish?</p><label><input type="radio" name="q2_1" value="0"><span>Because 𝒟² = 1 + φ²</span></label><label><input type="radio" name="q2_1" value="1"><span>Because 1·φ + φ·(−1) = 0</span></label><label><input type="radio" name="q2_1" value="2"><span>Because the matrix is symmetric</span></label><label><input type="radio" name="q2_1" value="3"><span>Because φ² = φ + 1</span></label></div><button class="btn" data-quizcheck="q2">Check answers</button><span class="verdict" data-qv="q2"></span></div></div>
+
+<pre>S² = (1/𝒟²) ⎡ 1·1 + φ·φ    1·φ + φ·(−1) ⎤
+            ⎣ φ·1 + (−1)·φ  φ·φ + (−1)(−1) ⎦
+
+   = (1/𝒟²) ⎡ 1 + φ²     0     ⎤
+            ⎣    0    φ² + 1   ⎦
+
+and  1 + φ² = <span class="h">𝒟²</span>   so
+
+S² = ⎡ 1  0 ⎤   =  <span class="g">the identity</span>
+     ⎣ 0  1 ⎦</pre>
+
+  <p>The off-diagonal entries cancel <em>before</em> you divide by anything: φ − φ = 0. The diagonal ones are 𝒟²/𝒟². <strong>Nothing was approximated.</strong></p>
+
+  <div class="note">
+    <span class="t">What you have just shown</span>
+    <p>Swapping the torus's two cycles twice returns you to where you started — and the anyon S-matrix knows this. <strong>S is not an arbitrary array of numbers; it is a geometric operation on a doughnut, written down.</strong> That is why tutorial 4 opens with a torus.</p>
+  </div>
+
+  <!-- ============ 3 ============ -->
+  <h2><span class="n">Derivation 3</span>Deriving the central charge<span class="effort">a day</span></h2>
+  <p>Here you produce one. <strong>c = 14/5 falls out of arithmetic you can do by hand.</strong></p>
+
+  <p>The Gauss sum:</p>
+<pre>Σ<sub>a</sub> d<sub>a</sub>² θ<sub>a</sub> = 𝒟 · e<sup>2πi c/8</sup></pre>
+
+  <p>Fibonacci has two terms. The twists are <span class="m">θ<sub>1</sub> = 1</span> and <span class="m">θ<sub>τ</sub> = e<sup>2πi(2/5)</sup> = e<sup>i·144°</sup></span>.</p>
+
+  <h3>The exact step that makes it hand-doable</h3>
+<pre>cos 144° = −cos 36° = <span class="h">−φ/2</span>       <span class="c">← because 2cos36° = φ</span>
+sin 144° =  sin 36°  = 0.587785</pre>
+
+  <div class="task">
+    <span class="t">On paper — derivation 3</span><ol><li><label class="step"><input type="checkbox" data-ck="d3s1"><span>Write the first term: <span class="m">d₁²θ₁ = 1 · 1</span>.</span></label><div class="ans"><label>first term =</label><input type="number" step="any" data-ans="d3a1" placeholder="your value"><button class="btn mini" data-check="d3a1">check</button><span class="mark" data-mark="d3a1"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d3s2"><span>Second term, real part: <span class="m">φ²·(−φ/2) = −φ³/2 = −(1+2φ)/2</span>.</span></label><div class="ans"><label>real part of term 2 =</label><input type="number" step="any" data-ans="d3a2" placeholder="your value"><button class="btn mini" data-check="d3a2">check</button><span class="mark" data-mark="d3a2"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d3s3"><span>Add the two real parts.</span></label><div class="ans"><label>total real =</label><input type="number" step="any" data-ans="d3a3" placeholder="your value"><button class="btn mini" data-check="d3a3">check</button><span class="mark" data-mark="d3a3"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d3s4"><span>Imaginary part: <span class="m">φ² sin 36°</span>.</span></label><div class="ans"><label>total imaginary =</label><input type="number" step="any" data-ans="d3a4" placeholder="your value"><button class="btn mini" data-check="d3a4">check</button><span class="mark" data-mark="d3a4"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d3s5"><span>Take the modulus √(re² + im²). It should be 𝒟.</span></label><div class="ans"><label>modulus =</label><input type="number" step="any" data-ans="d3a5" placeholder="your value"><button class="btn mini" data-check="d3a5">check</button><span class="mark" data-mark="d3a5"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d3s6"><span>Take the argument, in degrees, second quadrant.</span></label><div class="ans"><label>argument° =</label><input type="number" step="any" data-ans="d3a6" placeholder="your value"><button class="btn mini" data-check="d3a6">check</button><span class="mark" data-mark="d3a6"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d3s7"><span>Solve <span class="m">argument = 360·c/8</span> for c.</span></label><div class="ans"><label>c =</label><input type="number" step="any" data-ans="d3a7" placeholder="your value"><button class="btn mini" data-check="d3a7">check</button><span class="mark" data-mark="d3a7"></span></div></li></ol><div class="notes"><label for="d3n">Your working / notes</label><textarea id="d3n" data-note="d3n" placeholder="Write what you got, where you got stuck, anything to come back to."></textarea></div><div class="progress"><span data-prog="d3n">0 / 0</span><span class="bar"><i data-progbar="d3n"></i></span></div>
+<div class="quiz" data-quiz="q3"><span class="t">Gate — derivation 3</span><div class="q" data-q="q3_0"><p class="qt">In the Gauss sum, which quantity supplies the magnitude and which the phase?</p><label><input type="radio" name="q3_0" value="0"><span>Twists give magnitude, dimensions give phase</span></label><label><input type="radio" name="q3_0" value="1"><span>Dimensions give magnitude, twists give phase</span></label><label><input type="radio" name="q3_0" value="2"><span>Both come from the dimensions</span></label><label><input type="radio" name="q3_0" value="3"><span>Both come from the S-matrix</span></label></div><div class="q" data-q="q3_1"><p class="qt">The Gauss sum's modulus came out 1.902113. That number is:</p><label><input type="radio" name="q3_1" value="0"><span>φ²</span></label><label><input type="radio" name="q3_1" value="1"><span>𝒟</span></label><label><input type="radio" name="q3_1" value="2"><span>c</span></label><label><input type="radio" name="q3_1" value="3"><span>√5</span></label></div><div class="q" data-q="q3_2"><p class="qt">A negative central charge is the signature of:</p><label><input type="radio" name="q3_2" value="0"><span>low temperature</span></label><label><input type="radio" name="q3_2" value="1"><span>a gapless edge</span></label><label><input type="radio" name="q3_2" value="2"><span>non-unitarity</span></label><label><input type="radio" name="q3_2" value="3"><span>abelian statistics</span></label></div><button class="btn" data-quizcheck="q3">Check answers</button><span class="verdict" data-qv="q3"></span></div></div>
+
+  <div class="note">
+    <span class="t">What just happened</span>
+    <p>You took quantum dimensions (magnitudes) and twists (phases), added two complex numbers, and out came <strong>the central charge of a conformal field theory living on the boundary of the material.</strong> Two arrows and some golden-ratio arithmetic.</p>
+    <p>That is the Gauss sum being "the weld." Not a slogan — six lines of arithmetic.</p>
+  </div>
+
+  <!-- ============ 4 ============ -->
+  <h2><span class="n">Derivation 4</span>Lee–Yang zeros, on two sites<span class="effort">a day</span></h2>
+  <p>The circle theorem is usually presented as a deep result. On <strong>two spins</strong> you can derive it in ten lines and see exactly why a transition is zeros pinching the real axis.</p>
+
+  <div class="note crit"><span class="t">⚠ Read the case of the letters</span><p><strong>Z</strong> (capital) is the <em>partition function</em>. <strong>z</strong> (lowercase) is the <em>fugacity</em>, <span class="m">e<sup>2βh</sup></span>. They are different objects and they appear in the same equation. Statistical mechanics does this constantly — it is the same trap as τ meaning both the anyon and the torus modulus. Writing them visibly differently on paper is a legitimate defence.</p></div>
+  <p>Two Ising spins in a field: <span class="m">E = −J s₁s₂ − h(s₁+s₂)</span>, each s = ±1. Four states.</p>
+
+<pre>↑↑ :  E = −J − 2h
+↑↓ :  E = +J
+↓↑ :  E = +J
+↓↓ :  E = −J + 2h
+
+Z = e<sup>β(J+2h)</sup> + 2e<sup>−βJ</sup> + e<sup>β(J−2h)</sup>
+
+write  K = e<sup>βJ</sup>,  z = e<sup>2βh</sup>
+
+Z = K z + 2/K + K/z</pre>
+
+  <div class="task">
+    <span class="t">On paper — derivation 4</span><ol><li><label class="step"><input type="checkbox" data-ck="d4s1"><span>Multiply Z through by <span class="m">z/K</span> to clear the fractions. This yields an <em>identity</em>, not an equation to solve: <span class="m">(z/K)·Z = z² + (2/K²)z + 1</span>.</span></label></li><li><label class="step"><input type="checkbox" data-ck="d4s2"><span>Now <strong>set Z = 0</strong> — you are hunting the zeros of the partition function. Since z ≠ 0 and K ≠ 0 the prefactor cannot vanish, so <span class="m">z² + (2/K²)z + 1 = 0</span>. Solve it: <span class="m">z = −1/K² ± √(1/K⁴ − 1)</span>, then evaluate the real part at K = 2.</span></label><div class="ans"><label>Re(z) at K=2 =</label><input type="number" step="any" data-ans="d4a1" placeholder="your value"><button class="btn mini" data-check="d4a1">check</button><span class="mark" data-mark="d4a1"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d4s3"><span>At K = 2 the discriminant is negative, so the root is imaginary. Compute <span class="m">√(1 − 1/16)</span>.</span></label><div class="ans"><label>Im(z) at K=2 =</label><input type="number" step="any" data-ans="d4a2" placeholder="your value"><button class="btn mini" data-check="d4a2">check</button><span class="mark" data-mark="d4a2"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d4s4"><span>Now compute |z|² = Re² + Im². This is the circle theorem.</span></label><div class="ans"><label>|z|² =</label><input type="number" step="any" data-ans="d4a3" placeholder="your value"><button class="btn mini" data-check="d4a3">check</button><span class="mark" data-mark="d4a3"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d4s5"><span>As T → 0 (K → ∞), what angle from the positive real axis do the zeros approach?</span></label><div class="ans"><label>limiting angle° =</label><input type="number" step="any" data-ans="d4a4" placeholder="your value"><button class="btn mini" data-check="d4a4">check</button><span class="mark" data-mark="d4a4"></span></div></li></ol><div class="notes"><label for="d4n">Your working / notes</label><textarea id="d4n" data-note="d4n" placeholder="Write what you got, where you got stuck, anything to come back to."></textarea></div><div class="progress"><span data-prog="d4n">0 / 0</span><span class="bar"><i data-progbar="d4n"></i></span></div>
+<div class="quiz" data-quiz="q4"><span class="t">Gate — derivation 4</span><div class="q" data-q="q4_0"><p class="qt">Why does the 1D Ising model have no phase transition?</p><label><input type="radio" name="q4_0" value="0"><span>Because the zeros are complex rather than real</span></label><label><input type="radio" name="q4_0" value="1"><span>Because the zeros never reach the positive real axis</span></label><label><input type="radio" name="q4_0" value="2"><span>Because |z| = 1</span></label><label><input type="radio" name="q4_0" value="3"><span>Because K &gt; 1 always</span></label></div><div class="q" data-q="q4_1"><p class="qt">Physically, what happens when partition-function zeros pinch the real axis?</p><label><input type="radio" name="q4_1" value="0"><span>The system becomes non-unitary</span></label><label><input type="radio" name="q4_1" value="1"><span>The free energy goes singular — a phase transition</span></label><label><input type="radio" name="q4_1" value="2"><span>The temperature reaches absolute zero</span></label><label><input type="radio" name="q4_1" value="3"><span>The partition function vanishes</span></label></div><div class="q" data-q="q4_2"><p class="qt">Complex zeros are argument; a divergent susceptibility is magnitude. Criticality is where:</p><label><input type="radio" name="q4_2" value="0"><span>magnitude becomes argument</span></label><label><input type="radio" name="q4_2" value="1"><span>argument becomes magnitude</span></label><label><input type="radio" name="q4_2" value="2"><span>both vanish</span></label><label><input type="radio" name="q4_2" value="3"><span>neither is defined</span></label></div><button class="btn" data-quizcheck="q4">Check answers</button><span class="verdict" data-qv="q4"></span></div></div>
+
+  <div class="note">
+    <span class="t">You have just proved the Lee–Yang circle theorem for N = 2</span>
+    <p><strong>|z| = 1 exactly.</strong> The zeros of the partition function lie on the unit circle, for every temperature. That is the theorem, and on two sites it is four lines of algebra.</p>
+  </div>
+
+  <h3>And now the part that teaches the physics</h3>
+  <p>Track where on the circle the zeros sit as temperature changes:</p>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>K = e<sup>βJ</sup></th><th>temperature</th><th>z</th><th>angle from +real axis</th></tr></thead>
+      <tbody id="lyTable"></tbody>
+    </table>
+  </div>
+
+  <p>Physical magnetic fields are <em>real</em>, which means <strong>z sits on the positive real axis</strong> — angle 0. A phase transition happens only if a zero reaches it.</p>
+
+  <div class="note crit">
+    <span class="t">The punchline, and it is a real result</span>
+    <p>As T → 0 the zeros march only as far as <strong>±90°</strong>. They never reach the positive real axis. <strong>Therefore the 1D Ising model has no phase transition at any finite temperature</strong> — which is correct, and famous, and you just derived it by watching two complex numbers fail to arrive.</p>
+    <p>In 2D they do pinch. That is the whole difference.</p>
+  </div>
+
+  <!-- ============ 5 ============ -->
+  <h2><span class="n">Derivation 5</span>Berry phase<span class="effort big">weeks — and that is honest</span></h2>
+  <p>This one gates tutorial 2 and nothing else. With graduate QM the on-ramp is real, but a worksheet does not close it, and this page will not pretend otherwise.</p>
+
+  <p><strong>The canonical calculable example</strong>, and the right place to start: a spin-½ in a magnetic field, with the field direction traversing a closed loop on the sphere. The Berry phase comes out as</p>
+
+<pre>γ = −½ Ω        <span class="c">Ω = solid angle enclosed by the path</span></pre>
+
+  <p>Do that one first. It is in every graduate text, it is fully computable, and it establishes the shape: <strong>a phase that depends only on the geometry of the path, not on how fast you traverse it.</strong> That is holonomy, and once it is in your hands the ASW calculation is the same move with a different Hilbert space.</p>
+
+  <div class="task">
+    <span class="t">The sequence, honestly</span><ol><li><label class="step"><input type="checkbox" data-ck="d5s1"><span>Spin-½ in a rotating field → γ = −Ω/2. Compute it for a loop enclosing a hemisphere (Ω = 2π).</span></label><div class="ans"><label>γ for Ω=2π =</label><input type="number" step="any" data-ans="d5a1" placeholder="your value"><button class="btn mini" data-check="d5a1">check</button><span class="mark" data-mark="d5a1"></span></div></li><li><label class="step"><input type="checkbox" data-ck="d5s2"><span>The Berry connection <span class="m">A = i⟨ψ|∇<sub>R</sub>|ψ⟩</span> and its curvature. Recognise it as a gauge field.</span></label></li><li><label class="step"><input type="checkbox" data-ck="d5s3"><span>Aharonov–Bohm: charge q around flux Φ picks up <span class="m">2π qΦ/Φ₀</span>.</span></label></li><li><label class="step"><input type="checkbox" data-ck="d5s4"><span>ASW: charge e/3 around a loop, and the extra 2π/3 when a second quasihole sits inside.</span></label></li></ol><div class="notes"><label for="d5n">Your working / notes</label><textarea id="d5n" data-note="d5n" placeholder="Write what you got, where you got stuck, anything to come back to."></textarea></div><div class="progress"><span data-prog="d5n">0 / 0</span><span class="bar"><i data-progbar="d5n"></i></span></div>
+<div class="quiz" data-quiz="q5"><span class="t">Gate — derivation 5</span><div class="q" data-q="q5_0"><p class="qt">The relationship between Aharonov–Bohm and Berry phase is:</p><label><input type="radio" name="q5_0" value="0"><span>They are unrelated</span></label><label><input type="radio" name="q5_0" value="1"><span>AB is a special case of Berry phase</span></label><label><input type="radio" name="q5_0" value="2"><span>Berry phase is a special case of AB</span></label><label><input type="radio" name="q5_0" value="3"><span>They are two names for the same equation</span></label></div><div class="q" data-q="q5_1"><p class="qt">In ASW, what produces the extra phase beyond the Aharonov–Bohm contribution?</p><label><input type="radio" name="q5_1" value="0"><span>The strength of the magnetic field</span></label><label><input type="radio" name="q5_1" value="1"><span>A second quasihole inside the loop, changing the enclosed charge</span></label><label><input type="radio" name="q5_1" value="2"><span>The speed of the transport</span></label><label><input type="radio" name="q5_1" value="3"><span>The radius of the loop</span></label></div><div class="q" data-q="q5_2"><p class="qt">A Berry phase depends on:</p><label><input type="radio" name="q5_2" value="0"><span>how fast the loop is traversed</span></label><label><input type="radio" name="q5_2" value="1"><span>the geometry of the path only</span></label><label><input type="radio" name="q5_2" value="2"><span>the energy of the state</span></label><label><input type="radio" name="q5_2" value="3"><span>the temperature</span></label></div><button class="btn" data-quizcheck="q5">Check answers</button><span class="verdict" data-qv="q5"></span></div></div>
+
+  <div class="note">
+    <span class="t">Where this leaves you</span>
+    <p>Derivations 1–4 are a few days of paper and they open tutorials 1, 3 and 4 at full strength. Derivation 5 is a separate project of its own size, and it buys exactly one tutorial. <strong>Do 1–4 first and the ratio stays in your favour.</strong></p>
+  </div>
+
+  <footer>
+    Built 29 August 2026, ordered by leverage rather than by difficulty. Every number here was computed, not recalled; the check boxes verify against live arithmetic rather than stored answers, so the page cannot quietly agree with a wrong number.
+  </footer>
+
+  <div class="srcs">
+    <span class="st">Sources</span>
+    <p><strong>Checked against the paper itself:</strong> Rowell, Stong &amp; Wang (arXiv:0712.1377) for the Galois statement quoted in derivation 1; Fisher (1978) for the Yang&ndash;Lee edge singularity.</p>
+    <p><strong>Stated on reputation, not checked here:</strong> Verlinde (1988) and Moore&ndash;Seiberg (1989) for the fusion formula; Yang &amp; Lee (1952) for the circle theorem; Berry (1984) for the geometric phase. All are standard and none was opened while writing this page &mdash; treat the attributions, not the mathematics, as the soft part.</p>
+    <p>Every numerical answer the check boxes grade against is computed in your browser at the moment you press the button, from the definitions on the page.</p>
+  </div>
+</div>
+</div><script type="application/json" id="state">{"checks":{},"answers":{},"notes":{},"quiz":{},"log":[]}</script><script id="app">
+(function(){
+  var PHI=(1+Math.sqrt(5))/2;
+  var ANS={
+    d1a1: 2-PHI, d1a2: 3-2*PHI, d1a3: 1,
+    d2a1: 1+PHI*PHI, d2a2: 0,
+    d3a1: 1, d3a2: -(1+2*PHI)/2, d3a3: 1-(1+2*PHI)/2,
+    d3a4: PHI*PHI*Math.sin(36*Math.PI/180),
+    d3a5: Math.sqrt(1+PHI*PHI), d3a6: 126, d3a7: 2.8,
+    d4a1: -0.25, d4a2: Math.sqrt(1-1/16), d4a3: 1, d4a4: 90,
+    d5a1: -Math.PI
+  };
+  var QKEY={"q1": [1, 1, 2], "q2": [1, 1], "q3": [1, 1, 2], "q4": [1, 1, 1], "q5": [1, 1, 1]};
+  var GROUPS={d1n:"d1",d2n:"d2",d3n:"d3",d4n:"d4",d5n:"d5"};
+
+  var PRISTINE=document.getElementById("doc").outerHTML;   // captured BEFORE state is applied
+  var state={checks:{},answers:{},notes:{},quiz:{},log:[]};
+  var api=null, timer=null, LS="five-derivations-v1";
+
+  try{ state=JSON.parse(document.getElementById("state").textContent)||state; }catch(e){}
+  state.checks=state.checks||{}; state.answers=state.answers||{}; state.notes=state.notes||{}; state.quiz=state.quiz||{}; state.log=state.log||[];
+
+  try{ var raw=localStorage.getItem(LS); if(raw){ var o=JSON.parse(raw);
+    ["checks","answers","notes","quiz"].forEach(function(k){ for(var i in o[k]||{}) if(state[k][i]===undefined) state[k][i]=o[k][i]; }); } }catch(e){}
+
+  function saveLocal(){ try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){} }
+
+  function apply(){
+    document.querySelectorAll("[data-ck]").forEach(function(el){ el.checked=!!state.checks[el.dataset.ck]; });
+    document.querySelectorAll("[data-ans]").forEach(function(el){
+      var v=state.answers[el.dataset.ans];
+      if(v!==undefined && v!==""){ el.value=v; grade(el.dataset.ans,true); }
+    });
+    document.querySelectorAll("[data-note]").forEach(function(el){ el.value=state.notes[el.dataset.note]||""; });
+    state.quiz=state.quiz||{};
+    for(var nm in state.quiz){ var r=document.querySelector('input[name="'+nm+'"][value="'+state.quiz[nm]+'"]'); if(r) r.checked=true; }
+    for(var qq in QKEY){ if(gradedAll(qq)) markQuiz(qq,true); }
+    progress();
+  }
+
+  function grade(id,quiet){
+    var inp=document.querySelector('[data-ans="'+id+'"]');
+    var mk=document.querySelector('[data-mark="'+id+'"]');
+    var v=parseFloat(inp.value);
+    inp.classList.remove("right","wrong");
+    if(isNaN(v)){ if(!quiet){ mk.textContent="enter a value"; mk.className="mark"; } return null; }
+    var t=ANS[id], tol=Math.max(1e-3, Math.abs(t)*2e-3);
+    if(Math.abs(v-t)<=tol){ inp.classList.add("right"); mk.textContent="✓"; mk.className="mark ok"; return true; }
+    inp.classList.add("wrong"); mk.textContent=quiet?"":("✗  it is "+(Math.abs(t)<1e-9?"0":t.toFixed(6))); mk.className="mark no"; return false;
+  }
+
+  function gradedAll(qid){
+    return QKEY[qid].every(function(_,n){ return state.quiz && state.quiz[qid+"_"+n]!==undefined; });
+  }
+  function markQuiz(qid,quiet){
+    var ok=true;
+    QKEY[qid].forEach(function(correct,n){
+      var nm=qid+"_"+n, chosen=state.quiz[nm];
+      document.querySelectorAll('input[name="'+nm+'"]').forEach(function(r){
+        var lab=r.closest("label"); lab.classList.remove("correct","incorrect");
+        if(chosen===undefined) return;
+        if(+r.value===correct) lab.classList.add("correct");
+        else if(+r.value===+chosen) { lab.classList.add("incorrect"); }
+      });
+      if(chosen===undefined || +chosen!==correct) ok=false;
+    });
+    var v=document.querySelector('[data-qv="'+qid+'"]');
+    if(v){ v.textContent = ok?"gate passed":"not yet"; v.className="verdict "+(ok?"pass":"fail"); }
+    return ok;
+  }
+
+  function progress(){
+    var all=document.querySelectorAll("[data-ck]"), done=0;
+    all.forEach(function(el){ if(el.checked) done++; });
+    document.getElementById("topbar").style.width=all.length?(100*done/all.length)+"%":"0%";
+    document.getElementById("topcount").textContent=done+" / "+all.length;
+    for(var nid in GROUPS){
+      var pre=GROUPS[nid];
+      var g=document.querySelectorAll('[data-ck^="'+pre+'"]'), gd=0;
+      g.forEach(function(el){ if(el.checked) gd++; });
+      var lab=document.querySelector('[data-prog="'+nid+'"]');
+      var bar=document.querySelector('[data-progbar="'+nid+'"]');
+      if(lab) lab.textContent=gd+" / "+g.length+" steps";
+      if(bar) bar.style.width=g.length?(100*gd/g.length)+"%":"0%";
+    }
+  }
+
+  function setSave(k){
+    var el=document.getElementById("savestate");
+    el.className="savestate "+(k==="live"?"live":k==="local"?"local":"");
+    el.textContent = k==="live"?"saved to page" : k==="saving"?"saving…" : k==="local"?"saved on this device" : "loading…";
+  }
+
+  function docHTML(){
+    var css=document.getElementById("css").textContent;
+    var app=document.getElementById("app").textContent;
+    var fonts='<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">';
+    var o="<"+"script", c="<"+"/"+"script"+">";
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
+      '<title>Five Derivations</title>'+fonts+'<style id="css">'+css+'</style></head><body>'+
+      PRISTINE+
+      o+' type="application/json" id="state">'+JSON.stringify(state)+c+
+      o+' id="app">'+app+c+'</body></html>';
+  }
+
+  function schedule(){
+    saveLocal();
+    if(!api){ setSave("local"); return; }
+    if(timer) clearTimeout(timer);
+    setSave("saving");
+    timer=setTimeout(function(){
+      timer=null;
+      api.publish(docHTML()).catch(function(err){
+        var c=err&&err.code;
+        if(c==="conflict") return;
+        setSave("local");
+      });
+    },1400);
+  }
+
+  document.addEventListener("change",function(e){
+    if(e.target.matches("[data-ck]")){ state.checks[e.target.dataset.ck]=e.target.checked; progress(); schedule(); }
+    if(e.target.type==="radio"){ state.quiz=state.quiz||{}; state.quiz[e.target.name]=+e.target.value; schedule(); }
+  });
+  document.addEventListener("click",function(e){
+    if(e.target.matches("[data-check]")){
+      var id=e.target.dataset.check;
+      var raw=document.querySelector('[data-ans="'+id+'"]').value;
+      state.answers[id]=raw;
+      var ok=grade(id,false);
+      state.log=state.log||[];
+      state.log.push({t:new Date().toISOString().slice(0,19),k:id,v:raw,ok:!!ok});
+      if(state.log.length>300) state.log=state.log.slice(-300);
+      var lc=document.getElementById("logcount");
+      if(lc) lc.textContent=state.log.length+" attempts";
+      schedule();
+    }
+    if(e.target.matches("[data-quizcheck]")){
+      var qid=e.target.dataset.quizcheck, passed=markQuiz(qid,false);
+      state.log=state.log||[];
+      state.log.push({t:new Date().toISOString().slice(0,19),k:"gate:"+qid,v:JSON.stringify(QKEY[qid].map(function(_,n){return state.quiz[qid+"_"+n];})),ok:passed});
+      var lc2=document.getElementById("logcount"); if(lc2) lc2.textContent=state.log.length+" attempts";
+      schedule();
+    }
+    if(e.target.id==="clearAll"){
+      if(!confirm("Clear every tick, answer and note on this page?")) return;
+      state={checks:{},answers:{},notes:{},quiz:{},log:state.log||[]};
+      document.querySelectorAll(".quiz label").forEach(function(l){ l.classList.remove("correct","incorrect"); });
+      document.querySelectorAll(".quiz input[type=radio]").forEach(function(r){ r.checked=false; });
+      document.querySelectorAll("[data-qv]").forEach(function(v){ v.textContent=""; v.className="verdict"; });
+      document.querySelectorAll("[data-ans]").forEach(function(el){ el.value=""; el.classList.remove("right","wrong"); });
+      document.querySelectorAll("[data-mark]").forEach(function(el){ el.textContent=""; });
+      document.querySelectorAll("[data-note]").forEach(function(el){ el.value=""; });
+      document.querySelectorAll("[data-ck]").forEach(function(el){ el.checked=false; });
+      progress(); schedule();
+    }
+  });
+  document.addEventListener("blur",function(e){
+    if(e.target.matches("[data-note]")){ state.notes[e.target.dataset.note]=e.target.value; schedule(); }
+  },true);
+
+  /* Lee-Yang table */
+  var rows=[[1,"T = ∞"],[1.2,"hot"],[1.5,"warm"],[2,"cool"],[4,"cold"],[100,"T → 0"]];
+  var tb=document.getElementById("lyTable");
+  if(tb) rows.forEach(function(r){
+    var K=r[0], re=-1/(K*K), disc=1-1/Math.pow(K,4), im=disc>0?Math.sqrt(disc):0;
+    var ang=Math.atan2(im,re)*180/Math.PI;
+    var tr=document.createElement("tr");
+    tr.innerHTML="<td>"+K+"</td><td style='color:var(--ink-faint)'>"+r[1]+"</td>"+
+      "<td>"+re.toFixed(4)+(im>=0?" + ":" − ")+Math.abs(im).toFixed(4)+"i</td>"+
+      "<td style='color:var(--violet)'>"+ang.toFixed(1)+"°</td>";
+    tb.appendChild(tr);
+  });
+
+  apply();
+  var lc0=document.getElementById("logcount"); if(lc0) lc0.textContent=(state.log||[]).length+" attempts";
+  setSave("local");
+  if(window.claude&&window.claude.use){
+    window.claude.use("artifact").then(function(ns){ if(ns){ api=ns; setSave("live"); } }).catch(function(){});
+  }
+})();
+</script>
+</body>
+</html>

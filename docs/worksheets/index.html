@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Eight interactive worksheets for learning the concrete algebra of anyon theories by hand: the golden ratio, matrix multiplication, the Verlinde formula, Galois conjugation, and the Fibonacci / Yang-Lee pair. Standard topological quantum computation, roughly 1984-2009.">
+<title>Anyon Algebra by Hand — Worksheets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#0b1120;--bg-raise:#111a2e;--bg-sunk:#080d19;--ink:#dde5f2;--ink-soft:#97a6bf;--ink-faint:#6a7893;--rule:#1e2942;--rule-lit:#2c3a5c;--coral:#ef7a6d;--indigo:#7d93f0;--violet:#b98cf5;--amber:#e0b054;--good:#5fbf8f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.rail{border-bottom:1px solid var(--rule);background:var(--bg-sunk);padding:12px 24px;display:flex;flex-wrap:wrap;gap:6px 20px;align-items:baseline;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px}
+.rail .series{color:var(--ink-faint);text-transform:uppercase;letter-spacing:.14em}
+.rail a{color:var(--ink-soft);text-decoration:none}
+.rail a:hover{color:var(--ink)}
+.wrap{max-width:52em;margin:0 auto;padding:56px 24px 100px}
+h1{font-family:Spectral,Georgia,serif;font-size:2.7rem;font-weight:600;letter-spacing:-.015em;margin:0 0 12px;line-height:1.06}
+.kicker{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin:0 0 18px}
+.dek{font-family:Spectral,Georgia,serif;font-size:1.2rem;color:var(--ink-soft);margin:0 0 8px;line-height:1.5;max-width:40em}
+h2{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;margin:52px 0 6px;border-bottom:1px solid var(--rule);padding-bottom:9px}
+h2 .sub{text-transform:none;letter-spacing:0;color:var(--ink-faint);font-size:12px;margin-left:10px}
+p{margin:0 0 16px;max-width:44em}
+.m{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.9em}
+
+.scope{border:1px solid var(--rule-lit);background:var(--bg-raise);border-radius:4px;padding:22px 24px;margin:30px 0 10px}
+.scope .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:11px}
+.scope p{margin:0 0 13px;font-size:.95rem;color:var(--ink-soft);line-height:1.68;max-width:none}
+.scope p:last-child{margin-bottom:0}
+.scope strong{color:var(--ink)}
+blockquote{margin:16px 0;padding:2px 0 2px 16px;border-left:2px solid var(--violet);font-family:Spectral,Georgia,serif;font-size:1.03rem;color:var(--ink-soft);font-style:italic}
+
+a.sheet{display:block;text-decoration:none;color:inherit;border:1px solid var(--rule);background:var(--bg-sunk);border-radius:4px;padding:17px 19px;margin:11px 0;transition:.15s}
+a.sheet:hover,a.sheet:focus-visible{border-color:var(--violet);background:var(--bg-raise);outline:none}
+a.sheet .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--violet);display:block;margin-bottom:6px}
+a.sheet .t{font-family:Spectral,Georgia,serif;font-size:1.28rem;font-weight:600;color:var(--ink);display:block;margin-bottom:5px;letter-spacing:-.01em}
+a.sheet .d{font-size:.93rem;color:var(--ink-soft);line-height:1.55}
+a.sheet .p{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.78rem;color:var(--ink-faint);margin-top:8px;line-height:1.6}
+footer{margin-top:70px;padding-top:24px;border-top:1px solid var(--rule);color:var(--ink-faint);font-size:.85rem}
+footer a{color:var(--ink-soft)}
+</style>
+</head>
+<body>
+
+<nav class="rail">
+  <span class="series">Worksheets · anyon algebra by hand</span>
+  <a href="../">Web Annex</a>
+  <a href="../anyon-fusion/">Companion tutorial · Fibonacci Anyon Fusion Algebra</a>
+</nav>
+
+<div class="wrap">
+  <p class="kicker">Eight interactive worksheets · pencil, then keyboard</p>
+  <h1>Anyon Algebra<br>by Hand</h1>
+  <p class="dek">The algebra of anyon theories is usually read, not computed. These sheets are for computing it &mdash;
+  three labs, a paper course, and four tutorials, each built around numbers you work out before the page shows you
+  the answer.</p>
+
+  <div class="scope" id="scope">
+    <span class="st">What these are, and what they are not</span>
+
+    <p><strong>These are worksheets, not research.</strong> The mathematics on them is standard topological quantum
+    computation, roughly <strong>1984 to 2009</strong> &mdash; Arovas&ndash;Schrieffer&ndash;Wilczek on fractional
+    statistics, Verlinde and Moore&ndash;Seiberg on fusion from braiding, Rowell&ndash;Stong&ndash;Wang on
+    classification, and the Yang&ndash;Lee edge singularity, which is older still. <strong>None of it is new.</strong></p>
+
+    <blockquote>None of the above is new mathematics &mdash; it is standard topological quantum computation, roughly
+    1984&ndash;2009. It was simply new to my hands. I had read it for years and never computed with it, and those
+    turn out to be different states of knowing.</blockquote>
+
+    <p>That is the whole reason these exist. Nothing here is a result, a finding, or a contribution, and no sheet
+    argues for anything. Where a page calls something surprising, it means surprising to <em>work through</em> &mdash;
+    not new to the literature. If you find a claim on one of these pages that reads as a discovery, it is a failure of
+    my wording rather than a claim I am making.</p>
+
+    <p><strong>The method is predict, then check.</strong> Every input box, drill and gate on these pages exists for
+    one move: write down what you think the number is <em>before</em> you reveal it. Reading the worked answer first
+    feels faster and teaches almost nothing &mdash; the two operations spoil each other. Each sheet keeps your ticks
+    and answers in your own browser, so you can put one down mid-derivation and come back to it.</p>
+
+    <p><strong>Numbers are sourced, or they are marked.</strong> Each sheet carries a short sources block saying which
+    attributions were checked against the paper itself and which are stated on reputation only. That distinction
+    matters more here than usual: language models are reliable on this mathematics and <em>unreliable</em> on its
+    attributions. Ask one for the Yang&ndash;Lee central charge or conformal weight and it will give you numbers and
+    cite Cardy &mdash; but Cardy's 1985 paper does not contain them, and neither does his 2023 review. That was
+    checked against the actual PDFs. The values are probably right; the citations are folklore. A worksheet whose
+    whole method is <em>check it yourself</em> cannot ask you to take its own arithmetic on trust, so where a number
+    has no source it is labelled unsourced on the page that shows it.</p>
+
+    <p><strong>On declarations and observables.</strong> A reader coming from an operator formalism may reasonably
+    want to ask, of every quantity here: what is the declared observable, and what measurement mapping puts it into
+    the domain before the algebra acts? That is a fair question, and a good one. These sheets take no position on it.
+    They sit upstream of it &mdash; the arithmetic of <span class="m">d&sup2; = d + 1</span> is the same arithmetic
+    whichever way the question is answered &mdash; and nothing here is an argument for or against any particular
+    framework's answer. If you want to run that reading over these pages as you go, nothing in them will fight you.</p>
+  </div>
+
+  <h2>Start here · the labs <span class="sub">arithmetic first, about ten minutes each</span></h2>
+  <p>The labs came after the tutorials and turned out to be the ones that worked. They start from a number rather than
+  an axiom. If you only do one thing on this page, do these three in order.</p>
+
+  <a class="sheet" href="golden-arithmetic.html">
+    <span class="n">Lab 1</span>
+    <span class="t">Golden Arithmetic</span>
+    <span class="d">The S-matrix looks like a pile of irrational decimals. It isn't. Every number in it is built from
+    <span class="m">d&sup2; = d + 1</span>, and two identities collapse the messy sums to exactly 1 and exactly 0 with
+    no calculator. Exact arithmetic in <span class="m">&#8484;[&phi;]</span>, with drills.</span>
+    <span class="p">Prerequisites: none. This is where the series starts.</span>
+  </a>
+
+  <a class="sheet" href="row-times-column.html">
+    <span class="n">Lab 2</span>
+    <span class="t">Row Times Column</span>
+    <span class="d">Matrix multiplication is one rule applied four times. Click any answer cell and the page lights up
+    the row and column that made it. Runs on to repeated application, the Fibonacci numbers appearing on their own, and
+    eigenvectors as the directions that survive.</span>
+    <span class="p">Prerequisites: none. Pairs with Lab 1; either order works.</span>
+  </a>
+
+  <a class="sheet" href="verlinde-by-hand.html">
+    <span class="n">Lab 3</span>
+    <span class="t">Verlinde by Hand</span>
+    <span class="d">Two objects, a 2&times;2 matrix, and a sum with two terms. Predict a fusion coefficient, then show
+    the working. Nudge the quantum dimension by one percent and watch every integer fall off its value &mdash; the
+    rigidity is the point.</span>
+    <span class="p">Prerequisites: Labs 1 and 2.</span>
+  </a>
+
+  <h2>The paper course <span class="sub">what to do with a pencil, in order of leverage</span></h2>
+
+  <a class="sheet" href="five-derivations.html">
+    <span class="n">Paper course</span>
+    <span class="t">Five Derivations</span>
+    <span class="d">Five calculations you finish on paper, each with its own checkboxes, notes field and a gate you
+    have to pass: Galois conjugation, the modular group and why S exists, deriving the central charge, Lee&ndash;Yang
+    zeros on two spins, and the Berry phase. The first four are a few days between them. The fifth is honest about
+    being a mountain.</span>
+    <span class="p">Prerequisites: the three labs. Answers are graded against arithmetic computed live, not against
+    a stored key.</span>
+  </a>
+
+  <h2>The tutorials <span class="sub">read after the labs, not before</span></h2>
+  <p>These four came first and were written at research-paper level &mdash; axioms before numbers. That was a
+  misjudgement, and it is why the labs exist. Each now opens with a number and says plainly what it assumes.</p>
+
+  <a class="sheet" href="one-modulus-two-arguments.html">
+    <span class="n">Tutorial 1</span>
+    <span class="t">One Modulus, Two Arguments</span>
+    <span class="d">Two different physical theories share the Fibonacci fusion rule &mdash; one a universal quantum
+    computer, the other a critical point &mdash; and the fusion algebra cannot tell them apart. Fusion rings, quantum
+    dimensions, twists, why Reidemeister I fails for anyons, and a Gauss sum that produces a central charge from two
+    arrows.</span>
+    <span class="p">Prerequisites: Lab 1. Derivations 1 and 3 open Sections 3 and 6. No Berry phase.</span>
+  </a>
+
+  <a class="sheet" href="the-phase-you-pick-up.html">
+    <span class="n">Tutorial 2</span>
+    <span class="t">The Phase You Pick Up</span>
+    <span class="d">Arovas, Schrieffer and Wilczek, 1984: four pages that computed what the statistics actually
+    <em>are</em> in a real material. Drag a quasihole around a loop, put a second one inside, and subtract &mdash;
+    what is left is the exchange statistics. Predicted 1984, measured 2020.</span>
+    <span class="p">Prerequisites: Sections 1, 4 and 5 stand alone. Section 3 needs Derivation 5 (Berry phase), which
+    is weeks rather than hours.</span>
+  </a>
+
+  <a class="sheet" href="what-the-modulus-forgets.html">
+    <span class="n">Tutorial 3</span>
+    <span class="t">What the Modulus Forgets</span>
+    <span class="d">Braiding determines fusion; fusion does not determine braiding. The map runs one way, with a
+    four-element fibre sitting over the Fibonacci ring, and a theorem closing off the obvious physical route to the
+    non-unitary half. Ends where complex zeros pinch the real axis and phase data becomes a measurable
+    magnitude.</span>
+    <span class="p">Prerequisites: Tutorial 1, Lab 3, Derivation 1. Section 3 assumes Derivation 4.</span>
+  </a>
+
+  <a class="sheet" href="where-the-integers-come-from.html">
+    <span class="n">Tutorial 4</span>
+    <span class="t">Where the Integers Come From</span>
+    <span class="d">Counting how anyons fuse is combinatorics. How a theory behaves on a torus is analysis. Verlinde's
+    formula turns one into the other, and Section 3 is twenty minutes of pencil work in which a matrix of braiding
+    phases produces the integer 1 &mdash; exactly, twice. Also: how to cite the result honestly, which is not by
+    saying "Verlinde proved".</span>
+    <span class="p">Prerequisites: Lab 1 and Derivation 2. Lab 3 turns the same crank with the numbers filled in
+    live. No Berry phase.</span>
+  </a>
+
+  <footer>
+    <p>Written August 2026. Each sheet is a single self-contained file &mdash; no build step, no framework, and
+    nothing sent anywhere; your ticks and answers stay in your own browser. Published as a companion to
+    <a href="../anyon-fusion/">Fibonacci Anyon Fusion Algebra</a>, which covers the same standard material as an
+    animated introduction rather than as pencil work.</p>
+  </footer>
+</div>
+
+</body>
+</html>

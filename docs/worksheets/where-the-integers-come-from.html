@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Worksheet 4: Verlinde's formula from scratch — how a matrix of braiding phases produces the integers that count fusion channels.">
+<title>Where the Integers Come From</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* shared worksheet house style */
+:root{--bg:#0b1120;--bg-raise:#111a2e;--bg-sunk:#080d19;--ink:#dde5f2;--ink-soft:#97a6bf;--ink-faint:#6a7893;--rule:#1e2942;--rule-lit:#2c3a5c;--coral:#ef7a6d;--indigo:#7d93f0;--violet:#b98cf5;--amber:#e0b054}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;font-size:17px;line-height:1.68;-webkit-font-smoothing:antialiased}
+.rail{border-bottom:1px solid var(--rule);background:var(--bg-sunk);padding:12px 24px;display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.04em}
+.rail .series{color:var(--ink-faint);text-transform:uppercase;letter-spacing:.14em}
+.rail a{color:var(--ink-soft);text-decoration:none;border-bottom:1px solid transparent}
+.rail a:hover{color:var(--ink);border-bottom-color:var(--rule-lit)}
+.rail a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
+.rail .here{color:var(--violet)}
+.page{padding:0 24px 110px}
+.col{max-width:34em;margin:0 auto}
+.wide{max-width:50em;margin:38px auto}
+header.top{padding:76px 0 30px}
+.kicker{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin:0 0 20px}
+h1{font-family:Spectral,Georgia,serif;font-weight:600;font-size:clamp(2.3rem,5.5vw,3.4rem);line-height:1.06;letter-spacing:-.015em;margin:0 0 20px;text-wrap:balance}
+.dek{font-family:Spectral,Georgia,serif;font-size:1.24rem;line-height:1.52;color:var(--ink-soft);font-weight:300;margin:0}
+.dek em{color:var(--ink);font-style:italic}
+h2{font-family:Spectral,Georgia,serif;font-size:1.72rem;font-weight:600;line-height:1.16;letter-spacing:-.01em;margin:62px 0 6px;text-wrap:balance}
+h2 .n{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:9px}
+h3{font-size:1.02rem;font-weight:600;margin:34px 0 8px}
+p{margin:0 0 18px}
+a{color:var(--violet);text-underline-offset:2px}
+strong{font-weight:600;color:#f0f5ff}
+em{color:var(--ink)}
+.m{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.9em;color:var(--ink)}
+.eq{font-family:"IBM Plex Mono",ui-monospace,monospace;background:var(--bg-raise);border:1px solid var(--rule);border-left:2px solid var(--violet);padding:15px 18px;margin:22px 0;font-size:.95rem;overflow-x:auto;line-height:1.5}
+.eq .where{display:block;font-family:"IBM Plex Sans",sans-serif;font-size:.82rem;color:var(--ink-faint);margin-top:9px}
+blockquote{margin:24px 0;padding-left:18px;border-left:2px solid var(--rule-lit);color:var(--ink-soft);font-family:Spectral,Georgia,serif;font-size:1.06rem;font-style:italic}
+blockquote .attrib{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-style:normal;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-top:10px}
+.note{border:1px solid var(--rule);background:var(--bg-raise);border-radius:3px;padding:18px 20px;margin:26px 0}
+.note .tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:9px}
+.note.is-yours{border-left:2px solid var(--indigo)}.note.is-yours .tag{color:var(--indigo)}
+.note.is-caution{border-left:2px solid var(--amber)}.note.is-caution .tag{color:var(--amber)}
+.note.is-crit{border-left:2px solid var(--coral)}.note.is-crit .tag{color:var(--coral)}
+.note p:last-child{margin-bottom:0}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:480px}
+caption{text-align:left;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);padding-bottom:11px}
+th,td{text-align:left;padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;border-bottom:1px solid var(--rule-lit);white-space:nowrap}
+tbody th{font-weight:600;white-space:nowrap}
+td.n,th.n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+ul,ol{margin:0 0 18px;padding-left:20px}
+li{margin-bottom:9px}
+figure{margin:0}
+figcaption{font-size:.84rem;color:var(--ink-faint);margin-top:14px;line-height:1.5}
+svg{display:block;width:100%;height:auto}
+footer{margin:70px auto 0;max-width:34em;border-top:1px solid var(--rule);padding-top:26px;color:var(--ink-faint);font-size:.86rem}
+</style>
+<style>
+.fig{margin:40px auto;max-width:50em}
+.fig-frame{background:var(--bg-sunk);border:1px solid var(--rule);border-radius:4px;padding:18px 20px 20px}
+.fig-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.fig-label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+.playbtn{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--bg-raise);color:var(--ink-soft);border:1px solid var(--rule-lit);border-radius:3px;padding:5px 11px;cursor:pointer}
+.playbtn:hover{color:var(--ink);border-color:var(--violet)}
+.playbtn:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.fig figcaption{font-size:.85rem;color:var(--ink-faint);margin-top:14px;line-height:1.55}
+.fig figcaption strong{color:var(--ink-soft)}
+.paused *{animation-play-state:paused!important}
+svg text{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.sv-lab{font-size:11px;fill:#6a7893}
+.sv-key{font-size:12px;fill:#dde5f2}
+@media (prefers-reduced-motion:reduce){.fig *{animation:none!important}}
+@keyframes swapAB{0%,20%{opacity:1}30%,70%{opacity:0}80%,100%{opacity:1}}
+@keyframes swapBA{0%,20%{opacity:0}30%,70%{opacity:1}80%,100%{opacity:0}}
+.cycA{animation:swapAB 7s infinite}
+.cycB{animation:swapBA 7s infinite}
+@keyframes sPulse{0%,18%{opacity:.25}32%,68%{opacity:1}82%,100%{opacity:.25}}
+.sArrow{animation:sPulse 7s infinite}
+@keyframes barUp{0%,6%{transform:scaleY(0)}20%,94%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+.vbar{transform-origin:center bottom;animation:barUp 6s infinite}
+.vbar2{transform-origin:center top;animation:barUp 6s infinite;animation-delay:.6s}
+@keyframes sumIn{0%,52%{opacity:0}66%,100%{opacity:1}}
+.vsum{opacity:0;animation:sumIn 6s infinite}
+@keyframes colGlow{0%,100%{opacity:.15}50%{opacity:.4}}
+.colhi{animation:colGlow 3.2s ease-in-out infinite}
+
+/* --- scope note, added on publication --- */
+.scope{border:1px solid var(--rule-lit);background:var(--bg-raise);border-radius:4px;padding:17px 19px;margin:24px 0 28px}
+.scope .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:9px}
+.scope p{margin:0 0 10px;font-size:.93rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.scope p:last-child{margin-bottom:0}
+.scope a{color:var(--violet)}
+.prereq{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;color:var(--ink-faint);border-left:2px solid var(--rule-lit);padding:2px 0 2px 14px;margin:0 0 26px;line-height:1.7;max-width:none}
+.prereq b{color:var(--ink-soft);font-weight:500}
+.srcs{border:1px solid var(--rule);background:var(--bg-sunk);border-radius:4px;padding:16px 18px;margin:30px 0 0}
+.srcs .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--indigo,#7d93f0);display:block;margin-bottom:9px}
+.srcs p{margin:0 0 9px;font-size:.88rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.srcs p:last-child{margin-bottom:0}
+</style>
+<script>
+(function(){var r=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function w(){document.querySelectorAll(".fig[data-anim]").forEach(function(f){var b=f.querySelector(".playbtn");if(!b)return;var p=!r;
+function a(){f.classList.toggle("paused",!p);b.textContent=p?"\u275a\u275a Pause":"\u25b6 Play";b.setAttribute("aria-pressed",p?"true":"false");}
+b.addEventListener("click",function(){p=!p;a();});a();});}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",w);else w();})();
+</script>
+</head>
+<body>
+<nav class="rail">
+  <span class="series">Worksheets · anyon algebra by hand</span>
+  <a href="./">Index</a>
+  <a href="golden-arithmetic.html">Lab · Golden Arithmetic</a>
+  <a href="row-times-column.html">Lab · Row Times Column</a>
+  <a href="verlinde-by-hand.html">Lab · Verlinde by Hand</a>
+  <a href="five-derivations.html">Paper course · Five Derivations</a>
+  <a href="one-modulus-two-arguments.html">1 · One Modulus, Two Arguments</a>
+  <a href="the-phase-you-pick-up.html">2 · The Phase You Pick Up</a>
+  <a href="what-the-modulus-forgets.html">3 · What the Modulus Forgets</a>
+  <span class="here">4 · Where the Integers Come From</span>
+</nav>
+
+<div class="page">
+  <header class="top col">
+    <p class="kicker">Tutorial 4 · Verlinde's formula, from scratch</p>
+    <h1>Where the<br>Integers Come From</h1>
+    <p class="dek">Counting how anyons fuse is combinatorics — small non-negative integers. How a theory behaves on a torus is analysis. In 1988 Erik Verlinde noticed they are the same question, and wrote down a formula that turns one into the other.</p>
+  </header>
+
+  <div class="col">
+
+<div class="scope">
+  <span class="st">What this is</span>
+  <p><strong>A worksheet, not a result.</strong> The mathematics on this page is standard topological quantum
+  computation, roughly 1984&ndash;2009. None of it is new. <em>&ldquo;It was simply new to my hands. I had read it
+  for years and never computed with it, and those turn out to be different states of knowing.&rdquo;</em> These
+  sheets exist to move a reader from the first state to the second, and they make no claim of their own.</p>
+  <p><strong>The method is predict&ndash;then&ndash;check.</strong> Every input box, drill and gate here is built for one
+  move: write down what you think the number is <em>before</em> you reveal it. Numbers are sourced to a paper
+  where a paper says them, and marked unchecked where none does &mdash; a sheet whose whole method is
+  <em>check it yourself</em> cannot ask you to take its own arithmetic on trust.</p>
+  <p>If you are coming from an operator formalism, you may want to ask of every quantity here what the declared
+  observable is, and what mapping puts it into the domain before the algebra acts. That is a fair question, and
+  these sheets sit upstream of it &mdash; the arithmetic of <span class="m">d&sup2; = d + 1</span> is the same
+  arithmetic whichever way it is answered. They take no position on it. <a href="./#scope">The full note is on the index.</a></p>
+</div>
+
+<p class="prereq"><b>Prerequisites:</b> the Golden Arithmetic lab (&phi;, and &phi;&sup2; = &phi; + 1 &mdash; Section 3 leans on it hard) and Derivation 2, the modular group and why S exists at all, from the <a href="five-derivations.html">paper course</a>. The <a href="verlinde-by-hand.html">Verlinde by Hand</a> lab turns the same crank with the numbers filled in live. No Berry phase.</p>
+
+    <p><strong>Start from a number.</strong> Put the four entries of the Fibonacci S-matrix into Verlinde's
+    formula and out comes <strong>exactly 1</strong> &mdash; twice. Not 0.99999; exactly, because two irrational
+    expressions turn out to be the same number. This tutorial is how a matrix of braiding phases produces the
+    integers that count fusion channels, and Section 3 is the twenty minutes of pencil work that makes it
+    stick.</p>
+
+    <h2><span class="n">Section 1</span>Two structures that look unrelated</h2>
+
+    <p>Fix a topological order with finitely many anyon types <span class="m">a, b, c, …</span>, one of which is the vacuum, written <span class="m">0</span>. There are two quite different things you can ask about it.</p>
+
+    <h3>The counting question</h3>
+    <p>Bring <span class="m">a</span> next to <span class="m">b</span>. What can they become, and in how many distinguishable ways? The answer is a table of non-negative integers:</p>
+
+    <div class="eq">a ⊗ b = Σ<sub>c</sub> N<sub>ab</sub><sup>c</sup> · c<span class="where">N is a count of fusion channels. Nothing here is continuous. Nothing here involves a phase.</span></div>
+
+    <p>Collect these into matrices — one per anyon type — by fixing the first index:</p>
+
+    <div class="eq">(N<sub>a</sub>)<sub>b</sub><sup>c</sup> = N<sub>ab</sub><sup>c</sup><span class="where">For Fibonacci: N<sub>τ</sub> = [[0,1],[1,1]], the matrix whose Perron–Frobenius eigenvalue is φ.</span></div>
+
+    <h3>The torus question</h3>
+    <p>Now put the theory on a torus instead of a plane. A torus can be described by a shape parameter <span class="m">τ</span>, but the <em>same</em> torus has many descriptions — you can relabel which cycle you call "space" and which "time." The relabellings form the modular group SL(2,ℤ), generated by two moves:</p>
+
+    <ul>
+      <li><span class="m">T : τ → τ + 1</span> — shear. Acts diagonally, carrying the twists <span class="m">θ<sub>a</sub></span>.</li>
+      <li><span class="m">S : τ → −1/τ</span> — <strong>swap the two cycles.</strong> This is the interesting one.</li>
+    </ul>
+
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 1 — why there is an S at all</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 250" role="img" aria-label="A torus with two independent loops. S exchanges them.">
+        <ellipse cx="180" cy="125" rx="120" ry="72" fill="none" stroke="#2c3a5c" stroke-width="2"/>
+        <path d="M120 122 Q180 168 240 122" fill="none" stroke="#2c3a5c" stroke-width="2"/>
+        <path d="M132 130 Q180 96 228 130" fill="none" stroke="#2c3a5c" stroke-width="2"/>
+        <ellipse class="cycA" cx="180" cy="53" rx="118" ry="20" fill="none" stroke="#7d93f0" stroke-width="3" stroke-dasharray="0"/>
+        <ellipse class="cycA" cx="180" cy="125" rx="30" ry="66" fill="none" stroke="#7d93f0" stroke-width="0"/>
+        <ellipse class="cycB" cx="288" cy="125" rx="17" ry="55" fill="none" stroke="#ef7a6d" stroke-width="3"/>
+        <text class="cycA sv-key" x="180" y="30" fill="#7d93f0" text-anchor="middle">cycle a</text>
+        <text class="cycB sv-key" x="288" y="200" fill="#ef7a6d" text-anchor="middle">cycle b</text>
+
+        <g class="sArrow">
+          <path d="M330 110 L400 110" fill="none" stroke="#b98cf5" stroke-width="2.5"/>
+          <polygon points="408,110 396,105 396,115" fill="#b98cf5"/>
+          <path d="M400 140 L330 140" fill="none" stroke="#b98cf5" stroke-width="2.5"/>
+          <polygon points="322,140 334,135 334,145" fill="#b98cf5"/>
+          <text x="365" y="98" class="sv-lab" fill="#b98cf5" text-anchor="middle">S</text>
+        </g>
+
+        <rect x="440" y="60" width="150" height="130" rx="4" fill="#16224a" stroke="#2c3a5c"/>
+        <text x="515" y="100" class="sv-key" fill="#b98cf5" text-anchor="middle">S : &tau; &rarr; &minus;1/&tau;</text>
+        <text x="515" y="126" class="sv-lab" text-anchor="middle">swap the two cycles</text>
+        <text x="515" y="156" class="sv-key" fill="#7d93f0" text-anchor="middle">T : &tau; &rarr; &tau; + 1</text>
+        <text x="515" y="178" class="sv-lab" text-anchor="middle">shear</text>
+      </svg>
+      <figcaption><strong>A torus has two independent loops and nothing intrinsically distinguishes them.</strong> So there must be an operation that exchanges them — and that operation is <em>S</em>. The matrix you have been dividing by 𝒟 is this geometric move, written down. <span class="m">T</span> shears one loop along the other; together they generate SL(2,&#8484;). &#9888; The &tau; in <span class="m">S : &tau; &rarr; &minus;1/&tau;</span> is the <em>torus modulus</em>, not the Fibonacci anyon — the collision is real and lives in the literature.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <p>The theory's states on the torus are labelled by anyon type. Swapping the cycles mixes those labels, and the mixing is a matrix — <strong>the S-matrix</strong>, <span class="m">S<sub>ab</sub></span>. Physically it is the amplitude for the worldline of <span class="m">a</span> to link the worldline of <span class="m">b</span>. It is braiding data. It is phases.</p>
+
+    <div class="note is-caution">
+      <span class="tag">Hold the strangeness for a second</span>
+      <p>The first question is <em>how many ways can these two things combine</em>. The second is <em>what happens when I redescribe a doughnut</em>. There is no obvious reason these should be related at all — and the relation is the content of the theorem.</p>
+    </div>
+
+    <h2><span class="n">Section 2</span>The formula</h2>
+
+    <div class="eq">N<sub>ab</sub><sup>c</sup> = Σ<sub>x</sub> ( S<sub>ax</sub> S<sub>bx</sub> S̄<sub>cx</sub> ) / S<sub>0x</sub><span class="where">Sum over all anyon types x. Bar denotes complex conjugate. 0 is the vacuum.</span></div>
+
+    <p>On the left: integers, counting. On the right: nothing but entries of the modular S-matrix. <strong>The fusion rules are not independent data. They are a consequence of the braiding.</strong></p>
+
+    <h3>The cleaner way to say it</h3>
+
+    <p>The formula is equivalent to a statement that is easier to hold in your head:</p>
+
+    <div class="eq">N<sub>a</sub> = S Λ<sub>a</sub> S<sup>†</sup> ,  where  (Λ<sub>a</sub>)<sub>xx</sub> = S<sub>ax</sub> / S<sub>0x</sub><span class="where">S simultaneously diagonalises every fusion matrix, and the eigenvalues are ratios of S entries.</span></div>
+
+    <p>So: <strong>one matrix, <span class="m">S</span>, diagonalises all of them at once.</strong> The fusion matrices commute — they must, since fusion is associative and commutative — and commuting matrices share eigenvectors. Verlinde identifies those shared eigenvectors as the <em>columns of the modular S-matrix</em>, and that identification is the whole theorem.</p>
+
+    <p>The eigenvalues <span class="m">λ<sub>a</sub>(x) = S<sub>ax</sub>/S<sub>0x</sub></span> are the <strong>characters of the fusion ring</strong> — the one-dimensional representations. A rank-2 ring has two of them. Remember that.</p>
+
+    <h2><span class="n">Section 3</span>Do it by hand — Fibonacci</h2>
+
+    <p>This is worth twenty minutes of your Saturday, because the punchline lands only if you turn the crank yourself. Two objects, <span class="m">1</span> and <span class="m">τ</span>. Set <span class="m">𝒟 = √(1 + φ²)</span>, and note <span class="m">φ² = φ + 1</span> so <span class="m">𝒟² = 2 + φ ≈ 3.618</span>.</p>
+
+    <div class="eq">S = (1/𝒟) · [[ 1 , φ ] , [ φ , −1 ]]<span class="where">Rows and columns indexed (0, τ). Check for yourself that S² = identity.</span></div>
+
+    <h3>Step 1 — read off the eigenvalues</h3>
+    <p>The eigenvalues of <span class="m">N<sub>τ</sub></span> should be <span class="m">S<sub>τx</sub>/S<sub>0x</sub></span>, one per column:</p>
+
+    <ul>
+      <li>column <span class="m">x = 0</span>: &nbsp;<span class="m">(φ/𝒟) / (1/𝒟) = φ</span></li>
+      <li>column <span class="m">x = τ</span>: &nbsp;<span class="m">(−1/𝒟) / (φ/𝒟) = −1/φ</span></li>
+    </ul>
+
+    <p>And independently, <span class="m">N<sub>τ</sub> = [[0,1],[1,1]]</span> has characteristic polynomial <span class="m">λ² − λ − 1 = 0</span>, whose roots are <span class="m">φ</span> and <span class="m">−1/φ</span>. They match.</p>
+
+    <h3>Step 2 — recover the fusion rule</h3>
+    <p>Now run the full formula. Take <span class="m">a = b = τ</span> and ask for <span class="m">c = 0</span>. Since S is real here, <span class="m">S̄<sub>0x</sub>/S<sub>0x</sub> = 1</span> and the sum collapses:</p>
+
+    <div class="eq">N<sub>ττ</sub><sup>0</sup> = Σ<sub>x</sub> S<sub>τx</sub>² = (φ/𝒟)² + (−1/𝒟)² = (φ² + 1)/𝒟² = 𝒟²/𝒟² = <strong>1</strong></div>
+
+    <p>Now <span class="m">c = τ</span>:</p>
+
+    <div class="eq">N<sub>ττ</sub><sup>τ</sup> = Σ<sub>x</sub> S<sub>τx</sub>³ / S<sub>0x</sub>
+      = φ³/𝒟² − 1/(𝒟²φ)
+      = (φ³ − 1/φ) / 𝒟²<span class="where">φ³ = 2φ + 1 and 1/φ = φ − 1, so the numerator is (2φ+1) − (φ−1) = φ + 2. And 𝒟² = φ + 2.</span></div>
+
+    <div class="eq">N<sub>ττ</sub><sup>τ</sup> = (φ + 2)/(φ + 2) = <strong>1</strong></div>
+
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 2 — two terms, one integer</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 260" role="img" aria-label="Two contributions to the Verlinde sum, one positive and one negative, adding to exactly one.">
+        <line x1="60" y1="170" x2="560" y2="170" stroke="#2c3a5c"/>
+        <text x="52" y="174" class="sv-lab" text-anchor="end">0</text>
+        <line x1="60" y1="70" x2="560" y2="70" stroke="#1e2942" stroke-dasharray="4 4"/>
+        <text x="52" y="74" class="sv-lab" text-anchor="end">1</text>
+
+        <rect class="vbar" x="130" y="53" width="70" height="117" fill="#7d93f0" opacity=".85"/>
+        <text x="165" y="44" class="sv-key" fill="#7d93f0" text-anchor="middle">+1.170820</text>
+        <text x="165" y="196" class="sv-lab" text-anchor="middle">x = 1</text>
+        <text x="165" y="212" class="sv-lab" text-anchor="middle">&phi;&sup3;/&#119967;&sup2;</text>
+
+        <rect class="vbar2" x="285" y="170" width="70" height="17" fill="#ef7a6d" opacity=".85"/>
+        <text x="320" y="204" class="sv-key" fill="#ef7a6d" text-anchor="middle">&minus;0.170820</text>
+        <text x="320" y="226" class="sv-lab" text-anchor="middle">x = &tau;</text>
+        <text x="320" y="242" class="sv-lab" text-anchor="middle">&minus;1/(&phi;&#119967;&sup2;)</text>
+
+        <g class="vsum">
+          <rect x="440" y="70" width="70" height="100" fill="#b98cf5"/>
+          <text x="475" y="60" class="sv-key" fill="#b98cf5" text-anchor="middle" font-size="15">= 1</text>
+          <text x="475" y="196" class="sv-lab" text-anchor="middle">sum</text>
+          <text x="475" y="216" class="sv-lab" fill="#b98cf5" text-anchor="middle">exactly</text>
+        </g>
+      </svg>
+      <figcaption>The two contributions to <span class="m">N<sub>&tau;&tau;</sub><sup>&tau;</sup></span>. Neither is a nice number on its own — <span class="m">&phi;&sup3;/&#119967;&sup2;</span> and <span class="m">&minus;1/(&phi;&#119967;&sup2;)</span>, full of irrationals. <strong>Their sum is exactly 1</strong>, because <span class="m">&phi;&sup3; &minus; 1/&phi; = &phi; + 2</span> and <span class="m">&#119967;&sup2; = 2 + &phi;</span> are the same number. The integers are not approached; they are hit.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <div class="note is-crit">
+      <span class="tag">What you just did</span>
+      <p>You started from a matrix of <em>braiding phases</em> and, with no other input, produced the integers <strong>1</strong> and <strong>1</strong> — which is exactly <span class="m">τ ⊗ τ = 1 ⊕ τ</span>. The fusion rule was never independent information. It was recoverable from S all along.</p>
+    </div>
+
+    <h2><span class="n">Section 4</span>The punchline</h2>
+
+    <p>Look again at the two eigenvalues you read off the columns of S:</p>
+
+    <div class="eq">λ(0) = φ        λ(τ) = −1/φ<span class="where">The two characters of the Fibonacci fusion ring. Both are roots of d² = d + 1.</span></div>
+
+    <p>These are <strong>the same two numbers</strong> that separate Fibonacci from Yang–Lee in tutorial 1's table. And now you can see what they are: not two rival choices of dimension imposed from outside, but <strong>the two characters of one fusion ring, sitting as two columns of one matrix.</strong></p>
+
+    <p>The quantum dimension is defined as <span class="m">d<sub>a</sub> = S<sub>0a</sub>/S<sub>00</sub></span> — a ratio against <em>whichever column you designate the vacuum</em>. So:</p>
+
+  </div>
+
+  <figure class="fig">
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 3 — which column you call the vacuum</span></div>
+      <svg viewBox="0 0 620 280" role="img" aria-label="The two columns of the S matrix, one all-positive and one mixed-sign, giving the two characters of the fusion ring.">
+        <rect class="colhi" x="118" y="52" width="96" height="112" fill="#7d93f0"/>
+        <rect class="colhi" x="222" y="52" width="96" height="112" fill="#ef7a6d"/>
+        <text x="166" y="42" class="sv-lab" fill="#7d93f0" text-anchor="middle">column 1</text>
+        <text x="270" y="42" class="sv-lab" fill="#ef7a6d" text-anchor="middle">column &tau;</text>
+        <g class="sv-key" text-anchor="middle" font-size="14">
+          <text x="166" y="90">+0.525731</text><text x="270" y="90">+0.850651</text>
+          <text x="166" y="142">+0.850651</text><text x="270" y="142">&minus;0.525731</text>
+        </g>
+        <line x1="108" y1="52" x2="102" y2="52" stroke="#2c3a5c" stroke-width="2"/>
+        <line x1="102" y1="52" x2="102" y2="164" stroke="#2c3a5c" stroke-width="2"/>
+        <line x1="102" y1="164" x2="108" y2="164" stroke="#2c3a5c" stroke-width="2"/>
+        <line x1="328" y1="52" x2="334" y2="52" stroke="#2c3a5c" stroke-width="2"/>
+        <line x1="334" y1="52" x2="334" y2="164" stroke="#2c3a5c" stroke-width="2"/>
+        <line x1="334" y1="164" x2="328" y2="164" stroke="#2c3a5c" stroke-width="2"/>
+
+        <text x="166" y="192" class="sv-lab" fill="#7d93f0" text-anchor="middle">both positive</text>
+        <text x="270" y="192" class="sv-lab" fill="#ef7a6d" text-anchor="middle">mixed sign</text>
+        <text x="166" y="216" class="sv-key" fill="#7d93f0" text-anchor="middle">&lambda; = +&phi;</text>
+        <text x="270" y="216" class="sv-key" fill="#ef7a6d" text-anchor="middle">&lambda; = &minus;1/&phi;</text>
+
+        <rect x="372" y="52" width="230" height="52" rx="3" fill="#16224a" stroke="#7d93f0"/>
+        <text x="487" y="74" class="sv-key" fill="#7d93f0" text-anchor="middle">vacuum here &rarr; d = &phi;</text>
+        <text x="487" y="93" class="sv-lab" text-anchor="middle">unitary &mdash; FIBONACCI</text>
+        <rect x="372" y="118" width="230" height="52" rx="3" fill="#2a1a1c" stroke="#ef7a6d"/>
+        <text x="487" y="140" class="sv-key" fill="#ef7a6d" text-anchor="middle">vacuum here &rarr; d = &minus;1/&phi;</text>
+        <text x="487" y="159" class="sv-lab" text-anchor="middle">non-unitary &mdash; YANG&ndash;LEE</text>
+        <text x="487" y="200" class="sv-lab" text-anchor="middle">same matrix &middot; same ring</text>
+        <text x="487" y="218" class="sv-lab" text-anchor="middle">different choice of ground state</text>
+      </svg>
+      <figcaption><strong>The columns of S are the characters of the fusion ring</strong> — its two one-dimensional representations. The quantum dimension is a ratio taken against <em>whichever column you designate the vacuum</em>. Pick the all-positive one (the Perron&ndash;Frobenius character) and you get d = &phi;, positive dimensions, a universal quantum computer. Pick the other and you get &minus;1/&phi;, a negative dimension, and the Yang&ndash;Lee edge singularity. <strong>Unitarity is exactly the condition that the vacuum sits on the Perron&ndash;Frobenius character.</strong></figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <div class="note is-yours">
+      <span class="tag">The distinction, stated exactly</span>
+      <p><strong>Fibonacci and Yang–Lee differ by which character of the fusion ring is designated the vacuum.</strong></p>
+      <p>Choose the Perron–Frobenius character — the one whose entries are all positive — and you get <span class="m">d<sub>τ</sub> = φ</span>, positive dimensions, a unitary theory, a universal quantum computer. Choose the other, and you get <span class="m">d<sub>τ</sub> = −1/φ</span>, a negative dimension, non-unitarity, and the Yang–Lee edge singularity.</p>
+      <p><strong>Unitarity is exactly the condition that the vacuum sits on the Perron–Frobenius character.</strong></p>
+    </div>
+
+    <p>That is as sharp as "fusion carries the magnitude, braiding carries the phase" gets. The ring hands you a finite set of characters. Which one you call the ground state is extra data the ring does not contain — and it is the whole difference between a computer and a critical point.</p>
+
+    <h2><span class="n">Section 5</span>Why this is the engine of the classification</h2>
+
+    <p>Here is the part that connects Verlinde to Rowell–Stong–Wang, and it is the reason number theory can classify physical theories at all.</p>
+
+    <p>The left side of Verlinde's formula must be a <strong>non-negative integer</strong>. The right side is built from entries of S. That is an extremely rigid demand: most matrices, plugged into that expression, produce irrational numbers or negative ones and are thereby disqualified.</p>
+
+    <div class="note is-crit">
+      <span class="tag">The move</span>
+      <p>Verlinde converts <em>"is this a consistent topological order?"</em> — a question about physics — into <em>"does this matrix yield non-negative integers?"</em> — a question about arithmetic.</p>
+      <p>That is why RSW can classify by solving <strong>Diophantine equations</strong>. They are not being clever with an unrelated tool. They are using the only tool the problem admits, because Verlinde already made it an arithmetic problem.</p>
+    </div>
+
+    <p>And it explains the finiteness you meet in tutorial 3: the fibre over a fusion ring is small because integrality is so restrictive that only a handful of S-matrices survive.</p>
+
+    <h2><span class="n">Section 6</span>Provenance, and how to cite it</h2>
+
+    <p>Worth getting right, because the attribution is not a single paper:</p>
+
+    <ul>
+      <li><strong>Verlinde (1988)</strong>, Nucl. Phys. B300, 360, stated the relation — largely as an observation and conjecture, from the structure of rational conformal field theory.</li>
+      <li><strong>Moore &amp; Seiberg (1989)</strong> supplied the derivation in the CFT setting, from the consistency of the theory on higher-genus surfaces.</li>
+      <li>In the axiomatic modular-tensor-category setting it is a <strong>theorem</strong>, provable from the MTC axioms directly.</li>
+    </ul>
+
+    <p>So "Verlinde's formula" names the result, but <em>"Verlinde proved"</em> would be wrong. Say <strong>conjectured by Verlinde, derived by Moore–Seiberg, theorem in the categorical setting</strong> — three different epistemic statuses, and they are worth keeping apart.</p>
+
+    <div class="srcs">
+      <span class="st">Sources</span>
+      <p><strong>Checked against the paper itself:</strong> Rowell, Stong &amp; Wang (arXiv:0712.1377) for the
+      Diophantine classification described in Section 5.</p>
+      <p><strong>Not consulted for this page:</strong> Verlinde (1988), Nucl. Phys. B300, 360, and Moore &amp;
+      Seiberg (1989). Both are behind publisher paywalls and neither was opened while writing this. The formula is
+      reproduced in essentially every set of lecture notes on rational conformal field theory or topological
+      order, many of them free — which is a practical route for reading, though not for citing.</p>
+      <p>Everything in Section 3 was computed and checked while writing. <strong>Everything in Sections 4&ndash;5
+      is standard but reconstructed rather than read from a source</strong> — in particular, check Section 4's
+      vacuum-designation statement against Rowell&ndash;Stong&ndash;Wang before it carries any weight.</p>
+    </div>
+
+    <footer>
+      <p>Tutorial 4 of four. Written 28 August 2026. Section 3 is the part to do with a pencil — the punchline in Section 4 does not land until the integers come out in your own handwriting.</p>
+    </footer>
+  </div>
+</div>
+</body>
+</html>

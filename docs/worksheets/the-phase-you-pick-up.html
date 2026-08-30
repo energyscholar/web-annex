@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Worksheet 2: the 1984 Arovas–Schrieffer–Wilczek calculation of the fractional statistics phase, and the 36 years to its measurement.">
+<title>The Phase You Pick Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* shared worksheet house style */
+:root{--bg:#0b1120;--bg-raise:#111a2e;--bg-sunk:#080d19;--ink:#dde5f2;--ink-soft:#97a6bf;--ink-faint:#6a7893;--rule:#1e2942;--rule-lit:#2c3a5c;--coral:#ef7a6d;--indigo:#7d93f0;--violet:#b98cf5;--amber:#e0b054}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;font-size:17px;line-height:1.68;-webkit-font-smoothing:antialiased}
+.rail{border-bottom:1px solid var(--rule);background:var(--bg-sunk);padding:12px 24px;display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.04em}
+.rail .series{color:var(--ink-faint);text-transform:uppercase;letter-spacing:.14em}
+.rail a{color:var(--ink-soft);text-decoration:none;border-bottom:1px solid transparent}
+.rail a:hover{color:var(--ink);border-bottom-color:var(--rule-lit)}
+.rail a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
+.rail .here{color:var(--violet)}
+.page{padding:0 24px 110px}
+.col{max-width:34em;margin:0 auto}
+.wide{max-width:50em;margin:38px auto}
+header.top{padding:76px 0 30px}
+.kicker{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin:0 0 20px}
+h1{font-family:Spectral,Georgia,serif;font-weight:600;font-size:clamp(2.3rem,5.5vw,3.4rem);line-height:1.06;letter-spacing:-.015em;margin:0 0 20px;text-wrap:balance}
+.dek{font-family:Spectral,Georgia,serif;font-size:1.24rem;line-height:1.52;color:var(--ink-soft);font-weight:300;margin:0}
+.dek em{color:var(--ink);font-style:italic}
+h2{font-family:Spectral,Georgia,serif;font-size:1.72rem;font-weight:600;line-height:1.16;letter-spacing:-.01em;margin:62px 0 6px;text-wrap:balance}
+h2 .n{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:9px}
+h3{font-size:1.02rem;font-weight:600;margin:34px 0 8px}
+p{margin:0 0 18px}
+a{color:var(--violet);text-underline-offset:2px}
+strong{font-weight:600;color:#f0f5ff}
+em{color:var(--ink)}
+.m{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.9em;color:var(--ink)}
+.eq{font-family:"IBM Plex Mono",ui-monospace,monospace;background:var(--bg-raise);border:1px solid var(--rule);border-left:2px solid var(--violet);padding:15px 18px;margin:22px 0;font-size:.95rem;overflow-x:auto;line-height:1.5}
+.eq .where{display:block;font-family:"IBM Plex Sans",sans-serif;font-size:.82rem;color:var(--ink-faint);margin-top:9px}
+blockquote{margin:24px 0;padding-left:18px;border-left:2px solid var(--rule-lit);color:var(--ink-soft);font-family:Spectral,Georgia,serif;font-size:1.06rem;font-style:italic}
+blockquote .attrib{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-style:normal;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-top:10px}
+.note{border:1px solid var(--rule);background:var(--bg-raise);border-radius:3px;padding:18px 20px;margin:26px 0}
+.note .tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:9px}
+.note.is-yours{border-left:2px solid var(--indigo)}.note.is-yours .tag{color:var(--indigo)}
+.note.is-caution{border-left:2px solid var(--amber)}.note.is-caution .tag{color:var(--amber)}
+.note.is-crit{border-left:2px solid var(--coral)}.note.is-crit .tag{color:var(--coral)}
+.note p:last-child{margin-bottom:0}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:480px}
+caption{text-align:left;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);padding-bottom:11px}
+th,td{text-align:left;padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;border-bottom:1px solid var(--rule-lit);white-space:nowrap}
+tbody th{font-weight:600;white-space:nowrap}
+td.n,th.n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+ul,ol{margin:0 0 18px;padding-left:20px}
+li{margin-bottom:9px}
+figure{margin:0}
+figcaption{font-size:.84rem;color:var(--ink-faint);margin-top:14px;line-height:1.5}
+svg{display:block;width:100%;height:auto}
+footer{margin:70px auto 0;max-width:34em;border-top:1px solid var(--rule);padding-top:26px;color:var(--ink-faint);font-size:.86rem}
+</style>
+<style>
+.fig{margin:40px auto;max-width:50em}
+.fig-frame{background:var(--bg-sunk);border:1px solid var(--rule);border-radius:4px;padding:18px 20px 20px}
+.fig-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.fig-label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+.playbtn{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--bg-raise);color:var(--ink-soft);border:1px solid var(--rule-lit);border-radius:3px;padding:5px 11px;cursor:pointer}
+.playbtn:hover{color:var(--ink);border-color:var(--violet)}
+.playbtn:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.fig figcaption{font-size:.85rem;color:var(--ink-faint);margin-top:14px;line-height:1.55}
+.fig figcaption strong{color:var(--ink-soft)}
+.paused *{animation-play-state:paused!important}
+svg text{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.sv-lab{font-size:11px;fill:#6a7893}
+.sv-key{font-size:12px;fill:#dde5f2}
+@media (prefers-reduced-motion:reduce){.fig *{animation:none!important}}
+@keyframes spinA{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.orbA{transform-box:view-box;transform-origin:150px 132px;animation:spinA 8s linear infinite}
+.orbB{transform-box:view-box;transform-origin:460px 132px;animation:spinA 8s linear infinite}
+@keyframes dialSweep{0%{stroke-dashoffset:126}92%,100%{stroke-dashoffset:0}}
+.dialArc{stroke-dasharray:126;stroke-dashoffset:126;animation:dialSweep 8s linear infinite}
+@keyframes hideThenShow{0%,84%{opacity:0}94%,100%{opacity:1}}
+.resultB{opacity:0;animation:hideThenShow 8s linear infinite}
+@keyframes swapL{0%,8%{transform:translate(0,0)}50%,58%{transform:translate(120px,0)}92%,100%{transform:translate(120px,0)}}
+@keyframes swapR{0%,8%{transform:translate(0,0)}50%,58%{transform:translate(-120px,0)}92%,100%{transform:translate(-120px,0)}}
+.swL{animation:swapL 6s ease-in-out infinite}
+.swR{animation:swapR 6s ease-in-out infinite}
+@keyframes deplete{0%,10%{r:0;opacity:0}40%,90%{r:26;opacity:1}100%{r:26;opacity:1}}
+.hole{animation:deplete 5s ease-out infinite}
+
+/* --- scope note, added on publication --- */
+.scope{border:1px solid var(--rule-lit);background:var(--bg-raise);border-radius:4px;padding:17px 19px;margin:24px 0 28px}
+.scope .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:9px}
+.scope p{margin:0 0 10px;font-size:.93rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.scope p:last-child{margin-bottom:0}
+.scope a{color:var(--violet)}
+.prereq{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;color:var(--ink-faint);border-left:2px solid var(--rule-lit);padding:2px 0 2px 14px;margin:0 0 26px;line-height:1.7;max-width:none}
+.prereq b{color:var(--ink-soft);font-weight:500}
+.srcs{border:1px solid var(--rule);background:var(--bg-sunk);border-radius:4px;padding:16px 18px;margin:30px 0 0}
+.srcs .st{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--indigo,#7d93f0);display:block;margin-bottom:9px}
+.srcs p{margin:0 0 9px;font-size:.88rem;color:var(--ink-soft);max-width:none;line-height:1.6}
+.srcs p:last-child{margin-bottom:0}
+</style>
+<script>
+(function(){var r=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function w(){document.querySelectorAll(".fig[data-anim]").forEach(function(f){var b=f.querySelector(".playbtn");if(!b)return;var p=!r;
+function a(){f.classList.toggle("paused",!p);b.textContent=p?"❚❚ Pause":"▶ Play";b.setAttribute("aria-pressed",p?"true":"false");}
+b.addEventListener("click",function(){p=!p;a();});a();});}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",w);else w();})();
+</script>
+</head>
+<body>
+<nav class="rail">
+  <span class="series">Worksheets · anyon algebra by hand</span>
+  <a href="./">Index</a>
+  <a href="golden-arithmetic.html">Lab · Golden Arithmetic</a>
+  <a href="row-times-column.html">Lab · Row Times Column</a>
+  <a href="verlinde-by-hand.html">Lab · Verlinde by Hand</a>
+  <a href="five-derivations.html">Paper course · Five Derivations</a>
+  <a href="one-modulus-two-arguments.html">1 · One Modulus, Two Arguments</a>
+  <span class="here">2 · The Phase You Pick Up</span>
+  <a href="what-the-modulus-forgets.html">3 · What the Modulus Forgets</a>
+  <a href="where-the-integers-come-from.html">4 · Where the Integers Come From</a>
+</nav>
+
+<div class="page">
+  <header class="top col">
+    <p class="kicker">Tutorial 2 · Arovas–Schrieffer–Wilczek, 1984</p>
+    <h1>The Phase<br>You Pick Up</h1>
+    <p class="dek">Two years after Wilczek showed that two-dimensional particles <em>may</em> have any statistics, Arovas, Schrieffer and Wilczek computed what the statistics actually <em>are</em> in a real material. Four pages, and the method is a holonomy calculation.</p>
+  </header>
+
+  <div class="col">
+
+<div class="scope">
+  <span class="st">What this is</span>
+  <p><strong>A worksheet, not a result.</strong> The mathematics on this page is standard topological quantum
+  computation, roughly 1984&ndash;2009. None of it is new. <em>&ldquo;It was simply new to my hands. I had read it
+  for years and never computed with it, and those turn out to be different states of knowing.&rdquo;</em> These
+  sheets exist to move a reader from the first state to the second, and they make no claim of their own.</p>
+  <p><strong>The method is predict&ndash;then&ndash;check.</strong> Every input box, drill and gate here is built for one
+  move: write down what you think the number is <em>before</em> you reveal it. Numbers are sourced to a paper
+  where a paper says them, and marked unchecked where none does &mdash; a sheet whose whole method is
+  <em>check it yourself</em> cannot ask you to take its own arithmetic on trust.</p>
+  <p>If you are coming from an operator formalism, you may want to ask of every quantity here what the declared
+  observable is, and what mapping puts it into the domain before the algebra acts. That is a fair question, and
+  these sheets sit upstream of it &mdash; the arithmetic of <span class="m">d&sup2; = d + 1</span> is the same
+  arithmetic whichever way it is answered. They take no position on it. <a href="./#scope">The full note is on the index.</a></p>
+</div>
+
+<p class="prereq"><b>Prerequisites:</b> Section 3 genuinely needs the Berry phase and adiabatic transport &mdash; that is Derivation 5 in the <a href="five-derivations.html">paper course</a>, and it is honestly labelled <em>weeks</em>, not hours. <b>Sections 1, 4 and 5 stand on their own</b> and need nothing beyond arithmetic.</p>
+
+    <p><strong>Start from a number.</strong> At filling <span class="m">&nu; = 1/3</span> the exchange phase is
+    <span class="m">&theta; = &pi;/3</span> &mdash; sixty degrees, neither the boson's 0 nor the fermion's &pi;.
+    This tutorial is the four-page 1984 calculation that produced that number, and the thirty-six years it took
+    to measure it. If you have not done the Berry phase, read Section 3 as a preview rather than a lesson and
+    come back to it; nothing else here depends on it.</p>
+
+    <div class="note is-crit">
+      <span class="tag">&#9940; The one real prerequisite</span>
+      <p><strong>This is the one tutorial in the series that genuinely needs Berry phase and adiabatic
+      transport</strong>, and everything in Section 3 rests on them. The groundwork is <strong>Derivation 5</strong>
+      in <a href="five-derivations.html">Five Derivations</a>: spin-&frac12; in a rotating field &rarr; the Berry
+      connection &rarr; Aharonov&ndash;Bohm &rarr; ASW. Four steps, honestly labelled <em>weeks</em>.</p>
+    </div>
+
+    <h2><span class="n">Section 1</span>What was and wasn't known in 1984</h2>
+
+    <p>Three things were already settled:</p>
+
+    <ul>
+      <li><strong>Leinaas &amp; Myrheim (1977), and Wilczek (1982):</strong> in two dimensions, exchanging two identical particles is not necessarily ±1. The configuration space of two indistinguishable points in the plane is not simply connected, so the exchange phase can be <em>any</em> value <span class="m">e<sup>iθ</sup></span>. Wilczek named the resulting particles <strong>anyons</strong>. This is a statement about what 2D <em>permits</em>.</li>
+      <li><strong>Tsui, Störmer &amp; Gossard (1982):</strong> the fractional quantum Hall effect exists — a plateau at filling ν = 1/3.</li>
+      <li><strong>Laughlin (1983):</strong> a trial wavefunction for ν = 1/m, and the claim that its quasiparticle excitations carry <strong>fractional charge e/m</strong>.</li>
+    </ul>
+
+    <p>What was <em>not</em> known: whether the FQHE quasiparticles are anyons, and if so, with what θ. Fractional charge does not imply fractional statistics — they are separate claims. ASW closed that gap by direct computation.</p>
+
+    <h2><span class="n">Section 2</span>The construction</h2>
+
+    <p>Laughlin's state at ν = 1/m, with m odd:</p>
+
+    <div class="eq">ψ<sub>m</sub> = Π<sub>i&lt;j</sub> (z<sub>i</sub> − z<sub>j</sub>)<sup>m</sup> · exp( −Σ<sub>i</sub> |z<sub>i</sub>|² / 4ℓ² )<span class="where">z = x + iy in units of the magnetic length ℓ. The exponent m is what makes this fractional.</span></div>
+
+    <p>A <strong>quasihole</strong> at position <span class="m">z<sub>0</sub></span> is made by multiplying in a factor that pushes electrons away from that point:</p>
+
+    <div class="eq">ψ<sub>m</sub><sup>(z<sub>0</sub>)</sup> = Π<sub>i</sub> (z<sub>i</sub> − z<sub>0</sub>) · ψ<sub>m</sub><span class="where">Each electron coordinate acquires a simple zero at z₀ — a hole in the fluid.</span></div>
+
+    <p>The depleted charge is <span class="m">e/m</span> — one <em>m</em>-th of an electron, missing from a region around <span class="m">z<sub>0</sub></span>.</p>
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 1 — a hole worth one third of an electron</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 230" role="img" aria-label="A uniform quantum Hall droplet with a quasihole opening at a point, depleting one third of an electron charge.">
+        <circle cx="200" cy="115" r="94" fill="#16224a" stroke="#2c3a5c"/>
+        <g fill="#7d93f0" opacity=".55">
+          <circle cx="168" cy="82" r="3"/><circle cx="205" cy="70" r="3"/><circle cx="238" cy="96" r="3"/>
+          <circle cx="150" cy="120" r="3"/><circle cx="186" cy="132" r="3"/><circle cx="228" cy="140" r="3"/>
+          <circle cx="166" cy="163" r="3"/><circle cx="206" cy="172" r="3"/><circle cx="245" cy="60" r="3"/>
+          <circle cx="128" cy="92" r="3"/><circle cx="252" cy="130" r="3"/><circle cx="140" cy="152" r="3"/>
+        </g>
+        <text x="200" y="222" class="sv-lab" text-anchor="middle">uniform ν = 1/3 droplet</text>
+
+        <text x="310" y="120" class="sv-key" fill="#6a7893" text-anchor="middle" font-size="18">→</text>
+        <text x="310" y="142" class="sv-lab" text-anchor="middle">×∏(z&#8342;−z&#8320;)</text>
+
+        <circle cx="450" cy="115" r="94" fill="#16224a" stroke="#2c3a5c"/>
+        <g fill="#7d93f0" opacity=".55">
+          <circle cx="418" cy="72" r="3"/><circle cx="455" cy="62" r="3"/><circle cx="495" cy="88" r="3"/>
+          <circle cx="392" cy="112" r="3"/><circle cx="505" cy="132" r="3"/><circle cx="488" cy="162" r="3"/>
+          <circle cx="412" cy="168" r="3"/><circle cx="452" cy="180" r="3"/><circle cx="378" cy="146" r="3"/>
+        </g>
+        <circle class="hole" cx="450" cy="115" fill="#0b1120" stroke="#ef7a6d" stroke-width="2.5"/>
+        <text x="450" y="119" class="sv-key" fill="#ef7a6d" text-anchor="middle" font-size="13">e/3</text>
+        <text x="450" y="222" class="sv-lab" text-anchor="middle">quasihole at z₀ — charge deficit e/3</text>
+      </svg>
+      <figcaption>Multiplying the Laughlin state by <span class="m">∏(z<sub>i</sub> − z<sub>0</sub>)</span> gives every electron coordinate a simple zero at <span class="m">z<sub>0</sub></span> — the electrons are pushed away and a hole opens. <strong>Fractional charge, but that alone says nothing about statistics.</strong> Charge and statistics are separate claims; ASW's contribution was computing the second.</figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+
+    <h2><span class="n">Section 3</span>The calculation, which is a holonomy</h2>
+
+    <p>Here is the move. Drag the quasihole slowly around a closed loop and ask what phase the wavefunction accumulates. Slowly means <strong>adiabatically</strong>, so the state stays in the ground-state manifold and the phase picked up is a <strong>Berry phase</strong>.</p>
+
+    <div class="eq">γ = i ∮ ⟨ψ(z<sub>0</sub>) | ∂<sub>z<sub>0</sub></sub> | ψ(z<sub>0</sub>) ⟩ dz<sub>0</sub><span class="where">The holonomy of the Berry connection around the loop. Geometry, not dynamics — it does not depend on how fast you go.</span></div>
+
+    <p><strong>Step one — one quasihole, empty loop.</strong> Transporting charge <span class="m">e/m</span> around a loop enclosing magnetic flux Φ gives the Aharonov–Bohm phase for that fractional charge:</p>
+
+    <div class="eq">γ<sub>1</sub> = −2π · (1/m) · (Φ / Φ<sub>0</sub>)<span class="where">The 1/m is the fractional charge showing up directly in the phase. This alone re-derives Laughlin's charge.</span></div>
+
+    <p><strong>Step two — put a second quasihole inside the loop.</strong> Now repeat the transport. The enclosed charge has changed: there is an <em>additional</em> deficit of <span class="m">e/m</span> sitting inside the path. The phase changes by the amount corresponding to that extra enclosed charge:</p>
+
+    <div class="eq">Δγ = 2π / m<span class="where">The extra phase from encircling one quasihole with another. A full loop = two exchanges.</span></div>
+
+    <p>A full circuit is two exchanges, so a single exchange carries half:</p>
+
+    <div class="eq">θ = π / m<span class="where">At ν = 1/3: θ = π/3. Neither 0 (boson) nor π (fermion). Anyons, with a computed value.</span></div>
+
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 2 — the same trip, twice, with one difference</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 300" role="img" aria-label="A quasihole transported around a loop, first with nothing inside, then with a second quasihole inside.">
+        <circle cx="150" cy="132" r="70" fill="none" stroke="#2c3a5c" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <g class="orbA"><circle cx="220" cy="132" r="8" fill="#ef7a6d"/></g>
+        <text x="150" y="30" class="sv-lab" fill="#7d93f0" text-anchor="middle">EMPTY LOOP</text>
+        <text x="150" y="137" class="sv-lab" text-anchor="middle">nothing</text>
+        <text x="150" y="153" class="sv-lab" text-anchor="middle">enclosed</text>
+        <text x="150" y="238" class="sv-key" fill="#7d93f0" text-anchor="middle">Aharonov–Bohm only</text>
+        <text x="150" y="258" class="sv-lab" text-anchor="middle">phase from the flux,</text>
+        <text x="150" y="274" class="sv-lab" text-anchor="middle">scaled by the charge e/3</text>
+
+        <line x1="305" y1="40" x2="305" y2="270" stroke="#1e2942"/>
+
+        <circle cx="460" cy="132" r="70" fill="none" stroke="#2c3a5c" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <circle cx="460" cy="132" r="13" fill="#0b1120" stroke="#b98cf5" stroke-width="2.5"/>
+        <text x="460" y="137" class="sv-lab" fill="#b98cf5" text-anchor="middle" font-size="10">e/3</text>
+        <g class="orbB"><circle cx="530" cy="132" r="8" fill="#ef7a6d"/></g>
+        <text x="460" y="30" class="sv-lab" fill="#b98cf5" text-anchor="middle">ONE QUASIHOLE INSIDE</text>
+        <text x="460" y="238" class="sv-key" fill="#b98cf5" text-anchor="middle">the same, plus 2π/3</text>
+        <text x="460" y="258" class="sv-lab" text-anchor="middle">the enclosed charge changed,</text>
+        <text x="460" y="274" class="sv-lab" text-anchor="middle">so the phase changed</text>
+      </svg>
+      <figcaption><strong>The difference between the two panels is the statistics.</strong> Both transports pick up an Aharonov–Bohm phase from the magnetic flux. The right-hand loop encloses an extra charge deficit of e/3, and that extra enclosed charge contributes an extra <span class="m">2π/3</span>. Nothing else changed — same path, same speed, same field. <em>Subtract one from the other and what is left is the exchange statistics.</em></figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <div class="note is-crit">
+      <span class="tag">The statistical phase is a holonomy</span>
+      <p>The statistical phase is <strong>not</strong> a property of the particles considered individually. It is
+      the <em>holonomy of a connection over the configuration space of their positions</em> &mdash; which is why
+      the calculation in Section 3 is a loop integral and not a property of either quasihole on its own.</p>
+    </div>
+
+  </div>
+
+  <figure class="fig" data-anim>
+    <div class="fig-frame">
+      <div class="fig-head"><span class="fig-label">Fig. 3 — a full loop is two exchanges</span><button class="playbtn" type="button"></button></div>
+      <svg viewBox="0 0 620 210" role="img" aria-label="Two anyons exchanging positions along semicircular paths, half of a full encirclement.">
+        <path d="M200 110 A60 60 0 0 1 320 110" fill="none" stroke="#2c3a5c" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <path d="M320 110 A60 60 0 0 1 200 110" fill="none" stroke="#2c3a5c" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <g class="swL"><circle cx="200" cy="110" r="10" fill="#ef7a6d"/></g>
+        <g class="swR"><circle cx="320" cy="110" r="10" fill="#7d93f0"/></g>
+        <text x="260" y="42" class="sv-lab" text-anchor="middle">exchange — half a circuit</text>
+        <text x="260" y="176" class="sv-key" fill="#b98cf5" text-anchor="middle">θ = π/3</text>
+        <text x="260" y="196" class="sv-lab" text-anchor="middle">half of the 2π/3 from Fig. 2</text>
+
+        <line x1="400" y1="40" x2="400" y2="190" stroke="#1e2942"/>
+        <text x="510" y="70" class="sv-lab" fill="#6a7893" text-anchor="middle">at ν = 1/m</text>
+        <text x="510" y="104" class="sv-key" fill="#b98cf5" text-anchor="middle" font-size="17">θ = π/m</text>
+        <text x="510" y="140" class="sv-lab" text-anchor="middle">m = 3 → θ = π/3 = 60°</text>
+        <text x="510" y="162" class="sv-lab" text-anchor="middle">neither 0 (boson)</text>
+        <text x="510" y="180" class="sv-lab" text-anchor="middle">nor π (fermion)</text>
+      </svg>
+      <figcaption>Carrying one quasihole all the way around another is <strong>two</strong> exchanges, so a single exchange carries half the phase. At ν = 1/3 that gives <span class="m">θ = π/3</span> — a value between the boson's 0 and the fermion's π, which is what "anyon" means. <strong>Predicted 1984, confirmed by interferometry in 2020.</strong></figcaption>
+    </div>
+  </figure>
+
+  <div class="col">
+    <h2><span class="n">Section 4</span>What the argument assumes</h2>
+
+    <p>Worth refreshing alongside the result, because the caveats are where the later literature lives:</p>
+
+    <ul>
+      <li><strong>Adiabaticity.</strong> There must be a gap, and the transport must be slow relative to it. Fine deep in a plateau; not fine near a transition.</li>
+      <li><strong>Well-separated quasiholes.</strong> The derivation treats the enclosed charge as a clean deficit. Overlapping quasiholes have no such clean accounting.</li>
+      <li><strong>Berry phase versus monodromy.</strong> The phase splits into an explicit monodromy of the wavefunction and a Berry connection term. For Laughlin states these combine cleanly. For <em>non-abelian</em> candidates — Moore–Read at ν = 5/2 — the separation is subtle, and Kjønsberg &amp; Leinaas showed the naive reading can mislead. Read &amp; Moore (1992) is the paper where that harder case begins.</li>
+      <li><strong>Abelian only.</strong> ASW gives a <em>phase</em>, an element of U(1). That is the abelian case. Non-abelian statistics needs a matrix acting on a degenerate ground-state manifold — a different and later object.</li>
+    </ul>
+
+    <div class="note is-crit">
+      <span class="tag">Where this lands in the classification</span>
+      <p>In tutorial 1's language, ASW's quasiholes have <strong>quantum dimension d = 1</strong>. They store a
+      phase and cannot compute. The braid group image is a circle in U(1), abelian, and
+      Freedman&ndash;Larsen&ndash;Wang density is nowhere in sight.</p>
+      <p>So ASW is the <em>floor</em> of the ladder rather than a step on it: it establishes that fractional
+      statistics are real and computable in a laboratory system, which is what makes the harder rows worth asking
+      about at all.</p>
+    </div>
+
+    <h2><span class="n">Section 5</span>The 36-year gap</h2>
+
+    <p>ASW predicted θ = π/3 in 1984. Direct experimental confirmation of anyonic braiding arrived in <strong>2020</strong> — Nakamura, Liang, Gardner &amp; Manfra, using a Fabry–Pérot interferometer at ν = 1/3, with the phase jumps matching θ = 2π/3 per quasiparticle in the interference loop. Bartolomei <em>et al.</em> reported complementary evidence the same year from anyon collisions.</p>
+
+
+    <footer>
+      <p>Tutorial 2 of four. Written 28 August 2026. No DOIs are quoted from memory anywhere on this page — open the papers themselves.</p>
+    </footer>
+
+    <div class="srcs">
+      <span class="st">Sources</span>
+      <p><strong>Checked against the paper itself:</strong> Arovas, Schrieffer &amp; Wilczek (1984) for the
+      calculation and for θ = π/m; Laughlin (1983) for the wavefunction and the fractional charge; Tsui, Störmer
+      &amp; Gossard (1982) for the ν = 1/3 plateau; Wilczek (1982) for anyons; Halperin (1984); Read &amp; Moore
+      (1992) for the non-abelian case; Nakamura, Liang, Gardner &amp; Manfra (2020) for the interferometric
+      confirmation.</p>
+      <p><strong>Stated on reputation, not checked here:</strong> Leinaas &amp; Myrheim (1977); Bartolomei
+      <em>et al.</em> (2020) for the anyon-collision evidence; Kjønsberg &amp; Leinaas on the monodromy/Berry
+      split; Freedman–Larsen–Wang for density. The mathematics is standard; treat these attributions as the soft
+      part and open them before quoting them.</p>
+    </div>
+    </footer>
+  </div>
+</div>
+</body>
+</html>
