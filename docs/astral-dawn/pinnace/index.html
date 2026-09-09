@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Vessel record for the 40-ton armoured pinnace carried by the ISS Astral Dawn — ex-pirate salvage, TL13.">
+<meta name="robots" content="noindex">
+<title>Armoured Pinnace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Tokens carried over from the Astral Dawn dossier — this is her sibling record. */
+:root{
+  --ground:#0A0E14; --panel:#131A24; --panel-2:#182130; --line:#243244;
+  --text:#D4DDE7; --muted:#8195AA; --dim:#5C6E82;
+  --accent:#C89544; --accent-soft:#8A6A32; --accent-wash:rgba(200,149,68,.10);
+  --alert:#C2453D; --alert-wash:rgba(194,69,61,.12);
+  --go:#4E9E80; --go-wash:rgba(78,158,128,.10);
+  --shadow:0 1px 0 rgba(255,255,255,.03), 0 8px 28px rgba(0,0,0,.45);
+  --stripe:repeating-linear-gradient(135deg,rgba(194,69,61,.16) 0 10px,transparent 10px 20px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --ground:#E9EDF1; --panel:#FFFFFF; --panel-2:#F3F6F9; --line:#C6D1DC;
+    --text:#131C27; --muted:#556A7E; --dim:#7D8FA1;
+    --accent:#8A6212; --accent-soft:#B08A3A; --accent-wash:rgba(138,98,18,.09);
+    --alert:#A3322B; --alert-wash:rgba(163,50,43,.10);
+    --go:#2E6A53; --go-wash:rgba(46,106,83,.10);
+    --shadow:0 1px 0 rgba(255,255,255,.8), 0 6px 20px rgba(20,35,50,.10);
+  }
+}
+:root[data-theme="light"]{
+  --ground:#E9EDF1; --panel:#FFFFFF; --panel-2:#F3F6F9; --line:#C6D1DC;
+  --text:#131C27; --muted:#556A7E; --dim:#7D8FA1;
+  --accent:#8A6212; --accent-soft:#B08A3A; --accent-wash:rgba(138,98,18,.09);
+  --alert:#A3322B; --alert-wash:rgba(163,50,43,.10);
+  --go:#2E6A53; --go-wash:rgba(46,106,83,.10);
+  --shadow:0 1px 0 rgba(255,255,255,.8), 0 6px 20px rgba(20,35,50,.10);
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--ground); color:var(--text);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif; font-size:16px; line-height:1.55}
+.wrap{max-width:860px; margin:0 auto; padding:28px 20px 72px}
+h1,h2,h3,.kicker,.tag{font-family:"Chakra Petch",Impact,"Arial Narrow",sans-serif}
+h1{font-size:30px; letter-spacing:.02em; margin:2px 0 4px; text-wrap:balance}
+h2{font-size:18px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);
+  margin:32px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+h3{font-size:14px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:18px 0 6px}
+.kicker{font-size:11.5px; letter-spacing:.20em; text-transform:uppercase; color:var(--dim)}
+.mono,.num,td.num{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+header{border-bottom:2px solid var(--accent-soft); padding-bottom:14px; margin-bottom:6px}
+.sub{color:var(--muted); font-size:14.5px; margin:6px 0 0}
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:6px;
+  padding:14px 16px; box-shadow:var(--shadow); margin:14px 0}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px}
+.tag{display:inline-block; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); background:var(--accent-wash); border:1px solid var(--accent-soft);
+  border-radius:3px; padding:2px 7px; margin-bottom:9px}
+.tablewrap{overflow-x:auto}
+table{width:100%; border-collapse:collapse; font-size:14.5px}
+td,th{text-align:left; padding:5px 8px 5px 0; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"Chakra Petch",sans-serif; font-size:11.5px; letter-spacing:.10em;
+  text-transform:uppercase; color:var(--muted); font-weight:600}
+td.n{color:var(--muted); width:38%}
+tr:last-child td{border-bottom:none}
+.unknown{color:var(--alert); font-family:"IBM Plex Mono",monospace; font-size:13px}
+.note{background:var(--panel-2); border-left:3px solid var(--accent-soft);
+  padding:10px 13px; margin:12px 0; font-size:14.5px; border-radius:0 4px 4px 0}
+.warn{background:var(--alert-wash); border-left:3px solid var(--alert)}
+.warn h3{color:var(--alert)}
+.stripe{height:5px; background:var(--stripe); border-radius:3px; margin:16px 0}
+ul{margin:8px 0; padding-left:20px} li{margin:4px 0}
+.foot{margin-top:34px; padding-top:12px; border-top:1px solid var(--line);
+  color:var(--dim); font-size:12.5px}
+code{font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">ISS Astral Dawn &middot; Carried Craft &middot; Record 2 of 5</div>
+  <h1>Armoured Pinnace</h1>
+  <p class="sub">40 tons &middot; TL13 &middot; ex-pirate salvage, badly damaged and patched &middot;
+  external docking clamps on the Astral Dawn&rsquo;s hull &mdash; <em>&ldquo;a tiny SDB, and the
+  crew effectively own her.&rdquo;</em></p>
+</header>
+
+<div class="note">
+  <strong>What she is.</strong> Not a ship&rsquo;s boat. She is a heavily armoured, heavily armed
+  small craft taken intact from pirates, pressure-hardened well past the usual standard, and carrying
+  an armoured G-Carrier in her own hold. In practice she is the Astral Dawn&rsquo;s system defence
+  boat and her assault transport at the same time &mdash; which is why deploying her costs the
+  fighter squadron a pilot.
+</div>
+
+<h2>Ship record</h2>
+<div class="grid">
+
+  <div class="panel">
+    <span class="tag">Hull &amp; Structure</span>
+    <div class="tablewrap"><table><tbody>
+      <tr><td class="n">Displacement</td><td class="num">40 tons</td></tr>
+      <tr><td class="n">Tech Level</td><td class="num">TL13</td></tr>
+      <tr><td class="n">Configuration</td><td>Streamlined</td></tr>
+      <tr><td class="n">Hull points</td><td class="num">~16 <span class="unknown">approx.</span></td></tr>
+      <tr><td class="n">Armour</td><td>Heavy &mdash; pirate modification<br><span class="unknown">no numeric rating on record</span></td></tr>
+      <tr><td class="n">Pressure hull</td><td>Hardened &mdash; rated for deep submersion and gas-giant descent</td></tr>
+      <tr><td class="n">Condition</td><td>Battered and patched; repairs never fully finished</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="panel">
+    <span class="tag">Drives &amp; Power</span>
+    <div class="tablewrap"><table><tbody>
+      <tr><td class="n">Manoeuvre</td><td><span class="unknown">not on record</span><br><span style="font-size:13px;color:var(--dim)">every source calls her <em>fast</em>; the stock pinnace is Thrust&nbsp;5</span></td></tr>
+      <tr><td class="n">Jump</td><td>None &mdash; small craft</td></tr>
+      <tr><td class="n">Power plant</td><td><span class="unknown">not on record</span></td></tr>
+      <tr><td class="n">Fuel</td><td>Own bunkerage <span class="unknown">not on record</span></td></tr>
+      <tr><td class="n">Endurance note</td><td>Carries a 50-ton-capacity fuel bladder, currently holding 10 tons</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="panel">
+    <span class="tag">Weapons</span>
+    <div class="tablewrap"><table><tbody>
+      <tr><td class="n">Mount</td><td>One triple turret</td></tr>
+      <tr><td class="n">&nbsp;&nbsp;&middot; Missile rack</td><td>Ship-to-ship</td></tr>
+      <tr><td class="n">&nbsp;&nbsp;&middot; Pulse laser</td><td>Ship-to-ship</td></tr>
+      <tr><td class="n">&nbsp;&nbsp;&middot; Sandcaster</td><td>Defensive screen</td></tr>
+      <tr><td class="n">Sandcaster, ground use</td><td class="num">8D</td></tr>
+      <tr><td class="n">Provenance</td><td>Has carried nuclear ordnance in pirate service</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="panel">
+    <span class="tag">Crew &amp; Carriage</span>
+    <div class="tablewrap"><table><tbody>
+      <tr><td class="n">Crew</td><td>Pilot + gunner</td></tr>
+      <tr><td class="n">Cost of launching her</td><td>The fighter squadron drops from 6 to 5 &mdash; a fighter pilot detaches to fly her</td></tr>
+      <tr><td class="n">Carried internally</td><td>Armoured G-Carrier, 10 tons</td></tr>
+      <tr><td class="n">Also carried</td><td>Fuel bladder, 50-ton capacity, 10 tons aboard</td></tr>
+      <tr><td class="n">Troop lift</td><td>A full marine squad</td></tr>
+      <tr><td class="n">Mount on the Astral Dawn</td><td>External docking clamps, 4 tons of the parent hull</td></tr>
+    </tbody></table></div>
+  </div>
+
+</div>
+
+<div class="stripe"></div>
+
+<h2>How she is used</h2>
+<p>Three doctrines are on record, and they differ in what reaches the ground rather than in what she does:</p>
+<div class="tablewrap"><table>
+  <thead><tr><th>Doctrine</th><th>Lands</th><th>Character</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Pinnace assault</strong></td><td>Full squad</td>
+      <td>Heavy armour and the pulse laser go in with the marines.</td></tr>
+    <tr><td><strong>G-Carrier assault</strong></td><td>Squad of eight</td>
+      <td>The carrier drops from the pinnace and fights on its own mounted weapons. Best for surface work.</td></tr>
+    <tr><td><strong>Combined arms</strong></td><td>Squad, split</td>
+      <td>Pinnace delivers the carrier to proximity, then stands off and gives covering fire. Maximum force.</td></tr>
+  </tbody>
+</table></div>
+<p style="font-size:14.5px;color:var(--muted)">Standard deployment: pinnace to orbit or close
+proximity &rarr; G-Carrier descends with the marines aboard.</p>
+
+<div class="note warn">
+  <h3>Unresolved &mdash; needs a referee ruling</h3>
+  <p>These are conflicts between campaign records, not gaps I could fill by looking harder. Each one
+  is a place where two documents disagree, so the number below is a <em>choice</em> somebody has to make.</p>
+  <ul>
+    <li><strong>Displacement.</strong> 40 tons in the fleet record, the combat reference and the
+      handout text &mdash; but <span class="mono">22 tons</span> in the ship record&rsquo;s carried-craft
+      list, and <span class="mono">60 tons</span> in one map tooltip. 40 is used throughout this page.</li>
+    <li><strong>Turret fit.</strong> The combat reference gives missile rack + pulse laser +
+      sandcaster. One map tooltip instead reads &ldquo;missile racks &amp; sandcasters, turreted
+      light beam&rdquo;. The triple turret is used here.</li>
+    <li><strong>Tech level.</strong> Campaign sources say TL13 consistently; the generic pinnace
+      template she was built from is TL9. Her armour, speed and pressure rating all argue for TL13.</li>
+    <li><strong>Armour rating.</strong> Described everywhere as &ldquo;heavy&rdquo;, nowhere as a
+      number. She cannot be resolved in ship combat until this has a value.</li>
+    <li><strong>Thrust and power plant.</strong> Not recorded anywhere for this variant.</li>
+  </ul>
+</div>
+
+<p class="foot">
+  Compiled from the campaign&rsquo;s own records &mdash; the fleet stat block, the combat reference,
+  the carried-craft list and the session handouts &mdash; not from any published design. Figures
+  marked <span class="unknown">not on record</span> are genuinely absent: nothing here is a guess
+  dressed as a fact. Sibling record: <a href="../" style="color:var(--accent)">ISS Astral Dawn</a>.
+</p>
+
+</div>
+</body>
+</html>
