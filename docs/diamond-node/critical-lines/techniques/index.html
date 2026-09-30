@@ -146,7 +146,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   <p>Three numbers per level, three definitions: the step between successive levels is a
   <span class="tip" tabindex="0">directed difference<span class="tt">x[s] &minus; x[t] over a declared edge s &rarr; t. The kernel&rsquo;s operator A is defined this way; it is not a &ldquo;gradient&rdquo;.</span></span>
   over the declared scale relation (the kernel&rsquo;s A); the running sum of steps is an accumulation (the kernel&rsquo;s B);
-  the work the field does round a small loop is a circulation (the quantity R&rsquo;s antisymmetric term &Sigma;succ &minus; &Sigma;pred stands in for <span class="design">&#9670; design</span>).<a href="#fn-ksk" class="fn">12</a></p>
+  the work the field does round a small loop is a circulation. The kernel has no loops (&sect;4): its R, R(g)[e] = g[e] + &rho;&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g) is an antisymmetric response over a <em>chain</em> of declared relations: the kernel&rsquo;s discrete analogue of circulation, not a loop integral.<a href="#fn-ksk" class="fn">12</a></p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>The Detector will be a total lookup table over a discrete signature of these three readings (their signs, read against a declared margin). REFUSE is one of the table&rsquo;s cells, not an error message.<a href="#fn-design" class="fn">1</a></p></div>
   <details class="l2" id="d-0-l2"><summary>Working equations</summary>
     <p>With g<sub>n</sub> the couplings after n coarse-graining steps:</p>
@@ -256,7 +256,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
     <p><b>The surprise.</b> The eigenvalues converge while the renormalised correlation functions do not: &ldquo;there is no evidence that the
     tuned RG transformation brings the renormalized Hamiltonians closer to the fixed point.&rdquo;<a href="#fn-ron17" class="fn">4</a> Blöte et al. (1996) had
     already shown a nearly flat approach for a tuned Hamiltonian and rule: y<sub>T</sub> = 1.5885 &rarr; 1.5852 &rarr; 1.5829 and y<sub>H</sub> = 2.48492 &rarr; 2.48309 &rarr; 2.48219
-    over n = 1&ndash;3 at L = 32.<a href="#fn-blo96" class="fn">5</a> In two dimensions the plain majority rule already converges by the second iteration.<a href="#fn-ron17" class="fn">4</a> Why it matters for the instrument: the page says &ldquo;watch the flow&rdquo;, and the surprise says the <em>eigenvalues</em> (the flow&rsquo;s local rates) can settle while the <em>position</em> on the trajectory has not. The Detector therefore reads rates level by level and never takes a settled number as proof that the flow has arrived at a fixed point.</p>
+    over n = 1&ndash;3 at L = 32.<a href="#fn-blo96" class="fn">5</a> In two dimensions the plain majority rule already converges by the second iteration.<a href="#fn-ron17" class="fn">4</a> Why it matters for the instrument: the page says &ldquo;watch the flow&rdquo;, and the surprise says the <em>eigenvalues</em> (the flow&rsquo;s local rates) can settle while the <em>position</em> on the trajectory has not. The Detector therefore never trusts a settled eigenvalue: it reads the per-level differences, each with its declared band, through the five-valued sign (&sect;3), level by level, and a zero is claimed only where the sign reads ZERO! at every declared level.</p>
     <p><b>How MCRG sees the alphabet</b> <span class="design">&#9670; design</span>:<a href="#fn-tex" class="fn">19</a> POINT: one eigenvalue above 1, the rest below, and levels n and n+1 agree.
     LINE: one eigenvalue that stays at exactly 1 across levels, and fixed-level statistics that depend on where the run started.
     WALKING: an eigenvalue near 1 that drifts; level differences reach a small nonzero minimum, then grow.</p>
@@ -291,10 +291,16 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   <p>The four sequences above are <b>synthetic</b>, built with those shapes. Each panel shows an effective exponent against log<sub>2</sub>&nbsp;L at two
   control values. Sort them: which varies with the control but not with scale, which varies with neither, which drifts faster and faster, which
   slows but never settles?</p>
+  <ul>
+    <li><b>POINT</b>: the exponent varies with neither SCALE nor CONTROL (runs at the critical point, on its critical surface).</li>
+    <li><b>LINE</b>: it varies with CONTROL but not with SCALE.</li>
+    <li><b>WALKING</b>: it drifts with SCALE, faster and faster as the flow leaves.</li>
+    <li><b>BKT</b>: it slows with SCALE but never settles, approaching its limit as 1/(ln L + C).</li>
+  </ul>
   <p>Reading a drift needs a verdict per step, and that is where a <b>five-valued sign</b> comes in <span class="design">&#9670; design</span>.<a href="#fn-design" class="fn">1</a>
-  A velocity estimate v with a band &plusmn;w is read against a declared margin &plusmn;&epsilon;:</p>
+  Let v be a velocity estimate (a per-level difference) and w the half-width of its band, so the band is [v &minus; w, v + w]; it is read against a declared margin &plusmn;&epsilon;:</p>
   <div class="graphic" data-cc-id="t-sign"></div>
-  <p>The cell is looked up in a table with a row for every combination of four yes/no tests: <b>a</b> = the whole band lies above +&epsilon; (v &minus; w &gt; &epsilon;); <b>b</b> = it lies below &minus;&epsilon; (v + w &lt; &minus;&epsilon;); <b>c</b> = it lies inside &plusmn;&epsilon; (|v| + w &lt; &epsilon;); <b>r</b> = it excludes zero. The four answers form the key abcr (1 = yes). Some keys cannot occur for w, &epsilon; &ge; 0 (a and b together would need a negative band); they are given the cell ? so that the table is total and no input falls through it. No chain of conditions decides the cell.
+  <p>The cell is looked up in a table with a row for every combination of four yes/no tests: <b>a</b> = the whole band lies above +&epsilon; (v &minus; w &gt; &epsilon;); <b>b</b> = it lies below &minus;&epsilon; (v + w &lt; &minus;&epsilon;); <b>c</b> = it lies inside &plusmn;&epsilon; (|v| + w &lt; &epsilon;); <b>r</b> = it excludes zero. The four answers form the key abcr (1 = yes). Some keys cannot occur for w, &epsilon; &ge; 0 (a and b together would need a negative band); they are given the cell ? so that the table is total and no input falls through it. In words: c without r (0010) is ZERO!; c with r (0011) is SLOW by the overlap rule; r alone (0001) is SLOW; a with r (1001) is SIG+; b with r (0101) is SIG&minus;; every other key is ?. No chain of conditions decides the cell.
   Where ZERO! and SLOW could both be claimed (the band lies inside &plusmn;&epsilon; <em>and</em> excludes zero), the cell is <b>SLOW</b>:
   the overlap resolves toward the weaker claim, and a LINE is never asserted on an ambiguous reading. With &epsilon; = 0 the table collapses
   to the three-valued sign (SIG+, SIG&minus;, ?). The margin plays the role of the equivalence bounds of a
@@ -332,7 +338,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
 <section id="4-kernel" class="cc-sec" data-accent="green">
   <h2><span class="num">4</span> The kernel lens: A, B and R over declared relations</h2>
   <p class="headline">Declare the relations first; then three definitions turn exponent estimates into signs a table can read.</p>
-  <p>The three are a directed difference (A), an accumulation over immediate successors (B) and an antisymmetric response (R). R is the kernel&rsquo;s version of the circulation of &sect;0: its term &Sigma;succ &minus; &Sigma;pred is what is left of a loop integral when the relations form a chain rather than a loop <span class="design">&#9670; design reading</span>.</p>
+  <p>The three are a directed difference (A), an accumulation over immediate successors (B) and an antisymmetric response (R). R(g)[e] = g[e] + &rho;&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g) is an antisymmetric response over a <em>chain</em> of declared relations: the kernel&rsquo;s discrete analogue of circulation, not a loop integral (the circulation of &sect;0 is the continuum picture it is an analogue of). An <b>interior locus</b> is a node with both a declared predecessor and a declared successor, s &rarr; t &rarr; u; B and R need one.</p>
   <div class="graphic" data-cc-id="t-kernel"></div>
   <p>The relational kernel is a small set of operator definitions with one rule above them: <b>nothing enters an operator undeclared</b>.<a href="#fn-ksk" class="fn" id="fnref-ksk">12</a>
   The chain is observable &rarr; M &rarr; a numerical projection (numbers) &rarr; declared relations &rarr; operators &rarr; result &rarr; comparison with observables,
@@ -341,11 +347,11 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   <ul>
     <li><b>A</b> (also written &Delta;): A(x)[e] = x[s] &minus; x[t] over each declared edge e = s &rarr; t. It is the only step from a NodeField to an EdgeField.</li>
     <li><b>B</b>: B(g)[e] = g[e] + &Sigma; g[f] over the <em>immediate</em> successors f of e. A terminal edge accumulates nothing.</li>
-    <li><b>R</b>: R(g)[e] = g[e] + &rho;[src(e)]&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g), with &rho; = &rho;<sub>base</sub>&thinsp;&chi;/(&chi;<sub>0</sub> + &chi;) and &chi; = max|A| at the node. &rho;<sub>base</sub> and &chi;<sub>0</sub> are supplied by M; the kernel holds no defaults.</li>
+    <li><b>R</b>: R(g)[e] = g[e] + &rho;[src(e)]&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g), with &rho; = &rho;<sub>base</sub>&thinsp;&chi;/(&chi;<sub>0</sub> + &chi;) and &chi; = max|A| at the node. &rho;<sub>base</sub> and &chi;<sub>0</sub> are declared through M, e.g. &rho;<sub>base</sub> = 0.5, &chi;<sub>0</sub> = 0.1 (illustrative values, the graphic&rsquo;s); the kernel holds no defaults.</li>
     <li><b>C</b> is not a kernel operator: it is a <em>declared projection</em> that states what it keeps and what it discards.</li>
   </ul>
   <p>A missing declaration does not become zero: the operator is <b>NOT EVALUATED</b>, and that is a value the verdict table can read.
-  Declare a closing edge (a ring) and the whole relation set becomes inadmissible: a node would be its own predecessor, so there is no well-founded order in which B&rsquo;s accumulation over successors could be taken.
+  Declare a closing edge (a ring) and the whole relation set becomes inadmissible: B&rsquo;s accumulation needs a well-founded successor order, and on a ring a node would be its own predecessor.
   Tick &ldquo;second control value&rdquo; and the two relation families appear: <b>Continuation</b> over scale (along each row) and <b>Coupling</b> over
   control (between the rows). The trace below walks B through term by term on row 1&rsquo;s chain.</p>
   <div class="graphic" data-cc-id="t-btrace"></div>
@@ -397,7 +403,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   Aasen, Mong and Fendley print the anisotropic version as a whole critical, self-dual <em>line</em>, (sinh 2J<sub>x</sub>)(sinh 2J<sub>y</sub>) = 1.<a href="#fn-amf16" class="fn" id="fnref-amf16">13</a>
   Slide J<sub>x</sub> along it, then find the isotropic point: sinh 2K = 1 gives K<sub>c</sub> = &frac12; ln(1 + &radic;2) &asymp; 0.4407. (That number is this page&rsquo;s arithmetic from their equation (2.2); they do not print it.)
   </p>
-  <div class="box warn"><p style="margin:0"><b>A line of critical points is not a LINE of fixed points.</b> Every point of that curve is critical, and every point is the same Ising class (Onsager&rsquo;s exact solution of the anisotropic model, not held here): a line of critical points with no varying exponent. Strictly, a blocking that keeps the anisotropy has a fixed point for each ratio J<sub>y</sub>/J<sub>x</sub>, but they differ only by rescaling one axis (a <span class="tip" tabindex="0">redundant direction<span class="tt">A direction in coupling space that only reparametrises the same physics (here, stretching one lattice axis); nothing universal changes along it.</span></span>), so an eigenvalue of 1 along it is not a LINE: a LINE needs a universal quantity that varies along it.</p></div>
+  <div class="box warn"><p style="margin:0"><b>A line of critical points is not a LINE of fixed points.</b> Every point of that curve is critical, and every point is the same Ising class (Onsager&rsquo;s exact solution of the anisotropic model, not held here): a line of critical points with no varying exponent. Strictly, a blocking that keeps the anisotropy has a fixed point for each ratio J<sub>y</sub>/J<sub>x</sub>, but they differ only by rescaling one axis (a redundant direction: a change of the couplings that only rescales a coordinate and changes no universal quantity), so an eigenvalue of 1 along it is not a LINE. The primer&rsquo;s LINE is an exactly marginal direction along which universal quantities vary; a redundant direction changes none, so the anisotropic Ising curve is not a LINE.</p></div>
   <p>
   For Ashkin&ndash;Teller, duality answers with a genuine LINE: the self-dual line Z = 1 &minus; 2X, along which the exponents vary.<a href="#fn-wis93" class="fn" id="fnref-wis93">14</a></p>
   <div class="graphic" data-cc-id="t-zeros"></div>
