@@ -65,7 +65,9 @@ a:hover { text-decoration: underline; }
 .tip .tt { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400; color: var(--text); width: max-content; max-width: 300px; z-index: 100; line-height: 1.5; pointer-events: none; }
 .tip:hover .tt, .tip:focus .tt { display: block; }
 @media (max-width: 640px) { .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: 30%; transform: none; max-width: none; width: auto; } }
-.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); line-height: 0; margin-left: 1px; }
+sup.fnm { font-size: 0.68em; line-height: 0; }
+.fn { color: var(--muted); }
+sup.fnm + sup.fnm { margin-left: 0.15em; }
 .footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
 .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; overflow-wrap: anywhere; }
 .design { color: var(--cyan); font-size: 0.85em; white-space: nowrap; }
@@ -119,30 +121,39 @@ observations, and its <b>Navigator</b> finds a critical line and moves along it.
 headline, one live graphic and a cyan &ldquo;For the Compass&rdquo; box with its accordions closed; open
 &ldquo;Working equations&rdquo; for the physicist's layer and &ldquo;Full derivation&rdquo; inside it for the deepest.</p>
 <div class="alpha" aria-label="The Compass alphabet">
-  <div><b>POINT</b>: an isolated fixed point. The renormalisation-group flow stops at one place and has one escape direction (2D Ising).</div>
+  <div><b>POINT</b>: an isolated fixed point. The renormalisation-group flow stops at one place and has one escape direction among the symmetric couplings (2D Ising at zero field).</div>
   <div><b>LINE</b>: a continuum of fixed points. The flow stops wherever it lands; one direction is exactly marginal (Ashkin&ndash;Teller, XXZ).</div>
   <div><b>WALKING</b>: the flow slows to a small nonzero minimum, never stops, then leaves. Finite systems imitate criticality (Potts q = 5, 6).</div>
   <div><b>REFUSE</b>: the honest verdict when the data cannot tell. It is a cell of the table, the default one.</div>
 </div>
 <p>The organising idea is <b>follow the flow</b>: the Detector reads the velocity, accumulation and
-circulation of the flow over declared scale and control relations.<a href="#fn21" class="fn" id="fnref21">21</a>
+circulation of the flow over declared scale and control relations. In plain words: the <b>velocity</b> is how
+much a measured quantity changes from one scale (or one control value) to the next; the <b>accumulation</b> is
+that change added up along a chain of scales; the <b>circulation</b> is what is left over when you go round a
+small loop of scale and control steps; and a <b>declared relation</b> is the list of which measurements count as
+neighbours (this scale and the next, this control value and the next), fixed before the data are looked at.
+The <a href="../techniques/">techniques page</a> teaches the machinery.<sup class="fnm">&#8201;<a href="#fn21" class="fn" id="fnref21">21</a></sup>
 Quizzes are folded under each section; the final test at the end is drawn from a bank, so a retake gets
 different items. Scores stay in this browser (Export copies a summary).</p>
 
+<div class="cc-primer-mount"></div>
+
 <section id="0-orient" class="cc-sec" data-accent="amber">
   <h2><span class="num">0</span> Orientation: eight models on one alphabet</h2>
-  <p class="headline">Each model is here because it gives the Compass a known answer: a point, a line, a walk, or a point with two relevant directions.</p>
+  <p class="headline">Each model is here because it gives the Compass a known answer: a point, a line or a walk, plus one case the alphabet has no letter for yet, a point with two relevant directions (multicritical).</p>
   <div class="graphic" data-cc-id="gallery"></div>
-  <p>Click a miniature to jump to its section. Two of them are the gentlest on-ramps if the topic is new:
+  <p>The eight: Ashkin&ndash;Teller, Baxter&rsquo;s eight-vertex model, two Ising layers coupled bilinearly,
+  O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>), Blume&ndash;Capel, the Potts model at q = 5 and 6, the XXZ chain with its six-vertex twin, and
+  the self-organising adaptive networks of Sormunen, Gross and Saramäki. Click a miniature to jump to its section. Two of them are the gentlest on-ramps if the topic is new:
   <a href="#5-bc">Blume&ndash;Capel</a> (spins that may be missing) and <a href="#7-xxz">XXZ</a> (a
   quantum spin chain whose anisotropy you dial). The <a href="#1-at">Ashkin&ndash;Teller</a> and
   <a href="#3-coupled">coupled-Ising</a> sections are a pair: the same two ingredients, coupled two ways,
   give two different geometries. The <a href="#9-gallery">gallery</a> near the end is the one-table summary.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>The Compass is tested on <em>geometry</em>, not on model
   identity. It must pass Ising and Ashkin&ndash;Teller and XXZ; if it recognises XY as a line but fails
-  Ashkin&ndash;Teller, it has learned a BKT detector, not a critical-manifold detector. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  Ashkin&ndash;Teller, it has learned a BKT detector, not a critical-manifold detector. <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-0-l2"><summary>Working equations</summary>
-    <p>The validation ladder <span class="design">&#9670; design</span>, cheapest first:<a href="#fn21" class="fn">21</a></p>
+    <p>The validation ladder <span class="design">&#9670; design</span>, in the order of the instrument&rsquo;s specification (its four rungs; &sect;9 gives the build order used inside them):<sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p>
     <ol>
       <li><b>Known-answer classification.</b> 2D Ising &rarr; POINT; 2D XY/BKT &rarr; LINE (treacherous at its end); Potts &rarr; weak first order and walking.</li>
       <li><b>Generalisation.</b> Systems the instrument was not developed around: Ashkin&ndash;Teller first (an independent line mechanism), then Blume&ndash;Capel (changing local geometry, two relevant directions).</li>
@@ -168,26 +179,30 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   In between, a <span class="tip" tabindex="0">duality<span class="tt">An exact map between the model at strong and at weak coupling. If the transition is unique, it must sit where the map sends the model to itself: the self-dual locus.</span></span>
   pins every critical point to one curve, the <b>self-dual line</b>. Drag along it in the trace above: the
   <span class="tip" tabindex="0">specific-heat exponent<span class="tt">&alpha;/&nu;: how fast the specific-heat peak grows with system size, C ~ L<sup>&alpha;/&nu;</sup>.</span></span>
-  ratio &alpha;/&nu; climbs from 0 at the Ising end to 1 at the Potts end, while &gamma;/&nu; = 7/4 never moves.<a href="#fn1" class="fn" id="fnref1">1</a></p>
+  ratio &alpha;/&nu; climbs from 0 at the Ising end to 1 at the Potts end, while &gamma;/&nu; = 7/4 never moves. The symbols in the trace: <b>y<sub>t</sub></b> is the thermal RG eigenvalue (how fast
+  a temperature deviation grows under coarse-graining, &nu; = 1/y<sub>t</sub>); <b>g<sub>R</sub></b> is the Coulomb-gas coupling, a
+  number that labels the position on the line; <b>&alpha;/&nu;</b> and <b>&gamma;/&nu;</b> say how the specific-heat and
+  susceptibility peaks grow with size, C ~ L<sup>&alpha;/&nu;</sup> and &chi; ~ L<sup>&gamma;/&nu;</sup>. The trace starts at s = 0.25 (a
+  quarter of the way along, in the angle coordinate of the working equations).<sup class="fnm">&#8201;<a href="#fn1" class="fn" id="fnref1">1</a></sup></p>
   <div class="graphic" data-cc-id="at-toy"></div>
-  <p class="lead-in">The live toy: four colours for the four (&sigma;, &tau;) states. Tick &ldquo;lock onto the
+  <p class="lead-in">The live toy: four colours for the four (&sigma;, &tau;) states. It starts off the line, at K = 0.4, L = 0.05. Tick &ldquo;lock onto the
   self-dual line&rdquo; and slide the position; K and L follow the line. Unlock and move K or L freely to
   leave it. (Metropolis on a periodic lattice: a toy, not an instrument.)</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p><b>Detector:</b> this is the primary LINE control. The
   exponent varies with the CONTROL (where you are on the line) but not with SCALE. <b>Navigator:</b> the
   tangent is along the line and the normal points off it; both are known exactly here, on the scoring side,
   so the Navigator's estimates can be graded. Keep away from the Potts end, where logarithms fake a
-  drifting exponent. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  drifting exponent. <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-1-l2"><summary>Working equations</summary>
-    <p>The Hamiltonian (the inverse temperature is absorbed into the couplings), and Wiseman and Domany's coordinates:<a href="#fn1" class="fn">1</a></p>
+    <p>The Hamiltonian (the inverse temperature is absorbed into the couplings), and Wiseman and Domany's coordinates:<sup class="fnm">&#8201;<a href="#fn1" class="fn">1</a></sup></p>
     <span class="math-block">H = &minus;&Sigma;<sub>&lang;ij&rang;</sub> [ K&sigma;<sub>i</sub>&sigma;<sub>j</sub> + K&tau;<sub>i</sub>&tau;<sub>j</sub> + L&sigma;<sub>i</sub>&sigma;<sub>j</sub>&tau;<sub>i</sub>&tau;<sub>j</sub> ], &nbsp; Z = e<sup>&minus;4K</sup>, &nbsp; X = e<sup>&minus;2(K+L)</sup></span>
     <p>In the unit square of (X, Z): the parabola <span class="math">Z = X<sup>2</sup></span> is L = 0 (decoupled
     Ising), the diagonal <span class="math">Z = X</span> is L = K (four-state Potts), and duality places the
-    critical line on <span class="math">Z = 1 &minus; 2X</span>. That is the same curve as the form Ginsparg prints,<a href="#fn5" class="fn" id="fnref5">5</a></p>
-    <span class="math-block">Z = 1 &minus; 2X &nbsp;&hArr;&nbsp; e<sup>&minus;4K</sup> = 1 &minus; 2e<sup>&minus;2K&minus;2L</sup> &nbsp;&hArr;&nbsp; e<sup>&minus;2L</sup> = &frac12;(e<sup>2K</sup> &minus; e<sup>&minus;2K</sup>) = sinh 2K.</span>
+    critical line on <span class="math">Z = 1 &minus; 2X</span>. That is the same curve as the form Ginsparg prints,<sup class="fnm">&#8201;<a href="#fn5" class="fn" id="fnref5">5</a></sup></p>
+    <span class="math-block">Z = 1 &minus; 2X &nbsp;&hArr;&nbsp; e<sup>&minus;4K</sup> = 1 &minus; 2e<sup>&minus;2K&minus;2L</sup> &nbsp;&hArr;&nbsp; 2e<sup>&minus;2K</sup>e<sup>&minus;2L</sup> = 1 &minus; e<sup>&minus;4K</sup> &nbsp;&hArr;&nbsp; e<sup>&minus;2L</sup> = (1 &minus; e<sup>&minus;4K</sup>)/(2e<sup>&minus;2K</sup>) = &frac12;(e<sup>2K</sup> &minus; e<sup>&minus;2K</sup>) = sinh 2K.</span>
     <p>The critical segment runs from the Ising point <span class="math">X<sub>0</sub> = (&radic;2 &minus; 1, 3 &minus; 2&radic;2)</span>
     (K = 0.44069, L = 0) to the Potts point <span class="math">X<sub>4</sub> = (1/3, 1/3)</span>
-    (K = L = &frac14; ln 3 = 0.27465). Along it (Coulomb-gas results quoted by Wiseman and Domany):<a href="#fn1" class="fn">1</a></p>
+    (K = L = &frac14; ln 3 = 0.27465). Along it (Coulomb-gas results quoted by Wiseman and Domany):<sup class="fnm">&#8201;<a href="#fn1" class="fn">1</a></sup></p>
     <span class="math-block">y<sub>t</sub> = 2 &minus; 2/g<sub>R</sub>, &nbsp; g<sub>R</sub> = (8/&pi;) arcsin[&frac12; coth 2K], &nbsp; &alpha;/&nu; = 2y<sub>t</sub> &minus; 2, &nbsp; &gamma;/&nu; = 7/4.</span>
     <p>On the line, coth 2K = (1 + Z)/(1 &minus; Z) = (1 &minus; X)/X, so the argument of the arcsine runs from
     1/&radic;2 (Ising: g<sub>R</sub> = 2, &alpha;/&nu; = 0) to 1 (Potts: g<sub>R</sub> = 4, &alpha;/&nu; = 1). The
@@ -196,7 +211,7 @@ different items. Scores stay in this browser (Export copies a summary).</p>
     <div class="tbl"><table>
       <thead><tr><th>point</th><th>&gamma;/&nu; (fit)</th><th>&alpha;/&nu; (fit)</th><th>&alpha;/&nu; (exact)</th></tr></thead>
       <tbody>
-        <tr><td>X<sub>0</sub> (Ising)</td><td>1.751(4)</td><td>0 (semi-log)</td><td>0</td></tr>
+        <tr><td>X<sub>0</sub> (Ising)</td><td>1.751(4)</td><td>.23(1) log-log; 0 semi-log</td><td>0</td></tr>
         <tr><td>X<sub>1</sub></td><td>1.751(1)</td><td>0.38(2)</td><td>0.2096</td></tr>
         <tr><td>X<sub>2</sub></td><td>1.752(3)</td><td>0.542(8)</td><td>0.4182</td></tr>
         <tr><td>X<sub>3</sub></td><td>1.763(6)</td><td>0.655(13)</td><td>0.6383</td></tr>
@@ -206,14 +221,14 @@ different items. Scores stay in this browser (Export copies a summary).</p>
     end. There the marginal dilution field carries <b>multiplicative logarithms</b>: Salas and Sokal derive
     <span class="math">C<sub>H</sub> ~ L/(ln L)<sup>3/2</sup></span> and
     <span class="math">&chi; ~ L<sup>7/4</sup>/(ln L)<sup>1/8</sup></span> at the four-state Potts point, plus additive
-    log&thinsp;log corrections, and note that the theory could not have been read off the data.<a href="#fn3" class="fn" id="fnref3">3</a>
+    log&thinsp;log corrections, and note that the theory could not have been read off the data.<sup class="fnm">&#8201;<a href="#fn3" class="fn" id="fnref3">3</a></sup>
     Jin, Sen and Sandvik found a frustrated J<sub>1</sub>&ndash;J<sub>2</sub> Ising model to be Ashkin&ndash;Teller critical
     for g &ge; g* = 0.67(1), yet near the Potts end it shows double-peaked energy histograms and a negative
-    Binder minimum up to L = 256: <b>pseudo first-order</b> behaviour at a transition that is continuous.<a href="#fn2" class="fn" id="fnref2">2</a></p>
+    Binder minimum up to L = 256: <b>pseudo first-order</b> behaviour at a transition that is continuous.<sup class="fnm">&#8201;<a href="#fn2" class="fn" id="fnref2">2</a></sup></p>
     <details class="l1" id="d-1-l1"><summary>Full derivation</summary>
       <p><b>Why duality locates the line.</b> Kramers&ndash;Wannier duality maps the Ising model's high-temperature
       expansion onto the low-temperature expansion of a dual model. On the square lattice Aasen, Mong and Fendley
-      print the self-dual (critical) line of the anisotropic model as<a href="#fn4" class="fn" id="fnref4">4</a></p>
+      print the self-dual (critical) line of the anisotropic model as<sup class="fnm">&#8201;<a href="#fn4" class="fn" id="fnref4">4</a></sup></p>
       <span class="math-block">(sinh 2J<sub>x</sub>)(sinh 2J<sub>y</sub>) = 1 &nbsp; (their eq. 2.2).</span>
       <p>For J<sub>x</sub> = J<sub>y</sub> = K this gives sinh 2K = 1, i.e. K<sub>c</sub> = &frac12; ln(1 + &radic;2) = 0.4407 (the
       number is this page's arithmetic; the paper prints only the equation, and its eq. 2.13 drops a factor of 2
@@ -222,14 +237,14 @@ different items. Scores stay in this browser (Export copies a summary).</p>
       e<sup>&minus;2L</sup> = sinh 2K, as Wiseman&ndash;Domany and Ginsparg print it. The dual map itself is not
       reproduced here.</p>
       <p><b>Where on the line.</b> Ginsparg gives the position as a compact-boson radius on the orbifold line:
-      <span class="math">sin(&pi;r<sup>2</sup>/4) = &frac12; coth 2K</span>, with r = 1 at Ising &times; Ising and r = &radic;2 at four-state Potts.<a href="#fn5" class="fn">5</a>
+      <span class="math">sin(&pi;r<sup>2</sup>/4) = &frac12; coth 2K</span>, with r = 1 at Ising &times; Ising and r = &radic;2 at four-state Potts.<sup class="fnm">&#8201;<a href="#fn5" class="fn">5</a></sup>
       Put that into Wiseman&ndash;Domany's g<sub>R</sub>: arcsin(sin(&pi;r<sup>2</sup>/4)) = &pi;r<sup>2</sup>/4 for r &le; &radic;2, so
       g<sub>R</sub> = 2r<sup>2</sup> and y<sub>t</sub> = 2 &minus; 1/r<sup>2</sup>. That is this page's combination of the two printed formulas;
       radius normalisations differ between sources, so treat the factor as convention-dependent.</p>
       <p><b>The marginal operator.</b> At the decoupled point the operator that moves you along the line is
       &epsilon;<sub>1</sub>&epsilon;<sub>2</sub>, the product of the two Ising energy operators: Ginsparg calls it
       &ldquo;the Ashkin&ndash;Teller interaction coupling the two Ising energy operators&rdquo;, the four-fermion term that
-      &ldquo;simply changes the radius of a free boson&rdquo;.<a href="#fn5" class="fn">5</a></p>
+      &ldquo;simply changes the radius of a free boson&rdquo;.<sup class="fnm">&#8201;<a href="#fn5" class="fn">5</a></sup></p>
     </details>
   </details>
   <details class="quiz" id="q-1"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -241,16 +256,22 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   <div class="graphic vb" data-cc-id="vb8"></div>
   <p>Click a bond to flip its arrow. Each vertex has four arrows round it. The
   <span class="tip" tabindex="0">ice rule<span class="tt">Two arrows point in and two point out at every vertex, like the two near and two far hydrogens round each oxygen in ice.</span></span>
-  allows six arrangements (types a, b, c); the eight-vertex model also allows the two in which all four
+  (<b>two arrows in and two out at every vertex</b>) allows six arrangements (types a, b, c); the eight-vertex model also allows the two in which all four
   arrows point in (a sink) or all point out (a source), called d. Arrangements with one or three arrows in
   are forbidden (red &times;). Each type carries a weight, and the weight of a configuration is the product
-  over its vertices.<a href="#fn6" class="fn" id="fnref6">6</a> The &ldquo;flip a path&rdquo; button flips a whole
-  chain of bonds from one edge to another, which keeps every count even.</p>
+  over its vertices.<sup class="fnm">&#8201;<a href="#fn6" class="fn" id="fnref6">6</a></sup> The &ldquo;flip a path&rdquo; button flips a whole
+  chain of bonds from one edge to another. That keeps the number of incoming arrows at every vertex even (its
+  parity), because each vertex on the chain has exactly two of its arrows flipped; in six-vertex mode the chain
+  follows the arrows, so each vertex also keeps exactly two in.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>An exactly solved line: the cross-check on the
   scoring side, never an input to the instrument. It also poses a question the Compass must answer from
   data: are Ashkin&ndash;Teller and the vertex models two line mechanisms, or one family seen twice? The
   c = 1 picture below suggests one compact boson; which branch each model occupies has to be settled
-  before a representation-invariance test is read. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  before a representation-invariance test (does the instrument give the same verdict and the same
+  geometry for two models believed to be the same critical theory?) is read. The held XXZ sources list the full
+  (m, n) vertex-operator lattice and no dimension-1/16 twist field, the operator content of the circle line;
+  Ginsparg groups the vertex models with the orbifold. The two may refer to different boundary sectors; this
+  page does not settle it. <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-2-l2"><summary>Working equations</summary>
     <p><b>From the literature, not verified locally</b> (Baxter's papers are not held here). The zero-field
     eight-vertex model with weights a, b, c, d is usually written with the anisotropy</p>
@@ -258,14 +279,14 @@ different items. Scores stay in this browser (Export copies a summary).</p>
     <p>which reduces to the six-vertex &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab when d = 0. Baxter
     (1971&ndash;72) solved it and found critical exponents that vary continuously along its critical
     manifold; Wegner (1972) and Fan &amp; Wu related it to Ashkin&ndash;Teller, and Kadanoff &amp; Brown (1979) to
-    the Gaussian model.<a href="#fn20" class="fn" id="fnref20">20</a></p>
+    the Gaussian model.<sup class="fnm">&#8201;<a href="#fn20" class="fn" id="fnref20">20</a></sup></p>
     <p><b>The c = 1 picture (held, Ginsparg).</b> All the critical theories with central charge c = 1 form a
     moduli space of two half-lines. The <em>circle line</em> is the Gaussian model; the <em>orbifold line</em>
     is &ldquo;equivalent to the critical Ashkin&ndash;Teller model (which also encompasses &hellip; the 6-vertex
     model and the 8-vertex model on its critical line)&rdquo;. They meet at one point, which is the continuum
     Kosterlitz&ndash;Thouless point of the XY model. On the orbifold line Ising &times; Ising sits at r = 1 and the
     four-state Potts model at r = &radic;2. Three further c = 1 theories (T, O, I) are isolated points: c = 1
-    does not by itself imply a line.<a href="#fn5" class="fn">5</a></p>
+    does not by itself imply a line.<sup class="fnm">&#8201;<a href="#fn5" class="fn">5</a></sup></p>
     <svg class="fig" viewBox="0 0 520 300" role="img" aria-label="Sketch of Ginsparg's c = 1 moduli space: a horizontal circle line and a vertical orbifold line meeting at the KT point, with the Ashkin-Teller segment highlighted and three isolated points T, O, I">
       <line x1="30" y1="250" x2="500" y2="250" stroke="#94a3b8" stroke-width="2"/>
       <line x1="300" y1="250" x2="300" y2="30" stroke="#94a3b8" stroke-width="2"/>
@@ -296,21 +317,21 @@ different items. Scores stay in this browser (Export copies a summary).</p>
 
 <section id="3-coupled" class="cc-sec" data-accent="amber">
   <h2><span class="num">3</span> Two Ising layers coupled bilinearly: the contrast</h2>
-  <p class="headline">Keep the two Ising layers but couple them spin to spin (g&sigma;<sub>i</sub>&tau;<sub>i</sub>) instead of product to product: this coupling grows under coarse-graining, so the line collapses back to a point.</p>
+  <p class="headline">Keep the two Ising layers but couple them spin to spin (g&sigma;<sub>i</sub>&tau;<sub>i</sub>) instead of product to product: dimension counting says this coupling grows under coarse-graining, so the line is expected (not shown here) to collapse back to a point.</p>
   <div class="graphic" data-cc-id="dimcount"></div>
   <p>Coarse-graining multiplies each small coupling by b<sup>y</sup>, where b is the blocking factor and the
-  <span class="tip" tabindex="0">RG eigenvalue<span class="tt">y = d &minus; &Delta;: the space dimension d minus the scaling dimension &Delta; of the operator the coupling multiplies. y &gt; 0 grows (relevant), y &lt; 0 dies (irrelevant), y = 0 is marginal.</span></span>
-  <span class="math">y = d &minus; &Delta;</span>. An Ising spin has dimension 1/8 and the Ising energy
-  density has dimension 1. The bilinear term g&sigma;<sub>i</sub>&tau;<sub>i</sub> multiplies two spins: &Delta; = 1/4, y = 7/4,
-  strongly relevant. Ashkin&ndash;Teller's four-spin term multiplies two energy densities: &Delta; = 2, y = 0,
-  marginal.<a href="#fn22" class="fn" id="fnref22">22</a> Ginsparg identifies that product,
-  &epsilon;<sub>1</sub>&epsilon;<sub>2</sub>, as the operator that moves the theory along the line.<a href="#fn5" class="fn">5</a></p>
+  <span class="tip" tabindex="0">RG eigenvalue<span class="tt">y = d &minus; x: the space dimension d minus the scaling dimension x of the operator the coupling multiplies. y &gt; 0 grows (relevant), y &lt; 0 dies (irrelevant), y = 0 is marginal.</span></span>
+  <span class="math">y = d &minus; x</span> (x is the scaling dimension; this page keeps &Delta; for the Blume&ndash;Capel crystal field and the XXZ anisotropy). An Ising spin has dimension 1/8 and the Ising energy
+  density has dimension 1. The bilinear term g&sigma;<sub>i</sub>&tau;<sub>i</sub> multiplies two spins: x = 1/4, y = 7/4,
+  strongly relevant. Ashkin&ndash;Teller's four-spin term multiplies two energy densities: x = 2, y = 0,
+  marginal.<sup class="fnm">&#8201;<a href="#fn22" class="fn" id="fnref22">22</a></sup> Ginsparg identifies that product,
+  &epsilon;<sub>1</sub>&epsilon;<sub>2</sub>, as the operator that moves the theory along the line.<sup class="fnm">&#8201;<a href="#fn5" class="fn">5</a></sup></p>
   <div class="tbl"><table>
     <thead><tr><th></th><th>Ashkin&ndash;Teller</th><th>bilinear coupled Ising</th></tr></thead>
     <tbody>
       <tr><td>coupling</td><td>L&sigma;<sub>i</sub>&sigma;<sub>j</sub>&tau;<sub>i</sub>&tau;<sub>j</sub> (&epsilon;<sub>1</sub>&epsilon;<sub>2</sub>)</td><td>g&sigma;<sub>i</sub>&tau;<sub>i</sub> (&sigma;<sub>1</sub>&sigma;<sub>2</sub>)</td></tr>
-      <tr><td>dimension &Delta;</td><td>1 + 1 = 2</td><td>1/8 + 1/8 = 1/4</td></tr>
-      <tr><td>y = 2 &minus; &Delta;</td><td>0: marginal</td><td>7/4: relevant</td></tr>
+      <tr><td>dimension x</td><td>1 + 1 = 2</td><td>1/8 + 1/8 = 1/4</td></tr>
+      <tr><td>y = 2 &minus; x</td><td>0: marginal</td><td>7/4: relevant</td></tr>
       <tr><td>geometry</td><td>a LINE of fixed points</td><td>leaves the Ising &times; Ising point; expected: one POINT</td></tr>
     </tbody></table></div>
   <div class="graphic" data-cc-id="bil-toy"></div>
@@ -320,27 +341,27 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>The lesson of the pair: the TYPE of coupling decides
   LINE versus POINT. Two layers joined by an exactly marginal operator give a line; joined by a relevant
   one, they give a point. The Compass must read the difference from the flow, not from the model's name.
-  <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-3-l2"><summary>Working equations</summary>
-    <p>The coupled-Ising experiment of the validation ladder <span class="design">&#9670; design</span>:<a href="#fn21" class="fn">21</a></p>
+    <p>The coupled-Ising experiment of the validation ladder <span class="design">&#9670; design</span>:<sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p>
     <span class="math-block">H = &minus;J<sub>1</sub>&Sigma;<sub>&lang;ij&rang;</sub>&sigma;<sub>i</sub>&sigma;<sub>j</sub> &minus; J<sub>2</sub>&Sigma;<sub>&lang;ij&rang;</sub>&tau;<sub>i</sub>&tau;<sub>j</sub> &minus; g&Sigma;<sub>i</sub>&sigma;<sub>i</sub>&tau;<sub>i</sub>.</span>
     <p>At g = 0 the instrument sees two independently understood critical systems (two POINTs). Raise g
     and ask whether it recovers structure that neither layer has alone. Dimension counting (from the Ising
-    values &Delta;<sub>&sigma;</sub> = 1/8, &Delta;<sub>&epsilon;</sub> = 1; not checked here against a held source) says g grows as
+    values x<sub>&sigma;</sub> = 1/8, x<sub>&epsilon;</sub> = 1; not checked here against a held source) says g grows as
     b<sup>7/4</sup>, so the decoupled point is unstable in the g direction. What it flows to is <em>expected</em>
     to be a single Ising-like transition with the two order parameters locked, one POINT; that is not
-    shown on this page, and the Compass will be asked to say it from data.<a href="#fn22" class="fn">22</a></p>
+    shown on this page, and the Compass will be asked to say it from data.<sup class="fnm">&#8201;<a href="#fn22" class="fn">22</a></sup></p>
     <details class="l1" id="d-3-l1"><summary>Full derivation</summary>
       <p><b>When is a marginal operator exactly marginal?</b> Ginsparg's criterion: a dimension-(1,1) operator V
       generates a one-parameter family of critical theories only if, to leading order, the V&times;V operator
       product contains no term C<sub>VVV</sub>(z &minus; w)<sup>&minus;1</sup>(z&#772; &minus; w&#772;)<sup>&minus;1</sup>V. If it does, the
       two-point function picks up a logarithm and V's weight shifts to (1 &minus; &delta;g&thinsp;&pi;C<sub>VVV</sub>, 1 &minus;
       &delta;g&thinsp;&pi;C<sub>VVV</sub>): marginally relevant on one side, marginally irrelevant on the other. Higher orders
-      require further integrals to vanish.<a href="#fn5" class="fn">5</a></p>
+      require further integrals to vanish.<sup class="fnm">&#8201;<a href="#fn5" class="fn">5</a></sup></p>
       <p>For Ashkin&ndash;Teller the check passes for a structural reason: on the critical line
       &epsilon;<sub>1</sub>&epsilon;<sub>2</sub> = &psi;<sub>1</sub>&psi;&#772;<sub>1</sub>&psi;<sub>2</sub>&psi;&#772;<sub>2</sub> is the four-fermion term of the massless
       Thirring model, which only changes the radius of a free boson. Changing a radius is a motion along a line,
-      so no fixed point is left.<a href="#fn5" class="fn">5</a> The bilinear &sigma;<sub>1</sub>&sigma;<sub>2</sub> has no such
+      so no fixed point is left.<sup class="fnm">&#8201;<a href="#fn5" class="fn">5</a></sup> The bilinear &sigma;<sub>1</sub>&sigma;<sub>2</sub> has no such
       protection: its y = 7/4 is far from zero, so the question of higher orders never arises.</p>
     </details>
   </details>
@@ -349,54 +370,61 @@ different items. Scores stay in this browser (Export copies a summary).</p>
 
 <section id="4-onon" class="cc-sec" data-accent="amber">
   <h2><span class="num">4</span> O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>): bicritical and tetracritical points</h2>
-  <p class="headline">Two different order parameters, two critical lines that meet at one point: the sign of &Delta; = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> decides whether the two orders coexist (tetracritical) or exclude each other (bicritical).</p>
+  <p class="headline">Two different order parameters, two critical lines that meet at one point: the sign of D = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> decides whether the two orders coexist (tetracritical) or exclude each other (bicritical).</p>
   <div class="graphic" data-cc-id="onon"></div>
   <p>The plane shows the two &ldquo;temperatures&rdquo; r<sub>1</sub> and r<sub>2</sub>, one per order parameter; each
   orders when its r turns negative. The self-interactions u<sub>1</sub>, u<sub>2</sub> keep each order finite; the
   cross-coupling w decides how they meet. Slide w: with w<sup>2</sup> &lt; u<sub>1</sub>u<sub>2</sub> a green
   <b>mixed phase</b>, where both orders coexist, opens between two critical lines (four lines meet: tetracritical);
   with w<sup>2</sup> &gt; u<sub>1</sub>u<sub>2</sub> the orders repel and a first-order <b>flop line</b> separates them
-  (bicritical). This is mean field, the Landau picture, computed live as the lowest of the candidate minima at every point.<a href="#fn10" class="fn" id="fnref10">10</a></p>
+  (bicritical). This is mean field, the Landau picture, computed live as the lowest of the candidate minima at every point.<sup class="fnm">&#8201;<a href="#fn10" class="fn" id="fnref10">10</a></sup></p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>A multicritical point has at least two relevant
   directions. The alphabet has no cell for that yet: POINT allows one escape direction. That is a design
   gap, stated here rather than hidden. Its finite-size shadow is known: in the fully frustrated XY model the
-  effective exponent sits on a plateau, then moves on. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  effective exponent sits on a plateau, then moves on. <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-4-l2"><summary>Working equations</summary>
-    <p>The Landau&ndash;Ginzburg&ndash;Wilson Hamiltonian of Calabrese, Pelissetto and Vicari (&phi;<sub>1</sub> has n<sub>1</sub> components, &phi;<sub>2</sub> has n<sub>2</sub>):<a href="#fn10" class="fn">10</a></p>
+    <p>The Landau&ndash;Ginzburg&ndash;Wilson Hamiltonian of Calabrese, Pelissetto and Vicari (&phi;<sub>1</sub> has n<sub>1</sub> components, &phi;<sub>2</sub> has n<sub>2</sub>):<sup class="fnm">&#8201;<a href="#fn10" class="fn">10</a></sup></p>
     <span class="math-block">H = &int;d<sup>d</sup>x { &frac12;[(&part;&phi;<sub>1</sub>)<sup>2</sup> + (&part;&phi;<sub>2</sub>)<sup>2</sup>] + &frac12;[r<sub>1</sub>&phi;<sub>1</sub><sup>2</sup> + r<sub>2</sub>&phi;<sub>2</sub><sup>2</sup>] + (1/4!)[u<sub>1</sub>(&phi;<sub>1</sub><sup>2</sup>)<sup>2</sup> + u<sub>2</sub>(&phi;<sub>2</sub><sup>2</sup>)<sup>2</sup> + 2w&phi;<sub>1</sub><sup>2</sup>&phi;<sub>2</sub><sup>2</sup>] }</span>
-    <p>Mean field: &Delta; = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> &gt; 0 tetracritical, &lt; 0 bicritical. Beyond mean field,
+    <p>Mean field: D = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> &gt; 0 tetracritical, &lt; 0 bicritical (D is this page&rsquo;s letter for the
+    discriminant, to keep &Delta; for the Blume&ndash;Capel crystal field and the XXZ anisotropy). <b>Tetracritical</b>: four
+    continuous lines meet, bounding a mixed phase where both orders coexist. <b>Bicritical</b>: two continuous lines meet
+    a first-order line, the <b>flop line</b>, across which the system jumps from one order to the other. The
+    <b>biconical</b> fixed point is a third, non-symmetric fixed point where both couplings stay finite; the
+    <b>decoupled</b> one has w = 0. Beyond mean field,
     which fixed point controls the meeting depends on N = n<sub>1</sub> + n<sub>2</sub> (d = 3):</p>
     <div class="tbl"><table>
       <thead><tr><th>N</th><th>stable fixed point</th><th>phase diagram if continuous</th></tr></thead>
       <tbody>
         <tr><td>2 (Ising + Ising)</td><td>symmetric O(2)</td><td>bicritical or tetracritical</td></tr>
-        <tr><td>3</td><td>biconal (exponents within errors of Heisenberg)</td><td>tetracritical in mean field</td></tr>
+        <tr><td>3</td><td>biconical (exponents within errors of Heisenberg)</td><td>tetracritical in mean field</td></tr>
         <tr><td>&ge; 4</td><td>decoupled</td><td>tetracritical</td></tr>
         <tr><td>outside the attraction domain</td><td>none</td><td>first-order multicritical point</td></tr>
       </tbody></table></div>
-    <p>Crossover exponents measure how slowly a nearly symmetric point is left: at the O(N) point
-    &phi;<sub>4,4</sub> &asymp; 0.01 for N = 3 (the crossover is practically invisible), &asymp; 0.08 for N = 4 and &asymp; 0.15 for N = 5.<a href="#fn10" class="fn">10</a></p>
+    <p>Crossover exponents measure how slowly a nearly symmetric point is left. P<sub>4,4</sub> is the spin-4 (quartic,
+    fully anisotropic) perturbation of the O(N) point and &phi;<sub>4,4</sub> its crossover exponent: at the O(N) point
+    &phi;<sub>4,4</sub> &asymp; 0.01 for N = 3 (the crossover is practically invisible), &asymp; 0.08 for N = 4 and &asymp; 0.15 for N = 5.<sup class="fnm">&#8201;<a href="#fn10" class="fn">10</a></sup></p>
     <p><b>What a real multicritical crossover looks like at finite size.</b> In the fully frustrated XY
     model on the square lattice the chiral (Ising) and spin (KT) transitions are 1.6% apart. Hasenbusch,
     Pelissetto and Vicari, with L up to 1000, find the chiral exponent &nu; on a plateau near 0.8 for
     L &#8818; &xi;<sub>s</sub> &asymp; 118 and the Ising value 1 beyond it: &ldquo;by using only data with L &#8818; &xi;<sub>s</sub> one would obtain
-    &nu; = 0.8 instead of the Ising value.&rdquo;<a href="#fn11" class="fn" id="fnref11">11</a> Granato, Kosterlitz, Lee and
-    Nightingale's coupled XY&ndash;Ising systems (1991) had reported exponents varying along one transition line.<a href="#fn12" class="fn" id="fnref12">12</a></p>
+    &nu; = 0.8 instead of the Ising value.&rdquo;<sup class="fnm">&#8201;<a href="#fn11" class="fn" id="fnref11">11</a></sup> Granato, Kosterlitz, Lee and
+    Nightingale's coupled XY&ndash;Ising systems (1991) had reported exponents varying along one transition line.<sup class="fnm">&#8201;<a href="#fn12" class="fn" id="fnref12">12</a></sup></p>
     <details class="l1" id="d-4-l1"><summary>Full derivation</summary>
       <p><b>The mean-field computation behind the graphic.</b> Write a = &phi;<sub>1</sub><sup>2</sup>, b = &phi;<sub>2</sub><sup>2</sup> &ge; 0 and
       F = &frac12;(r<sub>1</sub>a + r<sub>2</sub>b) + (1/24)(u<sub>1</sub>a<sup>2</sup> + u<sub>2</sub>b<sup>2</sup> + 2wab). The four candidate minima are
       disordered (0, 0) with F = 0; phase 1 (a = &minus;6r<sub>1</sub>/u<sub>1</sub>, b = 0) with F = &minus;3r<sub>1</sub><sup>2</sup>/2u<sub>1</sub>; phase 2
       likewise; and the mixed phase solving [u<sub>1</sub> w; w u<sub>2</sub>](a, b) = &minus;6(r<sub>1</sub>, r<sub>2</sub>), with F = &frac14;(r<sub>1</sub>a + r<sub>2</sub>b).
       A candidate that is not a minimum (a negative a or b, or a mixed stationary point that is a saddle because
-      &Delta; &lt; 0) has F = +&infin;; the phase is the candidate of lowest F. The phase-1 state is unstable to
+      D &lt; 0) has F = +&infin;; the phase is the candidate of lowest F. The phase-1 state is unstable to
       &phi;<sub>2</sub> when r<sub>2</sub> &lt; (w/u<sub>1</sub>)r<sub>1</sub>, and phase 2 to &phi;<sub>1</sub> when r<sub>1</sub> &lt; (w/u<sub>2</sub>)r<sub>2</sub>; the wedge between
-      those lines exists exactly when w<sup>2</sup> &lt; u<sub>1</sub>u<sub>2</sub>. When &Delta; &lt; 0, phases 1 and 2 have equal F on
+      those lines exists exactly when w<sup>2</sup> &lt; u<sub>1</sub>u<sub>2</sub>. When D &lt; 0, phases 1 and 2 have equal F on
       r<sub>1</sub>/&radic;u<sub>1</sub> = r<sub>2</sub>/&radic;u<sub>2</sub>: the flop line. (This page's algebra on the printed Hamiltonian.)</p>
       <p><b>The &epsilon;-expansion reversal.</b> To low order (Nelson, Kosterlitz and Fisher; Fisher and Nelson) the
-      symmetric O(N) point is stable for N &lt; N<sub>c</sub> = 4 &minus; 2&epsilon; + O(&epsilon;<sup>2</sup>), which at &epsilon; = 1 suggests
-      O(3) is stable. Five-loop &epsilon; and six-loop fixed-dimension series overturn this: the spin-4 perturbation
-      P<sub>4,4</sub> is relevant for N &ge; 3 (N<sub>c</sub> &lt; 2.9), so O(N) is stable only for N = 2, the biconal point
-      takes over at N = 3 and the decoupled point at N &ge; 4.<a href="#fn10" class="fn">10</a></p>
+      symmetric O(N) point is the stable one for N &lt; N<sub>c</sub> = 4 &minus; 2&epsilon; + O(&epsilon;<sup>2</sup>); above N<sub>c</sub> the
+      biconical and then the decoupled point take over as N grows. Naively continued to &epsilon; = 1 the leading term gives
+      N<sub>c</sub> &asymp; 2, so O(3) would already be unstable; the low-order series cannot settle it. Five-loop &epsilon; and six-loop
+      fixed-dimension series do: the spin-4 perturbation P<sub>4,4</sub> is relevant for N &ge; 3, with N<sub>c</sub> = 2.87(5) (&lt; 2.9),
+      so O(N) is stable only for N = 2, the biconical point takes over at N = 3 and the decoupled point at N &ge; 4.<sup class="fnm">&#8201;<a href="#fn10" class="fn">10</a></sup></p>
     </details>
   </details>
   <details class="quiz" id="q-4"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -404,7 +432,7 @@ different items. Scores stay in this browser (Export copies a summary).</p>
 
 <section id="5-bc" class="cc-sec" data-accent="amber">
   <h2><span class="num">5</span> Blume&ndash;Capel: a tricritical point</h2>
-  <p class="headline">Ising spins that may also be missing (&sigma; = 0), and a knob &Delta; that charges rent for every spin that is present: turn &Delta; up and the ordering temperature falls, until at one special place the transition turns abruptly first order.</p>
+  <p class="headline">Ising spins that may also be missing (&sigma; = 0), and a knob &Delta; that charges rent for every spin that is present: turn &Delta; up and the ordering temperature falls, until at one special place, the tricritical point, the transition turns abruptly first order.</p>
   <div class="graphic" data-cc-id="bc-trace"></div>
   <p><b>Start here if this model is new.</b> Picture a lattice where each site is either empty (&sigma; = 0) or
   holds a little magnet pointing up or down (&sigma; = &plusmn;1). Neighbouring magnets that agree lower the energy
@@ -412,20 +440,23 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   <span class="tip" tabindex="0">crystal field<span class="tt">Here: a single-site energy &Delta;&sigma;<sup>2</sup>. With the plus sign used on this page, &Delta; &gt; 0 makes nonzero spins expensive and so controls how many sites are empty.</span></span>.
   Click the little lattice above to change sites, and drag &Delta;: at T = 0 a fully ordered site gains
   zJ/2 = 2 of bond energy (four neighbours, each bond shared) and pays &Delta;, so emptiness wins beyond
-  &Delta;<sub>0</sub> = 2.<a href="#fn13" class="fn" id="fnref13">13</a> The same competition at finite temperature
+  &Delta;<sub>0</sub> = 2.<sup class="fnm">&#8201;<a href="#fn13" class="fn" id="fnref13">13</a></sup> The same competition at finite temperature
   produces the phase diagram below, the kind of diagram seen in <sup>3</sup>He&ndash;<sup>4</sup>He mixtures.</p>
   <div class="graphic" data-cc-id="bc-pd"></div>
   <div class="graphic" data-cc-id="bc-toy"></div>
   <p class="lead-in">The cursor on the diagram is the toy's (&Delta;, T); drag either. Empty sites are dark.
   Along the solid line the transition is continuous and Ising-like; along the dotted piece near &Delta; = 2 it
-  is first order; they meet at the tricritical point (&#9670;).<a href="#fn13" class="fn">13</a></p>
+  is first order; they meet at the tricritical point (&#9670;).<sup class="fnm">&#8201;<a href="#fn13" class="fn">13</a></sup></p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>A point with <b>two relevant directions</b>: tuning T
   alone does not reach it. The first-order line is a <b>decoy</b>: a line in the phase diagram, not a line
   of fixed points, which the Detector must not read as LINE. Near the tricritical point the crossover can
   look like WALKING at finite L; the flow's minimum velocity is what tells them apart.
-  <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-5-l2"><summary>Working equations</summary>
-    <p>The Hamiltonian as Zierenberg, Fytas, Weigel, Janke and Malakis print it (J = k<sub>B</sub> = 1):<a href="#fn13" class="fn">13</a></p>
+    <p>Zierenberg, Fytas, Weigel, Janke and Malakis (2017) mapped the boundary by crossing it at fixed T while varying
+    &Delta;, with multicanonical simulations, and used &xi;/L at the size crossings as the universality test (it must reach
+    the exact Ising value 0.905 on the continuous part). Their Hamiltonian (J = k<sub>B</sub> = 1; here &Delta; is the crystal
+    field, not the XXZ anisotropy of &sect;7):<sup class="fnm">&#8201;<a href="#fn13" class="fn">13</a></sup></p>
     <span class="math-block">H = &minus;J&Sigma;<sub>&lang;ij&rang;</sub>&sigma;<sub>i</sub>&sigma;<sub>j</sub> + &Delta;&Sigma;<sub>i</sub>&sigma;<sub>i</sub><sup>2</sup> = E<sub>J</sub> + &Delta;E<sub>&Delta;</sub>, &nbsp; &sigma;<sub>i</sub> &isin; {&minus;1, 0, +1}.</span>
     <p>&Delta; &rarr; &minus;&infin; removes the vacancies and gives the Ising model; &Delta; = 0 orders at T<sub>0</sub> &asymp; 1.69; the
     boundary reaches T = 0 at &Delta;<sub>0</sub> = zJ/2 = 2. On the second-order part the exponents are Ising:
@@ -459,7 +490,7 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   <div class="graphic" data-cc-id="potts-xi"></div>
   <p>Slide your lattice size L. A first-order transition shows itself (two coexisting phases, a latent heat)
   only once L is larger than the correlation length &xi;. For q = 10, &xi; is about ten lattice spacings; for
-  q = 5 it is about 2512.<a href="#fn14" class="fn" id="fnref14">14</a><a href="#fn16" class="fn" id="fnref16">16</a>
+  q = 5 it is about 2512.<sup class="fnm">&#8201;<a href="#fn14" class="fn" id="fnref14">14</a></sup><sup class="fnm">&#8201;<a href="#fn16" class="fn" id="fnref16">16</a></sup>
   Below that size the system imitates a critical point, and a standard analysis returns exponents with
   small error bars that are simply wrong. Gorbenko, Rychkov and Zan explain why: as q passes 4, the
   critical and tricritical fixed points collide and move off into the complex plane as a conjugate pair.
@@ -467,48 +498,48 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   <div class="graphic" data-cc-id="potts-toy"></div>
   <p class="lead-in">Potts toy with the energy histogram below it. Press &ldquo;go to T<sub>c</sub>(q)&rdquo;
   (T<sub>c</sub> = 1/ln(1 + &radic;q)) and run. When the lattice is larger than &xi;(q), a long run near T<sub>c</sub> can
-  show two energy peaks; at q = 5 no lattice you can run here is large enough.<a href="#fn16" class="fn">16</a></p>
+  show two energy peaks; at q = 5 no lattice you can run here is large enough.<sup class="fnm">&#8201;<a href="#fn16" class="fn">16</a></sup></p>
   <div class="graphic" data-cc-id="potts-nu"></div>
   <p class="lead-in">The drifting exponent: the effective thermal dimension &delta;<sub>&epsilon;</sub> changes like a
   tangent in ln r, so the &ldquo;exponent&rdquo; &nu;(r) you measure depends on the scale you measure it at. The
-  amplitude is read off Gorbenko&ndash;Rychkov&ndash;Zan's Fig. 12 for q = 5 and is illustrative.<a href="#fn15" class="fn" id="fnref15">15</a></p>
+  amplitude is read off Gorbenko&ndash;Rychkov&ndash;Zan's Fig. 12 for q = 5 and is illustrative.<sup class="fnm">&#8201;<a href="#fn15" class="fn" id="fnref15">15</a></sup></p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>WALKING: at a fixed control value the exponent drifts
   with SCALE, and the flow's minimum velocity is small but not zero. At L &#8810; &xi; that minimum can sit
   below the noise; the honest verdict is then REFUSE, not LINE and not POINT. Potts q = 5 and 6 are the
-  walking controls. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  walking controls. <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-6-l2"><summary>Working equations</summary>
     <p>The model: H = &minus;J&Sigma;<sub>&lang;ij&rang;</sub>&delta;(&sigma;<sub>i</sub>, &sigma;<sub>j</sub>), &sigma; = 1&hellip;q, with
-    k<sub>B</sub>T<sub>c</sub> = J/ln(1 + &radic;q) on the square lattice. The transition is continuous for q = 2, 3, 4 (q = 4 with
-    logarithms) and first order for q &gt; 4 (Baxter 1973).<a href="#fn16" class="fn">16</a> Correlation lengths at the
+    k<sub>B</sub>T<sub>c</sub> = J/ln(1 + &radic;q) on the square lattice (the self-dual point; consistent with Iino et al.&rsquo;s T<sub>c</sub> = 0.851(5) at q = 5). The transition is continuous for q = 2, 3, 4 (q = 4 with
+    logarithms) and first order for q &gt; 4 (Baxter 1973).<sup class="fnm">&#8201;<a href="#fn16" class="fn">16</a></sup> Correlation lengths at the
     transition (Buffenoir&ndash;Wallon values, as tabulated by Gorbenko&ndash;Rychkov&ndash;Zan and by Iino et al.):</p>
     <div class="tbl"><table><thead><tr><th>q</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
       <tbody><tr><td>&xi;</td><td>&infin;</td><td>2512.2</td><td>158.9</td><td>48.1</td><td>23.9</td><td>14.9</td><td>10.6</td></tr></tbody></table></div>
     <p><b>Walking.</b> With &lambda; the coupling of the nearly marginal operator &epsilon;&prime; and t = ln(scale), Gorbenko,
-    Rychkov and Zan write<a href="#fn14" class="fn">14</a></p>
+    Rychkov and Zan write<sup class="fnm">&#8201;<a href="#fn14" class="fn">14</a></sup></p>
     <span class="math-block">d&lambda;/dt = &minus;y &minus; &lambda;<sup>2</sup> + &hellip;, &nbsp; y &gt; 0: &nbsp; &lambda;(t) = &minus;&radic;y tan[&radic;y (t &minus; t<sub>0</sub>)], &nbsp; &Lambda;<sub>UV</sub>/&Lambda;<sub>IR</sub> ~ e<sup>&pi;/&radic;y</sup>,</span>
     <p>with complex fixed points &lambda;* = &plusmn;i&radic;y. For Potts, y = (q &minus; 4)/&pi;<sup>2</sup> at leading order, which gives
     &xi; ~ &xi;<sub>0</sub> exp(&pi;<sup>2</sup>/&radic;(q &minus; 4)): faster than any power. The fixed points are complex CFTs; at
-    q = 5 the central charge is c &asymp; 1.138 &plusmn; 0.021i.<a href="#fn15" class="fn">15</a> Along the real flow two-point
+    q = 5 the central charge is c &asymp; 1.138 &plusmn; 0.021i.<sup class="fnm">&#8201;<a href="#fn15" class="fn">15</a></sup> Along the real flow two-point
     functions carry a drifting dimension (their eq. 4.33) and a <b>drifting exponent</b></p>
     <span class="math-block">&delta;<sub>&phi;</sub>(r) = Re&Delta;<sub>&phi;</sub> &minus; (&radic;3&epsilon;/2&pi;) C<sub>&phi;&phi;&epsilon;&prime;</sub> tan(&epsilon; ln(r/r<sub>0</sub>)/&pi;), &nbsp; &nu;(r) = 1/(d &minus; &delta;<sub>&epsilon;</sub>(r)), &nbsp; &epsilon; = &radic;(q &minus; 4).</span>
     <p><b>The deceptive collapse.</b> Iino, Morita, Kawashima and Sandvik simulated q = 5 up to L = 256. The best
     data collapse gives &beta; = 0.070(8), &nu; = 0.61(5), with statistical errors smaller than the symbols; the true
     first-order values are &beta; = 0, &nu; = 1/d = 0.5. From (L/2, L) crossings, &nu;(L) and &beta;(L) drift with L; a
     power-law extrapolation of 1/&nu;(L) returns 1/&nu;(&infin;) &asymp; 2.23 &gt; d, impossible for a continuous transition.
-    Their diagnostic: the Binder ratio's ln(R<sub>4</sub> &minus; 1) collapses only inside a linear window.<a href="#fn16" class="fn">16</a></p>
+    Their diagnostic: the Binder ratio's ln(R<sub>4</sub> &minus; 1) collapses only inside a linear window.<sup class="fnm">&#8201;<a href="#fn16" class="fn">16</a></sup></p>
     <p><b>The shadow.</b> Ma and He measured the central charge of the quantum Potts chain from entanglement
     entropy: c(L) drifts in the tan shape c(L) = c<sub>R</sub> &minus; &alpha; tan(&gamma; ln(L/L<sub>0</sub>)), with c<sub>R</sub> near
-    Re c = 1.13755 at q = 5.<a href="#fn17" class="fn" id="fnref17">17</a> The Kosterlitz flow's E &gt; 0 branch has the same
-    tangent shape, x(t) = &epsilon; tan(arctan(x<sub>0</sub>/&epsilon;) &minus; &epsilon;t);<a href="#fn8" class="fn" id="fnref8">8</a> the shape is shared, but
+    Re c = 1.13755 at q = 5.<sup class="fnm">&#8201;<a href="#fn17" class="fn" id="fnref17">17</a></sup> The Kosterlitz flow's E &gt; 0 branch has the same
+    tangent shape, x(t) = &epsilon; tan(arctan(x<sub>0</sub>/&epsilon;) &minus; &epsilon;t);<sup class="fnm">&#8201;<a href="#fn8" class="fn" id="fnref8">8</a></sup> the shape is shared, but
     the two &epsilon;'s are not the same parameter.</p>
     <details class="l1" id="d-6-l1"><summary>Full derivation</summary>
       <p><b>The correlation length, exactly.</b> In the second paper Gorbenko, Rychkov and Zan find that the one-loop
-      walking answer matches the exact Bethe-ansatz result of Buffenoir and Wallon to all orders in 1/|m|:<a href="#fn15" class="fn">15</a></p>
+      walking answer matches the exact Bethe-ansatz result of Buffenoir and Wallon to all orders in 1/|m|:<sup class="fnm">&#8201;<a href="#fn15" class="fn">15</a></sup></p>
       <span class="math-block">&xi;<sub>Potts</sub> = (&radic;2/16) e<sup>&pi;|m|/2</sup> + O(e<sup>&minus;&pi;|m|/2</sup>), &nbsp; |m(q)| = 2&pi; / ln[(q &minus; 2 + &radic;(q(q &minus; 4)))/2].</span>
       <p>At q = 5, |m| = 6.5285 and &xi; = 2512; at q = 6, |m| = 4.7710 and &xi; = 158.9 (the table above). Walking
       needs only that the imaginary part of the nearly marginal operator's dimension be small, not that q be
-      close to 4; the expansion parameter stays below about 0.6 up to q = 10, which is why the picture works
-      over that whole range.<a href="#fn15" class="fn">15</a></p>
+      close to 4; the expansion parameter (&epsilon;<sup>2</sup>/&pi;<sup>2</sup> with &epsilon; = &radic;(q &minus; 4), or more naturally 4/|m|<sup>2</sup>) stays below about 0.6 up to q = 10, which is why the picture works
+      over that whole range.<sup class="fnm">&#8201;<a href="#fn15" class="fn">15</a></sup></p>
     </details>
   </details>
   <details class="quiz" id="q-6"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -524,23 +555,24 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   adds an energy for each neighbouring pair depending on whether the two agree. Hopping wants the spins to
   spread and fluctuate; &Delta; wants them to line up (one sign) or alternate (the other). For
   |&Delta;| &lt; 1 neither wins: the chain stays <span class="tip" tabindex="0">gapless<span class="tt">Excitations cost arbitrarily little energy in a long chain, and correlations decay as powers of distance: the chain is critical.</span></span>
-  for every value in the range.<a href="#fn7" class="fn" id="fnref7">7</a>
-  <span class="tip" tabindex="0">&#9888; sign convention<span class="tt">This page follows Franchini's H = &minus;J&Sigma;[&hellip;]: &Delta; = +1 is the ferromagnet and &Delta; = &minus;1 the antiferromagnet. Many texts write H = +J&Sigma;[&hellip;], which reverses the sign of &Delta; and swaps the names of the two ends.</span></span></p>
+  for every value in the range. With this page&rsquo;s sign, &Delta; &gt; 0 favours neighbours that agree along z (toward the
+  ferromagnet at &Delta; = +1) and &Delta; &lt; 0 favours neighbours that alternate (toward the N&eacute;el antiferromagnet at &Delta; = &minus;1).<sup class="fnm">&#8201;<a href="#fn7" class="fn" id="fnref7">7</a></sup>
+  <span class="tip" tabindex="0">&#9888; sign convention: H = &minus;J&Sigma;[&hellip;], so &Delta; = +1 is the ferromagnet, &Delta; = &minus;1 the antiferromagnet<span class="tt">This page follows Franchini's H = &minus;J&Sigma;[&hellip;]: &Delta; = +1 is the ferromagnet and &Delta; = &minus;1 the antiferromagnet. Many texts write H = +J&Sigma;[&hellip;], which reverses the sign of &Delta; and swaps the names of the two ends.</span></span></p>
   <div class="graphic vb" data-cc-id="vb6"></div>
   <p class="lead-in">The six-vertex builder: only ice-rule vertices are allowed. Set the weights a, b, c and
   watch &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab move the point across Reshetikhin's three regimes; the
-  circle a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup> is the free-fermion point &Delta; = 0.<a href="#fn6" class="fn">6</a></p>
+  circle a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup> is the free-fermion point &Delta; = 0.<sup class="fnm">&#8201;<a href="#fn6" class="fn">6</a></sup></p>
   <div class="graphic" data-cc-id="xxz-x"></div>
   <p class="lead-in">Exponents along the line. One number, the Luttinger parameter K, sets them all:
-  x<sub>m,n</sub> = m<sup>2</sup>/(4K) + n<sup>2</sup>K.<a href="#fn9" class="fn" id="fnref9">9</a> As &Delta; moves, K moves and so do the
-  exponents; the marginal operator's dimension stays 2.</p>
-  <div class="cc-takeaway"><h4>For the Compass</h4><p>A second LINE mechanism, exactly solved: use the
-  INTERIOR. One end (&Delta; = &minus;1 here) is a BKT-type point, with all the treachery of the KT page's
+  x<sub>m,n</sub> = m<sup>2</sup>/(4K) + n<sup>2</sup>K.<sup class="fnm">&#8201;<a href="#fn9" class="fn" id="fnref9">9</a></sup> As &Delta; moves, K moves and so do the
+  exponents; the marginal operator &part;X&part;&#772;X (the one that changes the radius) keeps dimension 2.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>An exactly solved LINE. Whether it is a second line mechanism or the same c = 1 family as
+  Ashkin&ndash;Teller seen again is the open question &sect;2 poses; either way, use the INTERIOR. One end (&Delta; = &minus;1 here) is a BKT-type point, with all the treachery of the KT page's
   finite-size section; the other is a ferromagnet. c = 1 all along the line, so a transfer-matrix
   measurement of c cannot say WHERE on the line you are; the exponents can.
-  <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-7-l2"><summary>Working equations</summary>
-    <p>The chain in Franchini's convention (S = &sigma;/2, periodic):<a href="#fn7" class="fn">7</a></p>
+    <p>The chain in Franchini's convention (S = &sigma;/2, periodic):<sup class="fnm">&#8201;<a href="#fn7" class="fn">7</a></sup></p>
     <span class="math-block">H = &minus;J&Sigma;<sub>n</sub>[S<sup>x</sup><sub>n</sub>S<sup>x</sup><sub>n+1</sub> + S<sup>y</sup><sub>n</sub>S<sup>y</sup><sub>n+1</sub> + &Delta;S<sup>z</sup><sub>n</sub>S<sup>z</sup><sub>n+1</sub>] &minus; 2h&Sigma;<sub>n</sub>S<sup>z</sup><sub>n</sub> &nbsp; (4.1)</span>
     <div class="tbl"><table><thead><tr><th>&Delta; (h = 0)</th><th>phase</th></tr></thead><tbody>
       <tr><td>&Delta; &gt; 1</td><td>gapped ferromagnet (along z)</td></tr>
@@ -551,29 +583,30 @@ different items. Scores stay in this browser (Export copies a summary).</p>
     <p>In the critical regime, &Delta; = &minus;cos &gamma; (0 &lt; &gamma; &lt; &pi;), the sound velocity is v<sub>S</sub> = &pi; sin &gamma;/(2&gamma;) and
     the Luttinger parameter is K = &pi;/(2(&pi; &minus; &gamma;)) = &pi;/(2 arccos &Delta;): K = 1/2 at &Delta; = &minus;1, 1 at &Delta; = 0, and
     &rarr; &infin; as &Delta; &rarr; +1. The staggered S<sup>z</sup> correlation decays as r<sup>&minus;2K</sup>. The saturation field is
-    h<sub>s</sub> = (J/2)(1 &minus; &Delta;).<a href="#fn7" class="fn">7</a> In Ueda and Oshikawa's notation the vertex operator with charges
-    (m, n) has dimension x<sub>m,n</sub> = m<sup>2</sup>/(4K) + n<sup>2</sup>K,<a href="#fn9" class="fn">9</a> so the staggered S<sup>z</sup> (n = 1) has 2x = 2K,
+    h<sub>s</sub> = (J/2)(1 &minus; &Delta;).<sup class="fnm">&#8201;<a href="#fn7" class="fn">7</a></sup> In Ueda and Oshikawa's notation the vertex operator with charges
+    (m, n) has dimension x<sub>m,n</sub> = m<sup>2</sup>/(4K) + n<sup>2</sup>K,<sup class="fnm">&#8201;<a href="#fn9" class="fn">9</a></sup> so the staggered S<sup>z</sup> (n = 1) has 2x = 2K,
     matching Franchini, and the transverse spin (m = 1) has 2x = 1/(2K). Ginsparg writes the compact-boson
     dimensions in the same shape with a radius, m<sup>2</sup>/(4r<sup>2</sup>) + n<sup>2</sup>r<sup>2</sup> (the r&ndash;K dictionary depends on
-    normalisation; not checked here).<a href="#fn5" class="fn">5</a></p>
+    normalisation; not checked here).<sup class="fnm">&#8201;<a href="#fn5" class="fn">5</a></sup></p>
     <p><b>The six-vertex side.</b> Weights a (a<sub>1</sub>, a<sub>2</sub>), b (b<sub>1</sub>, b<sub>2</sub>), c (c<sub>1</sub>, c<sub>2</sub>); R-matrix
     [[a,0,0,0],[0,b,c,0],[0,c,b,0],[0,0,0,a]]; &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab. Transfer matrices with equal
     &Delta; commute, and the transfer matrix is &ldquo;the generating function for [the] commuting family of local
     Hamiltonians&rdquo;: H<sub>1</sub> = &Sigma;(&sigma;<sup>x</sup>&sigma;<sup>x</sup> + &sigma;<sup>y</sup>&sigma;<sup>y</sup> + &Delta;&sigma;<sup>z</sup>&sigma;<sup>z</sup>), printed with an
-    overall plus sign.<a href="#fn6" class="fn">6</a> Reshetikhin names the regimes &ldquo;ferromagnetic&rdquo; (frozen, &Delta; &gt; 1),
+    overall plus sign.<sup class="fnm">&#8201;<a href="#fn6" class="fn">6</a></sup> At zero field Reshetikhin&rsquo;s regimes are &ldquo;ferromagnetic&rdquo; (frozen, &Delta; &gt; 1),
     &ldquo;disordered&rdquo; (|&Delta;| &lt; 1, power-law correlations) and &ldquo;antiferromagnetic&rdquo; (&Delta; &lt; &minus;1), with the free-fermion
-    point at &Delta; = 0. Franchini states the dictionary explicitly (his App. B): &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab
+    point at &Delta; = 0. (In nonzero fields frozen phases occur for every &Delta;, and a disordered region also for &Delta; &gt; 1.) Franchini states the dictionary explicitly (his App. B): &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab
     (B.31); a = &rho; sinh(&lambda; + &phi;), b = &rho; sinh &lambda;, c = &rho; sinh &phi;, &Delta; = cosh &phi; (B.33); and d ln T/d&lambda; at &lambda; = 0 is
-    the XXZ chain plus a constant (B.45), up to the sign conventions noted above.<a href="#fn7" class="fn">7</a> A special
+    the XXZ chain plus a constant (B.45), up to the sign conventions noted above.<sup class="fnm">&#8201;<a href="#fn7" class="fn">7</a></sup> A special
     six-vertex model, the F-model (= the BCSOS surface model), is rigorously of KT type and served Hasenbusch,
-    Marcu and Pinn as their exact reference flow.<a href="#fn8" class="fn">8</a></p>
+    Marcu and Pinn as their exact reference flow.<sup class="fnm">&#8201;<a href="#fn8" class="fn">8</a></sup></p>
     <details class="l1" id="d-7-l1"><summary>Full derivation</summary>
-      <p><b>The Bethe ansatz in one screen</b> (Franchini, ch. 4 and App. C).<a href="#fn7" class="fn">7</a> Start from the
+      <p><b>The Bethe ansatz in one screen</b> (Franchini, ch. 4 and App. C).<sup class="fnm">&#8201;<a href="#fn7" class="fn">7</a></sup> Start from the
       all-up state and add M down spins. Bethe's guess: the eigenstate is a sum over permutations of plane waves,
       e<sup>i&Sigma;k<sub>j</sub>n<sub>j</sub></sup>, with an amplitude that changes only by a two-body phase when two magnons pass. Parametrising
       the momenta by rapidities, e<sup>ik</sup> = sin((&phi;/2)(&lambda; + i))/sin((&phi;/2)(&lambda; &minus; i)), the phase depends only on
       rapidity differences provided cosh &phi; = &Delta;. Periodicity gives M coupled Bethe equations. In the planar
-      regime &phi; becomes imaginary, and in the thermodynamic limit the ground state is a filled sea of real
+      regime &phi; becomes imaginary, &phi; = i&gamma;&prime;, so &Delta; = cos &gamma;&prime;; Franchini&rsquo;s Table 4.1 writes the same regime with
+      &gamma; = &pi; &minus; &gamma;&prime;, which is the &Delta; = &minus;cos &gamma; used in the working equations, and in the thermodynamic limit the ground state is a filled sea of real
       rapidities with a smooth density. The finite-size spectrum then has the form of a c = 1 Gaussian theory,
       &Delta;E = (2&pi;v<sub>S</sub>/L)[(&Delta;N)<sup>2</sup>/(4Z<sup>2</sup>) + (Zd)<sup>2</sup> + N<sub>+</sub> + N<sub>&minus;</sub>], where Z is the
       dressed charge at the edge of the sea. Comparing with the Gaussian form identifies K = Z<sup>2</sup>; a
@@ -585,7 +618,7 @@ different items. Scores stay in this browser (Export copies a summary).</p>
 
 <section id="8-sorm" class="cc-sec" data-accent="amber">
   <h2><span class="num">8</span> Networks that find their own critical manifold</h2>
-  <p class="headline">A network that rewires itself finds the edge between silence and runaway activity, then keeps changing its structure while staying on that edge (2023); with two kinds of transition, it can slide along one edge into the other (2025).</p>
+  <p class="headline">A network that rewires itself finds the edge between silence and runaway activity, then keeps changing its structure while staying on that edge (2023); with two kinds of transition, it can drift along the Hopf manifold into the Turing one (2025).</p>
   <div class="graphic sorm" data-cc-id="sorm-toy"></div>
   <p>Each node is <span style="color:#64748b">inactive</span>, <span style="color:#f59e0b">firing</span> or
   <span style="color:#3b82f6">refractory</span>. A firing node excites each inactive out-neighbour at rate
@@ -594,9 +627,9 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   between random nodes at rate g</b>. Too many links and activity runs away, so links are cut; too few and
   activity dies, so links accumulate. The system settles where the network's leading
   <span class="tip" tabindex="0">eigenvalue &lambda;<sub>1</sub><span class="tt">The largest eigenvalue of the adjacency matrix: how strongly the network amplifies activity. Activity persists when &lambda;<sub>1</sub> exceeds the threshold &lambda;<sub>1</sub>*.</span></span>
-  sits at the threshold. The toy runs N = 200 nodes with sped-up adaptation, so its trace is noisier than
+  sits at the threshold: the transition in 2023 is the <b>onset of activity</b>. The toy runs N = 200 nodes with sped-up adaptation, so its trace is noisier than
   the paper's N = 10<sup>5</sup>; watch &lambda;<sub>1</sub> climb and then hover near the cyan line while &lang;k&rang; rises past it
-  and the in/out-degree correlation &rho; turns negative.<a href="#fn18" class="fn" id="fnref18">18</a></p>
+  and the in/out-degree correlation &rho; turns negative.<sup class="fnm">&#8201;<a href="#fn18" class="fn" id="fnref18">18</a></sup></p>
   <div class="graphic" data-cc-id="sorm-lam"></div>
   <svg class="fig" viewBox="0 0 520 250" role="img" aria-label="Schematic of the 2025 result: in the plane of the leading and second-smallest Laplacian eigenvalues, the network first moves to the Hopf critical value, then along it to the Turing critical value, reaching the corner where both are critical">
     <line x1="60" y1="210" x2="500" y2="210" stroke="#94a3b8"/><line x1="60" y1="210" x2="60" y2="20" stroke="#94a3b8"/>
@@ -612,33 +645,33 @@ different items. Scores stay in this browser (Export copies a summary).</p>
     <circle cx="220" cy="80" r="7" fill="none" stroke="#f1f5f9" stroke-width="2"/><text x="232" y="104" font-size="11.5" fill="#f1f5f9">both critical: codimension 2</text>
     <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#06b6d4"/></marker></defs>
   </svg>
-  <p class="lead-in">2025, schematic: two local plasticity rules act on different parts of the network (the
+  <p class="lead-in">2025, schematic (a different model from the toy above: here the eigenvalues are of the network <em>Laplacian</em>; the toy&rsquo;s &lambda;<sub>1</sub> is an <em>adjacency</em> eigenvalue): two local plasticity rules act on different parts of the network (the
   Hopf rule on well-connected nodes, the Turing rule on weakly connected ones), so the system can hold one
-  condition while it drifts into the other.<a href="#fn19" class="fn" id="fnref19">19</a></p>
+  condition while it drifts into the other.<sup class="fnm">&#8201;<a href="#fn19" class="fn" id="fnref19">19</a></sup></p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>The Navigator's test bed: blind the instrument to
   the adaptation rule, compare the direction it infers with the network's own drift, then switch the
   adaptation off. The hard lesson: this manifold is <b>one universality class</b>. The avalanche exponents
   stay put while the network moves, so no exponent says where along the manifold you are; the Navigator
-  needs structural observables. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  needs structural observables. <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="l2" id="d-8-l2"><summary>Working equations</summary>
     <p><b>2023</b> (Sormunen, Gross &amp; Saramäki, Phys. Rev. Lett. 130, 188401). Three-state stochastic neurons on
     a directed Erdős&ndash;Rényi network, the model of Droste, Do and Gross. A pair approximation about the
-    all-inactive state gives the threshold on the leading adjacency eigenvalue<a href="#fn18" class="fn">18</a></p>
+    all-inactive state gives the threshold on the leading adjacency eigenvalue<sup class="fnm">&#8201;<a href="#fn18" class="fn">18</a></sup></p>
     <span class="math-block">&lambda;<sub>1</sub>* = &delta;/&beta; + (&delta; + &gamma;/2)/(&delta; + &gamma;) &nbsp; (eq. 1)</span>
     <p>With &beta; = 0.7, &delta; = 0.95, &gamma; = 0.4, &lambda;<sub>1</sub>* = 2.21. The paper's runs: N = 10<sup>5</sup>, l = 10<sup>&minus;3</sup>,
     g = 10<sup>&minus;6</sup>, spontaneous rate &eta; = 1/(100N). Result, in three stages: &lambda;<sub>1</sub> rises and pins near the
     threshold; then, with &lambda;<sub>1</sub> held, &lang;k&rang; keeps rising (about 2.3 &rarr; 2.5), the mean excess degree
-    &lang;q&rang; creeps up and the in/out-degree correlation &rho; falls to about &minus;0.15; finally &lang;k&rang; settles. Freezing the
-    network and perturbing &lang;k&rang; shows it sitting on the avalanche peak, and the peak itself moves over
+    mean excess degree &lang;q&rang; (the average out-degree of the node you reach by following a link) creeps up and the in/out-degree correlation &rho; falls to about &minus;0.15; finally &lang;k&rang; settles. Freezing the
+    network and perturbing &lang;k&rang; shows it sitting on the avalanche peak (the &lang;k&rang; at which the largest avalanche size and duration of the frozen network peak, i.e. the critical &lang;k&rang;), and the peak itself moves over
     time. The avalanche size and duration distributions keep the critical slopes &minus;3/2 and &minus;2 throughout.
     Mechanism: firing probability tracks eigenvector centrality, so the links cut are the ones that lower
     &lambda;<sub>1</sub> most, and more links must be added than removed to hold &lambda;<sub>1</sub> fixed.</p>
     <p><b>2025</b> (arXiv:2506.04275, preprint). N = 50 FitzHugh&ndash;Nagumo oscillators on a weighted network with
-    Laplacian L:<a href="#fn19" class="fn">19</a></p>
+    Laplacian L:<sup class="fnm">&#8201;<a href="#fn19" class="fn">19</a></sup></p>
     <span class="math-block">U&#775; = &minus;U<sup>3</sup> + U &minus; V &minus; C<sub>00</sub>LU &minus; C<sub>01</sub>LV, &nbsp; V&#775; = b(U &minus; aV) &minus; C<sub>10</sub>LU &minus; C<sub>11</sub>LV.</span>
     <p>A master-stability analysis separates node dynamics from topology: the Hopf bifurcation is governed by
-    the leading Laplacian eigenvalue &lambda;<sub>1</sub>, the Turing bifurcation by the second smallest,
-    &lambda;<sub>n&minus;1</sub>. The authors define <em>multicriticality</em> as &ldquo;a system sitting at two or more
+    the leading (largest) Laplacian eigenvalue &lambda;<sub>1</sub>, the Turing bifurcation by the second smallest,
+    &lambda;<sub>n&minus;1</sub> (eigenvalues ordered from largest, &lambda;<sub>1</sub>, down to &lambda;<sub>n</sub> = 0; the ordering is this page&rsquo;s reading of the indices). The authors define <em>multicriticality</em> as &ldquo;a system sitting at two or more
     bifurcations at once, or, phrased differently, at a bifurcation of higher codimension&rdquo;, and argue that two
     critical surfaces generically intersect, so rules that separately find each bifurcation can combine to
     find both. (&lambda; means an adjacency eigenvalue in 2023 and a Laplacian one in 2025.)</p>
@@ -654,10 +687,10 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   <h2><span class="num">9</span> The model gallery</h2>
   <p class="headline">One table to keep: what each model gives the Compass, what exact truth it offers, and what breaks it.</p>
   <div class="graphic" data-cc-id="cheat"></div>
-  <div class="cc-takeaway"><h4>For the Compass</h4><p>The order of work is the validation ladder: Ising
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The build order of work on the Detector and Navigator tracks (inside the four rungs of &sect;0): Ising
   (POINT) &rarr; Ashkin&ndash;Teller (LINE, on both the Detector and the Navigator tracks) &rarr; the eight-vertex
   cross-check &rarr; Potts (WALKING) &rarr; BKT last, as the breaker that tests honesty rather than skill.
-  <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <span class="design">&#9670; design</span><sup class="fnm">&#8201;<a href="#fn21" class="fn">21</a></sup></p></div>
   <details class="quiz" id="q-9"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
 </section>
 
@@ -667,9 +700,9 @@ different items. Scores stay in this browser (Export copies a summary).</p>
   <ol>
     <li><b>Ashkin&ndash;Teller</b>: self-dual line sinh 2K = e<sup>&minus;2L</sup> (Z = 1 &minus; 2X) from Ising to four-state Potts; &alpha;/&nu; = 2y<sub>t</sub> &minus; 2 climbs 0 &rarr; 1, &gamma;/&nu; = 7/4 fixed.</li>
     <li>The Potts end carries multiplicative logs (Salas&ndash;Sokal); a LINE point can look first order at reachable L (Jin&ndash;Sen&ndash;Sandvik).</li>
-    <li><b>Coupling type decides geometry</b>: &epsilon;<sub>1</sub>&epsilon;<sub>2</sub> (&Delta; = 2, y = 0) makes a line; &sigma;<sub>1</sub>&sigma;<sub>2</sub> (&Delta; = 1/4, y = 7/4) makes a point.</li>
+    <li><b>Coupling type decides geometry</b>: &epsilon;<sub>1</sub>&epsilon;<sub>2</sub> (x = 2, y = 0) makes a line; &sigma;<sub>1</sub>&sigma;<sub>2</sub> (x = 1/4, y = 7/4) makes a point.</li>
     <li>Baxter's eight-vertex model: the exactly solved line. c = 1: a circle (Gaussian) line and an orbifold (critical AT) line meeting at the KT point (Ginsparg).</li>
-    <li>O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>): &Delta; = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> &gt; 0 tetracritical, &lt; 0 bicritical; in d = 3 the O(N) point is stable only for N = 2 (Calabrese&ndash;Pelissetto&ndash;Vicari).</li>
+    <li>O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>): D = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> &gt; 0 tetracritical, &lt; 0 bicritical; in d = 3 the O(N) point is stable only for N = 2 (Calabrese&ndash;Pelissetto&ndash;Vicari).</li>
     <li><b>Blume&ndash;Capel</b>: H = &minus;J&Sigma;&sigma;&sigma;&prime; + &Delta;&Sigma;&sigma;<sup>2</sup>; T = 0 end at &Delta;<sub>0</sub> = 2; tricritical at (1.9660(1), 0.6080(1)); two knobs.</li>
     <li><b>Potts q &gt; 4</b>: weakly first order; &xi;(5) &asymp; 2512, &xi;(6) &asymp; 159; walking between complex fixed points; drifting &nu;(r) = 1/(d &minus; &delta;<sub>&epsilon;</sub>(r)).</li>
     <li><b>XXZ</b> (Franchini's sign): critical for |&Delta;| &lt; 1, c = 1, K = &pi;/(2 arccos &Delta;); &Delta; = &minus;1 is the BKT-type end.</li>
@@ -737,12 +770,13 @@ different items. Scores stay in this browser (Export copies a summary).</p>
     <li id="fn19">Sormunen, S., Gross, T. &amp; Saramäki, J. (2025). Self-organization to multicriticality. Preprint, no DOI; arXiv:2506.04275. Eqs. 1&ndash;3. <a href="#fnref19">&uarr;</a></li>
     <li id="fn20">Cited by name only; these works are not held locally, and no number or equation on this page rests on them alone (bibliographic details not checked against a copy): Ashkin, J. &amp; Teller, E. (1943) <em>Phys. Rev.</em> 64:178. Baxter, R. J. (1971) <em>Phys. Rev. Lett.</em> 26:832; (1972) <em>Ann. Phys.</em> 70:193; (1973) <em>J. Phys. C</em> 6:L445; <em>Exactly Solved Models in Statistical Mechanics</em> (Academic Press, 1982). Wegner, F. J. (1972) <em>J. Phys. C</em> 5:L131. Fan, C. &amp; Wu, F. Y. (1970) <em>Phys. Rev. B</em> 2:723. Kadanoff, L. P. &amp; Brown, A. C. (1979) <em>Ann. Phys.</em> 121:318. Lieb, E. H. (1967) <em>Phys. Rev. Lett.</em> 18:692. Bethe, H. (1931) <em>Z. Phys.</em> 71:205. Yang, C. N. &amp; Yang, C. P. (1966) <em>Phys. Rev.</em> 150:321. Luttinger, J. M. (1963) <em>J. Math. Phys.</em> 4:1154. Blume, M. (1966) <em>Phys. Rev.</em> 141:517. Capel, H. W. (1966) <em>Physica</em> 32:966. Griffiths, R. B. (1970) <em>Phys. Rev. Lett.</em> 24:715. Potts, R. B. (1952) <em>Proc. Camb. Phil. Soc.</em> 48:106. Fisher, M. E. &amp; Nelson, D. R. (1974) <em>Phys. Rev. Lett.</em> 32:1350. Kosterlitz, J. M., Nelson, D. R. &amp; Fisher, M. E. (1976) <em>Phys. Rev. B</em> 13:412. FitzHugh, R. (1961) <em>Biophys. J.</em> 1:445; Nagumo, J., Arimoto, S. &amp; Yoshizawa, S. (1962) <em>Proc. IRE</em> 50:2061. <a href="#fnref20">&uarr;</a></li>
     <li id="fn21">&#9670; Design notes of the Criticality Compass: the alphabet (POINT, LINE, WALKING, REFUSE), &ldquo;follow the flow&rdquo;, the validation ladder, the choice of controls and test beds, and every &ldquo;For the Compass&rdquo; box. These are design decisions for an instrument under construction, not published physics results. <a href="#fnref21">&uarr;</a></li>
-    <li id="fn22">Dimension counting from the standard 2D Ising values &Delta;<sub>&sigma;</sub> = 1/8 and &Delta;<sub>&epsilon;</sub> = 1 (not checked here against a held source); the fate of the bilinear model at g &ne; 0 is an expectation, not a result shown here. <a href="#fnref22">&uarr;</a></li>
+    <li id="fn22">Dimension counting from the standard 2D Ising values x<sub>&sigma;</sub> = 1/8 and x<sub>&epsilon;</sub> = 1 (not checked here against a held source); the fate of the bilinear model at g &ne; 0 is an expectation, not a result shown here. <a href="#fnref22">&uarr;</a></li>
   </ol>
 </div>
 </div>
 
 <script src="bank.js"></script>
+<script src="../primer.js"></script>
 <script src="../../../js/cc-tutor.js"></script>
 <script>/*MODELS-PAGE*/
 (function () {
@@ -1055,14 +1089,14 @@ vertexBuilder('vb8', 'eight');
   var el = q('dimcount');
   CC.trace(el, {
     id: 'dimcount', label: 'How two couplings between Ising layers grow under coarse-graining: the bilinear one as b to the 7/4, the four-spin one not at all', height: 250,
-    eq: [{ t: 'rule', html: 'y = d &minus; &Delta;' }, { html: ';' }, { t: 'bil', html: 'g&sigma;&tau;: &Delta; = &#8539; + &#8539; = &frac14;, y = 7/4' }, { html: ';' }, { t: 'four', html: '&epsilon;<sub>1</sub>&epsilon;<sub>2</sub>: &Delta; = 1 + 1 = 2, y = 0' }],
+    eq: [{ t: 'rule', html: 'y = d &minus; x' }, { html: ';' }, { t: 'bil', html: 'g&sigma;&tau;: x = &#8539; + &#8539; = &frac14;, y = 7/4' }, { html: ';' }, { t: 'four', html: '&epsilon;<sub>1</sub>&epsilon;<sub>2</sub>: x = 1 + 1 = 2, y = 0' }],
     vars: { ell: { min: 0, max: 3, step: 0.01, init: 1, label: 'RG time &#8467; = ln b' } },
     base: function (g, v) { g = G(g);
       var P = panel(g, 0, 3, 0, 1, 44, g.w - 12, 12, g.h - 36, { xt: [0, 1, 2, 3], yt: [0, 0.5, 1], xl: 'ℓ = ln b', yl: 'coupling' });
       g._P = P; g.line(P.X(v.ell), P.Y(0), P.X(v.ell), P.Y(1), { stroke: C.muted, dash: '3 3' });
     },
     steps: [
-      { lit: ['rule'], caption: 'Coarse-graining by b multiplies a small coupling by b<sup>y</sup>, with y = d &minus; &Delta; and d = 2.', draw: function () {} },
+      { lit: ['rule'], caption: 'Coarse-graining by b multiplies a small coupling by b<sup>y</sup>, with y = d &minus; x (x the scaling dimension) and d = 2.', draw: function () {} },
       { lit: ['bil'], caption: function (v) { var gg = 0.02 * Math.exp(1.75 * v.ell); return 'The bilinear coupling grows: g(&#8467;) = g<sub>0</sub>e<sup>7&#8467;/4</sup> = ' + f(gg, 3) + (gg > 1 ? ' — it has left the small-coupling regime: the Ising&sup2; point is unstable.' : '.'); },
         draw: function (g, v) { g = G(g); var P = g._P; P.curve(function (x) { return 0.02 * Math.exp(1.75 * x); }, 0, 3, 120, { stroke: C.red, width: 2.5 }); var y = 0.02 * Math.exp(1.75 * v.ell); if (y <= 1) g.dot(P.X(v.ell), P.Y(y), 5, { fill: C.red }); g.text(P.X(0.3), P.Y(0.9), 'g σ τ: relevant, y = 7/4', { size: 11, fill: C.red }); } },
       { lit: ['four'], caption: 'The four-spin coupling is marginal: L(&#8467;) = L<sub>0</sub> at linear order, and (Ginsparg) exactly, because it only changes the boson radius. Every value is a fixed point: a LINE.',
@@ -1112,7 +1146,7 @@ vertexBuilder('vb8', 'eight');
       g.rect(P.X(-1 + 2 * i / n), P.Y(-1 + 2 * (j + 1) / n), P.X(-1 + 2 * (i + 1) / n) - P.X(-1 + 2 * i / n) + 0.5, P.Y(-1 + 2 * j / n) - P.Y(-1 + 2 * (j + 1) / n) + 0.5, { fill: PCOL[k] }); } }
   CC.trace(el, {
     id: 'onon', label: 'Mean-field phase diagram of O(n1)+O(n2) in the (r1, r2) plane: disordered, two ordered phases and possibly a mixed phase', height: 300,
-    eq: [{ t: 'r', html: '&frac12;r<sub>1</sub>&phi;<sub>1</sub><sup>2</sup> + &frac12;r<sub>2</sub>&phi;<sub>2</sub><sup>2</sup>' }, { html: '+' }, { t: 'u', html: '(u<sub>1</sub>(&phi;<sub>1</sub><sup>2</sup>)<sup>2</sup> + u<sub>2</sub>(&phi;<sub>2</sub><sup>2</sup>)<sup>2</sup>)/4!' }, { html: '+' }, { t: 'w', html: '2w&phi;<sub>1</sub><sup>2</sup>&phi;<sub>2</sub><sup>2</sup>/4!' }, { html: ';' }, { t: 'D', html: '&Delta; = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup>' }],
+    eq: [{ t: 'r', html: '&frac12;r<sub>1</sub>&phi;<sub>1</sub><sup>2</sup> + &frac12;r<sub>2</sub>&phi;<sub>2</sub><sup>2</sup>' }, { html: '+' }, { t: 'u', html: '(u<sub>1</sub>(&phi;<sub>1</sub><sup>2</sup>)<sup>2</sup> + u<sub>2</sub>(&phi;<sub>2</sub><sup>2</sup>)<sup>2</sup>)/4!' }, { html: '+' }, { t: 'w', html: '2w&phi;<sub>1</sub><sup>2</sup>&phi;<sub>2</sub><sup>2</sup>/4!' }, { html: ';' }, { t: 'D', html: 'D = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup>' }],
     vars: { w: { min: -1.6, max: 1.6, step: 0.01, init: 0.5, label: 'cross-coupling w (u<sub>1</sub> = u<sub>2</sub> = 1)' } },
     base: function (g) { g = G(g);
       var sz = Math.min(g.h - 40, g.w - 150), l = (g.w - sz) / 2;
@@ -1125,7 +1159,7 @@ vertexBuilder('vb8', 'eight');
         draw: function (g) { g = G(g); var P = g._P; fill(g, P, 0); axes(g, P); legend(g, P); } },
       { lit: ['w'], caption: function (v) { return 'Now the cross-term w = ' + f(v.w, 2) + ': the orders help (w &lt; 0) or hinder (w &gt; 0) each other. Colours: the lowest of the four candidate minima at each point.'; },
         draw: function (g, v) { g = G(g); var P = g._P; fill(g, P, v.w); axes(g, P); legend(g, P); } },
-      { lit: ['D'], caption: function (v) { var D = 1 - v.w * v.w; return '&Delta; = ' + f(D, 2) + (D > 0 ? ' &gt; 0: TETRACRITICAL. A mixed phase (green) sits between two critical lines; four lines meet.' : D < 0 ? ' &lt; 0: BICRITICAL. The orders exclude each other across a first-order flop line (white).' : ' = 0: the boundary case.'); },
+      { lit: ['D'], caption: function (v) { var D = 1 - v.w * v.w; return 'D = ' + f(D, 2) + (D > 0 ? ' &gt; 0: TETRACRITICAL. A mixed phase (green) sits between two critical lines; four lines meet.' : D < 0 ? ' &lt; 0: BICRITICAL. The orders exclude each other across a first-order flop line (white).' : ' = 0: the boundary case.'); },
         draw: function (g, v) { g = G(g); var P = g._P; fill(g, P, v.w); axes(g, P); legend(g, P); if (1 - v.w * v.w < 0) g.line(P.X(0), P.Y(0), P.X(-1), P.Y(-1), { stroke: '#ffffff', width: 3 }); } }
     ],
     checks: { bicritical: function (st) { return 1 - st.vars.w * st.vars.w < 0; }, tetracritical: function (st) { return 1 - st.vars.w * st.vars.w > 0 && Math.abs(st.vars.w) > 0.05; } }
@@ -1250,7 +1284,7 @@ var XI = { 2: Infinity, 3: Infinity, 4: Infinity, 5: 2512.2, 6: 158.9, 7: 48.1, 
     vars: { x: { min: -4, max: 4, step: 0.02, init: 0, label: '&epsilon; ln(r/r<sub>0</sub>)' } },
     base: function (g, v) { g = G(g); g._P = panel(g, -4, 4, -1, 2.5, 44, g.w - 12, 12, g.h - 34, { xt: [-4, -2, 0, 2, 4], yt: [-1, 0, 1, 2], xl: 'ε ln(r/r₀)', yl: '' }); g.line(g._P.X(v.x), g._P.Y(-1), g._P.X(v.x), g._P.Y(2.5), { stroke: C.muted, dash: '3 3' }); },
     steps: [
-      { lit: ['re'], caption: 'At the scale r<sub>0</sub> where the walking coupling crosses zero, the effective dimension is its real part (about 0.5 in Fig. 12).',
+      { lit: ['re'], caption: 'At the scale r<sub>0</sub> where the walking coupling crosses zero, the effective dimension is its real part (about 0.5 in Gorbenko, Rychkov &amp; Zan II, Fig. 12, for q = 5).',
         draw: function (g) { g = G(g); var P = g._P; P.curve(function () { return 0.5; }, -4, 4, 2, { stroke: C.muted, width: 2, dash: '5 3' }); } },
       { lit: ['tan'], caption: function (v) { return 'Away from r<sub>0</sub> it drifts like a tangent: &delta;<sub>&epsilon;</sub> = ' + f(dl(v.x), 3) + ' here. There is no plateau to fit.'; },
         draw: function (g, v) { g = G(g); var P = g._P; P.curve(dl, -4, 4, 160, { stroke: C.purple, width: 2.5 }); g.dot(P.X(v.x), P.Y(dl(v.x)), 5, { fill: C.purple }); g.text(P.X(-3.9), P.Y(2.3), 'δ_ε(r)', { size: 11, fill: C.purple }); } },
@@ -1318,7 +1352,7 @@ vertexBuilder('vb6', 'six');
         draw: function (g, v) { g = G(g); var P = g._P; P.curve(Kof, -1, 0.999, 160, { stroke: C.cyan, width: 2.5 }); g.dot(P.X(v.D), P.Y(Math.min(3, Kof(v.D))), 5, { fill: C.cyan }); g.text(P.X(0.35), P.Y(Kof(0.35)) - 6, 'K', { size: 11, fill: C.cyan }); } },
       { lit: ['m'], caption: function (v) { return 'Transverse spin (m = 1, n = 0): x = 1/(4K) = ' + f(1 / (4 * Kof(v.D)), 3) + ', correlations ~ r<sup>&minus;1/(2K)</sup>.'; },
         draw: function (g, v) { g = G(g); var P = g._P; P.curve(Kof, -1, 0.999, 160, { stroke: C.cyan, width: 1.5 }); P.curve(function (d) { return 1 / (4 * Kof(d)); }, -1, 0.999, 160, { stroke: C.green, width: 2.5 }); g.dot(P.X(v.D), P.Y(1 / (4 * Kof(v.D))), 5, { fill: C.green }); g.text(P.X(-0.9), P.Y(0.62), 'x₁,₀', { size: 11, fill: C.green }); } },
-      { lit: ['n'], caption: function (v) { var K = Kof(v.D); return 'Staggered S<sup>z</sup> (n = 1): x = K = ' + f(K, 3) + ', correlations ~ r<sup>&minus;2K</sup>. The exponents move with &Delta;; the marginal operator stays at dimension 2 all along the line.'; },
+      { lit: ['n'], caption: function (v) { var K = Kof(v.D); return 'Staggered S<sup>z</sup> (n = 1): x = K = ' + f(K, 3) + ', correlations ~ r<sup>&minus;2K</sup>. The exponents move with &Delta;; the marginal operator &part;X&part;&#772;X stays at dimension 2 all along the line.'; },
         draw: function (g, v) { g = G(g); var P = g._P; P.curve(function (d) { return 1 / (4 * Kof(d)); }, -1, 0.999, 160, { stroke: C.green, width: 2 }); P.curve(Kof, -1, 0.999, 160, { stroke: C.amber, width: 2.5 }); P.curve(function () { return 2; }, -1, 1, 2, { stroke: C.purple, width: 2, dash: '5 3' });
           g.dot(P.X(v.D), P.Y(Math.min(3, Kof(v.D))), 5, { fill: C.amber }); g.text(P.X(0.98), P.Y(2) - 5, 'marginal: 2', { size: 10, fill: C.purple, anchor: 'end' }); g.text(P.X(-0.6), P.Y(Kof(-0.6)) + 14, 'x₀,₁ = K', { size: 11, fill: C.amber }); } }
     ],
@@ -1355,7 +1389,7 @@ vertexBuilder('vb6', 'six');
     function rho() { var sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0; for (var i = 0; i < N; i++) { var a = inn[i].length, b = out[i].length; sx += a; sy += b; sxx += a * a; syy += b * b; sxy += a * b; } var cx = sxx / N - (sx / N) * (sx / N), cy = syy / N - (sy / N) * (sy / N); return cx > 0 && cy > 0 ? (sxy / N - sx * sy / N / N) / Math.sqrt(cx * cy) : 0; }
     return { step: step, lambda1: lambda1, rho: rho, st: st, out: out, get t() { return t; }, get k() { return M / N; } };
   }
-  var row = E('div', { 'class': 'row' }), cvNet = E('canvas', { role: 'img', 'aria-label': 'The network: 200 nodes on a ring coloured by state, with its links' }), cvTs = E('canvas', { role: 'img', 'aria-label': 'Time series of the leading eigenvalue and the mean degree against the threshold' });
+  var row = E('div', { 'class': 'row' }), cvNet = E('canvas', { role: 'img', 'aria-label': 'The network: 200 nodes on a ring coloured by state, with its links' }), cvTs = E('canvas', { role: 'img', 'aria-label': 'Time series of the leading adjacency eigenvalue and the mean degree against the threshold' });
   row.appendChild(cvNet); row.appendChild(cvTs); el.appendChild(row);
   var read = E('p', { 'class': 'cc-readout', 'aria-live': 'off' }); el.appendChild(read);
   var ctl = E('div', { 'class': 'cc-ctl' }); el.appendChild(ctl);
@@ -1426,7 +1460,7 @@ vertexBuilder('vb6', 'six');
     ['multi', 'O(n₁)⊕O(n₂)', 'bicritical or tetracritical point', 'two order parameters meeting', 'mean field; high-order series', 'crossover plateaus (FFXY: ν ≈ 0.8)', 'mean field'],
     ['multi', 'Blume–Capel', 'tricritical point; Ising line; first-order decoy', 'two relevant directions', 'location to 4 digits', 'first-order line read as LINE; crossover', 'yes'],
     ['WALKING', 'Potts q = 5, 6', 'WALKING (weak first order)', 'walking controls', 'exact ξ, latent heat, complex c', 'ξ ≫ L: looks critical', 'yes'],
-    ['LINE', 'XXZ / six-vertex', 'LINE, |Δ| < 1, c = 1', 'second LINE mechanism; use the interior', 'Bethe ansatz: K(Δ)', 'BKT-type end at Δ = −1', 'builder'],
+    ['LINE', 'XXZ / six-vertex', 'LINE, |Δ| < 1, c = 1', 'another c = 1 line (same family as AT? open); use the interior', 'Bethe ansatz: K(Δ)', 'BKT-type end at Δ = −1', 'builder'],
     ['drift', 'Adaptive networks', 'one universality class, drifting structure', 'Navigator test bed (blinded rule)', 'λ₁* (pair approximation)', 'no exponent signal of position', 'yes']
   ];
   var bar = E('div', { 'class': 'filters', role: 'group', 'aria-label': 'filter by geometry' }), filter = 'all';
