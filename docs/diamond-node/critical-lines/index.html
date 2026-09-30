@@ -63,6 +63,12 @@ a:hover { text-decoration: underline; }
 .alphabet b { display: block; color: var(--heading); letter-spacing: 0.04em; }
 .alphabet .a-point { border-left-color: var(--blue); } .alphabet .a-line { border-left-color: var(--purple); }
 .alphabet .a-walk { border-left-color: var(--amber); } .alphabet .a-refuse { border-left-color: var(--cyan); }
+[data-cc-id="series-alphabet"] .term { font-weight: 600; font-style: normal; }
+[data-cc-id="series-alphabet"] .term[data-t="POINT"] { color: var(--blue); } [data-cc-id="series-alphabet"] .term[data-t="LINE"] { color: var(--purple); }
+[data-cc-id="series-alphabet"] .term[data-t="WALKING"] { color: var(--amber); } [data-cc-id="series-alphabet"] .term[data-t="REFUSE"] { color: var(--cyan); }
+[data-cc-id="series-alphabet"] .term.lit { color: #0f172a; }
+[data-cc-id="series-alphabet"] .term.lit[data-t="POINT"] { background: var(--blue); } [data-cc-id="series-alphabet"] .term.lit[data-t="LINE"] { background: var(--purple); }
+[data-cc-id="series-alphabet"] .term.lit[data-t="WALKING"] { background: var(--amber); } [data-cc-id="series-alphabet"] .term.lit[data-t="REFUSE"] { background: var(--cyan); }
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0; }
 .card { display: block; background: var(--card); border-radius: 8px; padding: 1.2rem 1.3rem; border: 1px solid transparent; color: var(--text); transition: border-color 0.2s; }
 .card:hover { border-color: var(--line); text-decoration: none; }
@@ -228,6 +234,14 @@ a:hover { text-decoration: underline; }
   var AX = { x: [0, 10], y: [0, 1], xlabel: 'scale  ln b', ylabel: 'flow speed |v|', ticks: 5 };
   var clip = { clip: [-0.01, 1.02] };
   var style = function (o) { var s = { clip: clip.clip }; for (var k in o) s[k] = o[k]; return s; };
+  /* The engine's .cc-ink class sets stroke in CSS, which beats an SVG attribute: set colours inline. */
+  var COL = { POINT: '#3b82f6', LINE: '#a855f7', WALKING: '#f59e0b', REFUSE: '#06b6d4' };
+  var ink = function (e, o) {
+    if (o.stroke) e.style.stroke = o.stroke; if (o.fill) e.style.fill = o.fill;
+    if (o.width != null) e.style.strokeWidth = o.width; if (o.opacity != null) e.style.opacity = o.opacity;
+    if (o.dash) e.style.strokeDasharray = o.dash; return e;
+  };
+  var P = function (g, fn, o) { return ink(g.plot(fn, style(o)), o); };
   var walk = function (m) { var e = Math.sqrt(m); return function (x) { var c = Math.cos(e * (x - 5)); return Math.abs(e * (x - 5)) < 1.5 ? m / (c * c) : NaN; }; };
   CC.trace(document.querySelector('[data-cc-id="series-alphabet"]'), {
     id: 'series-alphabet', height: 250, mode: 'stepper', cumulative: false,
@@ -238,23 +252,23 @@ a:hover { text-decoration: underline; }
     steps: [
       { lit: ['POINT'], caption: 'POINT: tuned exactly, the flow runs into the fixed point and stops (thick line). Tuned a little off, it slows near the point and then leaves along the one relevant direction: the closer the tuning, the later it leaves.',
         draw: function (g) {
-          [0.3, 0.1, 0.03].forEach(function (d) { g.plot(function (x) { return 0.9 * Math.exp(-0.8 * x) + d * Math.exp(0.55 * (x - 5)); }, style({ stroke: '#3b82f6', opacity: 0.55 })); });
-          g.plot(function (x) { return 0.9 * Math.exp(-0.8 * x); }, style({ stroke: '#3b82f6', width: 3 }));
+          [0.3, 0.1, 0.03].forEach(function (d) { P(g, function (x) { return 0.9 * Math.exp(-0.8 * x) + d * Math.exp(0.55 * (x - 5)); }, { stroke: COL.POINT, opacity: 0.55 }); });
+          P(g, function (x) { return 0.9 * Math.exp(-0.8 * x); }, { stroke: COL.POINT, width: 3.5 });
         } },
       { lit: ['LINE'], caption: 'LINE: from many different starting points the flow slows to zero and stays there. Where it stops depends on where it started, because one direction is exactly marginal.',
-        draw: function (g) { [0.95, 0.7, 0.45, 0.25].forEach(function (s) { g.plot(function (x) { return s * Math.exp(-0.7 * x); }, style({ stroke: '#a855f7', width: 2 })); }); } },
+        draw: function (g) { [0.95, 0.7, 0.45, 0.25].forEach(function (s) { P(g, function (x) { return s * Math.exp(-0.7 * x); }, { stroke: COL.LINE, width: s > 0.9 ? 3.5 : 2 }); }); } },
       { lit: ['WALKING'], caption: 'WALKING: the flow slows to a small speed that is not zero (dashed), lingers, and then leaves. A system smaller than the scale at which it leaves looks critical.',
         draw: function (g) {
-          g.plot(walk(0.12), style({ stroke: '#f59e0b', width: 3 }));
-          g.line(g.X(0), g.Y(0.12), g.X(10), g.Y(0.12), { stroke: '#f59e0b', dash: '4 4', opacity: 0.7 });
-          g.text(g.X(9.9), g.Y(0.12) - 5, 'nonzero minimum', { anchor: 'end', size: 11, fill: '#f59e0b' });
+          P(g, walk(0.12), { stroke: COL.WALKING, width: 3.5 });
+          ink(g.line(g.X(0), g.Y(0.12), g.X(10), g.Y(0.12), { stroke: COL.WALKING, dash: '4 4', opacity: 0.7 }), { stroke: COL.WALKING, dash: '4 4', opacity: 0.7, width: 1.5 });
+          ink(g.text(g.X(9.9), g.Y(0.12) - 5, 'nonzero minimum', { anchor: 'end', size: 11 }), { fill: COL.WALKING });
         } },
-      { lit: ['REFUSE'], caption: 'REFUSE: a slow walk (amber) and a stopped line (violet) seen through the same measurement band (shaded). While the band covers zero, the data cannot tell them apart, and the honest verdict is REFUSE.',
+      { lit: ['REFUSE'], caption: 'REFUSE: a slow walk (solid) and a stopped line (dashed) seen through the same measurement band (shaded). While the band covers zero, the data cannot tell them apart, and the honest verdict is REFUSE.',
         draw: function (g) {
           g.rect(g.X(0), g.Y(0.16), g.X(10) - g.X(0), g.Y(0) - g.Y(0.16), { fill: 'rgba(6,182,212,0.16)' });
-          g.plot(walk(0.05), style({ stroke: '#f59e0b', width: 2 }));
-          g.plot(function (x) { return 0.8 * Math.exp(-0.7 * x); }, style({ stroke: '#a855f7', width: 2 }));
-          g.text(g.X(5), g.Y(0.2), '?', { anchor: 'middle', size: 18, fill: '#06b6d4' });
+          P(g, walk(0.05), { stroke: COL.REFUSE, width: 3.5 });
+          P(g, function (x) { return 0.8 * Math.exp(-0.7 * x); }, { stroke: COL.REFUSE, width: 2, dash: '6 4' });
+          ink(g.text(g.X(5), g.Y(0.2), '?', { anchor: 'middle', size: 18 }), { fill: COL.REFUSE });
         } }
     ],
     checks: { atRefuse: function (s) { return s.step === 3; } }
