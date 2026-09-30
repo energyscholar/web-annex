@@ -36,14 +36,14 @@
       tip('declared relations', 'The directed edges between nodes, stated before any data are read; nothing is inferred.') + ' are the directed edges between them.',
     'A ' + tip('NodeField', 'One number per node.') + ' holds one number per node; an ' + tip('EdgeField', 'One number per declared directed edge.') + ' holds one number per declared edge.',
     tip('A', 'A(x)[e] = x[s] − x[t] over each declared edge e = (s, t); the only step from a NodeField to an EdgeField.') + ' is the directed difference over a declared relation; ' +
-      tip('B', 'B(g)[e] = g[e] + the sum of g over the immediate successors of e; terminal edges accumulate nothing.') + ' is the accumulation along it; ' +
-      tip('R', 'R(g)[e] = g[e] + ρ·(sum over successors − sum over predecessors), with ρ = ρ_base·χ/(χ₀ + χ) at the edge’s source node, χ the largest |A| there; ρ_base and χ₀ are declared through M.') + ' is the circulation. A missing declaration is ' +
+      tip('B', 'B(g)[e] = g[e] + the sum of g over the immediate successors of e; for a terminal edge (no successors) B(g)[e] = g[e].') + ' is the accumulation along it; ' +
+      tip('R', 'R(g)[e] = g[e] + ρ·(sum over successors − sum over predecessors), with ρ = ρ_base·χ/(χ₀ + χ) at the edge’s source node, χ the largest |A| there; ρ_base and χ₀ are declared through M.') + ' is the antisymmetric response: successors minus predecessors, weighted by ρ. A missing declaration is ' +
       tip('NOT EVALUATED', 'A value of its own, never 0.') + '.',
     'The ' + tip('five-valued sign', 'A velocity v with band w, read against a declared margin ε, lands in exactly one of five cells.') + ': ' +
       tip('SIG+', 'The whole band lies above +ε: moving up.') + ' · ' +
       tip('SIG−', 'The whole band lies below −ε: moving down.') + ' · ' +
       tip('ZERO!', 'The whole band lies inside ±ε and includes zero: stopped, as far as ε can tell.') + ' · ' +
-      tip('SLOW', 'Resolved nonzero but inside ±ε: slow, not stopped. Where ZERO! and SLOW both could apply, the cell is SLOW.') + ' · ' +
+      tip('SLOW', 'The band excludes zero but does not lie wholly beyond ±ε: resolved, slow, not shown to stop. Where ZERO! and SLOW could both be claimed, the cell is SLOW.') + ' · ' +
       tip('?', 'The data cannot tell.') + ' (taught in <a href="' + T + '#3-drift">Techniques §3</a>; the kernel in <a href="' + T + '#4-kernel">§4</a>).',
     'A ' + tip('breaker', 'A control case built to break the instrument. A good failure is REFUSE; a bad failure is a confident wrong verdict.') +
       ' is a test case chosen to fool the instrument; the main one is ' +
