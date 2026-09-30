@@ -1,0 +1,24 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+  <!-- four flow-speed curves against scale: POINT, LINE, WALKING, REFUSE -->
+  <g fill="none" stroke-width="1.6" stroke-linecap="round">
+    <line x1="12" y1="58" x2="62" y2="58" stroke="#334155" stroke-width="1"/>
+    <path d="M14 18 Q30 57 38 57 Q46 57 60 18" stroke="#3b82f6"/>
+    <circle cx="38" cy="57" r="2.6" fill="#3b82f6" stroke="none"/>
+    <line x1="80" y1="58" x2="130" y2="58" stroke="#334155" stroke-width="1"/>
+    <path d="M82 18 Q92 56 104 57 L128 57" stroke="#a855f7"/>
+    <line x1="104" y1="57" x2="128" y2="57" stroke="#a855f7" stroke-width="3"/>
+    <line x1="148" y1="58" x2="198" y2="58" stroke="#334155" stroke-width="1"/>
+    <path d="M150 18 Q164 46 174 46 Q184 46 196 18" stroke="#f59e0b"/>
+    <line x1="174" y1="47" x2="174" y2="57" stroke="#f59e0b" stroke-width="1" stroke-dasharray="2,2"/>
+    <line x1="216" y1="58" x2="266" y2="58" stroke="#334155" stroke-width="1"/>
+    <path d="M218 18 Q232 48 241 50 Q250 48 264 22" stroke="#64748b"/>
+    <rect x="218" y="40" width="46" height="18" fill="rgba(6,182,212,0.15)" stroke="none"/>
+  </g>
+  <g font-family="system-ui" font-size="8" text-anchor="middle">
+    <text x="38" y="71" fill="#3b82f6">POINT</text>
+    <text x="106" y="71" fill="#a855f7">LINE</text>
+    <text x="174" y="71" fill="#f59e0b">WALKING</text>
+    <text x="241" y="71" fill="#06b6d4">REFUSE</text>
+  </g>
+</svg>
