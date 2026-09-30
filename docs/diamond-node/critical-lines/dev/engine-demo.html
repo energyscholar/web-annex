@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==== PHYSICS EDITORIAL STANDARD - read before editing any claim in this file ====
+  Every physics claim here is held to one standard:
+    precluded     = a specific law or theorem prohibits it.  NAME THE LAW.
+    not precluded = no known law prohibits it. It may be undemonstrated, unlikely, or need many
+                    unverified steps - but physics does not forbid it.
+  "No one has done this" is an engineering status report, NOT a physics argument.
+
+  This is the ENGINE FIXTURE for the critical-lines tutorials: it mounts one of every primitive of
+  docs/js/cc-tutor.js with a six-item demo bank, for the headless smoke test and as the reference
+  for how each primitive looks. It is not a tutorial and is marked noindex. Its traps:
+    E1  The two-line argument is written in the modern convention (E = pi J ln(L/a), bare estimate
+        k_B T = pi J / 2). The 1973 paper prints coefficients that differ by a convention factor.
+    E2  The Monte Carlo toy has periodic boundaries and a seeded PRNG: it is a toy, not an instrument.
+        Nothing on this page reports a number measured with it.
+    E3  The five-valued sign is a DESIGN of the instrument (marked as such), not a physics result.
+==== end physics editorial standard ==== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="description" content="Engine fixture for the critical-lines tutorials: one of every quiz, test, trace, flow and Monte Carlo primitive, with a six-item demo bank.">
+<title>Tutorial Engine Demo</title>
+<link rel="stylesheet" href="../../../css/cc-tutor.css">
+<style>
+:root {
+  --bg: #0f172a; --card: #1e293b; --text: #cbd5e1; --heading: #f1f5f9; --muted: #64748b; --line: #94a3b8; --dim: #334155;
+  --red: #ef4444; --blue: #3b82f6; --green: #22c55e; --amber: #f59e0b; --purple: #a855f7; --cyan: #06b6d4;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 17px; line-height: 1.7; }
+.container { max-width: 900px; margin: 0 auto; padding: 1.5rem 16px 4rem; }
+h1, h2, h3, h4 { font-family: 'Times New Roman', Georgia, serif; color: var(--heading); font-weight: 600; }
+h1 { font-size: 2.2rem; line-height: 1.2; margin: 0.5rem 0; }
+h2 { font-size: 1.6rem; margin: 0 0 0.4rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--dim); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.back { color: var(--muted); font-size: 0.9rem; }
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+.math-block { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); display: block; text-align: center; margin: 1rem 0; font-size: 1.15rem; }
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; color: var(--text); width: max-content; max-width: 300px; z-index: 100; line-height: 1.5; pointer-events: none; }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) { .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; transform: none; max-width: none; width: auto; } }
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); line-height: 0; margin-left: 1px; }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+.design { color: var(--cyan); font-size: 0.85em; }
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back" href="../../">&larr; Domain Convergence Research</a>
+<h1>Tutorial engine demo</h1>
+<p>A fixture page: one of every primitive the critical-lines tutorials share, driven by a six-item
+demo bank. Every accordion starts closed. The vocabulary the pages share: <b>POINT</b> (an isolated
+fixed point), <b>LINE</b> (a continuum of fixed points), <b>WALKING</b> (the flow slows to a nonzero
+minimum, then leaves) and <b>REFUSE</b> (the data cannot tell).</p>
+
+<section id="1-trace" class="cc-sec" data-accent="purple">
+  <h2><span class="num">1</span> An equation trace: the two-line argument</h2>
+  <p class="headline">The energy of one vortex and the entropy of where to put it both grow like ln&nbsp;L, so a pure number decides which wins.</p>
+  <div class="graphic" data-cc-id="demo-trace"></div>
+  <p>Step through the terms, or drag the temperature: the free-energy line pivots through zero at
+  k<sub>B</sub>T = &pi;J/2, the bare estimate in the modern convention.<a href="#fn1" class="fn" id="fnref1">1</a>
+  A <span class="tip" tabindex="0">vortex<span class="tt">A point round which the spin angle winds by a whole turn.</span></span>
+  costs little when it is cheap to place many of them.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The argument is about scale (ln&nbsp;L); scale is what the Detector reads.</p></div>
+  <details class="l2" id="d-1-l2"><summary>Working equations</summary>
+    <span class="math-block">E = &pi;J ln(L/a), &nbsp; S = 2k<sub>B</sub> ln(L/a), &nbsp; F = (&pi;J &minus; 2k<sub>B</sub>T) ln(L/a)</span>
+    <p>The 1973 paper prints the same argument with coefficients that differ by a convention factor.<a href="#fn1" class="fn">1</a></p>
+    <details class="l1" id="d-1-l1"><summary>Full derivation</summary>
+      <p>The spin-wave energy of a single vortex is (J/2)&int;|&nabla;&theta;|&sup2;d&sup2;r with |&nabla;&theta;| = 1/r, which gives
+      &pi;J&int;<sub>a</sub><sup>L</sup> dr/r = &pi;J ln(L/a); the vortex can sit at any of (L/a)&sup2; sites, so S = k<sub>B</sub> ln(L/a)&sup2;.</p>
+    </details>
+  </details>
+  <details class="quiz" id="q-1"><summary>Check yourself (2)</summary><div data-cc-quiz="demo-1-01,demo-1-02"></div></details>
+</section>
+
+<section id="2-flow" class="cc-sec" data-accent="purple">
+  <h2><span class="num">2</span> A flow: the Kosterlitz recursion relations</h2>
+  <p class="headline">Two couplings, one line of fixed points that ends: drag the start point and watch where the flow stops.</p>
+  <div class="graphic" data-cc-id="demo-flow"></div>
+  <p>The field is dy/d&#8467; = &minus;xy, dx/d&#8467; = &minus;y&sup2; with x = &pi;&beta; &minus; 2, and every trajectory
+  keeps E = y&sup2; &minus; x&sup2; fixed (the dashed hyperbola through the start).<a href="#fn3" class="fn" id="fnref3">3</a>
+  On the critical branch x = y the flow approaches the end of the line only as y = 1/(1/y<sub>0</sub> + &#8467;).<a href="#fn3" class="fn">3</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>A flow that stops on a line reads LINE; near the line's end it slows only as 1/&#8467;, and the honest verdict there is REFUSE.</p></div>
+  <details class="l2" id="d-2-l2"><summary>Working equations</summary>
+    <span class="math-block">dy/dt = &minus;xy, &nbsp; dx/dt = &minus;y&sup2;, &nbsp; E = y&sup2; &minus; x&sup2;</span>
+    <p>Those are eqs 22&ndash;24 of Hasenbusch, Marcu &amp; Pinn, with t = ln B the scale.<a href="#fn3" class="fn">3</a></p>
+  </details>
+  <details class="quiz" id="q-2"><summary>Check yourself (2)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="3-toy" class="cc-sec" data-accent="amber">
+  <h2><span class="num">3</span> A live toy: Ising Monte Carlo with block spins</h2>
+  <p class="headline">Heat it, cool it, and compare the lattice with its own coarse-grained copies.</p>
+  <div class="graphic" data-cc-id="demo-toy"></div>
+  <p>Metropolis updates on a periodic 64&times;64 lattice (32&times;32 on a narrow screen), seeded so a
+  run can be repeated. Each smaller panel is a 2&times;2 majority-rule blocking of the one before it,
+  with its nearest-neighbour correlation. It is a toy: nothing on this page reports a number measured with it.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The instrument reads how the block levels differ from one another as you coarse-grain.</p></div>
+</section>
+
+<section id="4-sign" class="cc-sec" data-accent="green">
+  <h2><span class="num">4</span> A total table: the five-valued sign <span class="design">&#9670; design</span></h2>
+  <p class="headline">A velocity v with a band w, read against a declared margin &epsilon;, lands in exactly one of five cells, and &ldquo;?&rdquo; is one of them.</p>
+  <div class="graphic" data-cc-id="demo-sign"></div>
+  <p>Drag v, w and &epsilon;. The cell is looked up in a table with a row for every combination of four
+  yes/no tests; no chain of conditions decides it. The margin &epsilon; plays the role of the declared
+  equivalence bounds of a two-one-sided-tests procedure, which must be fixed before the data are seen.<a href="#fn4" class="fn" id="fnref4">4</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>With &epsilon; = 0 the table collapses to the three-valued sign (SIG+, SIG&minus;, ?); a LINE needs &epsilon; &gt; 0 to read ZERO!.</p></div>
+</section>
+
+<section id="5-tests" class="cc-sec" data-cc-exempt="graphic takeaway">
+  <h2><span class="num">5</span> The tests, the name drill and the scoreboard</h2>
+  <p class="headline">A retakeable final test, a combined test, a name drill, and a scoreboard you can export.</p>
+  <h3>Final test</h3>
+  <div data-cc-final="1" data-cc-id="demo-final"></div>
+  <h3>Combined test</h3>
+  <div data-cc-combined="2" data-cc-pages="demo"></div>
+  <h3>Name drill</h3>
+  <div data-cc-names="demo"></div>
+  <h3>Scoreboard</h3>
+  <div data-cc-scoreboard="demo"></div>
+</section>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn1">Berezinskii, V. L. (1971). <em>Sov. Phys. JETP</em> <strong>32</strong>:493; (1972) <strong>34</strong>:610 (no DOI). Kosterlitz, J. M. &amp; Thouless, D. J. (1973). Ordering, metastability and phase transitions in two-dimensional systems. <em>J. Phys. C</em> <strong>6</strong>:1181. doi:10.1088/0022-3719/6/7/010 &mdash; its printed coefficients differ from the modern convention used here by a convention factor. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Nelson, D. R. &amp; Kosterlitz, J. M. (1977). Universal jump in the superfluid density of two-dimensional superfluids. <em>Phys. Rev. Lett.</em> <strong>39</strong>:1201. doi:10.1103/PhysRevLett.39.1201</li>
+    <li id="fn3">Hasenbusch, M., Marcu, M. &amp; Pinn, K. (1994). High precision renormalization group study of the roughening transition. <em>Physica A</em> <strong>208</strong>:124. doi:10.1016/0378-4371(94)90536-3 (arXiv:hep-lat/9404016), eqs 22&ndash;24 and 60. <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">Lakens, D. (2017). Equivalence tests: a practical primer for t tests, correlations, and meta-analyses. <em>Social Psychological and Personality Science</em> <strong>8</strong>:355. doi:10.1177/1948550617697177 <a href="#fnref4">&uarr;</a></li>
+  </ol>
+</div>
+</div>
+
+<script src="demo-bank.js"></script>
+<script src="../../../js/cc-tutor.js"></script>
+<script>
+(function () {
+  var PI = Math.PI;
+  CC.trace(document.querySelector('[data-cc-id="demo-trace"]'), {
+    id: 'demo-trace', label: 'Energy, entropy and free energy of one vortex against ln(L/a)', height: 260,
+    eq: [{ t: 'F', html: 'F' }, { html: '=' }, { t: 'E', html: '&pi;J ln(L/a)' }, { html: '&minus;' }, { t: 'TS', html: '2k<sub>B</sub>T ln(L/a)' }],
+    vars: { T: { min: 0, max: 2.5, step: 0.01, init: 0.8, label: 'k<sub>B</sub>T/J' } },
+    base: function (g) { g.axis({ x: [0, 5], y: [-6, 16], xlabel: 'ln(L/a)', ylabel: 'units of J' }); g.line(g.X(0), g.Y(0), g.X(5), g.Y(0), { cls: 'cc-axis', dash: '3 3' }); },
+    steps: [
+      { lit: ['E'], caption: 'The energy of one vortex grows like the logarithm of the system size.', draw: function (g) { g.plot(function (x) { return PI * x; }, { stroke: '#a855f7' }); g.text(g.X(4.2), g.Y(PI * 4.2) - 6, 'E', { fill: '#a855f7' }); } },
+      { lit: ['TS'], caption: 'So does temperature times the entropy of where to put it.', draw: function (g, v) { g.plot(function (x) { return 2 * v.T * x; }, { stroke: '#f59e0b' }); g.text(g.X(4.6), g.Y(2 * v.T * 4.6) - 6, 'TS', { fill: '#f59e0b' }); } },
+      { lit: ['F'], caption: function (v) { var c = PI - 2 * v.T; return 'Their difference decides: the coefficient of ln(L/a) is ' + c.toFixed(2) + ' J, so ' + (Math.abs(c) < 0.1 ? 'the sign is about to flip.' : c > 0 ? 'one free vortex costs more the bigger the system.' : 'free vortices lower the free energy and proliferate.'); },
+        draw: function (g, v) { g.plot(function (x) { return (PI - 2 * v.T) * x; }, { stroke: '#06b6d4', width: 3 }); } }
+    ],
+    checks: { atSignFlip: function (s) { return Math.abs(s.vars.T - PI / 2) < 0.05; } }
+  });
+
+  CC.flow(document.querySelector('[data-cc-id="demo-flow"]'), {
+    id: 'demo-flow', label: 'Kosterlitz flow in the (x, y) plane with the fixed line y = 0, x > 0', height: 320,
+    f: function (x, y) { return [-y * y, -x * y]; }, x: [-0.6, 0.6], y: [0, 0.6], start: [0.3, 0.15],
+    dt: 0.05, steps: 1600, grid: 14, animate: true, xlabel: 'x = πβ − 2', ylabel: 'y',
+    inv: function (x, y) { return y * y - x * x; },
+    draw: function (g) {
+      g.line(g.X(0), g.Y(0), g.X(0.6), g.Y(0), { cls: 'cc-fixed' });
+      g.line(g.X(0), g.Y(0), g.X(0.6), g.Y(0.6), { cls: 'cc-axis', dash: '6 4' });
+      g.text(g.X(0.36), g.Y(0.02) - 6, 'fixed line', { size: 11, fill: '#ef4444' });
+      g.text(g.X(0.44), g.Y(0.5), 'x = y', { size: 11 });
+    },
+    readout: function (s) { return 'E = y² − x² = ' + (s.y0 * s.y0 - s.x0 * s.x0).toFixed(4); },
+    checks: {
+      landsOnFixedLine: function (s) { var e = s.traj[s.traj.length - 1]; return !!e && e[1] < 0.02 && e[0] > 0.01; },
+      aboveSeparatrix: function (s) { return s.y0 > Math.abs(s.x0); }
+    }
+  });
+
+  CC.toy.lattice(document.querySelector('[data-cc-id="demo-toy"]'), {
+    id: 'demo-toy', model: 'ising', levels: 4, params: { T: 2.5 }, seed: 7,
+    checks: { hasRun: function (s) { return s.sweeps > 0; } }
+  });
+
+  var cells = CC.sign.cells;
+  CC.trace(document.querySelector('[data-cc-id="demo-sign"]'), {
+    id: 'demo-sign', label: 'A band v plus or minus w on a number line with the margin plus or minus epsilon', height: 150, mode: 'slider', cumulative: false,
+    eq: cells.map(function (c) { return { t: c, html: c }; }),
+    vars: { v: { min: -1, max: 1, step: 0.01, init: 0.05, label: 'v' }, w: { min: 0, max: 0.5, step: 0.01, init: 0.05, label: 'w' }, eps: { min: 0, max: 0.5, step: 0.01, init: 0.2, label: '&epsilon;' } },
+    stepOf: function (v) { return cells.indexOf(CC.sign.classify(v.v, v.w, v.eps)); },
+    steps: cells.map(function (c) {
+      return { lit: [c], caption: function (v) { return 'key ' + CC.sign.key(v.v, v.w, v.eps) + ' → ' + c; },
+        draw: function (g, v) {
+          g.axis({ x: [-1, 1], y: [0, 1], pad: { l: 12, r: 12, t: 8, b: 28 }, ticks: 4 });
+          g.rect(g.X(-v.eps), g.Y(0.9), Math.max(0, g.X(v.eps) - g.X(-v.eps)), g.Y(0.1) - g.Y(0.9), { fill: 'rgba(6,182,212,0.15)' });
+          g.line(g.X(0), g.Y(0), g.X(0), g.Y(1), { cls: 'cc-axis' });
+          g.line(g.X(v.v - v.w), g.Y(0.5), g.X(v.v + v.w), g.Y(0.5), { stroke: '#22c55e', width: 6 });
+          g.dot(g.X(v.v), g.Y(0.5), 5, { fill: '#f1f5f9' });
+          g.text(g.X(0), g.Y(0.95), '±ε', { anchor: 'middle', size: 11 });
+        } };
+    }),
+    checks: { readsZero: function (s) { return CC.sign.classify(s.vars.v, s.vars.w, s.vars.eps) === 'ZERO!'; } }
+  });
+
+  CC.init({ page: 'demo', bank: window.CC_BANKS.demo, accent: '#3b82f6' });
+})();
+</script>
+<script src="../../../js/annex-tracker.js"></script>
+</body>
+</html>
