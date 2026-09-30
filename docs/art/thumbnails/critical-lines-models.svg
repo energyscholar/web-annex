@@ -1,0 +1,21 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+  <!-- a phase diagram: a critical line between two named ends, and a tricritical corner -->
+  <g fill="none" stroke-linecap="round">
+    <line x1="24" y1="66" x2="150" y2="66" stroke="#475569" stroke-width="1"/>
+    <line x1="24" y1="66" x2="24" y2="10" stroke="#475569" stroke-width="1"/>
+    <path d="M36 58 L136 18" stroke="#f59e0b" stroke-width="2.4"/>
+    <circle cx="36" cy="58" r="3.4" fill="#1e293b" stroke="#f59e0b" stroke-width="1.4"/>
+    <circle cx="136" cy="18" r="3.4" fill="#f59e0b"/>
+    <path d="M176 14 Q212 20 232 44" stroke="#f59e0b" stroke-width="2"/>
+    <path d="M232 44 Q244 56 262 64" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,3"/>
+    <circle cx="232" cy="44" r="3.6" fill="#f1f5f9"/>
+    <line x1="170" y1="66" x2="268" y2="66" stroke="#475569" stroke-width="1"/>
+    <line x1="170" y1="66" x2="170" y2="10" stroke="#475569" stroke-width="1"/>
+  </g>
+  <g font-family="system-ui" font-size="8" fill="#94a3b8">
+    <text x="40" y="74">Ising</text>
+    <text x="104" y="12">4-Potts</text>
+    <text x="238" y="40">tricritical</text>
+  </g>
+</svg>

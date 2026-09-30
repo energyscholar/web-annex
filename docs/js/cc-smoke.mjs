@@ -15,6 +15,9 @@
  *   (vi)   zero console errors, warnings and page errors from the page's own scripts
  *   (vii)  every task item's checker returns a boolean for its graphic's current state, without throwing
  *   (viii) final test taken twice: the item sets differ, and best and latest persist across a reload
+ * A series landing (no section quizzes, no final) is checked in its own terms: (ii) and (iii) use the
+ * first name-drill item, and (ii) reads the stored result after the reload (the drill starts a new round);
+ * (viii) takes the combined test instead of a final.
  * Exit code 1 if any check fails.
  */
 import { readdir, readFile } from 'node:fs/promises';
@@ -99,15 +102,17 @@ async function main() {
   const open = async (ctx, { width = 1200, pre = [], media = null } = {}) => {
     const page = await ctx.newPage();
     page.setDefaultTimeout(20000);
-    const log = { errors: [], external: [] };
+    /* Every error counts, the shared annex-tracker's included: a page error from any script fails (iii) and (vi). */
+    const log = { errors: [] };
     page.on('pageerror', (e) => {
       const s = String(e.stack || e.message);
-      (/annex-tracker\.js/.test(s) ? log.external : log.errors).push('pageerror: ' + String(e.message).slice(0, 160));
+      const at = (s.match(/[\w.-]+\.js/) || [''])[0];
+      log.errors.push('pageerror: ' + String(e.message).slice(0, 160) + (at ? ' @' + at : ''));
     });
     page.on('console', (m) => {
       if (m.type() !== 'error' && m.type() !== 'warn' && m.type() !== 'warning') return;
       const loc = (m.location && m.location().url) || '';
-      (/annex-tracker\.js/.test(loc) ? log.external : log.errors).push(m.type() + ': ' + m.text().slice(0, 160) + (loc ? ' @' + loc.split('/').pop() : ''));
+      log.errors.push(m.type() + ': ' + m.text().slice(0, 160) + (loc ? ' @' + loc.split('/').pop() : ''));
     });
     for (const p of pre) await page.evaluateOnNewDocument(p);
     if (media) await page.emulateMediaFeatures(media);
@@ -121,7 +126,7 @@ async function main() {
     /* ---------- (i), (ii), (vi), (vii), (viii) in one clean context */
     const ctx1 = await newCtx();
     let { page, log } = await open(ctx1, { pre: [COUNT_RAF] });
-    const hasCC = await page.evaluate(() => !!(window.CC && window.CC.page));
+    const hasCC = await page.evaluate(() => !!(window.CC && (window.CC.page || window.CC._inited)));
     if (!hasCC) throw new Error('window.CC is missing or CC.init was not called');
 
     const r1 = await page.evaluate(() => {
@@ -149,24 +154,26 @@ async function main() {
 
     /* (ii) answer the first section-quiz item correctly, reload, still marked */
     const ANSWER = `(() => {
-      const el = document.querySelector('[data-cc-quiz] .cc-item');
-      if (!el) return { err: 'no section-quiz item on the page' };
+      let where = 'quiz', el = document.querySelector('[data-cc-quiz] .cc-item');
+      if (!el) { where = 'names'; el = document.querySelector('[data-cc-names] .cc-item'); }
+      if (!el) return { err: 'no section-quiz or name-drill item on the page' };
       const id = el.getAttribute('data-cc-item');
-      let it = null;
-      for (const p in CC.banks) { it = CC.banks[p].items.find((x) => x.id === id) || it; }
+      let it = null, pg = null;
+      for (const p in CC.banks) { const f = CC.banks[p].items.find((x) => x.id === id); if (f) { it = f; pg = p; } }
       if (it.type === 'mc') el.querySelector('input[value="' + it.answer + '"]').checked = true;
       else if (it.type === 'match') el.querySelectorAll('select').forEach((s, i) => { s.value = it.answer[i][1]; });
       el.querySelector('[data-cc-act="check"]').click();
-      return { id, type: it.type, status: el.getAttribute('data-cc-status') };
+      return { id, page: pg, where, type: it.type, status: el.getAttribute('data-cc-status') };
     })()`;
     const a1 = await page.evaluate(ANSWER);
     await page.reload({ waitUntil: 'load' }); await sleep(400);
-    const a2 = a1.err ? {} : await page.evaluate((id) => {
-      const el = document.querySelector('[data-cc-quiz] [data-cc-item="' + id + '"]');
+    const a2 = a1.err ? {} : await page.evaluate((a) => {
+      if (a.where === 'names') { const n = ((CC.store.state.pages[a.page] || {}).names || {})[a.id]; return { status: n ? (n.ok ? 'ok' : 'wrong') : null }; }
+      const el = document.querySelector('[data-cc-quiz] [data-cc-item="' + a.id + '"]');
       return { status: el && el.getAttribute('data-cc-status') };
-    }, a1.id);
+    }, a1);
     record('ii', !a1.err && a1.status === 'ok' && a2.status === 'ok',
-      a1.err || `item ${a1.id} (${a1.type}) marked '${a1.status}' after Check, '${a2.status}' after reload`);
+      a1.err || `${a1.where === 'names' ? 'name-drill ' : ''}item ${a1.id} (${a1.type}) marked '${a1.status}' after Check, '${a2.status}' after reload`);
 
     /* (vii) every task item's checker returns a boolean */
     const r7 = await page.evaluate(() => {
@@ -185,8 +192,9 @@ async function main() {
 
     /* (viii) the final test, twice */
     const TAKE = `(async () => {
-      const f = document.querySelector('.cc-final[data-cc-final], [data-cc-final]');
-      if (!f) return { err: 'no final test on the page' };
+      let kind = 'final', f = document.querySelector('[data-cc-final]');
+      if (!f) { kind = 'combined'; f = document.querySelector('[data-cc-combined]'); }
+      if (!f) return { err: 'no final or combined test on the page' };
       const act = (a) => { const b = f.querySelector('[data-cc-act="' + a + '"]'); if (!b) throw new Error('no ' + a + ' button'); b.click(); };
       act('start');
       const s1 = [...f.querySelectorAll('.cc-item')].map((e) => e.getAttribute('data-cc-item'));
@@ -195,23 +203,23 @@ async function main() {
       act('retake');
       const s2 = [...f.querySelectorAll('.cc-item')].map((e) => e.getAttribute('data-cc-item'));
       act('submit');
-      return { s1, s2, state: f.getAttribute('data-cc-state') };
+      return { kind, s1, s2, state: f.getAttribute('data-cc-state') };
     })()`;
     const t = await page.evaluate(TAKE);
     let r8 = {};
     if (!t.err) {
       await page.reload({ waitUntil: 'load' }); await sleep(400);
-      r8 = await page.evaluate(() => { const f = CC.store.get(CC.page).final || {}; return { best: f.best, latest: f.latest, attempts: f.attempts, avail: CC.store.available }; });
+      r8 = await page.evaluate((kind) => { const f = (kind === 'combined' ? CC.store.state.combined : CC.store.get(CC.page).final) || {}; return { best: f.best, latest: f.latest, attempts: f.attempts, avail: CC.store.available }; }, t.kind);
     }
     const differ = !t.err && t.s1.slice().sort().join() !== t.s2.slice().sort().join();
     record('viii', !t.err && differ && t.s1.length > 0 && !!r8.best && !!r8.latest && r8.attempts >= 2,
-      t.err || `attempt 1 [${t.s1.join(', ')}] vs attempt 2 [${t.s2.join(', ')}] ${differ ? 'differ' : 'IDENTICAL'}; after reload best ${r8.best ? r8.best.score + '/' + r8.best.n : 'missing'}, latest ${r8.latest ? r8.latest.score + '/' + r8.latest.n : 'missing'}, attempts ${r8.attempts}`);
+      t.err || `${t.kind === 'combined' ? 'combined test: ' : ''}attempt 1 [${t.s1.join(', ')}] vs attempt 2 [${t.s2.join(', ')}] ${differ ? 'differ' : 'IDENTICAL'}; after reload best ${r8.best ? r8.best.score + '/' + r8.best.n : 'missing'}, latest ${r8.latest ? r8.latest.score + '/' + r8.latest.n : 'missing'}, attempts ${r8.attempts}`);
 
     const rafControl = await page.evaluate(() => window.__raf);
     await page.close();
 
     /* (vi) console hygiene over everything ctx1 did */
-    record('vi', !log.errors.length, log.errors.length ? log.errors.slice(0, 6).join(' | ') : `0 errors, 0 warnings${log.external.length ? ' (external annex-tracker: ' + log.external.length + ')' : ''}`);
+    record('vi', !log.errors.length, log.errors.length ? log.errors.slice(0, 6).join(' | ') : '0 errors, 0 warnings');
     await ctx1.close();
 
     /* ---------- (iii) both storages blocked */
@@ -225,7 +233,7 @@ async function main() {
     });
     record('iii', !b1.err && b1.status === 'ok' && b2.avail === false && b2.visible > 0 && !log.errors.length,
       (b1.err || `item ${b1.id} graded '${b1.status}' with storage blocked`) + `; CC.store.available=${b2.avail}; "not saved" notices ${b2.notices} (${b2.visible} visible with accordions closed)` +
-      (log.errors.length ? '; errors: ' + log.errors.slice(0, 3).join(' | ') : '') + (log.external.length ? `; external annex-tracker errors: ${log.external.length}` : ''));
+      (log.errors.length ? '; errors: ' + log.errors.slice(0, 3).join(' | ') : ''));
     await ctx2.close();
 
     /* ---------- (iv) 360 px */

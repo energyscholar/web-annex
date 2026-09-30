@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==== PHYSICS EDITORIAL STANDARD - read before editing any claim in this file ====
+  Every physics claim here is held to one standard:
+    precluded     = a specific law or theorem prohibits it.  NAME THE LAW.
+    not precluded = no known law prohibits it. It may be undemonstrated, unlikely, or need many
+                    unverified steps - but physics does not forbid it.
+  "No one has done this" is an engineering status report, NOT a physics argument.
+
+  This is the LANDING of the critical-lines series: three tutorial pages, a scoreboard, a combined
+  test drawn from the three pages' banks, and a name drill. It carries almost no physics of its own.
+  Its traps:
+    L1  POINT / LINE / WALKING / REFUSE is the DESIGN vocabulary of an instrument (marked as design),
+        not a classification theorem. REFUSE is a verdict, not a failure to answer.
+    L2  The flow-speed curves in the alphabet figure are schematic shapes, not data and not fits.
+        No number on this page was measured by us.
+    L3  WALKING is not "almost a LINE": the walking Potts transition is first order (Gorbenko,
+        Rychkov and Zan). Finite systems smaller than the correlation length imitate criticality.
+    L4  The combined test's answer keys live in the three pages' banks and are checked there; this
+        page adds no item of its own.
+==== end physics editorial standard ==== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A tutorial series on critical lines and multicritical points: Kosterlitz-Thouless, eight models (Ashkin-Teller, XXZ, Blume-Capel, walking Potts...) and the techniques that tell a critical point from a critical line. Quizzes, a combined test, a name drill and an exportable scoreboard.">
+<title>Critical Lines and Multicritical Points</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Critical Lines and Multicritical Points">
+<meta property="og:description" content="Three interactive tutorials: Kosterlitz-Thouless, the models, and the techniques. Point, line, walking, or refuse: follow the flow.">
+<meta property="og:url" content="https://energyscholar.github.io/web-annex/diamond-node/critical-lines/">
+<meta property="og:image" content="https://energyscholar.github.io/web-annex/art/og/critical-lines.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://energyscholar.github.io/web-annex/art/og/critical-lines.png">
+<link rel="stylesheet" href="../../css/cc-tutor.css">
+<style>
+:root {
+  --bg: #0f172a; --card: #1e293b; --text: #cbd5e1; --heading: #f1f5f9; --muted: #64748b; --line: #94a3b8; --dim: #334155;
+  --red: #ef4444; --blue: #3b82f6; --green: #22c55e; --amber: #f59e0b; --purple: #a855f7; --cyan: #06b6d4;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 17px; line-height: 1.7; }
+.container { max-width: 960px; margin: 0 auto; padding: 1.5rem 16px 4rem; }
+h1, h2, h3, h4 { font-family: Georgia, 'Times New Roman', serif; color: var(--heading); font-weight: 600; }
+h1 { font-size: 2.2rem; line-height: 1.2; margin: 0.6rem 0 0.3rem; }
+h2 { font-size: 1.55rem; margin: 2.4rem 0 0.4rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--dim); }
+section.cc-sec h2 { margin-top: 0; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.back { color: var(--muted); font-size: 0.9rem; }
+.subtitle { color: var(--line); font-size: 1.1rem; margin: 0 0 1.2rem; }
+.series-nav { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: 0.9rem; margin: 0.4rem 0 1rem; }
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: normal; color: var(--text); width: max-content; max-width: 300px; z-index: 100; line-height: 1.5; pointer-events: none; }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) { .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; transform: none; max-width: none; width: auto; } }
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); line-height: 0; margin-left: 1px; }
+.footnotes { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; overflow-wrap: anywhere; }
+.design { color: var(--cyan); font-size: 0.85em; font-weight: normal; }
+.alphabet { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.6rem; margin: 1rem 0; padding: 0; list-style: none; }
+.alphabet li { background: var(--card); border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.92rem; line-height: 1.5; border-left: 3px solid var(--dim); }
+.alphabet b { display: block; color: var(--heading); letter-spacing: 0.04em; }
+.alphabet .a-point { border-left-color: var(--blue); } .alphabet .a-line { border-left-color: var(--purple); }
+.alphabet .a-walk { border-left-color: var(--amber); } .alphabet .a-refuse { border-left-color: var(--cyan); }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.card { display: block; background: var(--card); border-radius: 8px; padding: 1.2rem 1.3rem; border: 1px solid transparent; color: var(--text); transition: border-color 0.2s; }
+.card:hover { border-color: var(--line); text-decoration: none; }
+.card-thumb { margin-bottom: 0.8rem; border-radius: 4px; overflow: hidden; }
+.card-thumb img { width: 100%; height: auto; display: block; }
+.card-number { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.card-title { font-family: Georgia, serif; font-size: 1.2rem; color: var(--heading); margin: 0.2rem 0 0.4rem; }
+.card-desc { font-size: 0.92rem; line-height: 1.55; }
+.card-meta { font-size: 0.8rem; color: var(--muted); margin-top: 0.6rem; }
+.card-kt .card-number { color: var(--purple); } .card-models .card-number { color: var(--amber); } .card-tech .card-number { color: var(--green); }
+.bank-status { font-size: 0.8rem; margin-top: 0.4rem; color: var(--line); }
+.bank-status.missing { color: var(--amber); }
+.panel { margin: 0.8rem 0; overflow-x: auto; }
+.panel-note { font-size: 0.85rem; color: var(--line); }
+@media (max-width: 480px) { h1 { font-size: 1.7rem; } h2 { font-size: 1.3rem; } }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back" href="../">&larr; Domain Convergence Research</a>
+<h1>Critical Lines and Multicritical Points</h1>
+<p class="subtitle">A three-part tutorial series: how a system can be critical at one point, along a whole line, or only nearly &mdash; and how an instrument that follows the renormalisation-group flow tells these apart.</p>
+<nav class="series-nav" aria-label="Series navigation">
+  <span>Series landing</span>
+  <a href="../../kosterlitz-thouless/">Next: Kosterlitz&ndash;Thouless &rarr;</a>
+</nav>
+
+<section id="0-alphabet" class="cc-sec">
+  <h2><span class="num">0</span> Follow the flow: four verdicts <span class="design">&#9670; design</span></h2>
+  <p class="headline">Watch how fast the renormalisation-group flow moves as you change scale: it stops at one place, stops wherever it lands, slows and then leaves, or the data cannot tell.</p>
+  <div class="graphic" data-cc-id="series-alphabet"></div>
+  <p>The series is written for someone building the <b>Criticality Compass</b>: a
+  <span class="tip" tabindex="0">Detector<span class="tt">The component that reads observations of a system and returns one verdict about its critical geometry: POINT, LINE, WALKING or REFUSE.</span></span>
+  that classifies a system's critical geometry from its observations, and a
+  <span class="tip" tabindex="0">Navigator<span class="tt">The component that finds a critical line and moves along it, keeping the system critical while its control parameters change.</span></span>
+  that finds a critical line and moves along it. All three pages share one vocabulary:</p>
+  <ul class="alphabet">
+    <li class="a-point"><b>POINT</b>An isolated fixed point: the flow stops at one place and has one way out. The 2D Ising critical point is the reference.<a href="#fn2" class="fn" id="fnref2">2</a></li>
+    <li class="a-line"><b>LINE</b>A continuum of fixed points, with an exactly <span class="tip" tabindex="0">marginal<span class="tt">A direction in coupling space along which the flow neither grows nor shrinks: moving along it changes the fixed point, not the distance from criticality.</span></span> direction: the flow stops wherever it lands. The low-temperature phase of the 2D XY model<a href="#fn1" class="fn" id="fnref1">1</a> and the self-dual line of the Ashkin&ndash;Teller model,<a href="#fn2" class="fn">2</a> whose exponents vary continuously along it.</li>
+    <li class="a-walk"><b>WALKING</b>The flow slows to a small nonzero minimum, never stops, then leaves. The 2D Potts model with q = 5 is first order, but its correlation length is about 2500 lattice spacings, so every smaller system looks critical.<a href="#fn3" class="fn" id="fnref3">3</a></li>
+    <li class="a-refuse"><b>REFUSE</b>The honest verdict when the data cannot tell &mdash; a value the instrument returns, not an error. It is the default cell.</li>
+  </ul>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>What the Detector measures is how the flow moves as the scale and the control parameters change: how fast it goes, how much it builds up, and whether it circulates. Each page ends every section with a box like this one, saying what that section means for the Detector or the Navigator.</p></div>
+  <details class="l2" id="d-0-l2"><summary>Working equations</summary>
+    <p>For a POINT, the flow near the fixed point is linear, with one relevant eigenvalue: tune the
+    control exactly and the flow speed goes to zero; tune it slightly off and the flow leaves. For a
+    LINE, one eigenvalue is exactly marginal (<span class="math">y</span> = 0), so the flow stops on the
+    line from a whole region of starting points. In the 2D XY model this is the Kosterlitz flow
+    dy/dt = &minus;xy, dx/dt = &minus;y&sup2;, which stops on the line y = 0, x &gt; 0, and whose
+    invariant y&sup2; &minus; x&sup2; sorts the trajectories.<a href="#fn1" class="fn">1</a> For WALKING,
+    the fixed points have moved off the real axis, and the flow passes close to them without
+    stopping.<a href="#fn3" class="fn">3</a> The pages derive each of these in full.</p>
+    <details class="l1" id="d-0-l1"><summary>Full derivation</summary>
+      <p>The derivations live on the tutorial pages themselves: the Kosterlitz flow on the
+      Kosterlitz&ndash;Thouless page, the Ashkin&ndash;Teller line and the walking Potts transition on
+      the models page, and the linearised flow matrix with its eigenvalues on the techniques page.</p>
+    </details>
+  </details>
+</section>
+
+<h2 id="pages">The three pages</h2>
+<div class="card-grid">
+  <a class="card card-kt" href="../../kosterlitz-thouless/" data-cc-page="kt">
+    <div class="card-thumb"><img src="../../art/thumbnails/kosterlitz-thouless.svg" alt="" loading="lazy"></div>
+    <div class="card-number">Part 1 &middot; the breaker</div>
+    <div class="card-title">Kosterlitz&ndash;Thouless</div>
+    <div class="card-desc">A LINE of fixed points that ends treacherously. Mermin&ndash;Wagner, vortices and the two-line argument, the Kosterlitz flow, the universal jump, the log-slow finite-size approach, and why a topological transition is not a topologically ordered phase.</div>
+    <div class="bank-status" data-cc-bank-status="kt"></div>
+  </a>
+  <a class="card card-models" href="models/" data-cc-page="models">
+    <div class="card-thumb"><img src="../../art/thumbnails/critical-lines-models.svg" alt="" loading="lazy"></div>
+    <div class="card-number">Part 2 &middot; the models</div>
+    <div class="card-title">The Models</div>
+    <div class="card-desc">Eight systems placed on the alphabet: Ashkin&ndash;Teller, Baxter's eight-vertex model, bilinearly coupled Ising layers, bicritical and tetracritical points, Blume&ndash;Capel, walking Potts, XXZ and the six-vertex model, and a self-organising adaptive network.</div>
+    <div class="bank-status" data-cc-bank-status="models"></div>
+  </a>
+  <a class="card card-tech" href="techniques/" data-cc-page="techniques">
+    <div class="card-thumb"><img src="../../art/thumbnails/critical-lines-techniques.svg" alt="" loading="lazy"></div>
+    <div class="card-number">Part 3 &middot; the instrument</div>
+    <div class="card-title">The Techniques</div>
+    <div class="card-desc">How an instrument sees a line: the linearised flow matrix, Monte Carlo renormalisation, drifting exponents and the five-valued sign, the relational-kernel lens, exact routes, and a cheat-sheet of how each technique sees each verdict.</div>
+    <div class="bank-status" data-cc-bank-status="techniques"></div>
+  </a>
+</div>
+<p class="panel-note">Every page works the same way: each section shows a headline, one graphic and a takeaway with everything folded; the working equations and the full derivations are folded underneath; every section ends with a short quiz, and every page with a retakeable final test.</p>
+
+<h2 id="scoreboard">Scoreboard</h2>
+<p>Your results on the three pages, kept in this browser. Export copies a short plain-text summary you can paste into a conversation.</p>
+<div class="panel"><div data-cc-scoreboard="kt,models,techniques"></div></div>
+
+<h2 id="combined">The combined test</h2>
+<p>Thirty items drawn from all three pages at once &mdash; names, concepts and equations (the interactive tasks stay on their pages). Each attempt draws a different set, and the best and latest scores are kept.</p>
+<div class="panel"><div id="combined-slot" data-cc-combined="30" data-cc-pages="kt,models,techniques"></div></div>
+
+<h2 id="names">The name roll</h2>
+<p>The people, models, methods and results of the whole series, one at a time. A name you miss comes back in the export's &ldquo;names missed&rdquo; list.</p>
+<div class="panel"><div data-cc-names="kt,models,techniques"></div></div>
+
+<details class="l2" id="d-storage"><summary>How your scores are kept</summary>
+  <p>Scores live in this browser only: in <code>localStorage</code>, with a small cookie copy
+  (best and latest scores and which sections are mastered, under 4&nbsp;KB) that can restore the
+  summary if the main copy is cleared. Nothing is sent anywhere. If your browser blocks site data, the
+  quizzes and tests still grade, and every panel says that the scores are not being saved.
+  <b>Reset all scores</b> in the scoreboard erases both copies.</p>
+</details>
+
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn1">Hasenbusch, M., Marcu, M. &amp; Pinn, K. (1994). High precision renormalization group study of the roughening transition. <em>Physica A</em> <strong>208</strong>:124. doi:10.1016/0378-4371(94)90536-3 (arXiv:hep-lat/9404016) &mdash; the Kosterlitz flow and its invariant, eqs 22&ndash;24. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Wiseman, S. &amp; Domany, E. (1993). Cluster method for the Ashkin&ndash;Teller model. <em>Phys. Rev. E</em> <strong>48</strong>:4080. doi:10.1103/PhysRevE.48.4080 &mdash; the self-dual critical line from the Ising point to the four-state Potts point, with continuously varying exponents. <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Gorbenko, V., Rychkov, S. &amp; Zan, B. (2018). Walking, weak first-order transitions, and complex CFTs. <em>JHEP</em> <strong>2018</strong>(10):108. doi:10.1007/JHEP10(2018)108 (arXiv:1807.11512) &mdash; the q &gt; 4 Potts transition is weakly first order; the correlation length at q = 5 is 2512.2 lattice spacings. <a href="#fnref3">&uarr;</a></li>
+  </ol>
+</div>
+<nav class="series-nav" aria-label="Series navigation">
+  <a href="../">&larr; Domain Convergence Research</a>
+  <a href="../../kosterlitz-thouless/">Next: Kosterlitz&ndash;Thouless &rarr;</a>
+</nav>
+</div>
+
+<script src="../../kosterlitz-thouless/bank.js"></script>
+<script src="models/bank.js"></script>
+<script src="techniques/bank.js"></script>
+<script src="../../js/cc-tutor.js"></script>
+<script>
+(function () {
+  var PAGES = ['kt', 'models', 'techniques'];
+  var TITLES = { kt: 'Kosterlitz–Thouless', models: 'The Models', techniques: 'The Techniques' };
+  var B = window.CC_BANKS = window.CC_BANKS || {};
+  var present = PAGES.filter(function (p) { return B[p] && Array.isArray(B[p].items); });
+  var missing = PAGES.filter(function (p) { return present.indexOf(p) < 0; });
+  present.forEach(function (p) { if (!B[p].title) B[p].title = TITLES[p]; });
+
+  /* Each card says whether its page's bank loaded. */
+  PAGES.forEach(function (p) {
+    var el = document.querySelector('[data-cc-bank-status="' + p + '"]');
+    if (!el) return;
+    if (present.indexOf(p) >= 0) {
+      var items = B[p].items, names = items.filter(function (it) { return it.tier === 'name'; }).length;
+      el.textContent = 'Quiz bank: ' + items.length + ' items, ' + names + ' of them names.';
+    } else {
+      el.textContent = 'Its quiz bank did not load, so it is left out of the tests below.';
+      el.classList.add('missing');
+    }
+  });
+
+  /* The combined test is defined over all three banks: with one missing it is not the same test,
+     so it is not offered (the pages' own finals still work) and its stored record keeps one meaning. */
+  var slot = document.getElementById('combined-slot');
+  if (missing.length && slot) {
+    slot.removeAttribute('data-cc-combined');
+    slot.textContent = 'The combined test needs the quiz banks of all three pages; not loaded: ' +
+      missing.map(function (p) { return TITLES[p]; }).join(', ') + '. Take the final test on each page instead.';
+    slot.className = 'cc-unsaved';
+  }
+
+  /* The alphabet figure: schematic flow speed |v| against the log of the scale, one verdict per step. */
+  var AX = { x: [0, 10], y: [0, 1], xlabel: 'scale  ln b', ylabel: 'flow speed |v|', ticks: 5 };
+  var clip = { clip: [-0.01, 1.02] };
+  var style = function (o) { var s = { clip: clip.clip }; for (var k in o) s[k] = o[k]; return s; };
+  var walk = function (m) { var e = Math.sqrt(m); return function (x) { var c = Math.cos(e * (x - 5)); return Math.abs(e * (x - 5)) < 1.5 ? m / (c * c) : NaN; }; };
+  CC.trace(document.querySelector('[data-cc-id="series-alphabet"]'), {
+    id: 'series-alphabet', height: 250, mode: 'stepper', cumulative: false,
+    label: 'Schematic flow speed against scale for the four verdicts POINT, LINE, WALKING and REFUSE',
+    eq: [{ t: 'POINT', html: 'POINT' }, { html: '&middot;' }, { t: 'LINE', html: 'LINE' }, { html: '&middot;' },
+         { t: 'WALKING', html: 'WALKING' }, { html: '&middot;' }, { t: 'REFUSE', html: 'REFUSE' }],
+    base: function (g) { g.axis(AX); },
+    steps: [
+      { lit: ['POINT'], caption: 'POINT: tuned exactly, the flow runs into the fixed point and stops (thick line). Tuned a little off, it slows near the point and then leaves along the one relevant direction: the closer the tuning, the later it leaves.',
+        draw: function (g) {
+          [0.3, 0.1, 0.03].forEach(function (d) { g.plot(function (x) { return 0.9 * Math.exp(-0.8 * x) + d * Math.exp(0.55 * (x - 5)); }, style({ stroke: '#3b82f6', opacity: 0.55 })); });
+          g.plot(function (x) { return 0.9 * Math.exp(-0.8 * x); }, style({ stroke: '#3b82f6', width: 3 }));
+        } },
+      { lit: ['LINE'], caption: 'LINE: from many different starting points the flow slows to zero and stays there. Where it stops depends on where it started, because one direction is exactly marginal.',
+        draw: function (g) { [0.95, 0.7, 0.45, 0.25].forEach(function (s) { g.plot(function (x) { return s * Math.exp(-0.7 * x); }, style({ stroke: '#a855f7', width: 2 })); }); } },
+      { lit: ['WALKING'], caption: 'WALKING: the flow slows to a small speed that is not zero (dashed), lingers, and then leaves. A system smaller than the scale at which it leaves looks critical.',
+        draw: function (g) {
+          g.plot(walk(0.12), style({ stroke: '#f59e0b', width: 3 }));
+          g.line(g.X(0), g.Y(0.12), g.X(10), g.Y(0.12), { stroke: '#f59e0b', dash: '4 4', opacity: 0.7 });
+          g.text(g.X(9.9), g.Y(0.12) - 5, 'nonzero minimum', { anchor: 'end', size: 11, fill: '#f59e0b' });
+        } },
+      { lit: ['REFUSE'], caption: 'REFUSE: a slow walk (amber) and a stopped line (violet) seen through the same measurement band (shaded). While the band covers zero, the data cannot tell them apart, and the honest verdict is REFUSE.',
+        draw: function (g) {
+          g.rect(g.X(0), g.Y(0.16), g.X(10) - g.X(0), g.Y(0) - g.Y(0.16), { fill: 'rgba(6,182,212,0.16)' });
+          g.plot(walk(0.05), style({ stroke: '#f59e0b', width: 2 }));
+          g.plot(function (x) { return 0.8 * Math.exp(-0.7 * x); }, style({ stroke: '#a855f7', width: 2 }));
+          g.text(g.X(5), g.Y(0.2), '?', { anchor: 'middle', size: 18, fill: '#06b6d4' });
+        } }
+    ],
+    checks: { atRefuse: function (s) { return s.step === 3; } }
+  });
+
+  CC.init({ bank: null, accordion: false });
+})();
+</script>
+<script src="../../js/annex-tracker.js"></script>
+</body>
+</html>

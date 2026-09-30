@@ -1,0 +1,23 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+  <!-- block spins: L, L/2, L/4, L/8, each a coarse-grained copy of the one before -->
+  <g stroke="#22c55e" stroke-width="1" fill="none">
+    <rect x="16" y="12" width="56" height="56"/>
+    <path d="M16 26H72M16 40H72M16 54H72M30 12V68M44 12V68M58 12V68" stroke-opacity="0.35"/>
+    <rect x="96" y="20" width="40" height="40"/>
+    <path d="M96 40H136M116 20V60" stroke-opacity="0.35"/>
+    <rect x="160" y="26" width="28" height="28"/>
+    <rect x="212" y="32" width="16" height="16"/>
+  </g>
+  <g fill="#22c55e">
+    <rect x="17" y="13" width="12" height="12"/><rect x="45" y="27" width="12" height="12"/><rect x="31" y="41" width="12" height="12"/><rect x="59" y="55" width="12" height="12"/><rect x="17" y="55" width="12" height="12"/><rect x="59" y="13" width="12" height="12"/>
+    <rect x="97" y="21" width="18" height="18"/><rect x="117" y="41" width="18" height="18"/>
+    <rect x="161" y="27" width="13" height="13"/>
+  </g>
+  <g stroke="#94a3b8" stroke-width="1.2" fill="#94a3b8">
+    <line x1="78" y1="40" x2="88" y2="40"/><polygon points="92,40 86,37 86,43" stroke="none"/>
+    <line x1="142" y1="40" x2="152" y2="40"/><polygon points="156,40 150,37 150,43" stroke="none"/>
+    <line x1="194" y1="40" x2="204" y2="40"/><polygon points="208,40 202,37 202,43" stroke="none"/>
+  </g>
+  <text x="252" y="44" font-family="Georgia" font-style="italic" font-size="11" fill="#22c55e" text-anchor="middle">b&#696;</text>
+</svg>
