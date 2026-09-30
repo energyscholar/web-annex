@@ -7,14 +7,14 @@ window.CC_BANKS.techniques = {
   sections: ['0-flow', '1-matrix', '2-mcrg', '3-drift', '4-kernel', '5-exact', '6-table', '7-cheat'],
   items: [
     /* ---------------------------------------------------------------- 0 follow the flow */
-    { id: 'techniques-0-01', section: '0-flow', tier: 'task', type: 'task',
-      prompt: 'In the flow graphic, choose the geometry whose per-level velocity falls to a small nonzero minimum and then rises again. Press Check.',
-      graphic: 't-follow', check: 'modeWalking',
-      explain: 'WALKING: dx/d&#8467; = &minus;(0.02 + x&sup2;) never falls below 0.02, so the flow slows but never stops, then leaves.', cite: 'fn-design' },
     { id: 'techniques-0-02', section: '0-flow', tier: 'concept', type: 'mc',
       prompt: 'On a LINE of fixed points, what does the RG flow do?',
       options: ['It stops wherever it lands on the line', 'It stops at one isolated point only', 'It slows to a nonzero minimum and leaves', 'It circulates for ever round the line'], answer: 0,
       explain: 'Every point of the line is fixed, so the velocity along it is zero; where the flow stops depends on where it started.', cite: 'fn-design' },
+    { id: 'techniques-0-01', section: '0-flow', tier: 'task', type: 'task',
+      prompt: 'In the flow graphic, choose the geometry whose per-level velocity falls to a small nonzero minimum and then rises again. Press Check.',
+      graphic: 't-follow', check: 'modeWalking',
+      explain: 'WALKING: dx/d&#8467; = &minus;(0.02 + x&sup2;) never falls below 0.02, so the flow slows but never stops, then leaves.', cite: 'fn-design' },
     { id: 'techniques-0-03', section: '0-flow', tier: 'concept', type: 'mc',
       prompt: 'Which statement is one of the two binding constraints on the instrument?',
       options: ['It may use the Hamiltonian if the class is known', 'Anything needing the Hamiltonian or the true class belongs on the scoring side, never as an instrument input', 'It must reach system sizes of order &xi; before giving a verdict', 'It must never return REFUSE'], answer: 1,
@@ -201,6 +201,14 @@ window.CC_BANKS.techniques = {
       prompt: 'Why does the finite-size doubling chain fail the design bound?',
       options: ['Each doubling multiplies the cost by about 2<sup>d+z</sup>, and LINE vs WALKING needs L near &xi; (2512 for q = 5)', 'It needs the Hamiltonian', 'It cannot use the Binder ratio', 'It only works for POINT'], answer: 0,
       explain: 'Cost ~L<sup>d+z</sup> per doubling: exponential in the number of doublings.', cite: 'fn-grz1' },
+    { id: 'techniques-3-16', section: '3-drift', tier: 'name', type: 'mc', label: 'Kawashima',
+      prompt: 'Which co-author of the 2019 &ldquo;deceptive collapse&rdquo; paper on weakly first-order Potts transitions, with Iino, Morita and Sandvik, is it?',
+      options: ['Kawashima', 'Kosterlitz', 'Kadanoff', 'Kenna'], answer: 0,
+      explain: 'N. Kawashima; J. Phys. Soc. Jpn. 88, 034006.', cite: 'fn-iin19' },
+    { id: 'techniques-3-17', section: '3-drift', tier: 'name', type: 'mc', label: 'Rychkov',
+      prompt: 'Who is the middle author of &ldquo;Walking, weak first-order transitions, and complex CFTs&rdquo; (Gorbenko, ___, Zan)?',
+      options: ['Rychkov', 'Ringel', 'Reppy', 'Ron'], answer: 0,
+      explain: 'S. Rychkov; JHEP 2018(10):108 and SciPost Phys. 5, 050.', cite: 'fn-grz1' },
 
     /* ---------------------------------------------------------------- 4 the kernel lens */
     { id: 'techniques-4-01', section: '4-kernel', tier: 'task', type: 'task',
@@ -333,7 +341,7 @@ window.CC_BANKS.techniques = {
       explain: 'Instrument-side methods take observations (snapshots, time series); the rest need the Hamiltonian.', cite: 'fn-tex' },
     { id: 'techniques-6-02', section: '6-table', tier: 'concept', type: 'match',
       prompt: 'Match each technique to its side of the firewall.',
-      answer: [['Monte Carlo RG on snapshots', 'instrument'], ['Transfer matrix / CFT spectrum', 'scoring'], ['Time-series early warning', 'instrument'], ['High-temperature series and Padé', 'scoring']],
+      answer: [['Monte Carlo RG on snapshots', 'instrument side: spatial snapshots'], ['Transfer matrix / CFT spectrum', 'scoring side: needs the Hamiltonian'], ['Time-series early warning', 'instrument side: time series'], ['Partition-function zeros', 'scoring side: needs exact Z']],
       explain: 'Scoring-side tools need the Hamiltonian and generate truth for the controls.', cite: 'fn-tex' },
     { id: 'techniques-6-03', section: '6-table', tier: 'name', type: 'mc', label: 'Koch-Janusz & Ringel',
       prompt: 'Who proposed learning the block compression that keeps the most mutual information with the block&rsquo;s surroundings (2018)?',
@@ -359,6 +367,10 @@ window.CC_BANKS.techniques = {
       prompt: 'Whose 2020 paper uses the shape of the power spectrum to detect and distinguish tipping points (spectral early-warning signals)?',
       options: ['Bury', 'Dakos', 'Lakens', 'Kenna'], answer: 0,
       explain: 'Bury, Bauch &amp; Anand, J. R. Soc. Interface 17, 20200482 (named; not checked here).', cite: 'fn-ews' },
+    { id: 'techniques-6-09', section: '6-table', tier: 'name', type: 'mc', label: 'Dakos',
+      prompt: 'Who led the 2012 PLoS ONE guide to methods for detecting early warnings of critical transitions in time series?',
+      options: ['Dakos', 'Domany', 'Dyson', 'Domb'], answer: 0,
+      explain: 'V. Dakos et al., PLoS ONE 7, e41010 (2012).', cite: 'fn-ews' },
 
     /* ---------------------------------------------------------------- 7 the cheat-sheet */
     { id: 'techniques-7-01', section: '7-cheat', tier: 'concept', type: 'order',

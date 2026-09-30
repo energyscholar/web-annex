@@ -389,7 +389,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   <p><b>Duality.</b> Kramers and Wannier found that the square-lattice Ising model maps onto itself with high and low temperature exchanged; the self-dual point is the transition.
   Aasen, Mong and Fendley print the anisotropic version as a whole critical, self-dual <em>line</em>, (sinh 2J<sub>x</sub>)(sinh 2J<sub>y</sub>) = 1.<a href="#fn-amf16" class="fn" id="fnref-amf16">13</a>
   Slide J<sub>x</sub> along it, then find the isotropic point: sinh 2K = 1 gives K<sub>c</sub> = &frac12; ln(1 + &radic;2) &asymp; 0.4407. (That number is this page&rsquo;s arithmetic from their equation (2.2); they do not print it.)
-  Every point of that curve is critical, and every point is the same Ising class: a line of critical <em>points</em>, not a LINE of fixed points (trap T1 in this page&rsquo;s source).
+  Every point of that curve is critical, and every point is the same Ising class: a line of critical <em>points</em>, not a LINE of fixed points.
   For Ashkin&ndash;Teller, duality answers with a genuine LINE: the self-dual line Z = 1 &minus; 2X, along which the exponents vary.<a href="#fn-wis93" class="fn" id="fnref-wis93">14</a></p>
   <div class="graphic" data-cc-id="t-zeros"></div>
   <p><b>Partition-function zeros.</b> Z of a finite system is a polynomial in e<sup>&minus;&beta;</sup> or in the field, so it has zeros, all off the real axis. As L grows they pinch the
@@ -526,7 +526,833 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
 
 <script src="bank.js"></script>
 <script src="../../../js/cc-tutor.js"></script>
-<!--PAGE-JS-->
+<script>
+/* Page-local graphics for the techniques page. Science code is structure, not control: every
+   verdict shown here is a lookup in a total table (REFUSE / '?' / NOT EVALUATED are values). */
+(function () {
+'use strict';
+var PI = Math.PI, LN2 = Math.LN2, SIGN = CC.sign, CELLS = SIGN.cells;
+var COL = { green: '#22c55e', amber: '#f59e0b', red: '#ef4444', blue: '#3b82f6', purple: '#a855f7', cyan: '#06b6d4', ink: '#cbd5e1', dim: '#334155', muted: '#94a3b8', head: '#f1f5f9' };
+var CELL_COL = { 'SIG+': COL.red, 'ZERO!': COL.green, 'SLOW': COL.amber, '?': COL.muted };
+CELL_COL[CELLS[1]] = COL.red;
+var CELL_CLS = { 'SIG+': 'c-SIG', 'ZERO!': 'c-ZERO', 'SLOW': 'c-SLOW', '?': 'c-Q' };
+CELL_CLS[CELLS[1]] = 'c-SIG';
+var NE = 'NOT EVALUATED';
+function q(id) { return document.querySelector('[data-cc-id="' + id + '"]'); }
+function mk(tag, attrs, html) {
+  var e = document.createElement(tag);
+  Object.keys(attrs || {}).forEach(function (k) { if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), attrs[k]); else e.setAttribute(k, attrs[k]); });
+  if (html != null) e.innerHTML = html;
+  return e;
+}
+function button(label, fn, cls) { return mk('button', { type: 'button', 'class': 'cc-btn' + (cls ? ' ' + cls : ''), onclick: fn }, label); }
+function fx(x, d) { return (typeof x === 'number' && isFinite(x)) ? x.toFixed(d == null ? 3 : d) : String(x); }
+function cellSpan(c) { return '<span class="cell ' + (CELL_CLS[c] || 'c-NE') + '">' + c + '</span>'; }
+var SVGNS = 'http://www.w3.org/2000/svg';
+function S(tag, a, parent, text) { var e = document.createElementNS(SVGNS, tag); Object.keys(a || {}).forEach(function (k) { e.setAttribute(k, a[k]); }); if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+function newSvg(parent, W, H, label) { return S('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': label, 'class': 'cc-svg' }, parent); }
+function registerGraphic(id, el, state, checks) { el.classList.add('cc-graphic'); CC.graphics[id] = { id: id, el: el, state: state, checks: checks }; }
+/* The engine stylesheet colours .cc-svg marks by class, which outranks presentation attributes.
+   Page-local fix: copy an explicit stroke / fill / stroke-width attribute into the inline style. */
+function inlineColors(n) {
+  if (!n || n.nodeType !== 1) return;
+  if (n.namespaceURI === SVGNS) ['stroke', 'fill', 'stroke-width', 'opacity'].forEach(function (k) { var v = n.getAttribute(k); if (v != null) n.style.setProperty(k, v); });
+  if (n.querySelectorAll) Array.prototype.forEach.call(n.querySelectorAll('[stroke],[fill]'), inlineColors1);
+}
+function inlineColors1(n) { ['stroke', 'fill', 'stroke-width', 'opacity'].forEach(function (k) { var v = n.getAttribute(k); if (v != null) n.style.setProperty(k, v); }); }
+if (window.MutationObserver) new MutationObserver(function (ms) { ms.forEach(function (m) { Array.prototype.forEach.call(m.addedNodes, inlineColors); }); }).observe(document.body, { childList: true, subtree: true });
+function merge(seq) { return seq.filter(function (c, i) { return i === 0 || c !== seq[i - 1]; }).join(' '); }
+
+/* ============================================================ §0 follow the flow */
+(function () {
+  var el = q('t-follow');
+  var FIELDS = {
+    point: { f: function (x, y) { return [0.6 * x, -y]; }, start: [0.3, 0.9], name: 'POINT',
+      note: 'a POINT: started ON the critical surface (x = 0) the flow stops at the origin; drag the start off it and the flow slows, then leaves along the relevant direction.' },
+    line: { f: function (x, y) { return [0, -y]; }, start: [0.35, 0.9], name: 'LINE',
+      note: 'a LINE: every point of y = 0 is fixed, so the flow stops wherever it lands.' },
+    walking: { f: function (x, y) { return [-(0.02 + x * x), -y]; }, start: [0.9, 0.9], name: 'WALKING',
+      note: 'WALKING: the velocity falls to a small nonzero minimum near x = 0, never zero, then the flow leaves.' },
+    spiral: { f: function (x, y) { return [-0.15 * x - 0.8 * y, 0.8 * x - 0.15 * y]; }, start: [0.8, 0.6], name: 'SPIRAL',
+      note: 'a SPIRAL (a complex eigenvalue pair, see §1): the only field here with circulation.' }
+  };
+  var mode = 'point', f0 = FIELDS[mode];
+  var bar = mk('div', { 'class': 'row-ctl', role: 'group', 'aria-label': 'choose a flow' });
+  var btns = {};
+  Object.keys(FIELDS).forEach(function (k) { btns[k] = button(FIELDS[k].name, function () { setMode(k); }); bar.appendChild(btns[k]); });
+  var host = mk('div');
+  el.appendChild(bar); el.appendChild(host);
+  var strip = newSvg(el, 600, 130, 'Distance moved per RG level on a logarithmic scale, for the chosen flow');
+  strip.setAttribute('class', 'cc-svg strip');
+  var note = mk('p', { 'class': 'cc-readout', 'aria-live': 'polite' });
+  el.appendChild(note);
+  var spec = {
+    id: 't-follow-flow', label: 'A flow in a two-coupling plane with its trajectory and RG levels marked', height: 300,
+    f: function (x, y) { return f0.f(x, y); }, x: [-1, 1], y: [-1, 1], start: f0.start.slice(), dt: 0.05, steps: 1200, grid: 14, animate: true,
+    xlabel: 'x (relevant / along the line)', ylabel: 'y (irrelevant)',
+    overlay: function (g, s) { s.traj.forEach(function (p, i) { if (i % 20 === 0 && i <= 400) g.dot(g.X(p[0]), g.Y(p[1]), 2.6, { fill: COL.green }); }); },
+    readout: function (s) { return readings(s); }
+  };
+  var flow = CC.flow(host, spec);
+  function levels(traj) { var out = []; for (var i = 0; i < traj.length && out.length < 21; i += 20) out.push(traj[i]); return out; }
+  function readings(s) {
+    var P = levels(s.traj), v = [];
+    for (var i = 0; i + 1 < P.length; i++) v.push(Math.hypot(P[i + 1][0] - P[i][0], P[i + 1][1] - P[i][1]));
+    var vmin = Infinity, imin = 0, D = 0;
+    v.forEach(function (x, i) { D += x; if (x < vmin) { vmin = x; imin = i; } });
+    var p = P[Math.min(imin, P.length - 1)] || [s.x0, s.y0], h = 0.1, e = 1e-4;
+    var curl = (f0.f(p[0] + e, p[1])[1] - f0.f(p[0] - e, p[1])[1]) / (2 * e) - (f0.f(p[0], p[1] + e)[0] - f0.f(p[0], p[1] - e)[0]) / (2 * e);
+    drawStrip(v, imin);
+    note.innerHTML = f0.note;
+    return 'velocity: minimum ' + fx(vmin, 4) + ' at level ' + imin + ' · accumulated path D = ' + fx(D, 3) + ' · circulation round a 0.1 × 0.1 loop there Γ = ' + fx(curl * h * h, 4);
+  }
+  function drawStrip(v, imin) {
+    while (strip.lastChild) strip.removeChild(strip.lastChild);
+    var L = 44, R = 590, T = 10, B = 104, lo = -5, hi = 0.3;
+    var Y = function (x) { var l = Math.log10(Math.max(x, 1e-5)); return B - (l - lo) / (hi - lo) * (B - T); };
+    S('line', { x1: L, y1: B, x2: R, y2: B, 'class': 'cc-axis' }, strip);
+    [-4, -2, 0].forEach(function (t) { S('text', { x: L - 4, y: Y(Math.pow(10, t)) + 3, 'text-anchor': 'end', 'font-size': 10, 'class': 'cc-tick' }, strip, '1e' + t); });
+    var bw = (R - L) / 20;
+    v.forEach(function (x, i) {
+      var y = Y(x);
+      S('rect', { x: L + i * bw + 2, y: y, width: bw - 4, height: Math.max(0, B - y), fill: i === imin ? COL.amber : COL.green, opacity: 0.85 }, strip);
+    });
+    S('text', { x: L, y: 124, 'font-size': 11, 'class': 'cc-lbl' }, strip, 'distance moved per RG level n → n+1 (log scale; bars at the floor are zero to this precision)');
+  }
+  function setMode(k) {
+    mode = k; f0 = FIELDS[k];
+    Object.keys(btns).forEach(function (b) { btns[b].classList.toggle('on', b === k); });
+    flow.set(f0.start[0], f0.start[1]);
+  }
+  var snap = function () { var s = flow.state(); if (mode === 'point' && Math.abs(s.x0) < 0.02 && s.x0 !== 0) flow.set(0, s.y0); };
+  host.addEventListener('pointerup', snap); host.addEventListener('keyup', snap);
+  setMode('point');
+  registerGraphic('t-follow', el, function () { var s = flow.state(); return { mode: mode, x0: s.x0, y0: s.y0 }; }, {
+    modeWalking: function () { return mode === 'walking'; },
+    pointOnSurface: function (s) { return s.mode === 'point' && Math.abs(s.x0) < 0.02; }
+  });
+})();
+
+/* ============================================================ §1 the linearised RG matrix */
+(function () {
+  var el = q('t-matrix');
+  var SG = { '-1': '−', '0': '0', '1': '+' };
+  var ORDER = { '+': 0, '0': 1, '−': 2 };
+  var PAIR = {
+    '++': 'two relevant directions: a multicritical point, two knobs to tune',
+    '+0': 'a LINE of critical points: the marginal eigenvector is the tangent, the relevant one the normal to tune',
+    '+−': 'a POINT: one relevant direction to tune, one irrelevant direction forgotten',
+    '00': 'two marginal directions: a plane of fixed points at linear order',
+    '0−': 'a LINE that attracts: a whole region flows onto a line of fixed points',
+    '−−': 'fully attractive: a stable phase, nothing to tune',
+    'c+': 'a complex pair with |λ| > 1: the deviation spirals outward',
+    'c0': 'a complex pair with |λ| = 1: the deviation circles without shrinking',
+    'c−': 'a complex pair with |λ| < 1: the deviation spirals in'
+  };
+  var CLS_COL = { '+': COL.red, '0': COL.amber, '−': COL.green };
+  var CLS_NAME = { '+': 'relevant', '0': 'marginal', '−': 'irrelevant' };
+  function sgn(l) { return SG[String(Math.sign(Math.round((Math.abs(l) - 1) / 0.05)))]; }
+  function eig(v) {
+    var a = v.a, b = v.b, c = v.c, d = v.d, tr = a + d, det = a * d - b * c, disc = tr * tr / 4 - det;
+    if (disc < 0) { var mod = Math.sqrt(det); return { real: false, re: tr / 2, im: Math.sqrt(-disc), mod: mod, key: 'c' + sgn(mod) }; }
+    var s = Math.sqrt(disc), l = [tr / 2 + s, tr / 2 - s];
+    var vec = function (L, i) {
+      var x, y;
+      if (Math.abs(b) > 1e-9) { x = b; y = L - a; } else if (Math.abs(c) > 1e-9) { x = L - d; y = c; } else return i === 0 ? (Math.abs(L - a) < 1e-12 ? [1, 0] : [0, 1]) : (Math.abs(L - d) < 1e-12 && Math.abs(l[0] - a) < 1e-12 ? [0, 1] : [1, 0]);
+      var n = Math.hypot(x, y) || 1; return [x / n, y / n];
+    };
+    var sg = [sgn(l[0]), sgn(l[1])];
+    var key = sg.slice().sort(function (p, r) { return ORDER[p] - ORDER[r]; }).join('');
+    return { real: true, l: l, v: [vec(l[0], 0), vec(l[1], 1)], sg: sg, key: key };
+  }
+  function yOf(l) { return Math.log(Math.abs(l)) / LN2; }
+  function arrows(g, v) {
+    for (var i = -4; i <= 4; i++) for (var j = -4; j <= 4; j++) {
+      var x = i / 4.5, y = j / 4.5, dx = (v.a * x + v.b * y - x) * 0.35, dy = (v.c * x + v.d * y - y) * 0.35;
+      var m = Math.hypot(dx, dy);
+      if (m < 1e-6) { g.dot(g.X(x), g.Y(y), 1.8, { fill: COL.amber }); continue; }
+      var s = Math.min(1, 0.09 / m);
+      g.line(g.X(x), g.Y(y), g.X(x + dx * s), g.Y(y + dy * s), { cls: 'cc-arrow' });
+      g.dot(g.X(x + dx * s), g.Y(y + dy * s), 1.6, { cls: 'cc-arrow-head' });
+    }
+    var p = [0.15, 0.85], pts = [p];
+    for (var k = 0; k < 10; k++) { p = [v.a * p[0] + v.b * p[1], v.c * p[0] + v.d * p[1]]; if (Math.abs(p[0]) > 1.4 || Math.abs(p[1]) > 1.4) break; pts.push(p); }
+    g.curve(pts, { stroke: COL.cyan, dash: '3 3', width: 1.5 });
+    pts.forEach(function (r, n) { g.dot(g.X(r[0]), g.Y(r[1]), 3, { fill: COL.cyan }); if (n < 4) g.text(g.X(r[0]) + 5, g.Y(r[1]) - 4, 'δK' + (n ? '⁽' + n + '⁾' : ''), { size: 10, fill: COL.cyan }); });
+  }
+  function eigLines(g, v) {
+    var E = eig(v);
+    if (!E.real) { g.text(g.X(-0.95), g.Y(-0.88), 'complex pair: no real eigenvector, the map rotates', { size: 11, fill: COL.purple }); return; }
+    E.v.forEach(function (u, i) {
+      var c = CLS_COL[E.sg[i]], w = E.sg[i] === '0' ? 4 : 2;
+      var t = 1 / Math.max(Math.abs(u[0]), Math.abs(u[1])); g.line(g.X(-u[0] * t), g.Y(-u[1] * t), g.X(u[0] * t), g.Y(u[1] * t), { stroke: c, width: w, opacity: 0.8 });
+    });
+  }
+  function labels(g, v) {
+    var E = eig(v);
+    if (!E.real) { g.text(g.X(-0.95), g.Y(-0.7), 'λ = ' + fx(E.re, 2) + ' ± ' + fx(E.im, 2) + 'i, |λ| = ' + fx(E.mod, 3), { size: 12, fill: COL.purple }); return; }
+    E.l.forEach(function (l, i) {
+      var t = 'λ' + (i + 1) + ' = ' + fx(l, 3) + ' → y' + (i + 1) + ' = ' + (l === 0 ? '−∞' : fx(yOf(l), 3)) + ' (' + CLS_NAME[E.sg[i]] + ')';
+      g.rect(g.X(-0.97), g.Y(-0.62 - 0.12 * i) - 13, 330, 17, { fill: '#0f172a', opacity: 0.85 }); g.text(g.X(-0.95), g.Y(-0.62 - 0.12 * i), t, { size: 12, fill: CLS_COL[E.sg[i]] });
+    });
+    if (E.sg.indexOf('0') >= 0) g.text(g.X(0.1), g.Y(-0.9), 'amber line: every point on it is fixed', { size: 11, fill: COL.amber });
+  }
+  var h = CC.trace(el, {
+    id: 't-matrix', label: 'Flow field of a 2 by 2 linearised RG matrix with its eigenvectors and an orbit', height: 320,
+    eq: [{ t: 'dKp', html: '&delta;K&prime;' }, { html: '=' }, { t: 'M', html: 'M' }, { t: 'dK', html: '&delta;K' }, { html: ',&ensp;' }, { t: 'lam', html: '&lambda;<sub>i</sub>' }, { html: '=' }, { t: 'by', html: 'b<sup>y<sub>i</sub></sup>&ensp;(b = 2)' }],
+    vars: {
+      a: { min: -0.8, max: 2.4, step: 0.05, init: 2.0, label: 'M<sub>11</sub>' }, b: { min: -1.2, max: 1.2, step: 0.05, init: 0, label: 'M<sub>12</sub>' },
+      c: { min: -1.2, max: 1.2, step: 0.05, init: 0, label: 'M<sub>21</sub>' }, d: { min: -0.8, max: 2.4, step: 0.05, init: 0.5, label: 'M<sub>22</sub>' }
+    },
+    base: function (g) { g.axis({ x: [-1, 1], y: [-1, 1], xlabel: 'δK₁', ylabel: 'δK₂', ticks: 4 }); },
+    steps: [
+      { lit: ['dK', 'dKp'], caption: 'Each arrow is one RG step, δK′ − δK: the map sends a deviation δK from the fixed point to δK′ = MδK. The dotted orbit applies M again and again.', draw: function (g, v) { arrows(g, v); } },
+      { lit: ['M'], caption: function (v) { var E = eig(v); return E.real ? 'The eigenvectors of M are the directions the map only stretches. Red is relevant, green irrelevant, amber marginal.' : 'This M has a complex pair of eigenvalues: no direction is only stretched, so the orbit turns.'; }, draw: function (g, v) { eigLines(g, v); } },
+      { lit: ['lam', 'by'], caption: function (v) { return 'The table reads the signs of y₁, y₂: <b>' + PAIR[eig(v).key] + '</b>.'; }, draw: function (g, v) { labels(g, v); } }
+    ],
+    checks: {
+      isMarginal: function (s) { var E = eig(s.vars); return E.real && E.sg.indexOf('0') >= 0; },
+      isSpiral: function (s) { return !eig(s.vars).real; },
+      isPoint: function (s) { return eig(s.vars).key === '+−'; }
+    }
+  });
+  h.go(2);
+})();
+
+/* ============================================================ §2 Monte Carlo RG */
+var MCRG = (function () {
+  var el = q('t-mcrg-toy');
+  var NL = 3, WARM = 30, acc, nnAcc, lastSweeps = -1, since = 0, hist = [];
+  function resetAcc() {
+    acc = []; nnAcc = [];
+    for (var l = 0; l < NL; l++) acc.push({ n: 0, a: 0, b: 0, ab: 0, bb: 0 });
+    for (l = 0; l <= NL; l++) nnAcc.push({ n: 0, s: 0 });
+    since = 0; hist = [[], [], []];
+  }
+  resetAcc();
+  var toy = CC.toy.lattice(el, {
+    id: 't-mcrg-toy', model: 'ising', levels: 4, params: { T: 3.0 }, seed: 11, hist: false, stepSweeps: 5,
+    label: 'Ising Monte Carlo toy with three levels of 2 by 2 majority-rule blocking',
+    onParams: function () { resetAcc(); },
+    checks: { levelsAgree: function (s) { return Math.abs(s.params.T - 2.269) < 0.05 && s.sweeps >= 20; } }
+  });
+  var chart = document.getElementById('mcrg-chart'), noteEl = document.getElementById('mcrg-note');
+  function sample() {
+    var st = toy.state();
+    if (st.sweeps < lastSweeps) resetAcc();
+    if (st.sweeps === lastSweeps) return false;
+    lastSweeps = st.sweeps; since++;
+    if (since <= WARM) return true;
+    var Sv = [], cur, sz, b = 1;
+    for (var l = 0; l <= NL; l++) {
+      var blk = toy.block(b); cur = blk.spins; sz = blk.size;
+      var nn = CC.core.nnCorr('ising', cur, sz);
+      Sv.push(nn * 2 * sz * sz); nnAcc[l].n++; nnAcc[l].s += nn;
+      b *= 2;
+    }
+    for (l = 0; l < NL; l++) { var o = acc[l]; o.n++; o.a += Sv[l]; o.b += Sv[l + 1]; o.ab += Sv[l] * Sv[l + 1]; o.bb += Sv[l + 1] * Sv[l + 1]; if (o.n % 5 === 0) { var t = est(l).T; if (isFinite(t)) { hist[l].push(t); if (hist[l].length > 120) hist[l].shift(); } } }
+    return true;
+  }
+  function est(l) {
+    var o = acc[l], sites = Math.pow((toy.size >> (l + 1)), 2);
+    if (o.n < 10) return { n: o.n, c4: NaN, c5: NaN, T: NaN, y: NaN };
+    var c4 = (o.ab / o.n - (o.a / o.n) * (o.b / o.n)) / sites, c5 = (o.bb / o.n - (o.b / o.n) * (o.b / o.n)) / sites, T = c4 / c5;
+    return { n: o.n, c4: c4, c5: c5, T: T, y: Math.log(T) / LN2 };
+  }
+  function drawChart() {
+    while (chart.lastChild) chart.removeChild(chart.lastChild);
+    var L0 = 60, R0 = 580, T0 = 12, B0 = 118, X = function (l) { return L0 + l * (R0 - L0) / NL; }, Y = function (v) { return B0 - v * (B0 - T0); };
+    S('line', { x1: L0, y1: B0, x2: R0, y2: B0, 'class': 'cc-axis' }, chart);
+    S('line', { x1: L0, y1: T0, x2: L0, y2: B0, 'class': 'cc-axis' }, chart);
+    [0, 0.5, 1].forEach(function (v) { S('text', { x: L0 - 6, y: Y(v) + 3, 'text-anchor': 'end', 'font-size': 10, 'class': 'cc-tick' }, chart, String(v)); });
+    var pts = [], vals = [];
+    for (var l = 0; l <= NL; l++) {
+      var a = nnAcc[l], v = a.n ? a.s / a.n : CC.core.nnCorr('ising', toy.block(Math.pow(2, l)).spins, toy.size >> l);
+      vals.push(v); pts.push(X(l) + ',' + Y(v));
+      S('text', { x: X(l), y: B0 + 14, 'text-anchor': 'middle', 'font-size': 10, 'class': 'cc-tick' }, chart, (toy.size >> l) + '×' + (toy.size >> l));
+    }
+    S('line', { x1: L0, y1: Y(vals[0]), x2: R0, y2: Y(vals[0]), stroke: COL.muted, 'stroke-dasharray': '4 4' }, chart);
+    S('polyline', { points: pts.join(' '), fill: 'none', stroke: COL.green, 'stroke-width': 2 }, chart);
+    vals.forEach(function (v, l) { S('circle', { cx: X(l), cy: Y(v), r: 4, fill: COL.green }, chart); });
+    S('text', { x: L0 + 6, y: T0 + 10, 'font-size': 11, 'class': 'cc-lbl' }, chart, 'nearest-neighbour correlation per block level (dashed: level 0)');
+    var spread = Math.max.apply(null, vals) - Math.min.apply(null, vals);
+    noteEl.textContent = 'T = ' + toy.state().params.T.toFixed(2) + ' · ' + (nnAcc[0].n ? 'averaged over ' + nnAcc[0].n + ' samples' : 'one snapshot (press Run or Step)') + ' · spread across levels ' + spread.toFixed(3) + (since <= WARM ? ' · letting the lattice settle for ' + WARM + ' draws after each change' : '');
+  }
+  var trace = null;
+  function onDraw() { sample(); drawChart(); if (trace) trace.render(); }
+  var ro = el.querySelector('.cc-readout');
+  if (ro && window.MutationObserver) new MutationObserver(onDraw).observe(ro, { childList: true, characterData: true, subtree: true });
+  drawChart();
+  return { toy: toy, est: est, hist: function (l) { return hist[l]; }, setTrace: function (t) { trace = t; }, NL: NL };
+})();
+
+(function () {
+  var el = q('t-mcrg-trace');
+  function patch(g, x0, y0, spins, n, cells, px) {
+    for (var i = 0; i < cells; i++) for (var j = 0; j < cells; j++) g.rect(x0 + j * px, y0 + i * px, px - 1, px - 1, { fill: spins[i * n + j] > 0 ? COL.amber : COL.blue });
+  }
+  function panel(g, v, which) {
+    var l = v.n | 0, toy = MCRG.toy, e = MCRG.est(l), sz = toy.size >> l;
+    var A = toy.block(Math.pow(2, l)), B = toy.block(Math.pow(2, l + 1));
+    patch(g, 16, 40, A.spins, A.size, 8, 14);
+    patch(g, 16 + 8 * 14 + 30, 40 + 28, B.spins, B.size, 4, 28 - 14 + 14);
+    g.text(16, 30, 'level ' + l + ' (' + sz + '×' + sz + ', corner)', { size: 11 });
+    g.text(16 + 8 * 14 + 30, 58, 'level ' + (l + 1), { size: 11 });
+    g.text(16 + 8 * 14 + 4, 110, '→', { size: 18, fill: COL.green });
+    var X = 300, nz = function (x, d) { return isFinite(x) ? fx(x, d) : '—'; }, rows = [
+      ['T2', 'T = ∂K′/∂K (eq. 2)', 'unknown'],
+      ['chain', '(4) = (5)·T (eq. 3)', ''],
+      ['e4', '(4) ⟨S′S⟩ − ⟨S′⟩⟨S⟩', nz(e.c4, 3)],
+      ['e5', '(5) ⟨S′S′⟩ − ⟨S′⟩²', nz(e.c5, 3)],
+      ['solve', 'T = (4)/(5); y = ln T/ln 2', isFinite(e.T) ? fx(e.T, 3) + '; ' + fx(e.y, 3) : 'run the toy']
+    ];
+    rows.forEach(function (r, i) {
+      var on = r[0] === which || (which === 'solve' && r[0] === 'T2');
+      g.text(X, 36 + i * 26, r[1], { size: 11, fill: on ? COL.green : COL.muted });
+      if (r[2]) g.text(594, 36 + i * 26, r[2], { size: 11, anchor: 'end', fill: on ? COL.head : COL.muted });
+    });
+    g.text(X, 36 + 5 * 22, 'per block site, level ' + l + ' → ' + (l + 1), { size: 9, fill: COL.muted });
+    var hs = MCRG.hist(l), x0 = 300, y0 = 170, w = 292, hgt = 70;
+    g.rect(x0, y0, w, hgt, { fill: 'none', stroke: COL.dim });
+    g.text(x0 + 4, y0 + 12, 'running estimate of T (samples: ' + e.n + ')', { size: 10, fill: COL.muted });
+    if (hs.length > 1) {
+      var lo = Math.min.apply(null, hs), hi = Math.max.apply(null, hs); if (hi - lo < 0.2) { var m = (hi + lo) / 2; lo = m - 0.1; hi = m + 0.1; }
+      var d = hs.map(function (t, i) { return (i ? 'L' : 'M') + (x0 + 4 + i * (w - 8) / 119).toFixed(1) + ' ' + (y0 + hgt - 6 - (t - lo) / (hi - lo) * (hgt - 22)).toFixed(1); }).join('');
+      g.path(d, { stroke: COL.green, width: 1.5 });
+      g.text(x0 + w - 4, y0 + 12, fx(lo, 2) + ' – ' + fx(hi, 2), { size: 10, anchor: 'end', fill: COL.muted });
+    }
+  }
+  var t = CC.trace(el, {
+    id: 't-mcrg-trace', label: 'The MCRG equations lit term by term with live correlations from the toy', height: 250, cumulative: false,
+    eq: [{ t: 'T2', html: 'T<sub>&alpha;&beta;</sub> = &part;K&prime;<sub>&alpha;</sub>/&part;K<sub>&beta;</sub>' }, { html: '&ensp;' },
+      { t: 'chain', html: '&part;&lang;S&prime;<sub>&gamma;</sub>&rang;/&part;K<sub>&beta;</sub> = &Sigma;<sub>&alpha;</sub>[&part;&lang;S&prime;<sub>&gamma;</sub>&rang;/&part;K&prime;<sub>&alpha;</sub>] T<sub>&alpha;&beta;</sub>' }, { html: '&ensp;' },
+      { t: 'e4', html: '(4) &lang;S&prime;S&rang; &minus; &lang;S&prime;&rang;&lang;S&rang;' }, { html: '&ensp;' },
+      { t: 'e5', html: '(5) &lang;S&prime;S&prime;&rang; &minus; &lang;S&prime;&rang;&lang;S&prime;&rang;' }],
+    vars: { n: { min: 0, max: 2, step: 1, init: 0, label: 'level pair n &rarr; n+1' } },
+    steps: [
+      { lit: ['T2'], caption: 'Equation (2): T is the matrix of derivatives of the level-(n+1) couplings with respect to the level-n couplings. Nobody knows K′, so T cannot be computed directly.', draw: function (g, v) { panel(g, v, 'T2'); } },
+      { lit: ['chain'], caption: 'Equation (3), the chain rule: a level-(n+1) average responds to a level-n coupling only through the level-(n+1) couplings. Both sides are measurable.', draw: function (g, v) { panel(g, v, 'chain'); } },
+      { lit: ['e4'], caption: 'Equation (4): the left side is a cross-correlation between block operators S′ and original operators S, measured live from the toy.', draw: function (g, v) { panel(g, v, 'e4'); } },
+      { lit: ['e5'], caption: 'Equation (5): the first factor is the auto-correlation of the block operators among themselves, also live.', draw: function (g, v) { panel(g, v, 'e5'); } },
+      { lit: ['T2', 'e4', 'e5'], caption: function (v) { var e = MCRG.est(v.n | 0); return 'Solve: with one coupling, T = (4)/(5) = ' + (isFinite(e.T) ? e.T.toFixed(3) + ' and y = ln T/ln 2 = ' + e.y.toFixed(3) : '… (run the toy)') + '. One tracked coupling is crude; the two-dimensional Ising value is y<sub>T</sub> = 1/&nu; = 1.'; }, draw: function (g, v) { panel(g, v, 'solve'); } }
+    ]
+  });
+  MCRG.setTrace(t);
+})();
+
+/* ============================================================ §3 the classifier game */
+(function () {
+  var el = q('t-classify');
+  var xs = [3, 4, 5, 6, 7, 8], NOISE = [0.004, -0.005, 0.003, -0.002, 0.005, -0.003];
+  var SEQ = {
+    POINT: function (x, c) { return 1.0 + (c ? 0.003 : 0); },
+    LINE: function (x, c) { return c ? 1.45 : 1.2; },
+    WALKING: function (x, c) { return 0.75 - 0.07 * Math.tan(0.42 * (x - 5.5)) + (c ? 0.015 : 0); },
+    BKT: function (x, c) { return 0.72 + 0.9 / (x * LN2 + 1.6) + (c ? 0.008 : 0); }
+  };
+  var PANELS = [['A', 'WALKING'], ['B', 'LINE'], ['C', 'BKT'], ['D', 'POINT']];
+  var WHY = {
+    POINT: 'flat in L and the same at both controls: varies with neither',
+    LINE: 'flat in L, but the second control value sits elsewhere: varies with control, not scale',
+    WALKING: 'drifts slowly in the middle, then faster and faster: the tangent shape of a walking flow',
+    BKT: 'drifts fastest at small L and keeps slowing, never settling: the 1/(ln L + C) approach'
+  };
+  var picks = {};
+  var h = CC.trace(el, {
+    id: 't-classify', label: 'Four synthetic sequences of an effective exponent against log base 2 of L at two control values', height: 330, mode: 'slider',
+    eq: [], vars: {},
+    steps: [{ lit: [], caption: 'Synthetic data: solid dots are control value 1, open circles control value 2; bars are ±0.012.', draw: function (g) {
+      PANELS.forEach(function (p, k) {
+        var ox = 10 + (k % 2) * 300, oy = 8 + Math.floor(k / 2) * 162, w = 280, hh = 140, lo = 0.5, hi = 1.6;
+        var X = function (x) { return ox + 34 + (x - 3) / 5 * (w - 44); }, Y = function (v) { return oy + hh - 20 - (v - lo) / (hi - lo) * (hh - 34); };
+        g.rect(ox, oy, w, hh, { fill: 'none', stroke: COL.dim });
+        g.text(ox + 8, oy + 16, 'Sequence ' + p[0], { size: 12, fill: COL.head });
+        g.line(ox + 34, Y(lo), ox + w - 10, Y(lo), { cls: 'cc-axis' });
+        [0.6, 1.0, 1.4].forEach(function (t) { g.text(ox + 30, Y(t) + 3, t.toFixed(1), { size: 9, anchor: 'end', cls: 'cc-tick' }); });
+        xs.forEach(function (x) { g.text(X(x), Y(lo) + 12, String(Math.pow(2, x)), { size: 9, anchor: 'middle', cls: 'cc-tick' }); });
+        [0, 1].forEach(function (c) {
+          var pts = xs.map(function (x, i) { return [X(x), Y(SEQ[p[1]](x, c) + NOISE[(i + k + c) % 6])]; });
+          g.path(pts.map(function (q2, i) { return (i ? 'L' : 'M') + q2[0].toFixed(1) + ' ' + q2[1].toFixed(1); }).join(''), { stroke: c ? COL.cyan : COL.green, width: 1, opacity: 0.6 });
+          pts.forEach(function (q2) {
+            g.line(q2[0], q2[1] - 4, q2[0], q2[1] + 4, { stroke: COL.muted });
+            g.dot(q2[0], q2[1], 3, c ? { fill: 'none', stroke: COL.cyan } : { fill: COL.green });
+          });
+        });
+      });
+    } }]
+  });
+  var box = mk('div', { 'class': 'row-ctl' });
+  var fb = mk('p', { 'class': 'cc-readout', 'aria-live': 'polite' });
+  PANELS.forEach(function (p) {
+    var sel = mk('select', { 'aria-label': 'geometry of sequence ' + p[0] }, '<option value="">—</option><option>POINT</option><option>LINE</option><option>WALKING</option><option>BKT</option>');
+    sel.addEventListener('change', function () { picks[p[0]] = sel.value; });
+    var lab = mk('label', {}, 'Sequence ' + p[0] + ' ');
+    lab.appendChild(sel); box.appendChild(lab);
+  });
+  box.appendChild(button('Check my sort', function () {
+    fb.innerHTML = PANELS.map(function (p) { var ok = picks[p[0]] === p[1]; return '<b>' + p[0] + '</b> ' + (ok ? '✓' : '✗') + (ok ? ' ' + WHY[p[1]] : ''); }).join(' · ');
+  }));
+  el.appendChild(box); el.appendChild(fb);
+  h.checks.sortedAll = function () { return PANELS.every(function (p) { return picks[p[0]] === p[1]; }); };
+})();
+
+/* ============================================================ §3 the five-valued sign */
+(function () {
+  var el = q('t-sign');
+  var REF = [['LINE level', 0.004, 0.010], ['BKT level', 0.030, 0.010], ['WALKING level', 0.080, 0.010]];
+  var tbl = mk('div', { 'class': 'tbl' });
+  function table(v) {
+    var main = SIGN.key(v.v, v.w, v.eps), refs = {};
+    REF.forEach(function (r) { var k = SIGN.key(r[1], r[2], v.eps); (refs[k] = refs[k] || []).push(r[0]); });
+    var rows = Object.keys(SIGN.table).map(function (k) {
+      return '<tr' + (k === main ? ' class="hl"' : '') + '><td class="num">' + k + '</td><td>' + cellSpan(SIGN.table[k]) + '</td><td class="small">' + (k === main ? 'your band' + (refs[k] ? '; ' : '') : '') + (refs[k] || []).join(', ') + '</td></tr>';
+    });
+    tbl.innerHTML = '<table class="t"><tr><th>key abcr</th><th>cell</th><th>who is here</th></tr>' + rows.join('') + '</table>';
+  }
+  function row(g, y, label, v, w, eps, big) {
+    var c = SIGN.classify(v, w, eps);
+    g.text(8, g.Y(y) + 4, label, { size: 11, fill: big ? COL.head : COL.muted });
+    g.line(g.X(v - w), g.Y(y), g.X(v + w), g.Y(y), { stroke: CELL_COL[c], width: big ? 7 : 5 });
+    g.dot(g.X(v), g.Y(y), big ? 5 : 3.5, { fill: COL.head });
+    g.text(g.X(0.15) + 4, g.Y(y) + 4, c, { size: 12, fill: CELL_COL[c] });
+  }
+  var h = CC.trace(el, {
+    id: 't-sign', label: 'Velocity bands read against a declared margin epsilon on a number line, with three reference readings', height: 230, mode: 'slider', cumulative: false,
+    eq: CELLS.map(function (c) { return { t: c, html: c }; }),
+    vars: { v: { min: -0.15, max: 0.15, step: 0.002, init: 0.01, label: 'v' }, w: { min: 0, max: 0.08, step: 0.002, init: 0.006, label: 'w (band)' }, eps: { min: 0, max: 0.1, step: 0.002, init: 0.01, label: '&epsilon; (declared)' } },
+    stepOf: function (v) { return CELLS.indexOf(SIGN.classify(v.v, v.w, v.eps)); },
+    steps: CELLS.map(function (c) {
+      return { lit: [c], caption: function (v) { return 'Your band: key ' + SIGN.key(v.v, v.w, v.eps) + ' → ' + cellSpan(c) + '. The three reference readings share your &epsilon;.'; },
+        draw: function (g, v) {
+          g.axis({ x: [-0.15, 0.15], y: [0, 1], pad: { l: 100, r: 56, t: 8, b: 26 }, ticks: 6 });
+          g.rect(g.X(-v.eps), g.Y(0.97), Math.max(0, g.X(v.eps) - g.X(-v.eps)), g.Y(0.03) - g.Y(0.97), { fill: 'rgba(6,182,212,0.14)' });
+          g.line(g.X(0), g.Y(0), g.X(0), g.Y(1), { cls: 'cc-axis' });
+          g.text(g.X(0), g.Y(0.97) + 10, '±ε', { anchor: 'middle', size: 10, fill: COL.cyan });
+          row(g, 0.8, 'your band', v.v, v.w, v.eps, true);
+          REF.forEach(function (r, i) { row(g, 0.56 - 0.2 * i, r[0], r[1], r[2], v.eps, false); });
+          table(v);
+        } };
+    }),
+    checks: {
+      readsZero: function (s) { return SIGN.classify(s.vars.v, s.vars.w, s.vars.eps) === 'ZERO!'; },
+      epsWindow: function (s) { var e = s.vars.eps; return SIGN.classify(REF[0][1], REF[0][2], e) === 'ZERO!' && SIGN.classify(REF[1][1], REF[1][2], e) === 'SLOW' && SIGN.classify(REF[2][1], REF[2][2], e) === 'SIG+'; },
+      readsSlowOverlap: function (s) { var k = SIGN.key(s.vars.v, s.vars.w, s.vars.eps); return k === '0011'; }
+    }
+  });
+  el.appendChild(tbl);
+  h.render();
+})();
+
+/* ============================================================ §4 the kernel lens */
+var KERNEL = (function () {
+  var el = q('t-kernel');
+  var PRESET = {
+    POINT: [[1.000, 0.998, 1.001, 0.999, 1.000], [1.001, 1.000, 0.999, 1.001, 1.000]],
+    LINE: [[1.200, 1.203, 1.201, 1.199, 1.200], [1.450, 1.448, 1.451, 1.450, 1.449]],
+    WALKING: [[1.60, 1.30, 1.25, 1.20, 0.90], [1.62, 1.31, 1.26, 1.21, 0.91]],
+    BKT: [[1.600, 1.350, 1.305, 1.280, 1.265], [1.610, 1.356, 1.309, 1.283, 1.267]]
+  };
+  var st = { x: PRESET.WALKING.map(function (r) { return r.slice(); }), two: false, decl: [true, false, true, false], ring: false, rhoOn: false, chiOn: false, rhoBase: 0.5, chi0: 0.1, w0: 0.005, eps: 0.05 };
+  /* Two total lookups with REFUSE as the default cell: the merged scale sequence first; a scale
+     reading of ZERO! is then read against the control relation. */
+  var BY_SCALE = { 'ZERO!': 'see control' };
+  ['SIG+', CELLS[1]].forEach(function (s) {
+    BY_SCALE[s + ' SLOW ' + s] = 'WALKING';
+    BY_SCALE[s + ' SLOW ?'] = 'REFUSE("slow")';
+    BY_SCALE[s + ' SLOW'] = 'REFUSE("slow")';
+  });
+  var BY_CONTROL = { 'ZERO!': 'POINT', 'SIG+': 'LINE', 'none': 'REFUSE("a zero along scale alone cannot separate POINT from LINE")' };
+  BY_CONTROL[CELLS[1]] = 'LINE';
+  var DEFAULT = 'REFUSE(signature not in the table)';
+  var VERDICT = { lookup: function (sc, ct) { var v = BY_SCALE[sc] || DEFAULT; return v === 'see control' ? (BY_CONTROL[ct] || DEFAULT) : v; } };
+  function compute() {
+    var out = { rows: [], ctrl: [] };
+    var interior = !st.ring && st.decl.some(function (d, n) { return d && st.decl[n + 1]; });
+    var rhoDecl = st.rhoOn && st.chiOn;
+    [0, 1].forEach(function (r) {
+      if (r === 1 && !st.two) return;
+      var x = st.x[r], A = [], B = [], R = [], rho = [], cells = [];
+      for (var n = 0; n < 4; n++) A.push(st.ring ? 'INADMISSIBLE' : st.decl[n] ? x[n] - x[n + 1] : NE);
+      for (var i = 0; i < 5; i++) {
+        var inc = [A[i - 1], A[i]].filter(function (a) { return typeof a === 'number'; }).map(Math.abs);
+        var chi = inc.length ? Math.max.apply(null, inc) : NE;
+        rho.push(rhoDecl && typeof chi === 'number' ? st.rhoBase * chi / (st.chi0 + chi) : NE);
+      }
+      for (n = 0; n < 4; n++) {
+        var ok = typeof A[n] === 'number' && interior;
+        var succ = typeof A[n + 1] === 'number' ? A[n + 1] : 0;
+        B.push(ok ? A[n] + succ : (st.ring ? 'INADMISSIBLE' : NE));
+      }
+      for (n = 0; n < 4; n++) {
+        var ok2 = typeof B[n] === 'number' && typeof rho[n] === 'number';
+        var sB = typeof B[n + 1] === 'number' ? B[n + 1] : 0, pB = n > 0 && typeof B[n - 1] === 'number' ? B[n - 1] : 0;
+        R.push(ok2 ? B[n] + rho[n] * (sB - pB) : (st.ring ? 'INADMISSIBLE' : NE));
+      }
+      for (n = 0; n < 4; n++) cells.push(typeof A[n] === 'number' ? SIGN.classify(A[n], st.w0 * Math.pow(2, n), st.eps) : NE);
+      out.rows.push({ A: A, B: B, R: R, rho: rho, cells: cells });
+    });
+    if (st.two) for (var m = 0; m < 4; m++) { var a = st.x[0][m] - st.x[1][m]; out.ctrl.push({ A: a, cell: SIGN.classify(a, st.w0 * Math.pow(2, m), st.eps) }); }
+    out.interior = interior; out.rhoDecl = rhoDecl;
+    out.scale = st.ring ? 'INADMISSIBLE' : merge(out.rows[0].cells);
+    out.control = st.two ? merge(out.ctrl.map(function (c) { return c.cell; })) : 'none';
+    out.key = out.scale + ' | ' + out.control;
+    out.verdict = VERDICT.lookup(out.scale, out.control);
+    if (out.verdict === 'LINE') out.verdict = 'LINE(ε = ' + st.eps + ', n = 5 levels)';
+    return out;
+  }
+  // ---- UI
+  var presetBar = mk('div', { 'class': 'row-ctl', role: 'group', 'aria-label': 'presets' });
+  presetBar.appendChild(mk('span', { 'class': 'small' }, 'Presets (synthetic): '));
+  Object.keys(PRESET).forEach(function (k) { presetBar.appendChild(button(k, function () { st.x = PRESET[k].map(function (r) { return r.slice(); }); if (k === 'POINT' || k === 'LINE') st.two = true; sync(); })); });
+  var svgHost = mk('div');
+  var svg = newSvg(svgHost, 600, 250, 'Two rows of five RG-level nodes with declared scale edges and control edges, labelled with A values and their signs');
+  var inputs = mk('div');
+  var decl = mk('div', { 'class': 'row-ctl' });
+  function chk(label, key) {
+    var c = mk('input', { type: 'checkbox' }); c.checked = !!st[key];
+    c.addEventListener('change', function () { st[key] = c.checked; update(); });
+    var l = mk('label', {}, ''); l.appendChild(c); l.appendChild(document.createTextNode(' ' + label)); decl.appendChild(l); return c;
+  }
+  function num(label, key, step) {
+    var i = mk('input', { type: 'number', step: step, value: st[key], 'aria-label': label });
+    i.addEventListener('input', function () { var v = parseFloat(i.value); if (isFinite(v)) { st[key] = v; update(); } });
+    var l = mk('label', {}, label + ' '); l.appendChild(i); decl.appendChild(l); return i;
+  }
+  var cTwo = chk('second control value (Coupling over CONTROL)', 'two');
+  var cRing = chk('declare a closing edge 4 → 0', 'ring');
+  var cRho = chk('M declares ρ_base', 'rhoOn'); var nRho = num('ρ_base', 'rhoBase', 0.05);
+  var cChi = chk('M declares χ₀', 'chiOn'); var nChi = num('χ₀', 'chi0', 0.01);
+  var nW = num('band w₀', 'w0', 0.001); var nE = num('ε', 'eps', 0.005);
+  var res = mk('div', { 'aria-live': 'polite' });
+  el.appendChild(presetBar); el.appendChild(svgHost); el.appendChild(inputs); el.appendChild(decl); el.appendChild(res);
+  function buildInputs() {
+    inputs.innerHTML = '';
+    [0, 1].forEach(function (r) {
+      if (r === 1 && !st.two) return;
+      var rowEl = mk('div', { 'class': 'row-ctl' });
+      rowEl.appendChild(mk('span', { 'class': 'small' }, (r ? 'control 2' : 'control 1') + ', exponent estimate at level 0–4: '));
+      st.x[r].forEach(function (v, n) {
+        var i = mk('input', { type: 'number', step: '0.001', value: v, 'aria-label': 'control ' + (r + 1) + ' level ' + n });
+        i.addEventListener('input', function () { var z = parseFloat(i.value); if (isFinite(z)) { st.x[r][n] = z; update(); } });
+        rowEl.appendChild(i);
+      });
+      inputs.appendChild(rowEl);
+    });
+  }
+  function draw(o) {
+    while (svg.lastChild) svg.removeChild(svg.lastChild);
+    svg.setAttribute('viewBox', '0 0 600 ' + (st.two ? 250 : 100));
+    var X = function (n) { return 50 + n * 125; }, Yr = [60, 190];
+    [0, 1].forEach(function (r) {
+      if (r === 1 && !st.two) return;
+      var row = o.rows[r], y = Yr[r];
+      for (var n = 0; n < 4; n++) {
+        var on = st.decl[n] && !st.ring, a = row.A[n];
+        var ln = S('line', { x1: X(n) + 14, y1: y, x2: X(n + 1) - 14, y2: y, stroke: on ? COL.green : COL.dim, 'stroke-width': on ? 3 : 2, 'stroke-dasharray': on ? '' : '5 4', style: 'cursor:pointer' }, svg);
+        var hit = S('rect', { x: X(n) + 14, y: y - 16, width: 97, height: 32, fill: 'transparent', style: 'cursor:pointer', 'data-edge': n }, svg);
+        hit.addEventListener('click', (function (k) { return function () { st.decl[k] = !st.decl[k]; update(); }; })(n));
+        S('polygon', { points: (X(n + 1) - 14) + ',' + y + ' ' + (X(n + 1) - 22) + ',' + (y - 5) + ' ' + (X(n + 1) - 22) + ',' + (y + 5), fill: on ? COL.green : COL.dim }, svg);
+        S('text', { x: (X(n) + X(n + 1)) / 2, y: y - 10, 'text-anchor': 'middle', 'font-size': 11, fill: COL.ink }, svg, 'A = ' + (typeof a === 'number' ? fx(a, 3) : 'n/e'));
+        S('text', { x: (X(n) + X(n + 1)) / 2, y: y + 20, 'text-anchor': 'middle', 'font-size': 11, fill: CELL_COL[row.cells[n]] || COL.purple }, svg, row.cells[n] === NE ? 'not declared' : row.cells[n]);
+      }
+      for (n = 0; n < 5; n++) {
+        S('circle', { cx: X(n), cy: y, r: 13, fill: '#1e293b', stroke: COL.ink }, svg);
+        S('text', { x: X(n), y: y + 4, 'text-anchor': 'middle', 'font-size': 10, fill: COL.head }, svg, fx(st.x[r][n], 2));
+        if (r === 0) S('text', { x: X(n), y: y - 26, 'text-anchor': 'middle', 'font-size': 10, fill: COL.muted }, svg, 'level ' + n);
+      }
+      if (st.ring) S('path', { d: 'M' + X(4) + ' ' + (y + 14) + ' C ' + X(4) + ' ' + (y + 46) + ', ' + X(0) + ' ' + (y + 46) + ', ' + X(0) + ' ' + (y + 14), fill: 'none', stroke: COL.red, 'stroke-width': 2 }, svg);
+    });
+    if (st.two) {
+      for (var m = 0; m < 4; m++) {
+        var c = o.ctrl[m];
+        S('line', { x1: X(m), y1: Yr[0] + 14, x2: X(m), y2: Yr[1] - 14, stroke: COL.cyan, 'stroke-width': 2 }, svg);
+        S('text', { x: X(m) + 5, y: (Yr[0] + Yr[1]) / 2, 'font-size': 10, fill: CELL_COL[c.cell] }, svg, fx(c.A, 3) + ' ' + c.cell);
+      }
+      S('text', { x: 596, y: (Yr[0] + Yr[1]) / 2, 'text-anchor': 'end', 'font-size': 10, fill: COL.cyan }, svg, 'Coupling ↓');
+    }
+    S('text', { x: 596, y: 16, 'text-anchor': 'end', 'font-size': 10, fill: COL.green }, svg, 'Continuation over scale → (click an edge)');
+  }
+  function list(arr, d) { return arr.map(function (x) { return typeof x === 'number' ? fx(x, d) : '<span class="cell c-NE">' + (x === NE ? 'n/e' : x) + '</span>'; }).join(', '); }
+  function update() {
+    var o = compute();
+    draw(o);
+    var r0 = o.rows[0];
+    res.innerHTML =
+      '<p class="small" style="margin:0.3rem 0">Row 1 &middot; A: ' + list(r0.A, 3) + ' &middot; B: ' + list(r0.B, 3) + ' &middot; &rho; (nodes): ' + list(r0.rho, 3) + ' &middot; R: ' + list(r0.R, 3) + ' <span class="small">(n/e = NOT EVALUATED)</span></p>' +
+      '<p class="small" style="margin:0.3rem 0">' + (st.ring ? 'The closing edge makes a node its own predecessor: every operator is INADMISSIBLE, a value.' : o.interior ? 'An interior locus is declared (a node with a declared edge in and out), so A &rarr; B &rarr; R applies.' : 'No interior locus is declared: the primary kernel &Delta; &rarr; &Sigma; applies and B is NOT EVALUATED.') +
+      (o.interior && !o.rhoDecl ? ' R needs &rho;, and &rho; needs &rho;<sub>base</sub> and &chi;<sub>0</sub> from M: R is NOT EVALUATED.' : '') + '</p>' +
+      '<p style="margin:0.3rem 0">Signature (runs merged): <span class="cell">' + o.key + '</span> &rarr; <span class="verdict">' + o.verdict + '</span> <span class="design">&#9670; illustrative table</span></p>';
+    if (BTRACE) BTRACE.render();
+  }
+  function sync() { cTwo.checked = st.two; buildInputs(); update(); }
+  buildInputs(); update();
+  registerGraphic('t-kernel', el, function () { var o = compute(); return { interior: o.interior, rhoDecl: o.rhoDecl, verdict: o.verdict, key: o.key, ring: st.ring }; }, {
+    interiorLocus: function (s) { return s.interior === true; },
+    rDeclared: function (s) { return s.interior === true && s.rhoDecl === true; },
+    readsLine: function (s) { return s.verdict.indexOf('LINE') === 0; }
+  });
+  return { compute: compute, st: st };
+})();
+var BTRACE = null;
+
+(function () {
+  var el = q('t-btrace');
+  function chain(g, v, which) {
+    var o = KERNEL.compute(), A = o.rows[0].A, B = o.rows[0].B, e = (v.e | 0) - 1;
+    var X = function (n) { return 40 + n * 130; }, y = 70;
+    for (var n = 0; n < 4; n++) {
+      var isE = n === e, isS = n === e + 1 && which !== 'ge';
+      var col = isE ? COL.green : isS ? COL.amber : (typeof A[n] === 'number' ? COL.ink : COL.dim);
+      g.line(X(n) + 12, y, X(n + 1) - 12, y, { stroke: col, width: isE || isS ? 4 : 2, dash: typeof A[n] === 'number' ? '' : '5 4' });
+      g.text((X(n) + X(n + 1)) / 2, y - 12, 'e' + (n + 1) + ': g = ' + (typeof A[n] === 'number' ? fx(A[n], 3) : 'n/e'), { anchor: 'middle', size: 11, fill: col });
+    }
+    for (n = 0; n < 5; n++) g.dot(X(n), y, 8, { fill: '#1e293b', stroke: COL.ink });
+    var succ = typeof A[e + 1] === 'number', res = B[e];
+    var line = which === 'ge' ? 'g[e' + (e + 1) + '] = ' + (typeof A[e] === 'number' ? fx(A[e], 3) : 'not declared')
+      : which === 'succ' ? (succ ? 'immediate successor: e' + (e + 2) + ', g = ' + fx(A[e + 1], 3) : 'no declared successor: a terminal edge accumulates nothing')
+      : 'B(g)[e' + (e + 1) + '] = ' + (typeof res === 'number' ? fx(res, 3) : res);
+    g.text(40, 140, line, { size: 13, fill: COL.head });
+    g.text(40, 166, o.interior ? 'row 1 of the kernel graphic above; g = A(x)' : 'no interior locus is declared above, so B is NOT EVALUATED', { size: 11, fill: COL.muted });
+  }
+  BTRACE = CC.trace(el, {
+    id: 't-btrace', label: 'The accumulation B traced term by term on a chain of edges', height: 190,
+    eq: [{ t: 'B', html: 'B(g)[e]' }, { html: '=' }, { t: 'ge', html: 'g[e]' }, { html: '+' }, { t: 'succ', html: '&Sigma;<sub>f &isin; succ(e)</sub> g[f]' }],
+    vars: { e: { min: 1, max: 4, step: 1, init: 1, label: 'edge e' } },
+    cumulative: false,
+    steps: [
+      { lit: ['ge'], caption: 'The edge value itself: g[e] is A over that edge.', draw: function (g, v) { chain(g, v, 'ge'); } },
+      { lit: ['succ'], caption: 'Add the values on the IMMEDIATE successors only: the edges that start where e ends.', draw: function (g, v) { chain(g, v, 'succ'); } },
+      { lit: ['B'], caption: 'The result. On a chain each edge has at most one successor; the last edge has none.', draw: function (g, v) { chain(g, v, 'B'); } }
+    ]
+  });
+})();
+
+/* ============================================================ §5 transfer matrix */
+(function () {
+  var el = q('t-tm');
+  var KC = 0.5 * Math.log(1 + Math.SQRT2), cache = {};
+  function lamMax(W, K) {
+    var n = 1 << W, d = new Float64Array(n), v = new Float64Array(n), u = new Float64Array(n), eK = Math.exp(K), mK = Math.exp(-K), lam = 0;
+    for (var s = 0; s < n; s++) { var e = 0; for (var i = 0; i < W; i++) e += (((s >> i) & 1) === ((s >> ((i + 1) % W)) & 1)) ? 1 : -1; d[s] = Math.exp(K * e / 2); v[s] = 1; }
+    for (var it = 0; it < 4000; it++) {
+      for (s = 0; s < n; s++) u[s] = v[s] * d[s];
+      for (i = 0; i < W; i++) { var m = 1 << i; for (s = 0; s < n; s++) if (!(s & m)) { var a = u[s], b = u[s | m]; u[s] = eK * a + mK * b; u[s | m] = mK * a + eK * b; } }
+      var nr = 0, nv = 0;
+      for (s = 0; s < n; s++) { u[s] *= d[s]; nr += u[s] * u[s]; nv += v[s] * v[s]; }
+      nr = Math.sqrt(nr); var nl = nr / Math.sqrt(nv);
+      for (s = 0; s < n; s++) v[s] = u[s] / nr;
+      if (Math.abs(nl - lam) < 1e-13 * nl) { lam = nl; break; }
+      lam = nl;
+    }
+    return lam;
+  }
+  function fs(K, Wmax) {
+    var key = K.toFixed(5);
+    if (!cache[key]) cache[key] = {};
+    var out = [];
+    for (var W = 2; W <= Wmax; W++) { if (cache[key][W] == null) cache[key][W] = -Math.log(lamMax(W, K)) / W; out.push([W, cache[key][W]]); }
+    return out;
+  }
+  function cOf(p, r) { return 6 / PI * (p[1] - r[1]) / (1 / (r[0] * r[0]) - 1 / (p[0] * p[0])); }
+  var sel = mk('select', { 'aria-label': 'your reading of the central charge' }, '<option value="">—</option><option>1/2</option><option>7/10</option><option>4/5</option><option>1</option>');
+  var h = CC.trace(el, {
+    id: 't-tm', label: 'Free energy per site of Ising strips against one over width squared, with the extrapolation that gives the central charge', height: 280,
+    eq: [{ t: 'F', html: 'f(W)' }, { html: '=' }, { t: 'Finf', html: 'f<sub>&infin;</sub>' }, { html: '&minus;' }, { t: 'corr', html: '&pi;c / (6W<sup>2</sup>)' }],
+    vars: { K: { min: 0.2407, max: 0.6407, step: 0.0005, init: 0.4407, label: 'K = J/k<sub>B</sub>T' }, Wmax: { min: 4, max: 10, step: 1, init: 8, label: 'widest strip W' } },
+    base: function (g, v) {
+      var d = fs(v.K, v.Wmax | 0), ys = d.map(function (p) { return p[1]; }), lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys), pad = (hi - lo) * 0.25 + 1e-4;
+      g.axis({ x: [0, 0.26], y: [lo - pad, hi + pad], xlabel: '1/W²', ylabel: 'f(W) = −ln λmax / W', ticks: 4, pad: { l: 64 } });
+    },
+    steps: [
+      { lit: ['F'], caption: 'Each dot is one exact strip: the largest eigenvalue of a 2<sup>W</sup>-state transfer matrix, computed in your browser.', draw: function (g, v) {
+        fs(v.K, v.Wmax | 0).forEach(function (p) { g.dot(g.X(1 / (p[0] * p[0])), g.Y(p[1]), 4, { fill: COL.green }); if (p[0] <= 5 || p[0] === (v.Wmax | 0)) g.text(g.X(1 / (p[0] * p[0])) + 5, g.Y(p[1]) - 7, 'W=' + p[0], { size: 9 }); });
+      } },
+      { lit: ['Finf'], caption: 'Draw the straight line through the two widest strips and follow it to 1/W² = 0: the intercept is f<sub>&infin;</sub>.', draw: function (g, v) {
+        var d = fs(v.K, v.Wmax | 0), p = d[d.length - 2], r = d[d.length - 1], sl = (r[1] - p[1]) / (1 / (r[0] * r[0]) - 1 / (p[0] * p[0])), f0 = r[1] - sl / (r[0] * r[0]);
+        g.line(g.X(0), g.Y(f0), g.X(0.26), g.Y(f0 + sl * 0.26), { stroke: COL.amber, dash: '5 4' });
+        g.dot(g.X(0), g.Y(f0), 5, { fill: COL.amber }); g.text(g.X(0) + 6, g.Y(f0) + 22, 'f∞ ≈ ' + f0.toFixed(5), { size: 10, fill: COL.amber });
+      } },
+      { lit: ['corr'], caption: function (v) {
+        var d = fs(v.K, v.Wmax | 0), cs = [];
+        for (var i = 0; i + 1 < d.length; i++) cs.push(cOf(d[i], d[i + 1]).toFixed(3));
+        return 'The slope is &minus;&pi;c/6. From each pair of neighbouring widths: c = ' + cs.join(', ') + '. Read the trend, then pick your value below.';
+      }, draw: function () {} }
+    ],
+    checks: { readC: function (s) { return sel.value === '1/2' && Math.abs(s.vars.K - KC) < 0.0015; } }
+  });
+  var box = mk('div', { 'class': 'row-ctl' });
+  var lab = mk('label', {}, 'Your reading of c at this K: '); lab.appendChild(sel); box.appendChild(lab);
+  box.appendChild(button('K = K<sub>c</sub>', function () { h.set({ K: 0.4407 }); }));
+  el.appendChild(box);
+  h.go(2);
+})();
+
+/* ============================================================ §5 duality */
+(function () {
+  var el = q('t-dual');
+  var KC = 0.5 * Math.log(1 + Math.SQRT2);
+  var jy = function (jx) { return 0.5 * Math.asinh(1 / Math.sinh(2 * jx)); };
+  CC.trace(el, {
+    id: 't-dual', label: 'The self-dual critical line of the anisotropic Ising model in the Jx Jy plane with the isotropic point', height: 280,
+    eq: [{ t: 'line', html: '(sinh 2J<sub>x</sub>)(sinh 2J<sub>y</sub>) = 1' }, { html: '&rarr;' }, { t: 'iso', html: 'J<sub>x</sub> = J<sub>y</sub> = K' }, { html: '&rarr;' }, { t: 's', html: 'sinh 2K = 1' }, { html: '&rarr;' }, { t: 'kc', html: 'K<sub>c</sub> = &frac12; ln(1 + &radic;2) &asymp; 0.4407' }],
+    vars: { Jx: { min: 0.1407, max: 1.2407, step: 0.005, init: 0.8407, label: 'J<sub>x</sub>' } },
+    base: function (g) {
+      g.axis({ x: [0, 1.25], y: [0, 1.25], xlabel: 'J_x', ylabel: 'J_y', ticks: 5 });
+      g.text(g.X(0.9), g.Y(1.05), 'ordered', { size: 11, fill: COL.muted }); g.text(g.X(0.08), g.Y(0.12), 'disordered', { size: 11, fill: COL.muted });
+    },
+    steps: [
+      { lit: ['line'], caption: function (v) { return 'Aasen&ndash;Mong&ndash;Fendley (2.2): the whole curve is critical and self-dual. At J<sub>x</sub> = ' + v.Jx.toFixed(3) + ', J<sub>y</sub> = ' + jy(v.Jx).toFixed(3) + ' and the product of sinhs is ' + (Math.sinh(2 * v.Jx) * Math.sinh(2 * jy(v.Jx))).toFixed(4) + '.'; }, draw: function (g, v) {
+        g.plot(function (x) { return x > 0.02 ? jy(x) : NaN; }, { x: [0.05, 1.25], clip: [0, 1.25], stroke: COL.green, width: 2.5 });
+        g.dot(g.X(v.Jx), g.Y(jy(v.Jx)), 6, { fill: COL.head });
+      } },
+      { lit: ['iso'], caption: 'Now ask for equal couplings: the diagonal J<sub>x</sub> = J<sub>y</sub>.', draw: function (g) { g.line(g.X(0), g.Y(0), g.X(1.25), g.Y(1.25), { stroke: COL.muted, dash: '5 4' }); } },
+      { lit: ['s'], caption: 'On the diagonal (2.2) reads sinh<sup>2</sup> 2K = 1, and sinh 2K &gt; 0, so sinh 2K = 1.', draw: function (g) { g.dot(g.X(KC), g.Y(KC), 7, { fill: 'none', stroke: COL.amber, width: 2.5 }); } },
+      { lit: ['kc'], caption: 'So 2K = asinh 1 = ln(1 + &radic;2), K<sub>c</sub> &asymp; 0.4407 and T<sub>c</sub> = 1/K<sub>c</sub> &asymp; 2.269 in units of J/k<sub>B</sub>. (This page&rsquo;s arithmetic from (2.2); the paper does not print the number.) Slide J<sub>x</sub> onto it.', draw: function (g) { g.text(g.X(KC) + 10, g.Y(KC) + 16, 'K_c = 0.4407', { size: 12, fill: COL.amber }); } }
+    ],
+    checks: { atIsotropic: function (s) { return Math.abs(s.vars.Jx - KC) < 0.006; } }
+  }).go(0);
+})();
+
+/* ============================================================ §5 zeros */
+(function () {
+  var el = q('t-zeros');
+  var Ls = [4, 8, 16, 32, 64, 128];
+  var LIT = { 20: 1, 40: 2 };
+  CC.trace(el, {
+    id: 't-zeros', label: 'The first partition-function zero approaching the real axis as L grows, and its log-log rate against the two reference rates', height: 250, mode: 'slider', cumulative: false,
+    eq: [{ t: 'r', html: 'r<sub>1</sub>(L) ~ L<sup>&minus;s</sup>' }, { html: ';&ensp;second order:' }, { t: 'second', html: 's = 1/&nu;' }, { html: ';&ensp;first order:' }, { t: 'first', html: 's = d' }],
+    vars: { s: { min: 0.5, max: 2.5, step: 0.05, init: 1.5, label: 'approach exponent s' } },
+    stepOf: function (v) { return LIT[Math.round(v.s * 20)] || 0; },
+    steps: [0, 1, 2].map(function (k) {
+      return { lit: [['r', 'second', 'first'][k]], caption: function (v) { return ['s = ' + v.s.toFixed(2) + ' matches neither reference rate for a two-dimensional system with &nu; = 1.', 's = 1 = 1/&nu;: the rate of a continuous transition with &nu; = 1 (the 2D Ising value).', 's = 2 = d: the rate of a first-order transition in two dimensions, &ldquo;the formal identification of &nu; with 1/d&rdquo;.'][k]; },
+        draw: function (g, v) {
+          var ox = 20, w = 270, top = 14, bot = 214, zx = ox + w / 2;
+          g.line(ox, bot, ox + w, bot, { cls: 'cc-axis' }); g.text(ox + w, bot + 14, 'Re (schematic)', { size: 10, anchor: 'end' });
+          g.dot(zx, bot, 4, { fill: COL.red }); g.text(zx + 6, bot - 6, 'transition', { size: 10, fill: COL.red });
+          var pts = Ls.map(function (L) { var r = 0.9 * Math.pow(L / 4, -v.s); return [zx + 0.35 * r * w * 0.5, bot - r * (bot - top)]; });
+          g.path(pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(''), { stroke: COL.green, dash: '3 3' });
+          pts.forEach(function (p, i) { g.dot(p[0], p[1], 4, { fill: COL.green }); g.text(p[0] + 6, p[1] + 3, 'L=' + Ls[i], { size: 9 }); });
+          g.text(ox, top + 4, 'Im', { size: 10 });
+          var lx = 330, lw = 250, X = function (l) { return lx + (l - 2) / 5 * lw; }, Y = function (lr) { return top + (0 - lr) / 12 * (bot - top); };
+          g.line(lx, bot, lx + lw, bot, { cls: 'cc-axis' }); g.line(lx, top, lx, bot, { cls: 'cc-axis' });
+          g.text(lx + lw, bot + 14, 'log₂ L', { size: 10, anchor: 'end' }); g.text(lx + 4, top + 10, 'log₂ r₁', { size: 10 });
+          [[1, COL.cyan, 's = 1/ν = 1'], [2, COL.amber, 's = d = 2']].forEach(function (ref) {
+            g.line(X(2), Y(0), X(7), Y(-5 * ref[0]), { stroke: ref[1], dash: '5 4' });
+            g.text(X(7) - 4, Y(-5 * ref[0]) - 4, ref[2], { size: 10, anchor: 'end', fill: ref[1] });
+          });
+          g.line(X(2), Y(0), X(7), Y(-5 * v.s), { stroke: COL.green, width: 2.5 });
+        } };
+    }),
+    checks: { firstOrderRate: function (s) { return Math.abs(s.vars.s - 2) < 0.03; } }
+  });
+})();
+
+/* ============================================================ §6 the technique table */
+(function () {
+  var el = q('t-table');
+  var FIT = ['none', 'weak', 'indirect', 'moderate', 'fine', 'good', 'strong', 'direct', 'exact (R)'];
+  var SIDE = { scoring: 0, both: 1, instrument: 2 };
+  var ROWS = [
+    [1, 'Anomaly constraints (Lieb–Schultz–Mattis, ’t Hooft matching)', 'symmetry and filling, declared', 'prunes the possible endpoints; not LINE vs WALKING', 'PASS', 'none', 'both', 'declared in M, else scoring'],
+    [2, 'Protected exact marginality', 'the Hamiltonian (to prove it) / exponents at 2–3 scales (to detect it)', 'LINE vs WALKING via drift', 'PASS / MARGINAL', 'good', 'both', 'both'],
+    [3, 'Kramers–Wannier duality', 'the Hamiltonian', 'exact location; point vs line in coupling space', 'PASS', 'none', 'scoring', 'scoring'],
+    [4, 'Real-space RG by hand (Migdal–Kadanoff, decimation)', 'the Hamiltonian', 'rough phase diagrams; can create or destroy marginality', 'PASS', 'indirect', 'scoring', 'scoring'],
+    [5, 'Topological invariants (winding numbers)', 'snapshots of a phase field / a band structure', 'which phase, not the critical geometry', 'PASS', 'exact (R)', 'both', 'instrument / scoring'],
+    [6, 'Monte Carlo RG (Swendsen block spin)', 'spatial snapshots', 'POINT, LINE, WALKING by eigenvalues and level matching', 'PASS', 'strong', 'instrument', 'instrument'],
+    [7, 'Mutual-information RG (Koch-Janusz & Ringel)', 'snapshots', 'what to coarse-grain, not the geometry', 'MARGINAL', 'weak', 'instrument', 'instrument'],
+    [8, 'Transfer matrices, strips, the CFT spectrum', 'the Hamiltonian', 'POINT, LINE, WALKING on the controls, precisely', 'PASS', 'moderate', 'scoring', 'scoring'],
+    [9, 'Tensor-network RG (TRG, TNR)', 'the Hamiltonian as a local tensor', 'c, scaling dimensions, the tensor flow', 'MARGINAL', 'moderate', 'scoring', 'scoring'],
+    [10, 'Partition-function zeros (Lee–Yang, Fisher)', 'the Hamiltonian (exact Z)', 'the order; ν; walking untested', 'PASS', 'weak', 'scoring', 'scoring'],
+    [11, 'Time-series early warning', 'time series', 'approaching a transition or not', 'PASS', 'good', 'instrument', 'instrument'],
+    [12, 'Finite-size-scaling doubling chain', 'simulation tables at L, 2L, 4L…', 'POINT cleanly; LINE vs WALKING only when L reaches ξ', 'FAIL', 'fine', 'instrument', 'instrument, if simulable'],
+    [13, 'Drifting exponent from one snapshot set', 'snapshots', 'LINE vs WALKING, if the drift is resolvable', 'MARGINAL', 'direct', 'instrument', 'instrument'],
+    [14, 'High-temperature series and Padé approximants', 'the Hamiltonian', 'T_c and exponents; blind to walking', 'PASS', 'none', 'scoring', 'scoring']
+  ];
+  var BOUND_COL = { 'PASS': COL.green, 'PASS / MARGINAL': COL.amber, 'MARGINAL': COL.amber, 'FAIL': COL.red };
+  var BOUND_CLS = { 'PASS': 'pass', 'PASS / MARGINAL': 'marg', 'MARGINAL': 'marg', 'FAIL': 'fail' };
+  var filter = 'all', sel = 0;
+  var bar = mk('div', { 'class': 'row-ctl', role: 'group', 'aria-label': 'filter by side' });
+  var fbtn = {};
+  [['all', 'All'], ['instrument', 'Instrument side'], ['scoring', 'Scoring side']].forEach(function (f) { fbtn[f[0]] = button(f[1], function () { filter = f[0]; draw(); }); bar.appendChild(fbtn[f[0]]); });
+  var svg = newSvg(el, 600, 190, 'Map of fourteen techniques by kernel fit and side of the firewall, coloured by the design bound');
+  var tb = mk('div', { 'class': 'tbl' });
+  el.appendChild(bar); el.appendChild(tb);
+  el.insertBefore(bar, svg);
+  function shown(r) { return filter === 'all' || r[6] === filter || (r[6] === 'both'); }
+  function draw() {
+    Object.keys(fbtn).forEach(function (k) { fbtn[k].classList.toggle('on', k === filter); });
+    while (svg.lastChild) svg.removeChild(svg.lastChild);
+    var X = function (i) { return 70 + i * 62; }, Y = function (s) { return 160 - s * 62; }, used = {};
+    ['scoring', 'both', 'instrument'].forEach(function (s, i) { S('text', { x: 64, y: Y(i) + 4, 'text-anchor': 'end', 'font-size': 10, fill: COL.muted }, svg, s); S('line', { x1: 66, y1: Y(i), x2: 596, y2: Y(i), stroke: COL.dim }, svg); });
+    FIT.forEach(function (f, i) { S('text', { x: X(i), y: 184, 'text-anchor': 'middle', 'font-size': 9, fill: COL.muted }, svg, f); });
+    ROWS.forEach(function (r) {
+      var k = FIT.indexOf(r[5]) + ':' + SIDE[r[6]], off = (used[k] = (used[k] || 0) + 1) - 1;
+      var cx = X(FIT.indexOf(r[5])) + (off % 3) * 14 - 14, cy = Y(SIDE[r[6]]) - 12 * Math.floor(off / 3) - 6 * (off % 2);
+      var c = S('circle', { cx: cx, cy: cy, r: r[0] === sel ? 9 : 7, fill: BOUND_COL[r[4]], opacity: shown(r) ? 0.95 : 0.2, stroke: r[0] === sel ? COL.head : 'none', 'stroke-width': 2, style: 'cursor:pointer' }, svg);
+      c.addEventListener('click', function () { sel = r[0]; draw(); });
+      S('text', { x: cx, y: cy + 3, 'text-anchor': 'middle', 'font-size': 8, fill: '#0f172a', style: 'pointer-events:none' }, svg, String(r[0]));
+    });
+    tb.innerHTML = '<table class="t"><tr><th>#</th><th>technique</th><th>input</th><th>decides</th><th>design bound</th><th>kernel fit</th><th>side</th></tr>' +
+      ROWS.map(function (r) { return '<tr class="' + (r[0] === sel ? 'hl' : '') + (shown(r) ? '' : ' dimrow') + '"><td class="num">' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td>' + r[3] + '</td><td class="' + BOUND_CLS[r[4]] + '">' + r[4] + '</td><td>' + r[5] + '</td><td>' + r[7] + '</td></tr>'; }).join('') + '</table>';
+  }
+  draw();
+  registerGraphic('t-table', el, function () { return { filter: filter, selected: sel }; }, {
+    filterInstrument: function (s) { return s.filter === 'instrument'; },
+    selectedMcrg: function (s) { return s.selected === 6; }
+  });
+})();
+
+/* ============================================================ §7 the cheat-sheet */
+(function () {
+  var el = q('t-cheat');
+  var COLS = ['POINT', 'LINE', 'WALKING', 'BKT', 'honest failure'];
+  var ROWS = [
+    ['MCRG eigenvalues and level matching', 'one eigenvalue above 1, the rest below; levels n and n+1 agree', 'one eigenvalue exactly 1 at every level; fixed-level statistics depend on the start', 'an eigenvalue near 1 that drifts; level differences reach a nonzero minimum, then grow', 'level differences shrink only like 1/ℓ toward the line’s end', 'the walking minimum under the noise ⇒ REFUSE; too few couplings can manufacture drift'],
+    ['Drifting exponents, against scale and control', 'varies with neither', 'varies with control, not with scale', 'drifts with scale at fixed control (tangent-shaped)', 'approaches its limit as 1/(ln L + C); a power-law fit invents an exponent', 'a clean collapse with wrong exponents (q = 5: ν = 0.61(5))'],
+    ['Kernel signs over scale | control', 'ZERO! | ZERO!', 'ZERO! | SIG', 'SIG → SLOW → SIG (a turn)', 'SIG → SLOW → ? (no turn) ⇒ REFUSE("slow")', 'the band never closes (w > ε at every reachable level) ⇒ ?'],
+    ['Transfer-matrix c and the marginal operator', 'c constant; no exactly marginal operator', 'c constant (c = 1 on the AT line), an operator of dimension exactly 2, other dimensions varying', 'a plateau near Re c (1.138 at q = 5) for W ≪ ξ, collapsing later', 'c = 1 at the KT point, approached slowly', 'scoring side only: needs the Hamiltonian'],
+    ['Fisher zeros', 'r ~ L^(−1/ν)', 'r ~ L^(−1/ν) with ν varying along the line', 'eventually L^(−d); a drifting rate at L ≪ ξ is reasoned, not sourced', 'not a power law; not checked here', 'decides order, not LINE-ness'],
+    ['Early-warning signals (time series)', 'slowing down', 'slowing down', 'slowing down', 'slowing down', 'blind to the geometry: a front screen only']
+  ];
+  var lit = -1;
+  var svg = newSvg(el, 600, 150, 'Per-level velocity bands for a walking flow and a BKT flow with their five-valued signs, showing a turn and no turn');
+  var bar = mk('div', { 'class': 'row-ctl', role: 'group', 'aria-label': 'light a column' });
+  var tb = mk('div', { 'class': 'tbl' });
+  el.appendChild(bar); el.appendChild(tb);
+  var cbtn = COLS.map(function (c, i) { var b = button(c, function () { lit = lit === i ? -1 : i; draw(); }); bar.appendChild(b); return b; });
+  var W0 = 0.005, EPS = 0.05;
+  var SEQ = [['WALKING', [0.30, 0.05, 0.05, 0.30]], ['BKT', [0.25, 0.045, 0.025, 0.015]]];
+  function strip() {
+    while (svg.lastChild) svg.removeChild(svg.lastChild);
+    var X = function (n) { return 150 + n * 110; };
+    SEQ.forEach(function (sq, r) {
+      var y = 40 + r * 60;
+      S('text', { x: 10, y: y + 4, 'font-size': 12, fill: COL.head }, svg, sq[0]);
+      sq[1].forEach(function (v, n) {
+        var w = W0 * Math.pow(2, n), c = SIGN.classify(v, w, EPS);
+        S('text', { x: X(n), y: y - 14, 'text-anchor': 'middle', 'font-size': 10, fill: COL.muted }, svg, 'v = ' + v.toFixed(3) + ' ± ' + w.toFixed(3));
+        S('rect', { x: X(n) - 36, y: y - 9, width: 72, height: 18, rx: 4, fill: 'none', stroke: CELL_COL[c] }, svg);
+        S('text', { x: X(n), y: y + 4, 'text-anchor': 'middle', 'font-size': 12, fill: CELL_COL[c], 'font-weight': 700 }, svg, c);
+        if (n < 3) S('text', { x: X(n) + 55, y: y + 4, 'text-anchor': 'middle', 'font-size': 12, fill: COL.muted }, svg, '→');
+      });
+    });
+    S('text', { x: 10, y: 144, 'font-size': 10, fill: COL.muted }, svg, 'levels 0→1 … 3→4 · ε = 0.05 · the band doubles per level · the same table as §3 and §4');
+  }
+  function draw() {
+    cbtn.forEach(function (b, i) { b.classList.toggle('on', i === lit); });
+    tb.innerHTML = '<table class="t"><tr><th>technique</th>' + COLS.map(function (c, i) { return '<th' + (i === lit ? ' class="colhl"' : '') + '>' + c + '</th>'; }).join('') + '</tr>' +
+      ROWS.map(function (r) { return '<tr><td><b>' + r[0] + '</b></td>' + r.slice(1).map(function (c, i) { return '<td' + (i === lit ? ' class="colhl"' : '') + '>' + c + '</td>'; }).join('') + '</tr>'; }).join('') + '</table>';
+  }
+  strip(); draw();
+  registerGraphic('t-cheat', el, function () { return { lit: lit === -1 ? null : COLS[lit] }; }, {
+    litBKT: function (s) { return s.lit === 'BKT'; }
+  });
+})();
+
+inlineColors(document.body);
+CC.init({ page: 'techniques', bank: window.CC_BANKS.techniques, accent: '#22c55e' });
+})();
+</script>
 <script src="../../../js/annex-tracker.js"></script>
 </body>
 </html>
