@@ -99,15 +99,17 @@ async function main() {
   const open = async (ctx, { width = 1200, pre = [], media = null } = {}) => {
     const page = await ctx.newPage();
     page.setDefaultTimeout(20000);
-    const log = { errors: [], external: [] };
+    /* Every error counts, the shared annex-tracker's included: a page error from any script fails (iii) and (vi). */
+    const log = { errors: [] };
     page.on('pageerror', (e) => {
       const s = String(e.stack || e.message);
-      (/annex-tracker\.js/.test(s) ? log.external : log.errors).push('pageerror: ' + String(e.message).slice(0, 160));
+      const at = (s.match(/[\w.-]+\.js/) || [''])[0];
+      log.errors.push('pageerror: ' + String(e.message).slice(0, 160) + (at ? ' @' + at : ''));
     });
     page.on('console', (m) => {
       if (m.type() !== 'error' && m.type() !== 'warn' && m.type() !== 'warning') return;
       const loc = (m.location && m.location().url) || '';
-      (/annex-tracker\.js/.test(loc) ? log.external : log.errors).push(m.type() + ': ' + m.text().slice(0, 160) + (loc ? ' @' + loc.split('/').pop() : ''));
+      log.errors.push(m.type() + ': ' + m.text().slice(0, 160) + (loc ? ' @' + loc.split('/').pop() : ''));
     });
     for (const p of pre) await page.evaluateOnNewDocument(p);
     if (media) await page.emulateMediaFeatures(media);
@@ -211,7 +213,7 @@ async function main() {
     await page.close();
 
     /* (vi) console hygiene over everything ctx1 did */
-    record('vi', !log.errors.length, log.errors.length ? log.errors.slice(0, 6).join(' | ') : `0 errors, 0 warnings${log.external.length ? ' (external annex-tracker: ' + log.external.length + ')' : ''}`);
+    record('vi', !log.errors.length, log.errors.length ? log.errors.slice(0, 6).join(' | ') : '0 errors, 0 warnings');
     await ctx1.close();
 
     /* ---------- (iii) both storages blocked */
@@ -225,7 +227,7 @@ async function main() {
     });
     record('iii', !b1.err && b1.status === 'ok' && b2.avail === false && b2.visible > 0 && !log.errors.length,
       (b1.err || `item ${b1.id} graded '${b1.status}' with storage blocked`) + `; CC.store.available=${b2.avail}; "not saved" notices ${b2.notices} (${b2.visible} visible with accordions closed)` +
-      (log.errors.length ? '; errors: ' + log.errors.slice(0, 3).join(' | ') : '') + (log.external.length ? `; external annex-tracker errors: ${log.external.length}` : ''));
+      (log.errors.length ? '; errors: ' + log.errors.slice(0, 3).join(' | ') : ''));
     await ctx2.close();
 
     /* ---------- (iv) 360 px */
