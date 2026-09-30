@@ -146,7 +146,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   <p>Three numbers per level, three definitions: the step between successive levels is a
   <span class="tip" tabindex="0">directed difference<span class="tt">x[s] &minus; x[t] over a declared edge s &rarr; t. The kernel&rsquo;s operator A is defined this way; it is not a &ldquo;gradient&rdquo;.</span></span>
   over the declared scale relation (the kernel&rsquo;s A); the running sum of steps is an accumulation (the kernel&rsquo;s B);
-  the work the field does round a small loop is a circulation. The kernel has no loops (&sect;4): its R, R(g)[e] = g[e] + &rho;&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g) is an antisymmetric response over a <em>chain</em> of declared relations: the kernel&rsquo;s discrete analogue of circulation, not a loop integral.<a href="#fn-ksk" class="fn">12</a></p>
+  the work the field does round a small loop is a circulation. That third reading is the FLOW&rsquo;s; the kernel has no loops and reads it only through R&rsquo;s antisymmetric response over a chain (&sect;4): R, R(g)[e] = g[e] + &rho;&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g) is an antisymmetric response over a <em>chain</em> of declared relations: the kernel&rsquo;s discrete analogue of circulation, not a loop integral.<a href="#fn-ksk" class="fn">12</a></p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>The Detector will be a total lookup table over a discrete signature of these three readings (their signs, read against a declared margin). REFUSE is one of the table&rsquo;s cells, not an error message.<a href="#fn-design" class="fn">1</a></p></div>
   <details class="l2" id="d-0-l2"><summary>Working equations</summary>
     <p>With g<sub>n</sub> the couplings after n coarse-graining steps:</p>
@@ -301,7 +301,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   Let v be a velocity estimate (a per-level difference) and w the half-width of its band, so the band is [v &minus; w, v + w]; it is read against a declared margin &plusmn;&epsilon;:</p>
   <div class="graphic" data-cc-id="t-sign"></div>
   <p>The cell is looked up in a table with a row for every combination of four yes/no tests: <b>a</b> = the whole band lies above +&epsilon; (v &minus; w &gt; &epsilon;); <b>b</b> = it lies below &minus;&epsilon; (v + w &lt; &minus;&epsilon;); <b>c</b> = it lies inside &plusmn;&epsilon; (|v| + w &lt; &epsilon;); <b>r</b> = it excludes zero. The four answers form the key abcr (1 = yes). Some keys cannot occur for w, &epsilon; &ge; 0 (a and b together would need a negative band); they are given the cell ? so that the table is total and no input falls through it. In words: c without r (0010) is ZERO!; c with r (0011) is SLOW by the overlap rule; r alone (0001) is SLOW; a with r (1001) is SIG+; b with r (0101) is SIG&minus;; every other key is ?. No chain of conditions decides the cell.
-  Where ZERO! and SLOW could both be claimed (the band lies inside &plusmn;&epsilon; <em>and</em> excludes zero), the cell is <b>SLOW</b>:
+  Where both c and r hold (key 0011: the band lies inside &plusmn;&epsilon; and excludes zero), the ZERO! test and the SLOW test are both met, and the cell is <b>SLOW</b>:
   the overlap resolves toward the weaker claim, and a LINE is never asserted on an ambiguous reading. With &epsilon; = 0 the table collapses
   to the three-valued sign (SIG+, SIG&minus;, ?). The margin plays the role of the equivalence bounds of a
   <span class="tip" tabindex="0">TOST<span class="tt">Two one-sided tests: reject &ldquo;the effect is at or below &minus;&Delta;&rdquo; and reject &ldquo;it is at or above +&Delta;&rdquo;; together they support &ldquo;inside the bounds&rdquo;. The bounds are declared first.</span></span>
@@ -318,7 +318,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
     <span class="math-block">&Upsilon;(L) = 0.63650817819&hellip; + 0.318899454&hellip; / (ln L + C) + &hellip;</span>
     <p>so it is still 5 % above its limit at L = 2048 for C of order 1 (an illustration of the form, not a fitted C).<a href="#fn-has05" class="fn">10</a></p>
     <p><b>The five-valued sign</b> <span class="design">&#9670; design</span>. Four predicates: a = (v &minus; w &gt; &epsilon;), b = (v + w &lt; &minus;&epsilon;), c = (|v| + w &lt; &epsilon;), r = (v &minus; w &gt; 0 or v + w &lt; 0).
-    The key abcr indexes a 16-row table (shown under the graphic). SIG+ = the whole band beyond +&epsilon;; SIG&minus; = beyond &minus;&epsilon;; ZERO! = the whole band inside the margin
+    The key abcr indexes a 16-row table (shown under the graphic). SIG+ = the whole band beyond +&epsilon;; SIG&minus; = beyond &minus;&epsilon;; ZERO! = c without r (0010): the whole band inside the margin
     and not excluding zero; SLOW = resolved nonzero but not beyond &epsilon;; ? = everything else, including keys that cannot occur and NaN.<a href="#fn-design" class="fn">1</a>
     <b>TOST</b>: equivalence holds when the 90 % confidence interval (two one-sided tests at &alpha; = 5 %) lies inside the declared bounds [&minus;&Delta;<sub>L</sub>, &Delta;<sub>U</sub>].<a href="#fn-lak17" class="fn">11</a></p>
     <details class="l1" id="d-3-l1"><summary>Full derivation</summary>
@@ -338,7 +338,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
 <section id="4-kernel" class="cc-sec" data-accent="green">
   <h2><span class="num">4</span> The kernel lens: A, B and R over declared relations</h2>
   <p class="headline">Declare the relations first; then three definitions turn exponent estimates into signs a table can read.</p>
-  <p>The three are a directed difference (A), an accumulation over immediate successors (B) and an antisymmetric response (R). R(g)[e] = g[e] + &rho;&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g) is an antisymmetric response over a <em>chain</em> of declared relations: the kernel&rsquo;s discrete analogue of circulation, not a loop integral (the circulation of &sect;0 is the continuum picture it is an analogue of). An <b>interior locus</b> is a node with both a declared predecessor and a declared successor, s &rarr; t &rarr; u; B and R need one.</p>
+  <p>The three are a directed difference (A), an accumulation over immediate successors (B) and an antisymmetric response (R). R(g)[e] = g[e] + &rho;&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g) is an antisymmetric response over a <em>chain</em> of declared relations: the kernel&rsquo;s discrete analogue of circulation, not a loop integral (the circulation of &sect;0 is the continuum picture it is an analogue of). An <b>interior locus</b> is a node with both a declared predecessor and a declared successor, s &rarr; t &rarr; u. B needs one, and so does the full A &rarr; B &rarr; R path; without one, the primary kernel &Sigma;<sub>k</sub> (the antisymmetric response applied without B) is the fallback.</p>
   <div class="graphic" data-cc-id="t-kernel"></div>
   <p>The relational kernel is a small set of operator definitions with one rule above them: <b>nothing enters an operator undeclared</b>.<a href="#fn-ksk" class="fn" id="fnref-ksk">12</a>
   The chain is observable &rarr; M &rarr; a numerical projection (numbers) &rarr; declared relations &rarr; operators &rarr; result &rarr; comparison with observables,
@@ -363,7 +363,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
       <tr><td>B</td><td>g[e] + &Sigma; over immediate successors; terminal edges accumulate nothing</td><td>EdgeField &rarr; EdgeField</td></tr>
       <tr><td>R</td><td>g[e] + &rho;[src(e)]&middot;(&Sigma; succ &minus; &Sigma; pred) (plus a declared cross-coupling between components)</td><td>EdgeField &rarr; EdgeField</td></tr>
       <tr><td>&rho;</td><td>&rho;<sub>base</sub>&middot;&chi;/(&chi;<sub>0</sub> + &chi;), &chi; = max |A| at the node</td><td>M supplies &rho;<sub>base</sub>, &chi;<sub>0</sub></td></tr>
-      <tr><td>&Sigma;<sub>k</sub> (the primary kernel; a named operator, not a summation)</td><td>&Delta; then an antisymmetric response, no B</td><td>used when no interior locus is established</td></tr>
+      <tr><td>&Sigma;<sub>k</sub> (the primary kernel; a named operator, not a summation)</td><td>&Delta; then the antisymmetric response applied WITHOUT B</td><td>B needs an interior locus; &Sigma;<sub>k</sub> applies the antisymmetric response without B, which is why it is the form used when no interior locus is established</td></tr>
       <tr><td>C</td><td>a declared projection (states what it keeps and discards)</td><td>application layer, not the kernel</td></tr>
     </table></div>
     <p class="small">As the kernel reference states them.<a href="#fn-ksk" class="fn">12</a></p>
@@ -449,7 +449,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   <h2><span class="num">6</span> The other techniques, in one table</h2>
   <p class="headline">Fourteen techniques side by side: what each needs, what it decides, whether it fits the design bound, how well it reduces to A, B and R, and which side of the firewall it lives on.</p>
   <div class="graphic" data-cc-id="t-table"></div>
-  <p>Two scales before the table. <b>Design bound</b>: PASS = fits a 486-class machine (16 MB, ~10<sup>7</sup> operations/s) comfortably; MARGINAL = fits only in a reduced form or at the edge; FAIL = does not fit. For example MCRG on a 64&sup2; lattice at 10<sup>4</sup> sweeps is ~10<sup>8</sup> operations, about 10 s at 10<sup>7</sup> operations/s: a PASS. <b>Kernel fit</b>, in the notes&rsquo; own words and ordered roughly from worst to best: none &lt; weak &lt; indirect &lt; moderate &lt; fine &lt; good &lt; strong &lt; direct &lt; exact (R), meaning how completely the method reduces to directed differences, accumulations and circulations over declared relations.</p>
+  <p>Two scales before the table. <b>Design bound</b>: PASS = fits a 486-class machine (16 MB, ~10<sup>7</sup> operations/s) comfortably; MARGINAL = fits only in a reduced form or at the edge; FAIL = does not fit. For example MCRG on a 64&sup2; lattice at 10<sup>4</sup> sweeps is ~10<sup>8</sup> operations, about 10 s at 10<sup>7</sup> operations/s: a PASS. <b>Kernel fit</b>, in the notes&rsquo; own words and ordered roughly from worst to best: none &lt; weak &lt; indirect &lt; moderate &lt; fine &lt; good &lt; strong &lt; direct, meaning how completely the method reduces to directed differences, accumulations and the antisymmetric response over declared relations; plus one separate category, <i>projection</i>: the method&rsquo;s output is a declared projection (a loop sum, such as a winding number), not an operator.</p>
   <p>The map places each technique by how well it reduces to the kernel&rsquo;s operators (left to right) and by the side of the firewall it lives on
   (bottom to top). Click a dot or a filter. Instrument-side methods take observations: snapshots or time series. Scoring-side methods need the
   Hamiltonian and generate truth. Tensor-network RG (Levin&ndash;Nave; Evenbly&ndash;Vidal),<a href="#fn-tn" class="fn" id="fnref-tn">20</a> information-based RG (Koch-Janusz &amp; Ringel),<a href="#fn-kjr" class="fn" id="fnref-kjr">22</a>
@@ -458,7 +458,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   <details class="l2" id="d-6-l2"><summary>Working equations</summary>
     <p><b>What the columns mean.</b> <i>Design bound</i>: could it run on a 486-class machine (16 MB, ~10<sup>7</sup> operations/s)? The costs are order-of-magnitude arithmetic, not timings:
     MCRG on 64&sup2; Ising at 10<sup>4</sup> sweeps is ~10<sup>8</sup> operations; a 2<sup>12</sup>-state sparse transfer-matrix step ~10<sup>5</sup>; tensor RG ~D<sup>6</sup> per step, which fits 16 MB at bond dimension D = 16&ndash;24.
-    <i>Kernel fit</i>: does it reduce to directed differences over a declared relation, their accumulations, and circulation round loops?<a href="#fn-tex" class="fn">19</a></p>
+    <i>Kernel fit</i>: does it reduce to directed differences over a declared relation, their accumulations over a declared chain, and the antisymmetric response R over it? (The kernel has no loops; a loop sum such as a winding number is a declared projection, not R.)<a href="#fn-tex" class="fn">19</a></p>
     <p><b>Claims in this table that are not verified here:</b> that Fisher zeros of a walking system approach the axis at a drifting rate; that a histogram version of information-based RG fits the design bound;
     that Migdal&ndash;Kadanoff mishandles marginality on Ashkin&ndash;Teller specifically (the general weakness is known). Treat them as leads.</p>
   </details>
@@ -490,7 +490,7 @@ Scores stay in this browser. The mark <span class="design">&#9670; design</span>
   <p class="headline">Ten lines to keep, a 25-item final test that draws new items on every retake, a name drill, and your scores.</p>
   <ol class="remember">
     <li>The instrument follows the flow: velocity (A over scale), accumulation (B), circulation (R).</li>
-    <li>Exponents are eigenvalues of the linearised RG matrix, &lambda; = b<sup>y</sup>; an eigenvalue exactly 1 is a line of fixed points.</li>
+    <li>Exponents are eigenvalues of the linearised RG matrix, &lambda; = b<sup>y</sup>; an eigenvalue that stays exactly 1 beyond linear order, along a direction that is not redundant, is a line of fixed points.</li>
     <li>MCRG (Swendsen 1979): block the same snapshots again and again; T<sub>&alpha;&beta;</sub> = &part;K&prime;<sub>&alpha;</sub>/&part;K<sub>&beta;</sub> from two correlation matrices and the chain rule.</li>
     <li>Converged eigenvalues are not a converged trajectory (Ron, Brandt &amp; Swendsen 2017); truncation can, by our reasoning, manufacture drift.</li>
     <li>A clean data collapse can be confidently wrong (Iino et al.: &nu; = 0.61(5) at a first-order transition).</li>
@@ -1267,14 +1267,14 @@ var BTRACE = null;
 /* ============================================================ §6 the technique table */
 (function () {
   var el = q('t-table');
-  var FIT = ['none', 'weak', 'indirect', 'moderate', 'fine', 'good', 'strong', 'direct', 'exact (R)'];
+  var FIT = ['none', 'weak', 'indirect', 'moderate', 'fine', 'good', 'strong', 'direct', 'projection'];
   var SIDE = { scoring: 0, both: 1, instrument: 2 };
   var ROWS = [
     [1, 'Anomaly constraints (Lieb–Schultz–Mattis, ’t Hooft matching)', 'symmetry and filling, declared', 'prunes the possible endpoints; not LINE vs WALKING', 'PASS', 'none', 'both', 'declared in M, else scoring'],
     [2, 'Protected exact marginality', 'the Hamiltonian (to prove it) / exponents at 2–3 scales (to detect it)', 'LINE vs WALKING via drift', 'PASS / MARGINAL', 'good', 'both', 'both'],
     [3, 'Kramers–Wannier duality', 'the Hamiltonian', 'exact location; point vs line in coupling space', 'PASS', 'none', 'scoring', 'scoring'],
     [4, 'Real-space RG by hand (Migdal–Kadanoff, decimation)', 'the Hamiltonian', 'rough phase diagrams; can create or destroy marginality', 'PASS', 'indirect', 'scoring', 'scoring'],
-    [5, 'Topological invariants (winding numbers)', 'snapshots of a phase field / a band structure', 'which phase, not the critical geometry', 'PASS', 'exact (R)', 'both', 'instrument / scoring'],
+    [5, 'Topological invariants (winding numbers)', 'snapshots of a phase field / a band structure', 'which phase, not the critical geometry', 'PASS', 'projection', 'both', 'instrument / scoring'],
     [6, 'Monte Carlo RG (Swendsen block spin)', 'spatial snapshots', 'POINT, LINE, WALKING by eigenvalues and level matching', 'PASS', 'strong', 'instrument', 'instrument'],
     [7, 'Mutual-information RG (Koch-Janusz & Ringel)', 'snapshots', 'what to coarse-grain, not the geometry', 'MARGINAL', 'weak', 'instrument', 'instrument'],
     [8, 'Transfer matrices, strips, the CFT spectrum', 'the Hamiltonian', 'POINT, LINE, WALKING on the controls, precisely', 'PASS', 'moderate', 'scoring', 'scoring'],

@@ -44,7 +44,7 @@ window.CC_BANKS.techniques = {
     { id: 'techniques-1-01', section: '1-matrix', tier: 'task', type: 'task',
       prompt: 'Drag the entries of M until one eigenvalue is exactly 1, so that a fixed line appears. Press Check.',
       graphic: 't-matrix', check: 'isMarginal',
-      explain: 'An eigenvalue &lambda; = 1 means y = 0: at linear order every point along that eigenvector maps to itself.', cite: 'fn-rgp' },
+      explain: 'An eigenvalue &lambda; = 1 means y = 0: at linear order every point along that eigenvector maps to itself (a true line of fixed points needs it to stay 1 beyond linear order, along a non-redundant direction).', cite: 'fn-rgp' },
     { id: 'techniques-1-02', section: '1-matrix', tier: 'equation', type: 'mc',
       prompt: 'How are the eigenvalues &lambda; of the linearised RG matrix conventionally written, for a scale factor b?',
       options: ['&lambda; = b<sup>y</sup>', '&lambda; = y<sup>b</sup>', '&lambda; = e<sup>&minus;b/y</sup>', '&lambda; = b &middot; y'], answer: 0,
