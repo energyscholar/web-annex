@@ -302,7 +302,7 @@ window.CC_BANKS.kt = {
 /* ---- 12 BKT for the Compass */
 { id: 'kt-12-01', section: '12-compass', tier: 'concept', type: 'mc',
   prompt: 'On a BKT file at T<sub>KT</sub>, what sequence of five-valued signs does the flow velocity give as the RG level grows?',
-  options: ['SIG &rarr; SLOW &rarr; ? (resolved, then within the margin, then unresolved)', 'ZERO! at every level', 'SIG at every level', 'SLOW &rarr; SIG &rarr; SLOW'], answer: 0,
+  options: ['SIG &rarr; SLOW &rarr; ?, with no turn back up', 'ZERO! at every level', 'SIG at every level', 'SLOW &rarr; SIG &rarr; SLOW'], answer: 0,
   explain: 'The velocity falls as 1/&#8467;&sup2; while the band grows with the level: a named cell, REFUSE(&ldquo;slow&rdquo;).', cite: 'fn18' },
 { id: 'kt-12-02', section: '12-compass', tier: 'task', type: 'task', graphic: 'kt-sign', check: 'slowThenUnknown',
   prompt: 'In the sign-sequence trace, choose &epsilon; and the band so the BKT sequence contains SLOW and ends in &ldquo;?&rdquo;, then press Check.',

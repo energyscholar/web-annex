@@ -173,7 +173,7 @@ is why it opens this series.</p>
     <li><span class="alpha w">WALKING</span> the flow slows to a small nonzero minimum, never stops, then leaves; a finite system imitates criticality (Potts q = 5, 6).&#8288;<sup class="fnm"><a href="#fn19" class="fn" id="fnref19">[19]</a></sup></li>
     <li><span class="alpha r">REFUSE</span> the honest verdict when the data cannot tell. It is a verdict about the data, not a behaviour of the flow, and it is a value, not an error.</li>
   </ul>
-  <p>The Detector follows the flow over two kinds of relation: <b>SCALE</b> (a system against its own coarse-grained copy: level n against n + 1, or size L/2 against L) and <b>CONTROL</b> (runs at neighbouring values of a knob such as the temperature). A <b>breaker</b> is a test case chosen to fool the instrument: a good failure on it is REFUSE, a bad one is a confident wrong verdict. Each reading of a flow velocity is sorted by a <b>five-valued sign</b> (SIG+, SIG&minus;, ZERO!, SLOW, ?), taught in §12.</p>
+  <p>The Detector follows the flow over two kinds of relation: <b>SCALE</b> (a system against its own coarse-grained copy: level n against n + 1, or size L/2 against L) and <b>CONTROL</b> (runs at neighbouring values of a knob such as the temperature). A <b>breaker</b> is a test case chosen to fool the instrument: a good failure on it is REFUSE, a bad one is a confident wrong verdict. Each reading of a flow velocity is sorted by a <b>five-valued sign</b> (SIG+, SIG&minus;, ZERO!, SLOW, ?), taught on the Techniques page, §3; applied to BKT in §12 below.</p>
   <p>Each section has three layers. The picture and the prose are open. <b>Working equations</b> (a closed
   box) holds the equations a working physicist uses. <b>Full derivation</b>, nested inside it, holds the
   step-by-step argument. Every section ends with a cyan box saying what it means for the
@@ -401,9 +401,7 @@ is why it opens this series.</p>
   <p>Drag the white handle. The arrows are the flow field; the thick curve is the trajectory from your
   start; the dashed curve is the hyperbola <span class="math">E = y&sup2; &minus; x&sup2;</span> through it, which the
   flow can never leave. Here <span class="math">x = &pi;K &minus; 2</span> measures how far the running stiffness K (the renormalised J/k<sub>B</sub>T) is above the critical value 2/&pi;, and y, the vortex fugacity, measures how cheap vortices are. (Hasenbusch, Marcu and Pinn write x = &pi;&beta; &minus; 2, with &beta; the coupling of the dual Gaussian model; on this page &beta; always means 1/k<sub>B</sub>T.) The scale variable is t = ln b, the logarithm of the coarse-graining factor; Nelson and Kosterlitz call it &#8467;.&#8288;<sup class="fnm"><a href="#fn9" class="fn" id="fnref9">[9]</a></sup>
-  The two diagonals y = |x| are the separatrices; they cut the plane into three regions. <b>Region I</b> (below y = x, with x &gt; 0): the fugacity dies and the trajectory lands on the red <b>fixed line</b>
-  (y = 0) at x<sub>&infin;</sub> = &radic;(x&sup2; &minus; y&sup2;), a different point for every start. <b>Region II</b> (above both diagonals) and <b>region III</b> (below y = &minus;x, with x &lt; 0): y
-  grows without bound and vortices take over. The branch x = y is the critical trajectory, and it runs
+  The separatrices are the lines y = x and y = &minus;x; they cut the upper half-plane into three regions. <b>Region I</b> is below y = x on the right (x &gt; 0, y &lt; x): the fugacity dies and the trajectory lands on the red <b>fixed line</b> (y = 0) at x<sub>&infin;</sub> = &radic;(x&sup2; &minus; y&sup2;), a different point for every start. <b>Region II</b> is above both separatrices (y &gt; |x|): y grows without bound and vortices take over. <b>Region III</b> is below y = &minus;x on the left (x &lt; 0, y &lt; &minus;x): y also grows without bound. The branch x = y is the critical trajectory, and it runs
   into the end of the line, the point (0, 0).</p>
   <div class="graphic" data-cc-id="kt-flow-eq"></div>
   <p>The second trace takes the two equations apart: the fugacity equation alone, the stiffness equation
@@ -412,7 +410,7 @@ is why it opens this series.</p>
   irrelevant coupling near an ordinary fixed point dies exponentially in the scale time t = ln b. On the
   critical trajectory the fugacity dies only as 1/t: after a factor of 10<sup>40</sup> in scale it has
   still not gone.</p>
-  <div class="cc-takeaway"><h4>For the Compass</h4><p>This is what &ldquo;the flow stops on a line&rdquo; looks like, and what happens at the line&rsquo;s end. Below the separatrix the velocity drops to zero exponentially: ZERO! within any declared margin, a LINE. On the critical trajectory the velocity falls as 1/t&sup2;: resolved and nonzero, then within the margin, then lost in the noise. That sequence, SIG &rarr; SLOW &rarr; ?, is a named cell of the Detector&rsquo;s table, and its verdict is REFUSE(&ldquo;slow&rdquo;). <span class="design">&#9670; design</span></p></div>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>This is what &ldquo;the flow stops on a line&rdquo; looks like, and what happens at the line&rsquo;s end. Below the separatrix the velocity drops to zero exponentially: ZERO! within any declared margin, a LINE. On the critical trajectory the velocity falls as 1/t&sup2;, and the five-valued sign of §12 reads it SIG, then SLOW, then ?. That sequence, SIG &rarr; SLOW &rarr; ?, is a named cell of the Detector&rsquo;s table, and its verdict is REFUSE(&ldquo;slow&rdquo;). <span class="design">&#9670; design</span></p></div>
   <details class="l2" id="d-6-l2"><summary>Working equations</summary>
     <p>Hasenbusch, Marcu and Pinn write the flow (their eqs 22&ndash;24), with t = ln B the scale:</p>
     <span class="math-block">dy/dt = &minus;xy, &nbsp;&nbsp; dx/dt = &minus;y&sup2;, &nbsp;&nbsp; x = &pi;K &minus; 2, &nbsp; y = cz (c a non-universal constant), &nbsp;&nbsp; E = y&sup2; &minus; x&sup2; conserved.</span>
@@ -667,15 +665,17 @@ is why it opens this series.</p>
 
 <section id="12-compass" class="cc-sec" data-accent="purple">
   <h2><span class="num">12</span> BKT for the Compass <span class="design">&#9670; design</span></h2>
-  <p class="headline">BKT is a LINE control that is treacherous at its end, and the honest reading of its end is REFUSE.</p>
+  <p class="headline">BKT is a known-answer test for the LINE verdict, and a treacherous one: near the line&rsquo;s end the honest reading is REFUSE.</p>
   <div class="graphic" data-cc-id="kt-sign"></div>
-  <p>The trace applies the Detector&rsquo;s <b>five-valued sign</b> to the flow velocity at successive coarse-graining
-  levels. Each level gives an estimate v with a band w (the band widens with depth, because a coarser level has fewer
-  blocks), read against a margin &epsilon; that is declared before any data are seen, like the equivalence bounds of a
-  two-one-sided-tests procedure.&#8288;<sup class="fnm"><a href="#fn18" class="fn">[18]</a></sup> The cell is looked up in a table with a row for every
-  combination of four yes/no tests: SIG+ (the whole band above +&epsilon;), SIG&minus; (below &minus;&epsilon;), ZERO! (the band lies inside &plusmn;&epsilon;), SLOW (the band excludes zero but does not lie wholly beyond &plusmn;&epsilon;), and ?
-  (anything else). Where ZERO! and SLOW would both hold (inside &plusmn;&epsilon; yet excluding zero), the cell is SLOW: a zero is never claimed while a nonzero is
-  resolved, and LINE is never asserted on an ambiguous reading. These definitions are the table the trace uses, printed in full under &ldquo;Working equations&rdquo;. Move &epsilon; and the band and watch the BKT velocity profile, 1/(n + n<sub>0</sub>)&sup2;, read out.</p>
+  <p>The trace applies the Detector&rsquo;s <b>five-valued sign</b> (taught on the Techniques page, §3) to the flow velocity at successive coarse-graining
+  levels. At each level, <b>v</b> is the estimate of the flow velocity and <b>w</b> is the half-width of its band, so the band is v &plusmn; w (it widens with depth, because a coarser level has fewer
+  blocks). The band is read against a margin &plusmn;&epsilon; that is declared before any data are seen, like the equivalence bounds of a
+  two-one-sided-tests procedure.&#8288;<sup class="fnm"><a href="#fn18" class="fn">[18]</a></sup> Four yes/no tests: <b>a</b> = the whole band lies above +&epsilon; (v &minus; w &gt; &epsilon;);
+  <b>b</b> = the whole band lies below &minus;&epsilon; (v + w &lt; &minus;&epsilon;); <b>c</b> = the whole band lies inside &plusmn;&epsilon; (|v| + w &lt; &epsilon;);
+  <b>r</b> = the band excludes zero (v &minus; w &gt; 0 or v + w &lt; 0). The cell is looked up from the key abcr: a with r is SIG+ (1001); b with r is SIG&minus; (0101);
+  c without r is ZERO! (0010); c with r (key 0011) is SLOW by the overlap rule; r without a, b, c (0001) is SLOW; every other key is ?.
+  The overlap rule says that where the band is inside &plusmn;&epsilon; yet excludes zero, the cell is SLOW: a zero is never claimed while a nonzero is
+  resolved, and LINE is never asserted on an ambiguous reading. The whole table is printed under &ldquo;Working equations&rdquo;, read from the object the trace uses. Move &epsilon; and the band and watch the BKT velocity profile, 1/(n + n<sub>0</sub>)&sup2;, read out.</p>
   <p>Two typed verdicts appear below. <b>REFUSE(&ldquo;slow&rdquo;)</b> is REFUSE with its reason attached: the flow was resolved as moving, then as slow, then lost in the noise, with no turn that would mark WALKING. <b>LINE(&epsilon;, n<sub>levels</sub>)</b> is a LINE verdict that carries its own terms: stopped within the declared margin &epsilon;, over the n<sub>levels</sub> coarse-graining levels read, and nothing more. The <b>scoring side</b> is where exact answers (solutions, known phase diagrams) live; they grade a verdict after it is given and never feed the instrument.</p>
   <div class="tablewrap"><table class="t strip">
     <tr><th>Technique</th><th>How it sees BKT</th><th>Honest failure</th></tr>
@@ -687,14 +687,11 @@ is why it opens this series.</p>
   <p>The techniques page of this series takes each row apart.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>Pre-registered: on BKT the honest Detector answers REFUSE. The breaker tests honesty, not skill. And the verdict depends on &epsilon;, which is exactly why &epsilon; is declared first: chosen afterwards, it could make any answer come out.</p></div>
   <details class="l2" id="d-12-l2"><summary>Working equations</summary>
-    <p>The four tests over (v, w, &epsilon;): a = [v &minus; w &gt; &epsilon;], b = [v + w &lt; &minus;&epsilon;], c = [|v| + w &lt; &epsilon;],
-    r = [v &minus; w &gt; 0 or v + w &lt; 0]. The table maps each of the 16 keys abcr to one cell: 1001 &rarr; SIG+, 0101 &rarr; SIG&minus;,
-    0010 &rarr; ZERO!, 0001 and 0011 &rarr; SLOW, every other key &rarr; ?. Key 0011 is the overlap: inside &plusmn;&epsilon; (c) and excluding zero (r), and it reads SLOW. Keys such as 1100 (the band both above +&epsilon; and below &minus;&epsilon;) cannot occur for w, &epsilon; &ge; 0; they read ?, so the table has no gaps. There is no chain of conditions: the verdict is a lookup, and
+    <p>The table has one cell for each of the 16 keys abcr of the tests above. Keys such as 1100 (the band both above +&epsilon; and below &minus;&epsilon;) cannot occur for w, &epsilon; &ge; 0; they read ?, so the table has no gaps. There is no chain of conditions: the verdict is a lookup, and
     &ldquo;?&rdquo; is a value. With &epsilon; = 0 it collapses to the three-valued sign (SIG+, SIG&minus;, ?).&#8288;<sup class="fnm"><a href="#fn18" class="fn">[18]</a></sup> The full table, read from the same object the trace uses:</p>
     <div class="tablewrap" id="kt-sign-keys"></div>
     <p>The BKT row: velocity v<sub>n</sub> &prop; dx/dt = &minus;x&sup2; with x = 1/(t + C) along the critical trajectory, so
-    |v<sub>n</sub>| &prop; 1/(n + n<sub>0</sub>)&sup2; (n<sub>0</sub> a constant, 1.5 in the trace). Once it falls under &epsilon; the reading is SLOW (resolved) until the band covers zero; after that
-    it is ?. The named cell SIG &rarr; SLOW &rarr; ? with no later turn maps to REFUSE(&ldquo;slow&rdquo;). The verdict on a LINE is typed
+    |v<sub>n</sub>| &prop; 1/(n + n<sub>0</sub>)&sup2; (n<sub>0</sub> a constant, 1.5 in the trace). Once v &minus; w no longer exceeds &epsilon; the key is 0001 or 0011 and the cell is SLOW; once the band covers zero the cell is ?. The named cell SIG &rarr; SLOW &rarr; ? with no later turn maps to REFUSE(&ldquo;slow&rdquo;). The verdict on a LINE is typed
     LINE(&epsilon;, n<sub>levels</sub>): equivalent to stopped within the declared margin over the levels read, and nothing more.</p>
   </details>
   <details class="quiz" id="q-12"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -1023,7 +1020,7 @@ is why it opens this series.</p>
       },
       steps: [
         { lit: ['U'], caption: function (v) { return 'A pair at distance r has Boltzmann weight (r/r<sub>0</sub>)<sup>&minus;2&beta;q&sup2;</sup>, and with q&sup2; = &pi;J here &beta;q&sup2; = ' + fx(PI / v.T, 2) + '. The pairs on the left are drawn with sizes from that weight.'; } },
-        { lit: ['r2'], caption: 'The mean-square pair size, ignoring the other pairs (Kosterlitz &amp; Thouless eq. 7), plotted on the right.',
+        { lit: ['r2'], caption: 'The mean-square pair size, ignoring the other pairs (Kosterlitz &amp; Thouless eq. 7), plotted on the right. It diverges at &beta;q&sup2; = 2, i.e. k<sub>B</sub>T = &pi;J/2, the napkin temperature of §4. The real T<sub>KT</sub> = 0.8929J is lower, because the other pairs screen the interaction and renormalise the stiffness downward (§6).',
           draw: function (g, v) { var P = g._P; P.plot(function (t) { var x = PI / t; return x > 2 ? (x - 1) / (x - 2) : NaN; }, 0.3, PI / 2 - 0.002, { stroke: C.p, width: 2.5 }, 300); var x = PI / v.T; if (x > 2) g.dot(P.X(v.T), P.Y(Math.min(12, (x - 1) / (x - 2))), 5, { fill: C.h }); } },
         { lit: ['den'], caption: function (v) { var d = PI / v.T - 2; return 'The denominator &beta;q&sup2; &minus; 2 = ' + fx(d, 2) + (d > 0 ? ': positive, so pairs have a finite size: a dielectric.' : ': it has passed zero. The mean pair size is infinite: the gas conducts.'); },
           draw: function (g) { var P = g._P; g.line(P.X(PI / 2), P.Y(0), P.X(PI / 2), P.Y(12), { stroke: C.r, dash: '4 3' }); g.text(P.X(PI / 2) + 3, P.Y(11), 'πJ/2', { size: 10, fill: C.r }); } }
@@ -1269,7 +1266,7 @@ is why it opens this series.</p>
       'SIG → ZERO!': 'LINE(ε, n) at the deepest levels: the margin is wide enough to call this flow stopped',
       'SIG → SLOW → ZERO! → ?': 'LINE(ε, n) claimed, then lost: REFUSE is the safer reading',
       'SIG → ZERO! → ?': 'LINE(ε, n) claimed, then lost: REFUSE is the safer reading',
-      'SLOW': 'resolved but within the margin at every level: no verdict yet',
+      'SLOW': 'SLOW at every level read: no verdict yet',
       'SLOW → ?': 'REFUSE("slow")',
       'SLOW → ZERO!': 'LINE(ε, n) at the deepest levels: the margin is wide enough to call this flow stopped',
       'SLOW → ZERO! → ?': 'LINE(ε, n) claimed, then lost: REFUSE is the safer reading',
