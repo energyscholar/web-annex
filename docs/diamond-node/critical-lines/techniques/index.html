@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==== PHYSICS EDITORIAL STANDARD - read before editing any claim in this file ====
+  Every physics claim here is held to one standard:
+    precluded     = a specific law or theorem prohibits it.  NAME THE LAW.
+    not precluded = no known law prohibits it. It may be undemonstrated, unlikely, or need many
+                    unverified steps - but physics does not forbid it.
+  "No one has done this" is an engineering status report, NOT a physics argument.
+
+  This page teaches the TECHNIQUES an instrument could use to tell an isolated critical point
+  (POINT) from a line of fixed points (LINE) from a walking flow (WALKING), and when it must say
+  REFUSE. Every number and equation cites a footnote. The traps this page is built to avoid:
+    T1  A line of critical POINTS is not a LINE of fixed points. The anisotropic square-lattice
+        Ising model has a whole self-dual critical line (sinh 2Jx)(sinh 2Jy) = 1, and every point
+        on it is the same Ising class. A LINE means the exponents vary along it (Ashkin-Teller).
+    T2  MCRG eigenvalues that have converged do not mean the renormalised trajectory has converged
+        (Ron-Brandt-Swendsen 2017). Truncating the coupling set is the approximation: too few
+        couplings can manufacture a drift that is not in the physics.
+    T3  Effective exponents at reachable sizes can be confidently wrong. Iino et al. collapse q = 5
+        Potts data with beta = 0.070(8), nu = 0.61(5) and tiny errors; the truth is first order.
+        A power-law fit to a log-slow approach (BKT) returns an exponent that does not exist.
+    T4  The margin epsilon is DECLARED before the data (the TOST rule). "No significant difference"
+        is not equivalence. Where ZERO! and SLOW both hold the cell is SLOW: a zero is never
+        claimed while a nonzero is resolved. The five-valued sign is a DESIGN, marked as such.
+    T5  The kernel operators A, B, R are mathematical definitions over DECLARED relations. They do
+        not act or decide. A missing declaration gives NOT EVALUATED, a value, never 0.0. A applied
+        to an EdgeField is a type error (a declared projection first). No rings. Say "directed
+        difference", not "gradient". C is a declared projection, not an operator.
+    T6  Exact routes (duality, transfer matrix, partition-function zeros) need the Hamiltonian: they
+        are scoring-side truth, never instrument inputs. Aasen-Mong-Fendley print (2.13) without the
+        factor 2 that their (2.2) has; K_c = (1/2) ln(1 + sqrt 2) is this page's arithmetic from
+        (2.2). Zeros decide the ORDER of a transition, not whether it sits on a LINE; that zeros of a
+        walking system approach the axis at a drifting rate is reasoned, not sourced.
+==== end physics editorial standard ==== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How an instrument sees a critical line: the linearised RG matrix, Monte Carlo renormalisation, drifting exponents and a five-valued sign, the ABR kernel lens, and exact routes (duality, transfer matrices, partition-function zeros), with live toys, equation traces and retakeable quizzes.">
+<title>Critical Lines — the Techniques</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="Critical Lines — the Techniques (how an instrument sees a line)">
+<meta property="og:description" content="Monte Carlo RG, drifting exponents, a five-valued sign over declared relations, and the exact routes that score an instrument, with live toys and quizzes.">
+<meta property="og:url" content="https://energyscholar.github.io/web-annex/diamond-node/critical-lines/techniques/">
+<link rel="stylesheet" href="../../../css/cc-tutor.css">
+<style>
+:root {
+  --bg: #0f172a; --card: #1e293b; --text: #cbd5e1; --heading: #f1f5f9; --muted: #64748b; --line: #94a3b8; --dim: #334155;
+  --red: #ef4444; --blue: #3b82f6; --green: #22c55e; --amber: #f59e0b; --purple: #a855f7; --cyan: #06b6d4;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 17px; line-height: 1.7; }
+.container { max-width: 900px; margin: 0 auto; padding: 1.5rem 16px 4rem; }
+h1, h2, h3, h4 { font-family: Georgia, 'Times New Roman', serif; color: var(--heading); font-weight: 600; }
+h1 { font-size: 2.2rem; line-height: 1.2; margin: 0.5rem 0 0.2rem; }
+h2 { font-size: 1.6rem; margin: 0 0 0.4rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.15rem; margin: 1.4rem 0 0.4rem; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.nav { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font-size: 0.9rem; color: var(--muted); }
+.nav a { color: var(--muted); }
+.sub { color: var(--line); font-size: 1.1rem; margin: 0 0 1rem; font-style: italic; font-family: Georgia, serif; }
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+.math-block { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); display: block; text-align: center; margin: 1rem 0; font-size: 1.12rem; overflow-x: auto; }
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.5); cursor: help; }
+.tip .tt { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400; color: var(--text); width: max-content; max-width: 300px; z-index: 100; line-height: 1.5; pointer-events: none; font-family: system-ui, sans-serif; }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) { .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: 4rem; transform: none; max-width: none; width: auto; } }
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); line-height: 0; margin-left: 1px; }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; overflow-wrap: anywhere; }
+.design { color: var(--cyan); font-size: 0.85em; white-space: nowrap; }
+.alphabet { background: var(--card); border-left: 3px solid var(--green); border-radius: 8px; padding: 0.8rem 1rem; margin: 1rem 0; }
+.alphabet dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 0.8rem; }
+.alphabet dt { font-weight: 700; color: var(--heading); font-family: ui-monospace, 'JetBrains Mono', monospace; font-size: 0.9rem; }
+.alphabet dd { margin: 0; }
+.box { background: var(--card); border-radius: 8px; padding: 0.8rem 1rem; margin: 1rem 0; }
+.warn { border-left: 3px solid var(--amber); }
+.tbl { overflow-x: auto; margin: 0.8rem 0; }
+table.t { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+table.t th, table.t td { border-bottom: 1px solid var(--dim); padding: 0.35rem 0.45rem; text-align: left; vertical-align: top; }
+table.t th { color: var(--heading); font-weight: 600; background: rgba(51,65,85,0.35); }
+table.t td.num { font-family: ui-monospace, monospace; white-space: nowrap; }
+table.t tr.hl td { background: rgba(34,197,94,0.14); }
+table.t tr.dimrow td { opacity: 0.35; }
+table.t td.colhl, table.t th.colhl { background: rgba(34,197,94,0.16); }
+.pass { color: var(--green); } .marg { color: var(--amber); } .fail { color: var(--red); }
+.row-ctl { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin: 0.5rem 0; }
+.row-ctl label { font-size: 0.85rem; color: var(--line); }
+.row-ctl select, .row-ctl input[type=number] { background: var(--bg); color: var(--heading); border: 1px solid var(--dim); border-radius: 6px; padding: 0.2rem 0.3rem; font-size: 0.85rem; max-width: 100%; }
+.row-ctl input[type=number] { width: 4.6rem; }
+.cc-btn.on { background: var(--green); color: #0f172a; border-color: var(--green); }
+.kn-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.3rem; }
+.small { font-size: 0.85rem; color: var(--line); }
+.cell { font-family: ui-monospace, monospace; font-weight: 700; }
+.c-SIG { color: var(--red); } .c-ZERO { color: var(--green); } .c-SLOW { color: var(--amber); } .c-Q { color: var(--line); } .c-NE { color: var(--purple); }
+.verdict { font-family: ui-monospace, monospace; font-size: 1rem; color: var(--heading); background: rgba(34,197,94,0.12); border: 1px solid var(--green); border-radius: 6px; padding: 0.3rem 0.6rem; display: inline-block; }
+.strip { width: 100%; height: auto; display: block; margin-top: 0.3rem; }
+.remember li { margin-bottom: 0.3rem; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="container">
+<nav class="nav" aria-label="Site"><a href="../">&larr; Critical Lines series</a><a href="../../">Domain Convergence Research</a><a href="../models/">&larr; prev: the Models</a><a href="../">next: the series landing &rarr;</a></nav>
+<h1>Critical Lines &mdash; the Techniques</h1>
+<p class="sub">How an instrument sees a line.</p>
+
+<p>The <a href="../models/">models page</a> learns systems. This page learns <em>instruments</em>: the ways a
+measurement can tell a critical line from an isolated critical point from a transition that only pretends to be
+critical, and when it must decline to say. Each section names what a technique needs, what it decides, what it is blind
+to, what it costs, how it reads in the language of the relational kernel, and which side of the firewall it lives on.</p>
+
+<div class="alphabet">
+<p style="margin-top:0"><b>The alphabet these pages share</b> (the Criticality Compass&rsquo;s verdicts <span class="design">&#9670; design</span>)<a href="#fn-design" class="fn" id="fnref-design">1</a></p>
+<dl>
+<dt>POINT</dt><dd>an isolated fixed point; the RG flow stops at one place, with one escape direction (Ising).</dd>
+<dt>LINE</dt><dd>a continuum of fixed points; the flow stops wherever it lands; an exactly marginal direction (the Ashkin&ndash;Teller self-dual line; the XXZ/six-vertex critical regime; the XY low-temperature phase).</dd>
+<dt>WALKING</dt><dd>the flow slows to a small <em>nonzero</em> minimum, never stops, then leaves; finite systems imitate criticality (Potts q = 5, 6).</dd>
+<dt>REFUSE</dt><dd>the honest verdict when the data cannot tell (the default cell).</dd>
+</dl>
+<p style="margin-bottom:0">The organising idea is <b>follow the flow</b>: the velocity, accumulation and circulation of the flow over
+declared scale and control relations are what the Detector reads. The <b>Detector</b> classifies a system&rsquo;s critical
+geometry from observations; the <b>Navigator</b> finds a critical line and moves along it.</p>
+</div>
+
+<p class="small">How to read: every section shows a headline, one live graphic and a cyan <b>For the Compass</b> box.
+&ldquo;Working equations&rdquo; opens the physicist&rsquo;s layer; &ldquo;Full derivation&rdquo; inside it opens the deepest one.
+&ldquo;Check yourself&rdquo; holds three graded items; the final test at the end is retakeable and draws new items each time.
+Scores stay in this browser. The mark <span class="design">&#9670; design</span> flags a design choice of the instrument, never a physics result.</p>
+
+<!-- ============================================================ 0 -->
+<section id="0-flow" class="cc-sec" data-accent="green">
+  <h2><span class="num">0</span> Follow the flow</h2>
+  <p class="headline">An instrument never sees a fixed point directly; it sees the flow, and the flow offers three readings: how fast it moves (velocity), how far it has gone (accumulation), and whether it turns (circulation).</p>
+  <div class="graphic" data-cc-id="t-follow"></div>
+  <p>Renormalisation replaces a system by a coarser copy of itself, and the couplings of the copy differ from the
+  original&rsquo;s; repeat, and the couplings trace a path, the <span class="tip" tabindex="0">RG flow<span class="tt">The path of the effective couplings as the description is coarse-grained step by step. ℓ counts the steps (ℓ = ln b for a scale factor b).</span></span>.<a href="#fn-rgp" class="fn" id="fnref-rgp">2</a>
+  The alphabet is a statement about where that path stops. Press the four buttons. The dots on each trajectory mark
+  whole RG levels, and the strip under the flow plots the distance moved per level. At a POINT (started on its critical
+  surface) and on a LINE that distance falls to zero; on a WALKING flow it falls to a small nonzero minimum and rises
+  again; only the spiral carries circulation.</p>
+  <p>Three numbers per level, three definitions: the step between successive levels is a
+  <span class="tip" tabindex="0">directed difference<span class="tt">x[s] &minus; x[t] over a declared edge s &rarr; t. The kernel&rsquo;s operator A is defined this way; it is not a &ldquo;gradient&rdquo;.</span></span>
+  over the declared scale relation (the kernel&rsquo;s A); the running sum of steps is an accumulation (the kernel&rsquo;s B);
+  the work the field does round a small loop is a circulation (what R responds to).<a href="#fn-ksk" class="fn">12</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The Detector is a total lookup table over a discrete signature of these three readings (their signs, read against a declared margin). REFUSE is one of the table&rsquo;s cells, not an error message.<a href="#fn-design" class="fn">1</a></p></div>
+  <details class="l2" id="d-0-l2"><summary>Working equations</summary>
+    <p>With g<sub>n</sub> the couplings after n coarse-graining steps:</p>
+    <span class="math-block">v<sub>n</sub> = |g<sub>n+1</sub> &minus; g<sub>n</sub>| &nbsp;(velocity), &nbsp; D<sub>N</sub> = &Sigma;<sub>n&lt;N</sub> v<sub>n</sub> &nbsp;(accumulated path), &nbsp; &Gamma; = &oint; f&middot;dl &asymp; (&part;f<sub>y</sub>/&part;x &minus; &part;f<sub>x</sub>/&part;y)&thinsp;h&sup2; &nbsp;(circulation)</span>
+    <p>The four fields drawn above, with x the direction the page calls relevant (or along the line) and y an irrelevant one:
+    POINT f = (0.6x, &minus;y), fixed point at the origin; LINE f = (0, &minus;y), every point of y = 0 fixed; WALKING
+    f = (&minus;(0.02 + x&sup2;), &minus;y), whose x-velocity never falls below 0.02; SPIRAL f = (&minus;0.15x &minus; 0.8y, 0.8x &minus; 0.15y),
+    a complex pair of eigenvalues (&sect;1) and the only field here with nonzero curl. They are illustrations of the four shapes, not models.</p>
+    <p><b>The two binding constraints on the instrument</b> <span class="design">&#9670; design</span>:<a href="#fn-tex" class="fn" id="fnref-tex">19</a></p>
+    <ul>
+      <li><b>The design bound.</b> The instrument must run on a mid-1990s desktop: a 486, 16 MB, ~10<sup>7</sup> operations/s. (An unsourced design bound, chosen to keep the method small and inspectable.)</li>
+      <li><b>The firewall.</b> Anything that needs the Hamiltonian or the true class is a validation tool on the scoring side, never an input of the instrument.</li>
+    </ul>
+  </details>
+  <details class="quiz" id="q-0"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<!-- ============================================================ 1 -->
+<section id="1-matrix" class="cc-sec" data-accent="green">
+  <h2><span class="num">1</span> The linearised RG matrix <span class="small">(a refresher; the long version is the <a href="../../../renormalization-group/">RG page</a>)</span></h2>
+  <p class="headline">Near a fixed point the flow is a matrix: its eigenvalues are the exponents, its eigenvectors are the directions, and an eigenvalue of exactly 1 (y = 0) makes a whole line of fixed points.</p>
+  <div class="graphic" data-cc-id="t-matrix"></div>
+  <p>Kadanoff&rsquo;s idea was to throw detail away on purpose by blocking spins; Wilson made the blocking a map on
+  couplings and found the exponents in its fixed points.<a href="#fn-rgp" class="fn">2</a> Close to a fixed point the map is linear,
+  <span class="math">&delta;K&prime; = M&thinsp;&delta;K</span>, and everything is in the eigenvalues, written
+  <span class="math">&lambda; = b<sup>y</sup></span> for a scale factor <span class="math">b</span>: a <span class="tip" tabindex="0">relevant<span class="tt">y &gt; 0 (&lambda; &gt; 1): the deviation grows under coarse-graining; it must be tuned to zero to sit on the critical point.</span></span>
+  direction grows, an <span class="tip" tabindex="0">irrelevant<span class="tt">y &lt; 0 (&lambda; &lt; 1): the deviation shrinks and is forgotten; this is universality.</span></span>
+  one shrinks, and a <span class="tip" tabindex="0">marginal<span class="tt">y = 0 (&lambda; = 1): at linear order the deviation neither grows nor shrinks. If it stays exactly marginal at every order, the fixed point is one of a line.</span></span> one does neither.
+  Drag the four entries of M. The arrows are the step &delta;K&prime; &minus; &delta;K; the dotted orbit is repeated application of M. Set an
+  eigenvalue to 1 and the fixed line appears; give M a complex pair and the orbit turns.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p><b>Navigator:</b> the marginal eigenvector is the tangent to the line; the relevant one is the normal, the direction that must be tuned. <b>Detector:</b> a POINT has one eigenvalue above 1 and the rest below; a LINE has one that stays at exactly 1, level after level.</p></div>
+  <details class="l2" id="d-1-l2"><summary>Working equations</summary>
+    <span class="math-block">&delta;K&prime; = M&thinsp;&delta;K, &nbsp; M<sub>ij</sub> = &part;K&prime;<sub>i</sub>/&part;K<sub>j</sub> at K*, &nbsp; &lambda;<sub>i</sub> = b<sup>y<sub>i</sub></sup> &nbsp;&rArr;&nbsp; y<sub>i</sub> = ln &lambda;<sub>i</sub> / ln b</span>
+    <div class="tbl"><table class="t">
+      <tr><th>y</th><th>&lambda;</th><th>name</th><th>under coarse-graining</th></tr>
+      <tr><td class="num">y &gt; 0</td><td class="num">&lambda; &gt; 1</td><td>relevant</td><td>grows; one knob to tune per relevant direction</td></tr>
+      <tr><td class="num">y &lt; 0</td><td class="num">&lambda; &lt; 1</td><td>irrelevant</td><td>shrinks; the microscopic details live here</td></tr>
+      <tr><td class="num">y = 0</td><td class="num">&lambda; = 1</td><td>marginal</td><td>undecided at linear order; can give logarithms, or a line</td></tr>
+    </table></div>
+    <p>The table is the RG page&rsquo;s.<a href="#fn-rgp" class="fn">2</a> The exponents follow from the leading thermal and magnetic
+    eigenvalues: <span class="math">&nu; = 1/y<sub>T</sub></span> and <span class="math">&eta; = d + 2 &minus; 2y<sub>H</sub></span>. Ron, Brandt &amp; Swendsen
+    use exactly these (their y<sub>T1</sub> = 1.591 gives &nu; = 0.6285 and their y<sub>H1</sub> = 2.4829 gives &eta; = 0.0342 in d = 3), though their paper does not print
+    <span class="math">&lambda; = b<sup>y</sup></span> itself.<a href="#fn-ron17" class="fn">4</a> A complex pair &lambda; = |&lambda;|e<sup>&plusmn;i&theta;</sup> rotates the deviation by &theta; per step:
+    the orbit spirals in (|&lambda;| &lt; 1) or out (|&lambda;| &gt; 1). The classifier in the graphic is a total table over the signs of y<sub>1</sub>, y<sub>2</sub>
+    (each +, 0 or &minus;) and a flag for a complex pair; no chain of conditions decides it.</p>
+    <details class="l1" id="d-1-l1"><summary>Full derivation</summary>
+      <p><b>The worked example: 1D Ising decimation.</b><a href="#fn-rgp" class="fn">2</a> Sum out every second spin of a chain with coupling K:</p>
+      <span class="math-block">&Sigma;<sub>&sigma;<sub>2</sub>=&plusmn;1</sub> e<sup>K(&sigma;<sub>1</sub>&sigma;<sub>2</sub> + &sigma;<sub>2</sub>&sigma;<sub>3</sub>)</sup> = 2 cosh(K(&sigma;<sub>1</sub> + &sigma;<sub>3</sub>)) = e<sup>g + K&prime;&sigma;<sub>1</sub>&sigma;<sub>3</sub></sup></span>
+      <p>Taking &sigma;<sub>1</sub>&sigma;<sub>3</sub> = +1 gives 2 cosh 2K = e<sup>g + K&prime;</sup>; taking &minus;1 gives 2 = e<sup>g &minus; K&prime;</sup>. Divide:
+      e<sup>2K&prime;</sup> = cosh 2K, so</p>
+      <span class="math-block">K&prime; = &frac12; ln cosh 2K, &nbsp;&nbsp; b = 2.</span>
+      <p>Fixed points: K* = 0 and K* = &infin;, nothing between. Linearise at K* = 0: dK&prime;/dK = tanh 2K &rarr; 0, so
+      &lambda; = 0 &lt; 1: the high-temperature fixed point is fully attractive (a phase, not a transition). At large K,
+      K&prime; &asymp; K &minus; &frac12; ln 2: the flow creeps down by a constant each step, so K* = &infin; is unstable, and the chain has no
+      finite-temperature transition. A 1 &times; 1 &ldquo;matrix&rdquo; already shows the whole logic: fixed points, eigenvalues, stability.</p>
+    </details>
+  </details>
+  <details class="quiz" id="q-1"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<!-- ============================================================ 2 -->
+<section id="2-mcrg" class="cc-sec" data-accent="green">
+  <h2><span class="num">2</span> Monte Carlo RG: the instrument</h2>
+  <p class="headline">Coarse-grain the same snapshots again and again: the change from one level to the next is the flow, and a single lattice gives several RG steps.</p>
+  <div class="graphic" data-cc-id="t-mcrg-toy"></div>
+  <svg class="strip" id="mcrg-chart" viewBox="0 0 600 150" role="img" aria-label="Nearest-neighbour correlation at each block level of the toy, updated as the toy runs"></svg>
+  <p class="small" id="mcrg-note" aria-live="polite"></p>
+  <p>Swendsen (1979) turned Kadanoff&rsquo;s picture into a measurement: simulate at the candidate critical point, block the
+  snapshots, block the blocks, and compare levels.<a href="#fn-sw79" class="fn" id="fnref-sw79">3</a> The toy is a
+  64&times;64 Ising lattice (32&times;32 on a narrow screen) with Metropolis updates. Each smaller panel is a 2&times;2
+  <span class="tip" tabindex="0">majority-rule<span class="tt">A block spin takes the sign of the sum of its four spins; a tie takes the block&rsquo;s top-left spin (a fixed rule, so the map is deterministic).</span></span>
+  blocking of the one before, labelled with its nearest-neighbour correlation, and the chart above plots those four numbers.
+  Run it and move T. Near <span class="math">T<sub>c</sub> = 2/ln(1 + &radic;2) &asymp; 2.269</span> (the arithmetic is in &sect;5) the levels look alike and
+  their correlations nearly agree: a fixed point. Below it the blocks order level by level; above it they disorder. That drift
+  <em>is</em> the flow, read from one lattice.</p>
+  <p>The trace below turns the same snapshots into the linearised matrix of &sect;1. It is equations (2)&ndash;(5) of Ron,
+  Brandt &amp; Swendsen, lit term by term while the toy&rsquo;s own correlations fill them in.<a href="#fn-ron17" class="fn" id="fnref-ron17">4</a>
+  With one tracked coupling (nearest neighbours) the &ldquo;matrix&rdquo; is a single number you can watch settle as samples
+  accumulate.</p>
+  <div class="graphic" data-cc-id="t-mcrg-trace"></div>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>This is <b>the</b> instrument. Kernel reading: A is the level-n versus level-(n+1) difference over the declared blocking relation; B accumulates the drift down the chain of levels; R responds to circulation in coupling space. It passes the design bound with room to spare. Blind spots: a walking minimum that sits under the noise at reachable levels (then REFUSE), and too few tracked couplings, where truncation can manufacture a drift.<a href="#fn-tex" class="fn">19</a></p></div>
+  <details class="l2" id="d-2-l2"><summary>Working equations</summary>
+    <p><b>Swendsen&rsquo;s construction, as Ron, Brandt &amp; Swendsen print it (p. 2).</b><a href="#fn-ron17" class="fn">4</a> Level-n configurations carry unknown couplings
+    K<sub>&alpha;</sub><sup>(n)</sup> conjugate to operators S<sub>&alpha;</sub><sup>(n)</sup> (nearest-neighbour sum, next-nearest, four-spin, &hellip;). Then</p>
+    <span class="math-block">T<sup>(n+1,n)</sup><sub>&alpha;&beta;</sub> = &part;K<sub>&alpha;</sub><sup>(n+1)</sup> / &part;K<sub>&beta;</sub><sup>(n)</sup> &nbsp;&nbsp;(2)</span>
+    <span class="math-block">&part;&lang;S<sub>&gamma;</sub><sup>(n+1)</sup>&rang;/&part;K<sub>&beta;</sub><sup>(n)</sup> = &Sigma;<sub>&alpha;</sub> [&part;&lang;S<sub>&gamma;</sub><sup>(n+1)</sup>&rang;/&part;K<sub>&alpha;</sub><sup>(n+1)</sup>]&thinsp;[&part;K<sub>&alpha;</sub><sup>(n+1)</sup>/&part;K<sub>&beta;</sub><sup>(n)</sup>] &nbsp;&nbsp;(3)</span>
+    <span class="math-block">&part;&lang;S<sub>&gamma;</sub><sup>(n+1)</sup>&rang;/&part;K<sub>&beta;</sub><sup>(n)</sup> = &lang;S<sub>&gamma;</sub><sup>(n+1)</sup>S<sub>&beta;</sub><sup>(n)</sup>&rang; &minus; &lang;S<sub>&gamma;</sub><sup>(n+1)</sup>&rang;&lang;S<sub>&beta;</sub><sup>(n)</sup>&rang; &nbsp;&nbsp;(4)</span>
+    <span class="math-block">&part;&lang;S<sub>&gamma;</sub><sup>(n+1)</sup>&rang;/&part;K<sub>&alpha;</sub><sup>(n+1)</sup> = &lang;S<sub>&gamma;</sub><sup>(n+1)</sup>S<sub>&alpha;</sub><sup>(n+1)</sup>&rang; &minus; &lang;S<sub>&gamma;</sub><sup>(n+1)</sup>&rang;&lang;S<sub>&alpha;</sub><sup>(n+1)</sup>&rang; &nbsp;&nbsp;(5)</span>
+    <p>Everything on the right of (4) and (5) is a correlation measured in the simulation, so (3) is a linear system for T. Blöte and
+    co-workers write the same thing as B&thinsp;T = C with B the level-(n+1) auto-correlations and C the cross-correlations, and solve it
+    after truncating to a finite set of couplings; the number of couplings used in the literature rose from 7 (Blöte &amp; Swendsen 1979) to 99 (1992).<a href="#fn-blo96" class="fn" id="fnref-blo96">5</a>
+    The eigenvalues of T give <span class="math">y = ln &lambda; / ln b</span> with b = 2.<a href="#fn-rgp" class="fn">2</a></p>
+    <p><b>The block rule is a choice.</b> Ron, Brandt &amp; Swendsen use a tunable rule, equation (6):</p>
+    <span class="math-block">P(&sigma;&prime;<sub>l</sub>) = exp(w&thinsp;&sigma;&prime;<sub>l</sub> &Sigma;<sub>j&isin;l</sub> &sigma;<sub>j</sub>) / [exp(w &Sigma;<sub>j&isin;l</sub> &sigma;<sub>j</sub>) + exp(&minus;w &Sigma;<sub>j&isin;l</sub> &sigma;<sub>j</sub>)] &nbsp;&nbsp;(6)</span>
+    <p>which is the majority rule at w = &infin;. Tuned to w = 0.4314 (even sector) and 0.555 (odd sector), with 30 even and 20 odd couplings on the
+    3D Ising model, it gives <b>y<sub>T1</sub> = 1.591(1)</b> and <b>y<sub>H1</sub> = 2.4829(2)</b>, converged by the second or third iteration.<a href="#fn-ron17" class="fn">4</a></p>
+    <div class="tbl"><table class="t">
+      <tr><th>n (iteration)</th><th>y<sub>T1</sub>, majority rule (w = &infin;)</th><th>y<sub>T1</sub>, tuned (w = 0.4314)</th></tr>
+      <tr><td class="num">1</td><td class="num">1.4224(7)</td><td class="num">1.5930(8)</td></tr>
+      <tr><td class="num">2</td><td class="num">1.5072(6)</td><td class="num">1.5919(5)</td></tr>
+      <tr><td class="num">3</td><td class="num">1.5504(5)</td><td class="num">1.5912(5)</td></tr>
+      <tr><td class="num">4</td><td class="num">1.5718(7)</td><td class="num">1.5906(6)</td></tr>
+      <tr><td class="num">5</td><td class="num">1.5788(11)</td><td class="num">1.5908(7)</td></tr>
+    </table></div>
+    <p class="small">3D Ising, 256&sup3; lattice, 30 even couplings (Tables II and III of Ron, Brandt &amp; Swendsen).<a href="#fn-ron17" class="fn">4</a></p>
+    <p><b>The surprise.</b> The eigenvalues converge while the renormalised correlation functions do not: &ldquo;there is no evidence that the
+    tuned RG transformation brings the renormalized Hamiltonians closer to the fixed point.&rdquo;<a href="#fn-ron17" class="fn">4</a> Blöte et al. (1996) had
+    already shown a nearly flat approach for a tuned Hamiltonian and rule: y<sub>T</sub> = 1.5885 &rarr; 1.5852 &rarr; 1.5829 and y<sub>H</sub> = 2.48492 &rarr; 2.48309 &rarr; 2.48219
+    over n = 1&ndash;3 at L = 32.<a href="#fn-blo96" class="fn">5</a> In two dimensions the plain majority rule already converges by the second iteration.<a href="#fn-ron17" class="fn">4</a></p>
+    <p><b>How MCRG sees the alphabet</b> <span class="design">&#9670; design</span>:<a href="#fn-tex" class="fn">19</a> POINT: one eigenvalue above 1, the rest below, and levels n and n+1 agree.
+    LINE: one eigenvalue that stays at exactly 1 across levels, and fixed-level statistics that depend on where the run started.
+    WALKING: an eigenvalue near 1 that drifts; level differences reach a small nonzero minimum, then grow.</p>
+    <details class="l1" id="d-2-l1"><summary>Full derivation</summary>
+      <p>Write the level-n weight as exp(&Sigma;<sub>&beta;</sub> K<sub>&beta;</sub><sup>(n)</sup>S<sub>&beta;</sub><sup>(n)</sup>) (Ron, Brandt &amp; Swendsen put no minus sign in the exponent, and neither do we here).<a href="#fn-ron17" class="fn">4</a>
+      For any quantity Q computed from a configuration, &part;&lang;Q&rang;/&part;K<sub>&beta;</sub> = &lang;Q S<sub>&beta;</sub>&rang; &minus; &lang;Q&rang;&lang;S<sub>&beta;</sub>&rang;, because
+      &lang;Q&rang; = Z<sup>&minus;1</sup>&Sigma; Q e<sup>&Sigma;KS</sup> and differentiating the numerator brings down S<sub>&beta;</sub>, differentiating Z<sup>&minus;1</sup> brings down &minus;&lang;S<sub>&beta;</sub>&rang;.</p>
+      <p>Take Q = S<sub>&gamma;</sub><sup>(n+1)</sup>, the block operator computed from the blocked configuration. Averaged over the level-n ensemble it is a function of the
+      K<sup>(n)</sup>; averaged over the level-(n+1) ensemble it is a function of the K<sup>(n+1)</sup>. The blocking rule makes the two averages the same number, so
+      &lang;S<sub>&gamma;</sub><sup>(n+1)</sup>&rang; depends on K<sup>(n)</sup> only through K<sup>(n+1)</sup>(K<sup>(n)</sup>). The chain rule is (3). Applying the identity above in
+      each ensemble gives (4) (Q = S&prime;, derivative with respect to a level-n coupling, so the partner operator is S<sup>(n)</sup>) and (5) (derivative with respect to a
+      level-(n+1) coupling, partner S<sup>(n+1)</sup>). In matrix form (3) is (4) = (5)&thinsp;T, so T = (5)<sup>&minus;1</sup>(4); with one coupling, T is the ratio of two numbers,
+      which is what the trace computes live.</p>
+    </details>
+  </details>
+  <details class="quiz" id="q-2"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<!-- ============================================================ 3 -->
+<section id="3-drift" class="cc-sec" data-accent="green">
+  <h2><span class="num">3</span> Drifting exponents, finite-size scaling, and the five-valued sign</h2>
+  <p class="headline">At one size LINE, WALKING and BKT look alike; they differ in how an effective exponent moves with SCALE and with CONTROL, and reading that difference honestly needs a margin &epsilon; declared before the data.</p>
+  <div class="graphic" data-cc-id="t-classify"></div>
+  <p>Finite-size scaling reads exponents from how observables change with the system size L. Iino, Morita, Kawashima and
+  Sandvik showed how that goes wrong: the q = 5 Potts transition is first order, yet sizes L = 24&ndash;256 collapse
+  beautifully with <span class="math">&beta; = 0.070(8)</span>, <span class="math">&nu; = 0.61(5)</span> and error bars smaller than the symbols.<a href="#fn-iin19" class="fn" id="fnref-iin19">7</a>
+  The cure is to follow the exponent: from crossings of size pairs (L/2, L) they read a size-dependent &nu;(L) and &beta;(L), whose power-law
+  extrapolation gives 1/&nu;(&infin;) &asymp; 2.23, larger than 2, which is impossible for a continuous transition in two dimensions.
+  Gorbenko, Rychkov and Zan explain the drift: along a walking flow scaling dimensions drift with scale in a tangent-shaped way.<a href="#fn-grz2" class="fn" id="fnref-grz2">8</a>
+  At a BKT point the drift is different again: finite-size values approach their limits only as 1/(ln L + C).<a href="#fn-has05" class="fn" id="fnref-has05">10</a></p>
+  <p>The four sequences above are <b>synthetic</b>, built with those shapes. Each panel shows an effective exponent against log<sub>2</sub>&nbsp;L at two
+  control values. Sort them: which varies with the control but not with scale, which varies with neither, which drifts faster and faster, which
+  slows but never settles?</p>
+  <p>Reading a drift needs a verdict per step, and that is where a <b>five-valued sign</b> comes in <span class="design">&#9670; design</span>.<a href="#fn-design" class="fn">1</a>
+  A velocity estimate v with a band &plusmn;w is read against a declared margin &plusmn;&epsilon;:</p>
+  <div class="graphic" data-cc-id="t-sign"></div>
+  <p>The cell is looked up in a table with a row for every combination of four yes/no tests; no chain of conditions decides it.
+  Where ZERO! and SLOW could both be claimed (the band lies inside &plusmn;&epsilon; <em>and</em> excludes zero), the cell is <b>SLOW</b>:
+  the overlap resolves toward the weaker claim, and a LINE is never asserted on an ambiguous reading. With &epsilon; = 0 the table collapses
+  to the three-valued sign (SIG+, SIG&minus;, ?). The margin plays the role of the equivalence bounds of a
+  <span class="tip" tabindex="0">TOST<span class="tt">Two one-sided tests: reject &ldquo;the effect is at or below &minus;&Delta;&rdquo; and reject &ldquo;it is at or above +&Delta;&rdquo;; together they support &ldquo;inside the bounds&rdquo;. The bounds are declared first.</span></span>
+  procedure, which Lakens insists are declared before the data are seen: &ldquo;no significant difference&rdquo; is not equivalence.<a href="#fn-lak17" class="fn" id="fnref-lak17">11</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>One machine for every case: five-valued signs over declared relations, with &epsilon; and the null declared before the data. LINE versus WALKING is a question of <b>power</b> (how small an &epsilon; the data can close), not of a null hypothesis. The verdict is typed LINE(&epsilon;, n<sub>levels</sub>), and the blind spot &ldquo;walking slower than &epsilon; per level&rdquo; is declared in advance.<a href="#fn-design" class="fn">1</a></p></div>
+  <details class="l2" id="d-3-l2"><summary>Working equations</summary>
+    <p><b>Effective exponents from crossings</b> (Iino et al., eqs 5&ndash;6), with R<sub>4</sub> = &lang;m<sup>4</sup>&rang;/&lang;m<sup>2</sup>&rang;<sup>2</sup> the Binder ratio and t the reduced temperature at the crossing of the (L/2, L) pair:<a href="#fn-iin19" class="fn">7</a></p>
+    <span class="math-block">1/&nu;(L) = log<sub>2</sub> [ (d ln(R<sub>4</sub>(t,L) &minus; 1)/dt) / (d ln(R<sub>4</sub>(t,L/2) &minus; 1)/dt) ], &nbsp; (1 &minus; 2&beta;(L))/&nu;(L) = log<sub>2</sub> [ (d&lang;m<sup>2</sup>&rang;(t,L)/dt) / (d&lang;m<sup>2</sup>&rang;(t,L/2)/dt) ]</span>
+    <p><b>The drifting dimension and the drifting exponent</b> (Gorbenko, Rychkov &amp; Zan, (4.33) and (4.34)):<a href="#fn-grz2" class="fn">8</a></p>
+    <span class="math-block">&delta;<sub>&phi;</sub>(r) = Re&thinsp;&Delta;<sup>C</sup><sub>&phi;</sub> &minus; (&radic;3&thinsp;&epsilon; / 2&pi;)&thinsp;C<sub>&phi;&phi;&epsilon;&prime;</sub>&thinsp;tan(&epsilon; ln(r/r<sub>0</sub>) / &pi;), &nbsp;&nbsp; &nu;(r) = 1 / (d &minus; &delta;<sub>&epsilon;</sub>(r))</span>
+    <p>(Their &epsilon; is the walking parameter, not the margin of this page.) The walking correlation length is huge for q = 5: &xi; &asymp; 2512 lattice spacings, 159 for q = 6, 48 for q = 7,
+    so at L &Lt; &xi; the transition imitates a critical point.<a href="#fn-grz1" class="fn" id="fnref-grz1">9</a></p>
+    <p><b>The logarithmic approach at BKT</b> (Hasenbusch 2005, eq. 31): the helicity modulus at the transition on an L &times; L lattice is</p>
+    <span class="math-block">&Upsilon;(L) = 0.63650817819&hellip; + 0.318899454&hellip; / (ln L + C) + &hellip;</span>
+    <p>so it is still 5 % above its limit at L = 2048 for C of order 1 (an illustration of the form, not a fitted C).<a href="#fn-has05" class="fn">10</a></p>
+    <p><b>The five-valued sign</b> <span class="design">&#9670; design</span>. Four predicates: a = (v &minus; w &gt; &epsilon;), b = (v + w &lt; &minus;&epsilon;), c = (|v| + w &lt; &epsilon;), r = (v &minus; w &gt; 0 or v + w &lt; 0).
+    The key abcr indexes a 16-row table (shown under the graphic). SIG+ = the whole band beyond +&epsilon;; SIG&minus; = beyond &minus;&epsilon;; ZERO! = the whole band inside the margin
+    and not excluding zero; SLOW = resolved nonzero but not beyond &epsilon;; ? = everything else, including keys that cannot occur and NaN.<a href="#fn-design" class="fn">1</a>
+    <b>TOST</b>: equivalence holds when the 90 % confidence interval (two one-sided tests at &alpha; = 5 %) lies inside the declared bounds [&minus;&Delta;<sub>L</sub>, &Delta;<sub>U</sub>].<a href="#fn-lak17" class="fn">11</a></p>
+    <details class="l1" id="d-3-l1"><summary>Full derivation</summary>
+      <p><b>Why the doubling chain fails the design bound.</b> A finite-size-scaling chain simulates at L, 2L, 4L, &hellip;. The work per independent
+      sample grows like L<sup>d+z</sup>, with z the dynamic exponent of the update: L<sup>d</sup> sites per sweep, and about L<sup>z</sup> sweeps between independent samples.
+      Each doubling therefore multiplies the cost by 2<sup>d+z</sup>; for d = 2 and an illustrative z = 2 that is 16, and five doublings cost about 16<sup>5</sup> &asymp; 10<sup>6</sup> times the first size.
+      Separating LINE from WALKING needs L to approach &xi;, which is 2512 for q = 5. That is exponential cost in the number of doublings, and it is why the
+      instrument follows the flow <em>within</em> one lattice (&sect;2) rather than across lattices.<a href="#fn-tex" class="fn">19</a></p>
+      <p><b>The ε = 0 limit.</b> With &epsilon; = 0, c needs |v| + w &lt; 0, impossible for w &ge; 0, so ZERO! is empty; SLOW needs r without a or b, and with &epsilon; = 0 r implies a or b, so SLOW is empty too.
+      What remains is SIG+, SIG&minus; and ?: the three-valued sign exactly.<a href="#fn-design" class="fn">1</a></p>
+    </details>
+  </details>
+  <details class="quiz" id="q-3"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<!-- ============================================================ 4 -->
+<section id="4-kernel" class="cc-sec" data-accent="green">
+  <h2><span class="num">4</span> The kernel lens: A, B and R over declared relations</h2>
+  <p class="headline">Declare the relations first; then three definitions, a directed difference (A), an accumulation over immediate successors (B) and an antisymmetric response (R), turn a table of exponent estimates into signs a lookup table can read.</p>
+  <div class="graphic" data-cc-id="t-kernel"></div>
+  <p>The relational kernel is a small set of operator definitions with one rule above them: <b>nothing enters an operator undeclared</b>.<a href="#fn-ksk" class="fn" id="fnref-ksk">12</a>
+  The chain is observable &rarr; M &rarr; numbers in D &rarr; declared relations &rarr; operators &rarr; result &rarr; comparison with observables,
+  where M is the declared mapping from what was observed to the numbers the operators are applied to. Here the nodes are exponent estimates at RG
+  levels 0&ndash;4; the edges are declared relations between them. Click an edge to declare or undeclare it, press a preset, or type your own values.</p>
+  <ul>
+    <li><b>A</b> (also written &Delta;): A(x)[e] = x[s] &minus; x[t] over each declared edge e = s &rarr; t. It is the only step from a NodeField to an EdgeField.</li>
+    <li><b>B</b>: B(g)[e] = g[e] + &Sigma; g[f] over the <em>immediate</em> successors f of e. A terminal edge accumulates nothing.</li>
+    <li><b>R</b>: R(g)[e] = g[e] + &rho;[src(e)]&thinsp;(&Sigma;<sub>succ</sub> g &minus; &Sigma;<sub>pred</sub> g), with &rho; = &rho;<sub>base</sub>&thinsp;&chi;/(&chi;<sub>0</sub> + &chi;) and &chi; = max|A| at the node. &rho;<sub>base</sub> and &chi;<sub>0</sub> are supplied by M; the kernel holds no defaults.</li>
+    <li><b>C</b> is not a kernel operator: it is a <em>declared projection</em> that states what it keeps and what it discards.</li>
+  </ul>
+  <p>A missing declaration does not become zero: the operator is <b>NOT EVALUATED</b>, and that is a value the verdict table can read.
+  Declare a closing edge (a ring) and the whole relation set becomes inadmissible: a node would be its own predecessor.
+  Tick &ldquo;second control value&rdquo; and the two relation families appear: <b>Continuation</b> over scale (along each row) and <b>Coupling</b> over
+  control (between the rows). The trace below walks B through term by term on row 1&rsquo;s chain.</p>
+  <div class="graphic" data-cc-id="t-btrace"></div>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>A verdict is a lookup over the signs of A, B and R. Statistics enters only as the declared band w and margin &epsilon;; every &ldquo;if &sigma; &gt; x&rdquo; hidden in code is a review finding. Kernel-conformant is not the same as physically correct: they are two separate gates.<a href="#fn-ksk" class="fn">12</a><a href="#fn-design" class="fn">1</a></p></div>
+  <details class="l2" id="d-4-l2"><summary>Working equations</summary>
+    <div class="tbl"><table class="t">
+      <tr><th>operator</th><th>definition (Kernel V8)</th><th>type</th></tr>
+      <tr><td>A / &Delta;</td><td>x[s] &minus; x[t] over each declared edge</td><td>NodeField &rarr; EdgeField (the only node&rarr;edge step)</td></tr>
+      <tr><td>B</td><td>g[e] + &Sigma; over immediate successors; terminal edges accumulate nothing</td><td>EdgeField &rarr; EdgeField</td></tr>
+      <tr><td>R</td><td>g[e] + &rho;[src(e)]&middot;(&Sigma; succ &minus; &Sigma; pred) (plus a declared cross-coupling between components)</td><td>EdgeField &rarr; EdgeField</td></tr>
+      <tr><td>&rho;</td><td>&rho;<sub>base</sub>&middot;&chi;/(&chi;<sub>0</sub> + &chi;), &chi; = max |A| at the node</td><td>M supplies &rho;<sub>base</sub>, &chi;<sub>0</sub></td></tr>
+      <tr><td>&Sigma; (primary kernel)</td><td>&Delta; then an antisymmetric response, no B</td><td>used when no interior locus is established</td></tr>
+      <tr><td>C</td><td>a declared projection (states what it keeps and discards)</td><td>application layer, not the kernel</td></tr>
+    </table></div>
+    <p class="small">As the kernel reference states them.<a href="#fn-ksk" class="fn">12</a></p>
+    <ul>
+      <li><b>Interior locus.</b> A &rarr; B &rarr; R applies only when M establishes an interior locus: s &rarr; t &rarr; u with independently declared edges. Otherwise the primary kernel &Delta; &rarr; &Sigma; applies and B is not evaluated.</li>
+      <li><b>Before A</b> only a uniform shift (and a declared unit scale) is admissible undeclared. Detrending, smoothing, normalising or interpolating is a transform that must be declared in M.</li>
+      <li><b>Direction</b> must be traceable to an observable: here, &ldquo;toward the coarser level&rdquo; (the block size) and &ldquo;toward the larger control value&rdquo;. Index order is not a direction.</li>
+      <li><b>A second A.</b> A applied to an EdgeField is a type error. The between-run difference &delta;K is an EdgeField, so a declared projection P<sub>&delta;</sub> must turn it back into nodes before any A over scale.<a href="#fn-design" class="fn">1</a></li>
+      <li><b>The band.</b> The graphic declares a band w<sub>0</sub> at level 0 and doubles it at each level, because each 2&times;2 blocking leaves a quarter of the sites and a standard error scales as 1/&radic;N. Its verdict table (&#9670; design, illustrative only) is a dictionary of named sign sequences with REFUSE as the default cell; the instrument&rsquo;s own table is to be enumerated on the controls before any recogniser is written.<a href="#fn-design" class="fn">1</a></li>
+    </ul>
+    <details class="l1" id="d-4-l1"><summary>Full derivation</summary>
+      <p><b>Two gates.</b> The kernel reference names four verification stages: declaration (the domain, M, the relations and their provenance), mathematical (only declared operators, no imported constructs),
+      observable validation (against independent observables, with no tuning) and repeatability.<a href="#fn-ksk" class="fn">12</a> Passing them says the computation is <em>traceable</em>:
+      every number follows from declared observables through declared operators. It does not say the physics is right. A block rule that throws away the relevant operator can be declared
+      perfectly and still hide a LINE; a physically sound estimate built with an undeclared smoothing step can be correct and still fail conformance. So the instrument is checked twice:
+      once for conformance and once against the exact routes of &sect;5, and a pass at one gate says nothing about the other.</p>
+      <p><b>Why B needs an interior locus.</b> B adds each edge&rsquo;s immediate successors. On a chain s &rarr; t with nothing after t, the only edge is terminal and B(g) = g: nothing is
+      accumulated, so B carries no information beyond A. Only when some node has both a declared incoming and a declared outgoing edge does B differ from A, which is why the reference
+      makes that declaration the condition for the A &rarr; B &rarr; R path.</p>
+    </details>
+  </details>
+  <details class="quiz" id="q-4"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<!-- ============================================================ 5 -->
+<section id="5-exact" class="cc-sec" data-accent="green">
+  <h2><span class="num">5</span> Exact routes: truth for the scoring side</h2>
+  <p class="headline">When the Hamiltonian is known, three exact tools, duality, the transfer matrix and partition-function zeros, locate and classify a transition; they generate truth for scoring and never touch the instrument&rsquo;s inputs.</p>
+  <div class="graphic" data-cc-id="t-tm"></div>
+  <p><b>The transfer matrix.</b> Build the matrix that adds one row to an infinitely long Ising strip of width W, periodic across the width
+  (2<sup>W</sup> states). Its largest eigenvalue gives the free energy per site f(W). At a conformally invariant critical point the leading
+  finite-width correction is universal, <span class="math">f(W) = f<sub>&infin;</sub> &minus; &pi;c/(6W<sup>2</sup>)</span>, where c is the central charge (Blöte, Cardy and
+  Nightingale; Affleck).<a href="#fn-bcn" class="fn" id="fnref-bcn">15</a> The demo computes W = 2 to 10 in your browser. Step through the trace and read c off the slope; then move K away
+  from K<sub>c</sub> and watch the estimate stop converging.</p>
+  <div class="graphic" data-cc-id="t-dual"></div>
+  <p><b>Duality.</b> Kramers and Wannier found that the square-lattice Ising model maps onto itself with high and low temperature exchanged; the self-dual point is the transition.
+  Aasen, Mong and Fendley print the anisotropic version as a whole critical, self-dual <em>line</em>, (sinh 2J<sub>x</sub>)(sinh 2J<sub>y</sub>) = 1.<a href="#fn-amf16" class="fn" id="fnref-amf16">13</a>
+  Slide J<sub>x</sub> along it, then find the isotropic point: sinh 2K = 1 gives K<sub>c</sub> = &frac12; ln(1 + &radic;2) &asymp; 0.4407. (That number is this page&rsquo;s arithmetic from their equation (2.2); they do not print it.)
+  Every point of that curve is critical, and every point is the same Ising class: a line of critical <em>points</em>, not a LINE of fixed points (trap T1 in this page&rsquo;s source).
+  For Ashkin&ndash;Teller, duality answers with a genuine LINE: the self-dual line Z = 1 &minus; 2X, along which the exponents vary.<a href="#fn-wis93" class="fn" id="fnref-wis93">14</a></p>
+  <div class="graphic" data-cc-id="t-zeros"></div>
+  <p><b>Partition-function zeros.</b> Z of a finite system is a polynomial in e<sup>&minus;&beta;</sup> or in the field, so it has zeros, all off the real axis. As L grows they pinch the
+  axis, and the rate carries the order of the transition: the first zero approaches like L<sup>&minus;1/&nu;</sup> at a continuous transition and like L<sup>&minus;d</sup> at a first-order one
+  (Janke and Kenna).<a href="#fn-jk01" class="fn" id="fnref-jk01">17</a> Lee and Yang proved that for a ferromagnet the field-plane zeros lie exactly on the unit circle.<a href="#fn-yl52" class="fn" id="fnref-yl52">18</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>These are truth generators for the controls. None of them may touch the instrument&rsquo;s inputs (the firewall): they need the Hamiltonian. The transfer matrix scores LINE (c constant and a marginal operator), duality locates lines exactly, and zeros decide the ORDER of a transition, not whether it sits on a LINE.<a href="#fn-tex" class="fn">19</a></p></div>
+  <details class="l2" id="d-5-l2"><summary>Working equations</summary>
+    <p><b>Kramers&ndash;Wannier as Aasen, Mong &amp; Fendley print it.</b><a href="#fn-amf16" class="fn">13</a> The critical, self-dual line is (2.2) (sinh 2J<sub>x</sub>)(sinh 2J<sub>y</sub>) = 1. With the
+    weights e<sup>2J<sub>y</sub></sup> = cot u<sub>V</sub> and e<sup>2J<sub>x</sub></sup> = cot(&pi;/4 &minus; u<sub>H</sub>), the critical line is u<sub>H</sub> = u<sub>V</sub> and the isotropic critical point is
+    u<sub>H</sub> = u<sub>V</sub> = &pi;/8. The duality relation printed as (2.13), sinh J sinh &Jcirc; = 1, lacks the factor 2 that (2.2) carries: a slip in the paper, not in this page.
+    Duality is also an operator: a defect D<sub>&sigma;</sub> with D<sub>&sigma;</sub>&sigma;<sup>z</sup>&sigma;<sup>z</sup> = &mu;<sup>x</sup>D<sub>&sigma;</sub> and D<sub>&sigma;</sub>&sigma;<sup>x</sup> = &mu;<sup>z</sup>&mu;<sup>z</sup>D<sub>&sigma;</sub>,
+    which fuses as D<sub>&sigma;</sub><sup>2</sup> = 1 + D<sub>&psi;</sub> and is not invertible.</p>
+    <p><b>Ashkin&ndash;Teller.</b> With Z = e<sup>&minus;4K</sup> and X = e<sup>&minus;2(K+L)</sup>, the self-dual line Z = 1 &minus; 2X runs from the Ising end to the 4-state Potts end, and the thermal exponent
+    y<sub>t</sub> = 2 &minus; 2/g<sub>R</sub> varies along it.<a href="#fn-wis93" class="fn">14</a> That line has c = 1: it is the orbifold branch of the c = 1 compact boson.<a href="#fn-gin88" class="fn" id="fnref-gin88">25</a></p>
+    <p><b>Walking in the strip.</b> For q = 5 Potts the complex fixed point has c &asymp; 1.138 &plusmn; 0.021i (Gorbenko, Rychkov &amp; Zan, (3.2)),<a href="#fn-grz2" class="fn">8</a> Re c = 1.13755.
+    Ma and He measure c(L) on quantum Potts chains: at q = 5 it approaches Re c (1.149 at L = 20, 1.139 at L = 70), and the drift fits a tangent form
+    c(L) = c<sub>R</sub> &minus; &alpha; tan(&gamma; ln(L/L<sub>0</sub>)) better than a polynomial in 1/L.<a href="#fn-mah19" class="fn" id="fnref-mah19">16</a> A plateau near Re c at W &Lt; &xi; is the strip&rsquo;s view of walking.</p>
+    <p><b>Zeros, as Janke &amp; Kenna write them.</b><a href="#fn-jk01" class="fn">17</a></p>
+    <span class="math-block">second order: r<sub>j</sub>(L) ~ ((2j &minus; 1)/L<sup>d</sup>)<sup>1/(&nu;d)</sup> ~ L<sup>&minus;1/&nu;</sup> &nbsp;(2.14); &nbsp;&nbsp; first order: r<sub>j</sub>(L) ~ L<sup>&minus;d</sup> &nbsp;(2.17)</span>
+    <span class="math-block">G<sub>L</sub>(r<sub>j</sub>) = (2j &minus; 1)/(2L<sup>d</sup>) = a<sub>1</sub>&thinsp;r<sub>j</sub><sup>a<sub>2</sub></sup> + a<sub>3</sub> &nbsp;(3.1&ndash;3.2)</span>
+    <p>Read the fit: a<sub>2</sub> &asymp; 1 means first order, with the latent heat set by the slope a<sub>1</sub>; a<sub>2</sub> &gt; 1 means second order with &alpha; = 2 &minus; a<sub>2</sub>;
+    a<sub>3</sub> &ne; 0 means no transition. The first-order rate L<sup>&minus;d</sup> is &ldquo;the formal identification of &nu; with 1/d&rdquo;. Fisher zeros live in the complex temperature plane at zero field;
+    Lee&ndash;Yang zeros in the complex field plane. Whether the zeros of a walking system approach at a drifting rate is reasoned, not found in a source here.<a href="#fn-tex" class="fn">19</a></p>
+    <details class="l1" id="d-5-l1"><summary>Full derivation</summary>
+      <p><b>The strip transfer matrix, symmetrised.</b> Let s = (s<sub>1</sub>&hellip;s<sub>W</sub>) be one row, periodic across the width. Split the Boltzmann weight into a row part
+      D(s) = exp(K&thinsp;&Sigma;<sub>i</sub> s<sub>i</sub>s<sub>i+1</sub>) and a between-row part V(s, s&prime;) = exp(K&thinsp;&Sigma;<sub>i</sub> s<sub>i</sub>s&prime;<sub>i</sub>). Then
+      T = D<sup>1/2</sup>&thinsp;V&thinsp;D<sup>1/2</sup> is symmetric, and V is a tensor product of W copies of the 2&times;2 matrix [[e<sup>K</sup>, e<sup>&minus;K</sup>], [e<sup>&minus;K</sup>, e<sup>K</sup>]], so
+      applying T to a vector costs W&middot;2<sup>W</sup> operations rather than 4<sup>W</sup>. For an M-row strip Z = tr T<sup>M</sup> &rarr; &lambda;<sub>max</sub><sup>M</sup>, so the free energy per site in units of k<sub>B</sub>T is
+      f(W) = &minus;ln &lambda;<sub>max</sub>/W. Power iteration finds &lambda;<sub>max</sub>. Two widths give c: c = (6/&pi;)&thinsp;[f(W) &minus; f(W&prime;)] / [1/W&prime;<sup>2</sup> &minus; 1/W<sup>2</sup>].
+      This construction is standard; the code on this page is its direct transcription.</p>
+      <p><b>The Lee&ndash;Yang circle theorem</b>, Theorem 3 of their Paper II (verbatim): &ldquo;If the interaction u between two gas atoms is such that u = +&infin; if the two atoms occupy the same
+      lattice [site] and u &le; 0 otherwise, then all the roots of the polynomial &#119979; lie on the unit circle in the complex z-plane.&rdquo; In the Ising language the lattice-gas fugacity z is
+      e<sup>&minus;2&beta;h</sup> (up to convention), so the ferromagnet&rsquo;s field-plane zeros sit on a circle, and the transition is where they pinch the positive real axis.
+      The theorem assumes nothing about the range of u, the dimension, or the lattice.<a href="#fn-yl52" class="fn">18</a></p>
+    </details>
+  </details>
+  <details class="quiz" id="q-5"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<!-- ============================================================ 6 -->
+<section id="6-table" class="cc-sec" data-accent="green">
+  <h2><span class="num">6</span> The other techniques, in one table</h2>
+  <p class="headline">Fourteen techniques side by side: what each needs, what it decides, whether it fits the design bound, how well it reduces to A, B and R, and which side of the firewall it lives on.</p>
+  <div class="graphic" data-cc-id="t-table"></div>
+  <p>The map places each technique by how well it reduces to the kernel&rsquo;s operators (left to right) and by the side of the firewall it lives on
+  (bottom to top). Click a dot or a filter. Instrument-side methods take observations: snapshots or time series. Scoring-side methods need the
+  Hamiltonian and generate truth. Tensor-network RG (Levin&ndash;Nave; Evenbly&ndash;Vidal),<a href="#fn-tn" class="fn" id="fnref-tn">20</a> information-based RG (Koch-Janusz &amp; Ringel),<a href="#fn-kjr" class="fn" id="fnref-kjr">22</a>
+  and time-series early warning (Scheffer and co-workers; Bury&rsquo;s spectral variant)<a href="#fn-ews" class="fn" id="fnref-ews">21</a> each get one row.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>Pick by geometry, not by fashion. The instrument side holds MCRG on snapshots, the drifting exponent from one snapshot set, winding counts and early-warning screens; everything else is scoring-side truth for the controls.<a href="#fn-tex" class="fn">19</a></p></div>
+  <details class="l2" id="d-6-l2"><summary>Working equations</summary>
+    <p><b>What the columns mean.</b> <i>Design bound</i>: could it run on a 486-class machine (16 MB, ~10<sup>7</sup> operations/s)? The costs are order-of-magnitude arithmetic, not timings:
+    MCRG on 64&sup2; Ising at 10<sup>4</sup> sweeps is ~10<sup>8</sup> operations; a 2<sup>12</sup>-state sparse transfer-matrix step ~10<sup>5</sup>; tensor RG ~D<sup>6</sup> per step, which fits 16 MB at bond dimension D = 16&ndash;24.
+    <i>Kernel fit</i>: does it reduce to directed differences over a declared relation, their accumulations, and circulation round loops?<a href="#fn-tex" class="fn">19</a></p>
+    <p><b>Claims in this table that are not verified here:</b> that Fisher zeros of a walking system approach the axis at a drifting rate; that a histogram version of information-based RG fits the design bound;
+    that Migdal&ndash;Kadanoff mishandles marginality on Ashkin&ndash;Teller specifically (the general weakness is known). Treat them as leads.</p>
+  </details>
+  <details class="quiz" id="q-6"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<!-- ============================================================ 7 -->
+<section id="7-cheat" class="cc-sec" data-accent="green">
+  <h2><span class="num">7</span> The signature cheat-sheet</h2>
+  <p class="headline">How each technique sees POINT, LINE, WALKING and BKT, and what its honest failure looks like.</p>
+  <div class="graphic" data-cc-id="t-cheat"></div>
+  <p>The strip at the top is the whole distinction between the last two columns in one picture. A walking flow&rsquo;s per-level velocity reads
+  SIG &rarr; SLOW &rarr; SIG: it turns and leaves. A BKT flow near the end of its line slows only as 1/&#8467; (the critical branch
+  y = 1/(1/y<sub>0</sub> + &#8467;))<a href="#fn-has94" class="fn" id="fnref-has94">24</a> and reads SIG &rarr; SLOW &rarr; ? with no turn, because the band widens before the velocity
+  settles. That sequence is a named cell of the table: REFUSE(&ldquo;slow&rdquo;).<a href="#fn-design" class="fn">1</a> Click a column head to light one geometry.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>Print it. It is the Detector&rsquo;s table before it is code, and the last column is as much a part of the specification as the first four: a GOOD failure on BKT is REFUSE(&ldquo;slow&rdquo;); a BAD failure is a confident WALKING or POINT.<a href="#fn-design" class="fn">1</a></p></div>
+  <details class="l2" id="d-7-l2"><summary>Working equations</summary>
+    <p>The rows restate &sect;2 (MCRG), &sect;3 (drift and the five-valued sign), &sect;4 (kernel signs) and &sect;5 (exact routes), plus early-warning signals: variance and lag-1
+    autocorrelation rise near a bifurcation because recovery from kicks slows,<a href="#fn-ews" class="fn">21</a> which is true of a line, a walking flow and a plain bifurcation alike.
+    The BKT column&rsquo;s strip entries come from the Kosterlitz flow&rsquo;s critical branch, whose approach is 1/&#8467; with no power law,<a href="#fn-has94" class="fn">24</a> and the transfer-matrix entry
+    from the c = 1 moduli space, where the KT point sits.<a href="#fn-gin88" class="fn">25</a></p>
+  </details>
+  <details class="quiz" id="q-7"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<!-- ============================================================ 8 -->
+<section id="8-final" class="cc-sec" data-cc-exempt="graphic takeaway">
+  <h2><span class="num">8</span> What to remember, and the final test</h2>
+  <p class="headline">Ten lines to keep, a 25-item final test that draws new items on every retake, a name drill, and your scores.</p>
+  <ol class="remember">
+    <li>The instrument follows the flow: velocity (A over scale), accumulation (B), circulation (R).</li>
+    <li>Exponents are eigenvalues of the linearised RG matrix, &lambda; = b<sup>y</sup>; an eigenvalue exactly 1 is a line of fixed points.</li>
+    <li>MCRG (Swendsen 1979): block the same snapshots again and again; T<sub>&alpha;&beta;</sub> = &part;K&prime;<sub>&alpha;</sub>/&part;K<sub>&beta;</sub> from two correlation matrices and the chain rule.</li>
+    <li>Converged eigenvalues are not a converged trajectory (Ron, Brandt &amp; Swendsen 2017); truncation can manufacture drift.</li>
+    <li>A clean data collapse can be confidently wrong (Iino et al.: &nu; = 0.61(5) at a first-order transition).</li>
+    <li>LINE varies with control, not scale; WALKING drifts with scale (Gorbenko&ndash;Rychkov&ndash;Zan (4.34)); POINT varies with neither; BKT approaches as 1/(ln L + C).</li>
+    <li>The five-valued sign: SIG+, SIG&minus;, ZERO!, SLOW, ?; &epsilon; declared first (TOST, Lakens); overlap goes to SLOW.</li>
+    <li>Kernel V8: A = x[s] &minus; x[t]; B adds immediate successors; R = g + &rho;(&Sigma;succ &minus; &Sigma;pred); a missing declaration is NOT EVALUATED, never 0.</li>
+    <li>F(L) = F<sub>&infin;</sub> &minus; &pi;c/(6L<sup>2</sup>) (Blöte&ndash;Cardy&ndash;Nightingale; Affleck); sinh 2K = 1 at the Ising self-dual point (Kramers&ndash;Wannier).</li>
+    <li>Zeros approach as L<sup>&minus;1/&nu;</sup> (continuous) or L<sup>&minus;d</sup> (first order) (Janke&ndash;Kenna): they decide order, not LINE-ness.</li>
+  </ol>
+  <h3>Final test</h3>
+  <div data-cc-final="25" data-cc-id="t-final"></div>
+  <h3>Name drill</h3>
+  <div data-cc-names="techniques"></div>
+  <h3>Your scores</h3>
+  <div data-cc-scoreboard="techniques"></div>
+</section>
+
+<div class="footnotes">
+  <h3>Sources</h3>
+  <ol>
+    <li id="fn-design">Criticality Compass design notes (2026, unpublished): the verdict alphabet POINT / LINE / WALKING / REFUSE as flow behaviour; the five-valued sign over (v, w, &epsilon;) with &epsilon; a declared equivalence margin; the typed verdict LINE(&epsilon;, n<sub>levels</sub>); the two relation families; the projection P<sub>&delta;</sub>; BKT as the pre-registered breaker whose honest answer is REFUSE(&ldquo;slow&rdquo;). These are design choices of an instrument under construction, not physics results. <a href="#fnref-design">&uarr;</a></li>
+    <li id="fn-rgp"><a href="../../../renormalization-group/">The Renormalization Group for the Working Mathematician</a> (this site): &delta;K&prime; = M&delta;K, &lambda; = b<sup>y</sup>, relevant / irrelevant / marginal, the 1D Ising decimation K&prime; = &frac12; ln cosh 2K. Wilson, K. G. (1971). Renormalization group and critical phenomena I &amp; II. <em>Phys. Rev. B</em> <strong>4</strong>:3174, 3184. doi:10.1103/PhysRevB.4.3174. Kadanoff, L. P. (1966). Scaling laws for Ising models near T<sub>c</sub>. <em>Physics</em> <strong>2</strong>:263. doi:10.1103/PhysicsPhysiqueFizika.2.263 <a href="#fnref-rgp">&uarr;</a></li>
+    <li id="fn-sw79">Swendsen, R. H. (1979). Monte Carlo renormalization group. <em>Phys. Rev. Lett.</em> <strong>42</strong>:859. doi:10.1103/PhysRevLett.42.859 (named here; not checked against the paper). <a href="#fnref-sw79">&uarr;</a></li>
+    <li id="fn-ron17">Ron, D., Brandt, A. &amp; Swendsen, R. H. (2017). Surprising convergence of the Monte Carlo renormalization group for the three-dimensional Ising model. <em>Phys. Rev. E</em> <strong>95</strong>:053305. doi:10.1103/PhysRevE.95.053305 (arXiv:1703.02430): eqs (1)&ndash;(6), Tables II&ndash;VIII, Sec. IX. <a href="#fnref-ron17">&uarr;</a></li>
+    <li id="fn-blo96">Blöte, H. W. J., Heringa, J. R., Hoogland, A., Meyer, E. W. &amp; Smit, T. S. (1996). Monte Carlo renormalization of the 3D Ising model: analyticity and convergence. <em>Phys. Rev. Lett.</em> <strong>76</strong>:2613. doi:10.1103/PhysRevLett.76.2613: eqs (2)&ndash;(5), Table I. <a href="#fnref-blo96">&uarr;</a></li>
+    <li id="fn-zie17">Zierenberg, J., Fytas, N. G., Weigel, M., Janke, W. &amp; Malakis, A. (2017). Scaling and universality in the phase diagram of the 2D Blume&ndash;Capel model. <em>Eur. Phys. J. Special Topics</em> <strong>226</strong>:789. doi:10.1140/epjst/e2016-60337-x: the two-dimensional Ising exponents &alpha; = 0, &beta; = 1/8, &gamma; = 7/4, &nu; = 1 (p. 4).</li>
+    <li id="fn-iin19">Iino, S., Morita, S., Kawashima, N. &amp; Sandvik, A. W. (2019). Detecting signals of weakly first-order phase transitions in two-dimensional Potts models. <em>J. Phys. Soc. Jpn.</em> <strong>88</strong>:034006. doi:10.7566/JPSJ.88.034006: eqs (4)&ndash;(6), Figs 1, 3, 4. <a href="#fnref-iin19">&uarr;</a></li>
+    <li id="fn-grz2">Gorbenko, V., Rychkov, S. &amp; Zan, B. (2018). Walking, weak first-order transitions, and complex CFTs II. Two-dimensional Potts model at Q &gt; 4. <em>SciPost Phys.</em> <strong>5</strong>:050. doi:10.21468/SciPostPhys.5.5.050: eqs (3.2), (4.33), (4.34). <a href="#fnref-grz2">&uarr;</a></li>
+    <li id="fn-grz1">Gorbenko, V., Rychkov, S. &amp; Zan, B. (2018). Walking, weak first-order transitions, and complex CFTs. <em>JHEP</em> <strong>2018</strong>(10):108. doi:10.1007/JHEP10(2018)108: the &xi;(Q) table (Q = 5: 2512.2; 6: 158.9; 7: 48.1). <a href="#fnref-grz1">&uarr;</a></li>
+    <li id="fn-has05">Hasenbusch, M. (2005). The two-dimensional XY model at the transition temperature: a high-precision Monte Carlo study. <em>J. Phys. A</em> <strong>38</strong>:5869. doi:10.1088/0305-4470/38/26/003: eq. (31). <a href="#fnref-has05">&uarr;</a></li>
+    <li id="fn-lak17">Lakens, D. (2017). Equivalence tests: a practical primer for t tests, correlations, and meta-analyses. <em>Soc. Psychol. Personal. Sci.</em> <strong>8</strong>:355. doi:10.1177/1948550617697177 <a href="#fnref-lak17">&uarr;</a></li>
+    <li id="fn-ksk">The ABR relational kernel, Kernel V8 reference (2026; open source under Apache-2.0): operators A (&Delta;), B, R, &rho;, &Sigma;; C as a declared projection; NOT EVALUATED as a value; no rings; the four verification stages. Stated here as the reference states them. <a href="#fnref-ksk">&uarr;</a></li>
+    <li id="fn-amf16">Aasen, D., Mong, R. S. K. &amp; Fendley, P. (2016). Topological defects on the lattice I: the Ising model. <em>J. Phys. A</em> <strong>49</strong>:354001. doi:10.1088/1751-8113/49/35/354001 (arXiv:1601.07185): eqs (2.2)&ndash;(2.4), (2.13) (printed without the factor 2 of (2.2)), (3.22)&ndash;(3.27). Kramers, H. A. &amp; Wannier, G. H. (1941). Statistics of the two-dimensional ferromagnet. <em>Phys. Rev.</em> <strong>60</strong>:252. doi:10.1103/PhysRev.60.252 (named here; not checked against the paper). <a href="#fnref-amf16">&uarr;</a></li>
+    <li id="fn-wis93">Wiseman, S. &amp; Domany, E. (1993). Cluster method for the Ashkin&ndash;Teller model. <em>Phys. Rev. E</em> <strong>48</strong>:4080. doi:10.1103/PhysRevE.48.4080: the self-dual line Z = 1 &minus; 2X, y<sub>t</sub> = 2 &minus; 2/g<sub>R</sub>. <a href="#fnref-wis93">&uarr;</a></li>
+    <li id="fn-bcn">Blöte, H. W. J., Cardy, J. L. &amp; Nightingale, M. P. (1986). Conformal invariance, the central charge, and universal finite-size amplitudes at criticality. <em>Phys. Rev. Lett.</em> <strong>56</strong>:742. doi:10.1103/PhysRevLett.56.742. Affleck, I. (1986). Universal term in the free energy at a critical point and the conformal anomaly. <em>Phys. Rev. Lett.</em> <strong>56</strong>:746. doi:10.1103/PhysRevLett.56.746 (abstract: the leading finite-size correction to ln Z on a strip is (&pi;/6)c(L/&beta;)). <a href="#fnref-bcn">&uarr;</a></li>
+    <li id="fn-mah19">Ma, H. &amp; He, Y.-C. (2019). Shadow of complex fixed point: approximate conformality of Q &gt; 4 Potts model. <em>Phys. Rev. B</em> <strong>99</strong>:195130. doi:10.1103/PhysRevB.99.195130: Re c(Q = 5) = 1.13755; the tangent-shaped c(L) drift, eq. (6). <a href="#fnref-mah19">&uarr;</a></li>
+    <li id="fn-jk01">Janke, W. &amp; Kenna, R. (2001). The strength of first and second order phase transitions from partition function zeroes. <em>J. Stat. Phys.</em> <strong>102</strong>:1211. doi:10.1023/A:1004836227767: eqs (2.8), (2.14), (2.17), (3.1). Fisher, M. E. (1965). The nature of critical points. <em>Lectures in Theoretical Physics</em> VII C (University of Colorado Press; no DOI), named for the complex-temperature zeros. <a href="#fnref-jk01">&uarr;</a></li>
+    <li id="fn-yl52">Yang, C. N. &amp; Lee, T. D. (1952). Statistical theory of equations of state and phase transitions. I. <em>Phys. Rev.</em> <strong>87</strong>:404. doi:10.1103/PhysRev.87.404. Lee, T. D. &amp; Yang, C. N. (1952). &hellip; II. Lattice gas and Ising model. <em>Phys. Rev.</em> <strong>87</strong>:410. doi:10.1103/PhysRev.87.410: the circle theorem is Theorem 3 of Paper II. <a href="#fnref-yl52">&uarr;</a></li>
+    <li id="fn-tex">Technique comparison notes for the Compass (2026, unpublished): fourteen techniques with their inputs, what they decide, cost against the design bound, kernel fit and side of the firewall; the order-of-magnitude costs are arithmetic, not timings. <a href="#fnref-tex">&uarr;</a></li>
+    <li id="fn-tn">Levin, M. &amp; Nave, C. P. (2007). Tensor renormalization group approach to two-dimensional classical lattice models. <em>Phys. Rev. Lett.</em> <strong>99</strong>:120601. doi:10.1103/PhysRevLett.99.120601. Evenbly, G. &amp; Vidal, G. (2015). Tensor network renormalization. <em>Phys. Rev. Lett.</em> <strong>115</strong>:180405. doi:10.1103/PhysRevLett.115.180405 <a href="#fnref-tn">&uarr;</a></li>
+    <li id="fn-ews">Scheffer, M. et al. (2012). Anticipating critical transitions. <em>Science</em> <strong>338</strong>:344. doi:10.1126/science.1225244. Dakos, V. et al. (2012). Methods for detecting early warnings of critical transitions in time series illustrated using simulated ecological data. <em>PLoS ONE</em> <strong>7</strong>:e41010. doi:10.1371/journal.pone.0041010. Bury, T. M., Bauch, C. T. &amp; Anand, M. (2020). Detecting and distinguishing tipping points using spectral early warning signals. <em>J. R. Soc. Interface</em> <strong>17</strong>:20200482. doi:10.1098/rsif.2020.0482 (named here; not checked against the paper). <a href="#fnref-ews">&uarr;</a></li>
+    <li id="fn-kjr">Koch-Janusz, M. &amp; Ringel, Z. (2018). Mutual information, neural networks and the renormalization group. <em>Nature Physics</em> <strong>14</strong>:578. doi:10.1038/s41567-018-0081-4 (named here; not checked against the paper). <a href="#fnref-kjr">&uarr;</a></li>
+    <li id="fn-kam93">Kamieniarz, G. &amp; Blöte, H. W. J. (1993). Universal ratio of magnetization moments in two-dimensional Ising models. <em>J. Phys. A</em> <strong>26</strong>:201. doi:10.1088/0305-4470/26/2/009: the Binder ratio at the Ising fixed point is universal. Binder, K. (1981). Finite size scaling analysis of Ising model block distribution functions. <em>Z. Phys. B</em> <strong>43</strong>:119. doi:10.1007/BF01293604 (named here; not checked against the paper).</li>
+    <li id="fn-has94">Hasenbusch, M., Marcu, M. &amp; Pinn, K. (1994). High precision renormalization group study of the roughening transition. <em>Physica A</em> <strong>208</strong>:124. doi:10.1016/0378-4371(94)90536-3 (arXiv:hep-lat/9404016): the flow dy/dt = &minus;xy, dx/dt = &minus;y&sup2; and its critical branch y(t) = 1/(1/y<sub>0</sub> + t), eq. (60). <a href="#fnref-has94">&uarr;</a></li>
+    <li id="fn-gin88">Ginsparg, P. (1988). Applied conformal field theory. Les Houches Session XLIX, <em>Fields, Strings and Critical Phenomena</em> (Elsevier, 1989); no DOI; arXiv:hep-th/9108028: the c = 1 moduli space, the orbifold line as the critical Ashkin&ndash;Teller line, the KT point. <a href="#fnref-gin88">&uarr;</a></li>
+  </ol>
+</div>
+</div>
+
+<script src="bank.js"></script>
+<script src="../../../js/cc-tutor.js"></script>
+<!--PAGE-JS-->
+<script src="../../../js/annex-tracker.js"></script>
+</body>
+</html>
