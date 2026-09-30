@@ -100,7 +100,8 @@ table.t td { padding: 0.55rem 0.7rem; border-top: 1px solid var(--dim); font-siz
 .tip .tt { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400; color: var(--text); width: max-content; max-width: 300px; z-index: 100; line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4); text-align: left; font-family: system-ui, sans-serif; }
 .tip:hover .tt, .tip:focus .tt { display: block; }
 @media (max-width: 640px) { .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: 4rem; transform: none; max-width: none; width: auto; } }
-.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+sup.fnm { font-size: 0.68em; line-height: 0; margin-left: 0.12em; }
+.fn { color: var(--muted); text-decoration: none; }
 .footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
 .footnotes ol { padding-left: 1.4rem; }
 .footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; overflow-wrap: anywhere; }
@@ -153,29 +154,31 @@ table.t td { padding: 0.55rem 0.7rem; border-top: 1px solid var(--dim); font-siz
 turns on, and something diverges as a power law. This one does none of that. There is no order
 parameter, no symmetry is broken, and a theorem forbids the ordered phase from existing at all. Yet
 there is a sharp, experimentally confirmed transition, with a parameter-free prediction that was
-measured and found correct.<a href="#fn3" class="fn" id="fnref3">3</a> It is also the most
+measured and found correct.&#8288;<sup class="fnm"><a href="#fn3" class="fn" id="fnref3">[3]</a></sup> It is also the most
 treacherous critical line there is for an instrument that reads the renormalization-group flow, which
 is why it opens this series.</p>
+<div class="cc-primer-mount"></div>
 
 <section id="0-read" class="cc-sec" data-accent="purple">
   <h2><span class="num">0</span> How to read this page</h2>
-  <p class="headline">Four letters describe what a renormalization-group flow can do, and the whole page is about the one place where they are hardest to tell apart.</p>
+  <p class="headline">The Compass&rsquo;s Detector gives one of four verdicts: three describe what the renormalization-group flow does, the fourth (REFUSE) says the data cannot tell, and this page is about the one place where they are hardest to tell apart.</p>
   <div class="graphic" data-cc-id="kt-alphabet"></div>
   <p>The panels above follow a point as it is coarse-grained: a picture of the
   <span class="tip" tabindex="0">renormalization-group flow<span class="tt">Coarse-grain a system (average over blocks, rescale) and track how its effective couplings change. The couplings trace a path: the flow. A fixed point is a set of couplings that coarse-graining leaves unchanged.</span></span>.
-  The strip under each panel is the speed of the flow. The series uses four verdicts:<a href="#fn18" class="fn" id="fnref18">18</a></p>
+  The strip under each panel is the speed of the flow. The <span class="tip" tabindex="0">Criticality Compass<span class="tt">An instrument under design with two parts: a Detector that classifies a system&rsquo;s critical geometry from observations, and a Navigator that finds a critical line and moves along it.</span></span> is an instrument under design; its <b>Detector</b> reads observations of a system and returns one of four verdicts:&#8288;<sup class="fnm"><a href="#fn18" class="fn" id="fnref18">[18]</a></sup></p>
   <ul>
-    <li><span class="alpha p">POINT</span> an isolated fixed point: the flow stops at one place, with one escape direction (the Ising critical point).</li>
+    <li><span class="alpha p">POINT</span> an isolated fixed point: the flow stops at one place, with one escape direction among the symmetric couplings (the Ising critical point at zero field).</li>
     <li><span class="alpha l">LINE</span> a continuum of fixed points: the flow stops wherever it lands, along an exactly
       <span class="tip" tabindex="0">marginal<span class="tt">A direction in coupling space that coarse-graining neither grows nor shrinks, to linear order. A whole line of fixed points has one along it.</span></span> direction (the XY low-temperature phase on this page).</li>
-    <li><span class="alpha w">WALKING</span> the flow slows to a small nonzero minimum, never stops, then leaves; a finite system imitates criticality (Potts q = 5, 6).<a href="#fn19" class="fn" id="fnref19">19</a></li>
-    <li><span class="alpha r">REFUSE</span> the honest verdict when the data cannot tell. It is a value, not an error.</li>
+    <li><span class="alpha w">WALKING</span> the flow slows to a small nonzero minimum, never stops, then leaves; a finite system imitates criticality (Potts q = 5, 6).&#8288;<sup class="fnm"><a href="#fn19" class="fn" id="fnref19">[19]</a></sup></li>
+    <li><span class="alpha r">REFUSE</span> the honest verdict when the data cannot tell. It is a verdict about the data, not a behaviour of the flow, and it is a value, not an error.</li>
   </ul>
+  <p>The Detector follows the flow over two kinds of relation: <b>SCALE</b> (a system against its own coarse-grained copy: level n against n + 1, or size L/2 against L) and <b>CONTROL</b> (runs at neighbouring values of a knob such as the temperature). A <b>breaker</b> is a test case chosen to fool the instrument: a good failure on it is REFUSE, a bad one is a confident wrong verdict. Each reading of a flow velocity is sorted by a <b>five-valued sign</b> (SIG+, SIG&minus;, ZERO!, SLOW, ?), taught in §12.</p>
   <p>Each section has three layers. The picture and the prose are open. <b>Working equations</b> (a closed
   box) holds the equations a working physicist uses. <b>Full derivation</b>, nested inside it, holds the
   step-by-step argument. Every section ends with a cyan box saying what it means for the
   <span class="tip" tabindex="0">Criticality Compass<span class="tt">An instrument under design with two parts: a Detector that classifies a system's critical geometry from observations (POINT / LINE / WALKING / REFUSE), and a Navigator that finds a critical line and moves along it.</span></span>
-  and a short <b>Check yourself</b> quiz. The final test at the bottom draws different questions on each
+  and a short <b>Check yourself</b> quiz. The box under the introduction, &ldquo;The Compass in one minute&rdquo;, collects every Compass term in one place. The final test at the bottom draws different questions on each
   attempt; your best and latest scores stay in this browser, and an Export button gives a short text
   summary you can paste anywhere.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>BKT is on the syllabus because it is the LINE that ends treacherously: near its end the flow slows only as 1/&#8467;, so a finite system can look like WALKING. It is the Detector&rsquo;s deliberate breaker, and the good answer there is REFUSE. <span class="design">&#9670; design</span></p></div>
@@ -197,10 +200,10 @@ is why it opens this series.</p>
     <div class="theorem-title">Mermin&ndash;Wagner&ndash;Hohenberg (1966&ndash;67)</div>
     <p>A <strong>continuous</strong> symmetry cannot be spontaneously broken at any temperature
     <span class="math">T &gt; 0</span> in <span class="math">d &le; 2</span> dimensions with short-range
-    interactions.<a href="#fn1" class="fn" id="fnref1">1</a></p>
+    interactions.&#8288;<sup class="fnm"><a href="#fn1" class="fn" id="fnref1">[1]</a></sup></p>
   </div>
   <p>So the model should be boring: disordered everywhere, no transition. Except that thin superfluid
-  films, thin-film superconductors and two-dimensional magnets all show something sharp happening at a
+  films and two-dimensional magnets show something sharp happening at a
   definite temperature. <strong>Both facts are true.</strong> Resolving that is the whole subject.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>The Detector never sees &ldquo;order&rdquo; here, because there is none to see. It sees flow: how the effective couplings move under coarse-graining. That is the only reason BKT is within its reach at all.</p></div>
   <details class="l2" id="d-1-l2"><summary>Working equations</summary>
@@ -209,8 +212,8 @@ is why it opens this series.</p>
     <p>has &lang;|&theta;<sub>k</sub>|&sup2;&rang; = k<sub>B</sub>T/(Jk&sup2;) for each Fourier mode, and so</p>
     <span class="math-block">&lang;&theta;&sup2;&rang; &asymp; (k<sub>B</sub>T/2&pi;J) ln(L/a), &nbsp;&nbsp; m = &lang;cos &theta;&rang; = e<sup>&minus;&lang;&theta;&sup2;&rang;/2</sup> = (a/L)<sup>k<sub>B</sub>T/4&pi;J</sup> &rarr; 0.</span>
     <p>The theorem itself is an inequality (Bogoliubov&rsquo;s) and does not rely on the Gaussian
-    approximation; the approximation shows the mechanism.<a href="#fn1" class="fn">1</a> This page
-    uses one convention throughout; the 1973 paper prints some coefficients in another.<a href="#fn20" class="fn" id="fnref20">20</a></p>
+    approximation; the approximation shows the mechanism.&#8288;<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> This page
+    uses one convention throughout; the 1973 paper prints some coefficients in another.&#8288;<sup class="fnm"><a href="#fn20" class="fn" id="fnref20">[20]</a></sup></p>
     <details class="l1" id="d-1-l1"><summary>Full derivation</summary>
       <p>With &theta;(r) = L<sup>&minus;1</sup> &sum;<sub>k</sub> &theta;<sub>k</sub> e<sup>ik&middot;r</sup>, the energy is
       (J/2) &sum;<sub>k</sub> k&sup2; |&theta;<sub>k</sub>|&sup2;, a sum of independent Gaussian modes, so equipartition gives
@@ -226,30 +229,30 @@ is why it opens this series.</p>
 
 <section id="2-spinwaves" class="cc-sec" data-accent="purple">
   <h2><span class="num">2</span> Spin waves: the whole low-temperature phase is critical</h2>
-  <p class="headline">Correlations decay as a power law whose exponent changes smoothly with temperature, so every temperature in the phase is its own fixed point.</p>
+  <p class="headline">Correlations decay as a power law whose exponent changes smoothly with temperature; a power law looks the same after coarse-graining, so each temperature is its own RG fixed point, and together they form a line.</p>
   <div class="graphic" data-cc-id="kt-sw"></div>
   <p>Compute the correlation between two spins anyway. It is a <strong>power law</strong>, not an
   exponential: correlations do not survive to infinity, but they do not die off at any finite length
   either. And the exponent <span class="math">&eta;(T)</span> <em>varies continuously with temperature</em>.
   Drag T in the trace: the straight line on the log&ndash;log plot tilts, and it stays straight.</p>
   <div class="callout">The low-temperature phase is neither ordered nor disordered. It is <strong>critical at every temperature</strong>: an entire phase of scale-invariant states.</div>
-  <p>In renormalization-group language this is a <strong>line of fixed points</strong>, and it is what
+  <p>In renormalization-group language: coarse-graining by a factor b rescales r to r/b and multiplies a power law by the constant b<sup>&minus;&eta;</sup>, which a rescaling of the spins absorbs. So the correlations at temperature T are unchanged by the flow: T is a fixed point, with its own &eta;(T). One fixed point per temperature is a <strong>line of fixed points</strong>, and it is what
   makes BKT structurally unlike anything in the standard catalogue. Nothing has to be tuned; criticality
-  is the generic condition of the whole phase.<a href="#fn6" class="fn" id="fnref6">6</a> But the spin-wave
+  is the generic condition of the whole phase.&#8288;<sup class="fnm"><a href="#fn6" class="fn" id="fnref6">[6]</a></sup> But the spin-wave
   calculation assumed that <span class="math">&theta;</span> is a smooth, single-valued field. It is not.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>This is the LINE: codimension zero, criticality without tuning. A Detector reading exponents sees them move with the CONTROL (temperature) but not with SCALE: at a fixed T, coarse-graining leaves &eta; alone.</p></div>
   <details class="l2" id="d-2-l2"><summary>Working equations</summary>
     <span class="math-block">&lang;<b>s</b>(0)&middot;<b>s</b>(r)&rang; &sim; (a/r)<sup>&eta;(T)</sup>, &nbsp;&nbsp; &eta;(T) = k<sub>B</sub>T/2&pi;J</span>
     <p>With vortices included the bare J is replaced by the renormalised stiffness. Nelson and Kosterlitz
     write it in superfluid variables as <span class="math">&eta;(T) = m&sup2;k<sub>B</sub>T / 2&pi;&#8463;&sup2;&rho;<sub>s</sub>(T)</span>, i.e.
-    <span class="math">&eta; = 1/2&pi;K<sub>R</sub></span> with <span class="math">K<sub>R</sub> = &#8463;&sup2;&rho;<sub>s</sub>/m&sup2;k<sub>B</sub>T</span>.<a href="#fn3" class="fn">3</a>
+    <span class="math">&eta; = 1/2&pi;K<sub>R</sub></span> with <span class="math">K<sub>R</sub> = &#8463;&sup2;&rho;<sub>s</sub>/m&sup2;k<sub>B</sub>T</span>. This is the XY model&rsquo;s K<sub>R</sub> = J<sub>R</sub>/k<sub>B</sub>T in superfluid units: the stiffness &#8463;&sup2;&rho;<sub>s</sub>/m&sup2; plays the role of the renormalised coupling J<sub>R</sub>. (Here m is the helium atom&rsquo;s mass, not the magnetisation of §1; Kosterlitz and Thouless write m* for its effective value in a film, §4.)&#8288;<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup>
     At the transition K<sub>R</sub> = 2/&pi;, so &eta;(T<sub>KT</sub>) = 1/4 exactly (§7).</p>
     <details class="l1" id="d-2-l1"><summary>Full derivation</summary>
       <p>For a Gaussian field, &lang;e<sup>i(&theta;<sub>0</sub> &minus; &theta;<sub>r</sub>)</sup>&rang; = e<sup>&minus;&lang;(&theta;<sub>0</sub> &minus; &theta;<sub>r</sub>)&sup2;&rang;/2</sup> (Wick). The
       difference has variance (k<sub>B</sub>T/J)&int;d&sup2;k/(2&pi;)&sup2; &middot; 2(1 &minus; cos k&middot;r)/k&sup2;
       &asymp; (k<sub>B</sub>T/&pi;J) ln(r/a) for r &raquo; a, the modes with k &lt; 1/r cancelling between the two points. Half of that is
       (k<sub>B</sub>T/2&pi;J) ln(r/a), so the correlation is (a/r)<sup>k<sub>B</sub>T/2&pi;J</sup>.
-      The 1973 paper prints this exponent as k<sub>B</sub>T/4&pi;J (its eq. 53), a convention factor of two.<a href="#fn20" class="fn">20</a></p>
+      The 1973 paper prints this exponent as k<sub>B</sub>T/4&pi;J (its eq. 53), a convention factor of two.&#8288;<sup class="fnm"><a href="#fn20" class="fn">[20]</a></sup></p>
     </details>
   </details>
   <details class="quiz" id="q-2"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -257,7 +260,7 @@ is why it opens this series.</p>
 
 <section id="3-vortices" class="cc-sec" data-accent="purple">
   <h2><span class="num">3</span> Vortices: what smoothness forgot</h2>
-  <p class="headline">The angle lives on a circle, so going once round a loop it can come back having turned by a whole number of turns, and that integer cannot change smoothly.</p>
+  <p class="headline">The angle lives on a circle, so going once round a loop it can come back having turned by a whole number of turns, the winding number; a vortex is a point enclosed with winding +1, and that integer cannot change smoothly.</p>
   <div class="graphic" data-cc-id="kt-xy"></div>
   <p>This is a live XY Monte Carlo lattice; colour is the spin angle. It starts cold, with one
   <span class="tip" tabindex="0">vortex<span class="tt">A point round which the angle winds once, by +2&pi;. All colours meet there.</span></span>
@@ -266,22 +269,22 @@ is why it opens this series.</p>
   the total in turns. Round the vortex you get +1; round the antivortex &minus;1; round both, 0. Then
   heat it (the T slider, and Run or Step) and watch vortex&ndash;antivortex pairs appear everywhere.
   The integer is <span class="math">&pi;<sub>1</sub>(S<sup>1</sup>) = &#8484;</span>, the same invariant
-  that classifies superfluid vortices.<a href="#fn2" class="fn" id="fnref2">2</a></p>
+  that classifies superfluid vortices.&#8288;<sup class="fnm"><a href="#fn2" class="fn" id="fnref2">[2]</a></sup></p>
   <p>The toy has periodic edges and a seeded random number generator; it is for looking, and nothing on
   this page reports a number measured with it. Note one thing it shows honestly: the <em>count</em> of
   winding plaquettes rises smoothly with T. A 2024 lattice study states it flatly: &ldquo;The density of
-  vortices in itself is not a good indicator of the KT transition.&rdquo;<a href="#fn13" class="fn" id="fnref13">13</a>
+  vortices in itself is not a good indicator of the KT transition.&rdquo;&#8288;<sup class="fnm"><a href="#fn13" class="fn" id="fnref13">[13]</a></sup>
   What changes at T<sub>KT</sub> is not whether vortices exist but whether they are bound.</p>
-  <div class="cc-takeaway"><h4>For the Compass</h4><p>A winding number is an integer: it cannot drift, so it needs little data. In the kernel&rsquo;s language the phase differences along the bonds are directed differences (A over the declared bond relation), and their sum round a loop is a circulation. One caution the kernel imposes: a closed loop is a ring, and rings are not admissible as declared relations, so the loop sum must be declared as a projection, not smuggled in as an edge. <span class="design">&#9670; design</span></p></div>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>A winding number is an integer: it cannot drift, so it needs little data. In the kernel&rsquo;s language the raw phase differences along the bonds are directed differences (A over the declared bond relation, with each bond&rsquo;s orientation declared); wrapping each into (&minus;&pi;, &pi;] is a further declared transform, since A is only x[s] &minus; x[t]. Their sum round a loop is a line sum, not the kernel&rsquo;s R. The kernel&rsquo;s declaration rules exclude one shortcut: a closed loop is a ring, and rings are not admissible as declared relations, so the loop sum must be declared as a projection (it keeps the integer winding and discards the bond values), not smuggled in as an edge. In plain terms: counting a winding is allowed, but it has to be written down as its own declared step, not assembled from the operators. <span class="design">&#9670; design</span></p></div>
   <details class="l2" id="d-3-l2"><summary>Working equations</summary>
     <p>Round any closed lattice contour <span class="math">&sum; &Delta;&phi;(r) = 2&pi;q</span>, q = 0, &plusmn;1, &plusmn;2, &hellip;, the total
     vortex strength enclosed (Kosterlitz &amp; Thouless eq. 45). Split &phi; = &psi; + &phi;&#771; into a smooth
     spin-wave part (&sum;&Delta;&psi; = 0) and a vortex part (&sum;&Delta;&phi;&#771; = 2&pi;q); the energy
     separates, H &minus; E<sub>0</sub> = J&sum;(&Delta;&psi;)&sup2; + J&sum;(&Delta;&phi;&#771;)&sup2;, with no cross term (their eq. 46).
-    One vortex has energy <span class="math">&pi;J ln(R/a)</span> (their eq. 44).<a href="#fn2" class="fn">2</a></p>
+    One vortex has energy <span class="math">&pi;J ln(R/a)</span> (their eq. 44).&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></p>
     <p>Kosterlitz and Thouless also explain why the isotropic Heisenberg model (spins on a sphere) has no
     such transition: a 2&pi; twist in the plane can be undone through the third direction, and the one
-    remaining invariant, the skyrmion number, costs only a finite, size-independent energy.<a href="#fn2" class="fn">2</a></p>
+    remaining invariant, the skyrmion number, costs only a finite, size-independent energy.&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></p>
     <details class="l1" id="d-3-l1"><summary>Full derivation</summary>
       <p>For one vortex, &theta; = the polar angle about its core, so |&nabla;&theta;| = 1/r and</p>
       <span class="math-block">E = (J/2)&int;<sub>a</sub><sup>R</sup> (1/r)&sup2; 2&pi;r dr = &pi;J ln(R/a).</span>
@@ -299,7 +302,7 @@ is why it opens this series.</p>
   <p class="headline">The energy of one free vortex and the entropy of where to put it both grow like ln&nbsp;L, so the system size cancels and a pure number decides which wins.</p>
   <div class="graphic" data-cc-id="kt-two-lines"></div>
   <p>This is the heart of the subject and it fits on a napkin: Berezinskii in 1971&ndash;72, independently
-  and first, and Kosterlitz and Thouless in 1973.<a href="#fn2" class="fn">2</a> Put <em>one</em> vortex in a
+  and first, and Kosterlitz and Thouless in 1973.&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup> Put <em>one</em> vortex in a
   system of size L. Its energy grows like ln(L/a): a single vortex looks forbidden. But its core can sit at
   any of about (L/a)&sup2; places, so its entropy grows like ln(L/a) too, <em>with the same functional
   form</em>. Step through the trace and then drag T. The free-energy line pivots through zero, and at
@@ -312,19 +315,19 @@ is why it opens this series.</p>
   </div>
   <p>The right-hand panel of the trace shows why this is only an estimate. The napkin number is
   k<sub>B</sub>T = &pi;J/2 &asymp; 1.571J. The measured transition of the square-lattice XY model is at
-  0.8929J.<a href="#fn10" class="fn" id="fnref10">10</a><a href="#fn11" class="fn" id="fnref11">11</a>
+  0.8929J.&#8288;<sup class="fnm"><a href="#fn10" class="fn" id="fnref10">[10]</a></sup>&#8288;<sup class="fnm"><a href="#fn11" class="fn" id="fnref11">[11]</a></sup>
   Kosterlitz and Thouless said so themselves: other pairs &ldquo;will relax in the field of the first pair
   thereby renormalizing the rigidity modulus &hellip; downwards and consequently reducing the critical
-  temperature.&rdquo;<a href="#fn2" class="fn">2</a></p>
+  temperature.&rdquo;&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>The whole argument is about how things change with SCALE (ln L), which is exactly the axis the Detector reads. The lesson in the gap between 1.571 and 0.893: a bare estimate is not the fixed point, and the flow (§6) is what moves one to the other.</p></div>
   <details class="l2" id="d-4-l2"><summary>Working equations</summary>
     <p>As Kosterlitz and Thouless print it, for a dislocation in a crystal (Burgers vector b, 2D rigidity
-    modulus v, Poisson ratio &tau;, area A):<a href="#fn2" class="fn">2</a></p>
+    modulus v, Poisson ratio &tau;, area A):&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></p>
     <span class="math-block">E = [vb&sup2;(1+&tau;)/4&pi;] ln(A/A<sub>0</sub>), &nbsp; S = k<sub>B</sub> ln(A/A<sub>0</sub>) + O(1), &nbsp; k<sub>B</sub>T<sub>c</sub> = vb&sup2;(1+&tau;)/4&pi;</span>
     <p>(their eqs 1&ndash;3), with the statement that these are upper bounds. &ldquo;Identical considerations for the
     xy model give&rdquo; their eq. 4, printed as k<sub>B</sub>T<sub>c</sub> = &pi;J. In the convention used on this page
     (H = &minus;J&sum;cos, the same paper&rsquo;s own vortex energy &pi;J ln(R/a), and S = 2k<sub>B</sub> ln(R/a)) the
-    argument gives &pi;J/2; the printed coefficient differs by a convention factor.<a href="#fn20" class="fn">20</a></p>
+    argument gives &pi;J/2; the printed coefficient differs by a convention factor.&#8288;<sup class="fnm"><a href="#fn20" class="fn">[20]</a></sup></p>
     <p>For the neutral superfluid they give k<sub>B</sub>T<sub>c</sub> = &pi;&#8463;&sup2;&rho;/2m (eq. 5), and for a film
     k<sub>B</sub>T<sub>c</sub> = &pi;&#8463;&sup2;&rho;<sub>s</sub>/2m* (eq. 82), with &rho;<sub>s</sub> the superfluid density per unit area.</p>
     <details class="l1" id="d-4-l1"><summary>Full derivation</summary>
@@ -344,7 +347,7 @@ is why it opens this series.</p>
   <div class="graphic" data-cc-id="kt-cg"></div>
   <p>Two vortices with winding numbers n<sub>i</sub>, n<sub>j</sub> at distance r interact as
   <span class="math">E<sub>ij</sub> = &minus;2&pi;J n<sub>i</sub>n<sub>j</sub> ln(r<sub>ij</sub>/a)</span>, which is the two-dimensional Coulomb
-  law with winding number as charge.<a href="#fn2" class="fn">2</a> So the XY model maps onto a
+  law with winding number as charge.&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup> So the XY model maps onto a
   <strong>neutral two-dimensional Coulomb gas</strong>, and BKT becomes a
   <strong>dielectric-to-conductor transition</strong>. Below it, charges are bound into dipoles that only
   polarise; above it, free charges screen. In the trace, raise T and watch the mean pair size run away
@@ -364,7 +367,7 @@ is why it opens this series.</p>
       <text class="lbl-s" x="20" y="180">free charges: the vortex gas screens</text>
     </g>
   </svg>
-  <div class="figcap"><b>Figure 2 (from the earlier version of this page).</b> The same event in the Coulomb language. Under reduced motion only the bound pair is shown.</div>
+  <div class="figcap"><b>Figure 1.</b> The same event in the Coulomb language. Under reduced motion only the bound pair is shown.</div>
   </div>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>A second language for the same flow: nothing new for the Detector, but a vocabulary to recognise (dielectric constant = inverse stiffness, pair = dipole, screening = free vortices).</p></div>
   <details class="l2" id="d-5-l2"><summary>Working equations</summary>
@@ -374,18 +377,18 @@ is why it opens this series.</p>
     <span class="math-block">&lang;r&sup2;&rang; = r<sub>0</sub>&sup2; (&beta;q&sup2; &minus; 1)/(&beta;q&sup2; &minus; 2)</span>
     <p>(their eq. 7), which diverges at &beta;q&sup2; = 2: &ldquo;a phase transition to a conducting state will take
     place&rdquo; at k<sub>B</sub>T<sub>c</sub> &asymp; q&sup2;/2 (eq. 10). For the XY vortex gas a &plusmn;1 pair costs 2&pi;J ln(r/a), which matches the model&rsquo;s 2q&sup2; ln(r/r<sub>0</sub>) for
-    q&sup2; = &pi;J, and gives &pi;J/2 again (the paper&rsquo;s own bookkeeping differs by the convention factor).<a href="#fn2" class="fn">2</a><a href="#fn20" class="fn">20</a></p>
+    q&sup2; = &pi;J, and gives &pi;J/2 again (the paper&rsquo;s own bookkeeping differs by the convention factor).&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup>&#8288;<sup class="fnm"><a href="#fn20" class="fn">[20]</a></sup></p>
     <details class="l1" id="d-5-l1"><summary>Full derivation</summary>
       <p>The paper&rsquo;s real step is self-consistent screening. A pair of size r is screened by all smaller pairs,
-      giving a scale-dependent dielectric constant &epsilon;(r). With x = ln(r/r<sub>0</sub>) as the scale and
-      y(x) = 2&beta;q&sup2;/&epsilon;(x) &minus; 4, they obtain (eq. 19)</p>
-      <span class="math-block">dy/dx = &minus;&pi;&sup2; e<sup>&minus;2&beta;&mu;</sup> (y + 4)&sup2; e<sup>&minus;xy</sup>,</span>
-      <p>which rescales to the parameter-free <span class="math">dy&#771;/dx&#771; = &minus;exp(&minus;x&#771;y&#771;)</span> (eq. 21). Its solutions fall
-      into two classes: y(&infin;) &ge; 0, a finite macroscopic dielectric constant (T &lt; T<sub>c</sub>, one end-point per
-      temperature: a line), or y &rarr; &minus;&infin; (T &gt; T<sub>c</sub>, free charges). This is the ancestor of the recursion
+      giving a scale-dependent dielectric constant &epsilon;(r). Write &#8467; = ln(r/r<sub>0</sub>) for the scale and u(&#8467;) = 2&beta;q&sup2;/&epsilon;(&#8467;) &minus; 4 for the running stiffness
+      (the paper calls them x and y; on this page y is reserved for the fugacity of §6). They obtain (eq. 19)</p>
+      <span class="math-block">du/d&#8467; = &minus;&pi;&sup2; e<sup>&minus;2&beta;&mu;</sup> (u + 4)&sup2; e<sup>&minus;&#8467;u</sup>,</span>
+      <p>which rescales to a parameter-free equation, in the paper&rsquo;s own letters <span class="math">dy&#771;/dx&#771; = &minus;exp(&minus;x&#771;y&#771;)</span> (eq. 21). Its solutions fall
+      into two classes: u(&infin;) &ge; 0, a finite macroscopic dielectric constant (T &lt; T<sub>c</sub>, one end-point per
+      temperature: a line), or u &rarr; &minus;&infin; (T &gt; T<sub>c</sub>, free charges). This is the ancestor of the recursion
       relations of §6, written as a flow in ln r before the name RG was attached to it. The paper derives an
       essential singularity from it (eq. 27) and says frankly that &ldquo;since we have used a mean field
-      theory, this form of the singularity is unlikely to be the correct one.&rdquo;<a href="#fn2" class="fn">2</a></p>
+      theory, this form of the singularity is unlikely to be the correct one.&rdquo;&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></p>
     </details>
   </details>
   <details class="quiz" id="q-5"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -397,11 +400,10 @@ is why it opens this series.</p>
   <div class="graphic" data-cc-id="kt-flow"></div>
   <p>Drag the white handle. The arrows are the flow field; the thick curve is the trajectory from your
   start; the dashed curve is the hyperbola <span class="math">E = y&sup2; &minus; x&sup2;</span> through it, which the
-  flow can never leave. Here <span class="math">x = &pi;&beta; &minus; 2</span> measures how stiff the spins are
-  beyond the critical value, and y measures how cheap vortices are.<a href="#fn9" class="fn" id="fnref9">9</a>
-  Start below the diagonal and the fugacity dies: the trajectory lands on the red <b>fixed line</b>
-  (y = 0) at x<sub>&infin;</sub> = &radic;(x&sup2; &minus; y&sup2;), a different point for every start. Start above it and y
-  grows without bound: vortices take over. The diagonal x = y is the critical trajectory, and it runs
+  flow can never leave. Here <span class="math">x = &pi;K &minus; 2</span> measures how far the running stiffness K (the renormalised J/k<sub>B</sub>T) is above the critical value 2/&pi;, and y, the vortex fugacity, measures how cheap vortices are. (Hasenbusch, Marcu and Pinn write x = &pi;&beta; &minus; 2, with &beta; the coupling of the dual Gaussian model; on this page &beta; always means 1/k<sub>B</sub>T.) The scale variable is t = ln b, the logarithm of the coarse-graining factor; Nelson and Kosterlitz call it &#8467;.&#8288;<sup class="fnm"><a href="#fn9" class="fn" id="fnref9">[9]</a></sup>
+  The two diagonals y = |x| are the separatrices; they cut the plane into three regions. <b>Region I</b> (below y = x, with x &gt; 0): the fugacity dies and the trajectory lands on the red <b>fixed line</b>
+  (y = 0) at x<sub>&infin;</sub> = &radic;(x&sup2; &minus; y&sup2;), a different point for every start. <b>Region II</b> (above both diagonals) and <b>region III</b> (below y = &minus;x, with x &lt; 0): y
+  grows without bound and vortices take over. The branch x = y is the critical trajectory, and it runs
   into the end of the line, the point (0, 0).</p>
   <div class="graphic" data-cc-id="kt-flow-eq"></div>
   <p>The second trace takes the two equations apart: the fugacity equation alone, the stiffness equation
@@ -413,26 +415,26 @@ is why it opens this series.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>This is what &ldquo;the flow stops on a line&rdquo; looks like, and what happens at the line&rsquo;s end. Below the separatrix the velocity drops to zero exponentially: ZERO! within any declared margin, a LINE. On the critical trajectory the velocity falls as 1/t&sup2;: resolved and nonzero, then within the margin, then lost in the noise. That sequence, SIG &rarr; SLOW &rarr; ?, is a named cell of the Detector&rsquo;s table, and its verdict is REFUSE(&ldquo;slow&rdquo;). <span class="design">&#9670; design</span></p></div>
   <details class="l2" id="d-6-l2"><summary>Working equations</summary>
     <p>Hasenbusch, Marcu and Pinn write the flow (their eqs 22&ndash;24), with t = ln B the scale:</p>
-    <span class="math-block">dy/dt = &minus;xy, &nbsp;&nbsp; dx/dt = &minus;y&sup2;, &nbsp;&nbsp; x = &pi;&beta; &minus; 2, &nbsp; y = cz, &nbsp;&nbsp; E = y&sup2; &minus; x&sup2; conserved.</span>
+    <span class="math-block">dy/dt = &minus;xy, &nbsp;&nbsp; dx/dt = &minus;y&sup2;, &nbsp;&nbsp; x = &pi;K &minus; 2, &nbsp; y = cz (c a non-universal constant), &nbsp;&nbsp; E = y&sup2; &minus; x&sup2; conserved.</span>
     <p>On the critical branch x = y, <span class="math">y(t) = 1/(1/y<sub>0</sub> + t)</span> (their eq. 60). For E &gt; 0, with
-    &epsilon; = &radic;E, <span class="math">x(t) = &epsilon; tan(arctan(x<sub>0</sub>/&epsilon;) &minus; &epsilon;t)</span> (eq. 69).<a href="#fn9" class="fn">9</a>
+    &epsilon; = &radic;E, <span class="math">x(t) = &epsilon; tan(arctan(x<sub>0</sub>/&epsilon;) &minus; &epsilon;t)</span> (eq. 69).&#8288;<sup class="fnm"><a href="#fn9" class="fn">[9]</a></sup>
     The same flow in the couplings (y<sub>K</sub>, y<sub>V</sub>) of Ueda and Oshikawa is
     dy<sub>K</sub>/dl = &minus;y<sub>V</sub>&sup2;, dy<sub>V</sub>/dl = &minus;y<sub>V</sub>y<sub>K</sub>, with the BKT line y<sub>K</sub> = y<sub>V</sub>;
     they extracted (y<sub>K</sub>, y<sub>V</sub>) from transfer-matrix spectra and watched the trajectories follow the
-    hyperbolas, with the T = 0.893 points lying on the BKT line.<a href="#fn11" class="fn">11</a></p>
+    hyperbolas, with the T = 0.893 points lying on the BKT line.&#8288;<sup class="fnm"><a href="#fn11" class="fn">[11]</a></sup></p>
     <p>In the original variables, the <b>Kosterlitz recursion relations</b> as Nelson and Kosterlitz print them
-    (their eq. 8), with K = J/k<sub>B</sub>T and y the vortex fugacity:<a href="#fn3" class="fn">3</a></p>
+    (their eq. 8), with K = J/k<sub>B</sub>T and y the vortex fugacity:&#8288;<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
     <span class="math-block">dK<sup>&minus;1</sup>/d&#8467; = 4&pi;&sup3;y&sup2;, &nbsp;&nbsp; dy/d&#8467; = (2 &minus; &pi;K) y</span>
     <p>The fugacity changes sign of growth at &pi;K = 2: that is where x = 0.</p>
     <p><b>A resemblance, not a claim.</b> The E &gt; 0 branch, dx/dt = &minus;(&epsilon;&sup2; + x&sup2;), has exactly the form of
     the walking beta function that Gorbenko, Rychkov and Zan write, d&lambda;/dt = &minus;y &minus; &lambda;&sup2;, whose passage
-    takes a scale time of order &pi;/&radic;y.<a href="#fn19" class="fn">19</a> The functional forms match; nothing
+    takes a scale time of order &pi;/&radic;y.&#8288;<sup class="fnm"><a href="#fn19" class="fn">[19]</a></sup> The functional forms match; nothing
     here says the two small parameters are the same thing.</p>
     <details class="l1" id="d-6-l1"><summary>Full derivation</summary>
-      <p>Hasenbusch (2005) derives the flow from the sine-Gordon action
+      <p>Hasenbusch (2005) derives the flow from the sine-Gordon action (here &beta; is the coupling of this dual model, the running stiffness K of the text, not 1/k<sub>B</sub>T)
       S = (1/2&beta;)&sum;(&phi;<sub>x</sub> &minus; &phi;<sub>x+&mu;</sub>)&sup2; &minus; z&sum;cos(2&pi;&phi;<sub>x</sub>), the dual of the XY model: for
       &beta; &gt; 2/&pi; the cosine is irrelevant. Near (x, z) = (0, 0): dz/dt = &minus;xz, dx/dt = &minus;const&middot;z&sup2;
-      (eqs 13&ndash;15).<a href="#fn10" class="fn">10</a> On the critical trajectory x = const<sup>1/2</sup>z, so dx/dt = &minus;x&sup2; and</p>
+      (eqs 13&ndash;15).&#8288;<sup class="fnm"><a href="#fn10" class="fn">[10]</a></sup> On the critical trajectory x = const<sup>1/2</sup>z, so dx/dt = &minus;x&sup2; and</p>
       <span class="math-block">x = 1/(ln l + C)</span>
       <p>(eq. 18). The next order, dx/dt = &minus;x&sup2; &minus; x&sup3;/2, adds corrections of order ln|ln L|/(ln L)&sup2;.</p>
       <p>Conservation: dE/dt = 2y(&minus;xy) &minus; 2x(&minus;y&sup2;) = 0. On x = y the first equation becomes dy/dt = &minus;y&sup2;,
@@ -449,27 +451,27 @@ is why it opens this series.</p>
   <p class="headline">The correlation length diverges faster than any power, the stiffness jumps by a universal amount, and &eta; = 1/4 exactly.</p>
   <div class="graphic" data-cc-id="kt-xi"></div>
   <p><b>An essential singularity.</b> Because the flow near the end of the line is marginal, the correlation
-  length above T<sub>KT</sub> does not diverge as a power of the distance t from the transition. It goes as
-  <span class="math">&xi; &sim; A exp(C/&radic;t)</span>.<a href="#fn9" class="fn">9</a> The trace plots the square-lattice XY
+  length above T<sub>KT</sub> does not diverge as a power of the reduced distance from the transition, &kappa; = |&beta;<sub>c</sub> &minus; &beta;|/&beta;<sub>c</sub> (on this page t is kept for the scale time of §6). It goes as
+  <span class="math">&xi; &sim; A exp(C/&radic;&kappa;)</span>.&#8288;<sup class="fnm"><a href="#fn9" class="fn">[9]</a></sup> The trace plots the square-lattice XY
   model&rsquo;s own form, with the constants A = 0.223 and C = 1.78 that Hasenbusch, Marcu and Pinn extracted.
-  Flip the axes: against t<sup>&minus;1/2</sup> the points fall on a straight line; against ln t they curve, and a
+  Flip the axes: against &kappa;<sup>&minus;1/2</sup> the points fall on a straight line; against ln &kappa; they curve, and a
   power-law fit returns a &ldquo;&nu;&rdquo; that grows the closer you get.</p>
   <div class="warn">
     <div class="warn-title">There is no &nu; for BKT</div>
     <p>Quoting a correlation-length exponent for this transition is a category error. The divergence is
     <strong>faster than any power law</strong>, and the transition is of <strong>infinite order</strong>: every
     derivative of the free energy is continuous through it. This is also the easiest experimental signature
-    to check: plot ln &xi; against t<sup>&minus;1/2</sup> and look for a straight line.</p>
+    to check: plot ln &xi; against &kappa;<sup>&minus;1/2</sup> and look for a straight line.</p>
   </div>
   <p><b>The universal jump.</b> At the transition the renormalised stiffness takes the value
   <span class="math">K<sub>R</sub> = 2/&pi;</span> exactly and then drops discontinuously to zero. For a superfluid
-  film this is a statement about the superfluid density with nothing adjustable in it:<a href="#fn3" class="fn">3</a></p>
-  <span class="math-block">&rho;<sub>s</sub>(T<sub>KT</sub><sup>&minus;</sup>) / T<sub>KT</sub> = 2m&sup2;k<sub>B</sub> / &pi;&#8463;&sup2; &nbsp;(= 3.52 &times; 10<sup>&minus;9</sup> g cm<sup>&minus;2</sup> K<sup>&minus;1</sup> for &#8308;He)</span>
+  film this is a statement about the superfluid density with nothing adjustable in it:&#8288;<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
+  <span class="math-block">&rho;<sub>s</sub>(T<sub>KT</sub><sup>&minus;</sup>) / T<sub>KT</sub> = 2m&sup2;k<sub>B</sub> / &pi;&#8463;&sup2; &nbsp;(= 3.49 &times; 10<sup>&minus;9</sup> g cm<sup>&minus;2</sup> K<sup>&minus;1</sup> for &#8308;He; Nelson and Kosterlitz print 3.52 &times; 10<sup>&minus;9</sup>)</span>
   <p>The film&rsquo;s thickness, substrate and disorder do not enter. Nelson and Kosterlitz framed it as a single
   number that could decide between competing theories; Bishop and Reppy measured it in 1978 with helium films
-  on a torsional oscillator.<a href="#fn4" class="fn" id="fnref4">4</a> Twenty-eight years later Hadzibabic and
+  on a torsional oscillator.&#8288;<sup class="fnm"><a href="#fn4" class="fn" id="fnref4">[4]</a></sup> Twenty-eight years later Hadzibabic and
   co-workers saw the same jump in the coherence of a trapped two-dimensional atomic gas, coinciding with the
-  onset of free vortices.<a href="#fn7" class="fn" id="fnref7">7</a></p>
+  onset of free vortices.&#8288;<sup class="fnm"><a href="#fn7" class="fn" id="fnref7">[7]</a></sup></p>
   <div class="svg-container">
   <svg viewBox="0 0 820 280" role="img" aria-label="Superfluid density against temperature, falling smoothly and then dropping discontinuously to zero exactly where it crosses the universal straight line proportional to temperature.">
     <line class="ax" x1="90" y1="230" x2="750" y2="230"/><line class="ax" x1="90" y1="230" x2="90" y2="40"/>
@@ -487,28 +489,28 @@ is why it opens this series.</p>
     <text class="lbl-s" x="120" y="118">the transition happens exactly where</text>
     <text class="lbl-s" x="120" y="134">the measured curve meets the universal line</text>
   </svg>
-  <div class="figcap"><b>Figure 4 (from the earlier version).</b> The superfluid density falls smoothly, then vanishes discontinuously where it crosses a line fixed by fundamental constants. Only the jump is universal; the shape of the approach to it is not.</div>
+  <div class="figcap"><b>Figure 2.</b> The superfluid density falls smoothly, then vanishes discontinuously where it crosses a line fixed by fundamental constants. Only the jump is universal; the shape of the approach to it is not.</div>
   </div>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>&ldquo;There is no &nu;&rdquo;: a Detector that fits a power law here manufactures an exponent, and the exponent drifts with the fitting window. Drift with scale is WALKING&rsquo;s signature, so an unwary Detector reads this LINE&rsquo;s end as WALKING. That is the bad failure.</p></div>
   <details class="l2" id="d-7-l2"><summary>Working equations</summary>
     <p>Correlation length (Hasenbusch, Marcu &amp; Pinn eq. 25): <span class="math">&xi; &sim; A exp(C|(&beta;<sub>c</sub> &minus; &beta;)/&beta;<sub>c</sub>|<sup>&minus;1/2</sup>)</span>,
-    A, C, &beta;<sub>c</sub> non-universal; for the XY cosine model A = 0.223(13), C = 1.78(2).<a href="#fn9" class="fn">9</a></p>
+    A, C, &beta;<sub>c</sub> non-universal; for the XY cosine model A = 0.223(13), C = 1.78(2).&#8288;<sup class="fnm"><a href="#fn9" class="fn">[9]</a></sup></p>
     <p>Universal jump (Nelson &amp; Kosterlitz eq. 10): <span class="math">lim<sub>T&rarr;T<sub>c</sub><sup>&minus;</sup></sub> m&sup2;k<sub>B</sub>T / &#8463;&sup2;&rho;<sub>s</sub>(T) = &pi;/2</span>,
     i.e. K<sub>R</sub> &rarr; 2/&pi;; and &eta;(T<sub>c</sub>) = 1/4. Below T<sub>c</sub> they find a square-root cusp,
     &rho;<sub>s</sub>(T)/T &asymp; [&rho;<sub>s</sub>(T<sub>c</sub>)/T<sub>c</sub>][1 + 0.50(1 &minus; T/T<sub>c</sub>)<sup>1/2</sup>], and stress that its amplitude is
-    non-universal. The same 2/&pi; holds for the Frank constants of a 2D nematic.<a href="#fn3" class="fn">3</a></p>
+    non-universal. The same 2/&pi; holds for the Frank constants of a 2D nematic.&#8288;<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
     <p>At T<sub>KT</sub> the susceptibility carries a logarithmic correction,
     <span class="math">&chi; &prop; L<sup>2&minus;&eta;</sup>(ln L + C)<sup>&minus;2r</sup></span> with &eta; = 1/4 and r = &minus;1/16
     (Hasenbusch 2005, eqs 42&ndash;44). Fits without the C term had returned r &asymp; &minus;0.023 to &minus;0.027; with it,
-    r = &minus;0.056(7) at L<sub>min</sub> = 256.<a href="#fn10" class="fn">10</a></p>
+    r = &minus;0.056(7) at L<sub>min</sub> = 256.&#8288;<sup class="fnm"><a href="#fn10" class="fn">[10]</a></sup></p>
     <details class="l1" id="d-7-l1"><summary>Full derivation</summary>
       <p><b>The jump is the fixed-point condition.</b> In dy/d&#8467; = (2 &minus; &pi;K)y the fugacity stops shrinking where
       &pi;K = 2. Below T<sub>c</sub> the flow ends on the fixed line with some K<sub>R</sub> &ge; 2/&pi;; the critical trajectory
       ends exactly at its end, K<sub>R</sub> = 2/&pi;; above T<sub>c</sub> y grows and K is driven to zero. So K<sub>R</sub>(T<sub>c</sub><sup>&minus;</sup>) = 2/&pi;
-      is where the separatrix meets the line, and no material parameter can enter it.<a href="#fn3" class="fn">3</a></p>
-      <p><b>The essential singularity.</b> Just above T<sub>c</sub>, E = &epsilon;&sup2; &gt; 0 is small, with &epsilon;&sup2; &prop; t. By eq. 69 the
+      is where the separatrix meets the line, and no material parameter can enter it.&#8288;<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
+      <p><b>The essential singularity.</b> Just above T<sub>c</sub>, E = &epsilon;&sup2; &gt; 0 is small; if E is a smooth function of T that vanishes at T<sub>c</sub>, then &epsilon;&sup2; &prop; &kappa;. By eq. 69 the
       trajectory needs a scale time of order &pi;/&epsilon; to pass the bottleneck near the origin and escape. The correlation
-      length is the scale at which it escapes: ln &xi; &sim; &pi;/&epsilon; &prop; t<sup>&minus;1/2</sup>.<a href="#fn9" class="fn">9</a></p>
+      length is the scale at which it escapes: ln &xi; &sim; &pi;/&epsilon; &prop; &kappa;<sup>&minus;1/2</sup>.&#8288;<sup class="fnm"><a href="#fn9" class="fn">[9]</a></sup></p>
     </details>
   </details>
   <details class="quiz" id="q-7"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -516,13 +518,15 @@ is why it opens this series.</p>
 
 <section id="8-finite-size" class="cc-sec" data-accent="purple">
   <h2><span class="num">8</span> Finite size: the log-slow approach (the breaker)</h2>
-  <p class="headline">At T<sub>KT</sub> every finite-size quantity creeps toward its limit as 1/(ln L + C), so even the largest lattice ever simulated is still percent-level away.</p>
+  <p class="headline">At T<sub>KT</sub> the helicity modulus &Upsilon; and the ratio &xi;<sub>2nd</sub>/L creep toward their limits as 1/(ln L + C), so even at L = 2048, the largest lattice of Hasenbusch&rsquo;s 2005 study, &Upsilon; is still 5.6 % away.</p>
   <div class="graphic" data-cc-id="kt-fss"></div>
   <p>Hasenbusch derived the exact limits and the leading corrections of two quantities at T<sub>KT</sub> on an L &times; L
-  torus, and simulated lattices up to L = 2048 (one lattice took about 76 days).<a href="#fn10" class="fn">10</a> The dots in the
+  torus, and simulated lattices up to L = 2048 (one lattice took about 76 days).&#8288;<sup class="fnm"><a href="#fn10" class="fn">[10]</a></sup> The dots in the
   trace are his Table 1; the curves are his fits. Slide L. At L = 2048 the
   <span class="tip" tabindex="0">helicity modulus<span class="tt">&Upsilon;: the free-energy cost of a small twist of the boundary conditions, i.e. the spin stiffness a finite sample shows. Its infinite-volume value at T<sub>KT</sub> is the universal 2/&pi;.</span></span>
-  &Upsilon; is still 5.6 % above its limit. To get within 1 % you would need L of order 10<sup>20</sup>.
+  &Upsilon; is still 5.6 % above its limit. The second quantity is &xi;<sub>2nd</sub>/L, the
+  <span class="tip" tabindex="0">second-moment correlation length<span class="tt">&xi;<sub>2nd</sub>: a correlation length computed from the susceptibility and the lowest nonzero Fourier mode of the spin correlations. Divided by L it is dimensionless and tends to a finite value at a critical point.</span></span>
+  divided by the lattice size. To get within 1 % you would need L of order 10<sup>20</sup>.
   The second readout is the trap: fit a power law L<sup>&minus;&omega;</sup> to the approach and you get a small
   exponent that keeps shrinking as you add larger lattices. It is not an exponent at all. It is
   1/(ln L + C).</p>
@@ -532,18 +536,18 @@ is why it opens this series.</p>
     <p>(Hasenbusch 2005, eqs 31 and 36; the amplitudes are exact, C is an integration constant fitted to data).
     With L<sub>min</sub> = 256 the fits give, for &Upsilon;, amplitude 0.3033(29) and C = 0.847(67); for &xi;<sub>2nd</sub>/L,
     amplitude 0.2112(97) and C = 1.69(36). The fitted C drifts upward as L<sub>min</sub> rises and &chi;&sup2;/dof stays
-    above 1 to L<sub>min</sub> = 512: &ldquo;neglected corrections die out only logarithmically&rdquo;.<a href="#fn10" class="fn">10</a></p>
+    above 1 to L<sub>min</sub> = 512: &ldquo;neglected corrections die out only logarithmically&rdquo;.&#8288;<sup class="fnm"><a href="#fn10" class="fn">[10]</a></sup></p>
     <p>The same analysis decided a disagreement about T<sub>KT</sub> itself: at &beta; = 1.1199 (T = 0.8929) the fitted
     amplitudes approach the exact ones; at &beta; = 1.12091 (T = 0.8921) they overshoot and keep rising, so that value is
     excluded. Tensor-network level spectroscopy later gave T<sub>c</sub> = 0.892943(2), removing the logarithms by a
-    symmetry argument rather than fighting them.<a href="#fn11" class="fn">11</a></p>
+    symmetry argument rather than fighting them.&#8288;<sup class="fnm"><a href="#fn11" class="fn">[11]</a></sup></p>
     <details class="l1" id="d-8-l1"><summary>Full derivation</summary>
       <p>At z = 0 (no vortices) both quantities are exact Gaussian-model numbers; their O(z) corrections vanish, so to
-      leading order only the running stiffness matters: &Upsilon; = 0.63650817819 + 1.001852182(&beta; &minus; 2/&pi;) + &hellip; (eq. 30).
-      On the critical trajectory the stiffness runs as x = &pi;&beta; &minus; 2 = 1/(ln L + C), i.e. &beta; &minus; 2/&pi; = 1/&pi;(ln L + C),
+      leading order only the running stiffness matters: &Upsilon; = 0.63650817819 + 1.001852182(K &minus; 2/&pi;) + &hellip; (eq. 30, with K the Gaussian stiffness, Hasenbusch&rsquo;s &beta;).
+      On the critical trajectory the stiffness runs as x = &pi;K &minus; 2 = 1/(ln L + C), i.e. K &minus; 2/&pi; = 1/&pi;(ln L + C),
       and 1.001852182/&pi; = 0.318899454 gives eq. 31. The limit 0.63650817819 differs from 2/&pi; = 0.63662 because on a
       finite torus the Gaussian field can also wind round the periodic directions; that winding-sector sum is the
-      difference.<a href="#fn10" class="fn">10</a></p>
+      difference.&#8288;<sup class="fnm"><a href="#fn10" class="fn">[10]</a></sup></p>
       <p>Why the power-law fit misleads: if f(L) = a/(ln L + C), then &minus;d ln f/d ln L = 1/(ln L + C). Any window of L
       returns that value as its &ldquo;exponent&rdquo;, and it falls toward zero as the window moves out.</p>
     </details>
@@ -556,39 +560,39 @@ is why it opens this series.</p>
   <p class="headline">A two-dimensional crystal has two kinds of defect, so it melts in two BKT-type steps with a hexatic phase between them.</p>
   <div class="graphic" data-cc-id="kt-kthny"></div>
   <p>Kosterlitz and Thouless already applied their argument to a 2D crystal, where the defect is a dislocation
-  and melting is the unbinding of dislocation pairs.<a href="#fn2" class="fn">2</a> Halperin and Nelson, and
-  independently Young, showed that this is only the first step.<a href="#fn5" class="fn" id="fnref5">5</a> Unbinding
+  and melting is the unbinding of dislocation pairs.&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup> Halperin and Nelson worked out the dislocation-unbinding step (Young did so
+  independently) and showed that it is only the first step; the hexatic phase and the second, disclination-unbinding step are Halperin and Nelson&rsquo;s.&#8288;<sup class="fnm"><a href="#fn5" class="fn" id="fnref5">[5]</a></sup> Unbinding
   dislocations destroys positional order but leaves the <b>hexatic</b> phase, which still remembers bond
   directions (quasi-long-range). Unbinding
-  <span class="tip" tabindex="0">disclinations<span class="tt">Orientational defects: round one, the local bond direction turns by 60&deg; (for a triangular lattice).</span></span>
+  <span class="tip" tabindex="0">disclinations<span class="tt">Orientational defects: round one, the local bond direction turns by 60&deg; (for a triangular lattice). (Standard geometry; not checked here.)</span></span>
   destroys that too, and leaves an isotropic liquid. Slide T in the trace across the three phases.
   The hexatic has been reported in colloidal monolayers; that experimental literature is not checked here.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>A LINE can end in two steps, one after another. Neither step is a POINT, and a Detector that finds &ldquo;two transitions&rdquo; should expect two log-slow ends, not two power laws.</p></div>
   <details class="l2" id="d-9-l2"><summary>Working equations</summary>
     <p>Kosterlitz and Thouless&rsquo;s dislocation pair energy (their eq. 72):
-    U<sub>pair</sub>(r) &asymp; (Kb&sup2;/4&pi;)(ln|r/a| &minus; &frac12;cos 2&theta;) + 2&mu;, with K = 2v(1 + &tau;) and &theta; the angle between b and r.
+    U<sub>pair</sub>(r) &asymp; (Kb&sup2;/4&pi;)(ln|r/a| &minus; &frac12;cos 2&theta;) + 2&mu;, with K = 2v(1 + &tau;) (KT&rsquo;s elastic constant, not the stiffness K) and &theta; the angle between b and r.
     The angular term only multiplies their flow equation by a Bessel-function factor that is constant for small y (their eq. 81),
     so &ldquo;we can immediately apply all the results&rdquo; of the Coulomb-gas section: melting is the unbinding of dislocation
-    pairs, with the rigidity modulus renormalised downward.<a href="#fn2" class="fn">2</a> The hexatic phase and its second
-    transition are the later theory, cited here by reference only (not held locally).<a href="#fn5" class="fn">5</a></p>
+    pairs, with the rigidity modulus renormalised downward.&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup> The hexatic phase and its second
+    transition are the later theory, cited here by reference only (not held locally).&#8288;<sup class="fnm"><a href="#fn5" class="fn">[5]</a></sup></p>
   </details>
   <details class="quiz" id="q-9"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
 </section>
 
 <section id="10-applies" class="cc-sec" data-accent="purple">
   <h2><span class="num">10</span> Where it applies, and where it does not</h2>
-  <p class="headline">Two dimensions, a continuous symmetry and a logarithmic defect energy, in thermal equilibrium: drop any one and it is a different transition.</p>
+  <p class="headline">BKT needs three conditions, two dimensions, a continuous symmetry and a logarithmic defect energy, and its numbers also assume thermal equilibrium: drop a condition and it is a different transition.</p>
   <div class="graphic" data-cc-id="kt-cond"></div>
   <div class="tablewrap"><table class="t">
     <tr><th>System</th><th>Defect</th><th>Status</th></tr>
-    <tr><td>2D superfluid &#8308;He film</td><td>vortex, &pi;&#8321;(S&sup1;) = &#8484;</td><td>BKT: universal jump measured<a href="#fn4" class="fn">4</a></td></tr>
-    <tr><td>Trapped 2D Bose gas</td><td>vortex</td><td>BKT crossover; exponent jump and free vortices coincide<a href="#fn7" class="fn">7</a></td></tr>
-    <tr><td>2D nematic film</td><td>&plusmn;&frac12; disclination</td><td>same 2/&pi; for the Frank constants (prediction)<a href="#fn3" class="fn">3</a></td></tr>
-    <tr><td>2D colloidal crystal</td><td>dislocation, disclination</td><td>KTHNY; hexatic reported (not checked here)<a href="#fn5" class="fn">5</a></td></tr>
-    <tr><td>Thin-film superconductor</td><td>flux line</td><td>not this transition in the 1973 argument: finite penetration depth makes the vortex energy finite<a href="#fn2" class="fn">2</a></td></tr>
-    <tr><td>Driven-dissipative polariton condensate</td><td>vortex</td><td>BKT-like, but the exponent at the transition exceeds the equilibrium bound 1/4<a href="#fn12" class="fn" id="fnref12">12</a></td></tr>
-    <tr><td>3D superfluid (&lambda;-point)</td><td>vortex <em>loops</em></td><td>different: an ordinary 3D XY critical point</td></tr>
-    <tr><td>2D Ising</td><td>domain wall</td><td>discrete symmetry: an ordinary critical point</td></tr>
+    <tr><td>2D superfluid &#8308;He film</td><td>vortex, &pi;&#8321;(S&sup1;) = &#8484;</td><td>BKT: universal jump measured&#8288;<sup class="fnm"><a href="#fn4" class="fn">[4]</a></sup></td></tr>
+    <tr><td>Trapped 2D Bose gas</td><td>vortex</td><td>BKT crossover; exponent jump and free vortices coincide&#8288;<sup class="fnm"><a href="#fn7" class="fn">[7]</a></sup></td></tr>
+    <tr><td>2D nematic film</td><td>&plusmn;&frac12; disclination</td><td>same 2/&pi; for the Frank constants (prediction)&#8288;<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></td></tr>
+    <tr><td>2D colloidal crystal</td><td>dislocation, disclination</td><td>KTHNY; hexatic reported (not checked here)&#8288;<sup class="fnm"><a href="#fn5" class="fn">[5]</a></sup></td></tr>
+    <tr><td>Thin-film superconductor</td><td>flux line</td><td>not this transition in the 1973 argument: a finite penetration depth screens the currents and makes the vortex energy finite (so §1&rsquo;s list of BKT systems does not include them)&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></td></tr>
+    <tr><td>Driven-dissipative polariton condensate</td><td>vortex</td><td>BKT-like, but the exponent at the transition exceeds the equilibrium bound 1/4 (in one of the two parameter sets studied)&#8288;<sup class="fnm"><a href="#fn12" class="fn" id="fnref12">[12]</a></sup></td></tr>
+    <tr><td>3D superfluid (&lambda;-point)</td><td>vortex <em>loops</em></td><td>different: an ordinary 3D XY critical point (textbook; not checked here)</td></tr>
+    <tr><td>2D Ising</td><td>domain wall</td><td>discrete symmetry: an ordinary critical point (Onsager; not held here)</td></tr>
     <tr><td>Cardiac spirals, active nematics</td><td>&pi;&#8321; defects</td><td>driven, not equilibrium: an analogy under test</td></tr>
   </table></div>
   <div class="warn">
@@ -598,19 +602,19 @@ is why it opens this series.</p>
     But those systems are <strong>driven and dissipative</strong>, and the equilibrium machinery on this page (the
     universal jump, the Kosterlitz recursion, the free-energy argument itself) assumes a Boltzmann distribution that a
     driven system does not have. The polariton study shows the picture transferring while the numbers do not: bound
-    pairs, then free vortices, but an exponent between 0.25 and 0.35 at the transition.<a href="#fn12" class="fn">12</a>
-    <strong>The discriminating measurement is cheap:</strong> an essential ln &xi; &prop; t<sup>&minus;1/2</sup> means BKT; a power
+    pairs, then free vortices, but an exponent between 0.25 and 0.35 at the transition, in one of their two parameter sets. Why &ldquo;bound&rdquo;: in equilibrium &eta; = 1/2&pi;K<sub>R</sub> grows with T through the low-temperature phase, and K<sub>R</sub> never falls below 2/&pi; there, so &eta; rises to exactly 1/4 at T<sub>KT</sub> (§7) and no higher. The exact value of §7 is the top of the equilibrium range.&#8288;<sup class="fnm"><a href="#fn12" class="fn">[12]</a></sup>
+    <strong>The discriminating measurement is cheap:</strong> an essential ln &xi; &prop; &kappa;<sup>&minus;1/2</sup> means BKT; a power
     law means something else. Measure before assuming.</p>
   </div>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>Driven analogues often turn out to be absorbing-state or other nonequilibrium transitions with ordinary power laws. The Compass classifies the geometry it measures; it must not import BKT&rsquo;s equilibrium numbers into a system that has not earned them.</p></div>
   <details class="l2" id="d-10-l2"><summary>Working equations</summary>
     <p><b>The three conditions, and what breaks.</b> Two dimensions make a point defect&rsquo;s energy logarithmic; in three
-    dimensions vortices are loops and the transition is ordinary 3D XY. A continuous symmetry gives Goldstone modes and
+    dimensions vortices are loops and the transition is ordinary 3D XY (textbook; not checked here). A continuous symmetry gives Goldstone modes and
     winding defects; with a discrete symmetry order survives and the transition is an ordinary critical point. The
     logarithm is what makes energy and entropy scale identically; a superconductor&rsquo;s screening currents cut it off
-    (Kosterlitz &amp; Thouless eqs 83&ndash;84), and an isotropic Heisenberg magnet has no stable winding at all.<a href="#fn2" class="fn">2</a></p>
+    (Kosterlitz &amp; Thouless eqs 83&ndash;84), and an isotropic Heisenberg magnet has no stable winding at all.&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></p>
     <p>Comaron et al. find, in a driven-dissipative condensate, an algebraic exponent 0.25 &lt; &alpha;<sub>s</sub> &lt; 0.35 at the
-    transition and a vortex number &lang;N<sub>v</sub>&rang; &prop; &xi;<sup>&minus;1/2</sup>.<a href="#fn12" class="fn">12</a></p>
+    transition in one parameter set (in the other it does not exceed 1/4) and a vortex number &lang;N<sub>v</sub>&rang; &prop; &xi;<sup>&minus;1/2</sup>.&#8288;<sup class="fnm"><a href="#fn12" class="fn">[12]</a></sup></p>
   </details>
   <details class="quiz" id="q-10"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
 </section>
@@ -622,40 +626,40 @@ is why it opens this series.</p>
   <p>The word is used for two different things, and the confusion starts in 1973. The Kosterlitz&ndash;Thouless abstract
   begins: &ldquo;A new definition of order called <em>topological order</em> is proposed for two-dimensional systems in
   which no long-range order of the conventional type exists&rdquo;. Their topological order is defined by the
-  system&rsquo;s <em>response</em> (rigidity, the stability of persistent currents).<a href="#fn2" class="fn">2</a> Twenty years
+  system&rsquo;s <em>response</em> (rigidity, the stability of persistent currents).&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup> About two decades
   later Wen gave the phrase its modern meaning: an order with no broken symmetry and no local order parameter,
   characterised by a <b>ground-state degeneracy that depends on the topology of space</b> and is robust against
   arbitrary perturbations, as in the fractional quantum Hall liquids (the &nu; = 1/q Laughlin state has q<sup>g</sup>
-  ground states on a genus-g surface).<a href="#fn14" class="fn" id="fnref14">14</a> Fill in the ledger above: the two
+  ground states on a genus-g surface).&#8288;<sup class="fnm"><a href="#fn14" class="fn" id="fnref14">[14]</a></sup> Fill in the ledger above: the two
   columns share almost nothing.</p>
   <p>The reasoning, in three lines. (1) The BKT low-temperature phase is a line of fixed points with power-law
   correlations: gapless and critical (§2, §6). (2) Wen&rsquo;s definition requires a topology-dependent ground-state
   degeneracy, which is protected by a gap. (3) So the BKT phase is not topologically ordered in Wen&rsquo;s sense; the 2016
-  Nobel citation&rsquo;s &ldquo;topological phase transitions&rdquo; is the correct description of it.<a href="#fn8" class="fn" id="fnref8">8</a>
+  Nobel citation&rsquo;s &ldquo;topological phase transitions&rdquo; is the correct description of it.&#8288;<sup class="fnm"><a href="#fn8" class="fn" id="fnref8">[8]</a></sup>
   This conclusion is this page&rsquo;s synthesis of the two premises, not a quotation.</p>
-  <div class="cc-takeaway"><h4>For the Compass</h4><p>The bridge to the Compass is the WINDING, not topological order. A winding number is a topological invariant the kernel can read directly from phase differences (§3). The Compass classifies the geometry of the flow, not phases of matter, so it needs no theory of topological order to handle BKT.</p></div>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The bridge to the Compass is the WINDING, not topological order. A winding number is a topological invariant computed from directed phase differences through one declared projection (§3). The Compass classifies the geometry of the flow, not phases of matter, so it needs no theory of topological order to handle BKT.</p></div>
   <details class="l2" id="d-11-l2"><summary>Working equations</summary>
     <p><b>Wen (1995).</b> The FQH liquid has &ldquo;hidden long range orders&rdquo;: long-range order despite no long-range correlation of
     any local operator. The degeneracy &ldquo;is not a consequence of symmetry of the Hamiltonian&rdquo; and survives impurities that
-    break every symmetry. The edges are gapless chiral Luttinger liquids.<a href="#fn14" class="fn">14</a></p>
+    break every symmetry. The edges are gapless chiral Luttinger liquids.&#8288;<sup class="fnm"><a href="#fn14" class="fn">[14]</a></sup></p>
     <p><b>McGreevy (2023).</b> In the language of generalised symmetries, a superfluid (a broken U(1) in two space dimensions)
     has an emergent higher-form symmetry whose charge counts the winding of the phase, <span class="math">Q[C] = &oint;<sub>C</sub> d&phi;</span>;
     it &ldquo;is generally not an exact symmetry of a microscopic Hamiltonian for a superfluid; it is explicitly broken by the presence of
     vortex configurations.&rdquo; In higher dimensions the analogue of BKT is a Coulomb &rarr; Z<sub>k</sub> topological-order transition,
     predicted to show a universal jump in the stiffness; &ldquo;many of these ideas were anticipated by Cardy&rdquo;; Monte Carlo finds
-    that transition weakly first order.<a href="#fn15" class="fn" id="fnref15">15</a></p>
+    that transition weakly first order.&#8288;<sup class="fnm"><a href="#fn15" class="fn" id="fnref15">[15]</a></sup></p>
     <p><b>Ji &amp; Wen (2020).</b> At a symmetry-breaking critical point the symmetry is doubled: at the Ising point the Z<sub>2</sub>
     and its Kramers&ndash;Wannier dual appear together, written Z<sub>2</sub> &or; Z&#771;<sub>2</sub>, and the two cannot both be spontaneously
-    broken. &ldquo;Symmetry breaking transitions and topological transitions are treated at equal footing.&rdquo;<a href="#fn16" class="fn" id="fnref16">16</a></p>
+    broken. &ldquo;Symmetry breaking transitions and topological transitions are treated at equal footing.&rdquo;&#8288;<sup class="fnm"><a href="#fn16" class="fn" id="fnref16">[16]</a></sup></p>
     <p><b>Chatterjee &amp; Wen (2023).</b> &ldquo;Finite symmetry (with or without anomaly) is the shadow of topological order in one higher
-    dimension.&rdquo;<a href="#fn17" class="fn" id="fnref17">17</a></p>
+    dimension.&rdquo;&#8288;<sup class="fnm"><a href="#fn17" class="fn" id="fnref17">[17]</a></sup></p>
     <details class="l1" id="d-11-l1"><summary>Full derivation</summary>
       <p>The categorical-symmetry sketch for the Ising chain. Kramers&ndash;Wannier duality maps spins to domain walls; each
       representation makes one Z<sub>2</sub> manifest, and the model has both. A patch operator of one Z<sub>2</sub> creates a charge
       of the other at each end, U<sub>Z&#8322;</sub>(i,j)U<sub>Z&#771;&#8322;</sub>(i&prime;,j&prime;) = &minus;U<sub>Z&#771;&#8322;</sub>(i&prime;,j&prime;)U<sub>Z&#8322;</sub>(i,j) for
-      interleaved patches, which is why they cannot both be broken.<a href="#fn16" class="fn">16</a> In the holographic picture
+      interleaved patches, which is why they cannot both be broken.&#8288;<sup class="fnm"><a href="#fn16" class="fn">[16]</a></sup> In the holographic picture
       the anomaly-free Z<sub>2</sub> is the boundary shadow of the 2D Z<sub>2</sub> topological order {1, e, m, f} (the toric code), and
-      an anomalous Z<sub>2</sub> that of the double semion order.<a href="#fn17" class="fn">17</a></p>
+      an anomalous Z<sub>2</sub> that of the double semion order.&#8288;<sup class="fnm"><a href="#fn17" class="fn">[17]</a></sup></p>
     </details>
   </details>
   <details class="quiz" id="q-11"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -668,27 +672,28 @@ is why it opens this series.</p>
   <p>The trace applies the Detector&rsquo;s <b>five-valued sign</b> to the flow velocity at successive coarse-graining
   levels. Each level gives an estimate v with a band w (the band widens with depth, because a coarser level has fewer
   blocks), read against a margin &epsilon; that is declared before any data are seen, like the equivalence bounds of a
-  two-one-sided-tests procedure.<a href="#fn18" class="fn">18</a> The cell is looked up in a table with a row for every
-  combination of four yes/no tests: SIG+ (the whole band above +&epsilon;), SIG&minus; (below &minus;&epsilon;), ZERO! (the band
-  contains zero and lies inside &plusmn;&epsilon;), SLOW (the band excludes zero but lies within the margin), and ?
-  (anything else). Where ZERO! and SLOW would both hold, the cell is SLOW: a zero is never claimed while a nonzero is
-  resolved. Move &epsilon; and the band and watch the BKT velocity profile, 1/(n + c)&sup2;, read out.</p>
+  two-one-sided-tests procedure.&#8288;<sup class="fnm"><a href="#fn18" class="fn">[18]</a></sup> The cell is looked up in a table with a row for every
+  combination of four yes/no tests: SIG+ (the whole band above +&epsilon;), SIG&minus; (below &minus;&epsilon;), ZERO! (the band lies inside &plusmn;&epsilon;), SLOW (the band excludes zero but does not lie wholly beyond &plusmn;&epsilon;), and ?
+  (anything else). Where ZERO! and SLOW would both hold (inside &plusmn;&epsilon; yet excluding zero), the cell is SLOW: a zero is never claimed while a nonzero is
+  resolved, and LINE is never asserted on an ambiguous reading. These definitions are the table the trace uses, printed in full under &ldquo;Working equations&rdquo;. Move &epsilon; and the band and watch the BKT velocity profile, 1/(n + n<sub>0</sub>)&sup2;, read out.</p>
+  <p>Two typed verdicts appear below. <b>REFUSE(&ldquo;slow&rdquo;)</b> is REFUSE with its reason attached: the flow was resolved as moving, then as slow, then lost in the noise, with no turn that would mark WALKING. <b>LINE(&epsilon;, n<sub>levels</sub>)</b> is a LINE verdict that carries its own terms: stopped within the declared margin &epsilon;, over the n<sub>levels</sub> coarse-graining levels read, and nothing more. The <b>scoring side</b> is where exact answers (solutions, known phase diagrams) live; they grade a verdict after it is given and never feed the instrument.</p>
   <div class="tablewrap"><table class="t strip">
     <tr><th>Technique</th><th>How it sees BKT</th><th>Honest failure</th></tr>
     <tr><td>MCRG level matching</td><td>levels n and n+1 agree better and better, but only as 1/n</td><td>REFUSE(&ldquo;slow&rdquo;)</td></tr>
     <tr><td>Drifting exponents</td><td>an effective exponent that shrinks as 1/(ln L + C), not a plateau</td><td>REFUSE, never a fitted &nu;</td></tr>
     <tr><td>Kernel signs</td><td>SIG &rarr; SLOW &rarr; ? with no turn back up</td><td>REFUSE(&ldquo;slow&rdquo;)</td></tr>
-    <tr><td>Transfer matrix</td><td>c = 1 and a marginal operator; exact on the scoring side</td><td>truth for scoring, not an instrument input</td></tr>
+    <tr><td>Transfer matrix</td><td>central charge 1 and a marginal operator; exact on the scoring side</td><td>truth for scoring, not an instrument input</td></tr>
   </table></div>
   <p>The techniques page of this series takes each row apart.</p>
   <div class="cc-takeaway"><h4>For the Compass</h4><p>Pre-registered: on BKT the honest Detector answers REFUSE. The breaker tests honesty, not skill. And the verdict depends on &epsilon;, which is exactly why &epsilon; is declared first: chosen afterwards, it could make any answer come out.</p></div>
   <details class="l2" id="d-12-l2"><summary>Working equations</summary>
     <p>The four tests over (v, w, &epsilon;): a = [v &minus; w &gt; &epsilon;], b = [v + w &lt; &minus;&epsilon;], c = [|v| + w &lt; &epsilon;],
     r = [v &minus; w &gt; 0 or v + w &lt; 0]. The table maps each of the 16 keys abcr to one cell: 1001 &rarr; SIG+, 0101 &rarr; SIG&minus;,
-    0010 &rarr; ZERO!, 0001 and 0011 &rarr; SLOW, every other key &rarr; ?. There is no chain of conditions: the verdict is a lookup, and
-    &ldquo;?&rdquo; is a value. With &epsilon; = 0 it collapses to the three-valued sign (SIG+, SIG&minus;, ?).<a href="#fn18" class="fn">18</a></p>
+    0010 &rarr; ZERO!, 0001 and 0011 &rarr; SLOW, every other key &rarr; ?. Key 0011 is the overlap: inside &plusmn;&epsilon; (c) and excluding zero (r), and it reads SLOW. Keys such as 1100 (the band both above +&epsilon; and below &minus;&epsilon;) cannot occur for w, &epsilon; &ge; 0; they read ?, so the table has no gaps. There is no chain of conditions: the verdict is a lookup, and
+    &ldquo;?&rdquo; is a value. With &epsilon; = 0 it collapses to the three-valued sign (SIG+, SIG&minus;, ?).&#8288;<sup class="fnm"><a href="#fn18" class="fn">[18]</a></sup> The full table, read from the same object the trace uses:</p>
+    <div class="tablewrap" id="kt-sign-keys"></div>
     <p>The BKT row: velocity v<sub>n</sub> &prop; dx/dt = &minus;x&sup2; with x = 1/(t + C) along the critical trajectory, so
-    |v<sub>n</sub>| &prop; 1/(n + C)&sup2;. Once it falls under &epsilon; the reading is SLOW (resolved) until the band covers zero; after that
+    |v<sub>n</sub>| &prop; 1/(n + n<sub>0</sub>)&sup2; (n<sub>0</sub> a constant, 1.5 in the trace). Once it falls under &epsilon; the reading is SLOW (resolved) until the band covers zero; after that
     it is ?. The named cell SIG &rarr; SLOW &rarr; ? with no later turn maps to REFUSE(&ldquo;slow&rdquo;). The verdict on a LINE is typed
     LINE(&epsilon;, n<sub>levels</sub>): equivalent to stopped within the declared margin over the levels read, and nothing more.</p>
   </details>
@@ -706,7 +711,7 @@ is why it opens this series.</p>
     <li>Winding number is charge: the transition is a 2D Coulomb gas going from dielectric to conductor.</li>
     <li>The Kosterlitz flow: dy/dt = &minus;xy, dx/dt = &minus;y&sup2;, E = y&sup2; &minus; x&sup2; conserved; the fixed line ends at the transition.</li>
     <li>On the critical trajectory y = 1/(1/y<sub>0</sub> + t): the end of the line is approached as 1/t, not exponentially.</li>
-    <li>Infinite order; &xi; &sim; A exp(C/&radic;t). There is no &nu;. The stiffness jumps by the universal 2/&pi;, and &eta; = 1/4.</li>
+    <li>Infinite order; &xi; &sim; A exp(C/&radic;&kappa;). There is no &nu;. The stiffness jumps by the universal 2/&pi;, and &eta; = 1/4.</li>
     <li>At T<sub>KT</sub> finite-size values approach their limits as 1/(ln L + C): 5.6 % off at L = 2048.</li>
     <li>A topological transition is not topological order. For the Compass, BKT is the breaker; the honest answer is REFUSE.</li>
   </ol>
@@ -762,6 +767,7 @@ is why it opens this series.</p>
 </div>
 
 <script src="bank.js"></script>
+<script src="../diamond-node/critical-lines/primer.js"></script>
 <script src="../js/cc-tutor.js"></script>
 <script>
 /* The page's graphics. Science code is structure, not control: every verdict shown (the region of the
@@ -1035,9 +1041,9 @@ is why it opens this series.</p>
   };
   var regionKey = function (x0, y0) { var E = y0 * y0 - x0 * x0, tol = 4e-4; return (E < -tol ? '-' : E > tol ? '+' : '0') + (x0 > 0 ? 'r' : 'l'); };
   CC.flow($('kt-flow'), {
-    id: 'kt-flow', label: 'Kosterlitz flow in the plane of x equals pi beta minus 2 and y the fugacity, with the fixed line y = 0 for x > 0 and the separatrices y = plus or minus x', height: 330,
+    id: 'kt-flow', label: 'Kosterlitz flow in the plane of x equals pi K minus 2 and y the fugacity, with the fixed line y = 0 for x > 0 and the separatrices y = plus or minus x', height: 330,
     f: function (x, y) { return [-y * y, -x * y]; }, x: [-0.6, 0.6], y: [0, 0.6], start: [-0.4, 0.2],
-    dt: 0.05, steps: 4000, grid: 14, animate: true, xlabel: 'x = πβ − 2', ylabel: 'y (fugacity)',
+    dt: 0.05, steps: 4000, grid: 14, animate: true, xlabel: 'x = πK − 2', ylabel: 'y (fugacity)',
     inv: function (x, y) { return y * y - x * x; },
     draw: function (g) {
       g.line(g.X(0), g.Y(0), g.X(0.6), g.Y(0), { cls: 'cc-fixed' });
@@ -1075,7 +1081,7 @@ is why it opens this series.</p>
       steps: [
         { lit: ['xy'], caption: 'The fugacity equation alone: for x &gt; 0 (stiff spins) y shrinks, for x &lt; 0 it grows. Vortices are irrelevant exactly when the stiffness beats 2/&pi;.', draw: function (g) { plane(g); arrows(g, function (x, y) { return [0, -x * y]; }, { col: C.a }); } },
         { lit: ['yy'], caption: 'The stiffness equation alone: x only ever decreases. Every vortex pair softens the stiffness a little, never stiffens it.', draw: function (g) { plane(g); arrows(g, function (x, y) { return [-y * y, 0]; }, { col: C.b }); } },
-        { lit: ['xy', 'yy'], caption: 'Together: below the diagonal the flow bends down onto the fixed line; above it, y wins and runs away. The diagonal x = y is the separatrix.', draw: function (g) { plane(g); arrows(g, function (x, y) { return [-y * y, -x * y]; }); seps(g); } },
+        { lit: ['xy', 'yy'], caption: 'Together: in region I (below the separatrix y = x, x &gt; 0) the flow bends down onto the fixed line; above the separatrices y wins and runs away.', draw: function (g) { plane(g); arrows(g, function (x, y) { return [-y * y, -x * y]; }); seps(g); } },
         { lit: ['E'], caption: 'E = y&sup2; &minus; x&sup2; is conserved, so every trajectory is a hyperbola: E &lt; 0 lands on the line at x = &radic;(&minus;E); E &gt; 0 escapes; E = 0 is the separatrix.',
           draw: function (g) { plane(g); arrows(g, function (x, y) { return [-y * y, -x * y]; }, { col: '#475569' }); seps(g);
             [-0.09, -0.04, -0.01].forEach(function (E) { var pts = []; for (var k = 0; k <= 80; k++) { var y = 0.6 * k / 80; pts.push([Math.sqrt(y * y - E), y]); } g.curve(pts, { stroke: C.g, width: 1.6 }); });
@@ -1098,17 +1104,17 @@ is why it opens this series.</p>
       data.forEach(function (d) { var e = d[1] - a - b * X(view, d[0]); rs += e * e; });
       return { a: a, b: b, rms: Math.sqrt(rs / n) };
     };
-    var ax = function (g, view) { return view === 1 ? g.axis({ x: [1, 7.5], y: [0, 12], xlabel: 't^(−1/2)', ylabel: 'ln ξ' }) : g.axis({ x: [-4, 0], y: [0, 12], xlabel: 'ln t', ylabel: 'ln ξ' }); };
+    var ax = function (g, view) { return view === 1 ? g.axis({ x: [1, 7.5], y: [0, 12], xlabel: 'κ^(−1/2)', ylabel: 'ln ξ' }) : g.axis({ x: [-4, 0], y: [0, 12], xlabel: 'ln κ', ylabel: 'ln ξ' }); };
     CC.trace($('kt-xi'), {
-      id: 'kt-xi', height: 280, label: 'The logarithm of the correlation length of the square-lattice XY model above the transition, plotted against t to the minus one half or against ln t, with a straight-line fit',
-      eq: [{ t: 'xi', html: '&xi;' }, { html: '&sim;' }, { t: 'ess', html: 'A exp(C/&radic;t)' }, { html: '&nbsp;&nbsp;versus&nbsp;&nbsp;' }, { t: 'pow', html: 't<sup>&minus;&nu;</sup>' }],
-      vars: { view: { min: 0, max: 1, step: 1, init: 0, label: 'axes: 0 = ln t, 1 = t<sup>&minus;1/2</sup>' } },
+      id: 'kt-xi', height: 280, label: 'The logarithm of the correlation length of the square-lattice XY model above the transition, plotted against kappa to the minus one half or against ln kappa, with a straight-line fit',
+      eq: [{ t: 'xi', html: '&xi;' }, { html: '&sim;' }, { t: 'ess', html: 'A exp(C/&radic;&kappa;)' }, { html: '&nbsp;&nbsp;versus&nbsp;&nbsp;' }, { t: 'pow', html: '&kappa;<sup>&minus;&nu;</sup>' }],
+      vars: { view: { min: 0, max: 1, step: 1, init: 0, label: 'axes: 0 = ln &kappa;, 1 = &kappa;<sup>&minus;1/2</sup>' } },
       base: function (g, v) { ax(g, v.view); data.forEach(function (d) { g.dot(g.X(X(v.view, d[0])), g.Y(d[1]), 4, { fill: C.h }); }); },
       steps: [
-        { lit: ['xi'], caption: 'Twelve temperatures above T<sub>KT</sub>, t from 0.6 down to 0.02, with &xi; from the square-lattice XY form (A = 0.223, C = 1.78).' },
+        { lit: ['xi'], caption: 'Twelve temperatures above T<sub>KT</sub>, &kappa; from 0.6 down to 0.02, with &xi; from the square-lattice XY form (A = 0.223, C = 1.78).' },
         { lit: ['ess'], caption: function (v) { var f = fit(v.view); return 'Best straight line on these axes: rms residual ' + fx(f.rms, 3) + (v.view === 1 ? '. A straight line: the essential singularity, slope C = ' + fx(f.b, 2) + '.' : '. They curve: set the axes slider to 1.'); },
           draw: function (g, v) { var f = fit(v.view), lo = v.view === 1 ? 1 : -4, hi = v.view === 1 ? 7.5 : 0; g.plot(function (x) { return f.a + f.b * x; }, { x: [lo, hi], stroke: C.p, width: 2, clip: [0, 12] }); } },
-        { lit: ['pow'], caption: function (v) { var f = fit(0); return 'A power-law fit (the straight line on ln t axes) returns &nu; = ' + fx(-f.b, 2) + ' over this window; its local slope C/2&radic;t runs from ' + fx(Cc / 2 / Math.sqrt(0.6), 2) + ' to ' + fx(Cc / 2 / Math.sqrt(0.02), 2) + ' across it. A manufactured exponent that drifts.'; } }
+        { lit: ['pow'], caption: function (v) { var f = fit(0); return 'A power-law fit (the straight line on ln &kappa; axes) returns &nu; = ' + fx(-f.b, 2) + ' over this window; its local slope C/2&radic;&kappa; runs from ' + fx(Cc / 2 / Math.sqrt(0.6), 2) + ' to ' + fx(Cc / 2 / Math.sqrt(0.02), 2) + ' across it. A manufactured exponent that drifts.'; } }
       ],
       checks: { straightView: function (s) { return s.vars.view === 1; } }
     });
@@ -1250,8 +1256,8 @@ is why it opens this series.</p>
 
   /* ============ §12 the five-valued sign, level by level ============ */
   (function () {
-    var NL = 7, cc = 1.5;
-    var seq = function (v) { var out = []; for (var n = 1; n <= NL; n++) { var vel = 1 / Math.pow(n + cc, 2), w = v.w0 * Math.pow(2, n - 1); out.push({ v: vel, w: w, cell: CC.sign.classify(vel, w, v.eps) }); } return out; };
+    var NL = 7, n0 = 1.5;
+    var seq = function (v) { var out = []; for (var n = 1; n <= NL; n++) { var vel = 1 / Math.pow(n + n0, 2), w = v.w0 * Math.pow(2, n - 1); out.push({ v: vel, w: w, cell: CC.sign.classify(vel, w, v.eps) }); } return out; };
     var compress = function (s) { var o = []; s.forEach(function (x) { var c = x.cell.replace(/^SIG[+−]$/, 'SIG'); if (o[o.length - 1] !== c) o.push(c); }); return o.join(' → '); };
     /* The sequence reading is a lookup; a key with no named cell reads REFUSE (the default cell is a value). */
     var READ = {
@@ -1271,6 +1277,11 @@ is why it opens this series.</p>
       'ZERO! → ?': 'LINE(ε, n) claimed, then lost: REFUSE is the safer reading',
       '?': 'REFUSE: nothing resolved at any level'
     };
+    (function () {
+      var host = document.getElementById('kt-sign-keys'); if (!host) return;
+      var T = CC.sign.table, rows = Object.keys(T).sort().map(function (k) { return '<tr><td>' + k + '</td><td>' + ['a', 'b', 'c', 'r'].map(function (p, i) { return k[i] === '1' ? p : '&not;' + p; }).join(' ') + '</td><td>' + T[k] + '</td></tr>'; });
+      host.innerHTML = '<table class="t"><tr><th>key abcr</th><th>tests</th><th>cell</th></tr>' + rows.join('') + '</table>';
+    })();
     var readOf = function (key) { return READ[key] || 'REFUSE (no named cell)'; };
     var col = { 'SIG+': C.a, 'SIG−': C.a, 'ZERO!': C.g, 'SLOW': C.c, '?': C.m };
     var row = function (g, n) { return 30 + n * 34; };
@@ -1278,7 +1289,7 @@ is why it opens this series.</p>
     CC.trace($('kt-sign'), {
       id: 'kt-sign', height: 290, width: 600,
       label: 'For seven coarse-graining levels, the BKT flow velocity with its band against the declared margin plus or minus epsilon, and the five-valued sign of each level',
-      eq: [{ t: 'v', html: 'v<sub>n</sub> = 1/(n + c)&sup2;' }, { html: ',&nbsp;' }, { t: 'w', html: 'w<sub>n</sub> = w<sub>0</sub>&middot;2<sup>n&minus;1</sup>' }, { html: ',&nbsp;' }, { t: 'eps', html: 'read against &plusmn;&epsilon;' }],
+      eq: [{ t: 'v', html: 'v<sub>n</sub> = 1/(n + n<sub>0</sub>)&sup2;' }, { html: ',&nbsp;' }, { t: 'w', html: 'w<sub>n</sub> = w<sub>0</sub>&middot;2<sup>n&minus;1</sup>' }, { html: ',&nbsp;' }, { t: 'eps', html: 'read against &plusmn;&epsilon;' }],
       vars: { eps: { min: 0, max: 0.2, step: 0.005, init: 0.005, label: '&epsilon;' }, w0: { min: 0.0001, max: 0.02, step: 0.0001, init: 0.0001, label: 'w<sub>0</sub>' } },
       base: function (g) {
         g.line(VX(0), 14, VX(0), 270, { cls: 'cc-axis' });
@@ -1286,7 +1297,7 @@ is why it opens this series.</p>
         for (var n = 1; n <= NL; n++) g.text(14, row(g, n) - 12 + 4, 'n=' + n, { size: 10, cls: 'cc-tick' });
       },
       steps: [
-        { lit: ['v'], caption: 'The flow velocity at level n on the critical trajectory falls as 1/(n + c)&sup2;: always positive, never zero.',
+        { lit: ['v'], caption: 'The flow velocity at level n on the critical trajectory falls as 1/(n + n<sub>0</sub>)&sup2;: always positive, never zero.',
           draw: function (g, v) { seq(v).forEach(function (x, i) { g.dot(VX(x.v), row(g, i + 1) - 12, 4, { fill: C.h }); }); } },
         { lit: ['w'], caption: 'Each deeper level has four times fewer blocks, so the band of the estimate doubles.',
           draw: function (g, v) { seq(v).forEach(function (x, i) { var y = row(g, i + 1) - 12, a = Math.max(-0.05, x.v - x.w), b = Math.min(0.25, x.v + x.w); g.line(VX(a), y, VX(b), y, { stroke: '#94a3b8', width: 6, opacity: 0.6 }); }); } },
