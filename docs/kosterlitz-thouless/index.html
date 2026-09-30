@@ -260,7 +260,7 @@ is why it opens this series.</p>
 
 <section id="3-vortices" class="cc-sec" data-accent="purple">
   <h2><span class="num">3</span> Vortices: what smoothness forgot</h2>
-  <p class="headline">The angle lives on a circle, so going once round a loop it can come back having turned by a whole number of turns, the winding number; a vortex is a point enclosed with winding +1, and that integer cannot change smoothly.</p>
+  <p class="headline">The angle lives on a circle, so going once round a loop it can come back having turned by a whole number of turns, the winding number; a vortex is a point that a loop encloses with winding +1, and that integer cannot change smoothly.</p>
   <div class="graphic" data-cc-id="kt-xy"></div>
   <p>This is a live XY Monte Carlo lattice; colour is the spin angle. It starts cold, with one
   <span class="tip" tabindex="0">vortex<span class="tt">A point round which the angle winds once, by +2&pi;. All colours meet there.</span></span>
@@ -410,7 +410,7 @@ is why it opens this series.</p>
   irrelevant coupling near an ordinary fixed point dies exponentially in the scale time t = ln b. On the
   critical trajectory the fugacity dies only as 1/t: after a factor of 10<sup>40</sup> in scale it has
   still not gone.</p>
-  <div class="cc-takeaway"><h4>For the Compass</h4><p>This is what &ldquo;the flow stops on a line&rdquo; looks like, and what happens at the line&rsquo;s end. Below the separatrix the velocity drops to zero exponentially: ZERO! within any declared margin, a LINE. On the critical trajectory the velocity falls as 1/t&sup2;, and the five-valued sign of §12 reads it SIG, then SLOW, then ?. That sequence, SIG &rarr; SLOW &rarr; ?, is a named cell of the Detector&rsquo;s table, and its verdict is REFUSE(&ldquo;slow&rdquo;). <span class="design">&#9670; design</span></p></div>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>This is what &ldquo;the flow stops on a line&rdquo; looks like, and what happens at the line&rsquo;s end. In region I (x &gt; 0, y &lt; x) the velocity drops to zero exponentially: ZERO! within any declared margin, a LINE. On the critical trajectory the velocity falls as 1/t&sup2;, and the five-valued sign of §12 reads it SIG, then SLOW, then ?. That sequence, SIG &rarr; SLOW &rarr; ?, is a named cell of the Detector&rsquo;s table, and its verdict is REFUSE(&ldquo;slow&rdquo;). <span class="design">&#9670; design</span></p></div>
   <details class="l2" id="d-6-l2"><summary>Working equations</summary>
     <p>Hasenbusch, Marcu and Pinn write the flow (their eqs 22&ndash;24), with t = ln B the scale:</p>
     <span class="math-block">dy/dt = &minus;xy, &nbsp;&nbsp; dx/dt = &minus;y&sup2;, &nbsp;&nbsp; x = &pi;K &minus; 2, &nbsp; y = cz (c a non-universal constant), &nbsp;&nbsp; E = y&sup2; &minus; x&sup2; conserved.</span>
@@ -516,7 +516,7 @@ is why it opens this series.</p>
 
 <section id="8-finite-size" class="cc-sec" data-accent="purple">
   <h2><span class="num">8</span> Finite size: the log-slow approach (the breaker)</h2>
-  <p class="headline">At T<sub>KT</sub> the helicity modulus &Upsilon; and the ratio &xi;<sub>2nd</sub>/L creep toward their limits as 1/(ln L + C), so even at L = 2048, the largest lattice of Hasenbusch&rsquo;s 2005 study, &Upsilon; is still 5.6 % away.</p>
+  <p class="headline">At T<sub>KT</sub> the helicity modulus &Upsilon; (the free-energy cost of a twist across the sample: the stiffness a finite sample shows) and &xi;<sub>2nd</sub>/L (the second-moment correlation length divided by the lattice size) creep toward their limits as 1/(ln L + C), so even at L = 2048, the largest lattice of Hasenbusch&rsquo;s 2005 study, &Upsilon; is still 5.6 % away.</p>
   <div class="graphic" data-cc-id="kt-fss"></div>
   <p>Hasenbusch derived the exact limits and the leading corrections of two quantities at T<sub>KT</sub> on an L &times; L
   torus, and simulated lattices up to L = 2048 (one lattice took about 76 days).&#8288;<sup class="fnm"><a href="#fn10" class="fn">[10]</a></sup> The dots in the
@@ -587,7 +587,7 @@ is why it opens this series.</p>
     <tr><td>Trapped 2D Bose gas</td><td>vortex</td><td>BKT crossover; exponent jump and free vortices coincide&#8288;<sup class="fnm"><a href="#fn7" class="fn">[7]</a></sup></td></tr>
     <tr><td>2D nematic film</td><td>&plusmn;&frac12; disclination</td><td>same 2/&pi; for the Frank constants (prediction)&#8288;<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></td></tr>
     <tr><td>2D colloidal crystal</td><td>dislocation, disclination</td><td>KTHNY; hexatic reported (not checked here)&#8288;<sup class="fnm"><a href="#fn5" class="fn">[5]</a></sup></td></tr>
-    <tr><td>Thin-film superconductor</td><td>flux line</td><td>not this transition in the 1973 argument: a finite penetration depth screens the currents and makes the vortex energy finite (so §1&rsquo;s list of BKT systems does not include them)&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></td></tr>
+    <tr><td>Thin-film superconductor</td><td>flux line</td><td>not this transition in the 1973 argument: a finite penetration depth screens the currents and makes the vortex energy finite (which is why §1 names superfluid films and magnets, not superconductors)&#8288;<sup class="fnm"><a href="#fn2" class="fn">[2]</a></sup></td></tr>
     <tr><td>Driven-dissipative polariton condensate</td><td>vortex</td><td>BKT-like, but the exponent at the transition exceeds the equilibrium bound 1/4 (in one of the two parameter sets studied)&#8288;<sup class="fnm"><a href="#fn12" class="fn" id="fnref12">[12]</a></sup></td></tr>
     <tr><td>3D superfluid (&lambda;-point)</td><td>vortex <em>loops</em></td><td>different: an ordinary 3D XY critical point (textbook; not checked here)</td></tr>
     <tr><td>2D Ising</td><td>domain wall</td><td>discrete symmetry: an ordinary critical point (Onsager; not held here)</td></tr>
@@ -691,7 +691,7 @@ is why it opens this series.</p>
     &ldquo;?&rdquo; is a value. With &epsilon; = 0 it collapses to the three-valued sign (SIG+, SIG&minus;, ?).&#8288;<sup class="fnm"><a href="#fn18" class="fn">[18]</a></sup> The full table, read from the same object the trace uses:</p>
     <div class="tablewrap" id="kt-sign-keys"></div>
     <p>The BKT row: velocity v<sub>n</sub> &prop; dx/dt = &minus;x&sup2; with x = 1/(t + C) along the critical trajectory, so
-    |v<sub>n</sub>| &prop; 1/(n + n<sub>0</sub>)&sup2; (n<sub>0</sub> a constant, 1.5 in the trace). Once v &minus; w no longer exceeds &epsilon; the key is 0001 or 0011 and the cell is SLOW; once the band covers zero the cell is ?. The named cell SIG &rarr; SLOW &rarr; ? with no later turn maps to REFUSE(&ldquo;slow&rdquo;). The verdict on a LINE is typed
+    |v<sub>n</sub>| &prop; 1/(n + n<sub>0</sub>)&sup2; (n<sub>0</sub> a constant, 1.5 in the trace). Once v &minus; w no longer exceeds &epsilon; the key is 0001 or 0011 and the cell is SLOW; once the band covers zero it reads ZERO! if it also lies inside &plusmn;&epsilon; (0010), and ? otherwise. The named cell SIG &rarr; SLOW &rarr; ? with no later turn maps to REFUSE(&ldquo;slow&rdquo;). The verdict on a LINE is typed
     LINE(&epsilon;, n<sub>levels</sub>): equivalent to stopped within the declared margin over the levels read, and nothing more.</p>
   </details>
   <details class="quiz" id="q-12"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
@@ -823,7 +823,7 @@ is why it opens this series.</p>
       { name: 'WALKING', col: C.r, note: 'slows to a nonzero minimum, then leaves',
         trajs: [sim(function (x) { return [0.018 + x * x, 0]; }, -1, 0, 0.12, N)],
         range: [-1.1, 1.1, -0.6, 0.6], deco: function (Mx, My, gr) { S('circle', { cx: Mx(0), cy: My(0.13), r: 3, fill: 'none', stroke: C.r, 'stroke-dasharray': '2 2' }, gr); S('circle', { cx: Mx(0), cy: My(-0.13), r: 3, fill: 'none', stroke: C.r, 'stroke-dasharray': '2 2' }, gr); } },
-      { name: 'REFUSE', col: C.t, note: 'the band covers zero: cannot tell', band: 0.06,
+      { name: 'REFUSE', col: C.t, note: 'the noise band is too wide: cannot tell', band: 0.06,
         trajs: [sim(function (x) { return [0.018 + x * x, 0]; }, -1, 0, 0.12, N)],
         range: [-1.1, 1.1, -0.6, 0.6], deco: function () {} }
     ];
