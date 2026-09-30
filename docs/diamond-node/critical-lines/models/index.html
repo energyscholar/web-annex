@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==== PHYSICS EDITORIAL STANDARD - read before editing any claim in this file ====
+  Every physics claim here is held to one standard:
+    precluded     = a specific law or theorem prohibits it.  NAME THE LAW.
+    not precluded = no known law prohibits it. It may be undemonstrated, unlikely, or need many
+                    unverified steps - but physics does not forbid it.
+  "No one has done this" is an engineering status report, NOT a physics argument.
+
+  This page teaches eight models that give a criticality instrument known answers. Its traps:
+    M1  XXZ SIGN CONVENTION. The page follows Franchini's H = -J sum[SxSx + SySy + Delta SzSz]
+        verbatim: Delta = +1 is the isotropic FERROMAGNET, Delta = -1 the isotropic ANTIFERROMAGNET
+        and the infinite-order BKT-type end. Many texts reverse the sign of Delta, which swaps the
+        names of the two ends. Reshetikhin's H_1 has an overall PLUS sign. Check every "which end"
+        sentence against Franchini Fig. 4.1 before editing.
+    M2  TWO SORMUNEN MODELS. 2023 (PRL 130, 188401 - not 128401) is the three-state IFRI neuron on a
+        directed network, lambda_1 = leading ADJACENCY eigenvalue, transition = onset of activity.
+        2025 (arXiv:2506.04275, no DOI) is FitzHugh-Nagumo oscillators, lambda_l = LAPLACIAN
+        eigenvalues, transitions = Hopf and Turing. Never merge their equations.
+    M3  NO TRICRITICAL EXPONENTS. No held source prints the 2D tricritical Ising exponents. The page
+        shows only the tricritical LOCATION (1.9660(1), 0.6080(1)) and the qualitative crossover.
+    M4  BAXTER IS NOT HELD. The eight-vertex Delta formula, its continuously varying exponents and the
+        AT <-> 8V mapping are labelled "from the literature, not verified locally". Ginsparg's lecture
+        groups the six- and eight-vertex models with the ORBIFOLD (AT) line in one sentence; do not
+        assign XXZ/six-vertex to the circle line without a source.
+    M5  THE BILINEAR COUPLING. "g sigma tau is relevant" is dimension counting from the Ising values
+        (1/8, 1), not checked against a held source; what it flows to at g != 0 is an expectation.
+    M6  WALKING vs KT. The KT flow's E > 0 branch and the walking flow share a tangent shape; that is
+        drawn as a parallel, never as "the same parameter". "L << xi" is the only statement about
+        reachable sizes. The Potts xi values are the Buffenoir-Wallon numbers as tabulated by
+        Gorbenko-Rychkov-Zan and Iino et al.
+    M7  THE ASHKIN-TELLER LINE is the segment X0-X4 of Z = 1 - 2X. Its Potts end carries
+        multiplicative logarithms: fitted alpha/nu there comes out low (0.747 vs exact 1).
+    M8  TOYS ARE TOYS: periodic lattices, Metropolis, seeded random numbers; the adaptive-network toy
+        runs at N = 200 with sped-up adaptation rates. Nothing on this page reports a number measured
+        with a toy. The "◆ design" marker flags statements about the instrument's DESIGN; they are not
+        physics results.
+==== end physics editorial standard ==== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Eight models that give a criticality instrument known answers: Ashkin-Teller, Baxter's eight-vertex model, two coupled Ising layers, O(n1)+O(n2), Blume-Capel, walking Potts, XXZ/six-vertex and self-organising adaptive networks, with live toys, equation traces, quizzes and a final test.">
+<title>Critical Lines and Multicritical Points: the Models</title>
+<link rel="stylesheet" href="../../../css/cc-tutor.css">
+<style>
+:root {
+  --bg: #0f172a; --card: #1e293b; --text: #cbd5e1; --heading: #f1f5f9; --muted: #64748b; --line: #94a3b8; --dim: #334155;
+  --red: #ef4444; --blue: #3b82f6; --green: #22c55e; --amber: #f59e0b; --purple: #a855f7; --cyan: #06b6d4;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 17px; line-height: 1.7; }
+.container { max-width: 900px; margin: 0 auto; padding: 1.5rem 16px 4rem; }
+h1, h2, h3, h4 { font-family: Georgia, 'Times New Roman', serif; color: var(--heading); font-weight: 600; }
+h1 { font-size: 2.1rem; line-height: 1.2; margin: 0.5rem 0; }
+h2 { font-size: 1.55rem; margin: 0 0 0.4rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.15rem; margin: 1.2rem 0 0.4rem; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.nav { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font-size: 0.9rem; color: var(--muted); }
+.nav a { color: var(--muted); }
+.lede { font-size: 1.05rem; }
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+.math-block { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); display: block; text-align: center; margin: 1rem 0; font-size: 1.12rem; overflow-wrap: anywhere; }
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.5); cursor: help; }
+.tip .tt { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400; color: var(--text); width: max-content; max-width: 300px; z-index: 100; line-height: 1.5; pointer-events: none; }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) { .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: 30%; transform: none; max-width: none; width: auto; } }
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); line-height: 0; margin-left: 1px; }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; overflow-wrap: anywhere; }
+.design { color: var(--cyan); font-size: 0.85em; white-space: nowrap; }
+.alpha { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.5rem; margin: 1rem 0; }
+.alpha div { background: var(--card); border: 1px solid var(--dim); border-radius: 8px; padding: 0.5rem 0.7rem; font-size: 0.9rem; line-height: 1.45; }
+.alpha b { color: var(--heading); }
+.tbl { overflow-x: auto; margin: 0.8rem 0; }
+.tbl table { border-collapse: collapse; font-size: 0.86rem; min-width: 100%; }
+.tbl th, .tbl td { border-bottom: 1px solid var(--dim); padding: 0.3rem 0.5rem; text-align: left; vertical-align: top; }
+.tbl th { color: var(--heading); font-weight: 600; }
+.gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.6rem; }
+.gcard { display: block; background: var(--card); border: 1px solid var(--dim); border-radius: 10px; padding: 0.45rem; color: var(--text); text-decoration: none; }
+.gcard:hover, .gcard:focus-visible { border-color: var(--amber); text-decoration: none; }
+.gcard svg { width: 100%; height: auto; display: block; }
+.gcard .gname { font-size: 0.85rem; color: var(--heading); line-height: 1.3; margin-top: 0.25rem; }
+.chip { display: inline-block; font-size: 0.72rem; border-radius: 999px; padding: 0 0.5rem; margin-top: 0.2rem; border: 1px solid currentColor; }
+.chip.line { color: var(--amber); } .chip.point { color: var(--blue); } .chip.walk { color: var(--purple); } .chip.multi { color: var(--green); } .chip.drift { color: var(--cyan); }
+.pair { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-start; }
+.pair > svg, .pair > div { flex: 1 1 260px; max-width: 100%; }
+.vb svg { width: 100%; height: auto; display: block; touch-action: manipulation; }
+.vb .bond-hit { stroke: transparent; stroke-width: 16; cursor: pointer; }
+.vb .vb-read { font-size: 0.86rem; color: var(--text); margin: 0.3rem 0; line-height: 1.5; }
+.ctl2 { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; align-items: center; margin: 0.4rem 0; font-size: 0.86rem; }
+.ctl2 label { display: inline-flex; align-items: center; gap: 0.35rem; }
+.ctl2 input[type=range] { width: 120px; accent-color: var(--amber); }
+.sorm canvas { display: block; max-width: 100%; background: #0b1222; border: 1px solid var(--dim); border-radius: 6px; }
+.sorm .row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.fig { width: 100%; max-width: 560px; height: auto; display: block; margin: 0.6rem auto; }
+.lead-in { color: var(--muted); font-size: 0.9rem; }
+.roll { columns: 2 220px; font-size: 0.9rem; }
+.roll li { break-inside: avoid; }
+.filters { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.4rem; }
+.filters button { background: var(--card); color: var(--text); border: 1px solid var(--dim); border-radius: 999px; padding: 0.1rem 0.7rem; font-size: 0.82rem; cursor: pointer; }
+.filters button[aria-pressed="true"] { border-color: var(--amber); color: var(--amber); }
+tr.dimrow { opacity: 0.25; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="container">
+<nav class="nav" aria-label="Series navigation">
+  <a href="../">&larr; Critical Lines series</a>
+  <a href="../../">Domain Convergence Research</a>
+  <a href="../../../kosterlitz-thouless/">&lsaquo; prev: the BKT transition</a>
+  <a href="../techniques/">next: the techniques &rsaquo;</a>
+</nav>
+<h1>Critical Lines and Multicritical Points: the Models</h1>
+<p class="lede">Eight model systems, chosen because each one gives an instrument a <em>known</em> answer. The
+instrument is the Criticality Compass: its <b>Detector</b> classifies a system's critical geometry from
+observations, and its <b>Navigator</b> finds a critical line and moves along it. Every section shows a
+headline, one live graphic and a cyan &ldquo;For the Compass&rdquo; box with its accordions closed; open
+&ldquo;Working equations&rdquo; for the physicist's layer and &ldquo;Full derivation&rdquo; inside it for the deepest.</p>
+<div class="alpha" aria-label="The Compass alphabet">
+  <div><b>POINT</b>: an isolated fixed point. The renormalisation-group flow stops at one place and has one escape direction (2D Ising).</div>
+  <div><b>LINE</b>: a continuum of fixed points. The flow stops wherever it lands; one direction is exactly marginal (Ashkin&ndash;Teller, XXZ).</div>
+  <div><b>WALKING</b>: the flow slows to a small nonzero minimum, never stops, then leaves. Finite systems imitate criticality (Potts q = 5, 6).</div>
+  <div><b>REFUSE</b>: the honest verdict when the data cannot tell. It is a cell of the table, the default one.</div>
+</div>
+<p>The organising idea is <b>follow the flow</b>: the Detector reads the velocity, accumulation and
+circulation of the flow over declared scale and control relations.<a href="#fn21" class="fn" id="fnref21">21</a>
+Quizzes are folded under each section; the final test at the end is drawn from a bank, so a retake gets
+different items. Scores stay in this browser (Export copies a summary).</p>
+
+<section id="0-orient" class="cc-sec" data-accent="amber">
+  <h2><span class="num">0</span> Orientation: eight models on one alphabet</h2>
+  <p class="headline">Each model is here because it gives the Compass a known answer: a point, a line, a walk, or a point with two relevant directions.</p>
+  <div class="graphic" data-cc-id="gallery"></div>
+  <p>Click a miniature to jump to its section. Two of them are the gentlest on-ramps if the topic is new:
+  <a href="#5-bc">Blume&ndash;Capel</a> (spins that may be missing) and <a href="#7-xxz">XXZ</a> (a
+  quantum spin chain whose anisotropy you dial). The <a href="#1-at">Ashkin&ndash;Teller</a> and
+  <a href="#3-coupled">coupled-Ising</a> sections are a pair: the same two ingredients, coupled two ways,
+  give two different geometries. The <a href="#9-gallery">gallery</a> near the end is the one-table summary.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The Compass is tested on <em>geometry</em>, not on model
+  identity. It must pass Ising and Ashkin&ndash;Teller and XXZ; if it recognises XY as a line but fails
+  Ashkin&ndash;Teller, it has learned a BKT detector, not a critical-manifold detector. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-0-l2"><summary>Working equations</summary>
+    <p>The validation ladder <span class="design">&#9670; design</span>, cheapest first:<a href="#fn21" class="fn">21</a></p>
+    <ol>
+      <li><b>Known-answer classification.</b> 2D Ising &rarr; POINT; 2D XY/BKT &rarr; LINE (treacherous at its end); Potts &rarr; weak first order and walking.</li>
+      <li><b>Generalisation.</b> Systems the instrument was not developed around: Ashkin&ndash;Teller first (an independent line mechanism), then Blume&ndash;Capel (changing local geometry, two relevant directions).</li>
+      <li><b>Deliberately multivariate systems.</b> Two Ising layers coupled by &minus;g&Sigma;&sigma;<sub>i</sub>&tau;<sub>i</sub>, starting at g = 0; then O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>) with an explicit cross-coupling.</li>
+      <li><b>Adaptive systems.</b> A network that organises itself around a critical manifold (Sormunen, Gross &amp; Saramäki), with the instrument blinded to the adaptation rule.</li>
+    </ol>
+  </details>
+  <details class="quiz" id="q-0"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="1-at" class="cc-sec" data-accent="amber">
+  <h2><span class="num">1</span> Ashkin&ndash;Teller: a whole line of critical points</h2>
+  <p class="headline">Two Ising layers joined by a four-spin coupling: instead of one critical point there is a whole line of them, and the exponents change continuously as you slide along it.</p>
+  <div class="graphic" data-cc-id="at-line"></div>
+  <p>Every site carries two Ising spins, <span class="math">&sigma;</span> and <span class="math">&tau;</span>.
+  The coupling <span class="math">K</span> rewards neighbouring &sigma;'s that agree, and neighbouring
+  &tau;'s that agree. The four-spin coupling <span class="math">L</span> rewards neighbouring
+  <em>products</em> <span class="math">&sigma;&tau;</span> that agree. At <span class="math">L = 0</span> the
+  layers ignore each other: two copies of the Ising model, critical at the Onsager coupling
+  <span class="math">K = 0.44069</span>. At <span class="math">L = K</span> the four states
+  (&sigma;, &tau;) = (&plusmn;1, &plusmn;1) are all alike and the model is the four-state
+  <span class="tip" tabindex="0">Potts model<span class="tt">A lattice model with q states per site, where neighbours gain energy only if they are in the same state. q = 2 is Ising.</span></span>.
+  In between, a <span class="tip" tabindex="0">duality<span class="tt">An exact map between the model at strong and at weak coupling. If the transition is unique, it must sit where the map sends the model to itself: the self-dual locus.</span></span>
+  pins every critical point to one curve, the <b>self-dual line</b>. Drag along it in the trace above: the
+  <span class="tip" tabindex="0">specific-heat exponent<span class="tt">&alpha;/&nu;: how fast the specific-heat peak grows with system size, C ~ L<sup>&alpha;/&nu;</sup>.</span></span>
+  ratio &alpha;/&nu; climbs from 0 at the Ising end to 1 at the Potts end, while &gamma;/&nu; = 7/4 never moves.<a href="#fn1" class="fn" id="fnref1">1</a></p>
+  <div class="graphic" data-cc-id="at-toy"></div>
+  <p class="lead-in">The live toy: four colours for the four (&sigma;, &tau;) states. Tick &ldquo;lock onto the
+  self-dual line&rdquo; and slide the position; K and L follow the line. Unlock and move K or L freely to
+  leave it. (Metropolis on a periodic lattice: a toy, not an instrument.)</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p><b>Detector:</b> this is the primary LINE control. The
+  exponent varies with the CONTROL (where you are on the line) but not with SCALE. <b>Navigator:</b> the
+  tangent is along the line and the normal points off it; both are known exactly here, on the scoring side,
+  so the Navigator's estimates can be graded. Keep away from the Potts end, where logarithms fake a
+  drifting exponent. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-1-l2"><summary>Working equations</summary>
+    <p>The Hamiltonian (the inverse temperature is absorbed into the couplings), and Wiseman and Domany's coordinates:<a href="#fn1" class="fn">1</a></p>
+    <span class="math-block">H = &minus;&Sigma;<sub>&lang;ij&rang;</sub> [ K&sigma;<sub>i</sub>&sigma;<sub>j</sub> + K&tau;<sub>i</sub>&tau;<sub>j</sub> + L&sigma;<sub>i</sub>&sigma;<sub>j</sub>&tau;<sub>i</sub>&tau;<sub>j</sub> ], &nbsp; Z = e<sup>&minus;4K</sup>, &nbsp; X = e<sup>&minus;2(K+L)</sup></span>
+    <p>In the unit square of (X, Z): the parabola <span class="math">Z = X<sup>2</sup></span> is L = 0 (decoupled
+    Ising), the diagonal <span class="math">Z = X</span> is L = K (four-state Potts), and duality places the
+    critical line on <span class="math">Z = 1 &minus; 2X</span>. That is the same curve as the form Ginsparg prints,<a href="#fn5" class="fn" id="fnref5">5</a></p>
+    <span class="math-block">Z = 1 &minus; 2X &nbsp;&hArr;&nbsp; e<sup>&minus;4K</sup> = 1 &minus; 2e<sup>&minus;2K&minus;2L</sup> &nbsp;&hArr;&nbsp; e<sup>&minus;2L</sup> = &frac12;(e<sup>2K</sup> &minus; e<sup>&minus;2K</sup>) = sinh 2K.</span>
+    <p>The critical segment runs from the Ising point <span class="math">X<sub>0</sub> = (&radic;2 &minus; 1, 3 &minus; 2&radic;2)</span>
+    (K = 0.44069, L = 0) to the Potts point <span class="math">X<sub>4</sub> = (1/3, 1/3)</span>
+    (K = L = &frac14; ln 3 = 0.27465). Along it (Coulomb-gas results quoted by Wiseman and Domany):<a href="#fn1" class="fn">1</a></p>
+    <span class="math-block">y<sub>t</sub> = 2 &minus; 2/g<sub>R</sub>, &nbsp; g<sub>R</sub> = (8/&pi;) arcsin[&frac12; coth 2K], &nbsp; &alpha;/&nu; = 2y<sub>t</sub> &minus; 2, &nbsp; &gamma;/&nu; = 7/4.</span>
+    <p>On the line, coth 2K = (1 + Z)/(1 &minus; Z) = (1 &minus; X)/X, so the argument of the arcsine runs from
+    1/&radic;2 (Ising: g<sub>R</sub> = 2, &alpha;/&nu; = 0) to 1 (Potts: g<sub>R</sub> = 4, &alpha;/&nu; = 1). The
+    trace's slider moves uniformly in &theta; = arcsin[&frac12; coth 2K], which makes g<sub>R</sub> = 8&theta;/&pi; exactly
+    linear (this page's arithmetic). Wiseman and Domany's five equidistant test points, measured with their cluster algorithm up to L = 128:</p>
+    <div class="tbl"><table>
+      <thead><tr><th>point</th><th>&gamma;/&nu; (fit)</th><th>&alpha;/&nu; (fit)</th><th>&alpha;/&nu; (exact)</th></tr></thead>
+      <tbody>
+        <tr><td>X<sub>0</sub> (Ising)</td><td>1.751(4)</td><td>0 (semi-log)</td><td>0</td></tr>
+        <tr><td>X<sub>1</sub></td><td>1.751(1)</td><td>0.38(2)</td><td>0.2096</td></tr>
+        <tr><td>X<sub>2</sub></td><td>1.752(3)</td><td>0.542(8)</td><td>0.4182</td></tr>
+        <tr><td>X<sub>3</sub></td><td>1.763(6)</td><td>0.655(13)</td><td>0.6383</td></tr>
+        <tr><td>X<sub>4</sub> (Potts)</td><td>1.752(4)</td><td>0.747(3)</td><td>1</td></tr>
+      </tbody></table></div>
+    <p>&gamma;/&nu; = 7/4 holds everywhere; the fitted &alpha;/&nu; misses the exact value, worst at the Potts
+    end. There the marginal dilution field carries <b>multiplicative logarithms</b>: Salas and Sokal derive
+    <span class="math">C<sub>H</sub> ~ L/(ln L)<sup>3/2</sup></span> and
+    <span class="math">&chi; ~ L<sup>7/4</sup>/(ln L)<sup>1/8</sup></span> at the four-state Potts point, plus additive
+    log&thinsp;log corrections, and note that the theory could not have been read off the data.<a href="#fn3" class="fn" id="fnref3">3</a>
+    Jin, Sen and Sandvik found a frustrated J<sub>1</sub>&ndash;J<sub>2</sub> Ising model to be Ashkin&ndash;Teller critical
+    for g &ge; g* = 0.67(1), yet near the Potts end it shows double-peaked energy histograms and a negative
+    Binder minimum up to L = 256: <b>pseudo first-order</b> behaviour at a transition that is continuous.<a href="#fn2" class="fn" id="fnref2">2</a></p>
+    <details class="l1" id="d-1-l1"><summary>Full derivation</summary>
+      <p><b>Why duality locates the line.</b> Kramers&ndash;Wannier duality maps the Ising model's high-temperature
+      expansion onto the low-temperature expansion of a dual model. On the square lattice Aasen, Mong and Fendley
+      print the self-dual (critical) line of the anisotropic model as<a href="#fn4" class="fn" id="fnref4">4</a></p>
+      <span class="math-block">(sinh 2J<sub>x</sub>)(sinh 2J<sub>y</sub>) = 1 &nbsp; (their eq. 2.2).</span>
+      <p>For J<sub>x</sub> = J<sub>y</sub> = K this gives sinh 2K = 1, i.e. K<sub>c</sub> = &frac12; ln(1 + &radic;2) = 0.4407 (the
+      number is this page's arithmetic; the paper prints only the equation, and its eq. 2.13 drops a factor of 2
+      relative to 2.2). A duality has a fixed set; if the model has a single transition, it must lie on that set.
+      Ashkin&ndash;Teller has two couplings, so its duality map (K, L) &rarr; (K*, L*) has a fixed <em>curve</em>,
+      e<sup>&minus;2L</sup> = sinh 2K, as Wiseman&ndash;Domany and Ginsparg print it. The dual map itself is not
+      reproduced here.</p>
+      <p><b>Where on the line.</b> Ginsparg gives the position as a compact-boson radius on the orbifold line:
+      <span class="math">sin(&pi;r<sup>2</sup>/4) = &frac12; coth 2K</span>, with r = 1 at Ising &times; Ising and r = &radic;2 at four-state Potts.<a href="#fn5" class="fn">5</a>
+      Put that into Wiseman&ndash;Domany's g<sub>R</sub>: arcsin(sin(&pi;r<sup>2</sup>/4)) = &pi;r<sup>2</sup>/4 for r &le; &radic;2, so
+      g<sub>R</sub> = 2r<sup>2</sup> and y<sub>t</sub> = 2 &minus; 1/r<sup>2</sup>. That is this page's combination of the two printed formulas;
+      radius normalisations differ between sources, so treat the factor as convention-dependent.</p>
+      <p><b>The marginal operator.</b> At the decoupled point the operator that moves you along the line is
+      &epsilon;<sub>1</sub>&epsilon;<sub>2</sub>, the product of the two Ising energy operators: Ginsparg calls it
+      &ldquo;the Ashkin&ndash;Teller interaction coupling the two Ising energy operators&rdquo;, the four-fermion term that
+      &ldquo;simply changes the radius of a free boson&rdquo;.<a href="#fn5" class="fn">5</a></p>
+    </details>
+  </details>
+  <details class="quiz" id="q-1"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="2-baxter" class="cc-sec" data-accent="amber">
+  <h2><span class="num">2</span> Baxter's eight-vertex model: the textbook line</h2>
+  <p class="headline">Put an arrow on every bond of a square lattice and allow only eight kinds of vertex: Baxter solved this exactly, and its exponents vary continuously. It is the textbook critical line, and Ashkin&ndash;Teller's exact cousin.</p>
+  <div class="graphic vb" data-cc-id="vb8"></div>
+  <p>Click a bond to flip its arrow. Each vertex has four arrows round it. The
+  <span class="tip" tabindex="0">ice rule<span class="tt">Two arrows point in and two point out at every vertex, like the two near and two far hydrogens round each oxygen in ice.</span></span>
+  allows six arrangements (types a, b, c); the eight-vertex model also allows the two in which all four
+  arrows point in (a sink) or all point out (a source), called d. Arrangements with one or three arrows in
+  are forbidden (red &times;). Each type carries a weight, and the weight of a configuration is the product
+  over its vertices.<a href="#fn6" class="fn" id="fnref6">6</a> The &ldquo;flip a path&rdquo; button flips a whole
+  chain of bonds from one edge to another, which keeps every count even.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>An exactly solved line: the cross-check on the
+  scoring side, never an input to the instrument. It also poses a question the Compass must answer from
+  data: are Ashkin&ndash;Teller and the vertex models two line mechanisms, or one family seen twice? The
+  c = 1 picture below suggests one compact boson; which branch each model occupies has to be settled
+  before a representation-invariance test is read. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-2-l2"><summary>Working equations</summary>
+    <p><b>From the literature, not verified locally</b> (Baxter's papers are not held here). The zero-field
+    eight-vertex model with weights a, b, c, d is usually written with the anisotropy</p>
+    <span class="math-block">&Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup> &minus; d<sup>2</sup>) / 2(ab + cd),</span>
+    <p>which reduces to the six-vertex &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab when d = 0. Baxter
+    (1971&ndash;72) solved it and found critical exponents that vary continuously along its critical
+    manifold; Wegner (1972) and Fan &amp; Wu related it to Ashkin&ndash;Teller, and Kadanoff &amp; Brown (1979) to
+    the Gaussian model.<a href="#fn20" class="fn" id="fnref20">20</a></p>
+    <p><b>The c = 1 picture (held, Ginsparg).</b> All the critical theories with central charge c = 1 form a
+    moduli space of two half-lines. The <em>circle line</em> is the Gaussian model; the <em>orbifold line</em>
+    is &ldquo;equivalent to the critical Ashkin&ndash;Teller model (which also encompasses &hellip; the 6-vertex
+    model and the 8-vertex model on its critical line)&rdquo;. They meet at one point, which is the continuum
+    Kosterlitz&ndash;Thouless point of the XY model. On the orbifold line Ising &times; Ising sits at r = 1 and the
+    four-state Potts model at r = &radic;2. Three further c = 1 theories (T, O, I) are isolated points: c = 1
+    does not by itself imply a line.<a href="#fn5" class="fn">5</a></p>
+    <svg class="fig" viewBox="0 0 520 300" role="img" aria-label="Sketch of Ginsparg's c = 1 moduli space: a horizontal circle line and a vertical orbifold line meeting at the KT point, with the Ashkin-Teller segment highlighted and three isolated points T, O, I">
+      <line x1="30" y1="250" x2="500" y2="250" stroke="#94a3b8" stroke-width="2"/>
+      <line x1="300" y1="250" x2="300" y2="30" stroke="#94a3b8" stroke-width="2"/>
+      <line x1="300" y1="250" x2="300" y2="285" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <line x1="300" y1="190" x2="300" y2="112" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
+      <text x="492" y="272" font-size="12" fill="#cbd5e1" text-anchor="end">r (circle line: Gaussian)</text>
+      <text x="310" y="26" font-size="12" fill="#cbd5e1">r (orbifold line: critical AT)</text>
+      <g font-size="10.5" fill="#cbd5e1">
+        <circle cx="120" cy="250" r="4" fill="#3b82f6"/><text x="120" y="238" text-anchor="middle">1/&#8730;2</text><text x="120" y="268" text-anchor="middle">SU(2)&#178;</text>
+        <circle cx="205" cy="250" r="4" fill="#3b82f6"/><text x="205" y="238" text-anchor="middle">1</text><text x="205" y="268" text-anchor="middle">free Dirac</text>
+        <circle cx="300" cy="250" r="7" fill="#a855f7"/><text x="310" y="242">&#8730;2 : KT point</text>
+        <circle cx="400" cy="250" r="4" fill="#3b82f6"/><text x="400" y="238" text-anchor="middle">&#8730;3</text>
+        <circle cx="300" cy="190" r="5" fill="#f59e0b"/><text x="312" y="194">1 : Ising &#215; Ising</text>
+        <circle cx="300" cy="150" r="4" fill="#f59e0b"/><text x="312" y="154">&#8730;6/2 : Z&#8324; parafermions</text>
+        <circle cx="300" cy="112" r="5" fill="#f59e0b"/><text x="312" y="116">&#8730;2 : 4-state Potts</text>
+        <circle cx="300" cy="70" r="4" fill="#94a3b8"/><text x="312" y="74">&#8730;3</text>
+        <text x="288" y="226" text-anchor="end">1/&#8730;2 (junction)</text>
+        <circle cx="90" cy="70" r="4" fill="#22c55e"/><circle cx="120" cy="90" r="4" fill="#22c55e"/><circle cx="150" cy="70" r="4" fill="#22c55e"/>
+        <text x="120" y="56" text-anchor="middle">T, O, I: isolated points</text>
+        <text x="235" y="150" text-anchor="end" fill="#f59e0b">critical AT</text>
+      </g>
+    </svg>
+    <p class="lead-in">Redrawn after Ginsparg's Fig. 14; spacing schematic. The highlighted segment is critical
+    Ashkin&ndash;Teller from Ising &times; Ising (r = 1) to four-state Potts (r = &radic;2).</p>
+  </details>
+  <details class="quiz" id="q-2"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="3-coupled" class="cc-sec" data-accent="amber">
+  <h2><span class="num">3</span> Two Ising layers coupled bilinearly: the contrast</h2>
+  <p class="headline">Keep the two Ising layers but couple them spin to spin (g&sigma;<sub>i</sub>&tau;<sub>i</sub>) instead of product to product: this coupling grows under coarse-graining, so the line collapses back to a point.</p>
+  <div class="graphic" data-cc-id="dimcount"></div>
+  <p>Coarse-graining multiplies each small coupling by b<sup>y</sup>, where b is the blocking factor and the
+  <span class="tip" tabindex="0">RG eigenvalue<span class="tt">y = d &minus; &Delta;: the space dimension d minus the scaling dimension &Delta; of the operator the coupling multiplies. y &gt; 0 grows (relevant), y &lt; 0 dies (irrelevant), y = 0 is marginal.</span></span>
+  <span class="math">y = d &minus; &Delta;</span>. An Ising spin has dimension 1/8 and the Ising energy
+  density has dimension 1. The bilinear term g&sigma;<sub>i</sub>&tau;<sub>i</sub> multiplies two spins: &Delta; = 1/4, y = 7/4,
+  strongly relevant. Ashkin&ndash;Teller's four-spin term multiplies two energy densities: &Delta; = 2, y = 0,
+  marginal.<a href="#fn22" class="fn" id="fnref22">22</a> Ginsparg identifies that product,
+  &epsilon;<sub>1</sub>&epsilon;<sub>2</sub>, as the operator that moves the theory along the line.<a href="#fn5" class="fn">5</a></p>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Ashkin&ndash;Teller</th><th>bilinear coupled Ising</th></tr></thead>
+    <tbody>
+      <tr><td>coupling</td><td>L&sigma;<sub>i</sub>&sigma;<sub>j</sub>&tau;<sub>i</sub>&tau;<sub>j</sub> (&epsilon;<sub>1</sub>&epsilon;<sub>2</sub>)</td><td>g&sigma;<sub>i</sub>&tau;<sub>i</sub> (&sigma;<sub>1</sub>&sigma;<sub>2</sub>)</td></tr>
+      <tr><td>dimension &Delta;</td><td>1 + 1 = 2</td><td>1/8 + 1/8 = 1/4</td></tr>
+      <tr><td>y = 2 &minus; &Delta;</td><td>0: marginal</td><td>7/4: relevant</td></tr>
+      <tr><td>geometry</td><td>a LINE of fixed points</td><td>leaves the Ising &times; Ising point; expected: one POINT</td></tr>
+    </tbody></table></div>
+  <div class="graphic" data-cc-id="bil-toy"></div>
+  <p class="lead-in">Two-layer toy: colours as in the Ashkin&ndash;Teller toy. Start at g = 0 with K just below
+  the Ising value, press Run, then raise g: &lang;&sigma;&tau;&rang; climbs to 1 and the two magnetisations rise and move
+  together.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The lesson of the pair: the TYPE of coupling decides
+  LINE versus POINT. Two layers joined by an exactly marginal operator give a line; joined by a relevant
+  one, they give a point. The Compass must read the difference from the flow, not from the model's name.
+  <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-3-l2"><summary>Working equations</summary>
+    <p>The coupled-Ising experiment of the validation ladder <span class="design">&#9670; design</span>:<a href="#fn21" class="fn">21</a></p>
+    <span class="math-block">H = &minus;J<sub>1</sub>&Sigma;<sub>&lang;ij&rang;</sub>&sigma;<sub>i</sub>&sigma;<sub>j</sub> &minus; J<sub>2</sub>&Sigma;<sub>&lang;ij&rang;</sub>&tau;<sub>i</sub>&tau;<sub>j</sub> &minus; g&Sigma;<sub>i</sub>&sigma;<sub>i</sub>&tau;<sub>i</sub>.</span>
+    <p>At g = 0 the instrument sees two independently understood critical systems (two POINTs). Raise g
+    and ask whether it recovers structure that neither layer has alone. Dimension counting (from the Ising
+    values &Delta;<sub>&sigma;</sub> = 1/8, &Delta;<sub>&epsilon;</sub> = 1; not checked here against a held source) says g grows as
+    b<sup>7/4</sup>, so the decoupled point is unstable in the g direction. What it flows to is <em>expected</em>
+    to be a single Ising-like transition with the two order parameters locked, one POINT; that is not
+    shown on this page, and the Compass will be asked to say it from data.<a href="#fn22" class="fn">22</a></p>
+    <details class="l1" id="d-3-l1"><summary>Full derivation</summary>
+      <p><b>When is a marginal operator exactly marginal?</b> Ginsparg's criterion: a dimension-(1,1) operator V
+      generates a one-parameter family of critical theories only if, to leading order, the V&times;V operator
+      product contains no term C<sub>VVV</sub>(z &minus; w)<sup>&minus;1</sup>(z&#772; &minus; w&#772;)<sup>&minus;1</sup>V. If it does, the
+      two-point function picks up a logarithm and V's weight shifts to (1 &minus; &delta;g&thinsp;&pi;C<sub>VVV</sub>, 1 &minus;
+      &delta;g&thinsp;&pi;C<sub>VVV</sub>): marginally relevant on one side, marginally irrelevant on the other. Higher orders
+      require further integrals to vanish.<a href="#fn5" class="fn">5</a></p>
+      <p>For Ashkin&ndash;Teller the check passes for a structural reason: on the critical line
+      &epsilon;<sub>1</sub>&epsilon;<sub>2</sub> = &psi;<sub>1</sub>&psi;&#772;<sub>1</sub>&psi;<sub>2</sub>&psi;&#772;<sub>2</sub> is the four-fermion term of the massless
+      Thirring model, which only changes the radius of a free boson. Changing a radius is a motion along a line,
+      so no fixed point is left.<a href="#fn5" class="fn">5</a> The bilinear &sigma;<sub>1</sub>&sigma;<sub>2</sub> has no such
+      protection: its y = 7/4 is far from zero, so the question of higher orders never arises.</p>
+    </details>
+  </details>
+  <details class="quiz" id="q-3"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="4-onon" class="cc-sec" data-accent="amber">
+  <h2><span class="num">4</span> O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>): bicritical and tetracritical points</h2>
+  <p class="headline">Two different order parameters, two critical lines that meet at one point: the sign of &Delta; = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> decides whether the two orders coexist (tetracritical) or exclude each other (bicritical).</p>
+  <div class="graphic" data-cc-id="onon"></div>
+  <p>The plane shows the two &ldquo;temperatures&rdquo; r<sub>1</sub> and r<sub>2</sub>, one per order parameter; each
+  orders when its r turns negative. The self-interactions u<sub>1</sub>, u<sub>2</sub> keep each order finite; the
+  cross-coupling w decides how they meet. Slide w: with w<sup>2</sup> &lt; u<sub>1</sub>u<sub>2</sub> a green
+  <b>mixed phase</b>, where both orders coexist, opens between two critical lines (four lines meet: tetracritical);
+  with w<sup>2</sup> &gt; u<sub>1</sub>u<sub>2</sub> the orders repel and a first-order <b>flop line</b> separates them
+  (bicritical). This is mean field, the Landau picture, computed live as the lowest of the candidate minima at every point.<a href="#fn10" class="fn" id="fnref10">10</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>A multicritical point has at least two relevant
+  directions. The alphabet has no cell for that yet: POINT allows one escape direction. That is a design
+  gap, stated here rather than hidden. Its finite-size shadow is known: in the fully frustrated XY model the
+  effective exponent sits on a plateau, then moves on. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-4-l2"><summary>Working equations</summary>
+    <p>The Landau&ndash;Ginzburg&ndash;Wilson Hamiltonian of Calabrese, Pelissetto and Vicari (&phi;<sub>1</sub> has n<sub>1</sub> components, &phi;<sub>2</sub> has n<sub>2</sub>):<a href="#fn10" class="fn">10</a></p>
+    <span class="math-block">H = &int;d<sup>d</sup>x { &frac12;[(&part;&phi;<sub>1</sub>)<sup>2</sup> + (&part;&phi;<sub>2</sub>)<sup>2</sup>] + &frac12;[r<sub>1</sub>&phi;<sub>1</sub><sup>2</sup> + r<sub>2</sub>&phi;<sub>2</sub><sup>2</sup>] + (1/4!)[u<sub>1</sub>(&phi;<sub>1</sub><sup>2</sup>)<sup>2</sup> + u<sub>2</sub>(&phi;<sub>2</sub><sup>2</sup>)<sup>2</sup> + 2w&phi;<sub>1</sub><sup>2</sup>&phi;<sub>2</sub><sup>2</sup>] }</span>
+    <p>Mean field: &Delta; = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> &gt; 0 tetracritical, &lt; 0 bicritical. Beyond mean field,
+    which fixed point controls the meeting depends on N = n<sub>1</sub> + n<sub>2</sub> (d = 3):</p>
+    <div class="tbl"><table>
+      <thead><tr><th>N</th><th>stable fixed point</th><th>phase diagram if continuous</th></tr></thead>
+      <tbody>
+        <tr><td>2 (Ising + Ising)</td><td>symmetric O(2)</td><td>bicritical or tetracritical</td></tr>
+        <tr><td>3</td><td>biconal (exponents within errors of Heisenberg)</td><td>tetracritical in mean field</td></tr>
+        <tr><td>&ge; 4</td><td>decoupled</td><td>tetracritical</td></tr>
+        <tr><td>outside the attraction domain</td><td>none</td><td>first-order multicritical point</td></tr>
+      </tbody></table></div>
+    <p>Crossover exponents measure how slowly a nearly symmetric point is left: at the O(N) point
+    &phi;<sub>4,4</sub> &asymp; 0.01 for N = 3 (the crossover is practically invisible), &asymp; 0.08 for N = 4 and &asymp; 0.15 for N = 5.<a href="#fn10" class="fn">10</a></p>
+    <p><b>What a real multicritical crossover looks like at finite size.</b> In the fully frustrated XY
+    model on the square lattice the chiral (Ising) and spin (KT) transitions are 1.6% apart. Hasenbusch,
+    Pelissetto and Vicari, with L up to 1000, find the chiral exponent &nu; on a plateau near 0.8 for
+    L &#8818; &xi;<sub>s</sub> &asymp; 118 and the Ising value 1 beyond it: &ldquo;by using only data with L &#8818; &xi;<sub>s</sub> one would obtain
+    &nu; = 0.8 instead of the Ising value.&rdquo;<a href="#fn11" class="fn" id="fnref11">11</a> Granato, Kosterlitz, Lee and
+    Nightingale's coupled XY&ndash;Ising systems (1991) had reported exponents varying along one transition line.<a href="#fn12" class="fn" id="fnref12">12</a></p>
+    <details class="l1" id="d-4-l1"><summary>Full derivation</summary>
+      <p><b>The mean-field computation behind the graphic.</b> Write a = &phi;<sub>1</sub><sup>2</sup>, b = &phi;<sub>2</sub><sup>2</sup> &ge; 0 and
+      F = &frac12;(r<sub>1</sub>a + r<sub>2</sub>b) + (1/24)(u<sub>1</sub>a<sup>2</sup> + u<sub>2</sub>b<sup>2</sup> + 2wab). The four candidate minima are
+      disordered (0, 0) with F = 0; phase 1 (a = &minus;6r<sub>1</sub>/u<sub>1</sub>, b = 0) with F = &minus;3r<sub>1</sub><sup>2</sup>/2u<sub>1</sub>; phase 2
+      likewise; and the mixed phase solving [u<sub>1</sub> w; w u<sub>2</sub>](a, b) = &minus;6(r<sub>1</sub>, r<sub>2</sub>), with F = &frac14;(r<sub>1</sub>a + r<sub>2</sub>b).
+      A candidate that is not a minimum (a negative a or b, or a mixed stationary point that is a saddle because
+      &Delta; &lt; 0) has F = +&infin;; the phase is the candidate of lowest F. The phase-1 state is unstable to
+      &phi;<sub>2</sub> when r<sub>2</sub> &lt; (w/u<sub>1</sub>)r<sub>1</sub>, and phase 2 to &phi;<sub>1</sub> when r<sub>1</sub> &lt; (w/u<sub>2</sub>)r<sub>2</sub>; the wedge between
+      those lines exists exactly when w<sup>2</sup> &lt; u<sub>1</sub>u<sub>2</sub>. When &Delta; &lt; 0, phases 1 and 2 have equal F on
+      r<sub>1</sub>/&radic;u<sub>1</sub> = r<sub>2</sub>/&radic;u<sub>2</sub>: the flop line. (This page's algebra on the printed Hamiltonian.)</p>
+      <p><b>The &epsilon;-expansion reversal.</b> To low order (Nelson, Kosterlitz and Fisher; Fisher and Nelson) the
+      symmetric O(N) point is stable for N &lt; N<sub>c</sub> = 4 &minus; 2&epsilon; + O(&epsilon;<sup>2</sup>), which at &epsilon; = 1 suggests
+      O(3) is stable. Five-loop &epsilon; and six-loop fixed-dimension series overturn this: the spin-4 perturbation
+      P<sub>4,4</sub> is relevant for N &ge; 3 (N<sub>c</sub> &lt; 2.9), so O(N) is stable only for N = 2, the biconal point
+      takes over at N = 3 and the decoupled point at N &ge; 4.<a href="#fn10" class="fn">10</a></p>
+    </details>
+  </details>
+  <details class="quiz" id="q-4"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="5-bc" class="cc-sec" data-accent="amber">
+  <h2><span class="num">5</span> Blume&ndash;Capel: a tricritical point</h2>
+  <p class="headline">Ising spins that may also be missing (&sigma; = 0), and a knob &Delta; that charges rent for every spin that is present: turn &Delta; up and the ordering temperature falls, until at one special place the transition turns abruptly first order.</p>
+  <div class="graphic" data-cc-id="bc-trace"></div>
+  <p><b>Start here if this model is new.</b> Picture a lattice where each site is either empty (&sigma; = 0) or
+  holds a little magnet pointing up or down (&sigma; = &plusmn;1). Neighbouring magnets that agree lower the energy
+  by J, as in the Ising model. Every magnet that is present costs &Delta;, the
+  <span class="tip" tabindex="0">crystal field<span class="tt">Here: a single-site energy &Delta;&sigma;<sup>2</sup>. With the plus sign used on this page, &Delta; &gt; 0 makes nonzero spins expensive and so controls how many sites are empty.</span></span>.
+  Click the little lattice above to change sites, and drag &Delta;: at T = 0 a fully ordered site gains
+  zJ/2 = 2 of bond energy (four neighbours, each bond shared) and pays &Delta;, so emptiness wins beyond
+  &Delta;<sub>0</sub> = 2.<a href="#fn13" class="fn" id="fnref13">13</a> The same competition at finite temperature
+  produces the phase diagram below, the kind of diagram seen in <sup>3</sup>He&ndash;<sup>4</sup>He mixtures.</p>
+  <div class="graphic" data-cc-id="bc-pd"></div>
+  <div class="graphic" data-cc-id="bc-toy"></div>
+  <p class="lead-in">The cursor on the diagram is the toy's (&Delta;, T); drag either. Empty sites are dark.
+  Along the solid line the transition is continuous and Ising-like; along the dotted piece near &Delta; = 2 it
+  is first order; they meet at the tricritical point (&#9670;).<a href="#fn13" class="fn">13</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>A point with <b>two relevant directions</b>: tuning T
+  alone does not reach it. The first-order line is a <b>decoy</b>: a line in the phase diagram, not a line
+  of fixed points, which the Detector must not read as LINE. Near the tricritical point the crossover can
+  look like WALKING at finite L; the flow's minimum velocity is what tells them apart.
+  <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-5-l2"><summary>Working equations</summary>
+    <p>The Hamiltonian as Zierenberg, Fytas, Weigel, Janke and Malakis print it (J = k<sub>B</sub> = 1):<a href="#fn13" class="fn">13</a></p>
+    <span class="math-block">H = &minus;J&Sigma;<sub>&lang;ij&rang;</sub>&sigma;<sub>i</sub>&sigma;<sub>j</sub> + &Delta;&Sigma;<sub>i</sub>&sigma;<sub>i</sub><sup>2</sup> = E<sub>J</sub> + &Delta;E<sub>&Delta;</sub>, &nbsp; &sigma;<sub>i</sub> &isin; {&minus;1, 0, +1}.</span>
+    <p>&Delta; &rarr; &minus;&infin; removes the vacancies and gives the Ising model; &Delta; = 0 orders at T<sub>0</sub> &asymp; 1.69; the
+    boundary reaches T = 0 at &Delta;<sub>0</sub> = zJ/2 = 2. On the second-order part the exponents are Ising:
+    &alpha; = 0, &beta; = 1/8, &gamma; = 7/4, &nu; = 1; at T = 1.2 the paper measures &nu; = 0.97(10) and &gamma;/&nu; = 1.750(3),
+    and a logarithmic specific-heat peak. At T = 0.5 (first order) the pseudo-critical fields shift as
+    L<sup>&minus;2</sup> and the peaks grow as L<sup>2</sup>, the volume.</p>
+    <p><b>The tricritical point.</b> Quoted literature values (&Delta;<sub>t</sub>, T<sub>t</sub>): Beale (1986) (1.9655(50), 0.610(5));
+    Wilding and Nielaba (1996) (1.9665(3), 0.608(1)); Kwak et al. (2015) <b>(1.9660(1), 0.6080(1))</b>, the most
+    precise. The tricritical exponents are not printed in the held source, and this page does not quote them.</p>
+    <p><b>The approach.</b> Far above T<sub>t</sub> the universal ratio &xi;/L at the crossings extrapolates to the exact
+    Ising value 0.905; approaching T<sub>t</sub> &ldquo;additional corrections emerge&rdquo;, the crossings depart from 0.905,
+    and a fit at T = 0.65 with L &ge; 64 still has poor quality. The paper reads this as the crossover to
+    tricritical scaling; it does not measure a crossover exponent. Finite-size forms used:</p>
+    <span class="math-block">first order: &Delta;*<sub>L</sub> = &Delta;* + aL<sup>&minus;D</sup>; &nbsp; second order: &Delta;*<sub>L</sub> = &Delta;<sub>c</sub> + aL<sup>&minus;1/&nu;</sup>, C*<sub>L</sub> ~ ln L, &chi;*<sub>L</sub> ~ L<sup>&gamma;/&nu;</sup>.</span>
+    <details class="l1" id="d-5-l1"><summary>Full derivation</summary>
+      <p><b>Why a tricritical point needs two knobs (schematic Landau argument, no numbers).</b> Expand the
+      free energy in the order parameter m: F = a m<sup>2</sup> + b m<sup>4</sup> + c m<sup>6</sup>, with c &gt; 0. If b &gt; 0 the
+      minimum leaves m = 0 continuously when a changes sign: a second-order line, one condition (a = 0). If
+      b &lt; 0 the m<sup>6</sup> term holds the order finite and m jumps: first order. The two behaviours meet where
+      a = 0 <em>and</em> b = 0: two conditions, so two knobs, here T and &Delta;. The vacancies are what make b
+      change sign: diluting the magnets weakens the effective quartic stiffness. (Standard Landau theory; not
+      checked here against a held source.)</p>
+    </details>
+  </details>
+  <details class="quiz" id="q-5"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="6-potts" class="cc-sec" data-accent="amber">
+  <h2><span class="num">6</span> Potts q = 5, 6: walking</h2>
+  <p class="headline">With five or more states per site the 2D Potts transition is first order, but so weakly that any lattice smaller than the correlation length looks critical: the flow walks slowly past a pair of fixed points that have moved into the complex plane.</p>
+  <div class="graphic" data-cc-id="potts-xi"></div>
+  <p>Slide your lattice size L. A first-order transition shows itself (two coexisting phases, a latent heat)
+  only once L is larger than the correlation length &xi;. For q = 10, &xi; is about ten lattice spacings; for
+  q = 5 it is about 2512.<a href="#fn14" class="fn" id="fnref14">14</a><a href="#fn16" class="fn" id="fnref16">16</a>
+  Below that size the system imitates a critical point, and a standard analysis returns exponents with
+  small error bars that are simply wrong. Gorbenko, Rychkov and Zan explain why: as q passes 4, the
+  critical and tricritical fixed points collide and move off into the complex plane as a conjugate pair.
+  The real flow passes between them; it slows down there without stopping, and then leaves.</p>
+  <div class="graphic" data-cc-id="potts-toy"></div>
+  <p class="lead-in">Potts toy with the energy histogram below it. Press &ldquo;go to T<sub>c</sub>(q)&rdquo;
+  (T<sub>c</sub> = 1/ln(1 + &radic;q)) and run. When the lattice is larger than &xi;(q), a long run near T<sub>c</sub> can
+  show two energy peaks; at q = 5 no lattice you can run here is large enough.<a href="#fn16" class="fn">16</a></p>
+  <div class="graphic" data-cc-id="potts-nu"></div>
+  <p class="lead-in">The drifting exponent: the effective thermal dimension &delta;<sub>&epsilon;</sub> changes like a
+  tangent in ln r, so the &ldquo;exponent&rdquo; &nu;(r) you measure depends on the scale you measure it at. The
+  amplitude is read off Gorbenko&ndash;Rychkov&ndash;Zan's Fig. 12 for q = 5 and is illustrative.<a href="#fn15" class="fn" id="fnref15">15</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>WALKING: at a fixed control value the exponent drifts
+  with SCALE, and the flow's minimum velocity is small but not zero. At L &#8810; &xi; that minimum can sit
+  below the noise; the honest verdict is then REFUSE, not LINE and not POINT. Potts q = 5 and 6 are the
+  walking controls. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-6-l2"><summary>Working equations</summary>
+    <p>The model: H = &minus;J&Sigma;<sub>&lang;ij&rang;</sub>&delta;(&sigma;<sub>i</sub>, &sigma;<sub>j</sub>), &sigma; = 1&hellip;q, with
+    k<sub>B</sub>T<sub>c</sub> = J/ln(1 + &radic;q) on the square lattice. The transition is continuous for q = 2, 3, 4 (q = 4 with
+    logarithms) and first order for q &gt; 4 (Baxter 1973).<a href="#fn16" class="fn">16</a> Correlation lengths at the
+    transition (Buffenoir&ndash;Wallon values, as tabulated by Gorbenko&ndash;Rychkov&ndash;Zan and by Iino et al.):</p>
+    <div class="tbl"><table><thead><tr><th>q</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+      <tbody><tr><td>&xi;</td><td>&infin;</td><td>2512.2</td><td>158.9</td><td>48.1</td><td>23.9</td><td>14.9</td><td>10.6</td></tr></tbody></table></div>
+    <p><b>Walking.</b> With &lambda; the coupling of the nearly marginal operator &epsilon;&prime; and t = ln(scale), Gorbenko,
+    Rychkov and Zan write<a href="#fn14" class="fn">14</a></p>
+    <span class="math-block">d&lambda;/dt = &minus;y &minus; &lambda;<sup>2</sup> + &hellip;, &nbsp; y &gt; 0: &nbsp; &lambda;(t) = &minus;&radic;y tan[&radic;y (t &minus; t<sub>0</sub>)], &nbsp; &Lambda;<sub>UV</sub>/&Lambda;<sub>IR</sub> ~ e<sup>&pi;/&radic;y</sup>,</span>
+    <p>with complex fixed points &lambda;* = &plusmn;i&radic;y. For Potts, y = (q &minus; 4)/&pi;<sup>2</sup> at leading order, which gives
+    &xi; ~ &xi;<sub>0</sub> exp(&pi;<sup>2</sup>/&radic;(q &minus; 4)): faster than any power. The fixed points are complex CFTs; at
+    q = 5 the central charge is c &asymp; 1.138 &plusmn; 0.021i.<a href="#fn15" class="fn">15</a> Along the real flow two-point
+    functions carry a drifting dimension (their eq. 4.33) and a <b>drifting exponent</b></p>
+    <span class="math-block">&delta;<sub>&phi;</sub>(r) = Re&Delta;<sub>&phi;</sub> &minus; (&radic;3&epsilon;/2&pi;) C<sub>&phi;&phi;&epsilon;&prime;</sub> tan(&epsilon; ln(r/r<sub>0</sub>)/&pi;), &nbsp; &nu;(r) = 1/(d &minus; &delta;<sub>&epsilon;</sub>(r)), &nbsp; &epsilon; = &radic;(q &minus; 4).</span>
+    <p><b>The deceptive collapse.</b> Iino, Morita, Kawashima and Sandvik simulated q = 5 up to L = 256. The best
+    data collapse gives &beta; = 0.070(8), &nu; = 0.61(5), with statistical errors smaller than the symbols; the true
+    first-order values are &beta; = 0, &nu; = 1/d = 0.5. From (L/2, L) crossings, &nu;(L) and &beta;(L) drift with L; a
+    power-law extrapolation of 1/&nu;(L) returns 1/&nu;(&infin;) &asymp; 2.23 &gt; d, impossible for a continuous transition.
+    Their diagnostic: the Binder ratio's ln(R<sub>4</sub> &minus; 1) collapses only inside a linear window.<a href="#fn16" class="fn">16</a></p>
+    <p><b>The shadow.</b> Ma and He measured the central charge of the quantum Potts chain from entanglement
+    entropy: c(L) drifts in the tan shape c(L) = c<sub>R</sub> &minus; &alpha; tan(&gamma; ln(L/L<sub>0</sub>)), with c<sub>R</sub> near
+    Re c = 1.13755 at q = 5.<a href="#fn17" class="fn" id="fnref17">17</a> The Kosterlitz flow's E &gt; 0 branch has the same
+    tangent shape, x(t) = &epsilon; tan(arctan(x<sub>0</sub>/&epsilon;) &minus; &epsilon;t);<a href="#fn8" class="fn" id="fnref8">8</a> the shape is shared, but
+    the two &epsilon;'s are not the same parameter.</p>
+    <details class="l1" id="d-6-l1"><summary>Full derivation</summary>
+      <p><b>The correlation length, exactly.</b> In the second paper Gorbenko, Rychkov and Zan find that the one-loop
+      walking answer matches the exact Bethe-ansatz result of Buffenoir and Wallon to all orders in 1/|m|:<a href="#fn15" class="fn">15</a></p>
+      <span class="math-block">&xi;<sub>Potts</sub> = (&radic;2/16) e<sup>&pi;|m|/2</sup> + O(e<sup>&minus;&pi;|m|/2</sup>), &nbsp; |m(q)| = 2&pi; / ln[(q &minus; 2 + &radic;(q(q &minus; 4)))/2].</span>
+      <p>At q = 5, |m| = 6.5285 and &xi; = 2512; at q = 6, |m| = 4.7710 and &xi; = 158.9 (the table above). Walking
+      needs only that the imaginary part of the nearly marginal operator's dimension be small, not that q be
+      close to 4; the expansion parameter stays below about 0.6 up to q = 10, which is why the picture works
+      over that whole range.<a href="#fn15" class="fn">15</a></p>
+    </details>
+  </details>
+  <details class="quiz" id="q-6"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="7-xxz" class="cc-sec" data-accent="amber">
+  <h2><span class="num">7</span> XXZ and the six-vertex model</h2>
+  <p class="headline">A chain of quantum spins whose z-coupling &Delta; you can dial: for every &Delta; between &minus;1 and +1 the chain is critical, so a whole segment of &Delta; is one critical line. The same physics can be drawn as arrows on a 2D lattice, the six-vertex model.</p>
+  <div class="graphic" data-cc-id="xxz-h"></div>
+  <p><b>Start here if this model is new.</b> Line up spin-&frac12; particles, each up or down. The Hamiltonian
+  has two kinds of term. The <b>XX + YY</b> part takes a neighbouring up&ndash;down pair and swaps it: think of an
+  up spin as a particle that <em>hops</em> one site (the arcs above). The <b>&Delta;ZZ</b> part only looks: it
+  adds an energy for each neighbouring pair depending on whether the two agree. Hopping wants the spins to
+  spread and fluctuate; &Delta; wants them to line up (one sign) or alternate (the other). For
+  |&Delta;| &lt; 1 neither wins: the chain stays <span class="tip" tabindex="0">gapless<span class="tt">Excitations cost arbitrarily little energy in a long chain, and correlations decay as powers of distance: the chain is critical.</span></span>
+  for every value in the range.<a href="#fn7" class="fn" id="fnref7">7</a>
+  <span class="tip" tabindex="0">&#9888; sign convention<span class="tt">This page follows Franchini's H = &minus;J&Sigma;[&hellip;]: &Delta; = +1 is the ferromagnet and &Delta; = &minus;1 the antiferromagnet. Many texts write H = +J&Sigma;[&hellip;], which reverses the sign of &Delta; and swaps the names of the two ends.</span></span></p>
+  <div class="graphic vb" data-cc-id="vb6"></div>
+  <p class="lead-in">The six-vertex builder: only ice-rule vertices are allowed. Set the weights a, b, c and
+  watch &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab move the point across Reshetikhin's three regimes; the
+  circle a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup> is the free-fermion point &Delta; = 0.<a href="#fn6" class="fn">6</a></p>
+  <div class="graphic" data-cc-id="xxz-x"></div>
+  <p class="lead-in">Exponents along the line. One number, the Luttinger parameter K, sets them all:
+  x<sub>m,n</sub> = m<sup>2</sup>/(4K) + n<sup>2</sup>K.<a href="#fn9" class="fn" id="fnref9">9</a> As &Delta; moves, K moves and so do the
+  exponents; the marginal operator's dimension stays 2.</p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>A second LINE mechanism, exactly solved: use the
+  INTERIOR. One end (&Delta; = &minus;1 here) is a BKT-type point, with all the treachery of the KT page's
+  finite-size section; the other is a ferromagnet. c = 1 all along the line, so a transfer-matrix
+  measurement of c cannot say WHERE on the line you are; the exponents can.
+  <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-7-l2"><summary>Working equations</summary>
+    <p>The chain in Franchini's convention (S = &sigma;/2, periodic):<a href="#fn7" class="fn">7</a></p>
+    <span class="math-block">H = &minus;J&Sigma;<sub>n</sub>[S<sup>x</sup><sub>n</sub>S<sup>x</sup><sub>n+1</sub> + S<sup>y</sup><sub>n</sub>S<sup>y</sup><sub>n+1</sub> + &Delta;S<sup>z</sup><sub>n</sub>S<sup>z</sup><sub>n+1</sub>] &minus; 2h&Sigma;<sub>n</sub>S<sup>z</sup><sub>n</sub> &nbsp; (4.1)</span>
+    <div class="tbl"><table><thead><tr><th>&Delta; (h = 0)</th><th>phase</th></tr></thead><tbody>
+      <tr><td>&Delta; &gt; 1</td><td>gapped ferromagnet (along z)</td></tr>
+      <tr><td>&Delta; = +1</td><td>isotropic ferromagnet: ground-state energy continuous, but &ldquo;elements similar to a first order&rdquo; transition (massively degenerate ground state)</td></tr>
+      <tr><td>&minus;1 &lt; &Delta; &lt; 1</td><td>gapless: a c = 1 theory with varying compactification radius; &Delta; = 0 is free fermions</td></tr>
+      <tr><td>&Delta; = &minus;1</td><td>isotropic antiferromagnet: an infinite-order BKT-type transition</td></tr>
+      <tr><td>&Delta; &lt; &minus;1</td><td>gapped N&eacute;el antiferromagnet</td></tr></tbody></table></div>
+    <p>In the critical regime, &Delta; = &minus;cos &gamma; (0 &lt; &gamma; &lt; &pi;), the sound velocity is v<sub>S</sub> = &pi; sin &gamma;/(2&gamma;) and
+    the Luttinger parameter is K = &pi;/(2(&pi; &minus; &gamma;)) = &pi;/(2 arccos &Delta;): K = 1/2 at &Delta; = &minus;1, 1 at &Delta; = 0, and
+    &rarr; &infin; as &Delta; &rarr; +1. The staggered S<sup>z</sup> correlation decays as r<sup>&minus;2K</sup>. The saturation field is
+    h<sub>s</sub> = (J/2)(1 &minus; &Delta;).<a href="#fn7" class="fn">7</a> In Ueda and Oshikawa's notation the vertex operator with charges
+    (m, n) has dimension x<sub>m,n</sub> = m<sup>2</sup>/(4K) + n<sup>2</sup>K,<a href="#fn9" class="fn">9</a> so the staggered S<sup>z</sup> (n = 1) has 2x = 2K,
+    matching Franchini, and the transverse spin (m = 1) has 2x = 1/(2K). Ginsparg writes the compact-boson
+    dimensions in the same shape with a radius, m<sup>2</sup>/(4r<sup>2</sup>) + n<sup>2</sup>r<sup>2</sup> (the r&ndash;K dictionary depends on
+    normalisation; not checked here).<a href="#fn5" class="fn">5</a></p>
+    <p><b>The six-vertex side.</b> Weights a (a<sub>1</sub>, a<sub>2</sub>), b (b<sub>1</sub>, b<sub>2</sub>), c (c<sub>1</sub>, c<sub>2</sub>); R-matrix
+    [[a,0,0,0],[0,b,c,0],[0,c,b,0],[0,0,0,a]]; &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab. Transfer matrices with equal
+    &Delta; commute, and the transfer matrix is &ldquo;the generating function for [the] commuting family of local
+    Hamiltonians&rdquo;: H<sub>1</sub> = &Sigma;(&sigma;<sup>x</sup>&sigma;<sup>x</sup> + &sigma;<sup>y</sup>&sigma;<sup>y</sup> + &Delta;&sigma;<sup>z</sup>&sigma;<sup>z</sup>), printed with an
+    overall plus sign.<a href="#fn6" class="fn">6</a> Reshetikhin names the regimes &ldquo;ferromagnetic&rdquo; (frozen, &Delta; &gt; 1),
+    &ldquo;disordered&rdquo; (|&Delta;| &lt; 1, power-law correlations) and &ldquo;antiferromagnetic&rdquo; (&Delta; &lt; &minus;1), with the free-fermion
+    point at &Delta; = 0. Franchini states the dictionary explicitly (his App. B): &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab
+    (B.31); a = &rho; sinh(&lambda; + &phi;), b = &rho; sinh &lambda;, c = &rho; sinh &phi;, &Delta; = cosh &phi; (B.33); and d ln T/d&lambda; at &lambda; = 0 is
+    the XXZ chain plus a constant (B.45), up to the sign conventions noted above.<a href="#fn7" class="fn">7</a> A special
+    six-vertex model, the F-model (= the BCSOS surface model), is rigorously of KT type and served Hasenbusch,
+    Marcu and Pinn as their exact reference flow.<a href="#fn8" class="fn">8</a></p>
+    <details class="l1" id="d-7-l1"><summary>Full derivation</summary>
+      <p><b>The Bethe ansatz in one screen</b> (Franchini, ch. 4 and App. C).<a href="#fn7" class="fn">7</a> Start from the
+      all-up state and add M down spins. Bethe's guess: the eigenstate is a sum over permutations of plane waves,
+      e<sup>i&Sigma;k<sub>j</sub>n<sub>j</sub></sup>, with an amplitude that changes only by a two-body phase when two magnons pass. Parametrising
+      the momenta by rapidities, e<sup>ik</sup> = sin((&phi;/2)(&lambda; + i))/sin((&phi;/2)(&lambda; &minus; i)), the phase depends only on
+      rapidity differences provided cosh &phi; = &Delta;. Periodicity gives M coupled Bethe equations. In the planar
+      regime &phi; becomes imaginary, and in the thermodynamic limit the ground state is a filled sea of real
+      rapidities with a smooth density. The finite-size spectrum then has the form of a c = 1 Gaussian theory,
+      &Delta;E = (2&pi;v<sub>S</sub>/L)[(&Delta;N)<sup>2</sup>/(4Z<sup>2</sup>) + (Zd)<sup>2</sup> + N<sub>+</sub> + N<sub>&minus;</sub>], where Z is the
+      dressed charge at the edge of the sea. Comparing with the Gaussian form identifies K = Z<sup>2</sup>; a
+      Wiener&ndash;Hopf evaluation at vanishing field gives K = &pi;/(2(&pi; &minus; &gamma;)).</p>
+    </details>
+  </details>
+  <details class="quiz" id="q-7"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="8-sorm" class="cc-sec" data-accent="amber">
+  <h2><span class="num">8</span> Networks that find their own critical manifold</h2>
+  <p class="headline">A network that rewires itself finds the edge between silence and runaway activity, then keeps changing its structure while staying on that edge (2023); with two kinds of transition, it can slide along one edge into the other (2025).</p>
+  <div class="graphic sorm" data-cc-id="sorm-toy"></div>
+  <p>Each node is <span style="color:#64748b">inactive</span>, <span style="color:#f59e0b">firing</span> or
+  <span style="color:#3b82f6">refractory</span>. A firing node excites each inactive out-neighbour at rate
+  &beta;, stops firing at rate &delta; and recovers at rate &gamma;; now and then an inactive node fires on its own.
+  The adaptive rule is homeostatic: <b>a firing node loses an incoming link at rate l, and new links appear
+  between random nodes at rate g</b>. Too many links and activity runs away, so links are cut; too few and
+  activity dies, so links accumulate. The system settles where the network's leading
+  <span class="tip" tabindex="0">eigenvalue &lambda;<sub>1</sub><span class="tt">The largest eigenvalue of the adjacency matrix: how strongly the network amplifies activity. Activity persists when &lambda;<sub>1</sub> exceeds the threshold &lambda;<sub>1</sub>*.</span></span>
+  sits at the threshold. The toy runs N = 200 nodes with sped-up adaptation, so its trace is noisier than
+  the paper's N = 10<sup>5</sup>; watch &lambda;<sub>1</sub> climb and then hover near the cyan line while &lang;k&rang; rises past it
+  and the in/out-degree correlation &rho; turns negative.<a href="#fn18" class="fn" id="fnref18">18</a></p>
+  <div class="graphic" data-cc-id="sorm-lam"></div>
+  <svg class="fig" viewBox="0 0 520 250" role="img" aria-label="Schematic of the 2025 result: in the plane of the leading and second-smallest Laplacian eigenvalues, the network first moves to the Hopf critical value, then along it to the Turing critical value, reaching the corner where both are critical">
+    <line x1="60" y1="210" x2="500" y2="210" stroke="#94a3b8"/><line x1="60" y1="210" x2="60" y2="20" stroke="#94a3b8"/>
+    <text x="495" y="232" font-size="12" fill="#cbd5e1" text-anchor="end">&#955;&#8321; (leading Laplacian eigenvalue)</text>
+    <text x="66" y="18" font-size="12" fill="#cbd5e1">&#955;&#8345;&#8331;&#8321;</text>
+    <line x1="220" y1="30" x2="220" y2="210" stroke="#f59e0b" stroke-width="2.5"/><text x="226" y="44" font-size="11.5" fill="#f59e0b">Hopf manifold &#955;&#8321; = &#955;*&#8341;</text>
+    <line x1="60" y1="80" x2="500" y2="80" stroke="#22c55e" stroke-width="2.5"/><text x="300" y="72" font-size="11.5" fill="#22c55e">Turing manifold &#955;&#8345;&#8331;&#8321; = &#955;*&#8348;</text>
+    <circle cx="430" cy="180" r="5" fill="#cbd5e1"/><text x="438" y="196" font-size="11" fill="#cbd5e1">start</text>
+    <path d="M430 180 L232 180" stroke="#06b6d4" stroke-width="2.5" fill="none" marker-end="url(#arr)"/>
+    <path d="M220 172 L220 94" stroke="#06b6d4" stroke-width="2.5" fill="none" marker-end="url(#arr)"/>
+    <text x="330" y="172" font-size="11" fill="#06b6d4" text-anchor="middle">1: onset of oscillation</text>
+    <text x="214" y="140" font-size="11" fill="#06b6d4" text-anchor="end">2: drift along Hopf</text>
+    <circle cx="220" cy="80" r="7" fill="none" stroke="#f1f5f9" stroke-width="2"/><text x="232" y="104" font-size="11.5" fill="#f1f5f9">both critical: codimension 2</text>
+    <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#06b6d4"/></marker></defs>
+  </svg>
+  <p class="lead-in">2025, schematic: two local plasticity rules act on different parts of the network (the
+  Hopf rule on well-connected nodes, the Turing rule on weakly connected ones), so the system can hold one
+  condition while it drifts into the other.<a href="#fn19" class="fn" id="fnref19">19</a></p>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The Navigator's test bed: blind the instrument to
+  the adaptation rule, compare the direction it infers with the network's own drift, then switch the
+  adaptation off. The hard lesson: this manifold is <b>one universality class</b>. The avalanche exponents
+  stay put while the network moves, so no exponent says where along the manifold you are; the Navigator
+  needs structural observables. <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="l2" id="d-8-l2"><summary>Working equations</summary>
+    <p><b>2023</b> (Sormunen, Gross &amp; Saramäki, Phys. Rev. Lett. 130, 188401). Three-state stochastic neurons on
+    a directed Erdős&ndash;Rényi network, the model of Droste, Do and Gross. A pair approximation about the
+    all-inactive state gives the threshold on the leading adjacency eigenvalue<a href="#fn18" class="fn">18</a></p>
+    <span class="math-block">&lambda;<sub>1</sub>* = &delta;/&beta; + (&delta; + &gamma;/2)/(&delta; + &gamma;) &nbsp; (eq. 1)</span>
+    <p>With &beta; = 0.7, &delta; = 0.95, &gamma; = 0.4, &lambda;<sub>1</sub>* = 2.21. The paper's runs: N = 10<sup>5</sup>, l = 10<sup>&minus;3</sup>,
+    g = 10<sup>&minus;6</sup>, spontaneous rate &eta; = 1/(100N). Result, in three stages: &lambda;<sub>1</sub> rises and pins near the
+    threshold; then, with &lambda;<sub>1</sub> held, &lang;k&rang; keeps rising (about 2.3 &rarr; 2.5), the mean excess degree
+    &lang;q&rang; creeps up and the in/out-degree correlation &rho; falls to about &minus;0.15; finally &lang;k&rang; settles. Freezing the
+    network and perturbing &lang;k&rang; shows it sitting on the avalanche peak, and the peak itself moves over
+    time. The avalanche size and duration distributions keep the critical slopes &minus;3/2 and &minus;2 throughout.
+    Mechanism: firing probability tracks eigenvector centrality, so the links cut are the ones that lower
+    &lambda;<sub>1</sub> most, and more links must be added than removed to hold &lambda;<sub>1</sub> fixed.</p>
+    <p><b>2025</b> (arXiv:2506.04275, preprint). N = 50 FitzHugh&ndash;Nagumo oscillators on a weighted network with
+    Laplacian L:<a href="#fn19" class="fn">19</a></p>
+    <span class="math-block">U&#775; = &minus;U<sup>3</sup> + U &minus; V &minus; C<sub>00</sub>LU &minus; C<sub>01</sub>LV, &nbsp; V&#775; = b(U &minus; aV) &minus; C<sub>10</sub>LU &minus; C<sub>11</sub>LV.</span>
+    <p>A master-stability analysis separates node dynamics from topology: the Hopf bifurcation is governed by
+    the leading Laplacian eigenvalue &lambda;<sub>1</sub>, the Turing bifurcation by the second smallest,
+    &lambda;<sub>n&minus;1</sub>. The authors define <em>multicriticality</em> as &ldquo;a system sitting at two or more
+    bifurcations at once, or, phrased differently, at a bifurcation of higher codimension&rdquo;, and argue that two
+    critical surfaces generically intersect, so rules that separately find each bifurcation can combine to
+    find both. (&lambda; means an adjacency eigenvalue in 2023 and a Laplacian one in 2025.)</p>
+    <p><b>The toy's settings.</b> &beta;, &delta;, &gamma; as in the paper; N = 200 starting from &lang;k&rang; = 1;
+    l = 0.05, g = 2&times;10<sup>&minus;4</sup> per node, &eta; = 2.5&times;10<sup>&minus;4</sup> per node, time step 0.05; &lambda;<sub>1</sub> by power
+    iteration. The adaptation is about 50 times faster than the paper's so that the drift fits in a minute; the
+    paper notes that self-organisation is exact only as l and g/l go to zero.</p>
+  </details>
+  <details class="quiz" id="q-8"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="9-gallery" class="cc-sec" data-accent="amber">
+  <h2><span class="num">9</span> The model gallery</h2>
+  <p class="headline">One table to keep: what each model gives the Compass, what exact truth it offers, and what breaks it.</p>
+  <div class="graphic" data-cc-id="cheat"></div>
+  <div class="cc-takeaway"><h4>For the Compass</h4><p>The order of work is the validation ladder: Ising
+  (POINT) &rarr; Ashkin&ndash;Teller (LINE, on both the Detector and the Navigator tracks) &rarr; the eight-vertex
+  cross-check &rarr; Potts (WALKING) &rarr; BKT last, as the breaker that tests honesty rather than skill.
+  <span class="design">&#9670; design</span><a href="#fn21" class="fn">21</a></p></div>
+  <details class="quiz" id="q-9"><summary>Check yourself (3)</summary><div data-cc-quiz="auto"></div></details>
+</section>
+
+<section id="10-final" class="cc-sec" data-accent="amber" data-cc-exempt="graphic takeaway">
+  <h2><span class="num">10</span> What to remember, and the final test</h2>
+  <p class="headline">Ten lines to keep, the names to recognise, and a 25-item test drawn fresh on every attempt.</p>
+  <ol>
+    <li><b>Ashkin&ndash;Teller</b>: self-dual line sinh 2K = e<sup>&minus;2L</sup> (Z = 1 &minus; 2X) from Ising to four-state Potts; &alpha;/&nu; = 2y<sub>t</sub> &minus; 2 climbs 0 &rarr; 1, &gamma;/&nu; = 7/4 fixed.</li>
+    <li>The Potts end carries multiplicative logs (Salas&ndash;Sokal); a LINE point can look first order at reachable L (Jin&ndash;Sen&ndash;Sandvik).</li>
+    <li><b>Coupling type decides geometry</b>: &epsilon;<sub>1</sub>&epsilon;<sub>2</sub> (&Delta; = 2, y = 0) makes a line; &sigma;<sub>1</sub>&sigma;<sub>2</sub> (&Delta; = 1/4, y = 7/4) makes a point.</li>
+    <li>Baxter's eight-vertex model: the exactly solved line. c = 1: a circle (Gaussian) line and an orbifold (critical AT) line meeting at the KT point (Ginsparg).</li>
+    <li>O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>): &Delta; = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup> &gt; 0 tetracritical, &lt; 0 bicritical; in d = 3 the O(N) point is stable only for N = 2 (Calabrese&ndash;Pelissetto&ndash;Vicari).</li>
+    <li><b>Blume&ndash;Capel</b>: H = &minus;J&Sigma;&sigma;&sigma;&prime; + &Delta;&Sigma;&sigma;<sup>2</sup>; T = 0 end at &Delta;<sub>0</sub> = 2; tricritical at (1.9660(1), 0.6080(1)); two knobs.</li>
+    <li><b>Potts q &gt; 4</b>: weakly first order; &xi;(5) &asymp; 2512, &xi;(6) &asymp; 159; walking between complex fixed points; drifting &nu;(r) = 1/(d &minus; &delta;<sub>&epsilon;</sub>(r)).</li>
+    <li><b>XXZ</b> (Franchini's sign): critical for |&Delta;| &lt; 1, c = 1, K = &pi;/(2 arccos &Delta;); &Delta; = &minus;1 is the BKT-type end.</li>
+    <li>Six-vertex &Delta; = (a<sup>2</sup> + b<sup>2</sup> &minus; c<sup>2</sup>)/2ab; equal &Delta; &rArr; commuting transfer matrices &rArr; the chain.</li>
+    <li><b>Sormunen, Gross &amp; Saramäki</b>: &lambda;<sub>1</sub>* = &delta;/&beta; + (&delta; + &gamma;/2)/(&delta; + &gamma;); drift along one universality class is invisible to exponents.</li>
+  </ol>
+  <h3>Names on this page</h3>
+  <ul class="roll">
+    <li>Ashkin &amp; Teller (1943): the model</li>
+    <li>Baxter: eight-vertex solution; Potts first order for q &gt; 4</li>
+    <li>Wegner; Fan &amp; Wu: AT &harr; eight-vertex</li>
+    <li>Kadanoff &amp; Brown: the Gaussian connection</li>
+    <li>Wiseman &amp; Domany: AT cluster algorithm, X<sub>0</sub>&ndash;X<sub>4</sub></li>
+    <li>Jin, Sen &amp; Sandvik: pseudo first order on the AT line</li>
+    <li>Salas &amp; Sokal: four-state Potts logarithms</li>
+    <li>Ginsparg: the c = 1 moduli space</li>
+    <li>Calabrese, Pelissetto &amp; Vicari: O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>) stability</li>
+    <li>Kosterlitz, Nelson &amp; Fisher; Fisher &amp; Nelson: the low-order &epsilon; result</li>
+    <li>Hasenbusch, Pelissetto &amp; Vicari: the FFXY crossover plateau</li>
+    <li>Granato, Kosterlitz, Lee &amp; Nightingale: coupled XY&ndash;Ising</li>
+    <li>Blume; Capel (1966): the spin-1 model</li>
+    <li>Griffiths: tricritical points</li>
+    <li>Zierenberg, Fytas, Weigel, Janke &amp; Malakis: the Blume&ndash;Capel phase diagram</li>
+    <li>Potts (1952): the q-state model</li>
+    <li>Gorbenko, Rychkov &amp; Zan: walking and complex CFTs</li>
+    <li>Iino, Morita, Kawashima &amp; Sandvik: the deceptive collapse</li>
+    <li>Ma &amp; He: the drifting central charge</li>
+    <li>Lieb (1967): square ice</li>
+    <li>Bethe (1931): the ansatz</li>
+    <li>Yang &amp; Yang (1966): the XXZ chain</li>
+    <li>Luttinger: the liquid and its K</li>
+    <li>Reshetikhin; Franchini: the lecture notes used here</li>
+    <li>Sormunen, Gross &amp; Saramäki: critical drift; self-organised multicriticality</li>
+    <li>FitzHugh; Nagumo: the oscillator pair</li>
+  </ul>
+  <h3>Final test</h3>
+  <div data-cc-final="25" data-cc-id="models-final"></div>
+  <h3>Name drill</h3>
+  <div data-cc-names="models"></div>
+  <h3>Your scores</h3>
+  <div data-cc-scoreboard="models"></div>
+</section>
+
+<div class="footnotes">
+  <h3>Sources</h3>
+  <ol>
+    <li id="fn1">Wiseman, S. &amp; Domany, E. (1993). Cluster method for the Ashkin&ndash;Teller model. <em>Phys. Rev. E</em> <strong>48</strong>:4080. doi:10.1103/PhysRevE.48.4080 (arXiv:hep-lat/9310015). Eqs. 1&ndash;3, 30&ndash;31, Table I, Fig. 1. <a href="#fnref1">&uarr;</a></li>
+    <li id="fn2">Jin, S., Sen, A. &amp; Sandvik, A. W. (2012). Ashkin&ndash;Teller criticality and pseudo-first-order behavior in a frustrated Ising model on the square lattice. <em>Phys. Rev. Lett.</em> <strong>108</strong>:045702. doi:10.1103/PhysRevLett.108.045702 <a href="#fnref2">&uarr;</a></li>
+    <li id="fn3">Salas, J. &amp; Sokal, A. D. (1997). Logarithmic corrections and finite-size scaling in the two-dimensional 4-state Potts model. <em>J. Stat. Phys.</em> <strong>88</strong>:567. doi:10.1023/B:JOSS.0000015164.98296.85 (arXiv:hep-lat/9607030). Eqs. 3.23&ndash;3.24. <a href="#fnref3">&uarr;</a></li>
+    <li id="fn4">Aasen, D., Mong, R. S. K. &amp; Fendley, P. (2016). Topological defects on the lattice I: the Ising model. <em>J. Phys. A</em> <strong>49</strong>:354001. doi:10.1088/1751-8113/49/35/354001 (arXiv:1601.07185). Eq. 2.2; eq. 2.13 as printed lacks the factor 2. <a href="#fnref4">&uarr;</a></li>
+    <li id="fn5">Ginsparg, P. (1988). Applied conformal field theory. Les Houches Session XLIX, <em>Fields, Strings and Critical Phenomena</em>, North-Holland 1989. No DOI; arXiv:hep-th/9108028. Section 8: eqs. 8.1, 8.8&ndash;8.9, 8.24&ndash;8.26, Fig. 14. <a href="#fnref5">&uarr;</a></li>
+    <li id="fn6">Reshetikhin, N. (2010). Lectures on the integrability of the 6-vertex model. No DOI; arXiv:1010.5031. &sect;6.1&ndash;6.5, &sect;8, &sect;9 (eqs. 30, 49, 50). <a href="#fnref6">&uarr;</a></li>
+    <li id="fn7">Franchini, F. (2017). <em>An Introduction to Integrable Techniques for One-Dimensional Quantum Systems</em>. Lecture Notes in Physics 940, Springer. doi:10.1007/978-3-319-48487-7 (arXiv:1609.02100). Ch. 4 (eq. 4.1, Fig. 4.1, Table 4.1), App. B (B.31, B.33, B.45), App. C (C.104, C.120&ndash;C.121, C.127). Its prose after C.121 uses the opposite sign of &Delta;; this page follows eq. 4.1. <a href="#fnref7">&uarr;</a></li>
+    <li id="fn8">Hasenbusch, M., Marcu, M. &amp; Pinn, K. (1994). High precision renormalization group study of the roughening transition. <em>Physica A</em> <strong>208</strong>:124. doi:10.1016/0378-4371(94)90536-3 (arXiv:hep-lat/9404016). BCSOS = F-model reference; eq. 69. <a href="#fnref8">&uarr;</a></li>
+    <li id="fn9">Ueda, A. &amp; Oshikawa, M. (2021). Resolving the Berezinskii&ndash;Kosterlitz&ndash;Thouless transition in the two-dimensional XY model with tensor-network-based level spectroscopy. <em>Phys. Rev. B</em> <strong>104</strong>:165132. doi:10.1103/PhysRevB.104.165132 (arXiv:2105.11460). Eq. 3 and the vertex-operator dimensions. <a href="#fnref9">&uarr;</a></li>
+    <li id="fn10">Calabrese, P., Pelissetto, A. &amp; Vicari, E. (2003). Multicritical phenomena in O(n<sub>1</sub>)&oplus;O(n<sub>2</sub>)-symmetric theories. <em>Phys. Rev. B</em> <strong>67</strong>:054505. doi:10.1103/PhysRevB.67.054505 (arXiv:cond-mat/0209580). Eq. 1.1, Sec. I, Tables I&ndash;II. <a href="#fnref10">&uarr;</a></li>
+    <li id="fn11">Hasenbusch, M., Pelissetto, A. &amp; Vicari, E. (2005). Multicritical behaviour in the fully frustrated XY model and related systems. arXiv:cond-mat/0509682 (journal version not verified here; no DOI quoted). Conclusion (vii). <a href="#fnref11">&uarr;</a></li>
+    <li id="fn12">Granato, E., Kosterlitz, J. M., Lee, J. &amp; Nightingale, M. P. (1991). Phase transitions in coupled XY&ndash;Ising systems. <em>Phys. Rev. Lett.</em> <strong>66</strong>:1090. doi:10.1103/PhysRevLett.66.1090 <a href="#fnref12">&uarr;</a></li>
+    <li id="fn13">Zierenberg, J., Fytas, N. G., Weigel, M., Janke, W. &amp; Malakis, A. (2017). Scaling and universality in the phase diagram of the 2D Blume&ndash;Capel model. <em>Eur. Phys. J. Special Topics</em> <strong>226</strong>:789. doi:10.1140/epjst/e2016-60337-x (arXiv:1612.02138). Eqs. 1&ndash;3, 21&ndash;22, Fig. 1, Table 1 (boundary points used for the diagram). <a href="#fnref13">&uarr;</a></li>
+    <li id="fn14">Gorbenko, V., Rychkov, S. &amp; Zan, B. (2018). Walking, weak first-order transitions, and complex CFTs. <em>JHEP</em> <strong>2018</strong>(10):108. doi:10.1007/JHEP10(2018)108 (arXiv:1807.11512). Eqs. 2.3&ndash;2.8, 3.7&ndash;3.10, Table 1. <a href="#fnref14">&uarr;</a></li>
+    <li id="fn15">Gorbenko, V., Rychkov, S. &amp; Zan, B. (2018). Walking, weak first-order transitions, and complex CFTs II. Two-dimensional Potts model at Q &gt; 4. <em>SciPost Phys.</em> <strong>5</strong>:050. doi:10.21468/SciPostPhys.5.5.050 (arXiv:1808.04380). Eqs. 3.2, 4.33&ndash;4.34, 4.45, Fig. 12. <a href="#fnref15">&uarr;</a></li>
+    <li id="fn16">Iino, S., Morita, S., Kawashima, N. &amp; Sandvik, A. W. (2019). Detecting signals of weakly first-order phase transitions in two-dimensional Potts models. <em>J. Phys. Soc. Jpn.</em> <strong>88</strong>:034006. doi:10.7566/JPSJ.88.034006 (arXiv:1801.02786). Table I, Figs. 1, 3, 4. <a href="#fnref16">&uarr;</a></li>
+    <li id="fn17">Ma, H. &amp; He, Y.-C. (2019). Shadow of complex fixed point: approximate conformality of Q &gt; 4 Potts model. <em>Phys. Rev. B</em> <strong>99</strong>:195130. doi:10.1103/PhysRevB.99.195130 (arXiv:1811.11189). Eq. 6, Table I. <a href="#fnref17">&uarr;</a></li>
+    <li id="fn18">Sormunen, S., Gross, T. &amp; Saramäki, J. (2023). Critical drift in a neuro-inspired adaptive network. <em>Phys. Rev. Lett.</em> <strong>130</strong>:188401. doi:10.1103/PhysRevLett.130.188401 (arXiv:2206.10315). Eq. 1, Fig. 2, Supplemental Material. <a href="#fnref18">&uarr;</a></li>
+    <li id="fn19">Sormunen, S., Gross, T. &amp; Saramäki, J. (2025). Self-organization to multicriticality. Preprint, no DOI; arXiv:2506.04275. Eqs. 1&ndash;3. <a href="#fnref19">&uarr;</a></li>
+    <li id="fn20">Cited by name only; these works are not held locally, and no number or equation on this page rests on them alone (bibliographic details not checked against a copy): Ashkin, J. &amp; Teller, E. (1943) <em>Phys. Rev.</em> 64:178. Baxter, R. J. (1971) <em>Phys. Rev. Lett.</em> 26:832; (1972) <em>Ann. Phys.</em> 70:193; (1973) <em>J. Phys. C</em> 6:L445; <em>Exactly Solved Models in Statistical Mechanics</em> (Academic Press, 1982). Wegner, F. J. (1972) <em>J. Phys. C</em> 5:L131. Fan, C. &amp; Wu, F. Y. (1970) <em>Phys. Rev. B</em> 2:723. Kadanoff, L. P. &amp; Brown, A. C. (1979) <em>Ann. Phys.</em> 121:318. Lieb, E. H. (1967) <em>Phys. Rev. Lett.</em> 18:692. Bethe, H. (1931) <em>Z. Phys.</em> 71:205. Yang, C. N. &amp; Yang, C. P. (1966) <em>Phys. Rev.</em> 150:321. Luttinger, J. M. (1963) <em>J. Math. Phys.</em> 4:1154. Blume, M. (1966) <em>Phys. Rev.</em> 141:517. Capel, H. W. (1966) <em>Physica</em> 32:966. Griffiths, R. B. (1970) <em>Phys. Rev. Lett.</em> 24:715. Potts, R. B. (1952) <em>Proc. Camb. Phil. Soc.</em> 48:106. Fisher, M. E. &amp; Nelson, D. R. (1974) <em>Phys. Rev. Lett.</em> 32:1350. Kosterlitz, J. M., Nelson, D. R. &amp; Fisher, M. E. (1976) <em>Phys. Rev. B</em> 13:412. FitzHugh, R. (1961) <em>Biophys. J.</em> 1:445; Nagumo, J., Arimoto, S. &amp; Yoshizawa, S. (1962) <em>Proc. IRE</em> 50:2061. <a href="#fnref20">&uarr;</a></li>
+    <li id="fn21">&#9670; Design notes of the Criticality Compass: the alphabet (POINT, LINE, WALKING, REFUSE), &ldquo;follow the flow&rdquo;, the validation ladder, the choice of controls and test beds, and every &ldquo;For the Compass&rdquo; box. These are design decisions for an instrument under construction, not published physics results. <a href="#fnref21">&uarr;</a></li>
+    <li id="fn22">Dimension counting from the standard 2D Ising values &Delta;<sub>&sigma;</sub> = 1/8 and &Delta;<sub>&epsilon;</sub> = 1 (not checked here against a held source); the fate of the bilinear model at g &ne; 0 is an expectation, not a result shown here. <a href="#fnref22">&uarr;</a></li>
+  </ol>
+</div>
+</div>
+
+<script src="bank.js"></script>
+<script src="../../../js/cc-tutor.js"></script>
+<script>/*MODELS-PAGE*/
+(function () {
+'use strict';
+/* Page-local graphics for the models page. Engine primitives (CC.trace, CC.toy.lattice) where they
+   fit; the vertex builder, the phase diagrams, the gallery and the adaptive network are page-local and
+   register themselves in CC.graphics so the quizzes can grade them. Verdict-like readouts are table
+   lookups; a candidate that does not exist is a value (Infinity), not a branch. */
+var PI = Math.PI, NS = 'http://www.w3.org/2000/svg';
+var C = { amber: '#f59e0b', blue: '#3b82f6', green: '#22c55e', purple: '#a855f7', red: '#ef4444', cyan: '#06b6d4',
+  text: '#cbd5e1', muted: '#64748b', dim: '#334155', head: '#f1f5f9', line: '#94a3b8', card: '#1e293b', bg: '#0f172a' };
+function q(id) { return document.querySelector('[data-cc-id="' + id + '"]'); }
+function S(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) if (a[k] != null) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+function ST(p, x, y, s, a) { var o = { x: x, y: y, 'font-size': 11, fill: C.text }; for (var k in (a || {})) o[k] = a[k]; var e = S('text', o, p); e.style.fill = o.fill; e.textContent = s; return e; }
+function E(tag, a, html) { var e = document.createElement(tag); for (var k in (a || {})) { if (k === 'class') e.className = a[k]; else e.setAttribute(k, a[k]); } if (html != null) e.innerHTML = html; return e; }
+/* Engine CSS styles .cc-svg text and the default classes, which beats SVG presentation attributes;
+   this wrapper turns the colours a page asks for into inline styles. */
+function G(g) {
+  if (g._w) return g._w;
+  var w = Object.create(g);
+  ['line', 'path', 'dot', 'rect', 'text', 'add'].forEach(function (k) {
+    var fn = g[k];
+    w[k] = function () { var o = arguments[arguments.length - 1], e = fn.apply(g, arguments);
+      if (o && typeof o === 'object') { if (o.stroke) e.style.stroke = o.stroke; if (o.fill) e.style.fill = o.fill; if (o.width) e.style.strokeWidth = o.width; }
+      return e; };
+  });
+  g._w = w; return w;
+}
+function reg(id, h) { h.id = id; CC.graphics[id] = h; return h; }
+function lin(x0, x1, p0, p1) { return function (x) { return p0 + (x - x0) / (x1 - x0) * (p1 - p0); }; }
+function f(x, n) { return Number(x).toFixed(n == null ? 3 : n); }
+function narrowOf(el) { return (el.clientWidth || 600) < 480; }
+function rangeCtl(label, min, max, step, val, on) {
+  var id = 'r' + Math.random().toString(36).slice(2, 8), out = E('output', { 'for': id }), inp = E('input', { type: 'range', id: id, min: min, max: max, step: step, value: val });
+  out.textContent = String(val);
+  inp.addEventListener('input', function () { out.textContent = inp.value; on(+inp.value); });
+  var lab = E('label', {}); lab.appendChild(E('span', {}, label)); lab.appendChild(inp); lab.appendChild(out);
+  return { el: lab, input: inp, set: function (v) { inp.value = v; out.textContent = String(v); } };
+}
+function btn(label, fn, act) { var b = E('button', { type: 'button', 'class': 'cc-btn', 'data-cc-act': act || 'page' }); b.textContent = label; b.addEventListener('click', fn); return b; }
+var reduced = function () { return CC.reducedMotion(); };
+/* A tiny axis painter for custom panels inside a trace's SVG. */
+function panel(g, x0, x1, y0, y1, px0, px1, py0, py1, o) {
+  o = o || {};
+  var X = lin(x0, x1, px0, px1), Y = lin(y0, y1, py1, py0);
+  g.line(px0, py1, px1, py1, { cls: 'cc-axis' }); g.line(px0, py0, px0, py1, { cls: 'cc-axis' });
+  (o.xt || []).forEach(function (v) { g.text(X(v), py1 + 13, o.xf ? o.xf(v) : String(v), { anchor: 'middle', size: 10, cls: 'cc-tick' }); });
+  (o.yt || []).forEach(function (v) { g.text(px0 - 4, Y(v) + 3, o.yf ? o.yf(v) : String(v), { anchor: 'end', size: 10, cls: 'cc-tick' }); });
+  if (o.xl) g.text(px1, py1 + 26, o.xl, { anchor: 'end', size: 11 });
+  if (o.yl) g.text(px0 + 4, py0 + 10, o.yl, { size: 11 });
+  return { X: X, Y: Y, curve: function (fn, a, b, n, st) {
+    var d = '', pen = false; n = n || 120;
+    for (var i = 0; i <= n; i++) { var x = a + (b - a) * i / n, y = fn(x);
+      if (!isFinite(y) || y < y0 - (y1 - y0) || y > y1 + (y1 - y0)) { pen = false; continue; }
+      var yy = Math.max(y0, Math.min(y1, y));
+      d += (pen ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(yy).toFixed(1); pen = y === yy; }
+    return g.path(d, st); } };
+}
+
+/* ================================================================ 0 gallery */
+(function () {
+  var el = q('gallery');
+  var items = [
+    ['1-at', 'Ashkin–Teller', 'LINE', 'line', function (s) { s.appendChild(pathEl('M10 70 L110 70 M10 70 L10 8')); S('path', { d: 'M10 70 Q60 68 105 12', stroke: C.muted, fill: 'none', 'stroke-dasharray': '3 3' }, s); S('line', { x1: 40, y1: 22, x2: 72, y2: 50, stroke: C.amber, 'stroke-width': 4, 'stroke-linecap': 'round' }, s); S('circle', { cx: 72, cy: 50, r: 4, fill: C.blue }, s); S('circle', { cx: 40, cy: 22, r: 4, fill: C.purple }, s); }],
+    ['2-baxter', 'Baxter eight-vertex', 'LINE (exact)', 'line', function (s) { for (var i = 0; i < 3; i++) { S('line', { x1: 20 + 35 * i, y1: 8, x2: 20 + 35 * i, y2: 72, stroke: C.line }, s); S('line', { x1: 5, y1: 20 + 25 * i, x2: 115, y2: 20 + 25 * i, stroke: C.line }, s); } S('circle', { cx: 55, cy: 45, r: 6, fill: C.amber }, s); }],
+    ['3-coupled', 'Coupled Ising (bilinear)', 'POINT', 'point', function (s) { S('circle', { cx: 35, cy: 40, r: 6, fill: C.blue }, s); S('circle', { cx: 85, cy: 40, r: 6, fill: C.blue }, s); S('path', { d: 'M41 40 Q60 20 79 40', stroke: C.red, fill: 'none', 'stroke-width': 2 }, s); ST(s, 60, 68, 'g σ τ', { 'text-anchor': 'middle', fill: C.red }); }],
+    ['4-onon', 'O(n₁)⊕O(n₂)', 'multicritical', 'multi', function (s) { S('line', { x1: 60, y1: 40, x2: 115, y2: 40, stroke: C.line, 'stroke-width': 2 }, s); S('line', { x1: 60, y1: 40, x2: 60, y2: 5, stroke: C.line, 'stroke-width': 2 }, s); S('line', { x1: 60, y1: 40, x2: 20, y2: 75, stroke: C.green, 'stroke-width': 2 }, s); S('line', { x1: 60, y1: 40, x2: 10, y2: 50, stroke: C.green, 'stroke-width': 2 }, s); S('circle', { cx: 60, cy: 40, r: 5, fill: C.head }, s); }],
+    ['5-bc', 'Blume–Capel', 'tricritical', 'multi', function (s) { S('path', { d: 'M10 12 Q70 20 88 50', stroke: C.amber, fill: 'none', 'stroke-width': 2.5 }, s); S('path', { d: 'M88 50 Q94 62 96 74', stroke: C.amber, fill: 'none', 'stroke-width': 2.5, 'stroke-dasharray': '3 3' }, s); S('rect', { x: 84, y: 46, width: 8, height: 8, fill: C.head, transform: 'rotate(45 88 50)' }, s); }],
+    ['6-potts', 'Potts q = 5, 6', 'WALKING', 'walk', function (s) { [60, 40, 26, 18, 13, 10].forEach(function (hh, i) { S('rect', { x: 10 + 17 * i, y: 72 - hh, width: 12, height: hh, fill: i < 2 ? C.purple : C.muted }, s); }); S('line', { x1: 5, y1: 44, x2: 115, y2: 44, stroke: C.cyan, 'stroke-dasharray': '4 3' }, s); }],
+    ['7-xxz', 'XXZ / six-vertex', 'LINE', 'line', function (s) { S('line', { x1: 10, y1: 45, x2: 110, y2: 45, stroke: C.line }, s); S('line', { x1: 30, y1: 45, x2: 90, y2: 45, stroke: C.amber, 'stroke-width': 6 }, s); ST(s, 30, 64, '−1', { 'text-anchor': 'middle' }); ST(s, 90, 64, '+1', { 'text-anchor': 'middle' }); ST(s, 60, 30, 'Δ', { 'text-anchor': 'middle' }); }],
+    ['8-sorm', 'Adaptive networks', 'drift on a manifold', 'drift', function (s) { S('path', { d: 'M10 65 Q60 5 110 40', stroke: C.cyan, fill: 'none', 'stroke-width': 2.5 }, s); S('circle', { cx: 45, cy: 33, r: 5, fill: C.amber }, s); S('path', { d: 'M52 28 Q62 22 72 22', stroke: C.amber, fill: 'none', 'stroke-width': 1.5 }, s); }]
+  ];
+  function pathEl(d) { return S('path', { d: d, stroke: C.line, fill: 'none' }); }
+  var grid = E('div', { 'class': 'gal' }), seen = {};
+  items.forEach(function (it) {
+    var a = E('a', { 'class': 'gcard', href: '#' + it[0] });
+    var s = S('svg', { viewBox: '0 0 120 80', role: 'img', 'aria-label': 'miniature phase diagram: ' + it[1] });
+    it[4](s); a.appendChild(s);
+    a.appendChild(E('div', { 'class': 'gname' }, it[1]));
+    a.appendChild(E('span', { 'class': 'chip ' + it[3] }, it[2]));
+    a.addEventListener('click', function () { seen[it[0]] = 1; });
+    grid.appendChild(a);
+  });
+  el.appendChild(grid);
+  reg('gallery', { el: el, state: function () { return { visited: Object.keys(seen) }; }, checks: {} });
+})();
+
+/* ================================================================ 1 Ashkin–Teller */
+/* Position on the line is the angle th = arcsin(½ coth 2K) ∈ [π/4, π/2] (Ising → Potts), so g_R = 8th/π
+   is exactly linear and every point of the slider is on the line by construction. */
+function atPoint(s) {
+  var th = PI / 4 + s * PI / 4, sn = Math.sin(th), K = 0.5 * Math.atanh(1 / (2 * sn)), Z = Math.exp(-4 * K), X = (1 - Z) / 2;
+  var L = -0.5 * Math.log(X) - K, gR = 8 * th / PI, yt = 2 - 2 / gR;
+  return { th: th, K: K, L: L, X: X, Z: Z, half: sn, gR: gR, yt: yt, an: 2 * yt - 2 };
+}
+var atTrace = (function () {
+  var el = q('at-line');
+  var X0 = Math.SQRT2 - 1, Z0 = 3 - 2 * Math.SQRT2;
+  function frame(g) {
+    var nar = g.w < 500, side = Math.min(g.h - 44, nar ? 170 : 210), l = 40, t = 12;
+    var P = panel(g, 0, 1, 0, 1, l, l + side, t, t + side, { xt: [0, 0.5, 1], yt: [0, 0.5, 1], xl: 'X', yl: 'Z' });
+    var rx0 = l + side + (nar ? 34 : 50), rx1 = g.w - 10;
+    var R = panel(g, 0, 1, 0, 4, rx0, rx1, t, t + side, { xt: [0, 1], xf: function (v) { return v ? 'Potts' : 'Ising'; }, yt: [0, 1, 2, 3, 4], xl: 'position s' });
+    return { P: P, R: R, side: side, t: t, l: l };
+  }
+  function diag(g, F) {
+    var P = F.P;
+    P.curve(function (x) { return x * x; }, 0, 1, 60, { stroke: C.muted, dash: '4 3' });
+    P.curve(function (x) { return x; }, 0, 1, 10, { stroke: C.muted, dash: '4 3' });
+    g.line(P.X(X0), P.Y(Z0), P.X(0.5), P.Y(0), { stroke: C.line, width: 1.5 });
+    g.line(P.X(1 / 3), P.Y(1 / 3), P.X(X0), P.Y(Z0), { stroke: C.amber, width: 4 });
+    g.dot(P.X(X0), P.Y(Z0), 4, { fill: C.blue }); g.dot(P.X(1 / 3), P.Y(1 / 3), 4, { fill: C.purple });
+    g.text(P.X(X0) + 6, P.Y(Z0) + 12, 'X₀ Ising²', { size: 10, fill: C.blue });
+    g.text(P.X(1 / 3) - 4, P.Y(1 / 3) - 7, 'X₄ Potts', { size: 10, fill: C.purple, anchor: 'end' });
+    g.text(P.X(0.06), P.Y(0.06), 'F', { size: 12, fill: C.head });
+    g.text(P.X(0.72), P.Y(0.8), 'P', { size: 12, fill: C.head });
+    g.text(P.X(0.04), P.Y(0.86), '⟨στ⟩', { size: 11, fill: C.head });
+    g.text(P.X(0.62), P.Y(0.33), 'Z = X²', { size: 9.5, fill: C.muted });
+    g.text(P.X(0.8), P.Y(0.86), 'Z = X', { size: 9.5, fill: C.muted });
+  }
+  function here(g, F, v) { var p = atPoint(v.s); g.dot(F.P.X(p.X), F.P.Y(p.Z), 6, { cls: 'cc-handle' }); return p; }
+  var h = CC.trace(el, {
+    id: 'at-line', label: 'Ashkin-Teller phase diagram in the X-Z plane with the self-dual line, and the exponents along it', height: 270,
+    eq: [{ t: 'line', html: 'sinh 2K = e<sup>&minus;2L</sup>' }, { html: ':' }, { t: 'gR', html: 'g<sub>R</sub> = (8/&pi;) arcsin[&frac12; coth 2K]' }, { html: '&rArr;' },
+         { t: 'yt', html: 'y<sub>t</sub> = 2 &minus; 2/g<sub>R</sub>' }, { html: '&rArr;' }, { t: 'an', html: '&alpha;/&nu; = 2y<sub>t</sub> &minus; 2' }, { html: ',' }, { t: 'gn', html: '&gamma;/&nu; = 7/4' }],
+    vars: { s: { min: 0, max: 1, step: 0.005, init: 0.25, label: 'position on the line s (0 Ising, 1 Potts)' } },
+    base: function (g, v) { g = G(g); var F = frame(g); diag(g, F); g._F = F; },
+    steps: [
+      { lit: ['line'], caption: function (v) { var p = atPoint(v.s); return 'On the self-dual line: K = ' + f(p.K, 4) + ', L = ' + f(p.L, 4) + ' (X = ' + f(p.X) + ', Z = ' + f(p.Z) + '). Every slider position is on the line.'; },
+        draw: function (g, v) { g = G(g); here(g, g._F, v); } },
+      { lit: ['gR'], caption: function (v) { var p = atPoint(v.s); return '&frac12; coth 2K = ' + f(p.half, 4) + ', so g<sub>R</sub> = ' + f(p.gR) + ' (2 at Ising, 4 at Potts).'; },
+        draw: function (g, v) { g = G(g); var R = g._F.R; R.curve(function (s) { return atPoint(s).gR; }, 0, 1, 60, { stroke: C.cyan, width: 2 }); var p = atPoint(v.s); g.dot(R.X(v.s), R.Y(p.gR), 4, { fill: C.cyan }); g.text(R.X(0.02), R.Y(p.gR > 3 ? 3.6 : 3.4), 'g_R', { size: 10, fill: C.cyan }); } },
+      { lit: ['yt'], caption: function (v) { var p = atPoint(v.s); return 'The thermal eigenvalue y<sub>t</sub> = ' + f(p.yt) + ' (1 at Ising, 3/2 at Potts): &nu; = 1/y<sub>t</sub> = ' + f(1 / p.yt) + '.'; },
+        draw: function (g, v) { g = G(g); var R = g._F.R; R.curve(function (s) { return atPoint(s).yt; }, 0, 1, 60, { stroke: C.green, width: 2 }); var p = atPoint(v.s); g.dot(R.X(v.s), R.Y(p.yt), 4, { fill: C.green }); g.text(R.X(0.02), R.Y(1.2), 'y_t', { size: 10, fill: C.green }); } },
+      { lit: ['an', 'gn'], caption: function (v) { var p = atPoint(v.s); return '&alpha;/&nu; = ' + f(p.an) + ' moves with the position; &gamma;/&nu; = 1.750 does not. The exponent depends on the CONTROL, not on scale.'; },
+        draw: function (g, v) { g = G(g); var R = g._F.R; R.curve(function (s) { return atPoint(s).an; }, 0, 1, 60, { stroke: C.amber, width: 3 }); R.curve(function () { return 1.75; }, 0, 1, 2, { stroke: C.purple, width: 2, dash: '5 3' });
+          var p = atPoint(v.s); g.dot(R.X(v.s), R.Y(p.an), 5, { fill: C.amber }); g.text(R.X(0.98), R.Y(1.75) - 5, 'γ/ν', { size: 10, fill: C.purple, anchor: 'end' }); g.text(R.X(0.98), R.Y(0.85), 'α/ν', { size: 10, fill: C.amber, anchor: 'end' }); } }
+    ],
+    checks: { alphaHalf: function (st) { return Math.abs(atPoint(st.vars.s).an - 0.5) < 0.02; } }
+  });
+  return h;
+})();
+
+(function () {
+  var el = q('at-toy'), locked = { on: false, s: 0 };
+  var api = CC.toy.lattice(el, {
+    id: 'at-toy', model: 'at', params: { K: 0.4, L: 0.05 }, seed: 11, label: 'Ashkin-Teller Monte Carlo toy: four colours for the four (sigma, tau) states',
+    onParams: function (P) { if (locked.on) { var p = atPoint(locked.s); if (Math.abs(P.K - p.K) > 1e-5 || Math.abs(P.L - p.L) > 1e-5) { locked.on = false; box.checked = false; } } },
+    checks: { onLineRun: function (st) { var e = Math.abs(Math.sinh(2 * st.params.K) - Math.exp(-2 * st.params.L)); return locked.on && e < 1e-4 && st.sweeps >= 50; } }
+  });
+  var row = E('div', { 'class': 'ctl2' }), lab = E('label', {}), box = E('input', { type: 'checkbox' });
+  lab.appendChild(box); lab.appendChild(document.createTextNode(' lock onto the self-dual line'));
+  var pos = rangeCtl('position s', 0, 1, 0.01, 0, function (v) { locked.s = v; if (locked.on) apply(); });
+  function apply() { var p = atPoint(locked.s); api.set({ K: +p.K.toFixed(6), L: +p.L.toFixed(6) }); }
+  box.addEventListener('change', function () { locked.on = box.checked; if (locked.on) apply(); });
+  row.appendChild(lab); row.appendChild(pos.el);
+  el.appendChild(row);
+})();
+
+/* ================================================================ vertex builder (§2 eight-vertex, §7 six-vertex) */
+/* Bits of a vertex: hL (left bond points right), hR (right bond points right), vD (lower bond points up),
+   vU (upper bond points up). The TYPE table is total over the 16 keys; 'x' = forbidden (1 or 3 arrows in). */
+var VTYPE = { '1111': 'a1', '0000': 'a2', '1100': 'b1', '0011': 'b2', '1001': 'c1', '0110': 'c2', '1010': 'd1', '0101': 'd2',
+  '1000': 'x', '0100': 'x', '0010': 'x', '0001': 'x', '1110': 'x', '1101': 'x', '1011': 'x', '0111': 'x' };
+var VCLASS = { a1: 'a', a2: 'a', b1: 'b', b2: 'b', c1: 'c', c2: 'c', d1: 'd', d2: 'd', x: 'x' };
+var VALLOWED = { six: { a: 1, b: 1, c: 1, d: 0, x: 0 }, eight: { a: 1, b: 1, c: 1, d: 1, x: 0 } };
+var VCOL = { a: C.amber, b: C.blue, c: C.green, d: C.purple, x: C.red };
+function vertexBuilder(id, mode) {
+  var el = q(id), n = 4, Hb = [], Vb = [], r, c, w = { a: 1, b: 1, c: 1, d: mode === 'eight' ? 0.5 : 0 }, seed = 7;
+  var rng = CC.core.mulberry32(mode === 'eight' ? 99 : 42);
+  function reset() { Hb = []; Vb = []; for (r = 0; r < n; r++) { Hb.push([]); for (c = 0; c <= n; c++) Hb[r].push(1); } for (r = 0; r <= n; r++) { Vb.push([]); for (c = 0; c < n; c++) Vb[r].push(1); } }
+  reset();
+  function key(r, c) { return '' + Hb[r][c] + Hb[r][c + 1] + Vb[r + 1][c] + Vb[r][c]; }
+  function typeAt(r, c) { return VTYPE[key(r, c)]; }
+  var wrap = E('div', { 'class': 'pair' });
+  var svg = S('svg', { viewBox: '0 0 300 300', role: 'img', 'aria-label': (mode === 'eight' ? 'Eight' : 'Six') + '-vertex builder: a 4 by 4 lattice of vertices with clickable bond arrows' });
+  var side = S('svg', { viewBox: '0 0 280 250', role: 'img', 'aria-label': mode === 'eight' ? 'The eight-vertex anisotropy on a number line' : 'The (a/c, b/c) plane with the three six-vertex regimes and the free-fermion circle' });
+  wrap.appendChild(svg); wrap.appendChild(side); el.appendChild(wrap);
+  var read = E('p', { 'class': 'vb-read', 'aria-live': 'polite' }); el.appendChild(read);
+  var ctl = E('div', { 'class': 'ctl2' }); el.appendChild(ctl);
+  var sl = {};
+  ['a', 'b', 'c'].concat(mode === 'eight' ? ['d'] : []).forEach(function (k) {
+    sl[k] = rangeCtl('weight ' + k, 0, 3, 0.01, w[k], function (v) { w[k] = v; draw(); }); ctl.appendChild(sl[k].el);
+  });
+  ctl.appendChild(btn('Flip a path', function () { flipPath(); draw(); }, 'vb-path'));
+  ctl.appendChild(btn('Reset arrows', function () { reset(); draw(); }, 'vb-reset'));
+  var X = function (c) { return 60 + 60 * c; }, Y = function (r) { return 60 + 60 * r; };
+  /* bond ends: horizontal bond (r, c) spans x from X(c)-60 to X(c) at y = Y(r) (c = 0 … n); vertical (r, c) spans y Y(r)-60 … Y(r) */
+  function arrowH(g, r, c) {
+    var x1 = X(c) - 60, x2 = X(c), y = Y(r), right = Hb[r][c] === 1, mx = (x1 + x2) / 2;
+    if (c === 0) x1 = X(0) - 34; if (c === n) x2 = X(n - 1) + 34;
+    S('line', { x1: x1, y1: y, x2: x2, y2: y, stroke: C.line, 'stroke-width': 2 }, g);
+    var d = right ? 'M' + (mx - 6) + ' ' + (y - 6) + ' L' + (mx + 6) + ' ' + y + ' L' + (mx - 6) + ' ' + (y + 6) + 'z' : 'M' + (mx + 6) + ' ' + (y - 6) + ' L' + (mx - 6) + ' ' + y + ' L' + (mx + 6) + ' ' + (y + 6) + 'z';
+    S('path', { d: d, fill: C.head }, g);
+    var hit = S('line', { x1: x1, y1: y, x2: x2, y2: y, 'class': 'bond-hit', 'data-b': 'h' + r + '-' + c }, g);
+    hit.addEventListener('click', function () { Hb[r][c] = 1 - Hb[r][c]; draw(); });
+  }
+  function arrowV(g, r, c) {
+    var y1 = Y(r) - 60, y2 = Y(r), x = X(c), up = Vb[r][c] === 1, my = (y1 + y2) / 2;
+    if (r === 0) y1 = Y(0) - 34; if (r === n) y2 = Y(n - 1) + 34;
+    S('line', { x1: x, y1: y1, x2: x, y2: y2, stroke: C.line, 'stroke-width': 2 }, g);
+    var d = up ? 'M' + (x - 6) + ' ' + (my + 6) + ' L' + x + ' ' + (my - 6) + ' L' + (x + 6) + ' ' + (my + 6) + 'z' : 'M' + (x - 6) + ' ' + (my - 6) + ' L' + x + ' ' + (my + 6) + ' L' + (x + 6) + ' ' + (my - 6) + 'z';
+    S('path', { d: d, fill: C.head }, g);
+    var hit = S('line', { x1: x, y1: y1, x2: x, y2: y2, 'class': 'bond-hit', 'data-b': 'v' + r + '-' + c }, g);
+    hit.addEventListener('click', function () { Vb[r][c] = 1 - Vb[r][c]; draw(); });
+  }
+  /* A path of bonds from one edge to another. Six-vertex: a DIRECTED path (follow the arrows out of each
+     vertex), which keeps two-in-two-out everywhere. Eight-vertex: any path, which keeps the parity. */
+  function outs(r, c) { var o = []; if (Hb[r][c + 1] === 1) o.push(['h', r, c + 1, r, c + 1]); if (Hb[r][c] === 0) o.push(['h', r, c, r, c - 1]); if (Vb[r][c] === 1) o.push(['v', r, c, r - 1, c]); if (Vb[r + 1][c] === 0) o.push(['v', r + 1, c, r + 1, c]); return o; }
+  function all(r, c) { return [['h', r, c + 1, r, c + 1], ['h', r, c, r, c - 1], ['v', r, c, r - 1, c], ['v', r + 1, c, r + 1, c]]; }
+  function flipPath() {
+    for (var tries = 0; tries < 20; tries++) {
+      var r0 = (rng() * n) | 0, c0 = (rng() * n) | 0, seen = {}, path = [], vr = r0, vc = c0, ok = false;
+      for (var step = 0; step < 60; step++) {
+        var kk = vr + ',' + vc;
+        if (seen[kk] != null) { path = path.slice(seen[kk]); ok = true; break; }
+        seen[kk] = path.length;
+        var opts = mode === 'eight' ? all(vr, vc) : outs(vr, vc);
+        if (path.length && mode === 'eight') { var last = path[path.length - 1]; opts = opts.filter(function (o) { return !(o[0] === last[0] && o[1] === last[1] && o[2] === last[2]); }); }
+        if (!opts.length) break;
+        var o = opts[(rng() * opts.length) | 0];
+        path.push(o); vr = o[3]; vc = o[4];
+        if (vr < 0 || vr >= n || vc < 0 || vc >= n) { ok = true; break; }
+      }
+      if (!ok || !path.length) continue;
+      /* a boundary-to-boundary path must also start on the boundary: extend backwards for the open case */
+      if (vr < 0 || vr >= n || vc < 0 || vc >= n) {
+        var back = mode === 'eight' ? all(r0, c0) : ins(r0, c0), br = r0, bc = c0, guard = 0, bseen = {};
+        bseen[r0 + ',' + c0] = 1;
+        while (guard++ < 60) {
+          var cand = (mode === 'eight' ? all(br, bc) : ins(br, bc)).filter(function (o) { return !path.some(function (p) { return p[0] === o[0] && p[1] === o[1] && p[2] === o[2]; }); });
+          if (!cand.length) { ok = false; break; }
+          var oo = cand[(rng() * cand.length) | 0]; path.push(oo); br = oo[3]; bc = oo[4];
+          if (br < 0 || br >= n || bc < 0 || bc >= n) break;
+          if (bseen[br + ',' + bc] || seen[br + ',' + bc] != null) { ok = false; break; }
+          bseen[br + ',' + bc] = 1;
+        }
+        if (!ok) continue;
+      }
+      path.forEach(function (p) { if (p[0] === 'h') Hb[p[1]][p[2]] = 1 - Hb[p[1]][p[2]]; else Vb[p[1]][p[2]] = 1 - Vb[p[1]][p[2]]; });
+      return true;
+    }
+    return false;
+  }
+  function ins(r, c) { var o = []; if (Hb[r][c] === 1) o.push(['h', r, c, r, c - 1]); if (Hb[r][c + 1] === 0) o.push(['h', r, c + 1, r, c + 1]); if (Vb[r + 1][c] === 1) o.push(['v', r + 1, c, r + 1, c]); if (Vb[r][c] === 0) o.push(['v', r, c, r - 1, c]); return o; }
+  function counts() {
+    var k = { a: 0, b: 0, c: 0, d: 0, x: 0 }, allowed = 0;
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) { var t = VCLASS[typeAt(r, c)]; k[t]++; allowed += VALLOWED[mode][t]; }
+    return { k: k, allowed: allowed };
+  }
+  function delta() {
+    return mode === 'eight' ? (w.a * w.a + w.b * w.b - w.c * w.c - w.d * w.d) / (2 * (w.a * w.b + w.c * w.d)) : (w.a * w.a + w.b * w.b - w.c * w.c) / (2 * w.a * w.b);
+  }
+  /* Six-vertex regime: a total lookup on the pair (Δ > 1, Δ < −1). */
+  var REGIME = { '10': 'ferromagnetic (frozen)', '01': 'antiferromagnetic', '00': 'disordered: the critical regime', '11': 'undefined' };
+  function regime(D) { return isFinite(D) ? REGIME[(D > 1 ? '1' : '0') + (D < -1 ? '1' : '0')] : 'undefined (a weight is zero)'; }
+  function draw() {
+    while (svg.lastChild) svg.removeChild(svg.lastChild);
+    var gB = S('g', {}, svg);
+    for (var r = 0; r < n; r++) for (var c = 0; c <= n; c++) arrowH(gB, r, c);
+    for (r = 0; r <= n; r++) for (c = 0; c < n; c++) arrowV(gB, r, c);
+    for (r = 0; r < n; r++) for (c = 0; c < n; c++) {
+      var t = typeAt(r, c), cl = VCLASS[t], ok = VALLOWED[mode][cl];
+      S('circle', { cx: X(c), cy: Y(r), r: 9, fill: ok ? VCOL[cl] : C.bg, stroke: ok ? 'none' : C.red, 'stroke-width': 2 }, svg);
+      ST(svg, X(c) + 11, Y(r) - 8, ok ? t.replace('1', '₁').replace('2', '₂') : '✕', { 'font-size': 10, fill: ok ? C.head : C.red });
+    }
+    var k = counts(), D = delta(), W = 1;
+    ['a', 'b', 'c', 'd'].forEach(function (t) { W *= Math.pow(w[t], k.k[t]); });
+    read.innerHTML = 'allowed vertices ' + k.allowed + '/' + (n * n) + ' &middot; a ' + k.k.a + ', b ' + k.k.b + ', c ' + k.k.c + (mode === 'eight' ? ', d ' + k.k.d : '') + (k.k.x ? ', forbidden ' + k.k.x : '') +
+      ' &middot; weight a<sup>' + k.k.a + '</sup>b<sup>' + k.k.b + '</sup>c<sup>' + k.k.c + '</sup>' + (mode === 'eight' ? 'd<sup>' + k.k.d + '</sup>' : '') + ' = ' + (k.k.x ? '0 (forbidden vertex)' : f(W, 3)) +
+      ' &middot; &Delta; = ' + (isFinite(D) ? f(D, 3) : '&mdash;') + (mode === 'six' ? ': ' + regime(D) : ' (eight-vertex formula, from the literature)');
+    drawSide(D);
+  }
+  function drawSide(D) {
+    while (side.lastChild) side.removeChild(side.lastChild);
+    if (mode === 'six') {
+      var px = lin(0, 3, 40, 260), py = lin(0, 3, 220, 10);
+      S('polygon', { points: [[1, 0], [3, 0], [3, 2]].map(function (p) { return px(p[0]) + ',' + py(p[1]); }).join(' '), fill: 'rgba(59,130,246,0.18)' }, side);
+      S('polygon', { points: [[0, 1], [0, 3], [2, 3]].map(function (p) { return px(p[0]) + ',' + py(p[1]); }).join(' '), fill: 'rgba(59,130,246,0.18)' }, side);
+      S('polygon', { points: [[0, 0], [1, 0], [0, 1]].map(function (p) { return px(p[0]) + ',' + py(p[1]); }).join(' '), fill: 'rgba(168,85,247,0.25)' }, side);
+      var arc = ''; for (var i = 0; i <= 30; i++) { var t = i / 30 * PI / 2; arc += (i ? 'L' : 'M') + px(Math.cos(t)).toFixed(1) + ' ' + py(Math.sin(t)).toFixed(1); }
+      S('path', { d: arc, stroke: C.cyan, 'stroke-width': 2, fill: 'none', 'stroke-dasharray': '4 3' }, side);
+      S('line', { x1: px(0), y1: py(0), x2: px(3), y2: py(0), stroke: C.line }, side); S('line', { x1: px(0), y1: py(0), x2: px(0), y2: py(3), stroke: C.line }, side);
+      ST(side, px(3), py(0) + 22, 'a/c', { 'text-anchor': 'end' }); ST(side, px(0) + 4, py(3) + 4, 'b/c');
+      ST(side, px(2.3), py(0.4), 'Δ > 1', { fill: C.blue }); ST(side, px(0.1), py(2.5), 'Δ > 1', { fill: C.blue });
+      ST(side, px(0.08), py(0.2), 'Δ<−1', { fill: C.purple, 'font-size': 10 }); ST(side, px(1.3), py(1.5), '|Δ| < 1: critical', { fill: C.amber });
+      ST(side, px(0.72), py(0.95), 'Δ = 0', { fill: C.cyan, 'font-size': 10 });
+      var ax = w.c ? w.a / w.c : Infinity, bx = w.c ? w.b / w.c : Infinity;
+      if (isFinite(ax) && isFinite(bx)) S('circle', { cx: px(Math.min(3, ax)), cy: py(Math.min(3, bx)), r: 6, fill: C.head, stroke: C.amber, 'stroke-width': 2 }, side);
+      ST(side, 150, 245, 'regions: this page’s arithmetic on Δ’s definition', { 'text-anchor': 'middle', 'font-size': 9.5, fill: C.muted });
+    } else {
+      var X2 = lin(-3, 3, 20, 260), y = 120;
+      S('rect', { x: X2(-1), y: y - 14, width: X2(1) - X2(-1), height: 28, fill: 'rgba(245,158,11,0.18)' }, side);
+      S('line', { x1: X2(-3), y1: y, x2: X2(3), y2: y, stroke: C.line }, side);
+      [-3, -2, -1, 0, 1, 2, 3].forEach(function (v) { S('line', { x1: X2(v), y1: y - 5, x2: X2(v), y2: y + 5, stroke: C.line }, side); ST(side, X2(v), y + 20, String(v), { 'text-anchor': 'middle', 'font-size': 10 }); });
+      if (isFinite(D)) S('circle', { cx: X2(Math.max(-3, Math.min(3, D))), cy: y, r: 7, fill: C.purple }, side);
+      ST(side, 140, 60, 'Δ = (a² + b² − c² − d²) / 2(ab + cd)', { 'text-anchor': 'middle', 'font-size': 11.5, fill: C.head });
+      ST(side, 140, 80, 'from the literature; not verified locally', { 'text-anchor': 'middle', 'font-size': 10, fill: C.muted });
+      ST(side, 140, 175, 'd = 0 gives back the six-vertex Δ', { 'text-anchor': 'middle', 'font-size': 10.5 });
+    }
+  }
+  draw();
+  return reg(id, { el: el, state: function () { var k = counts(); return { counts: k.k, allowed: k.allowed, total: n * n, w: { a: w.a, b: w.b, c: w.c, d: w.d }, delta: delta() }; },
+    checks: { hasC: function (st) { return st.allowed === st.total && st.counts.c >= 1; }, hasD: function (st) { return st.allowed === st.total && st.counts.d >= 1; } } });
+}
+vertexBuilder('vb8', 'eight');
+
+/* ================================================================ 3 dimension counting + two-layer toy */
+(function () {
+  var el = q('dimcount');
+  CC.trace(el, {
+    id: 'dimcount', label: 'How two couplings between Ising layers grow under coarse-graining: the bilinear one as b to the 7/4, the four-spin one not at all', height: 250,
+    eq: [{ t: 'rule', html: 'y = d &minus; &Delta;' }, { html: ';' }, { t: 'bil', html: 'g&sigma;&tau;: &Delta; = &#8539; + &#8539; = &frac14;, y = 7/4' }, { html: ';' }, { t: 'four', html: '&epsilon;<sub>1</sub>&epsilon;<sub>2</sub>: &Delta; = 1 + 1 = 2, y = 0' }],
+    vars: { ell: { min: 0, max: 3, step: 0.01, init: 1, label: 'RG time &#8467; = ln b' } },
+    base: function (g, v) { g = G(g);
+      var P = panel(g, 0, 3, 0, 1, 44, g.w - 12, 12, g.h - 36, { xt: [0, 1, 2, 3], yt: [0, 0.5, 1], xl: 'ℓ = ln b', yl: 'coupling' });
+      g._P = P; g.line(P.X(v.ell), P.Y(0), P.X(v.ell), P.Y(1), { stroke: C.muted, dash: '3 3' });
+    },
+    steps: [
+      { lit: ['rule'], caption: 'Coarse-graining by b multiplies a small coupling by b<sup>y</sup>, with y = d &minus; &Delta; and d = 2.', draw: function () {} },
+      { lit: ['bil'], caption: function (v) { var gg = 0.02 * Math.exp(1.75 * v.ell); return 'The bilinear coupling grows: g(&#8467;) = g<sub>0</sub>e<sup>7&#8467;/4</sup> = ' + f(gg, 3) + (gg > 1 ? ' — it has left the small-coupling regime: the Ising&sup2; point is unstable.' : '.'); },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(function (x) { return 0.02 * Math.exp(1.75 * x); }, 0, 3, 120, { stroke: C.red, width: 2.5 }); var y = 0.02 * Math.exp(1.75 * v.ell); if (y <= 1) g.dot(P.X(v.ell), P.Y(y), 5, { fill: C.red }); g.text(P.X(0.3), P.Y(0.9), 'g σ τ: relevant, y = 7/4', { size: 11, fill: C.red }); } },
+      { lit: ['four'], caption: 'The four-spin coupling is marginal: L(&#8467;) = L<sub>0</sub> at linear order, and (Ginsparg) exactly, because it only changes the boson radius. Every value is a fixed point: a LINE.',
+        draw: function (g, v) { g = G(g); var P = g._P; g.line(P.X(0), P.Y(0.35), P.X(3), P.Y(0.35), { stroke: C.amber, width: 2.5 }); g.dot(P.X(v.ell), P.Y(0.35), 5, { fill: C.amber }); g.text(P.X(1.6), P.Y(0.3), 'ε₁ε₂ (Ashkin–Teller L): marginal, y = 0', { size: 11, fill: C.amber }); } },
+      { lit: ['rule', 'bil', 'four'], caption: 'Same two layers, two couplings: y = 7/4 flows away from the Ising&sup2; POINT; y = 0 stays put and makes a LINE.', draw: function () {} }
+    ],
+    checks: { atMarginal: function (st) { return st.step === 2; } }
+  });
+  /* Two Ising layers with an on-site bilinear coupling (units of k_B T absorbed: K = J/T, g = coupling/T). */
+  CC.toy.models.bil = {
+    params: { K: 0.40, g: 0 }, sliders: { K: { min: 0, max: 0.8, step: 0.005, label: 'K (each layer)' }, g: { min: 0, max: 1.2, step: 0.01, label: 'g (&sigma;<sub>i</sub>&tau;<sub>i</sub>)' } },
+    alloc: function (N) { return new Int8Array(2 * N); },
+    init: function (s, rng) { for (var i = 0; i < s.length; i++) s[i] = rng() < 0.5 ? 1 : -1; },
+    sweep: function (s, nb, N, P, rng) {
+      for (var k = 0; k < 2 * N; k++) {
+        var i = (rng() * N) | 0, layer = rng() < 0.5 ? 0 : N, other = layer ? 0 : N, a = s[layer + i];
+        var su = s[layer + nb[4 * i]] + s[layer + nb[4 * i + 1]] + s[layer + nb[4 * i + 2]] + s[layer + nb[4 * i + 3]];
+        var dE = 2 * a * (P.K * su + P.g * s[other + i]);
+        if (dE <= 0 || rng() < Math.exp(-dE)) s[layer + i] = -a;
+      }
+    },
+    measure: function (s, nb, N, P) {
+      var e = 0, ms = 0, mt = 0, st = 0;
+      for (var i = 0; i < N; i++) { var a = s[i], b = s[N + i]; ms += a; mt += b; st += a * b;
+        e -= P.K * (a * (s[nb[4 * i]] + s[nb[4 * i + 2]]) + b * (s[N + nb[4 * i]] + s[N + nb[4 * i + 2]])) + P.g * a * b; }
+      return { e: e / N, m: Math.abs(ms) / N, m_tau: Math.abs(mt) / N, sigma_tau: st / N };
+    },
+    color: function (s, i, N) { var cols = [[59, 130, 246], [245, 158, 11], [34, 197, 94], [168, 85, 247]]; return cols[(s[i] > 0 ? 1 : 0) + (s[N + i] > 0 ? 2 : 0)]; }
+  };
+  CC.toy.lattice(q('bil-toy'), {
+    id: 'bil-toy', model: 'bil', seed: 5, label: 'Two Ising layers coupled on each site by g sigma tau: Monte Carlo toy',
+    checks: { locked: function (st) { return st.obs.sigma_tau > 0.9 && st.sweeps >= 50; } }
+  });
+})();
+
+/* ================================================================ 4 O(n1)+O(n2) mean field */
+(function () {
+  var el = q('onon'), u1 = 1, u2 = 1;
+  /* The phase at (r1, r2) is the candidate of lowest F; a candidate that is not a minimum has F = +Infinity. */
+  var PH = ['disordered', 'phase 1', 'phase 2', 'mixed'], PCOL = ['rgba(51,65,85,0.55)', 'rgba(245,158,11,0.55)', 'rgba(59,130,246,0.55)', 'rgba(34,197,94,0.6)'];
+  function cand(r1, r2, w) {
+    var D = u1 * u2 - w * w, a = -6 * (r1 * u2 - w * r2) / D, b = -6 * (u1 * r2 - w * r1) / D;
+    return [0, r1 < 0 ? -1.5 * r1 * r1 / u1 : Infinity, r2 < 0 ? -1.5 * r2 * r2 / u2 : Infinity, (D > 0 && a > 0 && b > 0) ? 0.25 * (r1 * a + r2 * b) : Infinity];
+  }
+  function phase(r1, r2, w) { var F = cand(r1, r2, w), k = 0; for (var i = 1; i < 4; i++) if (F[i] < F[k]) k = i; return k; }
+  function fill(g, P, w) { var n = 30; for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) { var r1 = -1 + 2 * (i + 0.5) / n, r2 = -1 + 2 * (j + 0.5) / n; var k = phase(r1, r2, w);
+      g.rect(P.X(-1 + 2 * i / n), P.Y(-1 + 2 * (j + 1) / n), P.X(-1 + 2 * (i + 1) / n) - P.X(-1 + 2 * i / n) + 0.5, P.Y(-1 + 2 * j / n) - P.Y(-1 + 2 * (j + 1) / n) + 0.5, { fill: PCOL[k] }); } }
+  CC.trace(el, {
+    id: 'onon', label: 'Mean-field phase diagram of O(n1)+O(n2) in the (r1, r2) plane: disordered, two ordered phases and possibly a mixed phase', height: 300,
+    eq: [{ t: 'r', html: '&frac12;r<sub>1</sub>&phi;<sub>1</sub><sup>2</sup> + &frac12;r<sub>2</sub>&phi;<sub>2</sub><sup>2</sup>' }, { html: '+' }, { t: 'u', html: '(u<sub>1</sub>(&phi;<sub>1</sub><sup>2</sup>)<sup>2</sup> + u<sub>2</sub>(&phi;<sub>2</sub><sup>2</sup>)<sup>2</sup>)/4!' }, { html: '+' }, { t: 'w', html: '2w&phi;<sub>1</sub><sup>2</sup>&phi;<sub>2</sub><sup>2</sup>/4!' }, { html: ';' }, { t: 'D', html: '&Delta; = u<sub>1</sub>u<sub>2</sub> &minus; w<sup>2</sup>' }],
+    vars: { w: { min: -1.6, max: 1.6, step: 0.01, init: 0.5, label: 'cross-coupling w (u<sub>1</sub> = u<sub>2</sub> = 1)' } },
+    base: function (g) { g = G(g);
+      var sz = Math.min(g.h - 40, g.w - 150), l = (g.w - sz) / 2;
+      g._P = { l: l, sz: sz, X: lin(-1, 1, l, l + sz), Y: lin(-1, 1, 12 + sz, 12) };
+    },
+    steps: [
+      { lit: ['r'], caption: 'The quadratic terms alone: each order parameter orders when its r turns negative. Two critical lines leave the origin.',
+        draw: function (g) { g = G(g); var P = g._P; g.rect(P.l, 12, P.sz, P.sz, { fill: 'rgba(51,65,85,0.35)' }); axes(g, P); } },
+      { lit: ['u'], caption: 'The quartic self-terms hold each order finite. With w = 0 the two orders ignore each other: the quadrants simply add.',
+        draw: function (g) { g = G(g); var P = g._P; fill(g, P, 0); axes(g, P); legend(g, P); } },
+      { lit: ['w'], caption: function (v) { return 'Now the cross-term w = ' + f(v.w, 2) + ': the orders help (w &lt; 0) or hinder (w &gt; 0) each other. Colours: the lowest of the four candidate minima at each point.'; },
+        draw: function (g, v) { g = G(g); var P = g._P; fill(g, P, v.w); axes(g, P); legend(g, P); } },
+      { lit: ['D'], caption: function (v) { var D = 1 - v.w * v.w; return '&Delta; = ' + f(D, 2) + (D > 0 ? ' &gt; 0: TETRACRITICAL. A mixed phase (green) sits between two critical lines; four lines meet.' : D < 0 ? ' &lt; 0: BICRITICAL. The orders exclude each other across a first-order flop line (white).' : ' = 0: the boundary case.'); },
+        draw: function (g, v) { g = G(g); var P = g._P; fill(g, P, v.w); axes(g, P); legend(g, P); if (1 - v.w * v.w < 0) g.line(P.X(0), P.Y(0), P.X(-1), P.Y(-1), { stroke: '#ffffff', width: 3 }); } }
+    ],
+    checks: { bicritical: function (st) { return 1 - st.vars.w * st.vars.w < 0; }, tetracritical: function (st) { return 1 - st.vars.w * st.vars.w > 0 && Math.abs(st.vars.w) > 0.05; } }
+  });
+  function axes(g, P) { g.line(P.X(-1), P.Y(0), P.X(1), P.Y(0), { cls: 'cc-axis' }); g.line(P.X(0), P.Y(-1), P.X(0), P.Y(1), { cls: 'cc-axis' });
+    g.text(P.X(1), P.Y(0) - 4, 'r₁', { anchor: 'end', size: 11 }); g.text(P.X(0) + 4, P.Y(1) + 10, 'r₂', { size: 11 });
+    g.line(P.X(0), P.Y(0), P.X(0), P.Y(1), { stroke: C.head, width: 2 }); g.line(P.X(0), P.Y(0), P.X(1), P.Y(0), { stroke: C.head, width: 2 }); }
+  function legend(g, P) { var x = P.l + P.sz + 8; [0, 1, 2, 3].forEach(function (k) { g.rect(x, 20 + 18 * k, 10, 10, { fill: PCOL[k] }); g.text(x + 14, 29 + 18 * k, PH[k], { size: 10.5 }); }); }
+})();
+
+/* ================================================================ 5 Blume–Capel */
+var BC_T = [[0, 1.693], [0.375, 1.6], [0.7101, 1.5], [0.9909, 1.4], [1.2242, 1.3], [1.4167, 1.2], [1.575, 1.1], [1.70258, 1.0], [1.8028, 0.9], [1.87879, 0.8], [1.93296, 0.7], [1.95273, 0.65], [1.966, 0.608]];
+var BC_1 = [[1.966, 0.608], [1.968174, 0.6], [1.987889, 0.5], [1.99683, 0.4], [2, 0]];
+var BC_TRI = { D: 1.966, T: 0.608 };
+(function () {
+  var el = q('bc-trace'), cfg = [[1, 1, 1, 0, -1, -1], [1, 1, 0, 0, -1, -1], [1, 1, 1, 0, 0, -1]];
+  function energy(D) { var eJ = 0, eD = 0, R = cfg.length, Cn = cfg[0].length;
+    for (var r = 0; r < R; r++) for (var c = 0; c < Cn; c++) { var s = cfg[r][c]; eD += s * s; if (c + 1 < Cn) eJ -= s * cfg[r][c + 1]; if (r + 1 < R) eJ -= s * cfg[r + 1][c]; }
+    return { eJ: eJ, eD: eD, E: eJ + D * eD }; }
+  var h = CC.trace(el, {
+    id: 'bc-trace', label: 'Blume-Capel energy: a small clickable lattice and the energy per site of the ordered and the empty state against Delta', height: 290,
+    eq: [{ html: 'H =' }, { t: 'bond', html: '&minus;J&Sigma;<sub>&lang;ij&rang;</sub>&sigma;<sub>i</sub>&sigma;<sub>j</sub>' }, { html: '+' }, { t: 'cf', html: '&Delta;&Sigma;<sub>i</sub>&sigma;<sub>i</sub><sup>2</sup>' }],
+    vars: { D: { min: 0, max: 3, step: 0.01, init: 1, label: '&Delta; (crystal field)' } },
+    base: function (g, v) { g = G(g);
+      var cs = g.w < 500 ? 26 : 30, x0 = 20, y0 = 14;
+      for (var r = 0; r < cfg.length; r++) for (var c = 0; c < cfg[0].length; c++) (function (r, c) {
+        var s = cfg[r][c], x = x0 + c * cs, y = y0 + r * cs;
+        var e = g.rect(x, y, cs - 3, cs - 3, { fill: s ? (s > 0 ? C.amber : C.blue) : '#0b1222', stroke: C.dim });
+        g.text(x + (cs - 3) / 2, y + cs / 2 + 2, s > 0 ? '+' : s < 0 ? '−' : '0', { anchor: 'middle', size: 12, fill: s ? '#0f172a' : C.muted });
+        e.style.cursor = 'pointer';
+        e.addEventListener('click', function () { cfg[r][c] = cfg[r][c] === 1 ? 0 : cfg[r][c] === 0 ? -1 : 1; h.render(); });
+      })(r, c);
+      var P = panel(g, 0, 3, -2.5, 1.5, 44 + (g.w < 500 ? 0 : 200), g.w - 12, 12 + (g.w < 500 ? 104 : 0), g.h - 30, { xt: [0, 1, 2, 3], yt: [-2, -1, 0, 1], xl: 'Δ', yl: 'energy per site (T = 0)' });
+      g._P = P; g._E = energy(v.D);
+      g.line(P.X(v.D), P.Y(-2.5), P.X(v.D), P.Y(1.5), { stroke: C.muted, dash: '3 3' });
+    },
+    steps: [
+      { lit: ['bond'], caption: function (v) { var e = energy(v.D); return 'Bond term of the little lattice: E<sub>J</sub> = ' + e.eJ + ' (each agreeing pair of magnets lowers it by J). For a fully ordered 2D lattice it is &minus;zJ/2 = &minus;2 per site.'; },
+        draw: function (g) { g = G(g); var P = g._P; P.curve(function () { return -2; }, 0, 3, 2, { stroke: C.amber, width: 2, dash: '5 3' }); g.text(P.X(0.1), P.Y(-2) - 5, 'ordered: bonds only', { size: 10, fill: C.amber }); } },
+      { lit: ['cf'], caption: function (v) { var e = energy(v.D); return 'Crystal field: every nonzero spin pays &Delta;. Here &Delta;&Sigma;&sigma;<sup>2</sup> = ' + f(v.D, 2) + ' &times; ' + e.eD + ' = ' + f(v.D * e.eD, 2) + '; the ordered state costs &minus;2 + &Delta; per site.'; },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(function (d) { return -2 + d; }, 0, 3, 2, { stroke: C.amber, width: 3 }); g.dot(P.X(v.D), P.Y(-2 + v.D), 5, { fill: C.amber }); } },
+      { lit: ['bond', 'cf'], caption: function (v) { var e = energy(v.D), d = -2 + v.D; return 'Little lattice: E = ' + e.eJ + ' + ' + f(v.D, 2) + '&times;' + e.eD + ' = ' + f(e.E, 2) + '. Per site at T = 0: ordered ' + f(d, 2) + ' vs empty 0, so ' + (Math.abs(d) < 0.03 ? 'they tie: &Delta;<sub>0</sub> = zJ/2 = 2, the end of the phase boundary.' : d < 0 ? 'the ordered state wins.' : 'the empty state wins.'); },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(function (d) { return -2 + d; }, 0, 3, 2, { stroke: C.amber, width: 3 }); P.curve(function () { return 0; }, 0, 3, 2, { stroke: C.muted, width: 2.5 }); g.text(P.X(0.1), P.Y(0) - 5, 'empty: 0', { size: 10, fill: C.muted }); g.dot(P.X(2), P.Y(0), 5, { fill: C.head }); g.text(P.X(2) + 6, P.Y(0) + 14, 'Δ₀ = 2', { size: 10.5, fill: C.head }); g.dot(P.X(v.D), P.Y(-2 + v.D), 5, { fill: C.amber }); } }
+    ],
+    checks: { atDelta0: function (st) { return Math.abs(st.vars.D - 2) < 0.03; } }
+  });
+})();
+(function () {
+  var pd = q('bc-pd'), toyEl = q('bc-toy'), cur = { D: 1.4, T: 1.3 }, toy;
+  var svg = S('svg', { viewBox: '0 0 520 300', role: 'img', 'aria-label': 'Blume-Capel phase diagram in the Delta-T plane: second-order line, first-order piece and tricritical point, with a draggable cursor', 'class': 'cc-svg', style: 'touch-action:none' });
+  pd.appendChild(svg); pd.classList.add('cc-graphic');
+  var read = E('p', { 'class': 'cc-readout', 'aria-live': 'polite' }); pd.appendChild(read);
+  var X = lin(0, 2.2, 50, 505), Y = lin(0, 1.9, 265, 12);
+  function Tb(D) { /* the boundary temperature at D, interpolated through the tabulated points (a lookup, both segments) */
+    var pts = BC_T.concat(BC_1.slice(1));
+    for (var i = 0; i < pts.length - 1; i++) if (D >= pts[i][0] && D <= pts[i + 1][0]) return pts[i][1] + (D - pts[i][0]) / (pts[i + 1][0] - pts[i][0]) * (pts[i + 1][1] - pts[i][1]);
+    return D < 0 ? 1.693 : -Infinity; }
+  var SIDE = { '1': 'F: ordered (±1 spins aligned)', '0': 'P: disordered or vacancy-rich' };
+  function draw() {
+    while (svg.lastChild) svg.removeChild(svg.lastChild);
+    S('line', { x1: X(0), y1: Y(0), x2: X(2.2), y2: Y(0), stroke: C.line }, svg); S('line', { x1: X(0), y1: Y(0), x2: X(0), y2: Y(1.9), stroke: C.line }, svg);
+    [0, 0.5, 1, 1.5, 2].forEach(function (v) { ST(svg, X(v), Y(0) + 15, String(v), { 'text-anchor': 'middle', 'font-size': 10, fill: C.muted }); });
+    [0, 0.5, 1, 1.5].forEach(function (v) { ST(svg, X(0) - 5, Y(v) + 3, String(v), { 'text-anchor': 'end', 'font-size': 10, fill: C.muted }); });
+    ST(svg, X(2.2), Y(0) + 30, 'Δ', { 'text-anchor': 'end' }); ST(svg, X(0) + 5, Y(1.9) + 10, 'T');
+    S('path', { d: BC_T.map(function (p, i) { return (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1); }).join(' '), stroke: C.amber, 'stroke-width': 3, fill: 'none' }, svg);
+    S('path', { d: BC_1.map(function (p, i) { return (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1); }).join(' '), stroke: C.amber, 'stroke-width': 3, fill: 'none', 'stroke-dasharray': '4 4' }, svg);
+    S('line', { x1: X(2), y1: Y(0), x2: X(2), y2: Y(1.9), stroke: C.dim, 'stroke-dasharray': '2 4' }, svg);
+    S('rect', { x: X(BC_TRI.D) - 5, y: Y(BC_TRI.T) - 5, width: 10, height: 10, fill: C.head, transform: 'rotate(45 ' + X(BC_TRI.D) + ' ' + Y(BC_TRI.T) + ')' }, svg);
+    ST(svg, X(1.25), Y(1.5), '2nd order (Ising)', { fill: C.amber }); ST(svg, X(1.95), Y(0.25), '1st order', { fill: C.amber, 'font-size': 10, 'text-anchor': 'end' });
+    ST(svg, X(1.92), Y(BC_TRI.T) + 2, 'tricritical', { 'text-anchor': 'end', fill: C.head, 'font-size': 10.5 });
+    ST(svg, X(0.35), Y(0.5), 'F', { 'font-size': 16, fill: C.head }); ST(svg, X(1.6), Y(1.6), 'P', { 'font-size': 16, fill: C.head });
+    ST(svg, X(2) + 3, Y(1.8), 'Δ₀ = 2', { 'font-size': 10, fill: C.muted });
+    var cx = X(Math.max(0, Math.min(2.2, cur.D))), cy = Y(Math.max(0, Math.min(1.9, cur.T)));
+    S('circle', { cx: cx, cy: cy, r: 8, fill: 'none', stroke: C.cyan, 'stroke-width': 2.5 }, svg); S('circle', { cx: cx, cy: cy, r: 2.5, fill: C.cyan }, svg);
+    var side = SIDE[cur.T < Tb(cur.D) ? '1' : '0'], dt = Math.hypot(cur.D - BC_TRI.D, (cur.T - BC_TRI.T));
+    read.innerHTML = 'cursor (&Delta;, T) = (' + f(cur.D, 3) + ', ' + f(cur.T, 3) + ') &middot; ' + side + ' &middot; tricritical point (1.9660(1), 0.6080(1)) is ' + f(dt, 3) + ' away';
+  }
+  function toData(e) { var r = svg.getBoundingClientRect(), s = Math.min(r.width / 520, r.height / 300), ox = (r.width - 520 * s) / 2, oy = (r.height - 300 * s) / 2;
+    var px = (e.clientX - r.left - ox) / s, py = (e.clientY - r.top - oy) / s; return { D: Math.max(0, Math.min(2.5, (px - 50) / 455 * 2.2)), T: Math.max(0.2, Math.min(3, (265 - py) / 253 * 1.9)) }; }
+  var down = false;
+  svg.addEventListener('pointerdown', function (e) { down = true; try { svg.setPointerCapture(e.pointerId); } catch (er) { /* ok */ } move(e); e.preventDefault(); });
+  svg.addEventListener('pointermove', function (e) { if (down) move(e); });
+  svg.addEventListener('pointerup', function () { down = false; }); svg.addEventListener('pointercancel', function () { down = false; });
+  function move(e) { var p = toData(e); cur.D = +p.D.toFixed(3); cur.T = +p.T.toFixed(3); if (toy) toy.set({ D: cur.D, T: cur.T }); draw(); }
+  toy = CC.toy.lattice(toyEl, { id: 'bc-toy', model: 'bc', params: { D: cur.D, T: cur.T }, seed: 3, label: 'Blume-Capel Monte Carlo toy: amber +1, blue -1, dark empty',
+    onParams: function (P) { cur.D = P.D; cur.T = P.T; draw(); }, checks: {} });
+  draw();
+  reg('bc-pd', { el: pd, state: function () { return { D: cur.D, T: cur.T }; }, checks: { atTricritical: function (st) { return Math.abs(st.D - BC_TRI.D) < 0.02 && Math.abs(st.T - BC_TRI.T) < 0.03; } } });
+})();
+
+/* ================================================================ 6 Potts */
+var XI = { 2: Infinity, 3: Infinity, 4: Infinity, 5: 2512.2, 6: 158.9, 7: 48.1, 8: 23.9, 9: 14.9, 10: 10.6 };
+(function () {
+  CC.trace(q('potts-xi'), {
+    id: 'potts-xi', label: 'Correlation length of the 2D Potts transition for q = 5 to 10 on a log scale, against your lattice size L', height: 260,
+    eq: [{ t: 'xi', html: '&xi;(q) ~ &xi;<sub>0</sub> exp(&pi;<sup>2</sup>/&radic;(q &minus; 4))' }, { html: 'versus' }, { t: 'L', html: 'your lattice L' }],
+    vars: { lg: { min: 3, max: 12, step: 0.05, init: 6, label: 'log<sub>2</sub> L' } },
+    base: function (g, v) { g = G(g); g._P = panel(g, 4.5, 10.5, 0, 4, 48, g.w - 12, 12, g.h - 34, { xt: [5, 6, 7, 8, 9, 10], yt: [0, 1, 2, 3, 4], yf: function (y) { return y === 0 ? '1' : '10' + ['', '', '²', '³', '⁴'][y]; }, xl: 'q', yl: 'ξ (lattice spacings)' }); },
+    steps: [
+      { lit: ['xi'], caption: 'The exact correlation lengths at the transition: 2512, 159, 48, 24, 15, 10.6. q = 4 would be infinite (continuous).',
+        draw: function (g, v) { g = G(g); bars(g, v, false); } },
+      { lit: ['L'], caption: function (v) { var L = Math.pow(2, v.lg), res = [5, 6, 7, 8, 9, 10].filter(function (qq) { return XI[qq] < L; }); return 'L = ' + Math.round(L) + '. Resolved as first order (L &gt; &xi;): ' + (res.length ? 'q = ' + res.join(', ') : 'none') + '. The rest look critical at this size.'; },
+        draw: function (g, v) { g = G(g); bars(g, v, true); } }
+    ],
+    checks: { resolves6not5: function (st) { var L = Math.pow(2, st.vars.lg); return L > XI[6] && L < XI[5]; } }
+  });
+  function bars(g, v, withL) {
+    var P = g._P, L = Math.pow(2, v.lg);
+    [5, 6, 7, 8, 9, 10].forEach(function (qq) { var y = Math.log10(XI[qq]), ok = withL && XI[qq] < L;
+      g.rect(P.X(qq - 0.3), P.Y(y), P.X(qq + 0.3) - P.X(qq - 0.3), P.Y(0) - P.Y(y), { fill: withL ? (ok ? C.green : C.purple) : C.purple, opacity: 0.85 });
+      g.text(P.X(qq), P.Y(y) - 4, String(XI[qq]), { anchor: 'middle', size: 10 }); });
+    if (withL) { var yl = Math.log10(L); g.line(P.X(4.5), P.Y(yl), P.X(10.5), P.Y(yl), { stroke: C.cyan, width: 2.5, dash: '6 3' }); g.text(P.X(10.45), P.Y(yl) - 5, 'L = ' + Math.round(L), { anchor: 'end', size: 11, fill: C.cyan }); }
+  }
+  var toy = CC.toy.lattice(q('potts-toy'), { id: 'potts-toy', model: 'potts', params: { q: 5, T: 0.8515 }, seed: 9, label: 'Potts Monte Carlo toy with an energy histogram',
+    checks: { qResolved: function (st) { var L = st.size, first = null; for (var qq = 2; qq <= 8; qq++) if (first === null && XI[qq] < L) first = qq; return st.params.q === first; } } });
+  var row = E('div', { 'class': 'ctl2' });
+  row.appendChild(btn('go to T_c(q)', function () { var qq = toy.state().params.q; toy.set({ T: +(1 / Math.log(1 + Math.sqrt(qq))).toFixed(4) }); }, 'potts-tc'));
+  q('potts-toy').appendChild(row);
+  CC.trace(q('potts-nu'), {
+    id: 'potts-nu', label: 'The drifting effective dimension and the drifting exponent nu against epsilon times ln of r over r0, for q = 5', height: 250,
+    eq: [{ t: 're', html: '&delta;<sub>&epsilon;</sub>(r) = Re&Delta;<sub>&epsilon;</sub>' }, { t: 'tan', html: '&minus; A tan(&epsilon; ln(r/r<sub>0</sub>)/&pi;)' }, { html: ';' }, { t: 'nu', html: '&nu;(r) = 1/(d &minus; &delta;<sub>&epsilon;</sub>(r))' }],
+    vars: { x: { min: -4, max: 4, step: 0.02, init: 0, label: '&epsilon; ln(r/r<sub>0</sub>)' } },
+    base: function (g, v) { g = G(g); g._P = panel(g, -4, 4, -1, 2.5, 44, g.w - 12, 12, g.h - 34, { xt: [-4, -2, 0, 2, 4], yt: [-1, 0, 1, 2], xl: 'ε ln(r/r₀)', yl: '' }); g.line(g._P.X(v.x), g._P.Y(-1), g._P.X(v.x), g._P.Y(2.5), { stroke: C.muted, dash: '3 3' }); },
+    steps: [
+      { lit: ['re'], caption: 'At the scale r<sub>0</sub> where the walking coupling crosses zero, the effective dimension is its real part (about 0.5 in Fig. 12).',
+        draw: function (g) { g = G(g); var P = g._P; P.curve(function () { return 0.5; }, -4, 4, 2, { stroke: C.muted, width: 2, dash: '5 3' }); } },
+      { lit: ['tan'], caption: function (v) { return 'Away from r<sub>0</sub> it drifts like a tangent: &delta;<sub>&epsilon;</sub> = ' + f(dl(v.x), 3) + ' here. There is no plateau to fit.'; },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(dl, -4, 4, 160, { stroke: C.purple, width: 2.5 }); g.dot(P.X(v.x), P.Y(dl(v.x)), 5, { fill: C.purple }); g.text(P.X(-3.9), P.Y(2.3), 'δ_ε(r)', { size: 11, fill: C.purple }); } },
+      { lit: ['nu'], caption: function (v) { var n = 1 / (2 - dl(v.x)); return 'The exponent you would fit at this scale: &nu;(r) = ' + (isFinite(n) && n > 0 ? f(n, 3) : '&mdash; (off scale)') + '. A different lattice size gives a different &ldquo;exponent&rdquo;.'; },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(dl, -4, 4, 160, { stroke: C.purple, width: 2 }); P.curve(function (x) { var d = 2 - dl(x); return d > 0.4 ? 1 / d : NaN; }, -4, 4, 160, { stroke: C.amber, width: 3 });
+          var n = 1 / (2 - dl(v.x)); if (n > 0 && n < 2.5) g.dot(P.X(v.x), P.Y(n), 5, { fill: C.amber }); g.text(P.X(3.9), P.Y(0.2), 'ν(r)', { size: 11, fill: C.amber, anchor: 'end' }); } }
+    ], checks: {}
+  });
+  function dl(x) { return 0.5 - 0.47 * Math.tan(x / PI); }
+})();
+
+/* ================================================================ 7 XXZ */
+(function () {
+  var spins = [1, 1, -1, 1, -1, -1, 1, 1, -1, 1];
+  var h = CC.trace(q('xxz-h'), {
+    id: 'xxz-h', label: 'An XXZ chain of ten spins: hopping arcs over antiparallel pairs, bond energies, and the phase regimes of Delta', height: 250,
+    eq: [{ t: 'J', html: 'H = &minus;J&Sigma;<sub>n</sub>[' }, { t: 'xy', html: 'S<sup>x</sup><sub>n</sub>S<sup>x</sup><sub>n+1</sub> + S<sup>y</sup><sub>n</sub>S<sup>y</sup><sub>n+1</sub>' }, { html: '+' }, { t: 'zz', html: '&Delta;S<sup>z</sup><sub>n</sub>S<sup>z</sup><sub>n+1</sub>' }, { html: ']' }, { t: 'h', html: '&minus; 2h&Sigma;<sub>n</sub>S<sup>z</sup><sub>n</sub>' }],
+    vars: { D: { min: -2, max: 2, step: 0.01, init: 0.5, label: '&Delta;' }, hh: { min: 0, max: 1.5, step: 0.01, init: 0, label: 'h (J = 1)' } },
+    base: function (g, v) { g = G(g);
+      var n = spins.length, dx = (g.w - 40) / n, y = 70;
+      g._sx = function (i) { return 20 + dx * (i + 0.5); }; g._y = y;
+      spins.forEach(function (s, i) { var x = g._sx(i);
+        var e = g.add('path', { d: s > 0 ? 'M' + x + ' ' + (y + 18) + ' L' + x + ' ' + (y - 16) + ' M' + (x - 7) + ' ' + (y - 8) + ' L' + x + ' ' + (y - 17) + ' L' + (x + 7) + ' ' + (y - 8) : 'M' + x + ' ' + (y - 18) + ' L' + x + ' ' + (y + 16) + ' M' + (x - 7) + ' ' + (y + 8) + ' L' + x + ' ' + (y + 17) + ' L' + (x + 7) + ' ' + (y + 8) }, { stroke: s > 0 ? C.amber : C.blue, width: 3, fill: 'none' });
+        var hit = g.rect(x - dx / 2 + 2, y - 24, dx - 4, 48, { fill: 'transparent' }); hit.style.cursor = 'pointer';
+        hit.addEventListener('click', function () { spins[i] = -spins[i]; h.render(); }); });
+      var X = lin(-2, 2, 30, g.w - 20), yb = 200; g._X = X; g._yb = yb;
+    },
+    steps: [
+      { lit: ['xy'], caption: function () { var k = pairs().anti; return 'XX + YY = &frac12;(S<sup>+</sup>S<sup>&minus;</sup> + S<sup>&minus;</sup>S<sup>+</sup>): it swaps an antiparallel neighbour pair, so an up spin hops. This configuration has ' + k + ' hoppable pairs (arcs). Click spins to change it.'; },
+        draw: function (g) { g = G(g); arcs(g); } },
+      { lit: ['zz'], caption: function (v) { var p = pairs(); return 'The &Delta;ZZ term only looks: each bond contributes &minus;J&Delta;S<sup>z</sup>S<sup>z</sup> = &mp;&Delta;/4. Here ' + p.par + ' parallel and ' + p.anti + ' antiparallel bonds give &minus;J&Delta;&Sigma;S<sup>z</sup>S<sup>z</sup> = ' + f(-v.D * (p.par - p.anti) / 4, 3) + ' (periodic chain).'; },
+        draw: function (g, v) { g = G(g); arcs(g); bonds(g, v); } },
+      { lit: ['J'], caption: function (v) { return 'With the overall minus sign, &Delta; &gt; 0 favours parallel spins along z and &Delta; &lt; 0 alternating ones. &Delta; = ' + f(v.D, 2) + ': ' + regimeX(v.D) + '.'; },
+        draw: function (g, v) { g = G(g); arcs(g); bonds(g, v); line(g, v); } },
+      { lit: ['h'], caption: function (v) { var hs = 0.5 * (1 - v.D); return 'The field term tilts the balance toward up spins. The critical phase survives up to the saturation field h<sub>s</sub> = (J/2)(1 &minus; &Delta;)' + (v.D < 1 && v.D > -1 ? ' = ' + f(hs, 3) + '; h = ' + f(v.hh, 2) + (v.hh < hs ? ' is below it.' : ' is above it: fully polarised.') : ' (defined inside the critical range).'); },
+        draw: function (g, v) { g = G(g); arcs(g); bonds(g, v); line(g, v); } }
+    ],
+    checks: { critical: function (st) { return Math.abs(st.vars.D) < 1; } }
+  });
+  function pairs() { var par = 0, anti = 0, n = spins.length; for (var i = 0; i < n; i++) { if (spins[i] === spins[(i + 1) % n]) par++; else anti++; } return { par: par, anti: anti }; }
+  function arcs(g) { var n = spins.length; for (var i = 0; i < n - 1; i++) if (spins[i] !== spins[i + 1]) { var a = g._sx(i), b = g._sx(i + 1), y = g._y - 26; g.path('M' + a + ' ' + y + ' Q' + (a + b) / 2 + ' ' + (y - 22) + ' ' + b + ' ' + y, { stroke: C.green, width: 2 }); } }
+  function bonds(g, v) { var n = spins.length; for (var i = 0; i < n - 1; i++) { var par = spins[i] === spins[i + 1], e = -v.D * (par ? 1 : -1) / 4; g.rect(g._sx(i) + 6, g._y + 26, g._sx(i + 1) - g._sx(i) - 12, 8, { fill: e < 0 ? C.green : e > 0 ? C.red : C.dim }); } g.text(20, g._y + 50, 'bond energy −JΔS^zS^z: green lowers, red raises', { size: 10, fill: C.muted }); }
+  var RX = { '1': 'gapped ferromagnet', '0': 'critical: gapless, c = 1', '-1': 'gapped Néel antiferromagnet' };
+  function regimeX(D) { return D === 1 ? 'the isotropic ferromagnet (end of the line)' : D === -1 ? 'the isotropic antiferromagnet, the BKT-type end' : RX[String((D > 1) - (D < -1))]; }
+  function line(g, v) { var X = g._X, y = g._yb;
+    g.rect(X(-1), y - 12, X(1) - X(-1), 24, { fill: 'rgba(245,158,11,0.2)' }); g.line(X(-2), y, X(2), y, { stroke: C.line });
+    [-2, -1, 0, 1, 2].forEach(function (t) { g.line(X(t), y - 5, X(t), y + 5, { stroke: C.line }); g.text(X(t), y + 20, String(t), { anchor: 'middle', size: 10 }); });
+    g.text(X(-1.5), y - 18, 'Néel (gapped)', { anchor: 'middle', size: 10 }); g.text(X(0), y - 18, 'critical line', { anchor: 'middle', size: 10.5, fill: C.amber }); g.text(X(1.5), y - 18, 'ferro (gapped)', { anchor: 'middle', size: 10 });
+    g.text(X(-1), y + 34, 'BKT-type end', { anchor: 'middle', size: 9.5, fill: C.purple });
+    g.dot(X(v.D), y, 6, { fill: C.head }); }
+})();
+vertexBuilder('vb6', 'six');
+(function () {
+  function Kof(D) { return PI / (2 * Math.acos(D)); }
+  CC.trace(q('xxz-x'), {
+    id: 'xxz-x', label: 'Along the XXZ critical line: the Luttinger parameter K and the scaling dimensions of the transverse and staggered spin operators against Delta', height: 260,
+    eq: [{ t: 'gam', html: '&Delta; = &minus;cos &gamma;' }, { html: '&rArr;' }, { t: 'K', html: 'K = &pi;/(2(&pi; &minus; &gamma;))' }, { html: '&rArr;' }, { t: 'm', html: 'x<sub>m,n</sub> = m<sup>2</sup>/(4K)' }, { t: 'n', html: '+ n<sup>2</sup>K' }],
+    vars: { D: { min: -1, max: 0.95, step: 0.01, init: 0, label: '&Delta; (Franchini&rsquo;s sign)' } },
+    base: function (g, v) { g = G(g); g._P = panel(g, -1, 1, 0, 3, 44, g.w - 12, 12, g.h - 34, { xt: [-1, -0.5, 0, 0.5, 1], yt: [0, 1, 2, 3], xl: 'Δ', yl: '' }); var P = g._P; g.line(P.X(v.D), P.Y(0), P.X(v.D), P.Y(3), { stroke: C.muted, dash: '3 3' });
+      g.text(P.X(-1) + 2, P.Y(2.8), 'BKT-type end', { size: 9.5, fill: C.purple }); g.text(P.X(1) - 2, P.Y(2.8), 'ferromagnet', { size: 9.5, anchor: 'end', fill: C.muted }); },
+    steps: [
+      { lit: ['gam'], caption: function (v) { var gm = Math.acos(-v.D); return 'Inside the critical range write &Delta; = &minus;cos &gamma;: here &gamma; = ' + f(gm / PI, 3) + '&pi;. &gamma; &rarr; 0 at &Delta; = &minus;1, &gamma; = &pi;/2 at the free-fermion point, &gamma; &rarr; &pi; at &Delta; = +1.'; },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(function (d) { return Math.acos(-d) / PI * 2; }, -1, 0.999, 100, { stroke: C.muted, width: 2 }); g.dot(P.X(v.D), P.Y(Math.acos(-v.D) / PI * 2), 4, { fill: C.muted }); g.text(P.X(-0.95), P.Y(0.3), '2γ/π', { size: 10, fill: C.muted }); } },
+      { lit: ['K'], caption: function (v) { return 'The Luttinger parameter K = ' + f(Kof(v.D), 3) + ' (1/2 at &Delta; = &minus;1, 1 at &Delta; = 0, growing without bound toward &Delta; = +1).'; },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(Kof, -1, 0.999, 160, { stroke: C.cyan, width: 2.5 }); g.dot(P.X(v.D), P.Y(Math.min(3, Kof(v.D))), 5, { fill: C.cyan }); g.text(P.X(0.35), P.Y(Kof(0.35)) - 6, 'K', { size: 11, fill: C.cyan }); } },
+      { lit: ['m'], caption: function (v) { return 'Transverse spin (m = 1, n = 0): x = 1/(4K) = ' + f(1 / (4 * Kof(v.D)), 3) + ', correlations ~ r<sup>&minus;1/(2K)</sup>.'; },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(Kof, -1, 0.999, 160, { stroke: C.cyan, width: 1.5 }); P.curve(function (d) { return 1 / (4 * Kof(d)); }, -1, 0.999, 160, { stroke: C.green, width: 2.5 }); g.dot(P.X(v.D), P.Y(1 / (4 * Kof(v.D))), 5, { fill: C.green }); g.text(P.X(-0.9), P.Y(0.62), 'x₁,₀', { size: 11, fill: C.green }); } },
+      { lit: ['n'], caption: function (v) { var K = Kof(v.D); return 'Staggered S<sup>z</sup> (n = 1): x = K = ' + f(K, 3) + ', correlations ~ r<sup>&minus;2K</sup>. The exponents move with &Delta;; the marginal operator stays at dimension 2 all along the line.'; },
+        draw: function (g, v) { g = G(g); var P = g._P; P.curve(function (d) { return 1 / (4 * Kof(d)); }, -1, 0.999, 160, { stroke: C.green, width: 2 }); P.curve(Kof, -1, 0.999, 160, { stroke: C.amber, width: 2.5 }); P.curve(function () { return 2; }, -1, 1, 2, { stroke: C.purple, width: 2, dash: '5 3' });
+          g.dot(P.X(v.D), P.Y(Math.min(3, Kof(v.D))), 5, { fill: C.amber }); g.text(P.X(0.98), P.Y(2) - 5, 'marginal: 2', { size: 10, fill: C.purple, anchor: 'end' }); g.text(P.X(-0.6), P.Y(Kof(-0.6)) + 14, 'x₀,₁ = K', { size: 11, fill: C.amber }); } }
+    ],
+    checks: { interior: function (st) { return Math.abs(st.vars.D) <= 0.8; } }
+  });
+})();
+
+/* ================================================================ 8 adaptive network (Sormunen, Gross & Saramäki 2023) */
+(function () {
+  var el = q('sorm-toy'), N = 200, R = { beta: 0.7, delta: 0.95, gamma: 0.4, l: 0.05, g: 2e-4, eta: 2.5e-4 }, dt = 0.05;
+  var LSTAR = R.delta / R.beta + (R.delta + R.gamma / 2) / (R.delta + R.gamma);
+  var net, series, running = false, raf = null, nextSample = 0;
+  function make() {
+    var rng = CC.core.mulberry32(2023), out = [], inn = [], st = new Int8Array(N), nx = new Int8Array(N), M = 0, t = 0, x = new Float64Array(N).fill(1), y = new Float64Array(N);
+    for (var i = 0; i < N; i++) { out.push([]); inn.push([]); }
+    function add(a, b) { if (a === b || out[a].indexOf(b) >= 0) return; out[a].push(b); inn[b].push(a); M++; }
+    while (M < N) add((rng() * N) | 0, (rng() * N) | 0);
+    for (i = 0; i < N; i++) st[i] = rng() < 0.05 ? 1 : 0;
+    var pB = 1 - Math.exp(-R.beta * dt), pD = 1 - Math.exp(-R.delta * dt), pG = 1 - Math.exp(-R.gamma * dt), pE = 1 - Math.exp(-R.eta * dt), pL = 1 - Math.exp(-R.l * dt), lam = R.g * N * dt;
+    function step() {
+      nx.set(st);
+      for (var i = 0; i < N; i++) { var s = st[i];
+        if (s === 1) { var o = out[i]; for (var k = 0; k < o.length; k++) { var j = o[k]; if (st[j] === 0 && nx[j] === 0 && rng() < pB) nx[j] = 1; }
+          if (rng() < pD) nx[i] = 2;
+          if (inn[i].length && rng() < pL) { var r = (rng() * inn[i].length) | 0, a = inn[i][r]; inn[i].splice(r, 1); out[a].splice(out[a].indexOf(i), 1); M--; } }
+        else if (s === 2) { if (rng() < pG) nx[i] = 0; }
+        else if (rng() < pE) nx[i] = 1; }
+      st.set(nx);
+      var u = rng(), p = Math.exp(-lam), cum = p, na = 0; while (u > cum && na < 10) { na++; p *= lam / na; cum += p; }
+      for (var m = 0; m < na; m++) add((rng() * N) | 0, (rng() * N) | 0);
+      t += dt;
+    }
+    function lambda1() { for (var it = 0; it < 60; it++) { var s0 = 0, s1 = 0; for (var j = 0; j < N; j++) { var v = x[j], ii = inn[j]; for (var k = 0; k < ii.length; k++) v += x[ii[k]]; y[j] = v; s1 += v; s0 += x[j]; } var ev = s1 / s0; for (j = 0; j < N; j++) x[j] = y[j] / s1 * N; if (it === 59) return ev - 1; } return 0; }
+    function rho() { var sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0; for (var i = 0; i < N; i++) { var a = inn[i].length, b = out[i].length; sx += a; sy += b; sxx += a * a; syy += b * b; sxy += a * b; } var cx = sxx / N - (sx / N) * (sx / N), cy = syy / N - (sy / N) * (sy / N); return cx > 0 && cy > 0 ? (sxy / N - sx * sy / N / N) / Math.sqrt(cx * cy) : 0; }
+    return { step: step, lambda1: lambda1, rho: rho, st: st, out: out, get t() { return t; }, get k() { return M / N; } };
+  }
+  var row = E('div', { 'class': 'row' }), cvNet = E('canvas', { role: 'img', 'aria-label': 'The network: 200 nodes on a ring coloured by state, with its links' }), cvTs = E('canvas', { role: 'img', 'aria-label': 'Time series of the leading eigenvalue and the mean degree against the threshold' });
+  row.appendChild(cvNet); row.appendChild(cvTs); el.appendChild(row);
+  var read = E('p', { 'class': 'cc-readout', 'aria-live': 'off' }); el.appendChild(read);
+  var ctl = E('div', { 'class': 'cc-ctl' }); el.appendChild(ctl);
+  var runB = null;
+  if (!reduced()) { runB = btn('Run', function () { running ? pause() : run(); }, 'run'); runB.classList.add('cc-primary'); ctl.appendChild(runB); }
+  ctl.appendChild(btn(reduced() ? 'Step (+1000 time units)' : 'Step (+200 time units)', function () { advance(reduced() ? 1000 : 200); paint(); }, 'step'));
+  ctl.appendChild(btn('Reset', function () { pause(); reset(); }, 'reset'));
+  var dpr = Math.min(2, window.devicePixelRatio || 1), W1, W2, H = 190;
+  function layout() { var w = el.clientWidth || 600, nar = w < 520; W1 = nar ? Math.min(w - 2, 300) : 200; W2 = nar ? Math.min(w - 2, 400) : Math.max(200, w - W1 - 14); H = nar ? 170 : 200;
+    [[cvNet, W1, nar ? 170 : H], [cvTs, W2, H]].forEach(function (a) { a[0].style.width = a[1] + 'px'; a[0].style.height = a[2] + 'px'; a[0].width = Math.round(a[1] * dpr); a[0].height = Math.round(a[2] * dpr); }); }
+  function reset() { net = make(); series = []; nextSample = 0; sample(); paint(); }
+  function sample() { series.push([net.t, net.lambda1(), net.k, net.rho()]); if (series.length > 600) series.shift(); nextSample = net.t + 50; }
+  function advance(T) { var end = net.t + T; while (net.t < end) { net.step(); if (net.t >= nextSample) sample(); } }
+  function paint() {
+    var c = cvNet.getContext('2d'), w = cvNet.width, hh = cvNet.height, cx = w / 2, cy = hh / 2, rad = Math.min(w, hh) / 2 - 8 * dpr;
+    c.clearRect(0, 0, w, hh);
+    var pos = function (i) { var a = 2 * PI * i / N; return [cx + rad * Math.cos(a), cy + rad * Math.sin(a)]; };
+    c.strokeStyle = 'rgba(148,163,184,0.12)'; c.lineWidth = dpr; c.beginPath();
+    for (var i = 0; i < N; i++) { var o = net.out[i], p = pos(i); for (var k = 0; k < o.length; k++) { var qq = pos(o[k]); c.moveTo(p[0], p[1]); c.lineTo(qq[0], qq[1]); } }
+    c.stroke();
+    var col = ['#64748b', '#f59e0b', '#3b82f6'];
+    for (i = 0; i < N; i++) { var pp = pos(i); c.fillStyle = col[net.st[i]]; c.beginPath(); c.arc(pp[0], pp[1], 2.4 * dpr, 0, 2 * PI); c.fill(); }
+    var t = cvTs.getContext('2d'), W = cvTs.width, Hh = cvTs.height, l = 34 * dpr, b = 20 * dpr, tp = 8 * dpr;
+    t.clearRect(0, 0, W, Hh);
+    var tmax = Math.max(10000, net.t), yx = function (v) { return Hh - b - (v - 0.8) / (3.2 - 0.8) * (Hh - b - tp); }, xx = function (s) { return l + s / tmax * (W - l - 6 * dpr); };
+    t.strokeStyle = '#94a3b8'; t.lineWidth = dpr; t.beginPath(); t.moveTo(l, tp); t.lineTo(l, Hh - b); t.lineTo(W, Hh - b); t.stroke();
+    t.fillStyle = '#64748b'; t.font = (10 * dpr) + 'px system-ui, sans-serif';
+    [1, 2, 3].forEach(function (v) { t.fillText(String(v), 6 * dpr, yx(v) + 3 * dpr); });
+    t.fillText('t = ' + Math.round(tmax), W - 70 * dpr, Hh - 5 * dpr);
+    t.setLineDash([5 * dpr, 4 * dpr]); t.strokeStyle = '#06b6d4'; t.beginPath(); t.moveTo(l, yx(LSTAR)); t.lineTo(W, yx(LSTAR)); t.stroke(); t.setLineDash([]);
+    t.fillStyle = '#06b6d4'; t.fillText('λ₁* = 2.21', l + 4 * dpr, yx(LSTAR) - 4 * dpr);
+    [[1, '#f59e0b', 'λ₁'], [2, '#3b82f6', '⟨k⟩']].forEach(function (s, n) { t.strokeStyle = s[1]; t.lineWidth = 1.8 * dpr; t.beginPath(); series.forEach(function (p, i) { var X = xx(p[0]), Y = yx(Math.max(0.8, Math.min(3.2, p[s[0]]))); if (i) t.lineTo(X, Y); else t.moveTo(X, Y); }); t.stroke(); t.fillStyle = s[1]; t.fillText(s[2], W - 40 * dpr, tp + 12 * dpr * (n + 1)); });
+    var last = series[series.length - 1] || [0, 0, 0, 0], fir = 0; for (i = 0; i < N; i++) if (net.st[i] === 1) fir++;
+    read.textContent = 't ' + Math.round(net.t) + ' · ⟨k⟩ ' + f(net.k, 3) + ' · λ₁ ' + f(last[1], 3) + ' (threshold λ₁* ' + f(LSTAR, 2) + ') · firing ' + fir + '/' + N + ' · in/out-degree correlation ρ ' + f(last[3], 3);
+  }
+  function frame() { raf = null; if (!running) return; var t0 = performance.now(); do { advance(10); } while (performance.now() - t0 < 12); paint(); raf = requestAnimationFrame(frame); }
+  function run() { if (reduced() || running) return; running = true; if (runB) runB.textContent = 'Pause'; raf = requestAnimationFrame(frame); }
+  function pause() { running = false; if (runB) runB.textContent = 'Run'; if (raf) { cancelAnimationFrame(raf); raf = null; } }
+  layout(); reset();
+  window.addEventListener('resize', function () { layout(); paint(); });
+  reg('sorm-toy', { el: el, state: function () { var last = series[series.length - 1] || [0, 0, 0, 0]; return { t: net.t, k: net.k, lambda1: last[1], rho: last[3], running: running }; },
+    checks: { ranLong: function (st) { return st.t >= 8000; } } });
+})();
+(function () {
+  CC.trace(q('sorm-lam'), {
+    id: 'sorm-lam', label: 'The critical threshold lambda1 star as a stacked bar of its two terms, against the default value 2.21', height: 170,
+    eq: [{ t: 'ind', html: '&lambda;<sub>1</sub>* = &delta;/&beta;' }, { t: 'pair', html: '+ (&delta; + &gamma;/2)/(&delta; + &gamma;)' }],
+    vars: { beta: { min: 0.2, max: 2, step: 0.01, init: 0.7, label: '&beta; (excite)' }, delta: { min: 0.2, max: 2, step: 0.01, init: 0.95, label: '&delta; (stop firing)' }, gamma: { min: 0.05, max: 2, step: 0.01, init: 0.4, label: '&gamma; (recover)' } },
+    base: function (g) { g = G(g); var X = lin(0, 6, 20, g.w - 20); g._X = X; g.line(X(0), 110, X(6), 110, { cls: 'cc-axis' }); [0, 1, 2, 3, 4, 5, 6].forEach(function (v) { g.text(X(v), 126, String(v), { anchor: 'middle', size: 10, cls: 'cc-tick' }); });
+      g.line(X(2.21), 30, X(2.21), 110, { stroke: C.cyan, dash: '4 3' }); g.text(X(2.21) + 4, 26, 'paper: 2.21', { size: 10, fill: C.cyan }); },
+    steps: [
+      { lit: ['ind'], caption: function (v) { return 'Independent-node estimate &delta;/&beta; = ' + f(v.delta / v.beta, 3) + ': a firing node must excite about one neighbour before it stops.'; },
+        draw: function (g, v) { g = G(g); var X = g._X, a = Math.min(6, v.delta / v.beta); g.rect(X(0), 60, X(a) - X(0), 30, { fill: C.amber }); } },
+      { lit: ['pair'], caption: function (v) { var a = v.delta / v.beta, b = (v.delta + v.gamma / 2) / (v.delta + v.gamma); return 'Pair-approximation correction ' + f(b, 3) + '; total &lambda;<sub>1</sub>* = ' + f(a + b, 3) + '.'; },
+        draw: function (g, v) { g = G(g); var X = g._X, a = Math.min(6, v.delta / v.beta), b = (v.delta + v.gamma / 2) / (v.delta + v.gamma); g.rect(X(0), 60, X(a) - X(0), 30, { fill: C.amber }); g.rect(X(a), 60, X(Math.min(6, a + b)) - X(a), 30, { fill: C.blue }); g.text(X(Math.min(5.6, a + b)) + 4, 80, f(a + b, 2), { size: 11, fill: C.head }); } }
+    ],
+    checks: { below2: function (st) { var v = st.vars; return v.delta / v.beta + (v.delta + v.gamma / 2) / (v.delta + v.gamma) < 2; } }
+  });
+})();
+
+/* ================================================================ 9 gallery table */
+(function () {
+  var el = q('cheat');
+  var rows = [
+    ['LINE', 'Ashkin–Teller', 'LINE: α/ν varies with position', 'primary LINE control; Navigator test bed', 'self-dual line and exponents exact', 'Potts-end logs; pseudo first order', 'yes'],
+    ['LINE', 'Baxter eight-vertex', 'LINE (exactly solved)', 'scoring-side cross-check', 'full exact solution (literature)', 'a vertex model: hard to simulate', 'builder'],
+    ['POINT', 'Coupled Ising (bilinear g)', 'two POINTs at g = 0; one POINT expected at g ≠ 0', 'the contrast to AT; multivariate rung', 'Ising values at g = 0', 'relevant coupling: the line collapses', 'yes'],
+    ['multi', 'O(n₁)⊕O(n₂)', 'bicritical or tetracritical point', 'two order parameters meeting', 'mean field; high-order series', 'crossover plateaus (FFXY: ν ≈ 0.8)', 'mean field'],
+    ['multi', 'Blume–Capel', 'tricritical point; Ising line; first-order decoy', 'two relevant directions', 'location to 4 digits', 'first-order line read as LINE; crossover', 'yes'],
+    ['WALKING', 'Potts q = 5, 6', 'WALKING (weak first order)', 'walking controls', 'exact ξ, latent heat, complex c', 'ξ ≫ L: looks critical', 'yes'],
+    ['LINE', 'XXZ / six-vertex', 'LINE, |Δ| < 1, c = 1', 'second LINE mechanism; use the interior', 'Bethe ansatz: K(Δ)', 'BKT-type end at Δ = −1', 'builder'],
+    ['drift', 'Adaptive networks', 'one universality class, drifting structure', 'Navigator test bed (blinded rule)', 'λ₁* (pair approximation)', 'no exponent signal of position', 'yes']
+  ];
+  var bar = E('div', { 'class': 'filters', role: 'group', 'aria-label': 'filter by geometry' }), filter = 'all';
+  ['all', 'LINE', 'POINT', 'WALKING', 'multi', 'drift'].forEach(function (k) {
+    var b = E('button', { type: 'button', 'aria-pressed': k === 'all' ? 'true' : 'false' }); b.textContent = k === 'multi' ? 'multicritical' : k;
+    b.addEventListener('click', function () { filter = k; Array.prototype.forEach.call(bar.children, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); paint(); });
+    bar.appendChild(b);
+  });
+  var wrap = E('div', { 'class': 'tbl' }), tb = E('tbody');
+  var table = E('table'); table.innerHTML = '<thead><tr><th>model</th><th>geometry</th><th>role for the Compass</th><th>exact truth</th><th>what breaks it</th><th>live here</th></tr></thead>';
+  table.appendChild(tb); wrap.appendChild(table);
+  el.appendChild(bar); el.appendChild(wrap);
+  function paint() { tb.innerHTML = ''; rows.forEach(function (r) { var tr = E('tr', { 'class': filter === 'all' || filter === r[0] ? '' : 'dimrow' }); r.slice(1).forEach(function (c) { var td = E('td'); td.textContent = c; tr.appendChild(td); }); tb.appendChild(tr); }); }
+  paint();
+  reg('cheat', { el: el, state: function () { return { filter: filter }; }, checks: {} });
+})();
+
+CC.init({ page: 'models', bank: window.CC_BANKS.models, accent: '#f59e0b' });
+})();
+</script>
+<script src="../../../js/annex-tracker.js"></script>
+</body>
+</html>
