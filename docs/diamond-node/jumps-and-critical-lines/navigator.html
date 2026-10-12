@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==== PHYSICS EDITORIAL STANDARD - read before editing any claim in this file ====
+  Every physics claim here is held to one standard:
+    precluded     = a specific law or theorem prohibits it.  NAME THE LAW.
+    not precluded = no known law prohibits it. It may be undemonstrated, unlikely, or need many
+                    unverified steps - but physics does not forbid it.
+  "No one has done this" is an engineering status report, NOT a physics argument. Do not convert
+  one into the other. "Not precluded" is weaker than "plausible" and much weaker than "supported".
+
+  Structural analogies (e.g. anyon fusion algebra <-> RAF closure criteria) must STAY labelled as
+  structural analogies. Never upgrade one to "proven", "identical" or "equivalent" without a proof.
+                                                               doi:10.1016/j.jtbi.2003.11.020
+
+  Traps specific to this page and its companion (index.html):
+    J1  The toy model (Schlogl scheme) is a cusp BY CONSTRUCTION. It demonstrates the procedures,
+        not the hypothesis.                                    doi:10.1007/BF01379769
+    J2  No slowing is not no transition. A structural jump is still a jump, just not a followable one.
+                                                               doi:10.1111/j.1461-0248.2010.01439.x
+    J3  Sharp is not first-order. A sharp RAF onset in simulation says nothing about thermodynamic order.
+                                                               doi:10.1016/j.biosystems.2016.12.002
+    J4  The RAF threshold is a line in (n, f); the per-pair probability p is NOT proportional to 1/n.
+                                                               doi:10.3390/ijms12053085
+    J5  A heavy tail at one n is not a critical signature; the signature is exponents stable across n.
+    J6  A rising indicator is not a forecast; false alarms are common.   doi:10.1098/rsif.2012.0125
+==== end physics editorial standard ==== -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Bracket a jump in a two-control plane, follow the line of jumps, and find the cusp where the jump shrinks to zero. Interactive procedure.">
+<title>Walking the Line of Jumps to Its End</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="Walking the Line of Jumps to Its End">
+<meta property="og:description" content="Bracket a jump in a two-control plane, follow the line of jumps, and find the cusp where the jump shrinks to zero. Interactive procedure.">
+<meta property="og:url" content="https://energyscholar.github.io/web-annex/diamond-node/jumps-and-critical-lines/navigator.html">
+<meta property="og:image" content="https://energyscholar.github.io/web-annex/art/og/diamond-node.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://energyscholar.github.io/web-annex/art/og/diamond-node.png">
+<style>
+:root {
+  --bg: #0f172a; --card: #1e293b; --text: #cbd5e1; --heading: #f1f5f9;
+  --muted: #475569; --line: #94a3b8; --dim: #334155;
+  --red: #ef4444; --blue: #3b82f6; --green: #22c55e; --amber: #f59e0b;
+  --purple: #a855f7; --cyan: #06b6d4; --pink: #ec4899;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+h1, h2, h3 { font-family: 'Times New Roman', Georgia, serif; color: var(--heading); font-weight: 600; }
+h1 { font-size: 2.3rem; line-height: 1.15; text-align: center; margin-bottom: 0.3rem; }
+.subtitle { text-align: center; color: var(--line); font-size: 1.05rem; margin-bottom: 2rem; font-style: italic; font-family: Georgia, serif; }
+h2 { font-size: 1.6rem; margin: 3rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.15rem; margin: 1.2rem 0 0.5rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; }
+.viz { width: 100%; margin: 1rem 0; border-radius: 12px; overflow: hidden; background: var(--card); border: 1px solid var(--dim); }
+.viz canvas { width: 100%; display: block; }
+.viz-label { text-align: center; padding: 0.5rem 1rem 0; font-size: 0.78rem; color: var(--line); font-weight: 600; }
+.hyp { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0 1.2rem; }
+.hyp p:last-child { margin-bottom: 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 0.6rem 0 1.2rem; }
+th, td { border-bottom: 1px solid var(--dim); padding: 0.4rem 0.45rem; text-align: left; vertical-align: top; }
+th { color: var(--heading); }
+ol.tests, ul.cr { padding-left: 1.3rem; margin-bottom: 1rem; font-size: 0.95rem; }
+.cr2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 640px) { .cr2 { grid-template-columns: 1fr; } }
+.panel { background: var(--card); border: 1px solid var(--dim); border-left: 3px solid var(--purple); border-radius: 12px; padding: 1rem 1rem 1.2rem; margin: 1.2rem 0; }
+.controls { display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; align-items: center; margin: 0.4rem 0 0.6rem; font-size: 0.88rem; }
+.controls label { color: var(--line); font-weight: 600; }
+button, select, input[type="number"] { background: var(--bg); border: 1px solid var(--dim); color: var(--heading); font: inherit; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 6px; }
+button { cursor: pointer; }
+button:hover { border-color: var(--amber); color: var(--amber); }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+input[type="number"] { width: 4.5rem; }
+input[type="range"] { flex: 1 1 160px; min-width: 120px; accent-color: var(--purple); }
+.readout { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--heading); background: var(--bg); border: 1px solid var(--dim);
+  border-radius: 6px; padding: 0.4rem 0.6rem; margin: 0.4rem 0; overflow-wrap: anywhere; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+@media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+.grid2 > * { min-width: 0; }
+.case { background: var(--bg); border: 1px solid var(--dim); border-radius: 10px; padding: 0.7rem; min-width: 0; }
+.case h3 { margin-top: 0; }
+.reading { font-weight: 700; }
+.takeaway { border-left: 3px solid var(--amber); padding: 0.3rem 0 0.3rem 0.8rem; margin-top: 0.8rem; color: var(--heading); font-style: italic; }
+.note { font-size: 0.85rem; color: var(--line); }
+.progress { font-size: 0.82rem; color: var(--amber); min-height: 1.3em; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.legend-svg { max-width: 420px; width: 100%; display: block; margin: 0.4rem 0; }
+.tutorial-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim); }
+.tutorial-nav a { color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0; }
+.footer-note { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
+.footer-note a { color: var(--line); }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; text-transform: none;
+}
+.tip .tt::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line); }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto; transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; line-height: 1.5; overflow-wrap: anywhere; }
+.footnotes li a { color: var(--muted); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="back" href="index.html">&larr; Jumps, Slowing, and the Line They Sit On</a>
+
+<h1>Walking the Line of Jumps to Its End</h1>
+<p class="subtitle">Bracket the jump in two controls, follow it, and find where it vanishes.</p>
+
+<p class="note">This is the generic line-following procedure; in the Criticality Compass it is the Navigator&rsquo;s job.</p>
+
+<p>On the previous page one control, the catalytic drive <span class="math">a</span>, was ramped and the system jumped at a <span class="tip" tabindex="0">fold<span class="tt">A stable and an unstable state merge and vanish, so the state must jump.</span></span>. A fold is a point in one control but a line in two: change the food supply <span class="math">b</span> as well, and the jump moves. That line of jumps is what the procedure follows.</p>
+<p>Why the end point is the test: along the line the jump shrinks, and at a <span class="tip" tabindex="0">cusp<span class="tt">Where two fold lines meet and the jump shrinks to zero.</span></span> it vanishes as a power law, exponent &frac12; in mean-field theory.<sup><a class="fn" href="#fn2" id="r2">2</a></sup> Finding such an end point in an autocatalytic chemistry would be evidence for the hypothesis. This model, the Schl&ouml;gl scheme,<sup><a class="fn" href="#fn1" id="r1">1</a></sup> is a cusp by construction, so the page proves the procedure, not the hypothesis.</p>
+
+<ol class="tests">
+<li>At <span class="math">a</span> = 2.6, bracket the jump in <span class="math">b</span> from 0 to 0.30 and bisect 14 times. Each probe starts from food only (<span class="math">x</span> = 0), runs to steady state, and asks one thing: did it end above <span class="math">a</span>/3?</li>
+<li>Measure the jump: start a second probe high, at the bracket&rsquo;s lower end, and take the difference &Delta;<span class="math">x</span>.</li>
+<li>Step <span class="math">a</span> down by 0.1, re-bracket inside a declared window of &plusmn;0.05 around the last bracket, and repeat while &Delta;<span class="math">x</span> &gt; 0.02.</li>
+<li>Where the jump has gone, bisect on <span class="math">a</span> 8 times: the end point is reported as an interval.</li>
+<li>Fit log &Delta;<span class="math">x</span> against log(<span class="math">a</span> &minus; <span class="math">&acirc;</span>*) and compare with &frac12;.</li>
+</ol>
+
+<div class="panel" id="p3">
+  <div class="controls">
+    <button type="button" id="p3-step">Step</button>
+    <button type="button" id="p3-run">Run</button>
+    <button type="button" id="p3-reset">Reset</button>
+    <label for="p3-speed">Speed</label>
+    <select id="p3-speed"><option value="1">1 probe / frame</option><option value="4" selected>4 / frame</option><option value="16">16 / frame</option></select>
+    <button type="button" id="p3-edge">Show the other edge</button>
+  </div>
+  <p class="note">No seed: every probe is deterministic.</p>
+  <div class="viz"><div class="viz-label">Control plane: drive <span class="math">a</span> &times; food supply <span class="math">b</span></div>
+    <canvas id="p3-plane" aria-label="Control plane with probes, brackets, the line of jumps and its end point"></canvas></div>
+  <p class="sr-only">Probes bracket the jump at each a; the found points form a line of jumps that ends near a 1.73, b 0.19.</p>
+  <div class="grid2">
+    <div class="viz"><div class="viz-label">Jump size &Delta;x vs <span class="math">a</span></div>
+      <canvas id="p3-dx" aria-label="Jump size against a, shrinking to zero at the end point"></canvas></div>
+    <div class="viz"><div class="viz-label">log &Delta;x vs log(a &minus; &acirc;*)</div>
+      <canvas id="p3-log" aria-label="Log-log plot of jump size against distance to the end point, with a reference slope of one half"></canvas></div>
+  </div>
+  <p class="sr-only">The jump shrinks to zero at the end point; on log-log axes the slope is close to one half.</p>
+  <div class="readout" id="p3-read">Press Step or Run.</div>
+  <div class="takeaway">The line of jumps ended where the jump shrank to zero, with the exponent the cusp predicts. The procedure found the point from probes alone, without being told the model.</div>
+</div>
+
+<p class="note">&ldquo;Show the other edge&rdquo; brackets the jump down, starting each probe high. The shaded wedge between the two edges is the hysteresis region; the edges meet at the end point. For larger <span class="math">a</span> the lower edge leaves the plane below <span class="math">b</span> = 0, and is drawn only where found.</p>
+
+<div class="footnotes">
+<ol>
+<li id="fn1">F. Schl&ouml;gl, <em>Z. Physik</em> <strong>253</strong>, 147&ndash;161 (1972), doi:10.1007/BF01379769</li>
+<li id="fn2">S.H. Strogatz, <em>Nonlinear Dynamics and Chaos</em>, 2nd ed. (2015), &sect;3.6.</li>
+</ol>
+</div>
+
+<div class="tutorial-nav"><a href="index.html">&larr; Jumps, Slowing, and the Line They Sit On</a></div>
+<div class="footer-note">Part of <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../">Web Annex</a></div>
+
+</div>
+
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id);
+const reducedMotion = () => !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+const CSSV = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = { blue: CSSV('--blue'), amber: CSSV('--amber'), green: CSSV('--green'), red: CSSV('--red'), purple: CSSV('--purple'),
+  line: CSSV('--line'), muted: CSSV('--muted'), dim: CSSV('--dim'), heading: CSSV('--heading'), bg: CSSV('--bg') };
+function fitCanvas(cv, h) {
+  const dpr = window.devicePixelRatio || 1;
+  const w = Math.max(200, cv.clientWidth || cv.parentElement.clientWidth || 300);
+  cv.style.height = h + 'px';
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  return { ctx, w, h };
+}
+function niceTicks(lo, hi, n) {
+  const span = hi - lo, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const step = [1, 2, 5, 10].map((k) => k * mag).find((s) => span / s <= n) || 10 * mag;
+  const out = [];
+  for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9 * span; v += step) out.push(+v.toPrecision(10));
+  return out;
+}
+function fmtTick(v) { return Math.abs(v) >= 1000 ? v.toFixed(0) : +v.toPrecision(3) + ''; }
+/* axes: draws a frame with ticks; returns coordinate maps. log axes take log10 ranges. */
+function axes(ctx, r, xr, yr, o) {
+  o = o || {};
+  const X = (v) => r.x + (v - xr[0]) / (xr[1] - xr[0]) * r.w;
+  const Y = (v) => r.y + r.h - (v - yr[0]) / (yr[1] - yr[0]) * r.h;
+  ctx.strokeStyle = COL.dim; ctx.lineWidth = 1; ctx.strokeRect(r.x, r.y, r.w, r.h);
+  ctx.fillStyle = COL.line; ctx.font = '10px system-ui, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  if (!o.noXTicks) for (const t of niceTicks(xr[0], xr[1], o.nx || 4)) {
+    ctx.fillText(o.logx ? '10^' + t : fmtTick(t), X(t), r.y + r.h + 2);
+  }
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (const t of niceTicks(yr[0], yr[1], o.ny || 3)) ctx.fillText(o.logy ? '10^' + t : fmtTick(t), r.x - 3, Y(t));
+  if (o.xl) { ctx.textAlign = 'right'; ctx.textBaseline = 'bottom'; ctx.fillText(o.xl, r.x + r.w - 2, r.y + r.h - 2); }
+  if (o.yl) { ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText(o.yl, r.x + 3, r.y + 2); }
+  return { X, Y, r };
+}
+function polyline(ctx, A, xs, ys, color, width, dash) {
+  ctx.save(); ctx.beginPath(); ctx.rect(A.r.x, A.r.y, A.r.w, A.r.h); ctx.clip();
+  ctx.strokeStyle = color; ctx.lineWidth = width || 1.5; ctx.setLineDash(dash || []);
+  ctx.beginPath();
+  let pen = false;
+  for (let i = 0; i < xs.length; i++) {
+    if (xs[i] === null || ys[i] === null || !isFinite(ys[i])) { pen = false; continue; }
+    const px = A.X(xs[i]), py = A.Y(ys[i]);
+    if (pen) ctx.lineTo(px, py); else { ctx.moveTo(px, py); pen = true; }
+  }
+  ctx.stroke(); ctx.restore();
+}
+function hline(ctx, A, y, color, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.setLineDash(dash || []); ctx.beginPath();
+  ctx.moveTo(A.r.x, A.Y(y)); ctx.lineTo(A.r.x + A.r.w, A.Y(y)); ctx.stroke(); ctx.restore();
+}
+function dot(ctx, A, x, y, color, rad) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(A.X(x), A.Y(y), rad || 3, 0, 2 * Math.PI); ctx.fill(); }
+function vline(ctx, A, x, color, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.setLineDash(dash || [4, 3]); ctx.beginPath();
+  ctx.moveTo(A.X(x), A.r.y); ctx.lineTo(A.X(x), A.r.y + A.r.h); ctx.stroke(); ctx.restore();
+}
+
+
+
+/* ---------- the model: x' = a x^2 - x^3 + b - x (Schlogl scheme) ---------- */
+const fx = (x, a, b) => a * x * x - x * x * x + b - x;
+const P3 = { aMin: 1.6, aMax: 2.8, bMin: 0, bMax: 0.3, aStart: 2.6, da: 0.1, nb: 14, na: 8, eps: 0.02, win: 0.05, tol: 1e-7, cap: 20000 };
+/* Probe: integrate from a start to steady state (RK4 with step-doubling error control, so slow
+   approaches near a fold or the end point are followed to the end). Reports the branch label. */
+function probe(a, b, x0) {
+  let x = x0, dt = 0.02, steps = 0;
+  const rk = (x, h) => { const k1 = fx(x, a, b), k2 = fx(x + h / 2 * k1, a, b), k3 = fx(x + h / 2 * k2, a, b), k4 = fx(x + h * k3, a, b);
+    return x + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4); };
+  while (steps < P3.cap && Math.abs(fx(x, a, b)) >= P3.tol) {
+    steps++;
+    const x1 = rk(x, dt), x2 = rk(rk(x, dt / 2), dt / 2), err = Math.abs(x2 - x1) + 1e-300;
+    const scale = 0.9 * Math.pow(1e-10 / err, 0.2);
+    if (err <= 1e-10) { x = x2; dt = Math.min(dt * Math.min(2, scale), 100); } else dt *= Math.max(0.2, scale);
+  }
+  return { a, b, x, high: x > a / 3, x0 };
+}
+/* the procedure, one probe per yield */
+function* walk(st) {
+  const P = (a, b, x0) => { const p = probe(a, b, x0); st.probes++; st.dots.push(p); return p; };
+  function* bracket(a, lo, hi) {
+    let pl = P(a, lo, 0); yield; let ph = P(a, hi, 0); yield;
+    if (pl.high || !ph.high) { st.failed = a; return null; }   /* the declared window did not bracket: reported, not patched */
+    for (let i = 0; i < P3.nb; i++) {
+      const m = 0.5 * (lo + hi), p = P(a, m, 0);
+      if (p.high) { hi = m; ph = p; } else { lo = m; pl = p; }
+      st.cur = { a, lo, hi };
+      yield;
+    }
+    const up = P(a, lo, a + 1); yield;
+    return { a, lo, hi, b: 0.5 * (lo + hi), dx: up.x - pl.x };
+  }
+  let a = P3.aStart, lo = P3.bMin, hi = P3.bMax, lastJump = null, r;
+  for (;;) {
+    r = yield* bracket(a, Math.max(P3.bMin, lo - (lastJump ? P3.win : 0)), Math.min(P3.bMax, hi + (lastJump ? P3.win : 0)));
+    if (!r) return;
+    st.walkPts.push(r);
+    if (r.dx <= P3.eps) break;
+    lastJump = r; lo = r.lo; hi = r.hi;
+    a = Math.round((a - P3.da) * 1e9) / 1e9;
+  }
+  let aJ = lastJump.a, aN = r.a, bl = lastJump.lo, bh = lastJump.hi, bEnd = lastJump.b;
+  for (let i = 0; i < P3.na; i++) {
+    const m = 0.5 * (aJ + aN);
+    const q = yield* bracket(m, Math.max(P3.bMin, bl - P3.win), Math.min(P3.bMax, bh + P3.win));
+    if (!q) return;
+    if (q.dx > P3.eps) { aJ = m; bl = q.lo; bh = q.hi; bEnd = q.b; st.walkPts.push(q); } else { aN = m; st.nojump.push(q); }
+  }
+  st.end = { lo: aN, hi: aJ, b: bEnd };
+  const aHat = 0.5 * (aN + aJ);
+  const fit = st.walkPts.filter((p) => p.dx > P3.eps && p.a - aHat >= 0.02 && p.a - aHat <= 0.5);
+  let sx = 0, sy = 0, sxx = 0, sxy = 0;
+  for (const p of fit) { const X = Math.log(p.a - aHat), Y = Math.log(p.dx); sx += X; sy += Y; sxx += X * X; sxy += X * Y; }
+  const n = fit.length;
+  st.fit = { slope: (n * sxy - sx * sy) / (n * sxx - sx * sx), icpt: (sy * sxx - sx * sxy) / (n * sxx - sx * sx), n, aHat };
+  st.cur = null;
+}
+/* the other edge: start each probe high, bracket where it falls */
+function* otherEdge(st) {
+  const P = (a, b, x0) => { const p = probe(a, b, x0); st.edgeProbes++; st.dots.push(p); return p; };
+  const pts = st.walkPts.filter((p) => p.dx > P3.eps).sort((u, v) => u.a - v.a);
+  for (const w of pts) {
+    const z = P(w.a, P3.bMin, w.a + 1); yield;
+    if (z.high) { st.edge.push({ a: w.a, b: null }); continue; }   /* still high at b = 0: the edge is below the plane */
+    let lo = P3.bMin, hi = w.lo;
+    for (let i = 0; i < P3.nb; i++) {
+      const m = 0.5 * (lo + hi), p = P(w.a, m, w.a + 1);
+      if (p.high) hi = m; else lo = m;
+      yield;
+    }
+    st.edge.push({ a: w.a, b: 0.5 * (lo + hi) });
+  }
+}
+function fresh() { return { probes: 0, edgeProbes: 0, dots: [], walkPts: [], nojump: [], edge: [], cur: null, end: null, fit: null, failed: null }; }
+let st = fresh(), it = walk(st), eit = null, running = false, done = false;
+
+function draw() {
+  /* control plane */
+  {
+    const { ctx, w, h } = fitCanvas($('p3-plane'), 300);
+    const A = axes(ctx, { x: 42, y: 8, w: w - 52, h: h - 30 }, [P3.aMin, P3.aMax], [P3.bMin, P3.bMax], { xl: 'a', yl: 'b' });
+    /* wedge */
+    const ed = st.edge.slice().sort((u, v) => u.a - v.a);
+    if (ed.length && st.end) {
+      const up = st.walkPts.filter((p) => p.dx > P3.eps).sort((u, v) => u.a - v.a);
+      ctx.save(); ctx.fillStyle = 'rgba(168,85,247,0.18)'; ctx.beginPath();
+      ctx.moveTo(A.X(st.end.lo), A.Y(st.end.b));
+      for (const p of up) if (ed.find((e) => e.a === p.a)) ctx.lineTo(A.X(p.a), A.Y(p.b));
+      for (let i = ed.length - 1; i >= 0; i--) ctx.lineTo(A.X(ed[i].a), A.Y(ed[i].b === null ? P3.bMin : ed[i].b));
+      ctx.closePath(); ctx.fill(); ctx.restore();
+      const ex = [st.end.lo], ey = [st.end.b];
+      for (const e of ed) { ex.push(e.a); ey.push(e.b); }
+      polyline(ctx, A, ex, ey, COL.purple, 2, [5, 3]);
+    }
+    hline(ctx, A, 0.12, COL.muted, [2, 4]);
+    ctx.fillStyle = COL.muted; ctx.font = '10px system-ui'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+    ctx.fillText('the ramp on the previous page', A.r.x + A.r.w - 3, A.Y(0.12) - 2);
+    for (const d of st.dots) { ctx.fillStyle = d.high ? COL.amber : COL.blue; ctx.globalAlpha = 0.6; ctx.fillRect(A.X(d.a) - 1.5, A.Y(d.b) - 1.5, 3, 3); }
+    ctx.globalAlpha = 1;
+    const line = st.walkPts.filter((p) => p.dx > P3.eps).sort((u, v) => u.a - v.a);
+    const lx = line.map((p) => p.a), ly = line.map((p) => p.b);
+    if (st.end) { lx.unshift(st.end.lo); ly.unshift(st.end.b); }
+    polyline(ctx, A, lx, ly, COL.heading, 2);
+    if (st.cur) {
+      ctx.strokeStyle = COL.green; ctx.lineWidth = 3; ctx.beginPath();
+      ctx.moveTo(A.X(st.cur.a), A.Y(st.cur.lo)); ctx.lineTo(A.X(st.cur.a), A.Y(st.cur.hi)); ctx.stroke();
+    }
+    if (st.end) {
+      const x0 = A.X(st.end.lo), x1 = A.X(st.end.hi), yc = A.Y(st.end.b);
+      ctx.strokeStyle = COL.red; ctx.lineWidth = 2;
+      ctx.strokeRect(Math.min(x0, x1 - 8) - 2, yc - 6, Math.max(12, x1 - x0 + 4), 12);
+      ctx.fillStyle = COL.red; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'; ctx.font = '11px system-ui';
+      ctx.fillText('end point', x1 + 10, yc - 6);
+    }
+  }
+  /* jump size vs a */
+  const pts = st.walkPts.concat(st.nojump).sort((u, v) => u.a - v.a);
+  {
+    const { ctx, w, h } = fitCanvas($('p3-dx'), 200);
+    const A = axes(ctx, { x: 38, y: 8, w: w - 46, h: h - 28 }, [P3.aMin, P3.aMax], [0, 2.1], { xl: 'a', yl: 'Δx' });
+    polyline(ctx, A, pts.map((p) => p.a), pts.map((p) => p.dx), COL.amber, 1.5);
+    for (const p of pts) dot(ctx, A, p.a, p.dx, p.dx > P3.eps ? COL.amber : COL.blue, 3);
+    hline(ctx, A, P3.eps, COL.muted, [2, 3]);
+  }
+  /* log-log */
+  {
+    const { ctx, w, h } = fitCanvas($('p3-log'), 200);
+    const A = axes(ctx, { x: 38, y: 8, w: w - 46, h: h - 28 }, [-2.1, 0.1], [-1.5, 0.5], { xl: 'log₁₀(a − â*)', yl: 'log₁₀ Δx', logx: true, logy: true });
+    if (st.fit) {
+      const L = Math.log10;
+      for (const p of st.walkPts) if (p.dx > P3.eps && p.a > st.fit.aHat) {
+        const inFit = p.a - st.fit.aHat >= 0.02 && p.a - st.fit.aHat <= 0.5;
+        dot(ctx, A, L(p.a - st.fit.aHat), L(p.dx), inFit ? COL.amber : COL.muted, 3);
+      }
+      const f = (X) => (st.fit.slope * X * Math.LN10 + st.fit.icpt) / Math.LN10;
+      polyline(ctx, A, [-2, 0], [f(-2), f(0)], COL.amber, 1.5);
+      const y0 = f(-1);
+      polyline(ctx, A, [-2, 0], [y0 - 0.5 - 0.3, y0 + 0.5 - 0.3], COL.line, 1, [4, 3]);
+      ctx.fillStyle = COL.line; ctx.font = '10px system-ui'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+      ctx.fillText('dashed: slope ½', A.r.x + A.r.w - 3, A.r.y + A.r.h - 14);
+    }
+  }
+  let t = `probes ${st.probes}`;
+  if (st.cur) t += `  bracket a=${st.cur.a.toFixed(4)}: b in [${st.cur.lo.toFixed(5)}, ${st.cur.hi.toFixed(5)}]`;
+  if (st.end) t += `  end point a in [${st.end.lo.toFixed(5)}, ${st.end.hi.toFixed(5)}], b=${st.end.b.toFixed(4)}  slope ${st.fit.slope.toFixed(3)} (${st.fit.n} points)`;
+  if (st.failed !== null) t += `  window did not bracket at a=${st.failed}`;
+  if (st.edge.length) t += `  other edge: ${st.edge.length} points, ${st.edge.filter((e) => e.b === null).length} below b = 0 (${st.edgeProbes} probes)`;
+  $('p3-read').textContent = t;
+}
+function stepOnce() { if (done) return false; const r = it.next(); if (r.done) { done = true; } return !done; }
+function run() {
+  if (running) return;
+  if (reducedMotion()) { while (stepOnce()); draw(); return; }
+  running = true;
+  const tick = () => {
+    if (!running) return;
+    const k = +$('p3-speed').value;
+    for (let i = 0; i < k && stepOnce(); i++);
+    draw();
+    if (done) running = false; else requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+$('p3-step').addEventListener('click', () => { running = false; stepOnce(); draw(); });
+$('p3-run').addEventListener('click', run);
+$('p3-reset').addEventListener('click', () => { running = false; st = fresh(); it = walk(st); done = false; eit = null; draw(); });
+$('p3-edge').addEventListener('click', () => {
+  running = false;
+  while (stepOnce());   /* the edge needs the finished line */
+  if (eit || st.failed !== null) { draw(); return; }
+  eit = otherEdge(st);
+  if (reducedMotion()) { while (!eit.next().done); draw(); return; }
+  const tick = () => {
+    const k = +$('p3-speed').value;
+    let fin = false;
+    for (let i = 0; i < k; i++) if (eit.next().done) { fin = true; break; }
+    draw();
+    if (!fin) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+});
+
+/* ---------- self-test hook (side-effect free) ---------- */
+window.__tutorialSelfTest = function () {
+  const s = fresh(), g = walk(s);
+  while (!g.next().done);
+  const e = otherEdge(s);
+  while (!e.next().done);
+  return { interval: [s.end.lo, s.end.hi], bEnd: s.end.b, slope: s.fit.slope, nFit: s.fit.n, probes: s.probes, edgeProbes: s.edgeProbes,
+    edgeBelow: s.edge.filter((q) => q.b === null).map((q) => q.a), failed: s.failed };
+};
+
+draw();
+let rsT = null;
+new ResizeObserver(() => { clearTimeout(rsT); rsT = setTimeout(draw, 80); }).observe($('p3'));
+</script>
+<script src="../../js/annex-tracker.js"></script>
+</body>
+</html>
