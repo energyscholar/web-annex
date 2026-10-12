@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ==== PHYSICS EDITORIAL STANDARD - read before editing any claim in this file ====
+  Every physics claim here is held to one standard:
+    precluded     = a specific law or theorem prohibits it.  NAME THE LAW.
+    not precluded = no known law prohibits it. It may be undemonstrated, unlikely, or need many
+                    unverified steps - but physics does not forbid it.
+  "No one has done this" is an engineering status report, NOT a physics argument. Do not convert
+  one into the other. "Not precluded" is weaker than "plausible" and much weaker than "supported".
+
+  Structural analogies (e.g. anyon fusion algebra <-> RAF closure criteria) must STAY labelled as
+  structural analogies. Never upgrade one to "proven", "identical" or "equivalent" without a proof.
+                                                               doi:10.1016/j.jtbi.2003.11.020
+
+  Traps specific to this page and its companion (navigator.html):
+    J1  The toy model (Schlogl scheme) is a cusp BY CONSTRUCTION. It demonstrates the procedures,
+        not the hypothesis.                                    doi:10.1007/BF01379769
+    J2  No slowing is not no transition. A structural jump is still a jump, just not a followable one.
+                                                               doi:10.1111/j.1461-0248.2010.01439.x
+    J3  Sharp is not first-order. A sharp RAF onset in simulation says nothing about thermodynamic order.
+                                                               doi:10.1016/j.biosystems.2016.12.002
+    J4  The RAF threshold is a line in (n, f); the per-pair probability p is NOT proportional to 1/n.
+                                                               doi:10.3390/ijms12053085
+    J5  A heavy tail at one n is not a critical signature; the signature is exponents stable across n.
+    J6  A rising indicator is not a forecast; false alarms are common.   doi:10.1098/rsif.2012.0125
+==== end physics editorial standard ==== -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A growing autocatalytic chemistry jumps after quiet additions. Interactive: hysteresis, critical slowing down, early-warning signals, and jump statistics.">
+<title>Jumps, Slowing, and the Line They Sit On</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jumps, Slowing, and the Line They Sit On">
+<meta property="og:description" content="A growing autocatalytic chemistry jumps after quiet additions. Interactive: hysteresis, critical slowing down, early-warning signals, and jump statistics.">
+<meta property="og:url" content="https://energyscholar.github.io/web-annex/diamond-node/jumps-and-critical-lines/">
+<meta property="og:image" content="https://energyscholar.github.io/web-annex/art/og/diamond-node.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://energyscholar.github.io/web-annex/art/og/diamond-node.png">
+<style>
+:root {
+  --bg: #0f172a; --card: #1e293b; --text: #cbd5e1; --heading: #f1f5f9;
+  --muted: #475569; --line: #94a3b8; --dim: #334155;
+  --red: #ef4444; --blue: #3b82f6; --green: #22c55e; --amber: #f59e0b;
+  --purple: #a855f7; --cyan: #06b6d4; --pink: #ec4899;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+h1, h2, h3 { font-family: 'Times New Roman', Georgia, serif; color: var(--heading); font-weight: 600; }
+h1 { font-size: 2.3rem; line-height: 1.15; text-align: center; margin-bottom: 0.3rem; }
+.subtitle { text-align: center; color: var(--line); font-size: 1.05rem; margin-bottom: 2rem; font-style: italic; font-family: Georgia, serif; }
+h2 { font-size: 1.6rem; margin: 3rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--dim); }
+h3 { font-size: 1.15rem; margin: 1.2rem 0 0.5rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+em { color: var(--line); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.back { display: inline-block; margin-bottom: 1.5rem; color: var(--muted); font-size: 0.9rem; }
+.back:hover { color: var(--heading); text-decoration: none; }
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; }
+.viz { width: 100%; margin: 1rem 0; border-radius: 12px; overflow: hidden; background: var(--card); border: 1px solid var(--dim); }
+.viz canvas { width: 100%; display: block; }
+.viz-label { text-align: center; padding: 0.5rem 1rem 0; font-size: 0.78rem; color: var(--line); font-weight: 600; }
+.hyp { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0 1.2rem; }
+.hyp p:last-child { margin-bottom: 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 0.6rem 0 1.2rem; }
+th, td { border-bottom: 1px solid var(--dim); padding: 0.4rem 0.45rem; text-align: left; vertical-align: top; }
+th { color: var(--heading); }
+ol.tests, ul.cr { padding-left: 1.3rem; margin-bottom: 1rem; font-size: 0.95rem; }
+.cr2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 640px) { .cr2 { grid-template-columns: 1fr; } }
+.panel { background: var(--card); border: 1px solid var(--dim); border-left: 3px solid var(--purple); border-radius: 12px; padding: 1rem 1rem 1.2rem; margin: 1.2rem 0; }
+.controls { display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; align-items: center; margin: 0.4rem 0 0.6rem; font-size: 0.88rem; }
+.controls label { color: var(--line); font-weight: 600; }
+button, select, input[type="number"] { background: var(--bg); border: 1px solid var(--dim); color: var(--heading); font: inherit; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 6px; }
+button { cursor: pointer; }
+button:hover { border-color: var(--amber); color: var(--amber); }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+input[type="number"] { width: 4.5rem; }
+input[type="range"] { flex: 1 1 160px; min-width: 120px; accent-color: var(--purple); }
+.readout { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--heading); background: var(--bg); border: 1px solid var(--dim);
+  border-radius: 6px; padding: 0.4rem 0.6rem; margin: 0.4rem 0; overflow-wrap: anywhere; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+@media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+.grid2 > * { min-width: 0; }
+.case { background: var(--bg); border: 1px solid var(--dim); border-radius: 10px; padding: 0.7rem; min-width: 0; }
+.case h3 { margin-top: 0; }
+.reading { font-weight: 700; }
+.takeaway { border-left: 3px solid var(--amber); padding: 0.3rem 0 0.3rem 0.8rem; margin-top: 0.8rem; color: var(--heading); font-style: italic; }
+.note { font-size: 0.85rem; color: var(--line); }
+.progress { font-size: 0.82rem; color: var(--amber); min-height: 1.3em; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.legend-svg { max-width: 420px; width: 100%; display: block; margin: 0.4rem 0; }
+.tutorial-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--dim); }
+.tutorial-nav a { color: var(--muted); font-size: 0.95rem; padding: 0.4rem 0; }
+.footer-note { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
+.footer-note a { color: var(--line); }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.4); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400;
+  color: var(--text); width: max-content; max-width: 300px; z-index: 100;
+  line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  text-align: left; text-transform: none;
+}
+.tip .tt::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--line); }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto; transform: none; max-width: none; width: auto; }
+  .tip .tt::after { display: none; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--muted); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--line); }
+.footnotes { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.footnotes ol { padding-left: 1.5rem; }
+.footnotes li { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; line-height: 1.5; overflow-wrap: anywhere; }
+.footnotes li a { color: var(--muted); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="back" href="../index.html">&larr; Domain Convergence Research</a>
+
+<h1>Jumps, Slowing, and the Line They Sit On</h1>
+<p class="subtitle">Is a jump in a growing autocatalytic chemistry on a critical line?</p>
+
+<p class="note">This is the generic method of the Criticality Compass: its Detector watches for slowing (Panel&nbsp;2); its Navigator follows the line (second page).</p>
+
+<h2>The Question</h2>
+
+<div class="hyp">
+<p><strong>Hypothesis</strong> (Bruce Stephenson, 2026; from informal experiments, not a result). A minimal autocatalytic set is the step at which a chemistry closes: it goes from open to closed, sometimes only barely. It is complete but not tuned &mdash; its ratios are not adjusted for speed, stability, or whatever the physical setting rewards. Adding further components tunes the ratios. Most additions change nothing; then one addition makes the system jump to a new behaviour. The hypothesis is that these jump points are points on a (multi)critical line.</p>
+</div>
+
+<p>A reaction set is a <span class="tip" tabindex="0">RAF<span class="tt">Reflexively autocatalytic and food-generated.</span></span> if every reaction is catalysed by a molecule from the <span class="tip" tabindex="0">food set<span class="tt">Molecules supplied from outside.</span></span> or made by the set, and every reactant can be built from the food by the set&rsquo;s own reactions; the largest one, the <span class="tip" tabindex="0">maxRAF<span class="tt">The unique largest RAF in a network.</span></span>, is found in polynomial time.<sup><a class="fn" href="#fn1" id="r1">1</a>,<a class="fn" href="#fn2">2</a></sup> In the <span class="tip" tabindex="0">binary polymer model<span class="tt">Molecules are 0/1 strings up to length n; reactions join or cut them.</span></span> the catalysis level <span class="math">f</span> at which RAFs appear grows linearly with maximum length <span class="math">n</span>: the threshold is a line in the (<span class="math">n</span>,&nbsp;<span class="math">f</span>) plane, and the per-pair catalysis probability falls roughly exponentially in <span class="math">n</span>.<sup><a class="fn" href="#fn3">3</a>,<a class="fn" href="#fn4">4</a></sup> The onset is sharp in simulations; a zero&ndash;one law is proven for the whole network being a RAF and conjectured for any RAF existing. Whether it is first-order is not claimed.<sup><a class="fn" href="#fn4">4</a></sup> Kauffman proposed autocatalytic sets as a route to the origin of life;<sup><a class="fn" href="#fn5">5</a></sup> these pages do not argue it.</p>
+
+<table>
+<thead><tr><th>Kind of jump</th><th>What happens</th><th>Critical?</th></tr></thead>
+<tbody>
+<tr><td>Structural (closure)</td><td>A new autocatalytic subset forms</td><td>Only if such events are scale-free</td></tr>
+<tr><td>Dynamical (bifurcation)</td><td>The kinetics change regime</td><td>Locally, yes: it sits on a bifurcation line</td></tr>
+<tr><td>Multicritical</td><td>Boundaries meet, or a line of jumps ends as the jump shrinks to zero</td><td>The hypothesised point</td></tr>
+</tbody>
+</table>
+
+<p><strong>Four tests, simplest first.</strong></p>
+<ol class="tests">
+<li><strong>Make the step continuous.</strong> Ramp it in and out. Jumping at different places up and down (<span class="tip" tabindex="0">hysteresis<span class="tt">Up-jump and down-jump at different control values.</span></span>) marks an abrupt bifurcation. <em>Panel&nbsp;1.</em></li>
+<li><strong>Watch for slowing.</strong> At a <span class="tip" tabindex="0">fold<span class="tt">Saddle-node: a stable and an unstable state merge and vanish.</span></span> the slowest eigenvalue heads to zero (<span class="tip" tabindex="0">critical slowing down<span class="tt">Recovery from small kicks takes longer and longer.</span></span>). No slowing: a structural jump. <em>Panels&nbsp;1&ndash;2.</em></li>
+<li><strong>Use two controls.</strong> A line of jumps ending where the jump shrinks to zero, exponent &frac12; at the simplest <span class="tip" tabindex="0">cusp<span class="tt">Where two fold lines meet and the jump vanishes.</span></span>. <em>Second page, linked from the slowing case.</em></li>
+<li><strong>Ensemble statistics.</strong> Heavy tails in jump sizes and quiet gaps, exponents stable across size. <em>Panel&nbsp;4.</em></li>
+</ol>
+
+<div class="cr2">
+<div><strong>Would confirm:</strong> hysteresis; slowing; a line of jumps ending with jump size &prop; (distance)<sup>&frac12;</sup>; size-stable heavy tails.</div>
+<div><strong>Would refute:</strong> a smooth crossover; a jump with no slowing; a line that never ends, or ends at a boundary without shrinking; one characteristic jump size.</div>
+</div>
+
+<h2>Panel 1 &middot; Ramp It, Watch It Slow</h2>
+<p>The model is the Schl&ouml;gl scheme, <span class="math">x&#775; = a x&sup2; &minus; x&sup3; + b &minus; x</span>, the classic chemical model of a first-order nonequilibrium transition with a cusp.<sup><a class="fn" href="#fn6">6</a>,<a class="fn" href="#fn11">11</a></sup> It is a cusp by construction, so these pages demonstrate procedures, not the hypothesis. Catalyst <span class="math">Y</span> raises the drive: <span class="math">a<sub>eff</sub> = 1.6(1 + 0.625y)</span>, <span class="math">y&#775; = 2(c &minus; y)</span>, <span class="math">b</span> = 0.12.</p>
+
+<div class="panel" id="p1">
+  <div class="controls">
+    <button type="button" id="p1-once">Add Y all at once</button>
+    <button type="button" id="p1-sweep">&#9654; Sweep up &rarr; down</button>
+    <button type="button" id="p1-reset">Reset</button>
+  </div>
+  <div class="controls">
+    <label for="p1-c">Ramp Y in, <span class="math">c</span></label>
+    <input type="range" id="p1-c" min="0" max="1" step="0.005" value="0">
+    <span id="p1-cv" class="readout" style="margin:0">0.000</span>
+  </div>
+  <div class="viz"><div class="viz-label">x(t) after adding Y at once</div>
+    <canvas id="p1-t" aria-label="Time series of x after adding Y in one step"></canvas></div>
+  <p class="sr-only">x rises slowly, then jumps high.</p>
+  <div class="grid2">
+    <div class="viz"><div class="viz-label">Steady state x* vs c</div>
+      <canvas id="p1-x" aria-label="Steady states and the followed path against c, showing a hysteresis loop"></canvas></div>
+    <div class="viz"><div class="viz-label">Slowest eigenvalue &lambda;&#8321; vs c</div>
+      <canvas id="p1-l" aria-label="The eigenvalue lambda one along the followed path against c"></canvas></div>
+  </div>
+  <p class="sr-only">The path jumps up near c 0.73 and down near c 0.26; the eigenvalue nears zero before each.</p>
+  <div class="readout" id="p1-read"></div>
+  <div class="takeaway">Up and down jump in different places, and the slowest eigenvalue went to zero on the way in. That is a fold, approached slowly &mdash; a dynamical jump, not a change of the graph.</div>
+</div>
+
+<div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
+
+<h2>Panel 2 &middot; An Early-Warning Signal at Work</h2>
+<p>Indicators: lag-1 autocorrelation and variance on a rolling window of the detrended series,<sup><a class="fn" href="#fn7">7</a>,<a class="fn" href="#fn8">8</a></sup> with Kendall&rsquo;s &tau; over the stretch before the jump. Declared reading: <em>rising</em> if &tau; &ge; 0.5 for both; <em>quiet</em> otherwise; <em>too short</em> under three windows. A rising indicator is not a forecast; false alarms are common.<sup><a class="fn" href="#fn9">9</a></sup></p>
+<div class="panel" id="p2">
+  <div class="controls">
+    <label for="p2-seed">Seed</label><input type="number" id="p2-seed" value="1" min="1" step="1">
+    <button type="button" id="p2-run">Run both cases</button>
+  </div>
+  <div class="grid2">
+    <div class="case" id="case-a">
+      <h3>Case A &middot; Slowing Before the Jump</h3>
+      <p class="note"><span class="math">a</span> ramps 1.9 &rarr; 2.5, crossing the fold near 2.33; noise may trigger the jump early.</p>
+      <canvas id="p2-a" aria-label="Case A: x, the true eigenvalue, autocorrelation and variance over time"></canvas>
+      <p class="sr-only">Case A: eigenvalue nears zero; indicators rise.</p>
+      <div class="readout" id="p2-ra">Press Run.</div>
+      <p><a href="navigator.html">Slowing before the jump means the jump sits on a fold. In two controls a fold is a line &mdash; follow it to where it ends &rarr;</a></p>
+    </div>
+    <div class="case" id="case-b">
+      <h3>Case B &middot; A Structural Jump</h3>
+      <p class="note"><span class="math">a</span> = 2.0, low state. At 60% one reaction switches on, <span class="math">A&prime; + X &rarr; 2X</span>; the low state ceases to exist.</p>
+      <canvas id="p2-b" aria-label="Case B: x, the true eigenvalue, autocorrelation and variance over time"></canvas>
+      <p class="sr-only">Case B: all flat until the switch, then x jumps.</p>
+      <div class="readout" id="p2-rb">Press Run.</div>
+      <p class="note">Nothing in the kinetics beforehand knew this was coming: the jump is a change of the graph, not an approach to a fold. There is no line of jumps to follow from here, so there is no link to the line-following page.<sup><a class="fn" href="#fn10">10</a></sup></p>
+    </div>
+  </div>
+  <div class="takeaway">The signal rose where the eigenvalue went to zero and stayed silent where it did not. Slowing is what makes a jump followable.</div>
+</div>
+
+<h2>Panel 4 &middot; Many Networks, Many Orders</h2>
+<p>A simplified binary polymer model, ligation only (the published one also cleaves): 0/1 strings up to length <span class="math">n</span>, food = strings of length &le; 2, each molecule catalyses each reaction with probability <span class="math">f</span>/|R|. Reactions are added in random order, recomputing the maxRAF each time. An increase is a jump; additions between jumps are quiet gaps. The signature is exponents stable across <span class="math">n</span>; this toy stops at <span class="math">n</span> = 6, and the real test needs <span class="math">n</span> &asymp; 16&ndash;20 and the published generator.<sup><a class="fn" href="#fn12">12</a></sup></p>
+<div class="panel" id="p4">
+  <div class="controls">
+    <label for="p4-n">n</label><select id="p4-n"><option>4</option><option selected>5</option><option>6</option></select>
+    <label for="p4-k">Networks</label><select id="p4-k"><option>10</option><option selected>30</option><option>100</option></select>
+    <label for="p4-seed">Seed</label><input type="number" id="p4-seed" value="1" min="1" step="1">
+    <button type="button" id="p4-run">Run ensemble</button>
+  </div>
+  <div class="controls">
+    <label for="p4-f">f</label><input type="range" id="p4-f" min="0.5" max="3" step="0.05" value="1.3">
+    <span id="p4-fv" class="readout" style="margin:0">1.30</span>
+  </div>
+  <div class="progress" id="p4-prog" aria-live="polite"></div>
+  <div class="viz"><div class="viz-label">|maxRAF| vs additions, one network</div>
+    <canvas id="p4-s" aria-label="Staircase of maxRAF size against number of reactions added, for one network"></canvas></div>
+  <div class="grid2">
+    <div class="viz"><div class="viz-label">Jump sizes</div><canvas id="p4-h1" aria-label="Histogram of jump sizes with a log-log CCDF inset"></canvas></div>
+    <div class="viz"><div class="viz-label">Quiet gaps</div><canvas id="p4-h2" aria-label="Histogram of quiet gaps with a log-log CCDF inset"></canvas></div>
+  </div>
+  <p class="sr-only">Histograms of jump sizes and quiet gaps, with log-log tails.</p>
+  <svg class="legend-svg" viewBox="0 0 420 70" role="img" aria-label="Schematic guides: a straight descending line on log-log axes for a heavy tail, and one spike at one size for a single threshold">
+    <rect x="1" y="1" width="60" height="60" fill="none" stroke="#475569"/>
+    <line x1="6" y1="8" x2="56" y2="56" stroke="#a855f7" stroke-width="2"/>
+    <text x="70" y="28" fill="#94a3b8" font-size="12">what a heavy tail would look like</text>
+    <text x="70" y="44" fill="#475569" font-size="11">(schematic)</text>
+    <rect x="250" y="1" width="60" height="60" fill="none" stroke="#475569"/>
+    <rect x="281" y="10" width="6" height="51" fill="#f59e0b"/>
+    <text x="318" y="28" fill="#94a3b8" font-size="12">what a single</text>
+    <text x="318" y="44" fill="#94a3b8" font-size="12">threshold would</text>
+    <text x="318" y="60" fill="#94a3b8" font-size="12">look like</text>
+  </svg>
+  <div class="readout" id="p4-read">Press Run. n = 6 takes longer.</div>
+  <div class="takeaway">Two histograms decide the fourth test: jump sizes and quiet gaps. Heavy tails with exponents that do not move as n grows would be the critical-line signature; one characteristic jump at one characteristic size would be a threshold.</div>
+</div>
+
+<div class="footnotes">
+<ol>
+<li id="fn1">W. Hordijk &amp; M. Steel, <em>J. Theor. Biol.</em> <strong>227</strong>, 451&ndash;461 (2004), doi:10.1016/j.jtbi.2003.11.020</li>
+<li id="fn2">W. Hordijk, arXiv:2303.01809 (2023).</li>
+<li id="fn3">W. Hordijk, S.A. Kauffman &amp; M. Steel, <em>Int. J. Mol. Sci.</em> <strong>12</strong>, 3085&ndash;3101 (2011), doi:10.3390/ijms12053085</li>
+<li id="fn4">W. Hordijk &amp; M. Steel, <em>Biosystems</em> <strong>152</strong>, 1&ndash;10 (2017), doi:10.1016/j.biosystems.2016.12.002</li>
+<li id="fn5">S.A. Kauffman, <em>J. Theor. Biol.</em> <strong>119</strong>, 1&ndash;24 (1986), doi:10.1016/S0022-5193(86)80047-9</li>
+<li id="fn6">F. Schl&ouml;gl, <em>Z. Physik</em> <strong>253</strong>, 147&ndash;161 (1972), doi:10.1007/BF01379769</li>
+<li id="fn7">M. Scheffer <em>et al.</em>, &ldquo;Early-warning signals for critical transitions,&rdquo; <em>Nature</em> <strong>461</strong>, 53&ndash;59 (2009), doi:10.1038/nature08227</li>
+<li id="fn8">V. Dakos <em>et al.</em>, &ldquo;Slowing down as an early warning signal for abrupt climate change,&rdquo; <em>PNAS</em> <strong>105</strong>, 14308&ndash;14312 (2008), doi:10.1073/pnas.0802430105</li>
+<li id="fn9">C. Boettiger &amp; A. Hastings, <em>J. R. Soc. Interface</em> <strong>9</strong>, 2527&ndash;2539 (2012), doi:10.1098/rsif.2012.0125</li>
+<li id="fn10">A. Hastings &amp; D.B. Wysham, <em>Ecol. Lett.</em> <strong>13</strong>, 464&ndash;472 (2010), doi:10.1111/j.1461-0248.2010.01439.x</li>
+<li id="fn11">S.H. Strogatz, <em>Nonlinear Dynamics and Chaos</em>, 2nd ed. (2015), &sect;3.6.</li>
+<li id="fn12">Code: <a href="https://github.com/wimhor/RAF">github.com/wimhor/RAF</a> (GPL-3.0).</li>
+</ol>
+</div>
+
+<div class="footer-note">Part of <a href="../index.html">Domain Convergence Research</a> &middot; <a href="../../">Web Annex</a></div>
+
+</div>
+
+<script>
+'use strict';
+/* ---------- shared helpers ---------- */
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function seededGaussian(rng) {
+  var u = 0, v = 0;
+  while (u === 0) u = rng();
+  while (v === 0) v = rng();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+const $ = (id) => document.getElementById(id);
+const reducedMotion = () => !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+const CSSV = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = { blue: CSSV('--blue'), amber: CSSV('--amber'), green: CSSV('--green'), red: CSSV('--red'), purple: CSSV('--purple'),
+  cyan: CSSV('--cyan'), line: CSSV('--line'), muted: CSSV('--muted'), dim: CSSV('--dim'), heading: CSSV('--heading'), bg: CSSV('--bg') };
+
+function fitCanvas(cv, h) {
+  const dpr = window.devicePixelRatio || 1;
+  const w = Math.max(200, cv.clientWidth || cv.parentElement.clientWidth || 300);
+  cv.style.height = h + 'px';
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  return { ctx, w, h };
+}
+function niceTicks(lo, hi, n) {
+  const span = hi - lo, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const step = [1, 2, 5, 10].map((k) => k * mag).find((s) => span / s <= n) || 10 * mag;
+  const out = [];
+  for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9 * span; v += step) out.push(+v.toPrecision(10));
+  return out;
+}
+function fmtTick(v) { return Math.abs(v) >= 1000 ? v.toFixed(0) : +v.toPrecision(3) + ''; }
+/* axes: draws a frame with ticks; returns coordinate maps. log axes take log10 ranges. */
+function axes(ctx, r, xr, yr, o) {
+  o = o || {};
+  const X = (v) => r.x + (v - xr[0]) / (xr[1] - xr[0]) * r.w;
+  const Y = (v) => r.y + r.h - (v - yr[0]) / (yr[1] - yr[0]) * r.h;
+  ctx.strokeStyle = COL.dim; ctx.lineWidth = 1; ctx.strokeRect(r.x, r.y, r.w, r.h);
+  ctx.fillStyle = COL.line; ctx.font = '10px system-ui, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  if (!o.noXTicks) for (const t of niceTicks(xr[0], xr[1], o.nx || 4)) {
+    ctx.fillText(o.logx ? '10^' + t : fmtTick(t), X(t), r.y + r.h + 2);
+  }
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (const t of niceTicks(yr[0], yr[1], o.ny || 3)) ctx.fillText(o.logy ? '10^' + t : fmtTick(t), r.x - 3, Y(t));
+  if (o.xl) { ctx.textAlign = 'right'; ctx.textBaseline = 'bottom'; ctx.fillText(o.xl, r.x + r.w - 2, r.y + r.h - 2); }
+  if (o.yl) { ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText(o.yl, r.x + 3, r.y + 2); }
+  return { X, Y, r };
+}
+function polyline(ctx, A, xs, ys, color, width, dash) {
+  ctx.save(); ctx.beginPath(); ctx.rect(A.r.x, A.r.y, A.r.w, A.r.h); ctx.clip();
+  ctx.strokeStyle = color; ctx.lineWidth = width || 1.5; ctx.setLineDash(dash || []);
+  ctx.beginPath();
+  let pen = false;
+  for (let i = 0; i < xs.length; i++) {
+    if (xs[i] === null || ys[i] === null || !isFinite(ys[i])) { pen = false; continue; }
+    const px = A.X(xs[i]), py = A.Y(ys[i]);
+    if (pen) ctx.lineTo(px, py); else { ctx.moveTo(px, py); pen = true; }
+  }
+  ctx.stroke(); ctx.restore();
+}
+function hline(ctx, A, y, color, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.setLineDash(dash || []); ctx.beginPath();
+  ctx.moveTo(A.r.x, A.Y(y)); ctx.lineTo(A.r.x + A.r.w, A.Y(y)); ctx.stroke(); ctx.restore();
+}
+function dot(ctx, A, x, y, color, rad) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(A.X(x), A.Y(y), rad || 3, 0, 2 * Math.PI); ctx.fill(); }
+function vline(ctx, A, x, color, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.setLineDash(dash || [4, 3]); ctx.beginPath();
+  ctx.moveTo(A.X(x), A.r.y); ctx.lineTo(A.X(x), A.r.y + A.r.h); ctx.stroke(); ctx.restore();
+}
+
+/* ---------- the model (Schlogl scheme, mass action) ---------- */
+/* xdot = a x^2 - x^3 + b - k x ; k = 1 normally (Case B adds +0.6 x, i.e. k = 0.4) */
+function fx(x, a, b, k) { return a * x * x - x * x * x + b - k * x; }
+function lam1(x, a, k) { return 2 * a * x - 3 * x * x - k; }
+/* all real steady states: sample the cubic's sign on [0, a+2] at 400 points and bisect each sign change */
+function steadyStates(a, b, k) {
+  const out = [], hi = a + 2, n = 400;
+  let x0 = 0, f0 = fx(0, a, b, k);
+  for (let i = 1; i <= n; i++) {
+    const x1 = hi * i / n, f1 = fx(x1, a, b, k);
+    if ((f0 < 0) !== (f1 < 0)) {
+      let lo = x0, up = x1, flo = f0;
+      for (let j = 0; j < 60; j++) {
+        const m = 0.5 * (lo + up), fm = fx(m, a, b, k);
+        if ((fm < 0) === (flo < 0)) { lo = m; flo = fm; } else up = m;
+      }
+      out.push(0.5 * (lo + up));
+    }
+    x0 = x1; f0 = f1;
+  }
+  return out;
+}
+
+/* ---------- Panel 1 ---------- */
+const P1 = { a0: 1.6, beta: 0.625, kappa: 2, b: 0.12, dt: 0.02, cap: 20000, tol: 1e-7, dc: 0.005 };
+const aEff = (y) => P1.a0 * (1 + P1.beta * y);
+function p1deriv(x, y, c) { return [fx(x, aEff(y), P1.b, 1), P1.kappa * (c - y)]; }
+function p1step(x, y, c, h) {
+  const k1 = p1deriv(x, y, c), k2 = p1deriv(x + h / 2 * k1[0], y + h / 2 * k1[1], c);
+  const k3 = p1deriv(x + h / 2 * k2[0], y + h / 2 * k2[1], c), k4 = p1deriv(x + h * k3[0], y + h * k3[1], c);
+  return [x + h / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]), y + h / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1])];
+}
+/* continue the state at a new c: integrate until |xdot| < tol and |ydot| < tol, or the step cap */
+function p1relax(s, c) {
+  let x = s.x, y = s.y;
+  for (let k = 0; k < P1.cap; k++) {
+    const d = p1deriv(x, y, c);
+    if (Math.abs(d[0]) < P1.tol && Math.abs(d[1]) < P1.tol) break;
+    [x, y] = p1step(x, y, c, P1.dt);
+  }
+  const a = aEff(y);
+  return { c, x, y, a, l1: lam1(x, a, 1), l2: -P1.kappa };
+}
+function p1start() { const x = steadyStates(P1.a0, P1.b, 1)[0]; return p1relax({ x, y: 0 }, 0); }
+function p1sweepValues() {
+  const n = Math.round(1 / P1.dc), cs = [];
+  for (let i = 0; i <= n; i++) cs.push({ c: i * P1.dc, dir: 1 });
+  for (let i = n - 1; i >= 0; i--) cs.push({ c: i * P1.dc, dir: -1 });
+  return cs;
+}
+const p1 = { state: null, path: [], tseries: null, tshow: 0, busy: false, all: null };
+function p1allStates() {
+  const rows = [];
+  for (let i = 0; i <= 200; i++) {
+    const c = i / 200, a = aEff(c);
+    rows.push({ c, roots: steadyStates(a, P1.b, 1).map((x) => ({ x, stable: lam1(x, a, 1) < 0 })) });
+  }
+  return rows;
+}
+function p1draw() {
+  if (!p1.all) p1.all = p1allStates();
+  /* x(t) strip */
+  {
+    const { ctx, w, h } = fitCanvas($('p1-t'), 120);
+    const A = axes(ctx, { x: 38, y: 8, w: w - 48, h: h - 28 }, [0, 40], [0, 2.4], { xl: 't', yl: 'x' });
+    if (p1.tseries) {
+      const n = Math.min(p1.tshow, p1.tseries.t.length);
+      polyline(ctx, A, p1.tseries.t.slice(0, n), p1.tseries.x.slice(0, n), COL.amber, 2);
+      polyline(ctx, A, p1.tseries.t.slice(0, n), p1.tseries.sep.slice(0, n), COL.muted, 1, [3, 3]);
+    } else {
+      ctx.fillStyle = COL.muted; ctx.font = '12px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('press "Add Y all at once"', w / 2, h / 2);
+    }
+  }
+  const up = p1.path.filter((p) => p.dir >= 0), dn = p1.path.filter((p) => p.dir < 0);
+  /* x* vs c */
+  {
+    const { ctx, w, h } = fitCanvas($('p1-x'), 230);
+    const A = axes(ctx, { x: 34, y: 8, w: w - 44, h: h - 28 }, [0, 1], [0, 2.4], { xl: 'c', yl: 'x*' });
+    const lowX = [], lowY = [], hiX = [], hiY = [], unX = [], unY = [];
+    for (const r of p1.all) {
+      const a = aEff(r.c);
+      let lo = null, hi = null, un = null;
+      for (const q of r.roots) {
+        if (!q.stable) un = q.x; else if (q.x > a / 3) hi = q.x; else lo = q.x;
+      }
+      lowX.push(r.c); lowY.push(lo); hiX.push(r.c); hiY.push(hi); unX.push(r.c); unY.push(un);
+    }
+    polyline(ctx, A, lowX, lowY, COL.muted, 3);
+    polyline(ctx, A, hiX, hiY, COL.muted, 3);
+    polyline(ctx, A, unX, unY, COL.muted, 1.5, [4, 4]);
+    polyline(ctx, A, up.map((p) => p.c), up.map((p) => p.x), COL.blue, 2);
+    polyline(ctx, A, dn.map((p) => p.c), dn.map((p) => p.x), COL.amber, 2);
+    for (const j of p1jumps()) { dot(ctx, A, j.c, j.x, j.dir > 0 ? COL.blue : COL.amber, 4.5); }
+    if (p1.state) dot(ctx, A, p1.state.c, p1.state.x, COL.heading, 3.5);
+  }
+  /* lambda1 vs c */
+  {
+    const { ctx, w, h } = fitCanvas($('p1-l'), 230);
+    const A = axes(ctx, { x: 38, y: 8, w: w - 48, h: h - 28 }, [0, 1], [-3, 0.2], { xl: 'c', yl: 'λ₁' });
+    hline(ctx, A, 0, COL.red, [4, 3]);
+    const seg = (arr, col) => { /* break the line at a jump */
+      const xs = [], ys = [];
+      for (let i = 0; i < arr.length; i++) {
+        if (i && arr[i].hiSide !== arr[i - 1].hiSide) { xs.push(null); ys.push(null); }
+        xs.push(arr[i].c); ys.push(arr[i].l1);
+      }
+      polyline(ctx, A, xs, ys, col, 2);
+    };
+    seg(up, COL.blue); seg(dn, COL.amber);
+    if (p1.state) dot(ctx, A, p1.state.c, Math.max(-3, p1.state.l1), COL.heading, 3.5);
+  }
+  const s = p1.state;
+  if (s) {
+    const j11 = s.l1, j12 = P1.a0 * P1.beta * s.x * s.x;
+    $('p1-read').textContent = `c=${s.c.toFixed(3)}  a_eff=${s.a.toFixed(3)}  x*=${s.x.toFixed(4)}  λ₁=${s.l1.toFixed(4)}  λ₂=${s.l2.toFixed(1)}  ` +
+      `recovery time 1/|λ₁|=${(1 / Math.abs(s.l1)).toFixed(2)}  J=[[${j11.toFixed(3)}, ${j12.toFixed(3)}], [0, ${(-P1.kappa).toFixed(1)}]]`;
+  }
+}
+function p1label(p) { return p.x > p.a / 3; }
+function p1push(st, dir) { st.dir = dir; st.hiSide = p1label(st); p1.path.push(st); p1.state = st; }
+function p1jumps() {
+  const out = [];
+  for (let i = 1; i < p1.path.length; i++) if (p1.path[i].hiSide !== p1.path[i - 1].hiSide) out.push(p1.path[i]);
+  return out;
+}
+function p1reset() {
+  p1.busy = false; p1.path = []; p1.tseries = null;
+  p1push(p1start(), 1);
+  $('p1-c').value = 0; $('p1-cv').textContent = '0.000';
+  p1draw();
+}
+function p1sweep() {
+  if (p1.busy) return;
+  p1.path = []; p1.state = p1start(); p1push(p1.state, 1);
+  const cs = p1sweepValues().slice(1);
+  const doOne = (k) => {
+    const v = cs[k];
+    p1push(p1relax(p1.state, v.c), v.dir);
+    $('p1-c').value = v.c; $('p1-cv').textContent = v.c.toFixed(3);
+  };
+  if (reducedMotion()) { for (let k = 0; k < cs.length; k++) doOne(k); p1draw(); return; }
+  p1.busy = true; let k = 0;
+  const tick = () => {
+    if (!p1.busy) return;
+    for (let r = 0; r < 3 && k < cs.length; r++, k++) doOne(k);
+    p1draw();
+    if (k < cs.length) requestAnimationFrame(tick); else p1.busy = false;
+  };
+  requestAnimationFrame(tick);
+}
+function p1once() {
+  if (p1.busy) return;
+  const s0 = p1start();
+  let x = s0.x, y = 0;
+  const t = [], xs = [], sep = [];
+  for (let k = 0; k <= 2000; k++) {
+    if (k % 5 === 0) { t.push(k * P1.dt); xs.push(x); sep.push(aEff(y) / 3); }
+    [x, y] = p1step(x, y, 1, P1.dt);
+  }
+  p1.tseries = { t, x: xs, sep };
+  p1.path = []; p1push(s0, 1);
+  const end = p1relax({ x, y }, 1); p1push(end, 1);
+  $('p1-c').value = 1; $('p1-cv').textContent = '1.000';
+  if (reducedMotion()) { p1.tshow = t.length; p1draw(); return; }
+  p1.busy = true; p1.tshow = 0;
+  const tick = () => {
+    if (!p1.busy) return;
+    p1.tshow += 4; p1draw();
+    if (p1.tshow < t.length) requestAnimationFrame(tick); else p1.busy = false;
+  };
+  requestAnimationFrame(tick);
+}
+$('p1-sweep').addEventListener('click', p1sweep);
+$('p1-once').addEventListener('click', p1once);
+$('p1-reset').addEventListener('click', p1reset);
+$('p1-c').addEventListener('input', (e) => {
+  p1.busy = false;
+  const c = +e.target.value, dir = c >= p1.state.c ? 1 : -1;
+  p1push(p1relax(p1.state, c), dir);
+  $('p1-cv').textContent = c.toFixed(3);
+  p1draw();
+});
+
+/* ---------- Panel 2 ---------- */
+const P2 = { dt: 0.05, sigma: 0.01, N: 60000, every: 50, Wsteps: 12000, b: 0.12, switchAt: 0.6, extraRate: 0.6 };
+P2.W = P2.Wsteps / P2.every;   /* window in samples */
+function simCase(kind, rng) {
+  const a0 = kind === 'A' ? 1.9 : 2.0;
+  let x = steadyStates(a0, P2.b, 1)[0];
+  const xs = [], as = [], ks = [], sq = Math.sqrt(P2.dt);
+  for (let n = 0; n < P2.N; n++) {
+    const a = kind === 'A' ? 1.9 + 0.6 * n / P2.N : 2.0;
+    const k = (kind === 'B' && n >= P2.switchAt * P2.N) ? 1 - P2.extraRate : 1;
+    if (n % P2.every === 0) { xs.push(x); as.push(a); ks.push(k); }
+    x += fx(x, a, P2.b, k) * P2.dt + P2.sigma * sq * seededGaussian(rng);
+  }
+  let pre;
+  if (kind === 'A') { pre = xs.findIndex((v, i) => v > as[i] / 3); if (pre < 0) pre = xs.length; }
+  else pre = Math.floor(P2.switchAt * xs.length);
+  /* truth line: eigenvalue at the instantaneous stable steady state on the current side of a/3 */
+  const truth = xs.map((v, i) => {
+    const st = steadyStates(as[i], P2.b, ks[i]).filter((r) => lam1(r, as[i], ks[i]) < 0);
+    const side = st.filter((r) => (r > as[i] / 3) === (v > as[i] / 3));
+    const r = (side.length ? side : st)[0];
+    return lam1(r, as[i], ks[i]);
+  });
+  return { xs, as, pre, truth };
+}
+function indicators(xs, pre, W) {
+  const s = xs.slice(0, pre), n = s.length, half = W >> 1;
+  const res = s.map((v, i) => {
+    const lo = Math.max(0, i - half), hi = Math.min(n, i + half + 1);
+    let m = 0; for (let j = lo; j < hi; j++) m += s[j];
+    return v - m / (hi - lo);
+  });
+  const ac = [], va = [];
+  for (let e = W; e <= n; e++) {
+    let m = 0; for (let j = e - W; j < e; j++) m += res[j]; m /= W;
+    let v = 0, c = 0;
+    for (let j = e - W; j < e; j++) { v += (res[j] - m) * (res[j] - m); if (j > e - W) c += (res[j] - m) * (res[j - 1] - m); }
+    ac.push(c / v); va.push(v / W);
+  }
+  return { ac, va, windows: Math.floor(n / W) };
+}
+function kendallTau(v) {
+  const st = Math.max(1, Math.floor(v.length / 200)), s = [];
+  for (let i = 0; i < v.length; i += st) s.push(v[i]);
+  let c = 0, d = 0;
+  for (let i = 0; i < s.length; i++) for (let j = i + 1; j < s.length; j++) { const q = s[j] - s[i]; if (q > 0) c++; else if (q < 0) d++; }
+  return c + d ? (c - d) / (c + d) : 0;
+}
+function analyse(sim) {
+  const ind = indicators(sim.xs, sim.pre, P2.W);
+  const tAC = kendallTau(ind.ac), tVar = kendallTau(ind.va);
+  const reading = ind.windows < 3 ? 'too short' : (tAC >= 0.5 && tVar >= 0.5 ? 'rising' : 'quiet');
+  return { ...ind, tAC, tVar, reading };
+}
+function p2compute(seed) {
+  const rng = mulberry32(seed);
+  const A = simCase('A', rng), B = simCase('B', rng);
+  return { A: { sim: A, an: analyse(A) }, B: { sim: B, an: analyse(B) } };
+}
+function p2drawCase(cv, res, col) {
+  const { ctx, w } = fitCanvas(cv, 360);
+  const n = res ? res.sim.xs.length : 1200, T = n * P2.every * P2.dt;
+  const ts = Array.from({ length: n }, (_, i) => i * P2.every * P2.dt);
+  const rows = [['x', [0, 2.2]], ['λ₁ (truth)', [-1.2, 0.1]], ['lag-1 AC', [0, 1]], ['variance', null]];
+  const left = 40, rh = 68;
+  rows.forEach(([lab, yr], k) => {
+    let yrr = yr;
+    if (!yrr) { const m = res ? Math.max(...res.an.va) : 1e-4; yrr = [0, m * 1.1]; }
+    const A = axes(ctx, { x: left, y: 6 + k * (rh + 20), w: w - left - 8, h: rh }, [0, T], yrr, { yl: lab, ny: 2, noXTicks: k < 3, xl: k === 3 ? 't' : '' });
+    if (!res) return;
+    const preT = res.sim.pre * P2.every * P2.dt;
+    vline(ctx, A, preT, COL.red);
+    if (k === 0) polyline(ctx, A, ts, res.sim.xs, col, 1);
+    if (k === 1) { hline(ctx, A, 0, COL.red, [2, 3]); polyline(ctx, A, ts, res.sim.truth, COL.line, 1); }
+    if (k >= 2) {
+      const arr = k === 2 ? res.an.ac : res.an.va;
+      polyline(ctx, A, arr.map((_, i) => (i + P2.W - 1) * P2.every * P2.dt), arr, col, 1.5);
+    }
+  });
+  if (!res) { ctx.fillStyle = COL.muted; ctx.font = '12px system-ui'; ctx.textAlign = 'center'; ctx.fillText('press Run', w / 2, 40); }
+}
+const p2 = { res: null };
+function p2draw() {
+  p2drawCase($('p2-a'), p2.res && p2.res.A, COL.blue);
+  p2drawCase($('p2-b'), p2.res && p2.res.B, COL.amber);
+  if (!p2.res) return;
+  const txt = (r) => `τ(AC1)=${r.an.tAC.toFixed(2)}  τ(var)=${r.an.tVar.toFixed(2)}  windows=${r.an.windows}  reading: ${r.an.reading}`;
+  $('p2-ra').textContent = txt(p2.res.A);
+  $('p2-rb').textContent = txt(p2.res.B);
+}
+$('p2-run').addEventListener('click', () => {
+  const seed = Math.max(1, Math.floor(+$('p2-seed').value || 1));
+  $('p2-ra').textContent = 'running…'; $('p2-rb').textContent = 'running…';
+  setTimeout(() => { p2.res = p2compute(seed); p2draw(); }, 0);
+});
+
+/* ---------- Panel 4: RAF ensemble ---------- */
+/* maxRAF of a reaction list (RAF algorithm): closure of the food under R', keep reactions with reactants
+   and at least one catalyst inside the closure; repeat until nothing is removed. */
+function maxRAF(nMol, food, rx, list) {
+  let Rp = list;
+  const W = new Uint8Array(nMol);
+  for (;;) {
+    W.set(food);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const r of Rp) {
+        const q = rx[r];
+        if (!W[q.pr] && q.re.every((m) => W[m])) { W[q.pr] = 1; changed = true; }
+      }
+    }
+    const R2 = Rp.filter((r) => rx[r].re.every((m) => W[m]) && rx[r].cats.some((m) => W[m]));
+    if (R2.length === Rp.length) return R2;
+    Rp = R2;
+  }
+}
+function buildNet(n, f, rng, catalyseAll) {
+  const names = [];
+  for (let L = 1; L <= n; L++) for (let v = 0; v < (1 << L); v++) names.push(v.toString(2).padStart(L, '0'));
+  const id = new Map(names.map((s, i) => [s, i]));
+  const food = new Uint8Array(names.length);
+  names.forEach((s, i) => { if (s.length <= 2) food[i] = 1; });
+  const rx = [];
+  for (let L = 2; L <= n; L++) for (let v = 0; v < (1 << L); v++) {
+    const s = v.toString(2).padStart(L, '0');
+    for (let k = 1; k < L; k++) rx.push({ re: [id.get(s.slice(0, k)), id.get(s.slice(k))], pr: id.get(s), cats: [] });
+  }
+  const p = f / rx.length;
+  for (let m = 0; m < names.length; m++) for (let r = 0; r < rx.length; r++) {
+    if (catalyseAll || rng() < p) rx[r].cats.push(m);
+  }
+  const perm = rx.map((_, i) => i);
+  for (let i = perm.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); const t = perm[i]; perm[i] = perm[j]; perm[j] = t; }
+  return { nMol: names.length, food, rx, perm };
+}
+/* the addition process: sizes[k] = |maxRAF| after k+1 additions.
+   An uncatalysed reaction can be in no RAF, so adding it leaves the maxRAF unchanged (exact, not a shortcut guess). */
+function additionProcess(net) {
+  const sizes = [], added = [];
+  let cur = 0;
+  for (const r of net.perm) {
+    added.push(r);
+    if (net.rx[r].cats.length) cur = maxRAF(net.nMol, net.food, net.rx, added).length;
+    sizes.push(cur);
+  }
+  return sizes;
+}
+function eventsOf(sizes) {
+  const jumps = [], gaps = [];
+  let prev = 0, last = -1;
+  sizes.forEach((s, k) => {
+    if (s > prev) { jumps.push(s - prev); if (last >= 0) gaps.push(k - last - 1); last = k; }
+    prev = s;
+  });
+  return { jumps, gaps };
+}
+const p4 = { res: null, busy: false };
+function p4runSync(n, f, K, seed) {
+  const rng = mulberry32(seed), out = { first: null, jumps: [], gaps: [], R: 0 };
+  for (let i = 0; i < K; i++) {
+    const net = buildNet(n, f, rng), sizes = additionProcess(net), ev = eventsOf(sizes);
+    if (!i) out.first = sizes;
+    out.R = net.rx.length; out.jumps.push(...ev.jumps); out.gaps.push(...ev.gaps);
+  }
+  return out;
+}
+function histo(cv, data, col, xl) {
+  const { ctx, w, h } = fitCanvas(cv, 220);
+  if (!data || !data.length) {
+    axes(ctx, { x: 34, y: 8, w: w - 42, h: h - 28 }, [0, 10], [0, 1], { xl });
+    ctx.fillStyle = COL.muted; ctx.font = '12px system-ui'; ctx.textAlign = 'center'; ctx.fillText(data ? 'no events' : 'press Run', w / 2, h / 2);
+    return;
+  }
+  const mx = Math.max(...data), cap = Math.min(mx, 30), bins = new Array(cap + 1).fill(0);
+  for (const d of data) bins[Math.min(d, cap)]++;
+  const top = Math.max(...bins);
+  const A = axes(ctx, { x: 34, y: 8, w: w - 42, h: h - 28 }, [-0.5, cap + 0.5], [0, top * 1.1], { xl: xl + (mx > cap ? ' (last bin ≥' + cap + ')' : '') });
+  ctx.fillStyle = col;
+  const bw = Math.max(1, A.X(1) - A.X(0) - 1);
+  bins.forEach((c, v) => { if (c) ctx.fillRect(A.X(v) - bw / 2, A.Y(c), bw, A.Y(0) - A.Y(c)); });
+  /* CCDF inset, log-log */
+  const s = data.filter((d) => d > 0).sort((p, q) => p - q);
+  if (s.length < 2) return;
+  const ix = { x: w - 8 - Math.min(130, w * 0.42), y: 14, w: Math.min(130, w * 0.42) - 4, h: 80 };
+  ctx.fillStyle = COL.bg; ctx.fillRect(ix.x, ix.y, ix.w, ix.h);
+  const lx = [], ly = [];
+  for (let i = 0; i < s.length; i++) if (i === 0 || s[i] !== s[i - 1]) { lx.push(Math.log10(s[i])); ly.push(Math.log10((s.length - i) / s.length)); }
+  const B = axes(ctx, ix, [0, Math.max(0.5, lx[lx.length - 1])], [Math.min(-0.5, ly[ly.length - 1]), 0], { logx: true, logy: true, nx: 2, ny: 2 });
+  lx.forEach((v, i) => dot(ctx, B, v, ly[i], col, 1.8));
+  ctx.fillStyle = COL.line; ctx.textAlign = 'right'; ctx.textBaseline = 'top'; ctx.fillText('CCDF', ix.x + ix.w - 2, ix.y + 2);
+}
+function p4draw() {
+  const r = p4.res;
+  {
+    const { ctx, w, h } = fitCanvas($('p4-s'), 180);
+    const R = r ? r.R : 196;
+    const A = axes(ctx, { x: 38, y: 8, w: w - 46, h: h - 28 }, [0, R], [0, r ? Math.max(1, ...r.first) * 1.1 : 10], { xl: 'reactions added', yl: '|maxRAF|' });
+    if (r) {
+      const xs = [], ys = [];
+      r.first.forEach((s, k) => { xs.push(k, k + 1); ys.push(s, s); });
+      polyline(ctx, A, xs, ys, COL.purple, 1.8);
+    }
+  }
+  histo($('p4-h1'), r && r.jumps, COL.purple, 'jump size');
+  histo($('p4-h2'), r && r.gaps, COL.amber, 'quiet additions');
+  if (r) $('p4-read').textContent = `|R|=${r.R}  networks=${r.K}  jumps=${r.jumps.length}  gaps=${r.gaps.length}  largest jump=${r.jumps.length ? Math.max(...r.jumps) : 0}  time=${r.ms.toFixed(0)} ms`;
+}
+function p4run() {
+  if (p4.busy) return;
+  const n = +$('p4-n').value, f = +$('p4-f').value, K = +$('p4-k').value, seed = Math.max(1, Math.floor(+$('p4-seed').value || 1));
+  const rng = mulberry32(seed), out = { first: null, jumps: [], gaps: [], R: 0, K, ms: 0 };
+  const t0 = performance.now();
+  let i = 0; p4.busy = true;
+  const chunk = () => {
+    const tc = performance.now();
+    while (i < K && performance.now() - tc < 12) {
+      const net = buildNet(n, f, rng), sizes = additionProcess(net), ev = eventsOf(sizes);
+      if (!i) out.first = sizes;
+      out.R = net.rx.length; out.jumps.push(...ev.jumps); out.gaps.push(...ev.gaps);
+      i++;
+    }
+    $('p4-prog').textContent = i < K ? `network ${i} / ${K}…` : '';
+    if (i < K) { setTimeout(chunk, 0); return; }
+    out.ms = performance.now() - t0; p4.res = out; p4.busy = false; p4.lastMs = out.ms; p4draw();
+  };
+  $('p4-prog').textContent = n === 6 ? 'n = 6 takes longer; running…' : 'running…';
+  setTimeout(chunk, 0);
+}
+$('p4-run').addEventListener('click', p4run);
+$('p4-f').addEventListener('input', (e) => { $('p4-fv').textContent = (+e.target.value).toFixed(2); });
+
+/* ---------- self-test hook (side-effect free; returns plain numbers) ---------- */
+window.__tutorialSelfTest = function () {
+  /* Panel 1: full up/down sweep from a fresh state */
+  const vals = p1sweepValues();
+  let s = p1start();
+  const path = [{ ...s, dir: 1 }];
+  for (const v of vals.slice(1)) { s = p1relax(s, v.c); path.push({ ...s, dir: v.dir }); }
+  const lab = path.map((p) => p.x > p.a / 3);
+  const upIdx = lab.findIndex((v, i) => i > 0 && v && !lab[i - 1] && path[i].dir > 0);
+  const dnIdx = lab.findIndex((v, i) => i > 0 && !v && lab[i - 1] && path[i].dir < 0);
+  const p1r = {
+    aUp: path[upIdx].a, aDown: path[dnIdx].a, cUp: path[upIdx].c, cDown: path[dnIdx].c,
+    lamUp: path.slice(upIdx - 10, upIdx).map((p) => p.l1), lamDown: path.slice(dnIdx - 10, dnIdx).map((p) => p.l1),
+  };
+  /* Panel 2 */
+  const cases = [];
+  for (let seed = 1; seed <= 5; seed++) {
+    const r = p2compute(seed);
+    const m = (q) => ({ dAC: q.an.ac[q.an.ac.length - 1] - q.an.ac[0], varRatio: q.an.va[q.an.va.length - 1] / q.an.va[0],
+      tAC: q.an.tAC, tVar: q.an.tVar, reading: q.an.reading, pre: q.sim.pre, n: q.sim.xs.length });
+    cases.push({ seed, A: m(r.A), B: m(r.B) });
+  }
+  const r1 = p2compute(1), r1b = p2compute(1), r2 = p2compute(2);
+  const eq = (u, v) => u.length === v.length && u.every((x, i) => x === v[i]);
+  const det = { same: eq(r1.A.sim.xs, r1b.A.sim.xs) && eq(r1.B.sim.xs, r1b.B.sim.xs), differ: !eq(r1.A.sim.xs, r2.A.sim.xs) };
+  /* Panel 4: RAF checks */
+  const fx1 = (() => {
+    const names = ['a', 'b', 'ab', 'aba', 'abab', 'zz', 'zza', 'zzz'], id = new Map(names.map((q, i) => [q, i]));
+    const food = new Uint8Array(names.length); food[id.get('a')] = 1; food[id.get('b')] = 1;
+    const R = (re, pr, cat) => ({ re: re.map((q) => id.get(q)), pr: id.get(pr), cats: [id.get(cat)] });
+    const rx = [R(['a', 'b'], 'ab', 'ab'), R(['ab', 'a'], 'aba', 'b'), R(['aba', 'b'], 'abab', 'zzz'), R(['zz', 'a'], 'zza', 'ab')];
+    return maxRAF(names.length, food, rx, [0, 1, 2, 3]).map((r) => 'r' + (r + 1)).join(',');
+  })();
+  let zeroOK = true, allOK = true;
+  for (let i = 0; i < 5; i++) {
+    const g = buildNet(5, 0, mulberry32(100 + i));
+    if (maxRAF(g.nMol, g.food, g.rx, g.rx.map((_, k) => k)).length !== 0) zeroOK = false;
+  }
+  const ga = buildNet(4, 1, mulberry32(7), true);
+  if (maxRAF(ga.nMol, ga.food, ga.rx, ga.rx.map((_, k) => k)).length !== ga.rx.length) allOK = false;
+  const mono = [1, 2, 3].map((sd) => { const z = additionProcess(buildNet(5, 1.3, mulberry32(sd))); return z.every((v, k) => !k || v >= z[k - 1]); });
+  const R5 = buildNet(5, 1, mulberry32(1)).rx.length, R6 = buildNet(6, 1, mulberry32(1)).rx.length;
+  const t0 = performance.now(); const ens = p4runSync(5, 1.3, 30, 1); const ensMs = performance.now() - t0;
+  return { p1: p1r, cases, det, raf: { fixture: fx1, zeroOK, allOK, mono, R5, R6 }, ensemble: { ms: ensMs, jumps: ens.jumps.length } };
+};
+
+/* ---------- first frame ---------- */
+p1reset();
+p2draw();
+p4draw();
+let rsT = null;
+new ResizeObserver(() => { clearTimeout(rsT); rsT = setTimeout(() => { p1draw(); p2draw(); p4draw(); }, 80); }).observe($('p1'));
+</script>
+<script src="../../js/annex-tracker.js"></script>
+</body>
+</html>
