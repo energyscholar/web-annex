@@ -120,6 +120,28 @@ footer p { margin-bottom: 0.25rem; }
 footer a { color: var(--blue); }
 .backlink { margin-top: 0.4rem; }
 .backlink a { color: var(--line); text-decoration: none; }
+.i1 { display: grid; grid-template-columns: 37fr 35fr 28fr; gap: 0.7rem; align-items: start; }
+@media (max-width: 700px) { .i1 { grid-template-columns: 1fr; } }
+.i1-ctl { font-size: 0.85rem; }
+.i1-row { display: grid; grid-template-columns: 3.4rem 1fr 2.4rem; align-items: center; gap: 0.4rem; height: 1.6rem; }
+.i1-row label { color: var(--heading); }
+.i1-row output { color: var(--golden); font-variant-numeric: tabular-nums; text-align: right; }
+.i1-row input[type=range] { width: 100%; accent-color: var(--blue); }
+.badge { display: inline-block; font-size: 0.74rem; color: var(--amber); border: 1px solid rgba(245,158,11,0.45); border-radius: 4px; padding: 0 0.35rem; margin: 0.25rem 0 0.1rem; }
+.i1-chk { display: flex; gap: 0.4rem; align-items: center; margin: 0.25rem 0; color: var(--heading); }
+.i1-btns { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; margin-top: 0.2rem; }
+.i1 button, .i2 button {
+  background: var(--blue); color: #fff; border: none; border-radius: 5px; padding: 0.22rem 0.6rem;
+  font-size: 0.82rem; cursor: pointer; font-family: inherit;
+}
+.i1 button:disabled { background: var(--muted); color: var(--line); cursor: not-allowed; }
+.i1 button.ghost { background: transparent; border: 1px solid var(--line); color: var(--text); }
+.cap { display: block; font-size: 0.74rem; color: var(--line); font-style: italic; margin-top: 0.2rem; }
+.i1-svg svg { width: 100%; height: auto; max-height: 220px; display: block; }
+.i1-tab table { font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.i1-tab th, .i1-tab td { padding: 0.25rem 0.4rem; }
+.i1-tab td.ne { color: var(--muted); font-style: italic; font-size: 0.74rem; }
+.i1-tab td.k { color: var(--heading); font-weight: 600; }
 /*@@CSS-I@@*/
 </style>
 </head>
@@ -180,7 +202,54 @@ footer a { color: var(--blue); }
 
 <h2 id="try">What it does: try it</h2>
 <p>Three points, two declared arrows. <b>A</b> takes each arrow’s difference; <b>B</b> adds the next arrow’s, one step only; <b>R</b> adds what continues minus what arrives, scaled by the local contrast ρ. Untick the middle point: B is <i>not evaluated</i>, which is not zero.</p>
-<div class="panel" id="i1" data-interactive="1" style="height:260px"></div>
+<div class="panel" id="i1" data-interactive="1">
+<div class="i1">
+  <div class="i1-ctl">
+    <div class="i1-row"><label for="x0">point 0</label><input type="range" id="x0" min="-5" max="5" step="0.5" value="3"><output id="x0v" for="x0">3</output></div>
+    <div class="i1-row"><label for="x1">point 1</label><input type="range" id="x1" min="-5" max="5" step="0.5" value="1"><output id="x1v" for="x1">1</output></div>
+    <div class="i1-row"><label for="x2">point 2</label><input type="range" id="x2" min="-5" max="5" step="0.5" value="0"><output id="x2v" for="x2">0</output></div>
+    <span class="badge" title="0.5 and 1.0 are the repository’s own test-fixture values, not kernel defaults.">declared for this demo — the kernel holds no value for these</span>
+    <div class="i1-row" title="0.5 is the repository’s test-fixture value, not a kernel default."><label for="rb">ρ_base</label><input type="range" id="rb" min="0" max="2" step="0.1" value="0.5"><output id="rbv" for="rb">0.5</output></div>
+    <div class="i1-row" title="1.0 is the repository’s test-fixture value, not a kernel default. χ₀ must be finite and positive, so the slider starts at 0.1."><label for="c0">χ₀</label><input type="range" id="c0" min="0.1" max="5" step="0.1" value="1"><output id="c0v" for="c0">1</output></div>
+    <label class="i1-chk"><input type="checkbox" id="interior" checked> M establishes the middle point (s→t→u)</label>
+    <div class="i1-btns"><button type="button" id="shift">+1 to every point</button><button type="button" id="reset" class="ghost">Reset</button></div>
+    <span class="cap">+1: same differences — a uniform shift changes nothing.</span>
+  </div>
+  <div class="i1-svg">
+    <svg id="i1svg" role="img" aria-label="Three points, 0, 1 and 2, joined by two declared arrows, 0 to 1 and 1 to 2. Each point shows its value; each arrow shows its difference." viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="i1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
+      <g font-family="system-ui, sans-serif" text-anchor="middle">
+        <line x1="64" y1="100" x2="124" y2="100" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#i1a)"/>
+        <line x1="176" y1="100" x2="236" y2="100" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#i1a)"/>
+        <text id="i1e0" x="95" y="84" fill="#22c55e" font-size="14">A = 2</text>
+        <text id="i1e1" x="205" y="84" fill="#22c55e" font-size="14">A = 1</text>
+        <circle cx="40" cy="100" r="22" fill="#3b82f6"/>
+        <circle id="i1mid" cx="150" cy="100" r="22" fill="#22c55e" stroke="#f1f5f9" stroke-width="0"/>
+        <circle cx="260" cy="100" r="22" fill="#fbbf24"/>
+        <text id="i1n0" x="40" y="106" fill="#f1f5f9" font-size="17" font-weight="600">3</text>
+        <text id="i1n1" x="150" y="106" fill="#0f172a" font-size="17" font-weight="600">1</text>
+        <text id="i1n2" x="260" y="106" fill="#0f172a" font-size="17" font-weight="600">0</text>
+        <text x="40" y="142" fill="#94a3b8" font-size="12">point 0</text>
+        <text x="150" y="142" fill="#94a3b8" font-size="12">point 1</text>
+        <text x="260" y="142" fill="#94a3b8" font-size="12">point 2</text>
+        <text id="i1kern" x="150" y="180" fill="#a855f7" font-size="13" font-style="italic">kernel: A → B → R</text>
+      </g>
+    </svg>
+  </div>
+  <div class="i1-tab">
+    <div class="tscroll"><table id="i1tab">
+      <thead><tr><th></th><th>0→1</th><th>1→2</th></tr></thead>
+      <tbody>
+        <tr><td class="k" id="kA">A</td><td data-k="A" data-e="0"></td><td data-k="A" data-e="1"></td></tr>
+        <tr><td class="k">B</td><td data-k="B" data-e="0"></td><td data-k="B" data-e="1"></td></tr>
+        <tr><td class="k">ρ</td><td data-k="rho" data-e="0"></td><td data-k="rho" data-e="1"></td></tr>
+        <tr><td class="k" id="kR">R</td><td data-k="R" data-e="0"></td><td data-k="R" data-e="1"></td></tr>
+      </tbody>
+    </table></div>
+    <span class="cap">0.000 is a calculated result; “not evaluated” is the absence of one.</span>
+  </div>
+</div>
+</div>
 
 <h2 id="strict">Why the rules are strict</h2>
 <div class="rules">
@@ -239,6 +308,96 @@ footer a { color: var(--blue); }
 </footer>
 </div>
 <div class="scroll-marker" style="height:1px" aria-hidden="true"></div>
+<script>
+(function () {
+  'use strict';
+  /* The declared relation is fixed: nodes 0, 1, 2; edges e0 = (0→1), e1 = (1→2), both
+     Continuation. succ/pred/adj are read off the edge list, never assumed. */
+  var EDGES = [[0, 1], [1, 2]];
+  function succOf(e) { var r = []; EDGES.forEach(function (f, j) { if (f[0] === EDGES[e][1]) r.push(j); }); return r; }
+  function predOf(e) { var r = []; EDGES.forEach(function (f, j) { if (f[1] === EDGES[e][0]) r.push(j); }); return r; }
+  function incident(i) { var r = []; EDGES.forEach(function (f, j) { if (f[0] === i || f[1] === i) r.push(j); }); return r; }
+  function sum(idx, g) { return idx.reduce(function (a, j) { return a + g[j]; }, 0); }
+  function chiAt(i, g) { return incident(i).reduce(function (m, j) { return Math.max(m, Math.abs(g[j])); }, 0); }
+  function diff(x) { return EDGES.map(function (st) { return x[st[0]] - x[st[1]]; }); }
+
+  /* ABR path (operator_a, compute_rho, operator_b, operator_r). */
+  function rhoABR(a, rb, c0) {
+    var node = [0, 1, 2].map(function (i) { var c = chiAt(i, a); return rb * c / (c0 + c); });
+    return EDGES.map(function (st) { return node[st[0]]; });          // ρ[e] = ρ[source(e)]
+  }
+  /* Primary path (operator_delta, compute_rho_primary, operator_sigma). Kept separate. */
+  function rhoPrimary(d, rb, c0) {
+    return EDGES.map(function (st) { var c = chiAt(st[0], d); return rb * c / (c0 + c); });
+  }
+
+  function compute(o) {
+    var A = diff(o.x);
+    if (o.interior) {
+      var B = A.map(function (v, e) { return v + sum(succOf(e), A); });
+      var rho = rhoABR(A, o.rhoBase, o.chi0);
+      var R = B.map(function (v, e) { return v + rho[e] * (sum(succOf(e), B) - sum(predOf(e), B)); });
+      return { A: A, B: B, rho: rho, R: R, Delta: null, Sigma: null };
+    }
+    var D = diff(o.x);
+    var rp = rhoPrimary(D, o.rhoBase, o.chi0);
+    var S = D.map(function (v, e) { return v + rp[e] * (sum(succOf(e), D) - sum(predOf(e), D)); });
+    return { A: A, B: null, rho: rp, R: null, Delta: D, Sigma: S };
+  }
+  window.ABR_DEMO = { compute: compute };
+
+  function minus(s) { return s.charAt(0) === '-' ? '−' + s.slice(1) : s; }
+  function fmt(v) { return Math.abs(v) < 5e-4 ? '0.000' : minus(v.toFixed(3)); }
+  function fmtX(v) { return minus(String(v)); }
+  function $(id) { return document.getElementById(id); }
+
+  var DEF = { x0: 3, x1: 1, x2: 0, rb: 0.5, c0: 1 };
+  var ids = ['x0', 'x1', 'x2', 'rb', 'c0'];
+  var panel = $('i1');
+  if (!panel) return;
+
+  function cells(k) { return panel.querySelectorAll('td[data-k="' + k + '"]'); }
+  function fill(k, arr) {
+    cells(k).forEach(function (td, e) {
+      if (arr === null) { td.textContent = 'not evaluated'; td.className = 'ne'; }
+      else { td.textContent = fmt(arr[e]); td.className = ''; }
+    });
+  }
+  function render() {
+    var x = [+$('x0').value, +$('x1').value, +$('x2').value];
+    var interior = $('interior').checked;
+    var r = compute({ x: x, rhoBase: +$('rb').value, chi0: +$('c0').value, interior: interior });
+    ids.forEach(function (id) { $(id + 'v').textContent = fmtX(+$(id).value); });
+    [0, 1, 2].forEach(function (i) { $('i1n' + i).textContent = fmtX(x[i]); });
+    var first = interior ? r.A : r.Delta, name = interior ? 'A' : 'Δ';
+    $('i1e0').textContent = name + ' = ' + fmt(first[0]);
+    $('i1e1').textContent = name + ' = ' + fmt(first[1]);
+    $('kA').textContent = name;
+    $('kR').textContent = interior ? 'R' : 'Σ';
+    fill('A', first); fill('B', r.B); fill('rho', r.rho); fill('R', interior ? r.R : r.Sigma);
+    $('i1kern').textContent = interior ? 'kernel: A → B → R' : 'kernel: Δ → Σ (B not evaluated)';
+    var mid = $('i1mid');
+    mid.setAttribute('fill', interior ? '#22c55e' : '#1e293b');
+    mid.setAttribute('stroke-width', interior ? '0' : '2');
+    mid.setAttribute('stroke-dasharray', interior ? '' : '4 3');
+    $('i1n1').setAttribute('fill', interior ? '#0f172a' : '#f1f5f9');
+    /* +1 exists only where the shifted values are representable on the sliders (max 5). */
+    $('shift').disabled = x.some(function (v) { return v > 4; });
+  }
+  ids.forEach(function (id) { $(id).addEventListener('input', render); });
+  $('interior').addEventListener('change', render);
+  $('shift').addEventListener('click', function () {
+    ['x0', 'x1', 'x2'].forEach(function (id) { $(id).value = String(+$(id).value + 1); });
+    render();
+  });
+  $('reset').addEventListener('click', function () {
+    ids.forEach(function (id) { $(id).value = String(DEF[id]); });
+    $('interior').checked = true;
+    render();
+  });
+  render();
+})();
+</script>
 <!--@@JS@@-->
 <script src="../js/annex-tracker.js"></script>
 </body>
