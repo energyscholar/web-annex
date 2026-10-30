@@ -142,6 +142,26 @@ footer a { color: var(--blue); }
 .i1-tab th, .i1-tab td { padding: 0.25rem 0.4rem; }
 .i1-tab td.ne { color: var(--muted); font-style: italic; font-size: 0.74rem; }
 .i1-tab td.k { color: var(--heading); font-weight: 600; }
+.i2-top { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.i2 .tog { background: transparent; border: 1px solid var(--line); color: var(--text); }
+.i2 .tog[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.i2-view { flex: 1 1 18rem; background: var(--bg); border-radius: 6px; padding: 0.3rem 0.7rem; color: var(--heading); font-size: 0.9rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; margin-bottom: 0.25rem; }
+.i2 .chip { background: var(--bg); border: 1px solid var(--muted); color: var(--heading); border-radius: 999px; padding: 0.15rem 0.65rem; }
+.i2 .chip.emp { color: var(--line); border-style: dashed; }
+.i2 .chip[aria-pressed="true"] { border-color: var(--golden); color: var(--golden); }
+.emp-h { font-size: 0.74rem; color: var(--line); font-style: italic; }
+.i2-grid { display: grid; grid-template-columns: 5fr 2fr; gap: 0.7rem; margin-top: 0.45rem; align-items: start; }
+@media (max-width: 700px) { .i2-grid { grid-template-columns: 1fr; } }
+.i2-card { background: var(--bg); border-radius: 6px; padding: 0.45rem 0.75rem; font-size: 0.86rem; min-height: 7.6rem; }
+.i2-card .sym { font-family: 'Times New Roman', Georgia, serif; font-style: italic; font-size: 1.7rem; color: var(--golden); line-height: 1.1; margin-right: 0.4rem; }
+.i2-card .nm { color: var(--heading); font-weight: 600; }
+.i2-card dl { display: grid; grid-template-columns: 6.5rem 1fr; gap: 0.05rem 0.5rem; margin-top: 0.25rem; }
+.i2-card dt { color: var(--line); }
+.i2-card .nt { margin-top: 0.3rem; color: var(--amber); font-size: 0.8rem; }
+.i2-card .eq { margin-top: 0.3rem; color: var(--green); font-size: 0.8rem; }
+.i2-svg svg { width: 100%; height: auto; max-height: 160px; display: block; }
+.mark { color: var(--golden); font-weight: 700; }
 /*@@CSS-I@@*/
 </style>
 </head>
@@ -294,12 +314,86 @@ footer a { color: var(--blue); }
 </div>
 
 <h2 id="from">Where it comes from</h2>
-<p>The usual story: fields are independent, and any likeness between their tools is coincidence. Judge for yourself. The preprint <cite>Convergent Discovery of Critical Phenomena Mathematics Across Disciplines</cite> (Stephenson &amp; Macomber, arXiv:2601.22389) surveys six to twelve such fields. Its supplement records that the framework that preceded this kernel, from distributed systems engineering, resembled a critical phase transition near its parameter boundaries; that prompted the survey.</p>
-<div class="panel" id="i2" data-interactive="2" style="height:280px"></div>
+<p>The preprint <cite>Convergent Discovery of Critical Phenomena Mathematics Across Disciplines</cite> (Stephenson &amp; Macomber, arXiv:2601.22389) surveys six to twelve fields that built tools for the same question. Its supplement records that the framework that preceded this kernel, from distributed systems engineering, resembled a critical phase transition near its parameter boundaries; that prompted the survey. Compare the tools below.</p>
+<div class="panel" id="i2" data-interactive="2">
+<div class="i2">
+  <div class="i2-top">
+    <button type="button" class="tog" id="tStd" aria-pressed="true">The standard view</button>
+    <button type="button" class="tog" id="tSide" aria-pressed="false">Side by side</button>
+    <div class="i2-view" id="i2view" aria-live="polite"></div>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="chips" id="chipsEmp"><span class="emp-h">Empirical scaling exponents (power-law distributions, not correlation-decay diagnostics):</span></div>
+  <div class="i2-grid">
+    <div class="i2-card" id="i2card" aria-live="polite"></div>
+    <div class="i2-svg">
+      <svg id="i2svg" role="img" aria-label="Illustration of a correlation falling off with distance. A short curve drops quickly; a long curve, nearer a critical point, reaches much further." viewBox="0 6 300 134" xmlns="http://www.w3.org/2000/svg">
+        <g font-family="system-ui, sans-serif">
+          <line x1="34" y1="16" x2="34" y2="118" stroke="#475569"/>
+          <line x1="34" y1="118" x2="290" y2="118" stroke="#475569"/>
+          <path d="M34,22 C60,95 80,114 288,117" fill="none" stroke="#94a3b8" stroke-width="2.5"/>
+          <path d="M34,22 C120,40 190,90 288,108" fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+          <text x="28" y="26" fill="#94a3b8" font-size="14" text-anchor="end">C</text>
+          <text x="288" y="132" fill="#94a3b8" font-size="14" text-anchor="end">distance</text>
+          <text x="170" y="62" fill="#fbbf24" font-size="14">nearer critical</text>
+          <text x="150" y="104" fill="#94a3b8" font-size="14">far from it</text>
+        </g>
+      </svg>
+      <span class="cap">Illustration of a correlation falling off with distance; the reach grows as a critical point is approached.</span>
+    </div>
+  </div>
+</div>
+</div>
 
-<p class="dsum">The preprint’s six clearest cases: Kauffman’s edge of chaos, biomedical signal analysis, neuroscience, machine learning, power grids and traffic flow. Statistical physics is foundational; the count runs six to twelve.</p>
+<p class="dsum">The preprint’s six clearest cases: Kauffman’s edge of chaos, biomedical signal analysis, neuroscience, machine learning, power grids and traffic flow. Statistical physics is foundational, seismology an empirical precursor.</p>
+<details id="acc-domains">
+  <summary>Which fields already have criticality mathematics</summary>
+  <div class="acc-body">
+    <h3>Same question, different names</h3>
+    <p class="gloss">The preprint’s correspondence table, drawn from the same data as the chips above. It calls the link “functional correspondence” rather than “mathematical equivalence”. <cite>(preprint, tab:equiv)</cite></p>
+    <div class="tscroll"><table id="rowsTab">
+      <thead><tr><th>Domain</th><th>Parameter</th><th>Common name</th><th>Meaning</th><th>Critical value</th><th>Category</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p class="gloss" id="rowsNotes"></p>
+    <h3>How the preprint classifies each field</h3>
+    <div class="tscroll"><table id="classTab">
+      <thead><tr><th>Domain</th><th>Classification</th></tr></thead>
+      <tbody>
+        <tr><td>Statistical Physics</td><td>Foundational framework</td></tr>
+        <tr><td>Seismology (G-R 1944)</td><td>Empirical precursor</td></tr>
+        <tr><td>SOC (Bak 1987)</td><td>Intra-physics extension</td></tr>
+        <tr><td>Edge of Chaos (Kauffman) <span class="mark" title="one of the six clearest cases">★</span></td><td>Qualified independent</td></tr>
+        <tr><td>Biomedical (DFA) <span class="mark" title="one of the six clearest cases">★</span></td><td>Qualified independent</td></tr>
+        <tr><td>Finance (Mandelbrot 1963)</td><td>Foundational cross-domain</td></tr>
+        <tr><td>Finance (Peters 1994)</td><td>Domain transfer</td></tr>
+        <tr><td>Machine Learning <span class="mark" title="one of the six clearest cases">★</span></td><td>Qualified independent</td></tr>
+        <tr><td>Neuroscience <span class="mark" title="one of the six clearest cases">★</span></td><td>Qualified independent</td></tr>
+        <tr><td>Power Grids <span class="mark" title="one of the six clearest cases">★</span></td><td>Independent derivation</td></tr>
+        <tr><td>Traffic Flow <span class="mark" title="one of the six clearest cases">★</span></td><td>Empirical precursor + qualified</td></tr>
+        <tr><td>Climate / Thermohaline</td><td>Independent derivation</td></tr>
+        <tr><td>Linguistics (Zipf)</td><td>Empirical precursor</td></tr>
+        <tr><td>Urban Scaling</td><td>Domain transfer</td></tr>
+        <tr><td>Sornette (2004)</td><td>Prior cross-domain synthesis</td></tr>
+      </tbody>
+    </table></div>
+    <p class="gloss"><span class="mark">★</span> one of the six clearest cases, each, in the preprint’s words, “with qualifications noted for each”.</p>
+    <ul>
+      <li><b>Independent derivation</b>: developed from first principles without demonstrable awareness of equivalent prior work.</li>
+      <li><b>Qualified independent</b>: the method is novel, but the researcher’s training or setting included significant exposure to the relevant physics.</li>
+      <li><b>Domain transfer</b>: an existing technique applied to a new domain, with traceable lineage.</li>
+      <li><b>Intra-physics extension</b>: new phenomena found with existing tools inside the same discipline (the definition says “intra-field”).</li>
+      <li><b>Empirical precursor</b>: critical-like behaviour observed before the formal framework existed.</li>
+      <li><b>Foundational framework</b>, <b>foundational cross-domain</b>: the general mathematics (scaling, self-similarity, power laws) that shaped several lineages; statistical physics “established the mathematics”.</li>
+      <li><b>Prior cross-domain synthesis</b>: an earlier work that already drew the fields together, a “textbook treatment”.</li>
+    </ul>
+    <h3>The preprint’s own limits</h3>
+    <p>“The functional correspondence we document is phenomenological.” “Our citation analysis cannot rule out informal knowledge transfer. The quantitative evidence supports but does not prove independent derivation.” <cite>(preprint, Limitations)</cite></p>
+    <p><a href="https://arxiv.org/abs/2601.22389">Read the preprint, arXiv:2601.22389</a> · <a href="../domain-convergence/">Go deeper: the cross-domain survey</a> · <a href="../criticality-bridges/">Go deeper: bridges between domains</a></p>
+  </div>
+</details>
 <!--@@S5@@-->
-<div id="accres" style="height:176px"></div>
+<div id="accres" style="height:144px"></div>
 
 <footer>
   <p><a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/tree/kernel-v9">Repository</a> · <a href="https://arxiv.org/abs/2601.22389">Preprint</a> · <a href="../structure-from-topology/">Structure from Topology</a> · <a href="../renormalization-group/">Renormalization Group</a>
@@ -396,6 +490,87 @@ footer a { color: var(--blue); }
     render();
   });
   render();
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  /* One array, verbatim from the preprint's tab:equiv (MAIN:375-392). The chips, the card and
+     the 5.3 accordion table are all rendered from it, so they cannot drift apart. */
+  var EMP = 'empirical scaling exponent (power-law distribution, not a correlation-decay diagnostic)';
+  var ROWS = [
+    {domain: 'Physics', symbol: 'ξ', name: 'Correlation length', measures: 'Spatial correlation decay', critical: 'ξ → ∞', category: 'diverging correlation measure'},
+    {domain: 'Physics', symbol: 'τ', name: 'Relaxation time', measures: 'Temporal correlation decay', critical: 'τ → ∞', category: 'diverging correlation measure'},
+    {domain: 'DFA', symbol: 'α', name: 'DFA exponent', measures: 'Detrended fluctuation scaling', critical: 'α ≈ 1', category: 'global scaling exponent'},
+    {domain: 'Finance', symbol: 'H', name: 'Hurst exponent', measures: 'Long-range dependence', critical: 'H ≈ 1', category: 'global scaling exponent'},
+    {domain: 'ML', symbol: 'χ', name: 'Spectral radius', measures: 'Recurrent weight stability', critical: 'χ ≈ 1', category: 'local linear stability condition'},
+    {domain: 'HRV', symbol: 'α₁', name: 'Short-term DFA exponent', measures: 'Autonomic regulation index', critical: 'α₁ ≈ 0.75*', category: 'global scaling exponent',
+      note: 'Healthy cardiac dynamics operate away from criticality (α₁ ≈ 0.75); values of α₁ ≈ 1.0 indicate pathological loss of autonomic regulation.'},
+    {domain: 'Traffic', symbol: 'ρ_c', name: 'Critical density', measures: 'Flow-density phase boundary', critical: 'Phase transition', category: 'threshold'},
+    {domain: 'Seismology', symbol: 'b', name: 'b-value (Gutenberg–Richter)', measures: 'Frequency-magnitude scaling exponent', critical: 'b ≈ 1', category: EMP},
+    {domain: 'Linguistics', symbol: 'γ', name: 'Zipf exponent', measures: 'Word rank-frequency scaling', critical: 'γ ≈ 1', category: EMP},
+    {domain: 'Urban science', symbol: 'β', name: 'City scaling exponent', measures: 'Superlinear scaling with population', critical: 'β > 1 (innovation)', category: EMP}
+  ];
+  /* The one exact link the preprint states, and only between these two rows (MAIN:399, 406). */
+  var EXACT = 'α = H for fractional Gaussian noise, and α = H + 1 for fractional Brownian motion; ' +
+    '“We do not claim this equivalence generalizes beyond the fGn/fBm family”';
+  var EXACT_FOR = { DFA: true, Finance: true };
+  var VIEW = {
+    std: 'These fields developed separately. Any likeness between their tools is coincidence.',
+    side: 'How far do correlations extend?'
+  };
+  var CARD_KEYS = [['measures', 'Meaning'], ['critical', 'Critical value'], ['category', 'Category']];
+  window.ABR_DEMO = window.ABR_DEMO || {};
+  window.ABR_DEMO.ROWS = ROWS;
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function $(id) { return document.getElementById(id); }
+  var card = $('i2card');
+  if (!card) return;
+
+  function show(i) {
+    var r = ROWS[i];
+    card.textContent = '';
+    var head = el('div');
+    head.appendChild(el('span', 'sym', r.symbol));
+    head.appendChild(el('span', 'nm', r.name));
+    card.appendChild(head);
+    var dl = el('dl');
+    CARD_KEYS.forEach(function (k) { dl.appendChild(el('dt', null, k[1])); dl.appendChild(el('dd', null, r[k[0]])); });
+    card.appendChild(dl);
+    if (r.note) card.appendChild(el('div', 'nt', '* ' + r.note));
+    if (EXACT_FOR[r.domain]) card.appendChild(el('div', 'eq', EXACT));
+    document.querySelectorAll('#i2 .chip').forEach(function (c) { c.setAttribute('aria-pressed', String(+c.dataset.i === i)); });
+  }
+  function setView(side) {
+    $('i2view').textContent = side ? VIEW.side : VIEW.std;
+    $('tStd').setAttribute('aria-pressed', String(!side));
+    $('tSide').setAttribute('aria-pressed', String(side));
+  }
+
+  ROWS.forEach(function (r, i) {
+    var emp = r.category === EMP;
+    var b = el('button', 'chip' + (emp ? ' emp' : ''), r.domain + ' ' + r.symbol);
+    b.type = 'button'; b.dataset.i = String(i);
+    b.addEventListener('click', function () { show(i); });
+    $(emp ? 'chipsEmp' : 'chips').appendChild(b);
+  });
+  $('tStd').addEventListener('click', function () { setView(false); });
+  $('tSide').addEventListener('click', function () { setView(true); });
+  setView(false);
+  show(0);
+
+  /* 5.3 accordion: the same ROWS, one table row each. */
+  var tb = document.querySelector('#rowsTab tbody');
+  if (tb) {
+    ROWS.forEach(function (r) {
+      var tr = el('tr'); tr.dataset.row = '1';
+      ['domain', 'symbol', 'name', 'measures', 'critical', 'category'].forEach(function (k) { tr.appendChild(el('td', null, r[k])); });
+      tb.appendChild(tr);
+    });
+    var notes = ROWS.filter(function (r) { return r.note; }).map(function (r) { return '* ' + r.domain + ': ' + r.note; });
+    $('rowsNotes').textContent = notes.join(' ');
+  }
 })();
 </script>
 <!--@@JS@@-->
