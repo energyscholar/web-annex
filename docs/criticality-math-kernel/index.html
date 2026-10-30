@@ -193,9 +193,9 @@ footer a { color: var(--blue); }
 </div>
 
 <h2 id="what">What it is</h2>
-<p>This kernel starts from the arrow, not from objects <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L82-L84">kernel reference, lines 82–84</a>)</cite>. It does fixed arithmetic: first on the numbers at each arrow’s two ends, then on the results at neighbouring arrows; a result is a calculation, never an observation. <i>Declared</i> means written down beforehand by the person applying it, not inferred from the data.</p>
+<p>This kernel starts from the arrow, not from objects <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L82-L84">kernel reference, lines 82–84</a>)</cite>. It does fixed arithmetic: first on the numbers at each arrow’s two ends, then on neighbouring arrows’ results; a result is a calculation, never an observation. <i>Declared</i>: stated by Origin, the person responsible, before any operator acts; traced to an observation through M, never supplied by the calculation. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L5-L9">kernel notation, lines 5, 7, 9, 61</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/role_separation_and_operator_application.md#L31-L35">role separation, lines 31, 35</a>)</cite></p>
 <div class="fig">
-<svg id="g1" role="img" aria-label="The chain: a declared relation, then M, then a number in D, then the declared topology, then the operators, then a result; if the result is reduced, a declared projection C that states what it keeps and discards; then comparison with the observation." viewBox="0 12 880 132" xmlns="http://www.w3.org/2000/svg">
+<svg id="g1" role="img" aria-label="The chain: a declared relation, then M, then a number in D, then the declared topology, then the operators, then a result; if the result is reduced, a declared projection C that states what it keeps and discards; then comparison with the observation. A return arrow from the comparison goes back to the declared topology: change the declaration, not the kernel, and never to reach a wanted number." viewBox="0 12 880 132" xmlns="http://www.w3.org/2000/svg">
   <defs><marker id="g1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
   <g font-family="system-ui, sans-serif" font-size="14" text-anchor="middle">
     <rect x="6" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
@@ -231,7 +231,7 @@ footer a { color: var(--blue); }
 </div>
 
 <h2 id="try">What it does: try it</h2>
-<p><b>A</b> takes each arrow’s difference; <b>B</b> adds the next arrow’s, one step only; <b>R</b> adds what continues minus what arrives, scaled by local strength ρ. Untick the box and B is <i>not evaluated</i>, which is not zero.</p>
+<p><b>A</b> takes each arrow’s difference; <b>B</b> adds the next arrow’s; <b>R</b> adds what continues minus what arrives, scaled by local strength ρ. Untick the box: B is <i>not evaluated</i>, which is not zero.</p>
 <div class="panel" id="i1" data-interactive="1">
 <div class="i1">
   <div class="i1-ctl">
@@ -326,8 +326,8 @@ footer a { color: var(--blue); }
 </div>
 
 <h2 id="from">Where the criticality question comes from</h2>
-<p>A critical point is a tipping point: a small change can spread through the whole system. The preprint (arXiv:2601.22389) found six to twelve fields that each built their own maths for it. A field could, in principle, declare its own M and apply the same operators <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L20-L23">README</a>)</cite>; whether that answers the question is still to be shown.</p>
-<p>In the kernel’s terms, computing any of these measures (ξ, τ, α, H, χ) from kernel output would be a <em>declared projection</em> (C): a reduction of the edge field that must state what it preserves and discards. None is a kernel quantity; the fields’ χ (a spectral radius) is not the kernel’s χ[i] above. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L31">kernel notation, line 31</a>)</cite></p>
+<p>A critical point is a tipping point, where small changes spread system-wide. The preprint (arXiv:2601.22389) found six to twelve fields that each built their own maths. A field could, in principle, declare its own M and apply the same operators <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L20-L23">README</a>)</cite>; whether that works is still to be shown.</p>
+<p>Computing any of these measures (ξ, τ, α, H, χ) from kernel output would be a <em>declared projection</em> (C): a reduction of the edge field that must state what it preserves and discards. None is a kernel quantity; the fields’ χ (a spectral radius) is not the kernel’s χ[i] above. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L31">kernel notation, line 31</a>)</cite></p>
 <div class="panel" id="i2" data-interactive="2">
 <div class="i2">
   <div class="i2-top i2-view" id="i2view">
@@ -357,7 +357,7 @@ footer a { color: var(--blue); }
 </div>
 </div>
 
-<p class="dsum">The preprint’s six clearest cases: Kauffman’s edge of chaos, biomedical signals, neuroscience, machine learning, power grids, traffic flow.</p>
+<p class="dsum">The preprint’s six clearest cases: Kauffman’s edge of chaos, biomedical signals, neuroscience, machine learning, power grids, traffic.</p>
 <details id="acc-domains">
   <summary>Fields with criticality mathematics</summary>
   <div class="acc-body">
@@ -442,7 +442,7 @@ footer a { color: var(--blue); }
       <li><b>Before Δ or A.</b> Admissible: uniform shift, declared unit scale. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L33">kernel notation, line 33</a>)</cite></li>
       <li><b>Two phases.</b> Phase 1 acts on one declared observation M(o). Phase 2 needs a declared pair: “Phase 2 requires the process, not the photograph.” <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/abr_operators_plain.md#L51-L57">plain-language operators, lines 51–57, 231–237</a>)</cite></li>
       <li><b>Arrows.</b> Provenance classes Continuation, Coupling, Persistence. Each arrow has exactly one admissible direction; the reverse needs its own observable provenance. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L330-L337">kernel reference, lines 330–337</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L13">kernel notation, line 13</a>)</cite></li>
-      <li><b>C.</b> A declared projection, not a kernel operator: state what it preserves and what it discards. The repository calls itself the ABR/ABRCE kernel (README, line 15). In the preprint’s supplement C is an operator and E = C(R(B(A(x)))) the composite; in the repository C is a declared projection, not a kernel operator. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L17">kernel notation, lines 17, 31</a>)</cite></li>
+      <li><b>C.</b> A declared projection, not a kernel operator: state what it preserves and what it discards. The repository calls itself the ABR/ABRCE kernel (README, line 15). In the preprint’s supplement C is an operator and E = C(R(B(A(x)))) the composite; in the repository C is a declared projection, not a kernel operator. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L17">kernel notation, lines 17, 31</a>; supplement, lines 30, 63)</cite></li>
       <li><b>Roles.</b> Three project roles: Origin, the person who declares and holds responsibility; Generator, the one who proposes; Verifier, the one who checks, returning located findings, not approval, by asking: “Can I trace every mathematical operation continuously back to declared observables through declared operators?” The operators hold no agency. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/role_separation_and_operator_application.md#L29-L35">role separation, lines 29–35, 150, 180</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L131">kernel reference, lines 131, 175</a>)</cite></li>
     </ul>
     <h3>Kernel V9, development branch</h3>
