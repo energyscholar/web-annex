@@ -63,7 +63,7 @@ h1 { color: var(--heading); font-size: 2rem; letter-spacing: -0.02em; line-heigh
 .subtitle { color: var(--line); font-size: 0.98rem; margin: 0.2rem 0 0.7rem; }
 .summary { color: var(--heading); font-size: 1.06rem; margin-bottom: 0.8rem; }
 h2 {
-  color: var(--heading); font-size: 1.25rem; margin: 1rem 0 0.4rem;
+  color: var(--heading); font-size: 1.25rem; margin: 0.8rem 0 0.35rem;
   padding-bottom: 0.25rem; border-bottom: 1px solid var(--rule);
 }
 p { margin-bottom: 0.6rem; }
@@ -76,6 +76,7 @@ cite { font-style: italic; }
 .primer-title { color: var(--blue); font-weight: 700; margin-bottom: 0.2rem; }
 .primer ol { margin-left: 1.3rem; font-size: 0.95rem; }
 .primer li { margin-bottom: 0.1rem; }
+@media (min-width: 701px) { .primer ol { display: grid; grid-template-columns: 1fr 1fr; column-gap: 2.2rem; } .primer li:last-child { grid-column: 1 / -1; } }
 .primer b, .rules b { color: var(--heading); }
 .fig {
   background: var(--card); border-radius: 8px; padding: 0.5rem; margin: 0.5rem 0;
@@ -142,10 +143,11 @@ footer a { color: var(--blue); }
 .i1-tab th, .i1-tab td { padding: 0.25rem 0.4rem; }
 .i1-tab td.ne { color: var(--muted); font-style: italic; font-size: 0.74rem; }
 .i1-tab td.k { color: var(--heading); font-weight: 600; }
-.i2-top { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.i2-top { display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.6rem; align-items: center; margin-bottom: 0.5rem; }
 .i2 .tog { background: transparent; border: 1px solid var(--line); color: var(--text); }
 .i2 .tog[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
-.i2-view { flex: 1 1 18rem; background: var(--bg); border-radius: 6px; padding: 0.3rem 0.7rem; color: var(--heading); font-size: 0.9rem; }
+.i2-view .off { opacity: 0.5; }
+.i2-view { background: var(--bg); border-radius: 6px; padding: 0.3rem 0.7rem; color: var(--heading); font-size: 0.9rem; }
 .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; margin-bottom: 0.25rem; }
 .i2 .chip { background: var(--bg); border: 1px solid var(--muted); color: var(--heading); border-radius: 999px; padding: 0.15rem 0.65rem; }
 .i2 .chip.emp { color: var(--line); border-style: dashed; }
@@ -168,21 +170,21 @@ footer a { color: var(--blue); }
 <div class="container">
 <h1>Criticality Math Kernel</h1>
 <p class="subtitle">the ABR kernel (also called ABRCE) — Kernel V9, development branch</p>
-<p class="summary">The ABR kernel is domain-neutral arithmetic for how much changes along observed arrows, built so any field can ask the criticality question (is this system near a tipping point?) without inventing anything unobserved.</p>
+<p class="summary">The ABR kernel is arithmetic for how much changes along observed arrows, the same in every field, offered as a shared footing for the criticality question (is this system near a tipping point?) without inventing anything unobserved.</p>
 
 <div class="primer">
   <div class="primer-title">Five words, one minute</div>
   <ol>
     <li><b>Observation</b>: what was actually recorded.</li>
-    <li><b>M</b>: the written rule that turns an observation into a number, a stand-in for the thing.</li>
-    <li><b>Arrow</b>: from here to there, as observed. One observation, one arrow.</li>
+    <li><b>M</b>: the rule turning observations into numbers.</li>
+    <li><b>Arrow</b>: from here to there, as observed.</li>
     <li><b>Declared</b>: written down before any arithmetic.</li>
     <li><b>Operator</b>: a fixed arithmetic step. Five names, Δ A Σ B R; three formulas: Δ is A renamed, Σ is R applied to Δ.</li>
   </ol>
 </div>
 
 <h2 id="what">What it is</h2>
-<p>Most mathematics starts from objects and links them. This kernel starts from the arrow itself, an observed link. The rest is fixed arithmetic on arrows’ numbers; a result is a calculation, never an observation.</p>
+<p>This kernel starts from the arrow, an observed link, not from objects. The rest is fixed arithmetic on the numbers at each arrow’s two ends; a result is a calculation, never an observation.</p>
 <div class="fig">
 <svg id="g1" role="img" aria-label="The chain: observation, then M, then a number, then declared arrows, then operators, then a result, then comparison with the observation. A return arrow from the comparison goes back to the declared arrows: change the declaration, not the kernel." viewBox="0 12 880 132" xmlns="http://www.w3.org/2000/svg">
   <defs><marker id="g1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
@@ -193,8 +195,6 @@ footer a { color: var(--blue); }
     <text x="184" y="51" fill="#f1f5f9">M</text>
     <rect x="256" y="22" width="104" height="48" rx="7" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
     <text x="308" y="51" fill="#f1f5f9">number</text>
-    <text x="308" y="90" fill="#94a3b8" font-size="12" font-style="italic">not the thing,</text>
-    <text x="308" y="105" fill="#94a3b8" font-size="12" font-style="italic">its projection</text>
     <rect x="380" y="22" width="104" height="48" rx="7" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
     <text x="432" y="42" fill="#f1f5f9">declared</text>
     <text x="432" y="60" fill="#f1f5f9">arrows</text>
@@ -220,7 +220,7 @@ footer a { color: var(--blue); }
 </div>
 
 <h2 id="try">What it does: try it</h2>
-<p>Three points, two arrows. <b>A</b> takes each arrow’s difference; <b>B</b> adds the next arrow’s, one step only; <b>R</b> adds what continues minus what arrives, scaled by the local strength ρ. Untick the middle point: B is <i>not evaluated</i>, which is not zero.</p>
+<p><b>A</b> takes each arrow’s difference; <b>B</b> adds the next arrow’s, one step only; <b>R</b> adds what continues minus what arrives, scaled by the local strength ρ. Untick the middle point: B is <i>not evaluated</i>, which is not zero.</p>
 <div class="panel" id="i1" data-interactive="1">
 <div class="i1">
   <div class="i1-ctl">
@@ -261,16 +261,17 @@ footer a { color: var(--blue); }
       <tbody>
         <tr><td class="k" id="kA">A</td><td data-k="A" data-e="0"></td><td data-k="A" data-e="1"></td></tr>
         <tr><td class="k">B</td><td data-k="B" data-e="0"></td><td data-k="B" data-e="1"></td></tr>
-        <tr><td class="k">ρ</td><td data-k="rho" data-e="0"></td><td data-k="rho" data-e="1"></td></tr>
+        <tr><td class="k" title="ρ = ρ_base·χ/(χ₀+χ), χ = the largest |A| on the arrows touching the arrow’s source point (kernel notation, line 29)">ρ</td><td data-k="rho" data-e="0"></td><td data-k="rho" data-e="1"></td></tr>
         <tr><td class="k" id="kR">R</td><td data-k="R" data-e="0"></td><td data-k="R" data-e="1"></td></tr>
       </tbody>
     </table></div>
-    <span class="cap">0.000 is a calculated result; “not evaluated” is the absence of one.</span>
+    <span class="cap">ρ = ρ_base·χ/(χ₀+χ); χ = largest |A| on arrows touching the source point. 0.000 is a calculated result; “not evaluated” is the absence of one.</span>
   </div>
 </div>
 </div>
 
 <h2 id="strict">Why the rules are strict</h2>
+<p>Each rule stops a calculated number from passing as a measurement.</p>
 <div class="rules">
 <p><b>One observation, one arrow.</b> A reverse arrow needs its own observation; a loop’s closing arrow is inadmissible.</p>
 <p><b>Nothing undeclared enters.</b> A step missing a declared number is not evaluated, never filled in; a genuine zero is kept.</p>
@@ -313,13 +314,12 @@ footer a { color: var(--blue); }
 </div>
 
 <h2 id="from">Where it comes from</h2>
-<p>A critical point is a tipping point, where a small change can spread across the whole system. The preprint <cite>Convergent Discovery of Critical Phenomena Mathematics Across Disciplines</cite> (Stephenson &amp; Macomber, arXiv:2601.22389) found six to twelve fields that each built their own maths for that question. Its operators are the same in every field: “The kernel is domain and scale invariant … What changes across regions is the declared measurement mapping M, not the operators …” <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/kernel-v9/README.md#L20-L23">README</a>)</cite> So a field with no criticality maths of its own could declare its M and use the same operators.</p>
+<p>A critical point is a tipping point, where a small change can spread through the whole system. The preprint (arXiv:2601.22389) found six to twelve fields that each built their own maths for it. The kernel’s operators are the same at every declared scale (the README’s “regions”); only the declared measurement mapping M changes. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/kernel-v9/README.md#L20-L23">README</a>)</cite> So a field could, in principle, declare its own M and apply them; whether that answers the criticality question there is still to be shown, field by field.</p>
 <div class="panel" id="i2" data-interactive="2">
 <div class="i2">
-  <div class="i2-top">
-    <button type="button" class="tog" id="tStd" aria-pressed="true">The standard view says:</button>
-    <button type="button" class="tog" id="tSide" aria-pressed="false">The preprint’s answer</button>
-    <div class="i2-view" id="i2view" aria-live="polite"></div>
+  <div class="i2-top i2-view" id="i2view">
+    <button type="button" class="tog" id="tStd" aria-pressed="true">A natural first guess:</button><span id="vStd"></span>
+    <button type="button" class="tog" id="tSide" aria-pressed="false">The preprint’s answer:</button><span id="vSide" title="MAIN:80, 161, 410"></span>
   </div>
   <div class="chips" id="chips"></div>
   <div class="chips" id="chipsEmp"><span class="emp-h">Empirical scaling exponents (power-law distributions, not correlation-decay diagnostics):</span></div>
@@ -338,13 +338,13 @@ footer a { color: var(--blue); }
           <text x="150" y="104" fill="#94a3b8" font-size="14">far from it</text>
         </g>
       </svg>
-      <span class="cap">Illustration of a correlation falling off with distance; the reach grows as a critical point is approached.</span>
+      <span class="cap">An illustration, not data.</span>
     </div>
   </div>
 </div>
 </div>
 
-<p class="dsum">The preprint’s six clearest cases: Kauffman’s edge of chaos, biomedical signal analysis, neuroscience, machine learning, power grids, traffic flow.</p>
+<p class="dsum">The preprint’s six clearest cases (not all shown above): Kauffman’s edge of chaos, biomedical signal analysis, neuroscience, machine learning, power grids, traffic flow.</p>
 <details id="acc-domains">
   <summary>Which fields already have criticality mathematics</summary>
   <div class="acc-body">
@@ -605,7 +605,7 @@ footer a { color: var(--blue); }
   var EXACT_FOR = { DFA: true, Finance: true };
   var VIEW = {
     std: 'these fields developed separately, so any likeness is coincidence.',
-    side: 'Mostly separately, some with traceable borrowing, and the likeness is not coincidental. The problem dictates the mathematics: all ask how far correlations extend.'
+    side: 'mostly separately, with qualifications for each, not by coincidence: the problem dictates the maths.'
   };
   var FIELD = { DFA: 'detrended fluctuation analysis (DFA)', HRV: 'heart-rate variability (HRV)', ML: 'machine learning (ML)' };
   var CARD_KEYS = [['field', 'Field'], ['measures', 'Meaning'], ['critical', 'Critical value'], ['category', 'Category']];
@@ -632,7 +632,7 @@ footer a { color: var(--blue); }
     document.querySelectorAll('#i2 .chip').forEach(function (c) { c.setAttribute('aria-pressed', String(+c.dataset.i === i)); });
   }
   function setView(side) {
-    $('i2view').textContent = side ? VIEW.side : VIEW.std;
+    $('vStd').textContent = VIEW.std; $('vSide').textContent = VIEW.side; $('vStd').className = side ? 'off' : ''; $('vSide').className = side ? '' : 'off';
     $('tStd').setAttribute('aria-pressed', String(!side));
     $('tSide').setAttribute('aria-pressed', String(side));
   }
