@@ -176,26 +176,26 @@ footer a { color: var(--blue); }
 <body>
 <div class="container">
 <h1>The ABR Kernel</h1>
-<p class="subtitle">a footing for criticality mathematics — Kernel V9, development branch</p>
+<p class="subtitle">offered as a footing for criticality mathematics — Kernel V9, development branch</p>
 <p class="hcredit" data-credit>Kernel: <strong>Robin Macomber</strong> (Origin) · © 2026 <strong><span data-onename>Metatron Dynamics</span>, Inc.</strong> · Apache-2.0 · <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/tree/af5fd6f">repository, branch kernel-v9 at af5fd6f</a> · this page is a tutorial, not the kernel.</p>
-<p class="summary">The ABR kernel is arithmetic for how much changes along observed arrows, the same at every declared scale the repository has confirmed. This page offers it as a footing for one question criticality fields ask, how far correlations extend; a declared projection of its output may answer that, the kernel does not.</p>
+<p class="summary">The ABR kernel is arithmetic for how much changes along observed arrows, the same at every declared scale the repository has confirmed. This page offers it as a footing for one question criticality fields ask, how far correlations extend. A declared projection of its output may answer that; the kernel does not.</p>
 
-<p class="twoq">Two questions, before any arithmetic: “Does anything distinguishable exist across the declared relations?” and “Is what exists symmetrically or asymmetrically organized in its immediate neighborhood?” <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/abr_operators_plain.md#L109-L112">plain-language operators</a>)</cite></p>
+<p class="twoq">Two questions first: “Does anything distinguishable exist across the declared relations?” and “Is what exists symmetrically or asymmetrically organized in its immediate neighborhood?” <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/abr_operators_plain.md#L109-L112">plain-language operators, lines 109–112</a>)</cite></p>
 <div class="primer">
   <div class="primer-title">Five words, one minute</div>
   <ol>
     <li><b>Arrow</b>: a directed relation, declared from what was observed.</li>
     <li><b>M</b>: the rule turning observations into numbers.</li>
     <li><b>Number</b>: a value in D, not the thing.</li>
-    <li><b>Compare</b>: results go back against observation.</li>
-    <li><b>Operator</b>: a fixed arithmetic step. Five names, Δ A Σ B R; three formulas: Δ is A renamed, Σ is R applied to Δ.</li>
+    <li><b>Compare</b>: results against observation.</li>
+    <li><b>Operator</b>: a fixed arithmetic step (Δ A Σ B R).</li>
   </ol>
 </div>
 
 <h2 id="what">What it is</h2>
-<p>The kernel does fixed arithmetic on the numbers at each arrow’s two ends; a result is a calculation, never an observation.</p>
+<p>This kernel starts from the arrow, not from objects <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L82-L84">kernel reference, lines 82–84</a>)</cite>. It does fixed arithmetic: first on the numbers at each arrow’s two ends, then on the results at neighbouring arrows; a result is a calculation, never an observation. <i>Declared</i> means written down beforehand by the person applying it, not inferred from the data.</p>
 <div class="fig">
-<svg id="g1" role="img" aria-label="The chain: a declared relation, then M, then a number in D, then the declared topology, then the operators, then a result, then a declared projection C that states what it keeps and discards, then comparison with the observation. A return arrow from the comparison goes back to the declared topology: change the declaration, not the kernel, and never to reach a wanted number." viewBox="0 12 880 132" xmlns="http://www.w3.org/2000/svg">
+<svg id="g1" role="img" aria-label="The chain: a declared relation, then M, then a number in D, then the declared topology, then the operators, then a result; if the result is reduced, a declared projection C that states what it keeps and discards; then comparison with the observation." viewBox="0 12 880 132" xmlns="http://www.w3.org/2000/svg">
   <defs><marker id="g1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
   <g font-family="system-ui, sans-serif" font-size="14" text-anchor="middle">
     <rect x="6" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
@@ -241,9 +241,10 @@ footer a { color: var(--blue); }
     <span class="badge" title="0.5 and 1.0 are the repository’s own test-fixture values (v8_sigma_equals_delta_for_isolated_edge, tests/v9_conformance.rs, line 122), not kernel defaults.">declared for this demo — the kernel holds no value for these</span>
     <div class="i1-row" title="Base strength: ρ never reaches it. 0.5 is the repository’s test-fixture value (v8_sigma_equals_delta_for_isolated_edge, tests/v9_conformance.rs, line 122), not a kernel default."><label for="rb">strength ρ_base</label><input type="range" id="rb" min="0" max="2" step="0.1" value="0.5"><output id="rbv" for="rb">0.5</output></div>
     <div class="i1-row" title="A scale constant: how large a difference counts as large. 1.0 is the repository’s test-fixture value (v8_sigma_equals_delta_for_isolated_edge, tests/v9_conformance.rs, line 122), not a kernel default. χ₀ must be finite and positive, so the slider starts at 0.1."><label for="c0">scale χ₀</label><input type="range" id="c0" min="0.1" max="5" step="0.1" value="1"><output id="c0v" for="c0">1</output></div>
-    <label class="i1-chk"><input type="checkbox" id="interior" checked> M resolves point 1 as an interior locus (s→t→u)</label>
+    <label class="i1-chk"><input type="checkbox" id="interior" checked> M establishes the interior s→t→u (point 1 is t)</label>
     <div class="i1-btns"><button type="button" id="shift">+1 to every point</button><button type="button" id="reset" class="ghost">Reset</button></div>
     <span class="cap">+1: same differences — a uniform shift changes nothing.</span>
+    <span class="cap">Point 1’s value is used either way; the box declares only whether M establishes it as the interior t (kernel notation, lines 53–57).</span>
   </div>
   <div class="i1-svg">
     <svg id="i1svg" role="img" aria-label="Three points, 0, 1 and 2, joined by two declared arrows, 0 to 1 and 1 to 2. Each point shows its value; each arrow shows its difference." viewBox="0 62 300 126" xmlns="http://www.w3.org/2000/svg">
@@ -265,8 +266,7 @@ footer a { color: var(--blue); }
         <text id="i1kern" x="150" y="180" fill="#a855f7" font-size="13" font-style="italic">path: A → B → R</text>
       </g>
     </svg>
-    <span class="cap">Point 1’s value is used either way; the box declares only whether M resolves it as an interior (kernel notation, lines 53–57).</span>
-    <span class="cap">This panel is an illustration in JavaScript; the kernel of record is the Rust crate. Same chain and declared 0.5 and 1.0 as the conformance test <code>v8_continuity_abr_chain_finite</code> (<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/tests/v9_conformance.rs#L402-L411">tests/v9_conformance.rs, lines 402–411</a>).</span>
+    <span class="cap">This panel is an illustration in JavaScript; the reference implementation is the Rust crate (<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L15-L16">README, lines 15–16</a>). Same chain and declared 0.5, 1.0 as the conformance test <code>v8_continuity_abr_chain_finite</code> (<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/tests/v9_conformance.rs#L402-L411">tests/v9_conformance.rs, lines 402–411</a>). It checks only that the output is finite; the numbers here are hand-checked against <code>operators.rs</code> (see Sources).</span>
   </div>
   <div class="i1-tab">
     <div class="tscroll"><table id="i1tab">
@@ -284,7 +284,6 @@ footer a { color: var(--blue); }
 </div>
 
 <h2 id="strict">Why the rules are strict</h2>
-<p>Each rule stops a calculated number from passing as a measurement.</p>
 <div class="rules">
 <p><b>One observation, one arrow.</b> A reverse arrow needs its own observation; a loop’s closing arrow is inadmissible.</p>
 <p><b>Nothing undeclared enters.</b> A step missing a declared number is not evaluated, never filled in; a genuine zero is kept.</p>
@@ -327,8 +326,8 @@ footer a { color: var(--blue); }
 </div>
 
 <h2 id="from">Where the criticality question comes from</h2>
-<p>A critical point is a tipping point: a small change can spread through the whole system. The preprint (arXiv:2601.22389) found six to twelve fields that each built their own maths for it. The kernel’s operators stay the same at every declared scale (the README’s “regions”); only the declared M changes <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L20-L23">README</a>)</cite>. So a field could, in principle, declare its own M and apply them; whether that answers the criticality question there is still to be shown, field by field.</p>
-<p>In the kernel’s terms, each measure below (ξ, τ, α, H, χ) is a <em>declared projection</em> (C): one number that must state what it keeps and discards. None is a kernel quantity. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L31">kernel notation, line 31</a>)</cite></p>
+<p>A critical point is a tipping point: a small change can spread through the whole system. The preprint (arXiv:2601.22389) found six to twelve fields that each built their own maths for it. A field could, in principle, declare its own M and apply the same operators <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L20-L23">README</a>)</cite>; whether that answers the question is still to be shown.</p>
+<p>In the kernel’s terms, computing any of these measures (ξ, τ, α, H, χ) from kernel output would be a <em>declared projection</em> (C): a reduction of the edge field that must state what it preserves and discards. None is a kernel quantity; the fields’ χ (a spectral radius) is not the kernel’s χ[i] above. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L31">kernel notation, line 31</a>)</cite></p>
 <div class="panel" id="i2" data-interactive="2">
 <div class="i2">
   <div class="i2-top i2-view" id="i2view">
@@ -358,7 +357,7 @@ footer a { color: var(--blue); }
 </div>
 </div>
 
-<p class="dsum">The preprint’s six clearest cases (not all shown above): Kauffman’s edge of chaos, biomedical signal analysis, neuroscience, machine learning, power grids, traffic flow.</p>
+<p class="dsum">The preprint’s six clearest cases: Kauffman’s edge of chaos, biomedical signals, neuroscience, machine learning, power grids, traffic flow.</p>
 <details id="acc-domains">
   <summary>Fields with criticality mathematics</summary>
   <div class="acc-body">
@@ -439,15 +438,15 @@ footer a { color: var(--blue); }
       </svg>
     </div>
     <ul>
-      <li><b>Which kernel.</b> “The minimal admissible interior is: s → t → u.” Without it, “the primary kernel Δ → Σ is the correct kernel”. The condition is structural, not a number reached by a ratio. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L53-L57">kernel notation, lines 53–57</a>)</cite></li>
+      <li><b>Which kernel.</b> “The minimal admissible interior is: s → t → u.” Without it, “the primary kernel Δ → Σ is the correct kernel”. The condition is structural, not a number reached by a ratio. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L53-L57">kernel notation, lines 53–57</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/abr_operators_plain.md#L142">plain-language operators, line 142</a>)</cite></li>
       <li><b>Before Δ or A.</b> Admissible: uniform shift, declared unit scale. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L33">kernel notation, line 33</a>)</cite></li>
       <li><b>Two phases.</b> Phase 1 acts on one declared observation M(o). Phase 2 needs a declared pair: “Phase 2 requires the process, not the photograph.” <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/abr_operators_plain.md#L51-L57">plain-language operators, lines 51–57, 231–237</a>)</cite></li>
       <li><b>Arrows.</b> Provenance classes Continuation, Coupling, Persistence. Each arrow has exactly one admissible direction; the reverse needs its own observable provenance. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L330-L337">kernel reference, lines 330–337</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L13">kernel notation, line 13</a>)</cite></li>
-      <li><b>C.</b> A declared projection, not a kernel operator: state what it preserves and what it discards. The repository also says ABR/ABRCE; ABRCE is the older name, from when C was an operator; C is now a declared projection and E a composition. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L17">kernel notation, lines 17, 31</a>)</cite></li>
-      <li><b>Roles.</b> Three project roles: Origin, the person who declares and holds responsibility; Generator, the one who proposes; Verifier, the one who checks, returning located findings, not approval, by asking: “Can I trace every mathematical operation continuously back to declared observables through declared operators?” The operators hold no agency. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/role_separation_and_operator_application.md#L29-L35">role separation, lines 29–35, 150, 180</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L131">kernel reference, line 131</a>)</cite></li>
+      <li><b>C.</b> A declared projection, not a kernel operator: state what it preserves and what it discards. The repository calls itself the ABR/ABRCE kernel (README, line 15). In the preprint’s supplement C is an operator and E = C(R(B(A(x)))) the composite; in the repository C is a declared projection, not a kernel operator. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L17">kernel notation, lines 17, 31</a>)</cite></li>
+      <li><b>Roles.</b> Three project roles: Origin, the person who declares and holds responsibility; Generator, the one who proposes; Verifier, the one who checks, returning located findings, not approval, by asking: “Can I trace every mathematical operation continuously back to declared observables through declared operators?” The operators hold no agency. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/role_separation_and_operator_application.md#L29-L35">role separation, lines 29–35, 150, 180</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L131">kernel reference, lines 131, 175</a>)</cite></li>
     </ul>
     <h3>Kernel V9, development branch</h3>
-    <p>The Relational Primitive Provenance Invariant: “Every admitted value, operation, and result must have a continuous, verifiable provenance path to an Origin-declared observable relation within D.” It holds three things distinct: a provenance label, a declaration record and a calculation record. Four failure modes are named: missing, fabricated, disconnected and misattributed provenance. Milestones 2 and 3 (Milestone 3 declaring Req-1 to Req-7) were accepted by the project’s Verifier on 2026-10-24: internal milestones, not a release. The enforcement interface is OPEN, and the type names in the specification are working names. V8 constructors and operators are unchanged. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L37-L66">repository README, lines 37–66, 290–326</a>)</cite></p>
+    <p>The Relational Primitive Provenance Invariant: “Every admitted value, operation, and result must have a continuous, verifiable provenance path to an Origin-declared observable relation within D.” It holds three things distinct: a provenance label, a declaration record and a calculation record. Four failure modes are named: missing, fabricated, disconnected and misattributed provenance. Milestones 2 and 3 (Milestone 3 declaring Req-1 to Req-7) were accepted by the project’s Verifier on 2026-10-24: internal milestones, not a release. The enforcement interface is OPEN, and the type names in the specification are working names. V8 constructors and operators are unchanged. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L37-L66">repository README, lines 37–66, 290–326</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/v9_specification.md#L557">V9 specification, line 557</a>)</cite></p>
     <h3>Open conditions the repository lists</h3>
     <p>A-3, sums over an empty adjacency: OPEN. The ρ max-selection rule and its saturating form: OPEN, Origin declaration required. <code>are_proportional</code> edge-order dependence: HOLD. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L1031-L1036">kernel reference, lines 1031–1036</a>)</cite></p>
     <p>The crate is Rust. <code>cargo test</code> runs 61 library tests and 3 <code>provenance_demo</code> tests on <code>main</code>; on <code>kernel-v9</code> it runs 31 more conformance tests, with 4 ignored pending enforcement. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L81-L87">repository README, lines 81–87</a>)</cite></p>
@@ -474,11 +473,11 @@ footer a { color: var(--blue); }
       </svg>
     </div>
     <ol>
-      <li>The preprint’s supplement records the formulation it describes under the name “<span data-onename>Metatron Dynamics</span>” (the framework name at the time; <span data-onename>Metatron Dynamics</span>, Inc. is the company that now holds the kernel’s copyright): four operators A, B, R and C on a ring with circular boundary conditions, composed as E = C(R(B(A(x)))). <cite>(supplement)</cite></li>
-      <li>The supplement says the framework “originated in distributed systems engineering”, that Macomber “independently derived” its operators, and that when Stephenson evaluated it in 2024 its behaviour at parameter boundaries “resembled critical phase transitions”. The preprint says that case prompted its survey. “Our framework is not the paper’s thesis; it is the accident that revealed the thesis.” <cite>(supplement)</cite></li>
-      <li>The repository’s own history runs from persistence arrows (V5), through the primary kernel Δ → Σ with the ring ruled inadmissible (V6), the removal of rank and SVD quantities and of every kernel default (V7, V7.1), and one release number across every file (Kernel V8, 2026-09-26), to the declared arrow as the one starting point (Kernel V9 development branch, 2026-10-24). It starts at V5 because that is the earliest version the repository records. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L1119-L1136">kernel reference, lines 1119–1136</a>)</cite></li>
+      <li>The preprint’s supplement records the formulation it describes under the name “<span data-onename>Metatron Dynamics</span>” (the framework name at the time; <span data-onename>Metatron Dynamics</span>, Inc. is the company that now holds the kernel’s copyright): four operators A, B, R and C on a ring with circular boundary conditions, composed as E = C(R(B(A(x)))). <cite>(supplement, lines 27–63)</cite></li>
+      <li>The supplement says the framework “originated in distributed systems engineering”, that Macomber “independently derived” its operators, and that when Stephenson evaluated it in 2024 its behaviour at parameter boundaries “resembled critical phase transitions”. The preprint says that case prompted its survey. “Our framework is not the paper’s thesis; it is the accident that revealed the thesis.” <cite>(supplement, line 120; preprint, line 113)</cite></li>
+      <li>The repository’s own history runs from persistence arrows (V5), through the primary kernel Δ → Σ with the ring ruled inadmissible (V6), the removal of rank and SVD quantities and of every kernel default (V7, V7.1), and one release number across every file (Kernel V8, 2026-09-26), to the declared arrow as the one starting point (Kernel V9 development branch, 2026-10-24). It starts at V5, the first row of the repository’s version table. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L1119-L1136">kernel reference, lines 1119–1136</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L93-L94">repository README, lines 93–94, 334</a>)</cite></li>
       <li>So the ring that the supplement’s formulation ran on is exactly what the current kernel rules inadmissible. The operators kept their letters, but their definitions and domain changed: A was a deviation from the mean and is now a directed difference, and C is no longer a kernel operator. <cite>(supplement; kernel notation, lines 19 and 31)</cite> This page states the difference and does not reconcile it.</li>
-      <li>Labels before Kernel V8 were “document-local … not kernel release versions”; this page uses them only as the repository’s history does. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L93-L95">repository README, lines 93–95</a>)</cite></li>
+      <li>Labels before Kernel V8 were “document-local … not kernel release versions”; this page uses them only as the repository’s history does. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L93-L95">repository README, lines 93–95</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/abr_operators_plain.md#L280">plain-language operators, line 280</a>)</cite></li>
     </ol>
   </div>
 </details>
@@ -488,8 +487,8 @@ footer a { color: var(--blue); }
     <ul>
       <li>It does not interpret or rank results: “The result is not an interpretation. It is a function of the declaration and the observable.” <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/abr_operators_plain.md#L239-L241">plain-language operators, lines 239–241</a>)</cite></li>
       <li>It holds no value for ρ_base, χ₀ or cc (the coupling where two declared networks cross), and supplies no default. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L25">kernel notation, lines 25, 29</a>)</cite></li>
-      <li>It does not choose which kernel applies; the declared structure does (s → t → u or not). <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L53-L57">kernel notation, lines 53–57</a>)</cite></li>
-      <li>It does not detect or predict anything on its own; the chain ends at comparison with observables. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L101-L102">kernel reference, lines 101–102</a>)</cite></li>
+      <li>Which kernel applies follows from the declared structure (s → t → u or not). <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/operators_notation_and_constraint.md#L53-L57">kernel notation, lines 53–57</a>)</cite></li>
+      <li>It does not interpret what it computes; the chain ends at comparison with observables. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L101-L102">kernel reference, lines 101–102</a>; <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/abr_operators_plain.md#L239-L241">plain-language operators, lines 239–241</a>)</cite></li>
       <li>A result is never an observable: “No numerical result is itself an observable.” <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/docs/kernel/kernel_reference.md#L109">kernel reference, line 109</a>)</cite></li>
       <li>On the Kernel V9 development branch, the enforcement interface is not written yet. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/af5fd6f/README.md#L314-L323">repository README, lines 314–323</a>)</cite></li>
     </ul>

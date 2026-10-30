@@ -1,6 +1,6 @@
 # Criticality Math Kernel: sources
 
-Every statement on `index.html` traces to one of the 32 entries below. Each entry gives the
+Every statement on `index.html` traces to one of the 35 entries below. Each entry gives the
 file, the line number and the quoted text.
 
 **Kernel.** `github.com/Relational-Relativity-Corporation/abr-kernel`, branch `kernel-v9`, commit
