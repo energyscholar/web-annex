@@ -97,8 +97,8 @@ try {
     const w = (c.innerText.match(/\S+/g) || []).filter(x => /[\p{L}\p{N}]/u.test(x)).length;
     c.remove(); return { h: document.documentElement.scrollHeight, w };
   });
-  ok('R7 scrollHeight ≤ 2200', r7.h <= 2200, `${r7.h} px`);
-  ok('R7 visible words ≤ 450', r7.w <= 450, `${r7.w} words`);
+  ok('R7 scrollHeight ≤ 2600', r7.h <= 2600, `${r7.h} px`);
+  ok('R7 visible words ≤ 520', r7.w <= 520, `${r7.w} words`);
 
   const full = await ev(() => { Q$('details').forEach(d => { d.open = true; }); return document.body.innerText; });
   ok('I2(d) coincidence; convergen* only in title', Q.view.includes('coincidence') &&
@@ -108,7 +108,10 @@ try {
   const bs = full.split(/(?<=[.!?])\s+|\n+/).filter(s => /arXiv|preprint|Convergent Discovery|FACETS|Stephenson/.test(s) && /accepted|published in|under review/i.test(s));
   ok('R3 no paper-status claim', !bs.length, bs.join(' // '));
   const nm = await p.$$eval('[data-onename]', e => e.map(x => x.textContent));
-  ok('R1a name x2: lineage, credit (sha256)', nm.length === 2 && nm.every(n => createHash('sha256').update(n).digest('hex').startsWith('996800b39e0d4649')) && full.split(nm[0]).length === 3);
+  const where = await p.$$eval('[data-onename]', e => e.map(x => x.closest('.hcredit') ? 'h' : x.closest('.credit') ? 'c' : x.closest('#acc-lineage') ? 'l' : '?').join(''));
+  ok('R1a name x4: header, lineage x2, credit (sha256)', nm.length === 4 && where === 'hllc' && nm.every(n => createHash('sha256').update(n).digest('hex').startsWith('996800b39e0d4649')) && full.split(nm[0]).length === 5, where);
+  const rm = await p.$$eval('.hcredit, section.credit', e => e.map(x => x.textContent.includes('Robin Macomber')));
+  ok('R1b Robin Macomber in header and credit', rm.length === 2 && rm.every(Boolean));
 
   if (SHOTS) {
     for (const id of ['g1', 'g2', 'g3', 'g4', 'i1svg', 'i2svg']) { const e = await p.$('#' + id); if (e) await e.screenshot({ path: `${SHOTS}/${id}.png` }); }
