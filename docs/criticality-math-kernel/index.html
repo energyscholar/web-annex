@@ -177,7 +177,7 @@ footer a { color: var(--blue); }
 <h1>The ABR Kernel</h1>
 <p class="subtitle">a footing for criticality mathematics — Kernel V9, development branch</p>
 <p class="hcredit" data-credit>Kernel: <strong>Robin Macomber</strong> (Origin) · © 2026 <strong><span data-onename>Metatron Dynamics</span>, Inc.</strong> · Apache-2.0 · <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/tree/af5fd6f">repository, branch kernel-v9 at af5fd6f</a> · this page is a tutorial, not the kernel.</p>
-<p class="summary">The ABR kernel is arithmetic for how much changes along observed arrows, the same in every field; this page offers it as a shared footing for the criticality question (is this system near a tipping point?) without inventing anything unobserved.</p>
+<p class="summary">The ABR kernel is arithmetic for how much changes along observed arrows, the same at every declared scale the repository has confirmed (a new field has to declare its own M first); this page offers it as a shared footing for the criticality question (is this system near a tipping point?) without inventing anything unobserved.</p>
 
 <div class="primer">
   <div class="primer-title">Five words, one minute</div>
@@ -193,41 +193,43 @@ footer a { color: var(--blue); }
 <h2 id="what">What it is</h2>
 <p>This kernel starts from the arrow, an observed link, not from objects. The rest is fixed arithmetic on the numbers at each arrow’s two ends; a result is a calculation, never an observation.</p>
 <div class="fig">
-<svg id="g1" role="img" aria-label="The chain: observation, then M, then a number, then declared arrows, then operators, then a result, then comparison with the observation. A return arrow from the comparison goes back to the declared arrows: change the declaration, not the kernel." viewBox="0 12 880 132" xmlns="http://www.w3.org/2000/svg">
+<svg id="g1" role="img" aria-label="The chain: a declared relation, then M, then a number in D, then the declared topology, then the operators, then a result, then a declared projection C that states what it keeps and discards, then comparison with the observation. A return arrow from the comparison goes back to the declared topology: change the declaration, not the kernel, and never to reach a wanted number." viewBox="0 12 880 132" xmlns="http://www.w3.org/2000/svg">
   <defs><marker id="g1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
   <g font-family="system-ui, sans-serif" font-size="14" text-anchor="middle">
-    <rect x="8" y="22" width="104" height="48" rx="7" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
-    <text x="60" y="51" fill="#f1f5f9">Observation</text>
-    <rect x="132" y="22" width="104" height="48" rx="7" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
-    <text x="184" y="51" fill="#f1f5f9">M</text>
-    <rect x="256" y="22" width="104" height="48" rx="7" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
-    <text x="308" y="51" fill="#f1f5f9">number</text>
-    <rect x="380" y="22" width="104" height="48" rx="7" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
-    <text x="432" y="42" fill="#f1f5f9">declared</text>
-    <text x="432" y="60" fill="#f1f5f9">arrows</text>
-    <rect x="504" y="22" width="104" height="48" rx="7" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
-    <text x="556" y="51" fill="#f1f5f9">operators</text>
-    <rect x="628" y="22" width="104" height="48" rx="7" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
-    <text x="680" y="51" fill="#f1f5f9">result</text>
-    <rect x="752" y="22" width="120" height="48" rx="7" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
-    <text x="812" y="42" fill="#f1f5f9">compare with</text>
-    <text x="812" y="60" fill="#f1f5f9">observation</text>
+    <rect x="6" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+    <text x="55" y="42" fill="#f1f5f9">declared</text><text x="55" y="60" fill="#f1f5f9">relation</text>
+    <rect x="116" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+    <text x="165" y="51" fill="#f1f5f9">M</text>
+    <rect x="226" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <text x="275" y="42" fill="#f1f5f9">number</text><text x="275" y="60" fill="#f1f5f9">in D</text>
+    <rect x="336" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <text x="385" y="42" fill="#f1f5f9">declared</text><text x="385" y="60" fill="#f1f5f9">topology</text>
+    <rect x="446" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+    <text x="495" y="51" fill="#f1f5f9">operators</text>
+    <rect x="556" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+    <text x="605" y="51" fill="#f1f5f9">result</text>
+    <rect x="666" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#a855f7" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="715" y="42" fill="#f1f5f9">declared</text><text x="715" y="60" fill="#f1f5f9" font-size="13">projection C</text>
+    <rect x="776" y="22" width="98" height="48" rx="7" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+    <text x="825" y="42" fill="#f1f5f9">compare with</text><text x="825" y="60" fill="#f1f5f9">observation</text>
+    <text x="715" y="88" fill="#a855f7" font-size="12" font-style="italic">states what it</text><text x="715" y="102" fill="#a855f7" font-size="12" font-style="italic">keeps and discards</text>
   </g>
   <g stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#g1a)">
-    <line x1="112" y1="46" x2="130" y2="46"/>
-    <line x1="236" y1="46" x2="254" y2="46"/>
-    <line x1="360" y1="46" x2="378" y2="46"/>
-    <line x1="484" y1="46" x2="502" y2="46"/>
-    <line x1="608" y1="46" x2="626" y2="46"/>
-    <line x1="732" y1="46" x2="750" y2="46"/>
-    <path d="M812,70 L812,118 L432,118 L432,73" stroke="#a855f7" stroke-dasharray="6 4"/>
+    <line x1="104" y1="46" x2="114" y2="46"/>
+    <line x1="214" y1="46" x2="224" y2="46"/>
+    <line x1="324" y1="46" x2="334" y2="46"/>
+    <line x1="434" y1="46" x2="444" y2="46"/>
+    <line x1="544" y1="46" x2="554" y2="46"/>
+    <line x1="654" y1="46" x2="664" y2="46"/>
+    <line x1="764" y1="46" x2="774" y2="46"/>
+    <path d="M825,70 L825,118 L385,118 L385,73" stroke="#a855f7" stroke-dasharray="6 4"/>
   </g>
-  <text x="622" y="140" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-style="italic" fill="#a855f7">change the declaration, not the kernel</text>
+  <text x="605" y="140" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-style="italic" fill="#a855f7">change the declaration, not the kernel</text>
 </svg>
 </div>
 
 <h2 id="try">What it does: try it</h2>
-<p><b>A</b> takes each arrow’s difference; <b>B</b> adds the next arrow’s, one step only; <b>R</b> adds what continues minus what arrives, scaled by the local strength ρ. Untick the middle point: B is <i>not evaluated</i>, which is not zero.</p>
+<p><b>A</b> takes each arrow’s difference; <b>B</b> adds the next arrow’s, one step only; <b>R</b> adds what continues minus what arrives, scaled by the local strength ρ. Untick the box: M no longer resolves point 1 as an interior, so B is <i>not evaluated</i>, which is not zero.</p>
 <div class="panel" id="i1" data-interactive="1">
 <div class="i1">
   <div class="i1-ctl">
@@ -237,7 +239,8 @@ footer a { color: var(--blue); }
     <span class="badge" title="0.5 and 1.0 are the repository’s own test-fixture values, not kernel defaults.">declared for this demo — the kernel holds no value for these</span>
     <div class="i1-row" title="Base strength: ρ never reaches it. 0.5 is the repository’s test-fixture value, not a kernel default."><label for="rb">strength ρ_base</label><input type="range" id="rb" min="0" max="2" step="0.1" value="0.5"><output id="rbv" for="rb">0.5</output></div>
     <div class="i1-row" title="A scale constant: how large a difference counts as large. 1.0 is the repository’s test-fixture value, not a kernel default. χ₀ must be finite and positive, so the slider starts at 0.1."><label for="c0">scale χ₀</label><input type="range" id="c0" min="0.1" max="5" step="0.1" value="1"><output id="c0v" for="c0">1</output></div>
-    <label class="i1-chk"><input type="checkbox" id="interior" checked> the middle point was measured (s→t→u)</label>
+    <label class="i1-chk"><input type="checkbox" id="interior" checked> M resolves point 1 as an interior locus (s→t→u)</label>
+    <span class="cap">Point 1’s value is used in both states; the box declares whether M resolves it as an interior with independent provenance on both arrows (kernel notation, lines 53–57).</span>
     <div class="i1-btns"><button type="button" id="shift">+1 to every point</button><button type="button" id="reset" class="ghost">Reset</button></div>
     <span class="cap">+1: same differences — a uniform shift changes nothing.</span>
   </div>
@@ -320,7 +323,8 @@ footer a { color: var(--blue); }
 </svg>
 </div>
 
-<h2 id="from">Where it comes from</h2>
+<h2 id="from">Where the criticality question comes from</h2>
+<p>In the kernel’s own terms, each measure below (ξ, τ, α, H, χ) is a <em>declared projection</em> (C): a reduction of the relational field to one number that must state what it keeps and what it throws away. None is a kernel quantity. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/kernel-v9/docs/kernel/operators_notation_and_constraint.md#L31">kernel notation, line 31</a>)</cite></p>
 <p>A critical point is a tipping point, where a small change can spread through the whole system. The preprint (arXiv:2601.22389) found six to twelve fields that each built their own maths for it. The kernel’s operators are the same at every declared scale (the README’s “regions”); only the declared measurement mapping M changes. <cite>(<a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/blob/kernel-v9/README.md#L20-L23">README</a>)</cite> So a field could, in principle, declare its own M and apply them; whether that answers the criticality question there is still to be shown, field by field.</p>
 <div class="panel" id="i2" data-interactive="2">
 <div class="i2">
