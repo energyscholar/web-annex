@@ -1,8 +1,9 @@
-// Plan 1339 smoke: node docs/criticality-math-kernel/smoke.mjs (PUPPETEER_DIR, PLAN1339_SHOTS)
+// Plan 1339 smoke (env PUPPETEER_DIR, PLAN1339_SHOTS)
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
+import { createHash } from 'crypto';
 const require = createRequire(process.env.PUPPETEER_DIR + '/');
 const puppeteer = require('puppeteer');
 const HERE = path.dirname(fileURLToPath(import.meta.url)), SHOTS = process.env.PLAN1339_SHOTS;
@@ -35,7 +36,7 @@ try {
   ];
   const got = await ev(cs => cs.map(c => window.ABR_DEMO.compute(c[0])), CASES), bad = [];
   CASES.forEach(([, w], i) => Object.keys(w).forEach(k => { if (!near(got[i][k], w[k])) bad.push(`case${i}.${k}=${JSON.stringify(got[i][k])}`); }));
-  ok('I1(a) compute = assertion table to 1e-9', !bad.length, bad.join(' '));
+  ok('I1(a) compute to 1e-9', !bad.length, bad.join(' '));
 
   const set = (id, v) => ev((id, v) => { const e = G(id); e.value = String(v); e.dispatchEvent(new Event('input')); }, id, v);
   const row = k => ev(k => [...Q$(`#i1 td[data-k="${k}"]`)].map(td => td.textContent), k);
@@ -44,21 +45,21 @@ try {
 
   await set('x0', 0); await set('x2', 3);
   const rb = await row('R');
-  ok('I1(b) x=[0,1,3] renders R −3.500, −1.000', rb.join() === '−3.500,−1.000', rb.join(' '));
+  ok('I1(b) R cells', rb.join() === '−3.500,−1.000', rb.join(' '));
   await click('reset');
   await ev(() => { const c = G('interior'); c.checked = false; c.dispatchEvent(new Event('change')); });
   const bc = await row('B'), sc = await row('R'), rl = await p.$eval('#kR', e => e.textContent);
-  ok('I1(c) unticked: B not evaluated, Σ 2.333/0.333', bc.every(s => s === 'not evaluated') && rl === 'Σ' && sc.join() === '2.333,0.333', `${bc} ${rl} ${sc}`);
+  ok('I1(c) unticked: B not evaluated, Σ shown', bc.every(s => s === 'not evaluated') && rl === 'Σ' && sc.join() === '2.333,0.333', `${bc} ${rl} ${sc}`);
   await click('reset');
   const before = await all(); await click('shift');
   const lab = await ev(() => [0, 1, 2].map(i => G('i1n' + i).textContent).join());
-  ok('I1(d) +1 changes no number; labels 4,2,1', before === await all() && lab === '4,2,1', lab);
+  ok('I1(d) +1 changes no number', before === await all() && lab === '4,2,1', lab);
   ok('I1(e) χ₀ min is 0.1', (await p.$eval('#c0', e => e.getAttribute('min'))) === '0.1');
   const dis = () => p.$eval('#shift', e => e.disabled);
   await click('reset'); await set('x0', 5);
   const d5 = await dis();
   await set('x0', 4);
-  ok('I1(f) +1 disabled at x0=5, enabled at x0=4', d5 && !(await dis()));
+  ok('I1(f) +1 disabled iff x>4', d5 && !(await dis()));
   await click('reset');
   const lbl = id => p.$eval('#' + id, e => e.getAttribute('role') === 'img' && !!e.getAttribute('aria-label'));
   ok('I1(h) SVG role=img + aria-label', await lbl('i1svg'));
@@ -79,13 +80,13 @@ try {
     o.links = [...Q$('#acc-domains a[href^="../"]')].map(a => a.getAttribute('href'));
     return o;
   });
-  ok('I2(a) ten chips fill symbol/name/critical', Q.ch === 10 && Q.n === 10 && !Q.bad.length, Q.bad.join());
+  ok('I2(a) ten chips fill the card', Q.ch === 10 && Q.n === 10 && !Q.bad.length, Q.bad.join());
   ok('I2(b) HRV card: "away from criticality"', Q.hrv.includes('away from criticality'));
   ok('I2(c) α = H line on DFA and Finance only', Q.eq.join() === 'DFA,Finance', Q.eq.join());
   await p.focus('#i2 .chip[data-i="5"]'); await p.keyboard.press('Enter');
   ok('I2(e) chips are buttons; Enter activates', Q.btn && await p.$eval('#i2card', e => e.innerText.includes('Short-term DFA')));
   ok('I2(f) curve SVG labelled', await lbl('i2svg'));
-  ok('5.3 rows = ROWS.length, cells equal', Q.rows === Q.n && Q.cells, `${Q.rows} rows`);
+  ok('5.3 table = ROWS', Q.rows === Q.n && Q.cells, `${Q.rows} rows`);
   ok('5.3 go-deeper links on disk', Q.links.length === 2 && Q.links.every(h => fs.existsSync(path.join(HERE, h, 'index.html'))), Q.links.join(' '));
 
   const r7 = await ev(() => {
@@ -100,13 +101,14 @@ try {
   ok('R7 visible words ≤ 450', r7.w <= 450, `${r7.w} words`);
 
   const full = await ev(() => { Q$('details').forEach(d => { d.open = true; }); return document.body.innerText; });
-  ok('I2(d) default view "coincidence"; no "convergen" outside the title', Q.view.includes('coincidence') &&
+  ok('I2(d) coincidence; convergen* only in title', Q.view.includes('coincidence') &&
     !/convergen/i.test(full.split('Convergent Discovery of Critical Phenomena Mathematics Across Disciplines').join('')));
   const ph = full.match(/coming soon|placeholder|TODO|TBD|lorem/gi);
   ok('R9 no placeholder text', !ph, ph ? ph.join() : '');
   const bs = full.split(/(?<=[.!?])\s+|\n+/).filter(s => /arXiv|preprint|Convergent Discovery|FACETS|Stephenson/.test(s) && /accepted|published in|under review/i.test(s));
   ok('R3 no paper-status claim', !bs.length, bs.join(' // '));
-  //@@P4@@
+  const nm = await p.$$eval('[data-onename]', e => e.map(x => x.textContent));
+  ok('R1a lineage name once (sha256-checked)', nm.length === 1 && createHash('sha256').update(nm[0]).digest('hex').startsWith('996800b39e0d4649') && full.split(nm[0]).length === 2);
 
   if (SHOTS) {
     for (const id of ['g1', 'g2', 'g3', 'g4', 'i1svg', 'i2svg']) { const e = await p.$('#' + id); if (e) await e.screenshot({ path: `${SHOTS}/${id}.png` }); }
@@ -118,7 +120,7 @@ try {
     await p.screenshot({ path: `${SHOTS}/page-380.png`, fullPage: true });
     console.log(`shots → ${SHOTS}`);
   }
-  ok('I1(g) no console error/warning, page error, failed request', !noise.length, noise.join(' | '));
+  ok('I1(g) no console noise', !noise.length, noise.join(' | '));
 } finally { await b.close(); }
 console.log(fails ? `FAIL ${fails}` : 'ALL PASS');
 process.exit(fails ? 1 : 0);

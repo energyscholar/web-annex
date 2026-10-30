@@ -162,7 +162,6 @@ footer a { color: var(--blue); }
 .i2-card .eq { margin-top: 0.3rem; color: var(--green); font-size: 0.8rem; }
 .i2-svg svg { width: 100%; height: auto; max-height: 160px; display: block; }
 .mark { color: var(--golden); font-weight: 700; }
-/*@@CSS-I@@*/
 </style>
 </head>
 <body>
@@ -392,8 +391,97 @@ footer a { color: var(--blue); }
     <p><a href="https://arxiv.org/abs/2601.22389">Read the preprint, arXiv:2601.22389</a> · <a href="../domain-convergence/">Go deeper: the cross-domain survey</a> · <a href="../criticality-bridges/">Go deeper: bridges between domains</a></p>
   </div>
 </details>
-<!--@@S5@@-->
-<div id="accres" style="height:144px"></div>
+<details id="acc-math">
+  <summary>For mathematicians: the operators as the repository states them</summary>
+  <div class="acc-body">
+    <p class="gloss"><b>locus</b> = node · <b>edge</b> = declared relation · <b>provenance</b> = the observation an edge is traced to · <b>projection</b> = M or C · <b>admissible</b> = traceable to an observable through M · <b>Origin</b> = the person who declares.</p>
+    <p><span class="math">D</span> := { x ∈ ℝⁿ | n &lt; ∞, |x[i]| &lt; ∞ }, the image of M : O → D. “The kernel acts on M(o) only.” “No numerical result is itself an observable.” <cite>(notation:7)</cite></p>
+    <div class="tscroll"><table>
+      <thead><tr><th>Operator</th><th>Formula</th><th>In words</th></tr></thead>
+      <tbody>
+        <tr><td>Δ, A</td><td class="math">x[s] − x[t], e = (s, t)</td><td>“Take the directed difference and nothing else.” Δ is A under a declared renaming.</td></tr>
+        <tr><td>B</td><td class="math">g[e] + Σ<sub>f ∈ succ(e)</sub> g[f]</td><td>One step of accumulation along declared continuation; a terminal edge accumulates nothing.</td></tr>
+        <tr><td>ρ</td><td class="math">ρ_base · χ[i] / (χ₀ + χ[i]); ρ[e] := ρ[source(e)]</td><td>χ[i] is the largest |A| or |Δ| on edges incident to i. “The kernel holds no value for either.”</td></tr>
+        <tr><td>R</td><td class="math">g[e] + ρ[e]·(Σ<sub>succ(e)</sub> g − Σ<sub>pred(e)</sub> g)</td><td>What continues minus what arrives, scaled by local contrast.</td></tr>
+        <tr><td>Σ</td><td class="math">g[e] + ρ[e]·(Σ<sub>adj⁺(e)</sub> g − Σ<sub>adj⁻(e)</sub> g), g = Δ(x)</td><td>“R applied directly to Δ(x) without prior B accumulation.” E_primary = Σ(Δ(x)).</td></tr>
+      </tbody>
+    </table></div>
+    <p class="gloss"><cite>(notation:19-29; plain:116-126, 164-181)</cite></p>
+    <div class="fig">
+      <svg id="g3" role="img" aria-label="Which kernel applies. If M establishes an interior point s to t to u, the full kernel A, B, R applies. If not, the primary kernel Delta to Sigma applies and B is not evaluated." viewBox="0 0 880 130" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="g3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
+        <g font-family="system-ui, sans-serif" font-size="15" text-anchor="middle">
+          <rect x="20" y="40" width="270" height="50" rx="8" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+          <text x="155" y="70" fill="#f1f5f9">M establishes s → t → u ?</text>
+          <line x1="290" y1="55" x2="440" y2="30" stroke="#94a3b8" stroke-width="2" marker-end="url(#g3a)"/>
+          <line x1="290" y1="75" x2="440" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#g3a)"/>
+          <text x="360" y="32" fill="#22c55e">yes</text>
+          <text x="360" y="110" fill="#94a3b8">no</text>
+          <rect x="445" y="8" width="400" height="44" rx="8" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+          <text x="645" y="36" fill="#f1f5f9">full kernel: A → B → R</text>
+          <rect x="445" y="78" width="400" height="44" rx="8" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+          <text x="645" y="106" fill="#f1f5f9">primary kernel: Δ → Σ (B not evaluated)</text>
+        </g>
+      </svg>
+    </div>
+    <ul>
+      <li><b>Which kernel.</b> “The minimal admissible interior is: s → t → u.” Without it, “the primary kernel Δ → Σ is the correct kernel”. The condition is structural, not a number reached by a ratio. <cite>(notation:53-57)</cite></li>
+      <li><b>Before Δ or A.</b> Admissible: uniform shift, declared unit scale. <cite>(notation:33)</cite></li>
+      <li><b>Two phases.</b> Phase 1 acts on one declared observation M(o). Phase 2 needs a declared pair: “Phase 2 requires the process, not the photograph.” <cite>(plain:51-57, 231-237)</cite></li>
+      <li><b>Edges.</b> Provenance classes Continuation, Coupling, Persistence. Each relation has exactly one admissible direction; the reverse needs its own observable provenance. <cite>(ref:330-337; notation:13)</cite></li>
+      <li><b>C.</b> A declared projection, not a kernel operator: state what it preserves and what it discards. <cite>(notation:17, 31)</cite></li>
+      <li><b>Roles.</b> Origin declares and holds responsibility; Generator proposes; the Verifier returns located findings, not approval, by asking: “Can I trace every mathematical operation continuously back to declared observables through declared operators?” The operators hold no agency. <cite>(roles:29-35, 150, 180)</cite></li>
+    </ul>
+    <h3>Kernel V9, development branch</h3>
+    <p>The Relational Primitive Provenance Invariant: “Every admitted value, operation, and result must have a continuous, verifiable provenance path to an Origin-declared observable relation within D.” It holds three things distinct: a provenance label, a declaration record and a calculation record. Four failure modes are named: missing, fabricated, disconnected and misattributed provenance. Milestones 1–3, ending with seven requirements Req-1 to Req-7, were accepted by the Verifier on 2026-10-24. The enforcement interface is OPEN, and the type names in the specification are working names. V8 constructors and operators are unchanged. <cite>(README:37-66, 290-326)</cite></p>
+    <h3>Open conditions the repository lists</h3>
+    <p>A-3, sums over an empty adjacency: OPEN. The ρ max-selection rule and its saturating form: OPEN, Origin declaration required. <code>are_proportional</code> edge-order dependence: HOLD. <cite>(ref:1031-1036)</cite></p>
+    <p>The crate is Rust. <code>cargo test</code> runs 61 library tests and 3 <code>provenance_demo</code> tests on <code>main</code>; on <code>kernel-v9</code> it runs 31 more conformance tests, with 4 ignored pending enforcement. <cite>(README:81-87)</cite></p>
+    <p>“The operators produce the same classes of output … at every declared region from Primary through Planetary. What changes across regions is the declared measurement mapping M, not the operators or their constraints.” <cite>(README:20-23)</cite></p>
+  </div>
+</details>
+<details id="acc-lineage">
+  <summary>Where it’s from: V5 to the V9 development branch</summary>
+  <div class="acc-body">
+    <div class="fig">
+      <svg id="g4" role="img" aria-label="Timeline. The formulation in the supplement, evaluated in 2024; then the repository versions V5, V6, V7, V7.1, Kernel V8 on 2026-09-26, and the Kernel V9 development branch on 2026-10-24, with enforcement still open." viewBox="0 0 880 150" xmlns="http://www.w3.org/2000/svg">
+        <g font-family="system-ui, sans-serif" font-size="13" text-anchor="middle">
+          <line x1="60" y1="60" x2="820" y2="60" stroke="#475569" stroke-width="3"/>
+          <line x1="130" y1="60" x2="200" y2="60" stroke="#0f172a" stroke-width="5" stroke-dasharray="6 6"/>
+          <circle cx="70" cy="60" r="10" fill="#a855f7"/>
+          <text x="70" y="34" fill="#f1f5f9">supplement</text><text x="70" y="96" fill="#cbd5e1">formulation</text><text x="70" y="114" fill="#94a3b8">evaluated 2024</text>
+          <circle cx="240" cy="60" r="8" fill="#94a3b8"/><text x="240" y="96" fill="#cbd5e1">V5</text><text x="240" y="114" fill="#94a3b8">persistence</text>
+          <circle cx="335" cy="60" r="8" fill="#94a3b8"/><text x="335" y="96" fill="#cbd5e1">V6</text><text x="335" y="114" fill="#94a3b8">Δ → Σ; ring refused</text>
+          <circle cx="430" cy="60" r="8" fill="#94a3b8"/><text x="430" y="96" fill="#cbd5e1">V7</text><text x="430" y="114" fill="#94a3b8">rank, SVD out</text>
+          <circle cx="525" cy="60" r="8" fill="#94a3b8"/><text x="525" y="96" fill="#cbd5e1">V7.1</text><text x="525" y="114" fill="#94a3b8">no defaults</text>
+          <circle cx="640" cy="60" r="10" fill="#22c55e"/><text x="640" y="34" fill="#f1f5f9">Kernel V8</text><text x="640" y="96" fill="#cbd5e1">2026-09-26</text><text x="640" y="114" fill="#94a3b8">one release</text>
+          <circle cx="790" cy="60" r="10" fill="#fbbf24" stroke="#f1f5f9" stroke-width="2" stroke-dasharray="3 3"/><text x="790" y="34" fill="#f1f5f9">Kernel V9</text><text x="790" y="96" fill="#cbd5e1">development branch</text><text x="790" y="114" fill="#94a3b8">2026-10-24</text><text x="790" y="132" fill="#f59e0b">enforcement OPEN</text>
+        </g>
+      </svg>
+    </div>
+    <ol>
+      <li>The preprint’s supplement records the formulation it describes under the name “<span data-onename>Metatron Dynamics</span>”: four operators A, B, R and C on a ring with circular boundary conditions, composed as E = C(R(B(A(x)))). That is where the older name ABRCE comes from. <cite>(supplement; README:15)</cite></li>
+      <li>The supplement says the framework “originated in distributed systems engineering”, that Macomber “independently derived” its operators, and that when Stephenson evaluated it in 2024 its behaviour at parameter boundaries “resembled critical phase transitions”. The preprint says that case prompted its survey. “Our framework is not the paper’s thesis; it is the accident that revealed the thesis.” <cite>(supplement; preprint, introduction)</cite></li>
+      <li>The repository’s own history runs from persistence edges (V5), through the primary kernel Δ → Σ with the ring ruled inadmissible (V6), the removal of rank and SVD quantities and of every kernel default (V7, V7.1), and one release number across every file (Kernel V8, 2026-09-26), to the foundational primitive (Kernel V9 development branch, 2026-10-24). It starts at V5 because that is the earliest version the repository records. <cite>(ref:1119-1136)</cite></li>
+      <li>So the ring that the supplement’s formulation ran on is exactly what the current kernel refuses. The operators kept their letters and changed their domain. This page states the difference and does not reconcile it.</li>
+      <li>Labels before Kernel V8 were “document-local … not kernel release versions”; this page uses them only as the repository’s history does. <cite>(README:93-95)</cite></li>
+    </ol>
+  </div>
+</details>
+<details id="acc-not">
+  <summary>What the kernel does not claim</summary>
+  <div class="acc-body">
+    <ul>
+      <li>It does not interpret or rank results: “The result is not an interpretation. It is a function of the declaration and the observable.” <cite>(plain:239-241)</cite></li>
+      <li>It holds no value for ρ_base, χ₀ or cc, and supplies no default. <cite>(notation:25, 29)</cite></li>
+      <li>It does not choose which kernel applies; the declared structure does (s → t → u or not). <cite>(notation:53-57)</cite></li>
+      <li>It does not detect or predict anything on its own; the chain ends at comparison with observables. <cite>(ref:101-102)</cite></li>
+      <li>A result is never an observable: “No numerical result is itself an observable.” <cite>(ref:109)</cite></li>
+      <li>On the Kernel V9 development branch, the enforcement interface is not written yet. <cite>(README:314-323)</cite></li>
+    </ul>
+    <p>And the preprint’s own limit: “The quantitative evidence supports but does not prove independent derivation.” <cite>(preprint, Limitations)</cite></p>
+  </div>
+</details>
 
 <footer>
   <p><a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/tree/kernel-v9">Repository</a> · <a href="https://arxiv.org/abs/2601.22389">Preprint</a> · <a href="../structure-from-topology/">Structure from Topology</a> · <a href="../renormalization-group/">Renormalization Group</a>
@@ -573,7 +661,6 @@ footer a { color: var(--blue); }
   }
 })();
 </script>
-<!--@@JS@@-->
 <script src="../js/annex-tracker.js"></script>
 </body>
 </html>
