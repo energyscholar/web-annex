@@ -82,7 +82,7 @@ cite { font-style: italic; }
   background: var(--card); border-radius: 8px; padding: 0.5rem; margin: 0.5rem 0;
   text-align: center;
 }
-.fig svg { display: block; width: 100%; height: auto; margin: 0 auto; }
+.fig svg { display: block; width: 100%; max-width: 680px; height: auto; margin: 0 auto; }
 .rules p { margin-bottom: 0.3rem; }
 .panel {
   background: var(--card); border-radius: 8px; padding: 0.75rem; margin: 0.5rem 0;
@@ -118,6 +118,10 @@ footer {
   color: var(--line); font-size: 0.85rem;
 }
 footer p { margin-bottom: 0.25rem; }
+.credit { margin-top: 0.8rem; padding: 0.45rem 0.9rem; background: var(--card); border-left: 3px solid var(--golden); border-radius: 6px; color: var(--text); font-size: 0.95rem; }
+.credit p { margin: 0; }
+.credit b, .credit strong { color: var(--heading); }
+.credit + footer { margin-top: 0.5rem; padding-top: 0.4rem; }
 footer a { color: var(--blue); }
 .backlink { margin-top: 0.4rem; }
 .backlink a { color: var(--line); text-decoration: none; }
@@ -483,9 +487,12 @@ footer a { color: var(--blue); }
   </div>
 </details>
 
+<section class="credit" data-credit aria-label="Credits">
+  <p><b>Credits.</b> The ABR kernel is © 2026 <strong><span data-onename>Metatron Dynamics</span>, Inc.</strong> (<a href="https://relationalrelativity.dev">relationalrelativity.dev</a>), released under Apache-2.0: <a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/tree/kernel-v9">the repository</a>. The <a href="https://arxiv.org/abs/2601.22389">preprint</a> is by <strong>Bruce Stephenson</strong> and <strong>Robin Macomber</strong>.</p>
+</section>
 <footer>
   <p><a href="https://github.com/Relational-Relativity-Corporation/abr-kernel/tree/kernel-v9">Repository</a> · <a href="https://arxiv.org/abs/2601.22389">Preprint</a> · <a href="../structure-from-topology/">Structure from Topology</a> · <a href="../renormalization-group/">Renormalization Group</a>
-  · Apache-2.0 kernel · B. Stephenson, 2026</p>
+  · Apache-2.0 kernel</p>
   <p class="backlink"><a href="../">← Web Annex</a></p>
 </footer>
 </div>

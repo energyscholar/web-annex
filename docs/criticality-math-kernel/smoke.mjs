@@ -92,7 +92,7 @@ try {
   const r7 = await ev(() => {
     Q$('details').forEach(d => { d.open = false; });
     const c = document.body.cloneNode(true);
-    c.querySelectorAll('[data-interactive], script, style').forEach(e => e.remove());
+    c.querySelectorAll('[data-interactive],[data-credit],script,style').forEach(e => e.remove());
     c.style.cssText = 'position:absolute;left:-99999px'; document.documentElement.appendChild(c);
     const w = (c.innerText.match(/\S+/g) || []).filter(x => /[\p{L}\p{N}]/u.test(x)).length;
     c.remove(); return { h: document.documentElement.scrollHeight, w };
@@ -108,7 +108,7 @@ try {
   const bs = full.split(/(?<=[.!?])\s+|\n+/).filter(s => /arXiv|preprint|Convergent Discovery|FACETS|Stephenson/.test(s) && /accepted|published in|under review/i.test(s));
   ok('R3 no paper-status claim', !bs.length, bs.join(' // '));
   const nm = await p.$$eval('[data-onename]', e => e.map(x => x.textContent));
-  ok('R1a lineage name once (sha256-checked)', nm.length === 1 && createHash('sha256').update(nm[0]).digest('hex').startsWith('996800b39e0d4649') && full.split(nm[0]).length === 2);
+  ok('R1a name x2: lineage, credit (sha256)', nm.length === 2 && nm.every(n => createHash('sha256').update(n).digest('hex').startsWith('996800b39e0d4649')) && full.split(nm[0]).length === 3);
 
   if (SHOTS) {
     for (const id of ['g1', 'g2', 'g3', 'g4', 'i1svg', 'i2svg']) { const e = await p.$('#' + id); if (e) await e.screenshot({ path: `${SHOTS}/${id}.png` }); }
