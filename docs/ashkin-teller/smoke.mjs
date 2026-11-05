@@ -5,12 +5,14 @@
  *   T1 no links out          T2 links in (index card, search entry, models page)
  *   T3 exact numbers (I1)    T4 Monte Carlo sanity (I2, seed 1)
  *   T7 size: scrollHeight at 1280x1024 with details closed, and visible prose words
+ *   T10 revision content: Aoun cited, no "variance grows with", the −1/4 scaling,
+ *       and an RG section with an id that the reading map links to
  *
  * Puppeteer is resolved the same way as docs/verify-pages.mjs:
  *     PUPPETEER_DIR=/path/to/node_modules/puppeteer node docs/ashkin-teller/smoke.mjs
  *
  * Options:
- *   --page <file>   check another copy of the page (T1, T3, T4, T7 only)
+ *   --page <file>   check another copy of the page (T1, T3, T4, T7, T10 only)
  *   --only T3,T4    run a subset
  *
  * Exit code is non-zero if any test fails.
@@ -27,7 +29,7 @@ const DOCS = path.resolve(HERE, '..');
 const argv = process.argv.slice(2);
 const valOf = (f) => { const i = argv.indexOf(f); return i >= 0 ? argv[i + 1] : null; };
 const PAGE = path.resolve(valOf('--page') || path.join(HERE, 'index.html'));
-const ONLY = (valOf('--only') || 'T1,T2,T3,T4,T7').split(',');
+const ONLY = (valOf('--only') || 'T1,T2,T3,T4,T7,T10').split(',');
 
 async function loadPuppeteer() {
   try { return (await import('puppeteer')).default; } catch { /* keep looking */ }
@@ -104,7 +106,7 @@ async function t2() {
 /* --------------------------------------------------------- browser-side tests */
 async function browserTests(browser) {
   if (!existsSync(PAGE)) {
-    for (const t of ['T1', 'T3', 'T4', 'T7']) if (ONLY.includes(t)) report(t, false, 'page missing: ' + PAGE);
+    for (const t of ['T1', 'T3', 'T4', 'T7', 'T10']) if (ONLY.includes(t)) report(t, false, 'page missing: ' + PAGE);
     return;
   }
   const page = await browser.newPage();
@@ -199,14 +201,38 @@ async function browserTests(browser) {
       host.remove();
       return { h, words };
     });
-    report('T7 size', r.h <= 8200 && r.words <= 3000, `scrollHeight=${r.h} (≤8200), words=${r.words} (≤3000)`);
+    report('T7 size', r.h <= 10000 && r.words <= 3600, `scrollHeight=${r.h} (≤10000), words=${r.words} (≤3600)`);
+  }
+
+  if (ONLY.includes('T10')) {
+    const r = await page.evaluate(() => {
+      const bad = [];
+      const main = document.querySelector('main');
+      if (!main) return { bad: ['no <main>'] };
+      const txt = main.textContent;                       // closed <details> and the references count
+      if (!txt.includes('Aoun')) bad.push('no "Aoun"');
+      if (txt.includes('variance grows with')) bad.push('contains "variance grows with"');
+      if (!txt.includes('\u22121/4')) bad.push('no "−1/4" (U+2212)');
+      const rg = [...document.querySelectorAll('section')].find((s) => {
+        const h = s.querySelector('h2'); return h && /RG picture/.test(h.textContent);
+      });
+      let id = null;
+      if (!rg) bad.push('no section whose h2 names "RG picture"');
+      else if (!rg.id) bad.push('RG section has no id');
+      else {
+        id = rg.id;
+        if (!document.querySelector('.map a[href="#' + id + '"]')) bad.push('reading map has no link to #' + id);
+      }
+      return { bad, id };
+    });
+    report('T10 revision content', r.bad.length === 0, r.bad.length ? r.bad.join('; ') : `Aoun cited; no "variance grows with"; −1/4 present; RG section #${r.id} in the reading map`);
   }
   await page.close();
 }
 
 async function main() {
   if (ONLY.includes('T2')) await t2();
-  if (ONLY.some((t) => ['T1', 'T3', 'T4', 'T7'].includes(t))) {
+  if (ONLY.some((t) => ['T1', 'T3', 'T4', 'T7', 'T10'].includes(t))) {
     const puppeteer = await loadPuppeteer();
     const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
     try { await browserTests(browser); } finally { await browser.close().catch(() => {}); }
