@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive tutorial: from two independent critical Ising models to the Ashkin–Teller line of critical points. Dimension counting, exact marginality, the exact phase diagram with exponents read off as you drag, a live two-layer cluster Monte Carlo, weak universality, and what the line implies for fluctuation indicators.">
+<title>Ashkin&ndash;Teller for the Working Mathematician</title>
+<style>
+:root {
+  --bg: #0f172a; --card: #1e293b; --text: #cbd5e1; --heading: #f1f5f9;
+  --blue: #3b82f6; --green: #22c55e; --amber: #f59e0b; --red: #ef4444;
+  --golden: #fbbf24; --muted: #64748b; --line: #94a3b8; --purple: #a855f7; --dim: #334155; --cyan: #06b6d4;
+  --accent: #a855f7;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 17px; line-height: 1.65; }
+.container { max-width: 900px; margin: 0 auto; padding: 1.2rem 16px 3rem; }
+h1 { color: var(--heading); font-size: 2.1rem; line-height: 1.2; margin: 0.6rem 0 0.4rem; letter-spacing: -0.02em; font-family: Georgia, 'Times New Roman', serif; }
+h2 { color: var(--heading); font-size: 1.5rem; margin: 2rem 0 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--dim); font-family: Georgia, 'Times New Roman', serif; }
+h2 .num { color: var(--accent); margin-right: 0.35em; font-size: 0.9em; }
+p { margin: 0 0 0.9rem; }
+ol, ul { margin: 0 0 0.9rem 1.4rem; padding: 0; }
+li { margin-bottom: 0.25rem; }
+a { color: var(--blue); }
+.subtitle { color: var(--line); font-size: 1.05rem; margin-bottom: 1.2rem; font-family: Georgia, 'Times New Roman', serif; font-style: italic; }
+.map { font-size: 0.9rem; display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; list-style: none; margin: 0 0 1rem; padding: 0.6rem 0.9rem; background: var(--card); border-radius: 8px; }
+.map li { margin: 0; }
+.map a { color: var(--line); text-decoration: none; }
+.map a:hover, .map a:focus { color: var(--heading); }
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); }
+.math-block { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); display: block; text-align: center; margin: 0.8rem 0; font-size: 1.12rem; overflow-wrap: anywhere; }
+.lesson { background: var(--card); border-left: 4px solid var(--cyan); border-radius: 8px; padding: 0.8rem 1.1rem; margin: 1rem 0; }
+.lesson p:last-child { margin-bottom: 0; }
+.lesson b.h { color: var(--cyan); }
+.tablewrap { overflow-x: auto; max-width: 100%; margin: 1rem 0; }
+table.t { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
+table.t th { background: var(--dim); color: var(--heading); padding: 0.45rem 0.6rem; text-align: left; font-size: 0.84rem; }
+table.t td { padding: 0.4rem 0.6rem; border-top: 1px solid var(--dim); font-size: 0.84rem; vertical-align: top; }
+table.t caption { caption-side: bottom; text-align: left; font-size: 0.8rem; color: var(--line); padding: 0.4rem 0.2rem 0; }
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.6); cursor: help; }
+.tip .tt { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.82rem; font-style: normal; font-weight: 400; color: var(--text); width: max-content; max-width: 300px; z-index: 100; line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4); text-align: left; font-family: system-ui, sans-serif; }
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) { .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: 4rem; transform: none; max-width: none; width: auto; } }
+sup.fnm { font-size: 0.68em; line-height: 0; margin-left: 0.12em; }
+.fn { color: var(--muted); text-decoration: none; }
+.refs { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--dim); }
+.refs ol { padding-left: 1.4rem; }
+.refs li { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; overflow-wrap: anywhere; }
+.refs li a { color: var(--line); text-decoration: none; }
+details.d { margin: 0.9rem 0; border: 1px solid var(--dim); border-radius: 8px; background: var(--card); }
+details.d > summary { cursor: pointer; list-style: none; padding: 0.55rem 0.9rem; font-weight: 600; color: var(--line); font-size: 0.95rem; }
+details.d > summary::-webkit-details-marker { display: none; }
+details.d > summary::after { content: ' \25B8'; color: var(--accent); display: inline-block; }
+details[open].d > summary::after { transform: rotate(90deg); }
+details.d > :not(summary) { margin-left: 0.9rem; margin-right: 0.9rem; }
+details.d > :last-child { margin-bottom: 0.9rem; }
+/* interactives */
+.ix { background: var(--card); border: 1px solid var(--dim); border-radius: 10px; padding: 0.8rem; margin: 1.1rem 0; }
+.ix-row { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: flex-start; justify-content: center; }
+.ix svg { display: block; max-width: 100%; height: auto; }
+.ix svg text { font-family: ui-monospace, 'JetBrains Mono', monospace; fill: var(--text); }
+.ix .tick { fill: var(--muted); font-size: 11px; }
+.ix .cap { font-size: 0.82rem; color: var(--line); margin: 0.5rem 0 0; line-height: 1.5; }
+.ctl { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; font-size: 0.85rem; color: var(--line); margin: 0.5rem 0; }
+.ctl label { display: inline-flex; align-items: center; gap: 0.4rem; }
+.ctl input[type=range] { width: 150px; max-width: 42vw; accent-color: var(--accent); }
+.ctl input[type=number] { width: 5.5em; font: inherit; background: #0b1222; color: var(--heading); border: 1px solid var(--dim); border-radius: 5px; padding: 0.15rem 0.3rem; }
+.ctl output { font-family: ui-monospace, monospace; color: var(--heading); min-width: 3.4em; }
+.btn { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.8rem; border-radius: 6px; border: 1px solid var(--dim); background: #0b1222; color: var(--heading); cursor: pointer; }
+.btn:hover, .btn:focus-visible { border-color: var(--accent); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #0f172a; font-weight: 600; }
+.ro { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 0.25rem 0.8rem; font-family: ui-monospace, monospace; font-size: 0.82rem; color: var(--line); margin: 0.5rem 0; }
+.ro b { color: var(--heading); font-weight: 600; }
+.ro .pin b { color: var(--green); }
+#at-handle { cursor: grab; }
+#at-handle:focus { outline: none; }
+#at-handle:focus circle.ring { stroke: var(--heading); stroke-width: 2; }
+.panels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+.panels figure { margin: 0; text-align: center; }
+.panels canvas { width: 100%; max-width: 230px; aspect-ratio: 1; image-rendering: pixelated; image-rendering: crisp-edges; border: 1px solid var(--dim); border-radius: 4px; display: block; margin: 0 auto; }
+.panels figcaption { font-size: 0.8rem; color: var(--line); font-family: ui-monospace, monospace; }
+@media (max-width: 700px) { .panels { grid-template-columns: 1fr; } .panels canvas { max-width: 260px; } }
+.note { font-size: 0.8rem; color: var(--amber); }
+.remember li { margin-bottom: 0.4rem; }
+</style>
+</head>
+<body>
+<main class="container">
+
+<h1 id="top">Ashkin&ndash;Teller for the Working Mathematician</h1>
+<p class="subtitle">Two Ising copies, one marginal coupling, a line of critical points</p>
+
+<p>Take two copies of the critical Ising model that ignore each other, then couple them with one term of exactly the right kind:
+the product of their two energy densities. The critical point does not move or split. It becomes one end of a whole <b>line</b>
+of critical points, along which some exponents slide continuously while others stay pinned. This is the Ashkin&ndash;Teller model.<sup class="fnm"><a href="#fn7" class="fn" id="fnref7">[7]</a></sup>
+The page builds it from the double Ising model up, with every number sourced. It matters to anyone who reads exponents or
+fluctuation indicators off data: on this line the order parameter&rsquo;s variance scales identically everywhere, the energy&rsquo;s does not,
+and the textbook signature of an abrupt transition appears at a continuous one.</p>
+
+<ol class="map" aria-label="Sections">
+  <li><a href="#s1">1 One Ising model</a></li>
+  <li><a href="#s2">2 Two copies</a></li>
+  <li><a href="#s3">3 Turn on the coupling</a></li>
+  <li><a href="#s4">4 The phase diagram</a></li>
+  <li><a href="#s5">5 Live Monte Carlo</a></li>
+  <li><a href="#s6">6 Weak universality</a></li>
+  <li><a href="#s7">7 For the indicator-builder</a></li>
+  <li><a href="#s8">8 Where else the line lives</a></li>
+  <li><a href="#s9">9 What to remember</a></li>
+  <li><a href="#refs">References</a></li>
+</ol>
+
+<!-- ============================================================== 1 -->
+<section id="s1">
+<h2><span class="num">1</span>One Ising model, in five lines</h2>
+<p>Spins σ<sub>i</sub> = ±1 on the square lattice, <span class="math">H = −K Σ<sub>⟨ij⟩</sub> σ<sub>i</sub>σ<sub>j</sub></span>, with β absorbed into K.
+Kramers&ndash;Wannier duality maps the model at coupling K onto itself at a dual coupling; on the square lattice the
+<span class="tip" tabindex="0">self-dual<span class="tt">Left unchanged by the duality map. If the model has a single transition, it must sit on the self-dual set.</span></span>
+point is <span class="math">sinh 2K = 1</span>,<sup class="fnm"><a href="#fn2" class="fn" id="fnref2">[2]</a></sup> so
+<span class="math">K<sub>c</sub> = ½ ln(1 + √2) = 0.44069</span>.<sup class="fnm"><a href="#fn1" class="fn" id="fnref1">[1]</a></sup>
+The exponents, read off the formulas of §4 at the Ising end: <span class="math">ν = 1</span>, <span class="math">α/ν = 0</span>,
+<span class="math">γ/ν = 7/4</span>, <span class="math">η = 1/4</span>.
+In <span class="tip" tabindex="0">scaling dimensions<span class="tt">x: at criticality a local operator&rsquo;s two-point function decays as r<sup>−2x</sup>. A coupling h to that operator scales as b<sup>2−x</sup> under coarse-graining by b (in two dimensions).</span></span>,
+the spin has <span class="math">x<sub>σ</sub> = η/2 = 1/8</span> and the energy density <span class="math">x<sub>ε</sub> = 2 − 1/ν = 1</span>.
+Already here a power-law fit misleads: from the specific heat Wiseman and Domany obtain α/ν = 0.23(1) with a log&ndash;log fit and 0 with a semi-log fit.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+</section>
+
+<!-- ============================================================== 2 -->
+<section id="s2">
+<h2><span class="num">2</span>Two copies: the double Ising model</h2>
+<p>Put a second Ising spin τ<sub>i</sub> on every site, and give each copy its own coupling K = K<sub>c</sub> with no term between them.
+The partition function factorises, <span class="math">Z = Z<sub>Ising</sub>(K)<sup>2</sup></span>. The symmetry is
+<span class="math">Z<sub>2</sub> × Z<sub>2</sub></span> (flip every σ; flip every τ; independently), and there are three Z<sub>2</sub> order
+parameters: σ, τ and the product στ, which survives flipping both. Independence gives the product&rsquo;s correlations for free:</p>
+<span class="math-block">⟨σ<sub>0</sub>τ<sub>0</sub> σ<sub>r</sub>τ<sub>r</sub>⟩ = ⟨σ<sub>0</sub>σ<sub>r</sub>⟩⟨τ<sub>0</sub>τ<sub>r</sub>⟩ ~ r<sup>−1/2</sup>, &nbsp; so x<sub>στ</sub> = 1/4.</span>
+<p>Coarse-graining by b multiplies a small coupling to an operator of dimension x by b<sup>y</sup>, with <span class="math">y = 2 − x</span>.
+A coupling with y &gt; 0 is <span class="tip" tabindex="0">relevant<span class="tt">Grows under coarse-graining: switching it on drives the system away from the critical point it started at.</span></span>;
+y &lt; 0 is irrelevant; y = 0 is <span class="tip" tabindex="0">marginal<span class="tt">Neither grows nor shrinks under coarse-graining, to linear order. Whether it stays so at higher order decides whether it generates a line of critical points.</span></span>.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup><sup class="fnm"><a href="#fn3" class="fn" id="fnref3">[3]</a></sup>
+These are the local operators of the decoupled pair:</p>
+<div class="tablewrap" data-wc="skip"><table class="t">
+  <thead><tr><th>operator</th><th>lattice form</th><th>x</th><th>y = 2 − x</th><th>as a coupling</th></tr></thead>
+  <tbody>
+    <tr><td>σ, τ</td><td>σ<sub>i</sub>, τ<sub>i</sub></td><td>1/8</td><td>15/8</td><td>relevant (a field on one copy)</td></tr>
+    <tr><td>στ</td><td>σ<sub>i</sub>τ<sub>i</sub></td><td>1/4</td><td>7/4</td><td>relevant: the bilinear inter-copy coupling</td></tr>
+    <tr><td>ε<sub>σ</sub>, ε<sub>τ</sub></td><td>σ<sub>i</sub>σ<sub>j</sub>, τ<sub>i</sub>τ<sub>j</sub></td><td>1</td><td>1</td><td>relevant (a temperature shift)</td></tr>
+    <tr><td>ε<sub>σ</sub>ε<sub>τ</sub></td><td>σ<sub>i</sub>σ<sub>j</sub>τ<sub>i</sub>τ<sub>j</sub></td><td>2</td><td>0</td><td><b>marginal</b>: the four-spin coupling</td></tr>
+  </tbody></table></div>
+<p>Two of these join the copies. They are the subject of the next section.</p>
+</section>
+
+<!-- ============================================================== 3 -->
+<section id="s3">
+<h2><span class="num">3</span>Turn on the coupling</h2>
+<p>The Ashkin&ndash;Teller Hamiltonian adds the four-spin term, with β absorbed:<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+<span class="math-block">H = −Σ<sub>⟨ij⟩</sub> [ K σ<sub>i</sub>σ<sub>j</sub> + K τ<sub>i</sub>τ<sub>j</sub> + L σ<sub>i</sub>σ<sub>j</sub>τ<sub>i</sub>τ<sub>j</sub> ].</span>
+<p>The new term is the product of the two copies&rsquo; bond energies, (σ<sub>i</sub>σ<sub>j</sub>)(τ<sub>i</sub>τ<sub>j</sub>). At the decoupled point it
+couples to ε<sub>σ</sub>ε<sub>τ</sub>: x = 2, y = 0, marginal. Marginal to linear order is not enough for a line, since a
+marginal coupling can still grow or die slowly at the next order. This one does neither: it is <b>exactly</b> marginal, and Ginsparg
+identifies ε<sub>1</sub>ε<sub>2</sub> as the operator that moves the theory along a line of critical theories.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup>
+Turning L on therefore does not take the pair off criticality; it slides it along a line, and the exponents slide with it.
+At L = K the four states (σ, τ) = (±1, ±1) are all alike and the model is the four-state
+<span class="tip" tabindex="0">Potts model<span class="tt">q states per site; neighbours gain energy only when they are in the same state. q = 2 is Ising.</span></span>,
+where σ, τ and στ are interchangeable.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+<p>The contrast is the on-site bilinear coupling <span class="math">g Σ<sub>i</sub> σ<sub>i</sub>τ<sub>i</sub></span>. It multiplies στ, with
+x = 1/4 and y = 7/4: strongly relevant. The decoupled point is unstable in the g direction and there is no line. Where that flow
+ends is expected, not shown here.</p>
+<details class="d" id="d-marg"><summary>Why ε<sub>1</sub>ε<sub>2</sub> is exactly marginal</summary>
+  <p>Ginsparg&rsquo;s criterion: an operator V of dimension (1,1) generates a one-parameter family of critical theories only if, to
+  leading order, the V × V operator product contains no term in V itself. If it does, V&rsquo;s dimension shifts once the coupling
+  is on, and V is marginally relevant on one side and marginally irrelevant on the other.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
+  <p>For Ashkin&ndash;Teller the check passes for a structural reason. On the critical line, ε<sub>1</sub>ε<sub>2</sub> is the four-fermion term of
+  the massless Thirring model, which only changes the radius of a free boson. Changing a radius is a motion along a line, so no
+  fixed point is left.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup> The bilinear σ<sub>1</sub>σ<sub>2</sub> has no such protection; with y = 7/4 the
+  question of higher orders never arises.</p>
+</details>
+</section>
+
+<!-- ============================================================== 4 -->
+<section id="s4">
+<h2><span class="num">4</span>The phase diagram</h2>
+<p>In Wiseman and Domany&rsquo;s coordinates the phase diagram is the unit square X, Z ∈ [0, 1]:<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+<span class="math-block">Z = e<sup>−4K</sup>, &nbsp; X = e<sup>−2(K+L)</sup>; &nbsp;&nbsp; K = −¼ ln Z, &nbsp; L = −½ ln X − K.</span>
+<p>The parabola <span class="math">Z = X<sup>2</sup></span> is L = 0 (two decoupled Ising models); the diagonal <span class="math">Z = X</span> is L = K
+(four-state Potts). Duality fixes the critical line exactly on the <b>self-dual line</b> <span class="math">Z = 1 − 2X</span>, equivalently
+<span class="math">e<sup>−2L</sup> = sinh 2K</span>. Its segment from X<sub>0</sub> = (√2 − 1, 3 − 2√2), the decoupled Ising point (K = 0.44069, L = 0), to
+X<sub>4</sub> = (1/3, 1/3), the Potts point (K = L = ¼ ln 3 = 0.27465), is a line of critical points with continuously varying exponents.
+Below X<sub>0</sub> (L &lt; 0) the same line continues as the ferro&ndash;para boundary. Three phases: <b>P</b>, paramagnetic; <b>F</b>, ferromagnetic,
+with ⟨σ⟩ = ±⟨τ⟩ and ⟨στ⟩ ≠ 0; and a <b>⟨στ⟩</b> phase in which only the product orders (⟨σ⟩ = ⟨τ⟩ = 0), which exists only for L &gt; K.
+Two further boundaries leave X<sub>4</sub> and flow to Ising fixed points; they have no exact equation and are not drawn.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+<p>Along the segment the exponents come from the
+<span class="tip" tabindex="0">Coulomb gas<span class="tt">A standard exact method for 2D critical models (Nienhuis). Its single coupling, here g<sub>R</sub>, labels the position on the line and fixes the exponents.</span></span>,
+as quoted by Wiseman and Domany:<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+<span class="math-block">g<sub>R</sub> = (8/π) arcsin[½ coth 2K], &nbsp; y<sub>t</sub> = 2 − 2/g<sub>R</sub>, &nbsp; α/ν = 2y<sub>t</sub> − 2, &nbsp; γ/ν = 7/4.</span>
+<p>At X<sub>0</sub>, ½ coth 2K = 1/√2 and g<sub>R</sub> = 2; at X<sub>4</sub> it is 1 and g<sub>R</sub> = 4. By algebra, ν = 1/y<sub>t</sub> runs from 1 to 2/3,
+α/ν from 0 to 1, and the thermal dimension x<sub>ε</sub> = 2 − y<sub>t</sub> from 1 to 1/2, while η = 2 − γ/ν = 1/4 never moves.
+Drag the handle (or focus it and use the arrow keys); it lives on the critical segment only, because that is where the formulas hold.</p>
+
+<div class="ix" id="i1" data-wc="skip">
+  <div class="ix-row">
+    <svg id="at-svg" viewBox="0 0 400 400" width="400" role="img" aria-labelledby="at-svg-t">
+      <title id="at-svg-t">Ashkin–Teller phase diagram in the unit square of X and Z, with the parabola Z = X squared, the diagonal Z = X, the self-dual line Z = 1 − 2X, its critical segment from X0 to X4, five test points and a draggable handle</title>
+      <g id="at-static"></g>
+      <g id="at-handle" tabindex="0" role="slider" aria-label="position on the critical line" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.5">
+        <circle class="ring" r="11" fill="none" stroke="none"/>
+        <circle r="7" fill="#f1f5f9" stroke="#a855f7" stroke-width="2.5"/>
+      </g>
+    </svg>
+    <svg id="an-svg" viewBox="0 0 300 230" width="300" role="img" aria-labelledby="an-svg-t">
+      <title id="an-svg-t">Exact alpha over nu against position t on the critical line, rising from 0 to 1 with infinite slope at the Potts end, with Wiseman and Domany's fitted values at the five test points as open circles</title>
+      <g id="an-static"></g>
+      <line id="an-cur" y1="20" y2="190" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3"/>
+      <circle id="an-dot" r="4.5" fill="#a855f7"/>
+    </svg>
+  </div>
+  <div class="ctl"><label>position on the line t <input type="range" id="at-t" min="0" max="1" step="0.005" value="0.5"> <output id="at-t-o">0.500</output></label> <span>t = 0 is X<sub>0</sub> (Ising × Ising), t = 1 is X<sub>4</sub> (Potts)</span></div>
+  <div class="ro" id="at-ro" aria-live="polite"></div>
+  <p class="cap">Boundaries of the ⟨στ⟩ phase are not exactly known and are not drawn. Region labels are placed by the coordinates: P toward K, L → 0, F toward K → ∞, ⟨στ⟩ above the diagonal (L &gt; K). Right: solid curve, exact α/ν; open circles, fitted α/ν at X<sub>0</sub>…X<sub>4</sub> (X<sub>0</sub> log&ndash;log).</p>
+</div>
+
+<p>Wiseman and Domany test five equally spaced points X<sub>i</sub> = X<sub>0</sub> + (i/4)(X<sub>4</sub> − X<sub>0</sub>) with their cluster algorithm on
+ℓ × ℓ lattices up to ℓ = 128 (ℓ, the linear size, is never written L on this page). They measure
+C = ℓ<sup>2</sup>(⟨E<sup>2</sup>⟩ − ⟨E⟩<sup>2</sup>), with E the energy per site, and χ = ℓ<sup>2</sup>⟨M<sup>2</sup>⟩ with M = ℓ<sup>−2</sup>Σσ, and read exponents by
+<span class="tip" tabindex="0">finite-size scaling<span class="tt">At a critical point, peak quantities grow as powers of the linear size: C ~ ℓ<sup>α/ν</sup>, χ ~ ℓ<sup>γ/ν</sup>. Exponents are read from that growth.</span></span>,
+C ~ ℓ<sup>α/ν</sup> and χ ~ ℓ<sup>γ/ν</sup>.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> The errors are statistical only.</p>
+<div class="tablewrap" data-wc="skip"><table class="t" id="tab1">
+  <thead><tr><th>point</th><th>K</th><th>L</th><th>α/ν exact</th><th>α/ν fitted</th><th>γ/ν fitted</th><th>z<sub>int,χ</sub> (algorithm)</th></tr></thead>
+  <tbody>
+    <tr><td>X<sub>0</sub> Ising × Ising</td><td>0.44069</td><td>0</td><td>0</td><td>0.23(1); semi-log 0</td><td>1.751(4)</td><td>0.13(1)</td></tr>
+    <tr><td>X<sub>1</sub></td><td>0.3878</td><td>0.0779</td><td>0.2096</td><td>0.38(2)</td><td>1.751(1)</td><td>0.273(3)</td></tr>
+    <tr><td>X<sub>2</sub></td><td>0.3441</td><td>0.1479</td><td>0.4182</td><td>0.542(8)</td><td>1.752(3)</td><td>0.532(5)</td></tr>
+    <tr><td>X<sub>3</sub></td><td>0.3070</td><td>0.2129</td><td>0.6383</td><td>0.655(13)</td><td>1.763(6)</td><td>0.717(8)</td></tr>
+    <tr><td>X<sub>4</sub> Potts</td><td>0.27465</td><td>0.27465</td><td>1</td><td>0.747(3)</td><td>1.752(4)</td><td>0.99(3)</td></tr>
+  </tbody>
+  <caption>Wiseman &amp; Domany, Eq. 31 and Table I; ℓ ≤ 128. The last column is a property of a Monte Carlo algorithm (§7d), not of the model.</caption>
+</table></div>
+<p>The fitted γ/ν stays within 0.013 of 7/4 at every point. The fitted α/ν misses the exact value everywhere except near X<sub>3</sub>, and worst at the Potts end.</p>
+
+<details class="d" id="d-line"><summary>From Z = 1 − 2X to e<sup>−2L</sup> = sinh 2K, and the Ising point</summary>
+  <span class="math-block">e<sup>−4K</sup> = 1 − 2e<sup>−2K−2L</sup> ⇔ e<sup>−2L</sup> = (1 − e<sup>−4K</sup>)/(2e<sup>−2K</sup>) = ½(e<sup>2K</sup> − e<sup>−2K</sup>) = sinh 2K.</span>
+  <p>At L = 0 this is sinh 2K = 1, the Ising self-dual point of §1. On the line, coth 2K = (1 + Z)/(1 − Z) = (1 − X)/X, which is how the
+  readout computes g<sub>R</sub> from X alone. The point X<sub>0</sub> is where the line meets the parabola: 1 − 2X = X<sup>2</sup> gives X = √2 − 1;
+  X<sub>4</sub> is where it meets the diagonal, X = 1/3.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+</details>
+</section>
+
+<!-- ============================================================== 5 -->
+<section id="s5">
+<h2><span class="num">5</span>Live Monte Carlo: two layers on the line</h2>
+<p>The simulation uses Wiseman and Domany&rsquo;s cluster method.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> Freeze τ. Then σ alone is an Ising model with
+bond couplings J<sub>jk</sub> = K + L τ<sub>j</sub>τ<sub>k</sub>, ferromagnetic whenever L ≤ K. Grow one
+<span class="tip" tabindex="0">Wolff<span class="tt">Wolff and Swendsen&ndash;Wang are cluster algorithms for Ising-type models: instead of single spins, they flip whole clusters of aligned spins at once.</span></span>
+cluster on σ and flip it; then swap the roles of σ and τ. At L = 0 and at L = K this reduces to the standard Wolff and Swendsen&ndash;Wang
+methods. The controls are the position t on the critical segment and a temperature factor f that sends (K, L) to (K/f, L/f):
+f = 1 is on the line, f &lt; 1 colder and ordered, f &gt; 1 hotter and disordered. Dividing both couplings by f keeps L/K fixed,
+so L ≤ K holds everywhere the sliders reach. One sweep is enough cluster flips to turn over about ℓ<sup>2</sup> spins.</p>
+
+<div class="ix" id="i2" data-wc="skip">
+  <div class="panels">
+    <figure><canvas id="mc-s" width="64" height="64" aria-label="σ layer"></canvas><figcaption>σ</figcaption></figure>
+    <figure><canvas id="mc-t" width="64" height="64" aria-label="τ layer"></canvas><figcaption>τ</figcaption></figure>
+    <figure><canvas id="mc-st" width="64" height="64" aria-label="product στ"></canvas><figcaption>στ</figcaption></figure>
+  </div>
+  <div class="ctl">
+    <label>position t <input type="range" id="mc-tt" min="0" max="1" step="0.05" value="0"> <output id="mc-tt-o">0.00</output></label>
+    <label>temperature factor f <input type="range" id="mc-f" min="0.85" max="1.15" step="0.01" value="1"> <output id="mc-f-o">1.00</output></label>
+    <label>seed <input type="number" id="mc-seed" value="1" min="0" step="1"></label>
+  </div>
+  <div class="ctl">
+    <button class="btn primary" id="mc-run" type="button">Run</button>
+    <button class="btn" id="mc-step" type="button">Step</button>
+    <button class="btn" id="mc-reset" type="button">Reset</button>
+    <span class="note" id="mc-rm" hidden>Run is off because your system asks for reduced motion; Step advances one sweep.</span>
+  </div>
+  <div class="ro" id="mc-ro" aria-live="off"></div>
+  <p class="cap">64 × 64, periodic. Running means since Reset. Start at t = 0: στ looks like the product of two independent critical patterns. Move to t = 1
+  (Potts): the three panels become statistically alike. Then compare f = 0.9 (ordered) with f = 1.1 (disordered). Changing a slider resets the run.</p>
+</div>
+</section>
+
+<!-- ============================================================== 6 -->
+<section id="s6">
+<h2><span class="num">6</span>Weak universality: what slides and what is pinned</h2>
+<p>Suzuki&rsquo;s weak universality, as Khan et al. state it: along a line generated by a marginal parameter, β, γ and ν vary, but β/ν and γ/ν,
+and hence δ and η, stay fixed.<sup class="fnm"><a href="#fn4" class="fn" id="fnref4">[4]</a></sup> Ashkin&ndash;Teller obeys it: ν slides from 1 to 2/3, so γ = (7/4)ν slides with it,
+while γ/ν = 7/4 and η = 1/4 are pinned along the whole segment.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+<p>Khan et al. report a magnet that does not: in (Sm<sub>1−y</sub>Nd<sub>y</sub>)<sub>0.52</sub>Sr<sub>0.48</sub>MnO<sub>3</sub> (y is the Nd fraction here,
+not an RG eigenvalue), β, γ and δ all vary with composition, δ included.<sup class="fnm"><a href="#fn4" class="fn">[4]</a></sup></p>
+<div class="tablewrap" data-wc="skip"><table class="t">
+  <thead><tr><th>Nd fraction y</th><th>β</th><th>γ</th><th>δ</th></tr></thead>
+  <tbody><tr><td>1.0</td><td>0.36</td><td>1.38</td><td>4.72</td></tr><tr><td>0.5</td><td>0.16</td><td>1.27</td><td>9.30</td></tr></tbody>
+  <caption>Khan et al., Table 1. δ is fixed under weak universality; here it nearly doubles.</caption>
+</table></div>
+<details class="d" id="d-kh"><summary>Khan et al.&rsquo;s generalised family</summary>
+  <p>They propose a family of exponent forms in a parameter λ (their Eqs. 5&ndash;8), of which two members are
+  <span class="math">ν = ν<sub>0</sub>/λ<sup>κ+ω</sup></span> and <span class="math">γ = γ<sub>0</sub>/λ<sup>ω</sup></span>; weak universality is the case κ = 0.<sup class="fnm"><a href="#fn4" class="fn">[4]</a></sup>
+  By algebra, κ = 0 makes γ/ν = γ<sub>0</sub>/ν<sub>0</sub> independent of λ, which is exactly the pinning seen on the Ashkin&ndash;Teller line.</p>
+</details>
+</section>
+
+<!-- ============================================================== 7 -->
+<section id="s7">
+<h2><span class="num">7</span>For the indicator-builder</h2>
+<p>Four readings of the facts above. Each is a statement about this model and these measurements; the page cites no
+early-warning literature and makes no claim about it.</p>
+<div class="lesson" id="s7a"><p><b class="h">(a) The order parameter&rsquo;s variance cannot tell you where you are.</b>
+χ = ℓ<sup>2</sup>⟨M<sup>2</sup>⟩ scales as ℓ<sup>7/4</sup> at every point of the segment, with fitted γ/ν between 1.751 and 1.763 at all five points. The energy variance,
+C ~ ℓ<sup>α/ν</sup>, has an exponent running from 0 to 1. For an indicator this means a variance-type signal built on the order parameter is
+blind to position along a marginal line, while an energy-fluctuation signal is not.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p></div>
+<div class="lesson" id="s7b"><p><b class="h">(b) Exponent fits at accessible sizes are biased, and at the Potts end badly.</b>
+At X<sub>1</sub> the fit gives 0.38(2) against an exact 0.2096; at X<sub>4</sub>, 0.747(3) against 1. At X<sub>4</sub> the specific heat carries a
+<span class="tip" tabindex="0">multiplicative logarithm<span class="tt">A logarithmic factor multiplying the leading power law, here C ~ ℓ/(ln ℓ)<sup>3/2</sup>, rather than a separate correction term added to it.</span></span>,
+C ~ ℓ/(ln ℓ)<sup>3/2</sup>,<sup class="fnm"><a href="#fn5" class="fn" id="fnref5">[5]</a></sup> so a power-law fit returns α/ν well below 1. The corresponding correction
+expected in χ, ℓ<sup>7/4</sup>(ln ℓ)<sup>−1/8</sup>, is not visible for ℓ ≤ 256.<sup class="fnm"><a href="#fn6" class="fn" id="fnref6">[6]</a></sup> For an indicator this means
+the quoted errors (statistical only) do not cover the systematic error, which is largest at the Potts end.</p></div>
+<div class="lesson" id="s7c"><p><b class="h">(c) Bimodality does not certify an abrupt transition.</b>
+At the four-state Potts point, and on the Ashkin&ndash;Teller line at L/K = 0.95, both known to be continuous, Jin, Sen and Sandvik find
+double-peaked energy and order-parameter histograms near the transition and a <em>negative</em> minimum of the
+<span class="tip" tabindex="0">Binder cumulant<span class="tt">U = 2[1 − ⟨m<sup>4</sup>⟩/(2⟨m<sup>2</sup>⟩<sup>2</sup>)] in Jin, Sen and Sandvik&rsquo;s normalisation. A negative minimum, together with double-peaked histograms, is what they call pseudo-first-order behaviour.</span></span>
+U = 2[1 − ⟨m<sup>4</sup>⟩/(2⟨m<sup>2</sup>⟩<sup>2</sup>)], for sizes up to ℓ = 256.<sup class="fnm"><a href="#fn6" class="fn">[6]</a></sup> They call it pseudo-first-order. For an indicator this
+means a bimodal distribution near a transition, on its own, does not show the transition is discontinuous.</p></div>
+<div class="lesson" id="s7d"><p><b class="h">(d) Slowing down: what is sourced is an algorithm&rsquo;s, not the model&rsquo;s.</b>
+The only dynamic exponents in hand are those of Wiseman and Domany&rsquo;s cluster <em>algorithm</em>: z<sub>int,χ</sub>, the exponent of the
+integrated autocorrelation time of χ (last column of the table in §4). They vary continuously along the line and track α/ν. Wiseman and
+Domany call the Li&ndash;Sokal bound z ≥ α/ν &ldquo;moderately sharp&rdquo; for this algorithm, with anomalies at X<sub>4</sub> (z<sub>χ</sub> ≈ 0.94&ndash;0.99, low against
+the exact 1, which they attribute to the multiplicative logarithm) and at X<sub>1</sub>. Against the <b>exact</b> α/ν, the z<sub>int,χ</sub> points lie on or above
+the curve except at X<sub>4</sub>.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> This page makes no claim about the physical relaxation of any system on the line.
+For an indicator this means only that, for this algorithm, the strength of slowing down depends on where on the line one sits.</p></div>
+</section>
+
+<!-- ============================================================== 8 -->
+<section id="s8">
+<h2><span class="num">8</span>Where else the line lives</h2>
+<p><b>The eight-vertex model.</b> Ashkin&ndash;Teller maps to Baxter&rsquo;s eight-vertex model, and its critical segment is isomorphic to the eight-vertex
+critical line (Wegner; Fan and Wu; Kadanoff).<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup><sup class="fnm"><a href="#fn7" class="fn">[7]</a></sup></p>
+<p><b>The c = 1 picture.</b> Among the critical theories of central charge c = 1 are two lines, the circle line (the Gaussian model) and the
+<span class="tip" tabindex="0">orbifold<span class="tt">The second of the two lines of c = 1 critical theories (the first is the circle line); a radius r labels points on each.</span></span>
+line. Critical Ashkin&ndash;Teller runs along the orbifold line from r = 1 (Ising × Ising) to r = √2 (four-state Potts). The two lines meet at
+the Kosterlitz&ndash;Thouless point of the XY model, circle r = √2 = orbifold r = 1/√2.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
+<p><b>A frustrated Ising model in disguise.</b> Jin, Sen and Sandvik&rsquo;s J<sub>1</sub>&ndash;J<sub>2</sub> Ising model on the square lattice is Ashkin&ndash;Teller critical
+for g = J<sub>2</sub>/|J<sub>1</sub>| ≥ g* = 0.67(1), with the four-state Potts point at g*. Its critical curve g ∈ [g*, ∞) corresponds one-to-one with the
+Ashkin&ndash;Teller segment, L/K running from 1 towards 0. At the Potts point the Binder crossing takes the universal value U* = 0.792(4). The
+same model shows the pseudo-first-order signals of §7c.<sup class="fnm"><a href="#fn6" class="fn">[6]</a></sup></p>
+<details class="d" id="d-conv"><summary>Converting from Jin, Sen and Sandvik&rsquo;s convention</summary>
+  <p>They write <span class="math">H = −Σ(σσ + ττ + K′σσττ)</span> at temperature T. In this page&rsquo;s (K, L): their K′ is the ratio L/K, and 1/T is K.
+  So their K′ = 0.95 is L/K = 0.95 here, and their K′ ∈ [1, 0) is L/K ∈ [1, 0).<sup class="fnm"><a href="#fn6" class="fn">[6]</a></sup></p>
+</details>
+</section>
+
+<!-- ============================================================== 9 -->
+<section id="s9">
+<h2><span class="num">9</span>What to remember</h2>
+<ul class="remember">
+  <li>Between two critical Ising copies, the bilinear στ coupling (y = 7/4, relevant) gives no line; the four-spin ε<sub>σ</sub>ε<sub>τ</sub> coupling (y = 0, exactly marginal) gives a line.</li>
+  <li>The line is exact: Z = 1 − 2X, from X<sub>0</sub> (Ising × Ising, α/ν = 0) to X<sub>4</sub> (four-state Potts, α/ν = 1).</li>
+  <li>Along it ν, γ and α/ν slide; γ/ν = 7/4 and η = 1/4 are pinned. That is weak universality, and a real magnet violates it.</li>
+  <li>An order-parameter variance scales identically along the line; an energy variance does not.</li>
+  <li>Fits at ℓ ≤ 128 miss the exact α/ν, worst at the Potts end, where a multiplicative logarithm sits.</li>
+  <li>Double peaks and negative Binder minima appear at continuous transitions up to ℓ = 256.</li>
+</ul>
+</section>
+
+<!-- ============================================================= refs -->
+<section class="refs" id="refs" data-wc="skip">
+<h2>References</h2>
+<ol>
+  <li id="fn1">Wiseman, S. &amp; Domany, E. (1993). Cluster method for the Ashkin&ndash;Teller model. <em>Phys. Rev. E</em> 48:4080&ndash;4090. doi:10.1103/PhysRevE.48.4080; arXiv:hep-lat/9310015. Secs. II&ndash;IV, Eqs. 1&ndash;3, 30&ndash;31, 33&ndash;34, 37, Table I, Figs. 1 and 13, Appendix. <a href="#fnref1" aria-label="back">↑</a></li>
+  <li id="fn2">Aasen, D., Mong, R. S. K. &amp; Fendley, P. (2016). Topological defects on the lattice I: the Ising model. <em>J. Phys. A</em> 49:354001. doi:10.1088/1751-8113/49/35/354001; arXiv:1601.07185. Eq. 2.2. <a href="#fnref2" aria-label="back">↑</a></li>
+  <li id="fn3">Ginsparg, P. (1988). Applied conformal field theory. Les Houches Session XLIX, North-Holland 1989; arXiv:hep-th/9108028. §8. <a href="#fnref3" aria-label="back">↑</a></li>
+  <li id="fn4">Khan, N., Sarkar, P., Midya, A., Mandal, P. &amp; Mohanty, P. K. (2017). Continuously varying critical exponents beyond weak universality. <em>Sci. Rep.</em> 7:45004. doi:10.1038/srep45004. Introduction, Table 1, Eqs. 5&ndash;8. <a href="#fnref4" aria-label="back">↑</a></li>
+  <li id="fn5">Salas, J. &amp; Sokal, A. D. (1997). Logarithmic corrections and finite-size scaling in the two-dimensional 4-state Potts model. <em>J. Stat. Phys.</em> 88:567. doi:10.1023/B:JOSS.0000015164.98296.85; arXiv:hep-lat/9607030. Eqs. 3.23&ndash;3.24. <a href="#fnref5" aria-label="back">↑</a></li>
+  <li id="fn6">Jin, S., Sen, A. &amp; Sandvik, A. W. (2012). Ashkin&ndash;Teller criticality and pseudo-first-order behavior in a frustrated Ising model on the square lattice. <em>Phys. Rev. Lett.</em> 108:045702. doi:10.1103/PhysRevLett.108.045702; arXiv:1110.5874. Eq. 5, Figs. 1&ndash;4. <a href="#fnref6" aria-label="back">↑</a></li>
+  <li id="fn7">Cited by name only; these works are not held, and no number or equation on this page rests on them alone: Ashkin, J. &amp; Teller, E. (1943) <em>Phys. Rev.</em> 64:178. Baxter, R. J. (1971) <em>Phys. Rev. Lett.</em> 26:832; <em>Exactly Solved Models in Statistical Mechanics</em> (1982). Wegner, F. J. (1972) <em>J. Phys. C</em> 5:L131. Fan and Wu; Kadanoff; Nienhuis (Coulomb gas); Suzuki (1974), as cited by Khan et al. <a href="#fnref7" aria-label="back">↑</a></li>
+</ol>
+</section>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+  /* ------------------------------------------------------------ I1: exact line */
+  var X0x = Math.SQRT2 - 1;          // X at the decoupled Ising point
+  var THIRD = 1 / 3;                 // X at the Potts point
+  function coords(t) {               // convex parametrisation, both ends exact
+    var X = (1 - t) * X0x + t * THIRD;
+    return { X: X, Z: 1 - 2 * X };
+  }
+  function KL(t) {
+    var c = coords(t);
+    var K = -0.25 * Math.log(c.Z);
+    return { K: K, L: -0.5 * Math.log(c.X) - K };
+  }
+  // g_R = 4 - (16/pi) asin sqrt((3X-1)/(4X)), with 3X-1 = 3(1-t)(X0x-1/3): exact at both ends.
+  function gR(t) {
+    var X = coords(t).X;
+    return 4 - (16 / Math.PI) * Math.asin(Math.sqrt(3 * (1 - t) * (X0x - THIRD) / (4 * X)));
+  }
+  function alphaNu(t) { return 2 - 4 / gR(t); }   // = 2 y_t - 2, y_t = 2 - 2/g_R
+  function point(i) { var t = i / 4, c = coords(t), k = KL(t); return { t: t, X: c.X, Z: c.Z, K: k.K, L: k.L, alphaNu: alphaNu(t) }; }
+  window.__at = { alphaNu: alphaNu, coords: coords, KL: KL, point: point };
+
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(name, attrs, parent, text) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  // phase-diagram geometry: unit square -> [P0, P0+S]
+  var P0 = 48, S = 320;
+  function px(X) { return P0 + S * X; }
+  function py(Z) { return P0 + S * (1 - Z) - 16; }
+  var g = document.getElementById('at-static');
+  el('rect', { x: px(0), y: py(1), width: S, height: S, fill: '#0b1222', stroke: '#475569' }, g);
+  var ticks = [[0, '0'], [THIRD, '1/3'], [0.5, '½'], [1, '1']];
+  ticks.forEach(function (tk) {
+    el('line', { x1: px(tk[0]), y1: py(0), x2: px(tk[0]), y2: py(0) + 5, stroke: '#64748b' }, g);
+    el('text', { x: px(tk[0]), y: py(0) + 18, 'text-anchor': 'middle', 'class': 'tick' }, g, tk[1]);
+    el('line', { x1: px(0) - 5, y1: py(tk[0]), x2: px(0), y2: py(tk[0]), stroke: '#64748b' }, g);
+    el('text', { x: px(0) - 8, y: py(tk[0]) + 4, 'text-anchor': 'end', 'class': 'tick' }, g, tk[1]);
+  });
+  el('text', { x: px(0.5), y: py(0) + 34, 'text-anchor': 'middle', 'font-size': 13 }, g, 'X = exp[−2(K+L)]');
+  el('text', { x: 14, y: py(0.5), 'text-anchor': 'middle', 'font-size': 13, transform: 'rotate(-90 14 ' + py(0.5) + ')' }, g, 'Z = exp(−4K)');
+  function pathOf(f, a, b, n) {
+    var d = '';
+    for (var i = 0; i <= n; i++) { var X = a + (b - a) * i / n; d += (i ? 'L' : 'M') + px(X).toFixed(2) + ' ' + py(f(X)).toFixed(2); }
+    return d;
+  }
+  el('path', { d: pathOf(function (X) { return X * X; }, 0, 1, 80), fill: 'none', stroke: '#3b82f6', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }, g);
+  el('path', { d: pathOf(function (X) { return X; }, 0, 1, 2), fill: 'none', stroke: '#22c55e', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }, g);
+  el('path', { d: pathOf(function (X) { return 1 - 2 * X; }, X0x, 0.5, 2), fill: 'none', stroke: '#f59e0b', 'stroke-width': 1.5 }, g);
+  el('path', { d: pathOf(function (X) { return 1 - 2 * X; }, THIRD, X0x, 2), fill: 'none', stroke: '#f59e0b', 'stroke-width': 5, 'stroke-linecap': 'round' }, g);
+  el('text', { x: px(0.66) + 16, y: py(0.4356) + 10, 'font-size': 11, fill: '#3b82f6', transform: 'rotate(-53 ' + (px(0.66) + 16) + ' ' + (py(0.4356) + 10) + ')' }, g).textContent = 'L = 0: two Ising';
+  el('text', { x: px(0.60) - 4, y: py(0.60) - 6, 'font-size': 11, fill: '#22c55e', transform: 'rotate(-45 ' + (px(0.60) - 4) + ' ' + (py(0.60) - 6) + ')' }, g).textContent = 'L = K: Potts';
+  el('text', { x: px(0.40), y: py(0.30), 'font-size': 11, fill: '#f59e0b' }, g).textContent = 'critical line';
+  el('text', { x: px(0.47), y: py(0.10), 'font-size': 10, fill: '#f59e0b' }, g).textContent = 'F–P boundary';
+  el('text', { x: px(0.80), y: py(0.85), 'font-size': 18, fill: '#f1f5f9', 'font-weight': 700 }, g).textContent = 'P';
+  el('text', { x: px(0.12), y: py(0.10), 'font-size': 18, fill: '#f1f5f9', 'font-weight': 700 }, g).textContent = 'F';
+  el('text', { x: px(0.05), y: py(0.88), 'font-size': 15, fill: '#f1f5f9', 'font-weight': 700 }, g).textContent = '⟨στ⟩';
+  for (var i = 0; i <= 4; i++) {
+    var c = coords(i / 4);
+    el('circle', { cx: px(c.X), cy: py(c.Z), r: 3.5, fill: '#0f172a', stroke: '#f1f5f9', 'stroke-width': 1.5 }, g);
+  }
+  var c0 = coords(0), c4 = coords(1);
+  el('text', { x: px(c0.X) + 8, y: py(c0.Z) + 4, 'font-size': 11 }, g, 'X0');
+  el('text', { x: px(c4.X) - 26, y: py(c4.Z) + 2, 'font-size': 11 }, g, 'X4');
+
+  // alpha/nu chart: t in [0,1] -> [40, 280]; alpha/nu in [0,1] -> [190, 20]
+  var a = document.getElementById('an-static');
+  function cx(t) { return 40 + 240 * t; }
+  function cy(v) { return 190 - 170 * v; }
+  el('rect', { x: 40, y: 20, width: 240, height: 170, fill: '#0b1222', stroke: '#475569' }, a);
+  [0, 0.5, 1].forEach(function (v) {
+    el('text', { x: 34, y: cy(v) + 4, 'text-anchor': 'end', 'class': 'tick' }, a, String(v));
+    el('text', { x: cx(v), y: 205, 'text-anchor': 'middle', 'class': 'tick' }, a, String(v));
+  });
+  el('text', { x: 160, y: 224, 'text-anchor': 'middle', 'font-size': 12 }, a, 't (X0 → X4)');
+  el('text', { x: 46, y: 36, 'font-size': 12 }, a, 'α/ν');
+  var d = '';
+  for (var j = 0; j <= 200; j++) { var s = j / 200, tt = 1 - (1 - s) * (1 - s); d += (j ? 'L' : 'M') + cx(tt).toFixed(2) + ' ' + cy(alphaNu(tt)).toFixed(2); }
+  el('path', { d: d, fill: 'none', stroke: '#a855f7', 'stroke-width': 2 }, a);
+  var fitted = [0.23, 0.38, 0.542, 0.655, 0.747];
+  fitted.forEach(function (v, k) { el('circle', { cx: cx(k / 4), cy: cy(v), r: 4, fill: 'none', stroke: '#f59e0b', 'stroke-width': 1.6 }, a); });
+  el('line', { x1: 50, y1: 56, x2: 66, y2: 56, stroke: '#a855f7', 'stroke-width': 2 }, a);
+  el('text', { x: 70, y: 60, 'font-size': 11 }, a, 'exact');
+  el('circle', { cx: 58, cy: 74, r: 4, fill: 'none', stroke: '#f59e0b', 'stroke-width': 1.6 }, a);
+  el('text', { x: 70, y: 78, 'font-size': 11 }, a, 'fitted, ref. 1');
+
+  var range = document.getElementById('at-t'), out = document.getElementById('at-t-o');
+  var handle = document.getElementById('at-handle'), ro = document.getElementById('at-ro');
+  var anDot = document.getElementById('an-dot'), anCur = document.getElementById('an-cur');
+  function fix(v, n) { return v.toFixed(n).replace(/^-(0\.0+)$/, '$1'); }   // print -4e-16 as 0, not -0
+  function f5(v) { return fix(v, 5); }
+  function draw() {
+    var t = range.valueAsNumber, c = coords(t), k = KL(t), gr = gR(t), yt = 2 - 2 / gr, an = alphaNu(t);
+    handle.setAttribute('transform', 'translate(' + px(c.X).toFixed(2) + ' ' + py(c.Z).toFixed(2) + ')');
+    handle.setAttribute('aria-valuenow', t.toFixed(3));
+    handle.setAttribute('aria-valuetext', 't = ' + t.toFixed(3) + ', alpha/nu = ' + an.toFixed(4));
+    out.textContent = t.toFixed(3);
+    anDot.setAttribute('cx', cx(t)); anDot.setAttribute('cy', cy(an));
+    anCur.setAttribute('x1', cx(t)); anCur.setAttribute('x2', cx(t));
+    ro.innerHTML =
+      '<span>X <b>' + f5(c.X) + '</b></span><span>Z <b>' + f5(c.Z) + '</b></span>' +
+      '<span>K <b>' + f5(k.K) + '</b></span><span>L <b>' + f5(k.L) + '</b></span>' +
+      '<span>g<sub>R</sub> <b>' + f5(gr) + '</b></span><span>y<sub>t</sub> <b>' + f5(yt) + '</b></span>' +
+      '<span>ν <b>' + f5(1 / yt) + '</b></span><span>α/ν <b>' + f5(an) + '</b></span>' +
+      '<span class="pin">γ/ν <b>7/4</b> pinned</span><span class="pin">η <b>1/4</b> pinned</span>';
+  }
+  range.addEventListener('input', draw);
+  // The range input's value set IS the domain [0,1]: every drag and key goes through it.
+  var svg = document.getElementById('at-svg');
+  var dx = THIRD - X0x, dz = -2 * dx;       // direction of the segment in (X, Z), t: 0 -> 1
+  function setFromPointer(ev) {
+    var r = svg.getBoundingClientRect();
+    var sx = (ev.clientX - r.left) * 400 / r.width, sy = (ev.clientY - r.top) * 400 / r.height;
+    var X = (sx - P0) / S, Z = 1 - (sy - P0 + 16) / S;
+    range.value = ((X - X0x) * dx + (Z - (1 - 2 * X0x)) * dz) / (dx * dx + dz * dz);
+    draw();
+  }
+  var dragging = false;
+  handle.addEventListener('pointerdown', function (ev) { dragging = true; handle.setPointerCapture(ev.pointerId); ev.preventDefault(); });
+  handle.addEventListener('pointermove', function (ev) { if (dragging) setFromPointer(ev); });
+  handle.addEventListener('pointerup', function () { dragging = false; });
+  handle.addEventListener('keydown', function (ev) {
+    var k = ev.key;
+    if (k === 'ArrowRight' || k === 'ArrowUp') { range.stepUp(); }
+    else if (k === 'ArrowLeft' || k === 'ArrowDown') { range.stepDown(); }
+    else return;
+    ev.preventDefault(); draw();
+  });
+  draw();
+
+  /* ------------------------------------------------------- I2: cluster Monte Carlo */
+  var N = 64, NN = N * N;
+  var sig = new Int8Array(NN), tau = new Int8Array(NN);
+  var nbr = new Int32Array(4 * NN);
+  for (var y = 0; y < N; y++) for (var x = 0; x < N; x++) {
+    var q = y * N + x;
+    nbr[4 * q] = y * N + (x + 1) % N; nbr[4 * q + 1] = y * N + (x + N - 1) % N;
+    nbr[4 * q + 2] = ((y + 1) % N) * N + x; nbr[4 * q + 3] = ((y + N - 1) % N) * N + x;
+  }
+  var stack = new Int32Array(NN), memb = new Int32Array(NN), inC = new Uint8Array(NN);
+  var rng, Kc, Lc, pPlus, pMinus, sweeps, acc;
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function reset(seed, t, f) {
+    var k = KL(t);
+    Kc = k.K / f; Lc = k.L / f;
+    // bond J = K + L s s' takes two values; K - L >= 0 on the whole segment, so both are ferromagnetic
+    pPlus = -Math.expm1(-2 * (Kc + Lc));
+    pMinus = -Math.expm1(-2 * (Kc - Lc));
+    rng = mulberry32(seed >>> 0);
+    for (var i = 0; i < NN; i++) { sig[i] = rng() < 0.5 ? 1 : -1; tau[i] = rng() < 0.5 ? 1 : -1; }
+    sweeps = 0; acc = { s: 0, t: 0, st: 0, e: 0 };
+  }
+  // one Wolff cluster on `a` with `b` frozen: bond (i,j) has J = K + L b_i b_j
+  function wolff(a, b) {
+    var seed = (rng() * NN) | 0, s0 = a[seed], top = 0, n = 0;
+    stack[top++] = seed; inC[seed] = 1; memb[n++] = seed;
+    while (top) {
+      var i = stack[--top];
+      for (var m = 0; m < 4; m++) {
+        var j = nbr[4 * i + m];
+        if (inC[j] || a[j] !== s0) continue;
+        if (rng() < (b[i] === b[j] ? pPlus : pMinus)) { inC[j] = 1; stack[top++] = j; memb[n++] = j; }
+      }
+    }
+    for (var p = 0; p < n; p++) { var q2 = memb[p]; a[q2] = -a[q2]; inC[q2] = 0; }
+    return n;
+  }
+  function measure() {
+    var ms = 0, mt = 0, mst = 0, e = 0;
+    for (var i = 0; i < NN; i++) {
+      var s = sig[i], u = tau[i]; ms += s; mt += u; mst += s * u;
+      var r = nbr[4 * i], dn = nbr[4 * i + 2];
+      e -= Kc * (s * sig[r] + u * tau[r]) + Lc * s * sig[r] * u * tau[r];
+      e -= Kc * (s * sig[dn] + u * tau[dn]) + Lc * s * sig[dn] * u * tau[dn];
+    }
+    ms /= NN; mt /= NN; mst /= NN;
+    acc.s += ms * ms; acc.t += mt * mt; acc.st += mst * mst; acc.e += e / (2 * NN);
+  }
+  function sweep(n) {
+    for (var k = 0; k < n; k++) {
+      var flipped = 0, layer = 0;
+      while (flipped < NN) { flipped += layer ? wolff(tau, sig) : wolff(sig, tau); layer ^= 1; }
+      sweeps++; measure();
+    }
+  }
+  function stats() {
+    var d = sweeps || NaN;
+    return { m2s: acc.s / d, m2t: acc.t / d, m2st: acc.st / d, e: acc.e / d, sweeps: sweeps };
+  }
+  window.__mc = { reset: reset, sweep: sweep, stats: stats };
+
+  var cvs = ['mc-s', 'mc-t', 'mc-st'].map(function (id) { return document.getElementById(id); });
+  var ctxs = cvs.map(function (cv) { return cv.getContext('2d'); });
+  var imgs = ctxs.map(function (cx2) { return cx2.createImageData(N, N); });
+  var COL = [[[245, 158, 11], [40, 30, 10]], [[59, 130, 246], [12, 22, 45]], [[168, 85, 247], [30, 14, 45]]];
+  function paint() {
+    for (var i = 0; i < NN; i++) {
+      var v = [sig[i], tau[i], sig[i] * tau[i]];
+      for (var p = 0; p < 3; p++) {
+        var col = COL[p][v[p] > 0 ? 0 : 1], o = 4 * i, dta = imgs[p].data;
+        dta[o] = col[0]; dta[o + 1] = col[1]; dta[o + 2] = col[2]; dta[o + 3] = 255;
+      }
+    }
+    for (var p2 = 0; p2 < 3; p2++) ctxs[p2].putImageData(imgs[p2], 0, 0);
+    var st = stats(), mro = document.getElementById('mc-ro');
+    function v4(x) { return st.sweeps ? x.toFixed(4) : '–'; }
+    mro.innerHTML = '<span>sweeps <b>' + st.sweeps + '</b></span><span>K <b>' + fix(Kc, 4) + '</b></span><span>L <b>' + fix(Lc, 4) + '</b></span>' +
+      '<span>⟨m<sub>σ</sub>²⟩ <b>' + v4(st.m2s) + '</b></span><span>⟨m<sub>τ</sub>²⟩ <b>' + v4(st.m2t) + '</b></span>' +
+      '<span>⟨m<sub>στ</sub>²⟩ <b>' + v4(st.m2st) + '</b></span><span>energy/bond <b>' + v4(st.e) + '</b></span>';
+  }
+  var tt2 = document.getElementById('mc-tt'), ff = document.getElementById('mc-f'), seedEl = document.getElementById('mc-seed');
+  var runBtn = document.getElementById('mc-run');
+  var running = false, visible = false, raf = 0;
+  function doReset() {
+    document.getElementById('mc-tt-o').textContent = tt2.valueAsNumber.toFixed(2);
+    document.getElementById('mc-f-o').textContent = ff.valueAsNumber.toFixed(2);
+    reset(Math.abs(Math.trunc(Number(seedEl.value))) || 0, tt2.valueAsNumber, ff.valueAsNumber);
+    paint();
+  }
+  function frame() { raf = 0; if (!running || !visible) return; sweep(1); paint(); raf = requestAnimationFrame(frame); }
+  function setRunning(on) {
+    running = on; runBtn.textContent = on ? 'Pause' : 'Run';
+    if (on && visible && !raf) raf = requestAnimationFrame(frame);
+  }
+  runBtn.addEventListener('click', function () { setRunning(!running); });
+  document.getElementById('mc-step').addEventListener('click', function () { sweep(1); paint(); });
+  document.getElementById('mc-reset').addEventListener('click', function () { setRunning(false); doReset(); });
+  [tt2, ff, seedEl].forEach(function (n) { n.addEventListener('input', doReset); });
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function applyRM() {
+    runBtn.disabled = rm.matches; document.getElementById('mc-rm').hidden = !rm.matches;
+    if (rm.matches) setRunning(false);
+  }
+  if (rm.addEventListener) rm.addEventListener('change', applyRM);
+  applyRM();
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting;
+    if (visible && running && !raf) raf = requestAnimationFrame(frame);
+  }).observe(document.getElementById('i2'));
+  doReset();
+})();
+</script>
+</body>
+</html>
