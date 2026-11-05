@@ -92,10 +92,10 @@ details.d > :last-child { margin-bottom: 0.9rem; }
 <p class="subtitle">Two Ising copies, one marginal coupling, a line of critical points</p>
 
 <p>Take two copies of the critical Ising model that ignore each other, then couple them with one term of exactly the right kind:
-the product of their two energy densities. The critical point does not move or split. It becomes one end of a whole <b>line</b>
+the product of their two energy densities. The single critical point becomes one end of a whole <b>line</b>
 of critical points, along which some exponents slide continuously while others stay pinned. This is the Ashkin&ndash;Teller model.<sup class="fnm"><a href="#fn7" class="fn" id="fnref7">[7]</a></sup>
-The page builds it from the double Ising model up, with every number sourced. It matters to anyone who reads exponents or
-fluctuation indicators off data: on this line the order parameter&rsquo;s variance scales identically everywhere, the energy&rsquo;s does not,
+The page builds it from the double Ising model up, with every input number sourced; readouts are computed from the quoted formulas. It matters to anyone who reads exponents or
+fluctuation indicators off data: at criticality on this line the variance of each layer&rsquo;s magnetisation grows with system size identically everywhere, the energy&rsquo;s does not,
 and the textbook signature of an abrupt transition appears at a continuous one.</p>
 
 <ol class="map" aria-label="Sections">
@@ -116,22 +116,22 @@ and the textbook signature of an abrupt transition appears at a continuous one.<
 <h2><span class="num">1</span>One Ising model, in five lines</h2>
 <p>Spins σ<sub>i</sub> = ±1 on the square lattice, <span class="math">H = −K Σ<sub>⟨ij⟩</sub> σ<sub>i</sub>σ<sub>j</sub></span>, with β absorbed into K.
 Kramers&ndash;Wannier duality maps the model at coupling K onto itself at a dual coupling; on the square lattice the
-<span class="tip" tabindex="0">self-dual<span class="tt">Left unchanged by the duality map. If the model has a single transition, it must sit on the self-dual set.</span></span>
+<span class="tip" tabindex="0">self-dual<span class="tt">Left unchanged by the duality map. For the Ising model the unique transition must sit there; for Ashkin&ndash;Teller the exact critical segment lies on the self-dual set (§4).</span></span>
 point is <span class="math">sinh 2K = 1</span>,<sup class="fnm"><a href="#fn2" class="fn" id="fnref2">[2]</a></sup> so
 <span class="math">K<sub>c</sub> = ½ ln(1 + √2) = 0.44069</span>.<sup class="fnm"><a href="#fn1" class="fn" id="fnref1">[1]</a></sup>
-The exponents, read off the formulas of §4 at the Ising end: <span class="math">ν = 1</span>, <span class="math">α/ν = 0</span>,
+At the end point X<sub>0</sub> of §4 the two copies decouple, so the formulas there give one Ising model&rsquo;s exponents: <span class="math">ν = 1</span>, <span class="math">α/ν = 0</span>,
 <span class="math">γ/ν = 7/4</span>, <span class="math">η = 1/4</span>.
 In <span class="tip" tabindex="0">scaling dimensions<span class="tt">x: at criticality a local operator&rsquo;s two-point function decays as r<sup>−2x</sup>. A coupling h to that operator scales as b<sup>2−x</sup> under coarse-graining by b (in two dimensions).</span></span>,
 the spin has <span class="math">x<sub>σ</sub> = η/2 = 1/8</span> and the energy density <span class="math">x<sub>ε</sub> = 2 − 1/ν = 1</span>.
-Already here a power-law fit misleads: from the specific heat Wiseman and Domany obtain α/ν = 0.23(1) with a log&ndash;log fit and 0 with a semi-log fit.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+Already here a power-law fit misleads: at X<sub>0</sub>, from the specific heat, Wiseman and Domany obtain α/ν = 0.23(1) with a log&ndash;log fit (log C against log ℓ) and 0 with a semi-log fit (C against log ℓ).<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
 </section>
 
 <!-- ============================================================== 2 -->
 <section id="s2">
 <h2><span class="num">2</span>Two copies: the double Ising model</h2>
 <p>Put a second Ising spin τ<sub>i</sub> on every site, and give each copy its own coupling K = K<sub>c</sub> with no term between them.
-The partition function factorises, <span class="math">Z = Z<sub>Ising</sub>(K)<sup>2</sup></span>. The symmetry is
-<span class="math">Z<sub>2</sub> × Z<sub>2</sub></span> (flip every σ; flip every τ; independently), and there are three Z<sub>2</sub> order
+The partition function factorises, <span class="math">𝒵 = 𝒵<sub>Ising</sub>(K)<sup>2</sup></span> (𝒵, so as not to clash with the coordinate Z of §4). The symmetry is
+<span class="math">Z<sub>2</sub> × Z<sub>2</sub></span> (flip every σ; flip every τ; independently), and there are three Ising-like order
 parameters: σ, τ and the product στ, which survives flipping both. Independence gives the product&rsquo;s correlations for free:</p>
 <span class="math-block">⟨σ<sub>0</sub>τ<sub>0</sub> σ<sub>r</sub>τ<sub>r</sub>⟩ = ⟨σ<sub>0</sub>σ<sub>r</sub>⟩⟨τ<sub>0</sub>τ<sub>r</sub>⟩ ~ r<sup>−1/2</sup>, &nbsp; so x<sub>στ</sub> = 1/4.</span>
 <p>Coarse-graining by b multiplies a small coupling to an operator of dimension x by b<sup>y</sup>, with <span class="math">y = 2 − x</span>.
@@ -146,7 +146,8 @@ These are the local operators of the decoupled pair:</p>
     <tr><td>ε<sub>σ</sub>, ε<sub>τ</sub></td><td>σ<sub>i</sub>σ<sub>j</sub>, τ<sub>i</sub>τ<sub>j</sub></td><td>1</td><td>1</td><td>relevant (a temperature shift)</td></tr>
     <tr><td>ε<sub>σ</sub>ε<sub>τ</sub></td><td>σ<sub>i</sub>σ<sub>j</sub>τ<sub>i</sub>τ<sub>j</sub></td><td>2</td><td>0</td><td><b>marginal</b>: the four-spin coupling</td></tr>
   </tbody></table></div>
-<p>Two of these join the copies. They are the subject of the next section.</p>
+<p>The last two rows are the inter-copy couplings this page compares. Both keep the σ ↔ τ swap. The four-spin term keeps the full Z<sub>2</sub> × Z<sub>2</sub>
+(flipping every σ leaves σ<sub>i</sub>σ<sub>j</sub>τ<sub>i</sub>τ<sub>j</sub> unchanged); the bilinear σ<sub>i</sub>τ<sub>i</sub> survives only the joint flip of both layers.</p>
 </section>
 
 <!-- ============================================================== 3 -->
@@ -157,21 +158,21 @@ These are the local operators of the decoupled pair:</p>
 <p>The new term is the product of the two copies&rsquo; bond energies, (σ<sub>i</sub>σ<sub>j</sub>)(τ<sub>i</sub>τ<sub>j</sub>). At the decoupled point it
 couples to ε<sub>σ</sub>ε<sub>τ</sub>: x = 2, y = 0, marginal. Marginal to linear order is not enough for a line, since a
 marginal coupling can still grow or die slowly at the next order. This one does neither: it is <b>exactly</b> marginal, and Ginsparg
-identifies ε<sub>1</sub>ε<sub>2</sub> as the operator that moves the theory along a line of critical theories.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup>
-Turning L on therefore does not take the pair off criticality; it slides it along a line, and the exponents slide with it.
+identifies ε<sub>1</sub>ε<sub>2</sub> (his notation for ε<sub>σ</sub>ε<sub>τ</sub>) as the operator that moves the theory along a line of critical theories.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup>
+On the lattice, moving along that line changes K and L together: K falls from 0.44069 to 0.27465 as L rises from 0 (§4). With K held at K<sub>c</sub>, any L ≠ 0 leaves the line (§4: e<sup>−2L</sup> = sinh 2K = 1 forces L = 0). So the lattice term L is not purely the field-theory coupling to ε<sub>σ</sub>ε<sub>τ</sub>: switched on alone it also moves the system off criticality, and K must fall to compensate. That decomposition is not given here.
 At L = K the four states (σ, τ) = (±1, ±1) are all alike and the model is the four-state
 <span class="tip" tabindex="0">Potts model<span class="tt">q states per site; neighbours gain energy only when they are in the same state. q = 2 is Ising.</span></span>,
 where σ, τ and στ are interchangeable.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
 <p>The contrast is the on-site bilinear coupling <span class="math">g Σ<sub>i</sub> σ<sub>i</sub>τ<sub>i</sub></span>. It multiplies στ, with
 x = 1/4 and y = 7/4: strongly relevant. The decoupled point is unstable in the g direction and there is no line. Where that flow
-ends is expected, not shown here.</p>
+ends is not established on this page.</p>
 <details class="d" id="d-marg"><summary>Why ε<sub>1</sub>ε<sub>2</sub> is exactly marginal</summary>
-  <p>Ginsparg&rsquo;s criterion: an operator V of dimension (1,1) generates a one-parameter family of critical theories only if, to
+  <p>This argument is in the language of conformal field theory and is quoted, not derived. Ginsparg&rsquo;s criterion: an operator V of dimension (1,1), meaning total x = 2, the marginal value, generates a one-parameter family of critical theories only if, to
   leading order, the V × V operator product contains no term in V itself. If it does, V&rsquo;s dimension shifts once the coupling
   is on, and V is marginally relevant on one side and marginally irrelevant on the other.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
   <p>For Ashkin&ndash;Teller the check passes for a structural reason. On the critical line, ε<sub>1</sub>ε<sub>2</sub> is the four-fermion term of
-  the massless Thirring model, which only changes the radius of a free boson. Changing a radius is a motion along a line, so no
-  fixed point is left.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup> The bilinear σ<sub>1</sub>σ<sub>2</sub> has no such protection; with y = 7/4 the
+  the massless Thirring model, which only changes the radius of a free boson. Changing the radius moves the theory through a continuous family of critical theories, so the coupling never drives it to a different
+  fixed point.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup> The bilinear σ<sub>1</sub>σ<sub>2</sub> has no such protection; with y = 7/4 the
   question of higher orders never arises.</p>
 </details>
 </section>
@@ -182,19 +183,19 @@ ends is expected, not shown here.</p>
 <p>In Wiseman and Domany&rsquo;s coordinates the phase diagram is the unit square X, Z ∈ [0, 1]:<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
 <span class="math-block">Z = e<sup>−4K</sup>, &nbsp; X = e<sup>−2(K+L)</sup>; &nbsp;&nbsp; K = −¼ ln Z, &nbsp; L = −½ ln X − K.</span>
 <p>The parabola <span class="math">Z = X<sup>2</sup></span> is L = 0 (two decoupled Ising models); the diagonal <span class="math">Z = X</span> is L = K
-(four-state Potts). Duality fixes the critical line exactly on the <b>self-dual line</b> <span class="math">Z = 1 − 2X</span>, equivalently
-<span class="math">e<sup>−2L</sup> = sinh 2K</span>. Its segment from X<sub>0</sub> = (√2 − 1, 3 − 2√2), the decoupled Ising point (K = 0.44069, L = 0), to
+(four-state Potts). The critical line lies exactly on the <b>self-dual line</b> <span class="math">Z = 1 − 2X</span>, equivalently
+<span class="math">e<sup>−2L</sup> = sinh 2K</span>. Its segment from the point X<sub>0</sub> at (X, Z) = (√2 − 1, 3 − 2√2), the decoupled Ising point (K = 0.44069, L = 0), to
 X<sub>4</sub> = (1/3, 1/3), the Potts point (K = L = ¼ ln 3 = 0.27465), is a line of critical points with continuously varying exponents.
 Below X<sub>0</sub> (L &lt; 0) the same line continues as the ferro&ndash;para boundary. Three phases: <b>P</b>, paramagnetic; <b>F</b>, ferromagnetic,
-with ⟨σ⟩ = ±⟨τ⟩ and ⟨στ⟩ ≠ 0; and a <b>⟨στ⟩</b> phase in which only the product orders (⟨σ⟩ = ⟨τ⟩ = 0), which exists only for L &gt; K.
-Two further boundaries leave X<sub>4</sub> and flow to Ising fixed points; they have no exact equation and are not drawn.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+with ⟨σ⟩ = ±⟨τ⟩ and ⟨στ⟩ ≠ 0; and a <b>⟨στ⟩</b> phase in which only the product orders (⟨σ⟩ = ⟨τ⟩ = 0), which lies within L &gt; K.
+Two further boundaries leave X<sub>4</sub>; the source describes them as flowing to Ising fixed points (Ising-type transitions). They have no exact equation and are not drawn.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
 <p>Along the segment the exponents come from the
 <span class="tip" tabindex="0">Coulomb gas<span class="tt">A standard exact method for 2D critical models (Nienhuis). Its single coupling, here g<sub>R</sub>, labels the position on the line and fixes the exponents.</span></span>,
-as quoted by Wiseman and Domany:<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
+quoted (not derived here) by Wiseman and Domany:<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
 <span class="math-block">g<sub>R</sub> = (8/π) arcsin[½ coth 2K], &nbsp; y<sub>t</sub> = 2 − 2/g<sub>R</sub>, &nbsp; α/ν = 2y<sub>t</sub> − 2, &nbsp; γ/ν = 7/4.</span>
 <p>At X<sub>0</sub>, ½ coth 2K = 1/√2 and g<sub>R</sub> = 2; at X<sub>4</sub> it is 1 and g<sub>R</sub> = 4. By algebra, ν = 1/y<sub>t</sub> runs from 1 to 2/3,
 α/ν from 0 to 1, and the thermal dimension x<sub>ε</sub> = 2 − y<sub>t</sub> from 1 to 1/2, while η = 2 − γ/ν = 1/4 never moves.
-Drag the handle (or focus it and use the arrow keys); it lives on the critical segment only, because that is where the formulas hold.</p>
+Drag the handle (or focus it and use the arrow keys). It lives on the critical segment only: that is the range over which the source gives these exponents, and this page does not follow the line below X<sub>0</sub>.</p>
 
 <div class="ix" id="i1" data-wc="skip">
   <div class="ix-row">
@@ -213,15 +214,15 @@ Drag the handle (or focus it and use the arrow keys); it lives on the critical s
       <circle id="an-dot" r="4.5" fill="#a855f7"/>
     </svg>
   </div>
-  <div class="ctl"><label>position on the line t <input type="range" id="at-t" min="0" max="1" step="0.005" value="0.5"> <output id="at-t-o">0.500</output></label> <span>t = 0 is X<sub>0</sub> (Ising × Ising), t = 1 is X<sub>4</sub> (Potts)</span></div>
+  <div class="ctl"><label>position on the line t <input type="range" id="at-t" min="0" max="1" step="0.005" value="0.5"> <output id="at-t-o">0.500</output></label> <span>t is linear in X, not in g<sub>R</sub> or ν. t = 0 is X<sub>0</sub> (Ising × Ising), t = 1 is X<sub>4</sub> (Potts)</span></div>
   <div class="ro" id="at-ro" aria-live="polite"></div>
   <p class="cap">Boundaries of the ⟨στ⟩ phase are not exactly known and are not drawn. Region labels are placed by the coordinates: P toward K, L → 0, F toward K → ∞, ⟨στ⟩ above the diagonal (L &gt; K). Right: solid curve, exact α/ν; open circles, fitted α/ν at X<sub>0</sub>…X<sub>4</sub> (X<sub>0</sub> log&ndash;log).</p>
 </div>
 
 <p>Wiseman and Domany test five equally spaced points X<sub>i</sub> = X<sub>0</sub> + (i/4)(X<sub>4</sub> − X<sub>0</sub>) with their cluster algorithm on
 ℓ × ℓ lattices up to ℓ = 128 (ℓ, the linear size, is never written L on this page). They measure
-C = ℓ<sup>2</sup>(⟨E<sup>2</sup>⟩ − ⟨E⟩<sup>2</sup>), with E the energy per site, and χ = ℓ<sup>2</sup>⟨M<sup>2</sup>⟩ with M = ℓ<sup>−2</sup>Σσ, and read exponents by
-<span class="tip" tabindex="0">finite-size scaling<span class="tt">At a critical point, peak quantities grow as powers of the linear size: C ~ ℓ<sup>α/ν</sup>, χ ~ ℓ<sup>γ/ν</sup>. Exponents are read from that growth.</span></span>,
+C = ℓ<sup>2</sup>(⟨E<sup>2</sup>⟩ − ⟨E⟩<sup>2</sup>), with E the energy per site, and χ = ℓ<sup>2</sup>⟨M<sup>2</sup>⟩ with M = ℓ<sup>−2</sup>Σσ (built on σ alone; ⟨M⟩ = 0 on a finite lattice by symmetry, so this is a variance), and read exponents by
+<span class="tip" tabindex="0">finite-size scaling<span class="tt">At a critical point, fluctuation quantities such as C and χ grow as powers of the linear size: C ~ ℓ<sup>α/ν</sup>, χ ~ ℓ<sup>γ/ν</sup>. Exponents are read from that growth.</span></span>,
 C ~ ℓ<sup>α/ν</sup> and χ ~ ℓ<sup>γ/ν</sup>.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> The errors are statistical only.</p>
 <div class="tablewrap" data-wc="skip"><table class="t" id="tab1">
   <thead><tr><th>point</th><th>K</th><th>L</th><th>α/ν exact</th><th>α/ν fitted</th><th>γ/ν fitted</th><th>z<sub>int,χ</sub> (algorithm)</th></tr></thead>
@@ -234,7 +235,7 @@ C ~ ℓ<sup>α/ν</sup> and χ ~ ℓ<sup>γ/ν</sup>.<sup class="fnm"><a href="#
   </tbody>
   <caption>Wiseman &amp; Domany, Eq. 31 and Table I; ℓ ≤ 128. The last column is a property of a Monte Carlo algorithm (§7d), not of the model.</caption>
 </table></div>
-<p>The fitted γ/ν stays within 0.013 of 7/4 at every point. The fitted α/ν misses the exact value everywhere except near X<sub>3</sub>, and worst at the Potts end.</p>
+<p>The fitted γ/ν stays within 0.013 of 7/4 at every point. The fitted α/ν misses the exact value by more than its statistical error at every point: by 0.23 at X<sub>0</sub> (log&ndash;log), 0.17 at X<sub>1</sub>, 0.12 at X<sub>2</sub>, 0.017 at X<sub>3</sub> (error 0.013) and 0.25 at X<sub>4</sub>. At X<sub>0</sub> the semi-log entry fits C against log ℓ, the form that corresponds to α/ν = 0, so it is not an independent estimate of α/ν. The source explains only the Potts-end miss (§7b).</p>
 
 <details class="d" id="d-line"><summary>From Z = 1 − 2X to e<sup>−2L</sup> = sinh 2K, and the Ising point</summary>
   <span class="math-block">e<sup>−4K</sup> = 1 − 2e<sup>−2K−2L</sup> ⇔ e<sup>−2L</sup> = (1 − e<sup>−4K</sup>)/(2e<sup>−2K</sup>) = ½(e<sup>2K</sup> − e<sup>−2K</sup>) = sinh 2K.</span>
@@ -248,12 +249,11 @@ C ~ ℓ<sup>α/ν</sup> and χ ~ ℓ<sup>γ/ν</sup>.<sup class="fnm"><a href="#
 <section id="s5">
 <h2><span class="num">5</span>Live Monte Carlo: two layers on the line</h2>
 <p>The simulation uses Wiseman and Domany&rsquo;s cluster method.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> Freeze τ. Then σ alone is an Ising model with
-bond couplings J<sub>jk</sub> = K + L τ<sub>j</sub>τ<sub>k</sub>, ferromagnetic whenever L ≤ K. Grow one
-<span class="tip" tabindex="0">Wolff<span class="tt">Wolff and Swendsen&ndash;Wang are cluster algorithms for Ising-type models: instead of single spins, they flip whole clusters of aligned spins at once.</span></span>
-cluster on σ and flip it; then swap the roles of σ and τ. At L = 0 and at L = K this reduces to the standard Wolff and Swendsen&ndash;Wang
-methods. The controls are the position t on the critical segment and a temperature factor f that sends (K, L) to (K/f, L/f):
+bond couplings J<sub>jk</sub> = K + L τ<sub>j</sub>τ<sub>k</sub>, ferromagnetic whenever |L| ≤ K (here 0 ≤ L ≤ K). Grow one
+<span class="tip" tabindex="0">Wolff<span class="tt">Wolff and Swendsen&ndash;Wang are cluster algorithms for Ising-type models: instead of single spins, they flip whole clusters at once, grown by adding aligned neighbours across each bond with a probability set by its coupling.</span></span>
+cluster on σ and flip it; then swap the roles of σ and τ. The demo uses single Wolff clusters; Wiseman and Domany note that their method reduces to the standard Wolff and Swendsen&ndash;Wang methods at L = 0 and at L = K. The controls are the position t on the critical segment and a temperature factor f that sends (K, L) to (K/f, L/f):
 f = 1 is on the line, f &lt; 1 colder and ordered, f &gt; 1 hotter and disordered. Dividing both couplings by f keeps L/K fixed,
-so L ≤ K holds everywhere the sliders reach. One sweep is enough cluster flips to turn over about ℓ<sup>2</sup> spins.</p>
+so L ≤ K holds everywhere the sliders reach. One sweep is enough cluster flips to turn over about ℓ<sup>2</sup> spins, Wiseman and Domany&rsquo;s unit of Monte Carlo time.</p>
 
 <div class="ix" id="i2" data-wc="skip">
   <div class="panels">
@@ -273,7 +273,7 @@ so L ≤ K holds everywhere the sliders reach. One sweep is enough cluster flips
     <span class="note" id="mc-rm" hidden>Run is off because your system asks for reduced motion; Step advances one sweep.</span>
   </div>
   <div class="ro" id="mc-ro" aria-live="off"></div>
-  <p class="cap">64 × 64, periodic. Running means since Reset. Start at t = 0: στ looks like the product of two independent critical patterns. Move to t = 1
+  <p class="cap">64 × 64, periodic, random start. m is a layer&rsquo;s magnetisation per site (M of §4); energy/bond is H of §3 divided by the number of bonds, L term included. Running means since Reset, so the first sweeps (the approach to equilibrium) are included. Start at t = 0: the two layers are independent, and στ shows what their product looks like. Move to t = 1
   (Potts): the three panels become statistically alike. Then compare f = 0.9 (ordered) with f = 1.1 (disordered). Changing a slider resets the run.</p>
 </div>
 </section>
@@ -281,18 +281,18 @@ so L ≤ K holds everywhere the sliders reach. One sweep is enough cluster flips
 <!-- ============================================================== 6 -->
 <section id="s6">
 <h2><span class="num">6</span>Weak universality: what slides and what is pinned</h2>
-<p>Suzuki&rsquo;s weak universality, as Khan et al. state it: along a line generated by a marginal parameter, β, γ and ν vary, but β/ν and γ/ν,
-and hence δ and η, stay fixed.<sup class="fnm"><a href="#fn4" class="fn" id="fnref4">[4]</a></sup> Ashkin&ndash;Teller obeys it: ν slides from 1 to 2/3, so γ = (7/4)ν slides with it,
+<p>Suzuki&rsquo;s weak universality, as Khan et al. state it: along a line generated by a marginal parameter, β, γ and ν vary, but β/ν and γ/ν
+stay fixed, and with them (in their statement) δ and η.<sup class="fnm"><a href="#fn4" class="fn" id="fnref4">[4]</a></sup> Ashkin&ndash;Teller obeys it: ν slides from 1 to 2/3, so γ = (7/4)ν slides with it,
 while γ/ν = 7/4 and η = 1/4 are pinned along the whole segment.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p>
 <p>Khan et al. report a magnet that does not: in (Sm<sub>1−y</sub>Nd<sub>y</sub>)<sub>0.52</sub>Sr<sub>0.48</sub>MnO<sub>3</sub> (y is the Nd fraction here,
 not an RG eigenvalue), β, γ and δ all vary with composition, δ included.<sup class="fnm"><a href="#fn4" class="fn">[4]</a></sup></p>
 <div class="tablewrap" data-wc="skip"><table class="t">
   <thead><tr><th>Nd fraction y</th><th>β</th><th>γ</th><th>δ</th></tr></thead>
   <tbody><tr><td>1.0</td><td>0.36</td><td>1.38</td><td>4.72</td></tr><tr><td>0.5</td><td>0.16</td><td>1.27</td><td>9.30</td></tr></tbody>
-  <caption>Khan et al., Table 1. δ is fixed under weak universality; here it nearly doubles.</caption>
+  <caption>Khan et al., Table 1 (errors not shown here). δ is fixed under weak universality; here it nearly doubles.</caption>
 </table></div>
 <details class="d" id="d-kh"><summary>Khan et al.&rsquo;s generalised family</summary>
-  <p>They propose a family of exponent forms in a parameter λ (their Eqs. 5&ndash;8), of which two members are
+  <p>They propose a family of exponent forms in a parameter λ of theirs (their Eqs. 5&ndash;8; λ and the exponents κ, ω are theirs and are not defined further on this page), of which two members are
   <span class="math">ν = ν<sub>0</sub>/λ<sup>κ+ω</sup></span> and <span class="math">γ = γ<sub>0</sub>/λ<sup>ω</sup></span>; weak universality is the case κ = 0.<sup class="fnm"><a href="#fn4" class="fn">[4]</a></sup>
   By algebra, κ = 0 makes γ/ν = γ<sub>0</sub>/ν<sub>0</sub> independent of λ, which is exactly the pinning seen on the Ashkin&ndash;Teller line.</p>
 </details>
@@ -303,47 +303,47 @@ not an RG eigenvalue), β, γ and δ all vary with composition, δ included.<sup
 <h2><span class="num">7</span>For the indicator-builder</h2>
 <p>Four readings of the facts above. Each is a statement about this model and these measurements; the page cites no
 early-warning literature and makes no claim about it.</p>
-<div class="lesson" id="s7a"><p><b class="h">(a) The order parameter&rsquo;s variance cannot tell you where you are.</b>
-χ = ℓ<sup>2</sup>⟨M<sup>2</sup>⟩ scales as ℓ<sup>7/4</sup> at every point of the segment, with fitted γ/ν between 1.751 and 1.763 at all five points. The energy variance,
-C ~ ℓ<sup>α/ν</sup>, has an exponent running from 0 to 1. For an indicator this means a variance-type signal built on the order parameter is
-blind to position along a marginal line, while an energy-fluctuation signal is not.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup></p></div>
-<div class="lesson" id="s7b"><p><b class="h">(b) Exponent fits at accessible sizes are biased, and at the Potts end badly.</b>
-At X<sub>1</sub> the fit gives 0.38(2) against an exact 0.2096; at X<sub>4</sub>, 0.747(3) against 1. At X<sub>4</sub> the specific heat carries a
+<div class="lesson" id="s7a"><p><b class="h">(a) At criticality, a layer&rsquo;s magnetisation variance cannot tell you where on the line you are.</b>
+χ = ℓ<sup>2</sup>⟨M<sup>2</sup>⟩, the ensemble second moment of one layer&rsquo;s magnetisation M (σ here; τ is the same by symmetry), grows as ℓ<sup>7/4</sup> at every point of the segment, with fitted γ/ν between 1.751 and 1.763 at all five points. The energy variance,
+C ~ ℓ<sup>α/ν</sup>, has a size exponent running from 0 to 1. For an indicator this means a variance signal built on σ, read as growth with system size at criticality, is
+blind to position along the line, while an energy-fluctuation signal is not.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> Two limits on this reading. It is about size scaling on the line, not about the approach to it (for instance along f in §5): there χ grows with the exponent γ = (7/4)ν, which slides (§6). And it covers σ and τ only; the product στ is a different order parameter, not tabulated here.</p></div>
+<div class="lesson" id="s7b"><p><b class="h">(b) Exponent fits at accessible sizes are biased.</b>
+At X<sub>1</sub> the fit gives 0.38(2) against an exact 0.2096; at X<sub>4</sub>, 0.747(3) against 1. Only the Potts-end miss has a stated cause. At X<sub>4</sub> the specific heat carries a
 <span class="tip" tabindex="0">multiplicative logarithm<span class="tt">A logarithmic factor multiplying the leading power law, here C ~ ℓ/(ln ℓ)<sup>3/2</sup>, rather than a separate correction term added to it.</span></span>,
 C ~ ℓ/(ln ℓ)<sup>3/2</sup>,<sup class="fnm"><a href="#fn5" class="fn" id="fnref5">[5]</a></sup> so a power-law fit returns α/ν well below 1. The corresponding correction
 expected in χ, ℓ<sup>7/4</sup>(ln ℓ)<sup>−1/8</sup>, is not visible for ℓ ≤ 256.<sup class="fnm"><a href="#fn6" class="fn" id="fnref6">[6]</a></sup> For an indicator this means
-the quoted errors (statistical only) do not cover the systematic error, which is largest at the Potts end.</p></div>
+the quoted errors (statistical only) do not cover the miss at any of the five points (table in §4).</p></div>
 <div class="lesson" id="s7c"><p><b class="h">(c) Bimodality does not certify an abrupt transition.</b>
-At the four-state Potts point, and on the Ashkin&ndash;Teller line at L/K = 0.95, both known to be continuous, Jin, Sen and Sandvik find
-double-peaked energy and order-parameter histograms near the transition and a <em>negative</em> minimum of the
+At the four-state Potts point, and in the Ashkin&ndash;Teller model itself at L/K = 0.95, both on the exact critical segment of §4 and known to be continuous, Jin, Sen and Sandvik find
+double-peaked energy and order-parameter histograms near T<sub>c</sub> and a <em>negative</em> minimum, as a function of their temperature T near T<sub>c</sub>, of the
 <span class="tip" tabindex="0">Binder cumulant<span class="tt">U = 2[1 − ⟨m<sup>4</sup>⟩/(2⟨m<sup>2</sup>⟩<sup>2</sup>)] in Jin, Sen and Sandvik&rsquo;s normalisation. A negative minimum, together with double-peaked histograms, is what they call pseudo-first-order behaviour.</span></span>
-U = 2[1 − ⟨m<sup>4</sup>⟩/(2⟨m<sup>2</sup>⟩<sup>2</sup>)], for sizes up to ℓ = 256.<sup class="fnm"><a href="#fn6" class="fn">[6]</a></sup> They call it pseudo-first-order. For an indicator this
+U = 2[1 − ⟨m<sup>4</sup>⟩/(2⟨m<sup>2</sup>⟩<sup>2</sup>)], with m their order parameter (its definition, and its number of components, are not reproduced here), for sizes up to ℓ = 256.<sup class="fnm"><a href="#fn6" class="fn">[6]</a></sup> They call it pseudo-first-order. For an indicator this
 means a bimodal distribution near a transition, on its own, does not show the transition is discontinuous.</p></div>
 <div class="lesson" id="s7d"><p><b class="h">(d) Slowing down: what is sourced is an algorithm&rsquo;s, not the model&rsquo;s.</b>
 The only dynamic exponents in hand are those of Wiseman and Domany&rsquo;s cluster <em>algorithm</em>: z<sub>int,χ</sub>, the exponent of the
-integrated autocorrelation time of χ (last column of the table in §4). They vary continuously along the line and track α/ν. Wiseman and
-Domany call the Li&ndash;Sokal bound z ≥ α/ν &ldquo;moderately sharp&rdquo; for this algorithm, with anomalies at X<sub>4</sub> (z<sub>χ</sub> ≈ 0.94&ndash;0.99, low against
-the exact 1, which they attribute to the multiplicative logarithm) and at X<sub>1</sub>. Against the <b>exact</b> α/ν, the z<sub>int,χ</sub> points lie on or above
-the curve except at X<sub>4</sub>.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> This page makes no claim about the physical relaxation of any system on the line.
+integrated autocorrelation time of χ, in units of about ℓ<sup>2</sup> flipped spins (last column of the table in §4). The live demo of §5 runs the same update. Wiseman and Domany report that they vary continuously along the line and track α/ν. Wiseman and
+Domany call the Li&ndash;Sokal bound z ≥ α/ν (as they state it) &ldquo;moderately sharp&rdquo; for this algorithm, with anomalies at X<sub>4</sub> (their range of estimates of z there, 0.94&ndash;0.99, low against
+the exact 1, which they attribute to the multiplicative logarithm) and at X<sub>1</sub> (no cause is quoted here). Against the <b>exact</b> α/ν, the z<sub>int,χ</sub> points lie on or above
+the curve except at X<sub>4</sub>, where 0.99(3) sits just under 1.<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup> This page makes no claim about the physical relaxation of any system on the line.
 For an indicator this means only that, for this algorithm, the strength of slowing down depends on where on the line one sits.</p></div>
 </section>
 
 <!-- ============================================================== 8 -->
 <section id="s8">
 <h2><span class="num">8</span>Where else the line lives</h2>
-<p><b>The eight-vertex model.</b> Ashkin&ndash;Teller maps to Baxter&rsquo;s eight-vertex model, and its critical segment is isomorphic to the eight-vertex
+<p><b>The eight-vertex model.</b> Ashkin&ndash;Teller maps to Baxter&rsquo;s eight-vertex model, and its critical segment is, in Wiseman and Domany&rsquo;s word, isomorphic to the eight-vertex
 critical line (Wegner; Fan and Wu; Kadanoff).<sup class="fnm"><a href="#fn1" class="fn">[1]</a></sup><sup class="fnm"><a href="#fn7" class="fn">[7]</a></sup></p>
 <p><b>The c = 1 picture.</b> Among the critical theories of central charge c = 1 are two lines, the circle line (the Gaussian model) and the
 <span class="tip" tabindex="0">orbifold<span class="tt">The second of the two lines of c = 1 critical theories (the first is the circle line); a radius r labels points on each.</span></span>
 line. Critical Ashkin&ndash;Teller runs along the orbifold line from r = 1 (Ising × Ising) to r = √2 (four-state Potts). The two lines meet at
-the Kosterlitz&ndash;Thouless point of the XY model, circle r = √2 = orbifold r = 1/√2.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
+the Kosterlitz&ndash;Thouless point of the XY model, circle r = √2 = orbifold r = 1/√2, outside the Ashkin&ndash;Teller range r ∈ [1, √2]; this page does not say where that branch meets the lattice model. Radii are in Ginsparg&rsquo;s normalisation; other sources scale them differently.<sup class="fnm"><a href="#fn3" class="fn">[3]</a></sup></p>
 <p><b>A frustrated Ising model in disguise.</b> Jin, Sen and Sandvik&rsquo;s J<sub>1</sub>&ndash;J<sub>2</sub> Ising model on the square lattice is Ashkin&ndash;Teller critical
 for g = J<sub>2</sub>/|J<sub>1</sub>| ≥ g* = 0.67(1), with the four-state Potts point at g*. Its critical curve g ∈ [g*, ∞) corresponds one-to-one with the
 Ashkin&ndash;Teller segment, L/K running from 1 towards 0. At the Potts point the Binder crossing takes the universal value U* = 0.792(4). The
 same model shows the pseudo-first-order signals of §7c.<sup class="fnm"><a href="#fn6" class="fn">[6]</a></sup></p>
 <details class="d" id="d-conv"><summary>Converting from Jin, Sen and Sandvik&rsquo;s convention</summary>
   <p>They write <span class="math">H = −Σ(σσ + ττ + K′σσττ)</span> at temperature T. In this page&rsquo;s (K, L): their K′ is the ratio L/K, and 1/T is K.
-  So their K′ = 0.95 is L/K = 0.95 here, and their K′ ∈ [1, 0) is L/K ∈ [1, 0).<sup class="fnm"><a href="#fn6" class="fn">[6]</a></sup></p>
+  So their K′ = 0.95 is L/K = 0.95 here, and their K′ running from 1 down towards 0 is L/K running from 1 down towards 0.<sup class="fnm"><a href="#fn6" class="fn">[6]</a></sup></p>
 </details>
 </section>
 
@@ -353,8 +353,8 @@ same model shows the pseudo-first-order signals of §7c.<sup class="fnm"><a href
 <ul class="remember">
   <li>Between two critical Ising copies, the bilinear στ coupling (y = 7/4, relevant) gives no line; the four-spin ε<sub>σ</sub>ε<sub>τ</sub> coupling (y = 0, exactly marginal) gives a line.</li>
   <li>The line is exact: Z = 1 − 2X, from X<sub>0</sub> (Ising × Ising, α/ν = 0) to X<sub>4</sub> (four-state Potts, α/ν = 1).</li>
-  <li>Along it ν, γ and α/ν slide; γ/ν = 7/4 and η = 1/4 are pinned. That is weak universality, and a real magnet violates it.</li>
-  <li>An order-parameter variance scales identically along the line; an energy variance does not.</li>
+  <li>Along it ν, γ and α/ν slide; γ/ν = 7/4 and η = 1/4 are pinned. That is weak universality; Khan et al. report a magnet that departs from it.</li>
+  <li>At criticality, each layer&rsquo;s magnetisation variance grows with size identically along the line; the energy variance does not.</li>
   <li>Fits at ℓ ≤ 128 miss the exact α/ν, worst at the Potts end, where a multiplicative logarithm sits.</li>
   <li>Double peaks and negative Binder minima appear at continuous transitions up to ℓ = 256.</li>
 </ul>
