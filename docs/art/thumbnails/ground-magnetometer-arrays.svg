@@ -1,0 +1,28 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+
+  <!-- auroral band and field lines over a station chain -->
+  <path d="M 10 34 C 40 20, 70 36, 100 26 S 140 18, 150 28 L 150 42 C 120 36, 90 46, 60 40 S 25 44, 10 48 Z" fill="#34d399" fill-opacity="0.35"/>
+  <g fill="none" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1">
+    <path d="M 18 72 C 30 4, 130 4, 142 72"/>
+    <path d="M 40 72 C 50 24, 110 24, 120 72"/>
+  </g>
+  <line x1="6" y1="70" x2="154" y2="70" stroke="#475569" stroke-width="1"/>
+  <g fill="#f1f5f9">
+    <circle cx="22" cy="66" r="2.2"/><circle cx="50" cy="66" r="2.2"/><circle cx="78" cy="66" r="2.2"/><circle cx="106" cy="66" r="2.2"/><circle cx="134" cy="66" r="2.2"/>
+  </g>
+  <g fill="none" stroke="#fbbf24" stroke-width="1.1">
+    <path d="M 14 58 q 4 -6 8 0 t 8 0"/><path d="M 44 58 q 4 -6 8 0 t 8 0"/><path d="M 74 58 q 4 -6 8 0 t 8 0"/><path d="M 104 58 q 4 -6 8 0 t 8 0"/><path d="M 130 58 q 4 -6 8 0 t 8 0"/>
+  </g>
+
+  <!-- polar slowness map with a peak -->
+  <circle cx="214" cy="40" r="30" fill="#0b1222" stroke="#475569" stroke-width="1"/>
+  <circle cx="214" cy="40" r="20" fill="none" stroke="#334155" stroke-width="0.8"/>
+  <circle cx="214" cy="40" r="10" fill="none" stroke="#334155" stroke-width="0.8"/>
+  <circle cx="200" cy="30" r="9" fill="#c084fc" fill-opacity="0.35"/>
+  <circle cx="200" cy="30" r="5" fill="#f472b6" fill-opacity="0.7"/>
+  <circle cx="200" cy="30" r="2.2" fill="#fde68a"/>
+  <line x1="214" y1="40" x2="202" y2="31" stroke="#34d399" stroke-width="1.2"/>
+  <text x="214" y="8" text-anchor="middle" fill="#94a3b8" font-size="7" font-family="system-ui">N</text>
+  <text x="254" y="76" text-anchor="middle" fill="#94a3b8" font-size="7.5" font-family="system-ui">slowness</text>
+</svg>
