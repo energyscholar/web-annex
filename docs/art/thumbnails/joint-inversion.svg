@@ -1,0 +1,27 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+
+  <!-- satellite track, current sheet, radar fan, ground stations -->
+  <line x1="8" y1="12" x2="152" y2="12" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <rect x="8" y="38" width="144" height="5" fill="#34d399" fill-opacity="0.45"/>
+  <path d="M 120 70 L 92 40 L 112 40 Z" fill="#fb7185" fill-opacity="0.3" stroke="#fb7185" stroke-opacity="0.7" stroke-width="0.8"/>
+  <line x1="6" y1="70" x2="154" y2="70" stroke="#475569" stroke-width="1"/>
+  <g fill="#38bdf8">
+    <path d="M 20 70 l 4 -6 l 4 6 Z"/><path d="M 44 70 l 4 -6 l 4 6 Z"/><path d="M 68 70 l 4 -6 l 4 6 Z"/><path d="M 140 70 l 4 -6 l 4 6 Z"/>
+  </g>
+  <g fill="none" stroke="#c084fc" stroke-width="1">
+    <line x1="60" y1="38" x2="60" y2="14"/><line x1="84" y1="38" x2="84" y2="14"/>
+  </g>
+
+  <!-- resolution matrix: DF and CF blocks -->
+  <rect x="180" y="8" width="64" height="64" fill="#0b1222" stroke="#475569" stroke-width="1"/>
+  <g fill="#fb7185">
+    <rect x="182" y="10" width="6" height="6"/><rect x="188" y="16" width="6" height="6" fill-opacity="0.85"/><rect x="194" y="22" width="6" height="6" fill-opacity="0.7"/><rect x="200" y="28" width="6" height="6" fill-opacity="0.6"/>
+    <rect x="212" y="40" width="6" height="6"/><rect x="218" y="46" width="6" height="6"/><rect x="224" y="52" width="6" height="6"/><rect x="230" y="58" width="6" height="6"/>
+  </g>
+  <g fill="#38bdf8" fill-opacity="0.45">
+    <rect x="188" y="10" width="6" height="6"/><rect x="194" y="16" width="6" height="6"/><rect x="182" y="16" width="6" height="6"/><rect x="200" y="22" width="6" height="6"/>
+  </g>
+  <line x1="212" y1="8" x2="212" y2="72" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="180" y1="40" x2="244" y2="40" stroke="#94a3b8" stroke-width="0.8"/>
+</svg>
