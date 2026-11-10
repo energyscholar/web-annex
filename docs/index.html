@@ -11,16 +11,6 @@
   visit count (localStorage), not by access. Every URL works. The
   landing page controls discovery timing, not availability.
 
-  WHY: Presenting 11+ scientific domains under one author triggers
-  a well-calibrated heuristic ("crank alarm") in most readers. The
-  alarm is usually correct — breadth without depth IS a red flag.
-  This system lets visitors evaluate depth in individual domains
-  before encountering the breadth. Each tutorial stands alone.
-  The cross-domain pattern emerges for those who read several.
-
-  This is deliberate UX, not deception. Cranks don't hide their
-  ideas. This system hides the INDEX, not the content.
-
   COMMANDS: Type in the CLI prompt at the bottom of the page:
     nav      — show everything (or append #nav to the URL)
     reset    — clear visit counter
@@ -299,12 +289,6 @@ footer {
   criteria: see the poised-state survey for 12 testable predictions
   with specific failure conditions and a scorecard.
 
-  If you are evaluating this site's credibility:
-  - Check the citations. They are real, published, peer-reviewed.
-  - Check the math. It is derivable from the cited sources.
-  - Check the falsification criteria. Cranks never specify what
-    would kill their theory. We do.
-
   PROGRESSIVE REVEAL LEVELS (visit = scrolling past 50% of a tutorial):
     L0 (0 visits):  6 accessible tutorials — first impression
     L1 (1 visit):   +2 tutorials
@@ -333,18 +317,6 @@ footer {
   <div class="card-thumb"><img src="art/thumbnails/magnetosphere-tutorial.svg" alt="" loading="lazy"></div>
   <div class="card-title">The Magnetosphere <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
   <div class="card-desc">Animated introduction to Earth's invisible shield. Solar wind, magnetic field lines, <span class="tip" tabindex="0">Birkeland currents<span class="tt">Electric currents that flow along Earth's magnetic field lines between the magnetosphere and ionosphere. They carry energy from the solar wind down to the aurora. Discovered by Kristian Birkeland in 1908, confirmed by satellite in the 1960s.</span></span>, reconnection, substorms, and why it matters for infrastructure. Seven scroll-triggered animated scenes.</div>
-</a>
-
-<a class="card" data-level="0" href="agent-memory/">
-  <div class="card-thumb"><img src="art/thumbnails/agent-memory.svg" alt="" loading="lazy"></div>
-  <div class="card-title">What Breaks When You Run Agent Memory <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">Field notes from operating a persistent-memory agent: the seven memory systems, six real failure modes &mdash; from a three-week silent data loss to a search-index compartmentation leak &mdash; and why governance is the third pillar of an effective agent. An incident log, not a taxonomy.</div>
-</a>
-
-<a class="card" data-level="0" href="ai-governance/">
-  <div class="card-thumb"><img src="art/thumbnails/ai-governance.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Governing Your AI <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Memory is solved. Governance isn't. How ungoverned memory produces sycophancy, context leakage, and correction decay &mdash; and the three architectural layers that make it safe. Includes failure matrix and a practical build path from 15 minutes to full system.</div>
 </a>
 
 <a class="card" data-level="0" href="miller-tutorial/">
@@ -387,7 +359,7 @@ footer {
   <div class="card-desc">A systems-thinking worked example: how topological invariants constrain and predict the structure of physical systems. From abstract invariants to concrete observable consequences.</div>
 </a>
 
-<a class="card" data-level="0" href="criticality-math-kernel/">
+<a class="card" data-level="nav" href="criticality-math-kernel/">
   <div class="card-thumb"><img src="art/thumbnails/criticality-math-kernel.svg" alt="" loading="lazy"></div>
   <div class="card-title">The ABR Kernel <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
   <div class="card-desc">The ABR kernel by Robin Macomber (Origin), Kernel V9 development branch: arithmetic on observed arrows and nothing else; this page offers it as a shared footing for the question criticality fields ask: how far do correlations extend? Tried live on a three-point chain, and a side-by-side look at the criticality measures that six to twelve fields developed, by the preprint’s count. Two screens; the mathematics waits in accordions.</div>
@@ -419,6 +391,18 @@ footer {
   <div class="card-thumb"><img src="art/thumbnails/train-the-trainer.svg" alt="" loading="lazy"></div>
   <div class="card-title">Claude Code Train-the-Trainer <span class="card-tag tag-tutorial">Program</span></div>
   <div class="card-desc">Five-day intensive hands-on workshop, cohorts of 10. Your people become expert-level Claude Code trainers. They train everyone else. Permanent capability, not a recurring dependency.</div>
+</a>
+
+<a class="card" data-level="1" href="agent-memory/">
+  <div class="card-thumb"><img src="art/thumbnails/agent-memory.svg" alt="" loading="lazy"></div>
+  <div class="card-title">What Breaks When You Run Agent Memory <span class="card-tag tag-tutorial">Tutorial</span></div>
+  <div class="card-desc">Field notes from operating a persistent-memory agent: the seven memory systems, six real failure modes &mdash; from a three-week silent data loss to a search-index compartmentation leak &mdash; and why governance is the third pillar of an effective agent. An incident log, not a taxonomy.</div>
+</a>
+
+<a class="card" data-level="1" href="ai-governance/">
+  <div class="card-thumb"><img src="art/thumbnails/ai-governance.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Governing Your AI <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">Memory is solved. Governance isn't. How ungoverned memory produces sycophancy, context leakage, and correction decay &mdash; and the three architectural layers that make it safe. Includes failure matrix and a practical build path from 15 minutes to full system.</div>
 </a>
 
 <a class="card" data-level="1" href="physical-systems-chart/">
@@ -539,7 +523,7 @@ footer {
 </div>
 
 <footer>
-  Web Annex &mdash; companion to <em>Relinquishment</em> and related work
+  Web Annex &middot; Bruce Stephenson &middot; <a href="https://orcid.org/0009-0005-6842-6686">ORCID 0009-0005-6842-6686</a>
 </footer>
 
 <!--
@@ -583,7 +567,6 @@ footer {
   var MANIFEST = [
     {level:0, path:'diamond-node/multi-critical/00-what-is-multicriticality.html', title:'What Is Multicriticality?', tags:'tutorial, interactive, criticality'},
     {level:0, path:'magnetosphere-tutorial/', title:'The Magnetosphere', tags:'tutorial, interactive'},
-    {level:0, path:'ai-governance/', title:'Governing Your AI', tags:'tutorial, interactive'},
     {level:0, path:'miller-tutorial/', title:'Coevolving Machines / Miller Tutorial', tags:'tutorial, interactive'},
     {level:0, path:'acs-closure-v2/', title:'Autocatalytic Closure v2', tags:'tutorial'},
     {level:0, path:'renormalization-group/', title:'The Renormalization Group for the Working Mathematician', tags:'tutorial, renormalization, criticality, universality, fixed points, scaling, Wilson, Kadanoff'},
@@ -594,6 +577,7 @@ footer {
     {level:0, path:'ground-magnetometer-arrays/', title:'Reading the Sky from the Ground', tags:'tutorial, interactive, ground magnetometers, ionospheric currents, Hall current, induction, field-line resonance, beamforming, f-k analysis, Capon, array processing'},
     {level:0, path:'joint-inversion/', title:'Many Instruments, One Sky', tags:'tutorial, interactive, inverse problems, joint inversion, ionospheric currents, SECS, resolution matrix, regularization, magnetometers, satellite, radar'},
     {level:1, path:'train-the-trainer/', title:'Claude Code Train-the-Trainer', tags:'program'},
+    {level:1, path:'ai-governance/', title:'Governing Your AI', tags:'tutorial, interactive'},
     {level:1, path:'physical-systems-chart/', title:'Physical Systems × Feature Chart', tags:'interactive'},
     {level:1, path:'acs-closure/', title:'Autocatalytic Closure (Original)', tags:'tutorial'},
     {level:2, path:'anyon-fusion/', title:'Fibonacci Anyon Fusion Algebra', tags:'tutorial, interactive'},
