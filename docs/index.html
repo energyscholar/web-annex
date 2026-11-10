@@ -323,6 +323,12 @@ footer {
 
 <!-- === L0: Seed set (always visible) — easiest, standalone === -->
 
+<a class="card" data-level="0" href="diamond-node/multi-critical/00-what-is-multicriticality.html">
+  <div class="card-thumb"><img src="art/thumbnails/multicriticality.png" alt="" loading="lazy"></div>
+  <div class="card-title">What Is Multicriticality? <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">What happens when tipping points interact. Two coupled failure modes pull the safe operating boundary inward, so a system can fail before any single parameter reaches its threshold. Four live demonstrations.</div>
+</a>
+
 <a class="card" data-level="0" href="magnetosphere-tutorial/">
   <div class="card-thumb"><img src="art/thumbnails/magnetosphere-tutorial.svg" alt="" loading="lazy"></div>
   <div class="card-title">The Magnetosphere <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
@@ -387,12 +393,6 @@ footer {
   <div class="card-desc">The ABR kernel by Robin Macomber (Origin), Kernel V9 development branch: arithmetic on observed arrows and nothing else; this page offers it as a shared footing for the question criticality fields ask: how far do correlations extend? Tried live on a three-point chain, and a side-by-side look at the criticality measures that six to twelve fields developed, by the preprint’s count. Two screens; the mathematics waits in accordions.</div>
 </a>
 
-<a class="card" data-level="0" href="train-the-trainer/">
-  <div class="card-thumb"><img src="art/thumbnails/train-the-trainer.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Claude Code Train-the-Trainer <span class="card-tag tag-tutorial">Program</span></div>
-  <div class="card-desc">Five-day intensive hands-on workshop, cohorts of 10. Your people become expert-level Claude Code trainers. They train everyone else. Permanent capability, not a recurring dependency.</div>
-</a>
-
 <a class="card" data-level="0" href="topology-closure/">
   <div class="card-thumb"><img src="art/thumbnails/topology-closure.svg" alt="" loading="lazy"></div>
   <div class="card-title">Where the Topology Lives <span class="card-tag tag-tutorial">Tutorial</span></div>
@@ -414,6 +414,12 @@ footer {
 </a>
 
 <!-- === L1: First return (+2) — still accessible === -->
+
+<a class="card" data-level="1" href="train-the-trainer/">
+  <div class="card-thumb"><img src="art/thumbnails/train-the-trainer.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Claude Code Train-the-Trainer <span class="card-tag tag-tutorial">Program</span></div>
+  <div class="card-desc">Five-day intensive hands-on workshop, cohorts of 10. Your people become expert-level Claude Code trainers. They train everyone else. Permanent capability, not a recurring dependency.</div>
+</a>
 
 <a class="card" data-level="1" href="physical-systems-chart/">
   <div class="card-thumb"><img src="art/thumbnails/physical-systems-chart.svg" alt="" loading="lazy"></div>
@@ -575,6 +581,7 @@ footer {
   var THRESHOLDS = {0:0, 1:1, 2:2, 3:3, 4:4, hub:6};
 
   var MANIFEST = [
+    {level:0, path:'diamond-node/multi-critical/00-what-is-multicriticality.html', title:'What Is Multicriticality?', tags:'tutorial, interactive, criticality'},
     {level:0, path:'magnetosphere-tutorial/', title:'The Magnetosphere', tags:'tutorial, interactive'},
     {level:0, path:'ai-governance/', title:'Governing Your AI', tags:'tutorial, interactive'},
     {level:0, path:'miller-tutorial/', title:'Coevolving Machines / Miller Tutorial', tags:'tutorial, interactive'},
@@ -583,10 +590,10 @@ footer {
     {level:0, path:'kosterlitz-thouless/', title:'Kosterlitz-Thouless for the Working Mathematician', tags:'tutorial, BKT, topological transition, vortex unbinding, Coulomb gas, Mermin-Wagner, universal jump, hexatic, KTHNY'},
     {level:0, path:'ashkin-teller/', title:'Ashkin-Teller for the Working Mathematician', tags:'tutorial, Ashkin-Teller, double Ising, line of critical points, marginal coupling, weak universality, four-state Potts, cluster Monte Carlo, pseudo-first-order'},
     {level:0, path:'structure-from-topology/', title:'Structure from Topology', tags:'tutorial'},
-    {level:0, path:'train-the-trainer/', title:'Claude Code Train-the-Trainer', tags:'program'},
     {level:0, path:'topology-closure/', title:'Where the Topology Lives', tags:'tutorial'},
     {level:0, path:'ground-magnetometer-arrays/', title:'Reading the Sky from the Ground', tags:'tutorial, interactive, ground magnetometers, ionospheric currents, Hall current, induction, field-line resonance, beamforming, f-k analysis, Capon, array processing'},
     {level:0, path:'joint-inversion/', title:'Many Instruments, One Sky', tags:'tutorial, interactive, inverse problems, joint inversion, ionospheric currents, SECS, resolution matrix, regularization, magnetometers, satellite, radar'},
+    {level:1, path:'train-the-trainer/', title:'Claude Code Train-the-Trainer', tags:'program'},
     {level:1, path:'physical-systems-chart/', title:'Physical Systems × Feature Chart', tags:'interactive'},
     {level:1, path:'acs-closure/', title:'Autocatalytic Closure (Original)', tags:'tutorial'},
     {level:2, path:'anyon-fusion/', title:'Fibonacci Anyon Fusion Algebra', tags:'tutorial, interactive'},
