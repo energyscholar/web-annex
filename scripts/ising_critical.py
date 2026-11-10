@@ -64,18 +64,10 @@ def simulate(H, W, seed=1464):
 
 
 def colour(s):
-    H, W = s.shape
-    rgb = np.zeros((H, W, 3), np.uint8)
-    for sign, cmap in ((1, colormaps["plasma"]), (-1, colormaps["viridis"])):
-        lab, n = label_periodic(s == sign)
-        if n == 0:
-            continue
-        area = np.bincount(lab.ravel(), minlength=n + 1).astype(float)
-        mx = max(area[1:].max(), 2.0)
-        pos = 0.15 + 0.8 * np.log10(np.maximum(area, 1.0)) / np.log10(mx)
-        cols = (cmap(pos)[:, :3] * 255).round().astype(np.uint8)
-        m = s == sign
-        rgb[m] = cols[lab[m]]
+    """Palette A: colour by spin only. up = #22d3ee, down = #1e1b4b."""
+    rgb = np.empty(s.shape + (3,), np.uint8)
+    rgb[s == 1] = (0x22, 0xD3, 0xEE)
+    rgb[s != 1] = (0x1E, 0x1B, 0x4B)
     return rgb
 
 
