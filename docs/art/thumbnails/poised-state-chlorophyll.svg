@@ -1,0 +1,22 @@
+<svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="280" height="80" rx="6" fill="#1e293b"/>
+
+  <!-- occupation number: flat (classical) then steep fall (quantum) -->
+  <line x1="24" y1="66" x2="140" y2="66" stroke="#475569" stroke-width="1"/>
+  <line x1="24" y1="12" x2="24" y2="66" stroke="#475569" stroke-width="1"/>
+  <line x1="104" y1="12" x2="104" y2="66" stroke="#fbbf24" stroke-width="1.1" stroke-dasharray="4 3" opacity="0.85"/>
+  <path d="M 26 18 L 96 30 C 104 32 108 36 112 46 C 116 56 118 62 122 65" fill="none" stroke="#3b82f6" stroke-width="1.8"/>
+  <circle cx="44" cy="21" r="2.6" fill="#22c55e"/>
+  <circle cx="104" cy="32" r="2.6" fill="#fbbf24"/>
+  <circle cx="120" cy="62" r="2.6" fill="#a855f7"/>
+
+  <!-- timescale ladder: bars on a log axis -->
+  <rect x="160" y="16" width="14" height="5" rx="2.5" fill="#94a3b8"/>
+  <rect x="166" y="25" width="12" height="5" rx="2.5" fill="#ec4899"/>
+  <rect x="184" y="34" width="18" height="5" rx="2.5" fill="#06b6d4"/>
+  <rect x="204" y="43" width="16" height="5" rx="2.5" fill="#3b82f6"/>
+  <rect x="222" y="52" width="12" height="5" rx="2.5" fill="#ef4444"/>
+  <line x1="158" y1="61" x2="256" y2="61" stroke="#475569" stroke-width="1"/>
+
+  <text x="258" y="74" fill="#475569" font-family="Georgia, serif" font-size="8" text-anchor="end">the poised antenna</text>
+</svg>
