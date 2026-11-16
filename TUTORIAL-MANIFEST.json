@@ -885,6 +885,21 @@
   "dois": 9
  },
  {
+  "path": "ride/index.html",
+  "series": "ride",
+  "title": "The Ride: One Line Through the Edge",
+  "sha256": "215209f130c67b7270e73485b9dd4bbc15e01e2ddbe58451403e814442dc55cc",
+  "bytes": 19136,
+  "lines": 180,
+  "modified": "2026-11-16",
+  "has_meta_description": true,
+  "tooltips": 14,
+  "footnotes": 0,
+  "physics_guard": false,
+  "anchors_cited": 0,
+  "dois": 1
+ },
+ {
   "path": "s13-prep/arrest-scenario.html",
   "series": "s13-prep",
   "title": "S13 Arrest Scenario \u2014 GM Only",

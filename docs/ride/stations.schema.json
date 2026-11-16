@@ -44,8 +44,9 @@
         "start": {"oneOf": [{"type": "string", "pattern": "/start/index\\.html$"}, {"type": "null"}]},
         "state": {"enum": ["live", "coming", "held"]},
         "carry": {
-          "type": "object", "required": ["picture", "name"], "additionalProperties": false,
-          "properties": {"picture": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1}}
+          "type": "object", "required": ["picture", "name", "gloss"], "additionalProperties": false,
+          "properties": {"picture": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1},
+                         "gloss": {"type": "string", "minLength": 1}}
         },
         "map": {
           "type": "object", "required": ["x", "y"], "additionalProperties": false,

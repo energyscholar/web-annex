@@ -95,7 +95,7 @@ class Page(HTMLParser):
         el = {"tag": tag, "attrs": a, "i": len(self.els), "parent": self.stack[-1] if self.stack else None,
               "text": ""}
         self.els.append(el)
-        if tag in ("script", "style", "title"):
+        if tag in ("script", "style") or (tag == "title" and "svg" not in self.stack):
             self._in = tag
         if tag not in VOID:
             self.stack.append(tag)

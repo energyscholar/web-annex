@@ -1,81 +1,345 @@
 {
-  "plane": "schematic",
-  "note": "One line through the science tutorials. The plane is schematic: a picture of the idea, not one measured system. Each station is a different physical system placed on one shared drawing.",
-  "axes": {
-    "x": {"name": "the knob along the line", "meaning": "a second control setting, such as a coupling or an applied field, that moves a system along its edge; dimensionless, schematic"},
-    "y": {"name": "temperature, scaled", "meaning": "how hard random jiggling pushes against order, relative to the system's own edge; dimensionless, schematic"},
-    "z": {"name": "nearness to criticality", "meaning": "a normalised reading from 0 (far from any edge) to 1 (at a critical point); no units"}
+ "plane": "schematic",
+ "note": "One line through the science tutorials. The plane is schematic: a picture of the idea, not one measured system. Each station is a different physical system placed on one shared drawing.",
+ "axes": {
+  "x": {
+   "name": "the knob along the line",
+   "meaning": "a second control setting, such as a coupling or an applied field, that moves a system along its edge; dimensionless, schematic"
   },
-  "track_level_meaning": "c is the height the track rides at: a level just below the bead tops, so the track threads every peak and crosses the valleys between them on bridges",
-  "stations": [
-    {"id": "0", "title": "Ticket hall: why ride?", "view": "the whole country from above, before you board",
-     "phase": "the whole surface from above: edges are where behaviour changes",
-     "expert": "poised-state-survey/index.html", "expert_title": "Shadows of the Poised State",
-     "also": ["physical-systems-chart/index.html"], "start": null, "state": "live",
-     "carry": {"picture": "a ticket hall", "name": "poised"}, "map": {"x": 0.04, "y": 0.46}, "c": 0.9},
-    {"id": "1", "title": "The first edge", "view": "the track reaches a cliff",
-     "phase": "one critical point; the ride starts at the spike",
-     "expert": "diamond-node/multi-critical/00-what-is-multicriticality.html", "expert_title": "What Is Multicriticality?",
-     "also": [], "start": null, "state": "live",
-     "carry": {"picture": "the cliff", "name": "critical point, order parameter"}, "map": {"x": 0.132, "y": 0.52}, "c": 0.9},
-    {"id": "2", "title": "Hall of mirrors", "view": "every cliff looks the same up close",
-     "phase": "renormalisation flow to a fixed point: why the exponents repeat",
-     "expert": "renormalization-group/index.html", "expert_title": "The Renormalization Group for the Working Mathematician",
-     "also": [], "start": null, "state": "live",
-     "carry": {"picture": "the hall of mirrors", "name": "universality, fixed point"}, "map": {"x": 0.224, "y": 0.57}, "c": 0.9},
-    {"id": "3", "title": "An edge with no cliff", "view": "the track runs along a ridge",
-     "phase": "the Kosterlitz-Thouless line: a line of critical states with no local order parameter",
-     "expert": "kosterlitz-thouless/index.html", "expert_title": "Kosterlitz-Thouless for the Working Mathematician",
-     "also": [], "start": null, "state": "live",
-     "carry": {"picture": "the ridge", "name": "BKT, stiffness jump"}, "map": {"x": 0.316, "y": 0.58}, "c": 0.9},
-    {"id": "4", "title": "The grade changes", "view": "same track, different pitch",
-     "phase": "the Ashkin-Teller line: the exponents vary continuously along the line",
-     "expert": "ashkin-teller/index.html", "expert_title": "Ashkin-Teller for the Working Mathematician",
-     "also": [], "start": null, "state": "live",
-     "carry": {"picture": "the gradient sign", "name": "Ashkin-Teller, four-spin coupling"}, "map": {"x": 0.408, "y": 0.55}, "c": 0.9},
-    {"id": "5", "title": "The workshop", "view": "how the track is surveyed",
-     "phase": "the model zoo and the tools: finite-size scaling, the Binder cumulant",
-     "expert": "diamond-node/critical-lines/index.html", "expert_title": "Critical Lines and Multicritical Points",
-     "also": ["diamond-node/critical-lines/models/index.html", "diamond-node/critical-lines/techniques/index.html"], "start": null, "state": "live",
-     "carry": {"picture": "the surveyor's tools", "name": "finite-size scaling"}, "map": {"x": 0.5, "y": 0.5}, "c": 0.9},
-    {"id": "6", "title": "The tunnel", "view": "the track jumps",
-     "phase": "where a line turns first-order: coexistence, two states at once",
-     "expert": "diamond-node/jumps-and-critical-lines/index.html", "expert_title": "Jumps, Slowing, and the Line They Sit On",
-     "also": [], "start": null, "state": "live",
-     "carry": {"picture": "the tunnel", "name": "first-order, coexistence"}, "map": {"x": 0.592, "y": 0.44}, "c": 0.9},
-    {"id": "7", "title": "Beads on a string", "view": "stops with nothing between them",
-     "phase": "a beaded line: critical peaks aligned on one line with real valleys between; the fractional quantum Hall plateaus of a two-dimensional electron gas are one example among several",
-     "expert": null, "expert_title": null,
-     "also": [], "start": null, "state": "held",
-     "carry": {"picture": "beads", "name": "fractional quantum Hall, filling factor"}, "map": {"x": 0.684, "y": 0.41}, "c": 0.9},
-    {"id": "8", "title": "The window that shows the edge coming", "view": "the window fogs before the edge arrives",
-     "phase": "what an instrument reads near the line: variance, autocorrelation; why a point detector misreads a line",
-     "expert": null, "expert_title": null,
-     "also": [], "start": null, "state": "coming",
-     "carry": {"picture": "the fogging window", "name": "early-warning signal"}, "map": {"x": 0.776, "y": 0.43}, "c": 0.9},
-    {"id": "9", "title": "The instrument", "view": "what keeps the train on the line",
-     "phase": "the Criticality Compass, a planned instrument set out in a deposited design note; nothing is yet shown to work",
-     "expert": null, "expert_title": null,
-     "also": [], "start": null, "state": "coming",
-     "carry": {"picture": "the compass rose", "name": "Criticality Compass"}, "map": {"x": 0.868, "y": 0.49}, "c": 0.9},
-    {"id": "T", "title": "Terminus: the honest ending", "view": "three doors, one not yet opened",
-     "phase": "the three senses of poised, the critics, and the strongest independent support",
-     "expert": "poised-state-critics/index.html", "expert_title": "The Poised State and Its Critics",
-     "also": ["poised-state-chlorophyll/index.html"], "start": null, "state": "live",
-     "carry": {"picture": "three doors, one unopened", "name": "Poised Realm"}, "map": {"x": 0.96, "y": 0.54}, "c": 0.9}
-  ],
-  "spurs": [
-    {"line": "space", "line_title": "The view from the window: space physics", "from": "0", "expert": "magnetosphere-tutorial/index.html", "title": "The Magnetosphere: Earth's Invisible Shield"},
-    {"line": "space", "line_title": "The view from the window: space physics", "from": "0", "expert": "magnetospheric-tomography/index.html", "title": "Magnetospheric Tomography"},
-    {"line": "space", "line_title": "The view from the window: space physics", "from": "0", "expert": "ground-magnetometer-arrays/index.html", "title": "Reading the Sky from the Ground"},
-    {"line": "space", "line_title": "The view from the window: space physics", "from": "0", "expert": "joint-inversion/index.html", "title": "Many Instruments, One Sky"},
-    {"line": "topology", "line_title": "Topology and anyons", "from": "7", "expert": "anyon-fusion/index.html", "title": "Fibonacci Anyon Fusion Algebra"},
-    {"line": "topology", "line_title": "Topology and anyons", "from": "7", "expert": "worksheets/index.html", "title": "Anyon Algebra by Hand"},
-    {"line": "topology", "line_title": "Topology and anyons", "from": "7", "expert": "structure-from-topology/index.html", "title": "Structure from Topology"},
-    {"line": "topology", "line_title": "Topology and anyons", "from": "7", "expert": "topology-closure/index.html", "title": "Where the Topology Lives"},
-    {"line": "topology", "line_title": "Topology and anyons", "from": "7", "expert": "letters/topological-protection/index.html", "title": "A Note on Topological Protection"},
-    {"line": "cross-domain", "line_title": "Cross-domain", "from": "0", "expert": "criticality-bridges/index.html", "title": "Criticality Bridges"},
-    {"line": "cross-domain", "line_title": "Cross-domain", "from": "0", "expert": "domain-convergence/index.html", "title": "Domain Convergence"},
-    {"line": "side-window", "line_title": "Station 3's side window", "from": "3", "expert": "kosterlitz-thouless/confined-helium/index.html", "title": "Confined Helium"}
-  ]
+  "y": {
+   "name": "temperature, scaled",
+   "meaning": "how hard random jiggling pushes against order, relative to the system's own edge; dimensionless, schematic"
+  },
+  "z": {
+   "name": "nearness to criticality",
+   "meaning": "a normalised reading from 0 (far from any edge) to 1 (at a critical point); no units"
+  }
+ },
+ "track_level_meaning": "c is the height the track rides at: a level just below the bead tops, so the track threads every peak and crosses the valleys between them on bridges",
+ "stations": [
+  {
+   "id": "0",
+   "title": "Ticket hall: why ride?",
+   "view": "the whole country from above, before you board",
+   "phase": "the whole surface from above: edges are where behaviour changes",
+   "expert": "poised-state-survey/index.html",
+   "expert_title": "Shadows of the Poised State",
+   "also": [
+    "physical-systems-chart/index.html"
+   ],
+   "start": null,
+   "state": "live",
+   "carry": {
+    "picture": "a ticket hall",
+    "name": "poised",
+    "gloss": "poised: sitting at an edge between two kinds of behaviour instead of falling to one side; the word is used in three different senses, set side by side at the terminus"
+   },
+   "map": {
+    "x": 0.04,
+    "y": 0.46
+   },
+   "c": 0.9
+  },
+  {
+   "id": "1",
+   "title": "The first edge",
+   "view": "the track reaches a cliff",
+   "phase": "one critical point; the ride starts at the spike",
+   "expert": "diamond-node/multi-critical/00-what-is-multicriticality.html",
+   "expert_title": "What Is Multicriticality?",
+   "also": [],
+   "start": null,
+   "state": "live",
+   "carry": {
+    "picture": "the cliff",
+    "name": "critical point, order parameter",
+    "gloss": "critical point: the exact setting at which a system changes its kind of behaviour, and small pushes have large effects; order parameter: a number that is zero on one side of the change and grows on the other, like the pull of a magnet"
+   },
+   "map": {
+    "x": 0.132,
+    "y": 0.52
+   },
+   "c": 0.9
+  },
+  {
+   "id": "2",
+   "title": "Hall of mirrors",
+   "view": "every cliff looks the same up close",
+   "phase": "renormalisation flow to a fixed point: why the exponents repeat",
+   "expert": "renormalization-group/index.html",
+   "expert_title": "The Renormalization Group for the Working Mathematician",
+   "also": [],
+   "start": null,
+   "state": "live",
+   "carry": {
+    "picture": "the hall of mirrors",
+    "name": "universality, fixed point",
+    "gloss": "universality: very different systems share the same numbers near their critical points; fixed point: a state that looks the same after you zoom out, which is why those numbers repeat"
+   },
+   "map": {
+    "x": 0.224,
+    "y": 0.57
+   },
+   "c": 0.9
+  },
+  {
+   "id": "3",
+   "title": "An edge with no cliff",
+   "view": "the track runs along a ridge",
+   "phase": "the Kosterlitz-Thouless line: a line of critical states with no local order parameter",
+   "expert": "kosterlitz-thouless/index.html",
+   "expert_title": "Kosterlitz-Thouless for the Working Mathematician",
+   "also": [],
+   "start": null,
+   "state": "live",
+   "carry": {
+    "picture": "the ridge",
+    "name": "BKT, stiffness jump",
+    "gloss": "BKT (Berezinskii-Kosterlitz-Thouless): a change in flat, two-dimensional systems in which tiny whirlpools (vortices), bound in pairs, come apart; stiffness jump: the system's resistance to being twisted drops suddenly to zero at the change"
+   },
+   "map": {
+    "x": 0.316,
+    "y": 0.58
+   },
+   "c": 0.9
+  },
+  {
+   "id": "4",
+   "title": "The grade changes",
+   "view": "same track, different pitch",
+   "phase": "the Ashkin-Teller line: the exponents vary continuously along the line",
+   "expert": "ashkin-teller/index.html",
+   "expert_title": "Ashkin-Teller for the Working Mathematician",
+   "also": [],
+   "start": null,
+   "state": "live",
+   "carry": {
+    "picture": "the gradient sign",
+    "name": "Ashkin-Teller, four-spin coupling",
+    "gloss": "Ashkin-Teller: a model of two magnets sharing one lattice; four-spin coupling: the strength of the link between the two, which moves the system along a whole line of critical points whose numbers change as you go"
+   },
+   "map": {
+    "x": 0.408,
+    "y": 0.55
+   },
+   "c": 0.9
+  },
+  {
+   "id": "5",
+   "title": "The workshop",
+   "view": "how the track is surveyed",
+   "phase": "the model zoo and the tools: finite-size scaling, the Binder cumulant",
+   "expert": "diamond-node/critical-lines/index.html",
+   "expert_title": "Critical Lines and Multicritical Points",
+   "also": [
+    "diamond-node/critical-lines/models/index.html",
+    "diamond-node/critical-lines/techniques/index.html"
+   ],
+   "start": null,
+   "state": "live",
+   "carry": {
+    "picture": "the surveyor's tools",
+    "name": "finite-size scaling",
+    "gloss": "finite-size scaling: reading the behaviour of an endless system from simulations of several finite sizes, by watching how what you measure changes with size"
+   },
+   "map": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "c": 0.9
+  },
+  {
+   "id": "6",
+   "title": "The tunnel",
+   "view": "the track jumps",
+   "phase": "where a line turns first-order: coexistence, two states at once",
+   "expert": "diamond-node/jumps-and-critical-lines/index.html",
+   "expert_title": "Jumps, Slowing, and the Line They Sit On",
+   "also": [],
+   "start": null,
+   "state": "live",
+   "carry": {
+    "picture": "the tunnel",
+    "name": "first-order, coexistence",
+    "gloss": "first-order: a change with a jump, like ice melting, instead of a smooth critical change; coexistence: both kinds of behaviour present at once, side by side, at the jump"
+   },
+   "map": {
+    "x": 0.592,
+    "y": 0.44
+   },
+   "c": 0.9
+  },
+  {
+   "id": "7",
+   "title": "Beads on a string",
+   "view": "stops with nothing between them",
+   "phase": "a beaded line: critical points lined up on one line, with real valleys between them; in the fractional quantum Hall effect of a two-dimensional electron gas, the sharp changes between plateaus line up this way, one example among several",
+   "expert": null,
+   "expert_title": null,
+   "also": [],
+   "start": null,
+   "state": "held",
+   "carry": {
+    "picture": "beads",
+    "name": "fractional quantum Hall, filling factor",
+    "gloss": "fractional quantum Hall effect: in a thin sheet of electrons in a strong magnetic field, the resistance sits on flat steps at certain fractions and changes sharply between them; filling factor: the number that says how full the electrons' allowed energy levels are, which picks out the steps"
+   },
+   "map": {
+    "x": 0.684,
+    "y": 0.41
+   },
+   "c": 0.9
+  },
+  {
+   "id": "8",
+   "title": "The window that shows the edge coming",
+   "view": "the window fogs before the edge arrives",
+   "phase": "what an instrument reads near the line: variance, autocorrelation; why a point detector misreads a line",
+   "expert": null,
+   "expert_title": null,
+   "also": [],
+   "start": null,
+   "state": "coming",
+   "carry": {
+    "picture": "the fogging window",
+    "name": "early-warning signal",
+    "gloss": "early-warning signal: a change in how a system jiggles, such as larger and slower swings, that can appear as it nears a tipping point"
+   },
+   "map": {
+    "x": 0.776,
+    "y": 0.43
+   },
+   "c": 0.9
+  },
+  {
+   "id": "9",
+   "title": "The instrument",
+   "view": "what keeps the train on the line",
+   "phase": "the Criticality Compass, a planned instrument set out in a deposited design note; nothing is yet shown to work",
+   "expert": null,
+   "expert_title": null,
+   "also": [],
+   "start": null,
+   "state": "coming",
+   "carry": {
+    "picture": "the compass rose",
+    "name": "Criticality Compass",
+    "gloss": "Criticality Compass: a planned instrument for telling whether measurements sit near a critical point, along a critical line, or neither; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work"
+   },
+   "map": {
+    "x": 0.868,
+    "y": 0.49
+   },
+   "c": 0.9
+  },
+  {
+   "id": "T",
+   "title": "Terminus: the honest ending",
+   "view": "three doors, one not yet opened",
+   "phase": "the three senses of poised, the critics, and the strongest independent support",
+   "expert": "poised-state-critics/index.html",
+   "expert_title": "The Poised State and Its Critics",
+   "also": [
+    "poised-state-chlorophyll/index.html"
+   ],
+   "start": null,
+   "state": "live",
+   "carry": {
+    "picture": "three doors, one unopened",
+    "name": "Poised Realm",
+    "gloss": "Poised Realm: the newest of the three senses of poised, a proposal that some molecules of life sit at the edge between conducting and insulating, where quantum effects can last long enough to matter"
+   },
+   "map": {
+    "x": 0.96,
+    "y": 0.54
+   },
+   "c": 0.9
+  }
+ ],
+ "spurs": [
+  {
+   "line": "space",
+   "line_title": "The view from the window: space physics",
+   "from": "0",
+   "expert": "magnetosphere-tutorial/index.html",
+   "title": "The Magnetosphere: Earth's Invisible Shield"
+  },
+  {
+   "line": "space",
+   "line_title": "The view from the window: space physics",
+   "from": "0",
+   "expert": "magnetospheric-tomography/index.html",
+   "title": "Magnetospheric Tomography"
+  },
+  {
+   "line": "space",
+   "line_title": "The view from the window: space physics",
+   "from": "0",
+   "expert": "ground-magnetometer-arrays/index.html",
+   "title": "Reading the Sky from the Ground"
+  },
+  {
+   "line": "space",
+   "line_title": "The view from the window: space physics",
+   "from": "0",
+   "expert": "joint-inversion/index.html",
+   "title": "Many Instruments, One Sky"
+  },
+  {
+   "line": "topology",
+   "line_title": "Topology and anyons",
+   "from": "7",
+   "expert": "anyon-fusion/index.html",
+   "title": "Fibonacci Anyon Fusion Algebra"
+  },
+  {
+   "line": "topology",
+   "line_title": "Topology and anyons",
+   "from": "7",
+   "expert": "worksheets/index.html",
+   "title": "Anyon Algebra by Hand"
+  },
+  {
+   "line": "topology",
+   "line_title": "Topology and anyons",
+   "from": "7",
+   "expert": "structure-from-topology/index.html",
+   "title": "Structure from Topology"
+  },
+  {
+   "line": "topology",
+   "line_title": "Topology and anyons",
+   "from": "7",
+   "expert": "topology-closure/index.html",
+   "title": "Where the Topology Lives"
+  },
+  {
+   "line": "topology",
+   "line_title": "Topology and anyons",
+   "from": "7",
+   "expert": "letters/topological-protection/index.html",
+   "title": "A Note on Topological Protection"
+  },
+  {
+   "line": "cross-domain",
+   "line_title": "Cross-domain",
+   "from": "0",
+   "expert": "criticality-bridges/index.html",
+   "title": "Criticality Bridges"
+  },
+  {
+   "line": "cross-domain",
+   "line_title": "Cross-domain",
+   "from": "0",
+   "expert": "domain-convergence/index.html",
+   "title": "Domain Convergence"
+  },
+  {
+   "line": "side-window",
+   "line_title": "Station 3's side window",
+   "from": "3",
+   "expert": "kosterlitz-thouless/confined-helium/index.html",
+   "title": "Confined Helium"
+  }
+ ]
 }
