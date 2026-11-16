@@ -214,7 +214,9 @@
     }
     if (p) { last = 0; raf = requestAnimationFrame(frame); } else cancelAnimationFrame(raf);
   }
-  if (playBtn) playBtn.addEventListener('click', function () { setPlaying(!playing); });
+  // when the 3D app runs (js/ride3d.js, loaded first), it owns the play control and the scene
+  var app = document.documentElement.getAttribute('data-ride-app') === '3d';
+  if (playBtn && !app) playBtn.addEventListener('click', function () { setPlaying(!playing); });
 
   var buttons = Array.prototype.slice.call(document.querySelectorAll('.toggle button'));
   function setView(v) {

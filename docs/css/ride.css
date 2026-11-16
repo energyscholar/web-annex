@@ -103,3 +103,21 @@ body[data-view="map"] [data-layer="window"] { display: none; }
 .tip .tt { display: none; position: absolute; left: 0; top: calc(100% + 4px); z-index: 20; width: max-content; max-width: min(320px, 80vw);
   background: #0b1222; border: 1px solid var(--line); border-radius: 8px; padding: 0.5rem 0.7rem; font-size: 0.85rem; font-weight: 400; color: var(--text); line-height: 1.45; }
 .tip:hover .tt, .tip:focus .tt { display: block; }
+
+/* ---- the 3D scene (js/ride3d.js; plan 1554). Everything below applies only when the app runs. ---- */
+html[data-ride-app="3d"] #ride-svg.r3d-gone { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); border: 0; }
+.r3d { position: relative; width: 100%; aspect-ratio: 1000 / 540; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--sky); }
+@media (max-width: 640px) { .r3d { aspect-ratio: 4 / 3.4; } }
+.r3d canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+.r3d canvas:active { cursor: grabbing; }
+.r3d canvas:focus { outline: 3px solid var(--track); outline-offset: -3px; }
+.r3d-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.r3d-sign { position: absolute; left: 0; top: 0; display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap;
+  transform-origin: 0 0; margin: -0.75rem 0 0 -0.6rem; pointer-events: auto; font-size: 0.75rem; line-height: 1.2; color: #0f172a; }
+.r3d-sign .n { display: inline-block; min-width: 1.3rem; text-align: center; padding: 0.05rem 0.25rem; border-radius: 4px; background: #f1f5f9; border: 1px solid #0f172a; font-weight: 700; }
+.r3d-sign.hollow .n { background: #1e293b; color: #f1f5f9; border-style: dashed; border-color: #f1f5f9; }
+.r3d-sign .nm { display: none; padding: 0.05rem 0.4rem; border-radius: 4px; background: rgba(241, 245, 249, 0.92); }
+.r3d-sign.cur .nm, .r3d-sign:hover .nm, .r3d-sign:focus-within .nm { display: inline-block; }
+.r3d-sign.cur .n { background: var(--track); }
+.controls .r3d-reset, .controls .r3d-fs { font: inherit; font-size: 0.9rem; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 0.45rem 0.8rem; cursor: pointer; }
+.controls .r3d-reset:focus-visible, .controls .r3d-fs:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
