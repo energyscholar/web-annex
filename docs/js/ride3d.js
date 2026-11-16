@@ -92,11 +92,16 @@
   }
   var WINDOW_GROUND = [[0, 64, 112, 62], [0.35, 82, 124, 60], [0.6, 112, 104, 72], [0.8, 128, 118, 106],
                        [0.92, 196, 200, 206], [1, 240, 243, 247]];
+  // the map paint's colour scale on C (dark violet at 0, through blue and green, to yellow at 1)
+  var MAP_SCALE = [[0, 68, 1, 84], [0.25, 59, 82, 139], [0.5, 33, 145, 140], [0.75, 94, 201, 98], [1, 253, 231, 37]];
+  var BAND = [251, 191, 36], LEVEL = stations[0].c;
   function rgb(c, s) {
-    return 'rgb(' + Math.round(c[0] * s) + ',' + Math.round(c[1] * s) + ',' + Math.round(c[2] * s) + ')';
+    return 'rgb(' + Math.min(255, Math.round(c[0] * s)) + ',' + Math.min(255, Math.round(c[1] * s)) + ',' +
+      Math.min(255, Math.round(c[2] * s)) + ')';
   }
   var quadV = new Int32Array(NQ * 4), quadShade = new Float64Array(NQ), quadC = new Float64Array(NQ);
-  var paints = { window: new Array(NQ) };
+  var paints = { window: new Array(NQ), map: new Array(NQ) };
+  var contStart = new Int32Array(NQ), contCount = new Int32Array(NQ), contSegs = [];   // contours every 0.1
   for (j = 0, n = 0; j < NY - 1; j++) for (i = 0; i < NX - 1; i++, n++) {
     var a = j * NX + i, b = a + 1, d = a + NX, e = d + 1;
     quadV[4 * n] = a; quadV[4 * n + 1] = b; quadV[4 * n + 2] = e; quadV[4 * n + 3] = d;
@@ -108,7 +113,27 @@
     quadShade[n] = lam;
     quadC[n] = (vc[a] + vc[b] + vc[d] + vc[e]) / 4;
     paints.window[n] = rgb(mix(WINDOW_GROUND, quadC[n]), 0.42 + 0.62 * lam);
+    var mc = mix(MAP_SCALE, quadC[n]);
+    if (Math.abs(quadC[n] - LEVEL) < 0.012) mc = [(mc[0] + 2 * BAND[0]) / 3, (mc[1] + 2 * BAND[1]) / 3, (mc[2] + 2 * BAND[2]) / 3];
+    paints.map[n] = rgb(mc, 0.72 + 0.36 * lam);
+    contStart[n] = contSegs.length / 7;
+    contour([a, b, e, d]);
+    contCount[n] = contSegs.length / 7 - contStart[n];
   }
+  function contour(cv) {                            // marching squares on one quad, levels 0.1 .. 0.9
+    for (var lv = 1; lv <= 9; lv++) {
+      var L0 = lv / 10, pts = [];
+      for (var k = 0; k < 4; k++) {
+        var p = cv[k], q = cv[(k + 1) % 4], cp = vc[p] - L0, cq = vc[q] - L0;
+        if ((cp >= 0) !== (cq >= 0)) {
+          var f = cp / (cp - cq);
+          pts.push(vx[p] + f * (vx[q] - vx[p]), vy[p] + f * (vy[q] - vy[p]), L0 * HZ);
+        }
+      }
+      for (k = 0; k + 5 < pts.length; k += 6) contSegs.push(pts[k], pts[k + 1], pts[k + 2], pts[k + 3], pts[k + 4], pts[k + 5], lv);
+    }
+  }
+  contSegs = new Float64Array(contSegs);
 
   /* ------------------------------------------------------------ the track */
   function lineY(x) {                               // the line through the beads, in station order
@@ -211,9 +236,12 @@
     if (!w || !h) return;
     setBasis(w, h);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    var sky = ctx.createLinearGradient(0, 0, 0, h);
-    sky.addColorStop(0, '#0d2340'); sky.addColorStop(0.6, '#2c5279'); sky.addColorStop(1, '#5b84a8');
-    ctx.fillStyle = sky;
+    if (paint === 'map') ctx.fillStyle = '#0b1222';
+    else {
+      var sky = ctx.createLinearGradient(0, 0, 0, h);
+      sky.addColorStop(0, '#0d2340'); sky.addColorStop(0.6, '#2c5279'); sky.addColorStop(1, '#5b84a8');
+      ctx.fillStyle = sky;
+    }
     ctx.fillRect(0, 0, w, h);
     var k, n, p;
     for (k = 0; k < NV; k++) { p = project(vx[k], vy[k], vz[k]); sx[k] = p.x; sy[k] = p.y; sz[k] = p.z; }
@@ -248,9 +276,11 @@
         grow(q0, mx, my, true); grow(q1, mx, my, false); grow(q2, mx, my, false); grow(q3, mx, my, false);
         ctx.closePath();
         ctx.fillStyle = fills[n]; ctx.fill();
+        if (paint === 'map' && contCount[n]) drawContours(n);
       } else { drawExtra(EXTRA[n - NQ]); ctx.lineWidth = 0.7; }
     }
     drawTrain();
+    if (paint === 'map') drawAxes();
     placeLabels();
     frameTimes.push(performance.now() - t0);
     if (frameTimes.length > 240) frameTimes.shift();
@@ -258,6 +288,41 @@
   function grow(v, mx, my, first) {
     var dx = sx[v] - mx, dy = sy[v] - my, l = Math.sqrt(dx * dx + dy * dy) || 1, g = 0.6 / l;
     if (first) ctx.moveTo(sx[v] + dx * g, sy[v] + dy * g); else ctx.lineTo(sx[v] + dx * g, sy[v] + dy * g);
+  }
+  function drawContours(n) {
+    var k0 = contStart[n], k1 = k0 + contCount[n], k, o, p, x0, y0, band = false;
+    ctx.beginPath();
+    for (k = k0; k < k1; k++) {
+      o = 7 * k;
+      if (contSegs[o + 6] === 9) { band = true; continue; }
+      p = project(contSegs[o], contSegs[o + 1], contSegs[o + 2]); x0 = p.x; y0 = p.y;
+      p = project(contSegs[o + 3], contSegs[o + 4], contSegs[o + 5]);
+      ctx.moveTo(x0, y0); ctx.lineTo(p.x, p.y);
+    }
+    ctx.strokeStyle = 'rgba(8, 12, 24, 0.55)'; ctx.lineWidth = 0.8; ctx.stroke();
+    if (!band) return;
+    ctx.beginPath();
+    for (k = k0; k < k1; k++) {
+      o = 7 * k;
+      if (contSegs[o + 6] !== 9) continue;
+      p = project(contSegs[o], contSegs[o + 1], contSegs[o + 2]); x0 = p.x; y0 = p.y;
+      p = project(contSegs[o + 3], contSegs[o + 4], contSegs[o + 5]);
+      ctx.moveTo(x0, y0); ctx.lineTo(p.x, p.y);
+    }
+    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.6; ctx.stroke();
+  }
+  function drawAxes() {
+    var o = [WX(0), WY(0), 0];
+    seg(o, [WX(1), WY(0), 0], '#cbd5e1', 1.5);
+    seg(o, [WX(0), WY(1), 0], '#cbd5e1', 1.5);
+    seg([WX(0), WY(1), 0], [WX(0), WY(1), HZ], '#cbd5e1', 1.5);
+    ctx.fillStyle = '#cbd5e1'; ctx.font = '12px system-ui, sans-serif';
+    for (var t = 0; t <= 1; t += 0.5) {
+      var p = project(WX(0), WY(1), t * HZ);
+      if (p.z < NEAR) continue;
+      ctx.beginPath(); ctx.moveTo(p.x - 4, p.y); ctx.lineTo(p.x + 4, p.y); ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.fillText(t === 0.5 ? '0.5' : String(t), p.x + 7, p.y + 4);
+    }
   }
   function seg(a, b, color, width) {
     var p = project(a[0], a[1], a[2]), x0 = p.x, y0 = p.y, z0 = p.z;
@@ -308,7 +373,66 @@
     return el;
   });
   var current = 0;
+  function axisInfo(k) {                            // the axis legend the builder writes (dl.axes)
+    var t = document.querySelector('#axis-' + k + ' .tip'), name = k, meaning = '';
+    if (t && t.firstChild) name = t.firstChild.textContent.trim();
+    var tt = t ? t.querySelector('.tt') : null;
+    if (tt) meaning = tt.textContent.trim().replace(name + '; ', '');
+    return { name: name, meaning: meaning };
+  }
+  var tip = document.createElement('div');
+  tip.id = 'r3d-tip'; tip.className = 'r3d-tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true;
+  function showTip(anchor, src) {
+    tip.innerHTML = src.innerHTML;
+    tip.hidden = false;
+    var r = anchor.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+    var x = Math.max(4, Math.min(window.innerWidth - tw - 4, r.left));
+    var y = r.bottom + 6;
+    if (y + th > window.innerHeight - 4) y = Math.max(4, r.top - th - 6);
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  function hideTip() { tip.hidden = true; }
+  function withTip(el, src) {                       // a two-way tooltip: on hover and on keyboard focus
+    el.addEventListener('mouseenter', function () { showTip(el, src); });
+    el.addEventListener('mouseleave', function () { if (document.activeElement !== el) hideTip(); });
+    el.addEventListener('focus', function () { showTip(el, src); });
+    el.addEventListener('blur', hideTip);
+    el.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') hideTip(); });
+  }
+  var AXES = [{ k: 'x', at: [0.5, -0.07, 0] }, { k: 'y', at: [-0.07, 0.5, 0] }, { k: 'z', at: [0, 1, 1.12] }];
+  var axisLabels = AXES.map(function (A) {
+    var info = axisInfo(A.k), el = document.createElement('span');
+    el.className = 'r3d-axis'; el.tabIndex = 0;
+    el.textContent = info.name;
+    var d = document.createElement('span');
+    d.className = 'r3d-desc'; d.id = 'r3d-axis-' + A.k;
+    var b1 = document.createElement('strong'); b1.textContent = 'What: ';
+    var b2 = document.createElement('strong'); b2.textContent = 'How to read: ';
+    var l1 = document.createElement('span'); l1.className = 'r3d-tl'; l1.appendChild(b1); l1.appendChild(document.createTextNode(info.name));
+    var l2 = document.createElement('span'); l2.className = 'r3d-tl'; l2.appendChild(b2); l2.appendChild(document.createTextNode(info.meaning));
+    d.appendChild(l1); d.appendChild(l2);
+    el.setAttribute('aria-describedby', d.id);
+    withTip(el, d);
+    layer.appendChild(el); layer.appendChild(d);
+    return { el: el, at: A.at, w: 0, h: 0 };
+  });
+  function placeAxes() {
+    var on = paint === 'map';
+    for (var k = 0; k < axisLabels.length; k++) {
+      var A = axisLabels[k], el = A.el;
+      el.style.display = on ? '' : 'none';
+      if (!on) continue;
+      if (!A.w) { A.w = el.offsetWidth; A.h = el.offsetHeight; }
+      var p = project(WX(A.at[0]), WY(A.at[1]), A.at[2] * HZ);
+      var x = p.x - A.w / 2, y = p.y - A.h / 2;
+      if (p.z < NEAR) { x = 4; y = 4 + k * (A.h + 4); }
+      // keep the label inside the scene's box whatever the camera does
+      x = Math.max(4, Math.min(W_PX - A.w - 4, x)); y = Math.max(4, Math.min(H_PX - A.h - 4, y));
+      el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)';
+    }
+  }
   function placeLabels() {
+    placeAxes();
     for (var k = 0; k < stations.length; k++) {
       var s = stations[k], p = project(WX(s.x), WY(s.y), HZ * 1.16), el = signs[k];
       var vis = p.z > NEAR && p.x > -40 && p.x < W_PX + 40 && p.y > -20 && p.y < H_PX + 20;
@@ -412,6 +536,17 @@
   }
   if (playBtn) playBtn.addEventListener('click', function () { setPlaying(!playing); });
 
+  /* ------------------------------------------------------------ the two paints */
+  var viewButtons = Array.prototype.slice.call(document.querySelectorAll('.toggle button'));
+  function setPaint(v) {                             // switches only the paint; the camera stays put
+    paint = v === 'map' ? 'map' : 'window';
+    document.body.setAttribute('data-view', paint);
+    viewButtons.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-view') === paint ? 'true' : 'false'); });
+    if (paint === 'window') hideTip();
+    requestRender();
+  }
+  viewButtons.forEach(function (b) { b.addEventListener('click', function () { setPaint(b.getAttribute('data-view')); }); });
+
   /* ------------------------------------------------------------ controls */
   function button(label, cls) {
     var b = document.createElement('button');
@@ -446,6 +581,8 @@
   canvas.setAttribute('aria-label', 'A landscape you can turn: one peak for each station, lined up along one line with valleys between them, and a level monorail that runs through each summit in a tunnel and crosses each valley on a bridge.');
   host.appendChild(canvas);
   host.appendChild(layer);
+  document.body.appendChild(tip);
+  window.addEventListener('scroll', hideTip, true);
   host.hidden = false;
   focusOn(stations[current]);
   if (window.ResizeObserver) new ResizeObserver(function () { resize(); }).observe(host);
@@ -456,7 +593,7 @@
     C: C,
     beads: stations.map(function (s) { return { id: s.id, x: s.x, y: s.y }; }),
     meshMin: meshMin, meshMax: meshMax, quadCount: NQ, grid: [NX, NY], frameTimes: frameTimes,
-    rotate: function (a, b) { rotate(a, b); }, renderNow: render,
+    rotate: function (a, b) { rotate(a, b); }, renderNow: render, paint: function () { return paint; },
     camera: function () { return { yaw: cam.yaw, pitch: cam.pitch, dist: cam.dist, tx: cam.tx, ty: cam.ty }; }
   };
 })();

@@ -225,7 +225,8 @@
     buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-view') === v ? 'true' : 'false'); });
     render();
   }
-  buttons.forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view')); }); });
-  window.addEventListener('hashchange', function () { if (/^#station-/.test(window.location.hash) && view !== 'window') setView('window'); });
+  // the 3D app owns the toggle when it runs. A #station- hash change keeps the reader's view (window or
+  // map); only the first load uses the default view, window.
+  if (!app) buttons.forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view')); }); });
   setView('window');
 })();

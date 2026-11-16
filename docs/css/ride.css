@@ -121,3 +121,13 @@ html[data-ride-app="3d"] #ride-svg.r3d-gone { position: absolute; width: 1px; he
 .r3d-sign.cur .n { background: var(--track); }
 .controls .r3d-reset, .controls .r3d-fs { font: inherit; font-size: 0.9rem; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 0.45rem 0.8rem; cursor: pointer; }
 .controls .r3d-reset:focus-visible, .controls .r3d-fs:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
+.r3d-axis { position: absolute; left: 0; top: 0; pointer-events: auto; cursor: help; white-space: nowrap; font-size: 0.78rem; line-height: 1.3;
+  color: #e2e8f0; background: rgba(11, 18, 34, 0.82); border: 1px solid #475569; border-bottom-style: dotted; border-radius: 4px; padding: 0.05rem 0.4rem; }
+.r3d-axis:focus-visible, .r3d-axis:focus { outline: 2px solid var(--track); outline-offset: 1px; }
+.r3d-desc { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+.r3d-tip { position: fixed; z-index: 50; max-width: min(320px, calc(100vw - 8px)); background: #0b1222; border: 1px solid var(--line); border-radius: 8px;
+  padding: 0.5rem 0.7rem; font-size: 0.85rem; line-height: 1.45; color: var(--text); pointer-events: none; }
+.r3d-tip[hidden] { display: none; }
+.r3d-tip .r3d-tl { display: block; }
+.r3d-tip .r3d-tl + .r3d-tl { margin-top: 0.25rem; }
+.r3d-tip strong { color: var(--heading); }
