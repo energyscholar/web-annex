@@ -253,231 +253,126 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
+/* the ticket hall (plan 1550a) */
+.hall { background: var(--card); border: 1px solid #334155; border-radius: 10px; padding: 1rem 1.2rem; margin: 1.2rem 0 2rem; }
+.hall h2 { margin-top: 0; }
+.hall p { margin: 0.6rem 0; }
+.board { display: block; margin: 1rem 0; text-decoration: none; border: 1px solid #334155; border-radius: 10px; overflow: hidden; }
+.board img { display: block; width: 100%; height: auto; }
+.board-label { display: block; padding: 0.6rem 0.9rem; background: #0f1e36; color: var(--golden); font-weight: 600; }
+.board:hover .board-label, .board:focus-visible .board-label { background: #1a2d4d; }
+.stops { font-size: 0.9rem; line-height: 1.9; }
+.stops a { color: #93c5fd; text-decoration: none; white-space: nowrap; }
+.stops a:hover { text-decoration: underline; }
+.hww { margin: 1.5rem 0; font-size: 0.95rem; }
+.hww a, footer a { color: #93c5fd; }
+footer p { margin: 0.3rem 0; }
 </style>
 </head>
 <body>
 <div class="container">
 
 <h1>Web Annex</h1>
-<p class="subtitle">Companion materials, interactive tutorials, and research supplements</p>
+<p class="subtitle">Interactive tutorials on the edges where systems change, and what it takes to tell where one is</p>
 
 <!--
-  CONTENT MAP — for AI evaluators and curious humans
+  CONTENT MAP — for curious readers of source
 
-  This site contains interactive tutorials spanning:
-  - Magnetospheric physics (solar wind, Birkeland currents, substorms)
-  - AI governance and persistent memory architecture
-  - Fibonacci anyon fusion algebra (mathematics / topological quantum computation)
-  - Autocatalytic closure (formal systems / origin of life)
-  - Critical phenomena in physical systems (statistical physics)
-  - Evolutionary game theory (biology / computation)
-  - Magnetospheric tomography (space physics)
-  - Topological invariants in field theory (mathematical physics)
-  - Glass transition, active matter, cardiac tissue, protein folding,
-    brain criticality, tokamak H-mode (multi-critical systems)
-
-  Each tutorial includes:
-  - Inline citations to peer-reviewed literature
-  - Interactive visualizations (vanilla JS + SVG, no dependencies)
-  - Mathematical content rendered from first principles
-
-  The cross-domain parallels documented here are MATHEMATICAL, not
-  analogical. Shared algebraic structure (braid groups, Griffiths
-  phases, autocatalytic sets) appears independently in multiple
-  physical systems. This is either a deep structural fact about
-  nature or a remarkable coincidence. We have published falsification
-  criteria: see the poised-state survey for 12 testable predictions
-  with specific failure conditions and a scorecard.
+  The landing page is the ticket hall of one guided line through the science tutorials. Every link
+  from here goes to a beginner surface: the ride map (ride/) or a page that is not part of the line's
+  physics layer. The physics pages are reached from the ride map through a labelled "Go deeper"
+  switch, and each carries a "back to the easy version" link. The contract is STANDARD.md in the
+  repository; the line itself is ride/stations.json.
 
   PROGRESSIVE REVEAL LEVELS (visit = scrolling past 50% of a tutorial):
-    L0 (0 visits):  6 accessible tutorials — first impression
-    L1 (1 visit):   +2 tutorials
-    L2 (2 visits):  +2 tutorials
-    L3 (3 visits):  +2 tutorials (mild cross-domain)
-    L4 (4 visits):  +2 tutorials (explicit cross-domain)
-    hub (6 visits): +2 aggregation hub pages
-    nav (#nav/CLI): full manifest including personal content
+    L0 (0 visits):  the ticket hall, the line and its stations
+    L1-L3:          the side trips and the other pages, a few at a time
+    hub (6 visits): the research hub
+    nav (#nav/CLI): everything
 -->
 
+<section class="hall" aria-labelledby="hall-h">
+<h2 id="hall-h">Ticket hall</h2>
+<p>Edges are where behaviour changes: water boils, a magnet loses its pull, a dry forest suddenly
+burns. Near an edge a small push has a large effect, and unrelated systems start to behave alike.
+Some systems, people say, are <em>poised</em>: they seem to sit on their edge rather than fall off
+it. This site is one line of stations that shows what an edge is, how an edge can be a whole line,
+how you would tell, and what instrument it would take to check.</p>
+<a class="board" href="ride/">
+  <img src="art/thumbnails/ride.svg" alt="The ride: a monorail across a row of hills, one station on each hilltop" width="600" height="170">
+  <span class="board-label">Board here: the ride, one line through the edge &rarr;</span>
+</a>
+<p class="stops">Stations:
+<a href="ride/#station-0">0 ticket hall</a> &middot;
+<a href="ride/#station-1">1 the first edge</a> &middot;
+<a href="ride/#station-2">2 hall of mirrors</a> &middot;
+<a href="ride/#station-3">3 an edge with no cliff</a> &middot;
+<a href="ride/#station-4">4 the grade changes</a> &middot;
+<a href="ride/#station-5">5 the workshop</a> &middot;
+<a href="ride/#station-6">6 the tunnel</a> &middot;
+<a href="ride/#station-7">7 beads on a string</a> &middot;
+<a href="ride/#station-8">8 the window that shows the edge coming</a> &middot;
+<a href="ride/#station-9">9 the instrument</a> &middot;
+<a href="ride/#station-T">T the honest ending</a></p>
+</section>
+
 <!-- ============================================================ -->
-<h2 data-level="0">Tutorials</h2>
+<h2 data-level="1">Side trips</h2>
 <!-- ============================================================ -->
 
 <div class="card-grid">
 
-<!-- === L0: Seed set (always visible) — easiest, standalone === -->
-
-<a class="card" data-level="0" href="diamond-node/multi-critical/00-what-is-multicriticality.html">
-  <div class="card-thumb"><img src="art/thumbnails/multicriticality.png" alt="" loading="lazy"></div>
-  <div class="card-title">What Is Multicriticality? <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">What happens when tipping points interact. Two coupled failure modes pull the safe operating boundary inward, so a system can fail before any single parameter reaches its threshold. Four live demonstrations.</div>
-</a>
-
-<a class="card" data-level="0" href="magnetosphere-tutorial/">
+<a class="card" data-level="1" href="ride/#spur-space">
   <div class="card-thumb"><img src="art/thumbnails/magnetosphere-tutorial.svg" alt="" loading="lazy"></div>
-  <div class="card-title">The Magnetosphere <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Animated introduction to Earth's invisible shield. Solar wind, magnetic field lines, <span class="tip" tabindex="0">Birkeland currents<span class="tt">Electric currents that flow along Earth's magnetic field lines between the magnetosphere and ionosphere. They carry energy from the solar wind down to the aurora. Discovered by Kristian Birkeland in 1908, confirmed by satellite in the 1960s.</span></span>, reconnection, substorms, and why it matters for infrastructure. Seven scroll-triggered animated scenes.</div>
+  <div class="card-title">The view from the window: space physics <span class="card-tag tag-tutorial">Side trip</span></div>
+  <div class="card-desc">Earth's magnetosphere, the <span class="tip" tabindex="0">Birkeland currents<span class="tt">Electric currents that flow along Earth's magnetic field lines between the magnetosphere and ionosphere. They carry energy from the solar wind down to the aurora.</span></span> that light the aurora, and how magnetometers on the ground and in orbit are read together. Four pages, leaving from the ticket hall.</div>
 </a>
 
-<a class="card" data-level="0" href="miller-tutorial/">
-  <div class="card-thumb"><img src="art/thumbnails/miller-tutorial.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Coevolving Machines and the Social Threshold <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Interactive evolutionary game theory simulation based on John H. Miller's research. Explores how simple adaptive agents produce complex cooperative dynamics, <span class="tip" tabindex="0">phase transitions<span class="tt">Abrupt qualitative changes in a system's behavior at a critical parameter value. Water freezing, magnets losing magnetism, ecosystems collapsing — same mathematical structure, different substrates.</span></span> in social systems, and the emergence of collective behavior from individual strategy.</div>
-  <div class="card-meta">Includes live simulation engine, replication studies, and test suite</div>
+<a class="card" data-level="1" href="ride/#spur-side-window">
+  <div class="card-thumb"><img src="art/thumbnails/kosterlitz-thouless.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Station 3's side window <span class="card-tag tag-tutorial">Side trip</span></div>
+  <div class="card-desc">Superfluid helium films in confined spaces, where the edge with no cliff is measured in the laboratory.</div>
 </a>
+
+<a class="card" data-level="2" href="ride/#spur-topology">
+  <div class="card-thumb"><img src="art/thumbnails/anyon-fusion.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Topology and anyons <span class="card-tag tag-tutorial">Side trip</span></div>
+  <div class="card-desc"><span class="tip" tabindex="0">Anyons<span class="tt">Particles possible only in two dimensions, whose swaps are tracked by braids rather than by a plus or minus sign. They appear in the fractional quantum Hall effect.</span></span>, fusion rules worked by hand, and why topology protects information. Five pages, leaving from station 7.</div>
+</a>
+
+<a class="card" data-level="3" href="ride/#spur-cross-domain">
+  <div class="card-thumb"><img src="art/thumbnails/domain-convergence.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Cross-domain <span class="card-tag tag-tutorial">Side trip</span></div>
+  <div class="card-desc">Physical systems where <span class="tip" tabindex="0">critical phenomena<span class="tt">The behaviour of systems near a phase transition: correlations extend across the whole system and fluctuations grow without bound.</span></span> appear in more than one field. Two pages, leaving from the ticket hall.</div>
+</a>
+
+</div>
+
+<!-- ============================================================ -->
+<h2 data-level="0">Other tutorials</h2>
+<!-- ============================================================ -->
+
+<div class="card-grid">
 
 <a class="card" data-level="0" href="acs-closure-v2/">
   <div class="card-thumb"><img src="art/thumbnails/acs-closure-v2.svg" alt="" loading="lazy"></div>
   <div class="card-title">Autocatalytic Closure for the Working Mathematician <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">Kauffman's <span class="tip" tabindex="0">autocatalytic sets<span class="tt">Self-sustaining networks where every component is produced by reactions within the network itself. Nothing external is needed except a food set. The mathematical framework for self-organization across chemistry, biology, and computation.</span></span> presented as formal mathematics. Covers RAF theory (reflexively autocatalytic, food-generated sets), closure properties, the percolation phase transition in random catalytic networks, and the connection to origin-of-life chemistry. Revised edition.</div>
+  <div class="card-desc">Kauffman's <span class="tip" tabindex="0">autocatalytic sets<span class="tt">Self-sustaining networks where every component is produced by reactions within the network itself. Nothing external is needed except a food set.</span></span> presented as formal mathematics: RAF theory, closure properties, the percolation phase transition in random catalytic networks, and the connection to origin-of-life chemistry.</div>
 </a>
 
-<a class="card" data-level="0" href="renormalization-group/">
-  <div class="card-thumb"><img src="art/thumbnails/renormalization-group.svg" alt="" loading="lazy"></div>
-  <div class="card-title">The Renormalization Group for the Working Mathematician <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">Why a magnet, a fluid and a percolating network share the same numbers. Kadanoff blocking, flow in coupling space, <span class="tip" tabindex="0">fixed points<span class="tt">A set of couplings unchanged by coarse-graining — a theory that looks identical at every scale. Critical points are the unstable ones, which is why criticality has to be tuned for.</span></span> and why <span class="tip" tabindex="0">universality<span class="tt">Different microscopic systems sharing identical critical exponents. A consequence of irrelevant directions contracting under the flow — the microscopic detail is forgotten, and only dimension, symmetry and interaction range survive.</span></span> is a theorem rather than a coincidence. Worked examples in 1D Ising decimation and the epsilon-expansion, a survey of the eight flavours of RG, and a clear statement of the four places the method does not reach.</div>
-  <div class="card-meta">Eight animated figures &middot; ten cited sources &middot; ends on where the RG stops</div>
-</a>
-
-<a class="card" data-level="0" href="kosterlitz-thouless/">
-  <div class="card-thumb"><img src="art/thumbnails/kosterlitz-thouless.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Kosterlitz&ndash;Thouless for the Working Mathematician <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">A phase transition with no order parameter and no broken symmetry &mdash; the one a theorem says should not exist. Mermin&ndash;Wagner, vortices and the two-line argument, the Coulomb gas, the Kosterlitz flow with its <span class="tip" tabindex="0">line of fixed points<span class="tt">Unlike an ordinary critical point, the entire low-temperature phase is critical, with a continuously varying exponent. Criticality here needs no tuning — it has codimension zero.</span></span>, the universal jump, the log-slow finite-size approach that fools a power-law fit, two-step melting, and why a topological transition is not a topologically ordered phase.</div>
-  <div class="card-meta">Live XY Monte Carlo &middot; equation traces &middot; quizzes and a retakeable final test &middot; part 1 of the critical-lines series</div>
-</a>
-
-<a class="card" data-level="0" href="ashkin-teller/">
-  <div class="card-thumb"><img src="art/thumbnails/ashkin-teller.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Ashkin&ndash;Teller for the Working Mathematician <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">Two independent critical Ising copies, then one four-spin coupling of exactly the right kind: the critical point becomes a whole line of critical points. Dimension counting, exact marginality, the exact phase diagram with exponents read off as you drag, weak universality, and what a line with sliding and pinned exponents means for anyone reading variance indicators or fitted exponents off data.</div>
-  <div class="card-meta">Draggable phase diagram &middot; live two-layer cluster Monte Carlo &middot; every number sourced</div>
-</a>
-
-<a class="card" data-level="0" href="structure-from-topology/">
-  <div class="card-thumb"><img src="art/thumbnails/structure-from-topology.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Structure from Topology <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">A systems-thinking worked example: how topological invariants constrain and predict the structure of physical systems. From abstract invariants to concrete observable consequences.</div>
-</a>
-
-<a class="card" data-level="nav" href="criticality-math-kernel/">
-  <div class="card-thumb"><img src="art/thumbnails/criticality-math-kernel.svg" alt="" loading="lazy"></div>
-  <div class="card-title">The ABR Kernel <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">The ABR kernel by Robin Macomber (Origin), Kernel V9 development branch: arithmetic on observed arrows and nothing else; this page offers it as a shared footing for the question criticality fields ask: how far do correlations extend? Tried live on a three-point chain, and a side-by-side look at the criticality measures that six to twelve fields developed, by the preprint’s count. Two screens; the mathematics waits in accordions.</div>
-</a>
-
-<a class="card" data-level="0" href="topology-closure/">
-  <div class="card-thumb"><img src="art/thumbnails/topology-closure.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Where the Topology Lives <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">How topological order emerges in two-dimensional systems. Covers the quantum Hall effect, anyonic statistics, braiding, and why topology provides error protection. Bridges abstract mathematics to the physical systems where these phenomena appear.</div>
-</a>
-
-<a class="card" data-level="0" href="ground-magnetometer-arrays/">
-  <div class="card-thumb"><img src="art/thumbnails/ground-magnetometer-arrays.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Reading the Sky from the Ground <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">How a ground magnetometer array sees ionospheric currents: Hall and Pedersen currents, Fukushima&rsquo;s theorem and the 90&deg; rotation, induction in the ground and sea, and field-line resonances whose phase slides with latitude. Then eleven effects that make an array look as if something moves, and the estimators that test for motion &mdash; the delay-and-sum beam, f-k analysis, Capon beamforming &mdash; run live on a planted disturbance, with sensitivity sweeps and shuffled-array nulls.</div>
-  <div class="card-meta">Nine tabs &middot; drag an electrojet &middot; live beam, f-k and Capon maps &middot; 46 references, every DOI resolved</div>
-</a>
-
-<a class="card" data-level="0" href="joint-inversion/">
-  <div class="card-thumb"><img src="art/thumbnails/joint-inversion.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Many Instruments, One Sky <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">How ground magnetometers, a satellite pass and a radar are combined into one estimate of the ionospheric current: forward models, spherical elementary current systems, damped least squares and priors, the resolution matrix, and a joint inversion where each instrument fixes what the others cannot see. Then how to check an inversion &mdash; planted truth, residuals, held-out stations &mdash; and two hours of real IMAGE data inverted live.</div>
-  <div class="card-meta">Nine tabs &middot; toggle instruments &middot; live resolution matrices &middot; real 2008 data</div>
-</a>
-
-<!-- === L1: First return (+2) — still accessible === -->
-
-<a class="card" data-level="1" href="train-the-trainer/">
-  <div class="card-thumb"><img src="art/thumbnails/train-the-trainer.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Claude Code Train-the-Trainer <span class="card-tag tag-tutorial">Program</span></div>
-  <div class="card-desc">Five-day intensive hands-on workshop, cohorts of 10. Your people become expert-level Claude Code trainers. They train everyone else. Permanent capability, not a recurring dependency.</div>
-</a>
-
-<a class="card" data-level="1" href="agent-memory/">
-  <div class="card-thumb"><img src="art/thumbnails/agent-memory.svg" alt="" loading="lazy"></div>
-  <div class="card-title">What Breaks When You Run Agent Memory <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">Field notes from operating a persistent-memory agent: the seven memory systems, six real failure modes &mdash; from a three-week silent data loss to a search-index compartmentation leak &mdash; and why governance is the third pillar of an effective agent. An incident log, not a taxonomy.</div>
-</a>
-
-<a class="card" data-level="1" href="ai-governance/">
-  <div class="card-thumb"><img src="art/thumbnails/ai-governance.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Governing Your AI <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Memory is solved. Governance isn't. How ungoverned memory produces sycophancy, context leakage, and correction decay &mdash; and the three architectural layers that make it safe. Includes failure matrix and a practical build path from 15 minutes to full system.</div>
-</a>
-
-<a class="card" data-level="1" href="physical-systems-chart/">
-  <div class="card-thumb"><img src="art/thumbnails/physical-systems-chart.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Physical Systems &times; Feature Chart <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Interactive working document mapping ten physical systems against five feature clusters. Clickable matrix, coverage diagram, endpoint characterization, gap analysis, and research targets.</div>
-</a>
-
-<a class="card" data-level="1" href="acs-closure/">
-  <div class="card-title">Autocatalytic Closure (Original) <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">First edition of the autocatalytic closure tutorial. Superseded by the revised v2, retained for reference.</div>
-</a>
-
-<!-- === L2: Second return (+2) — harder === -->
-
-<a class="card" data-level="2" href="anyon-fusion/">
-  <div class="card-thumb"><img src="art/thumbnails/anyon-fusion.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Fibonacci Anyon Fusion Algebra <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Animated introduction to the Fibonacci anyon model. Covers fusion rules (&tau;&times;&tau; = 1+&tau;), the Fibonacci dimension sequence, fusion trees, braiding as quantum gates, and the connection to <span class="tip" tabindex="0">topological quantum computation<span class="tt">A model of quantum computing where information is encoded in the braiding patterns of quasiparticles called anyons. Because the braid's topology is a global property, local perturbations cannot corrupt the computation — fault tolerance is built into the physics, not bolted on.</span></span>. Eight sections with replay-able SVG animations.</div>
-</a>
-
-<a class="card" data-level="2" href="worksheets/">
-  <div class="card-thumb"><img src="art/thumbnails/worksheets.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Anyon Algebra by Hand <span class="card-tag tag-tutorial">Worksheet</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Eight worksheets for computing the same standard material the tutorial above introduces, rather than reading it. Three arithmetic-first labs (the golden ratio exactly, matrix multiplication one cell at a time, the Verlinde formula by hand), a five-part paper course with gates you have to pass, and four tutorials on the Fibonacci / Yang&ndash;Lee pair. Predict a number, then check it; your ticks and answers stay in your browser. Nothing here is new mathematics &mdash; it is standard topological quantum computation, roughly 1984&ndash;2009.</div>
-</a>
-
-<a class="card" data-level="2" href="poised-state-survey/">
-  <div class="card-thumb"><img src="art/thumbnails/poised-state-survey.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Shadows of the Poised State <span class="card-tag tag-research">Research</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Survey of twelve candidate systems scored against a five-feature framework. Six cross-cutting patterns, twelve falsifiable predictions with specific failure conditions, and a scorecard.</div>
-</a>
-
-<a class="card" data-level="2" href="poised-state-critics/">
-  <div class="card-thumb"><img src="art/thumbnails/poised-state-critics.svg" alt="" loading="lazy"></div>
-  <div class="card-title">The Poised State and Its Critics <span class="card-tag tag-research">Research</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Has anyone seriously studied the poised state? A guided reading path through thirty years of claim and rebuttal, with an interactive latent-variable machine showing how one hidden driver manufactures a power law from units that are not coupled at all.</div>
-</a>
-
-<a class="card" data-level="2" href="poised-state-chlorophyll/">
-  <div class="card-thumb"><img src="art/thumbnails/poised-state-chlorophyll.svg" alt="" loading="lazy"></div>
-  <div class="card-title">The Poised Antenna <span class="card-tag tag-research">Research</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">What chlorophyll actually teaches. The claim that quantum coherence makes photosynthesis efficient, the decade-long correction, and what survives: an antenna whose energy scales and timescales are matched, which exploits dissipation. With an occupation-number explorer and a ladder of timescales.</div>
-</a>
-
-<!-- === L3: Third return (+2) — domain-specific === -->
-
-<a class="card" data-level="3" href="magnetospheric-tomography/">
-  <div class="card-thumb"><img src="art/thumbnails/magnetospheric-tomography.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Four-Way Satellite Convergence <span class="card-tag tag-tutorial">Tutorial</span></div>
-  <div class="card-desc">SKT/STF boundary diagnosis using four independent satellite datasets. Cross-validation of magnetospheric tomography techniques with RBSP, Swarm, and IMAGE data.</div>
-</a>
-
-<a class="card" data-level="3" href="criticality-bridges/">
-  <div class="card-thumb"><img src="art/thumbnails/criticality-bridges.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Criticality Bridges &mdash; Physical Systems <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">Six concrete physical systems where <span class="tip" tabindex="0">critical phenomena<span class="tt">The behavior of physical systems near a phase transition — where correlations extend across the entire system, fluctuations diverge, and the system becomes scale-invariant. The same mathematical structure appears in magnets, fluids, neural networks, and ecosystems.</span></span> demonstrably couple scientific domains. Gene regulatory networks, BZ reaction, cortical neural tissue, immune system, magnetic skyrmions, and Earth's magnetosphere.</div>
-</a>
-
-<!-- === L4: Fourth return (+2) — explicit cross-domain + provocative === -->
-
-<a class="card" data-level="4" href="domain-convergence/">
-  <div class="card-thumb"><img src="art/thumbnails/domain-convergence.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Domain Convergence &mdash; An Animated Introduction <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
-  <div class="card-desc">How eleven scientific fields independently discovered different faces of the same physical phenomenon. Covers domain clusters, seven bridges, <span class="tip" tabindex="0">scale invariance<span class="tt">A system looks the same at every magnification — zoom in or out and the statistical structure is unchanged. Near a critical point, this self-similarity emerges spontaneously and connects microscopic physics to macroscopic behavior. It is the mechanism that makes universality possible.</span></span> as stitching mechanism, the AC bridge structural identity, and the emergent property stack.</div>
-</a>
-
-<a class="card" data-level="4" href="search-suppression/">
-  <div class="card-thumb"><img src="art/thumbnails/search-suppression.svg" alt="" loading="lazy"></div>
-  <div class="card-title">Content-Selective Search De-Indexing <span class="card-tag tag-research">Report</span></div>
-  <div class="card-desc">Reproducibility report documenting content-selective removal of specific pages from search engine indices. Four test cases and two controls across Cryptome, Substack, and Slashdot, with methodology for independent verification.</div>
-  <div class="card-meta">Posted June 2026</div>
+<a class="card" data-level="1" href="miller-tutorial/">
+  <div class="card-thumb"><img src="art/thumbnails/miller-tutorial.svg" alt="" loading="lazy"></div>
+  <div class="card-title">Coevolving Machines and the Social Threshold <span class="card-tag tag-tutorial">Tutorial</span> <span class="card-tag tag-interactive">Interactive</span></div>
+  <div class="card-desc">An evolutionary game theory simulation based on John H. Miller's research: how simple adaptive agents produce cooperative dynamics and <span class="tip" tabindex="0">phase transitions<span class="tt">Abrupt qualitative changes in a system's behaviour at a critical parameter value.</span></span> in social systems.</div>
 </a>
 
 </div>
+
+<p class="hww" data-level="1"><strong>How we work:</strong>
+<a href="train-the-trainer/">a train-the-trainer program</a> &middot;
+<a href="agent-memory/">what breaks when you run agent memory</a> &middot;
+<a href="ai-governance/">governing your AI</a><span data-level="nav"> &middot;
+<a href="criticality-math-kernel/">the ABR kernel</a></span></p>
 
 <!-- ============================================================ -->
 <h2 data-level="hub">Research</h2>
@@ -499,37 +394,13 @@ footer {
 
 </div>
 
-<!-- ============================================================ -->
-<h2 data-level="nav">Letters</h2>
-<!-- ============================================================ -->
-
-<div class="card-grid single">
-
-<a class="card" data-level="nav" href="letters/topological-protection/">
-  <div class="card-title">A Note on Topological Protection</div>
-  <div class="card-desc">Technical correspondence on topological protection mechanisms.</div>
-</a>
-
-</div>
-
 <!-- Traveller RPG content is UNLISTED. Direct URL only; robots-disallowed.
      Do not add cards or search entries here. -->
 
-<!-- ============================================================ -->
-<h2 data-level="nav">Design</h2>
-<!-- ============================================================ -->
-
-<div class="card-grid single">
-
-<a class="card" data-level="nav" href="vtt-mockups/">
-  <div class="card-title">Starship Operations VTT &mdash; Shared Display Mockup <span class="card-tag tag-design">Mockup</span></div>
-  <div class="card-desc">UI mockup for the Starship Operations virtual tabletop shared display. Grid layout with ship status, navigation, and crew panels.</div>
-</a>
-
-</div>
-
 <footer>
-  Web Annex &middot; Bruce Stephenson &middot; <a href="https://orcid.org/0009-0005-6842-6686">ORCID 0009-0005-6842-6686</a>
+  <p>Also here: <a href="search-suppression/">content-selective search de-indexing, a reproducibility report</a> &middot;
+  <a href="vtt-mockups/">a shared-display design mockup</a></p>
+  <p>Web Annex &middot; Bruce Stephenson &middot; <a href="https://orcid.org/0009-0005-6842-6686">ORCID 0009-0005-6842-6686</a></p>
 </footer>
 
 <!--
@@ -571,6 +442,7 @@ footer {
   var THRESHOLDS = {0:0, 1:1, 2:2, 3:3, 4:4, hub:6};
 
   var MANIFEST = [
+    {level:0, path:'ride/', title:'The Ride: One Line Through the Edge', tags:'ride, guided tour, stations'},
     {level:0, path:'diamond-node/multi-critical/00-what-is-multicriticality.html', title:'What Is Multicriticality?', tags:'tutorial, interactive, criticality'},
     {level:0, path:'magnetosphere-tutorial/', title:'The Magnetosphere', tags:'tutorial, interactive'},
     {level:0, path:'miller-tutorial/', title:'Coevolving Machines / Miller Tutorial', tags:'tutorial, interactive'},
@@ -585,7 +457,6 @@ footer {
     {level:1, path:'train-the-trainer/', title:'Claude Code Train-the-Trainer', tags:'program'},
     {level:1, path:'ai-governance/', title:'Governing Your AI', tags:'tutorial, interactive'},
     {level:1, path:'physical-systems-chart/', title:'Physical Systems × Feature Chart', tags:'interactive'},
-    {level:1, path:'acs-closure/', title:'Autocatalytic Closure (Original)', tags:'tutorial'},
     {level:2, path:'anyon-fusion/', title:'Fibonacci Anyon Fusion Algebra', tags:'tutorial, interactive'},
     {level:2, path:'worksheets/', title:'Anyon Algebra by Hand', tags:'worksheet, interactive'},
     {level:2, path:'poised-state-survey/', title:'Shadows of the Poised State', tags:'research, interactive'},
