@@ -257,8 +257,14 @@ blockquote .who { display: block; margin-top: 0.45rem; font-family: system-ui, s
   .fade-in { opacity: 1; transform: none; transition: none; }
 }
 </style>
+<!-- BEGIN NAVCSS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<link rel="stylesheet" href="../css/station-nav.css">
+<!-- END NAVCSS -->
 </head>
 <body>
+<!-- BEGIN HATCH: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<a class="hatch" data-station="T" href="../ride/#station-T">back to the easy version</a>
+<!-- END HATCH -->
 
 <nav id="topnav">
   <a href="#claim">1 &middot; The Claim</a>
@@ -974,5 +980,10 @@ Ordered for someone who has read none of these. Each entry says what the paper c
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
 <script src="../js/annex-tracker.js"></script>
 
+<!-- BEGIN LINE: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<nav class="station-nav" data-station="T" aria-label="The line"><span class="here"><a data-line href="../ride/#station-T">station T on the line</a></span></nav>
+<script src="../js/station-data.js"></script>
+<script src="../js/station-nav.js"></script>
+<!-- END LINE -->
 </body>
 </html>

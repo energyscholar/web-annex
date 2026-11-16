@@ -105,8 +105,14 @@ sup.fnm + sup.fnm { margin-left: 0.15em; }
 tr.dimrow { opacity: 0.25; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
+<!-- BEGIN NAVCSS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<link rel="stylesheet" href="../../../css/station-nav.css">
+<!-- END NAVCSS -->
 </head>
 <body>
+<!-- BEGIN HATCH: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<a class="hatch" data-station="5" href="../../../ride/#station-5">back to the easy version</a>
+<!-- END HATCH -->
 <div class="container">
 <nav class="nav" aria-label="Series navigation">
   <a href="../">&larr; Critical Lines series</a>
@@ -1482,5 +1488,10 @@ CC.init({ page: 'models', bank: window.CC_BANKS.models, accent: '#f59e0b' });
 })();
 </script>
 <script src="../../../js/annex-tracker.js"></script>
+<!-- BEGIN LINE: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<nav class="station-nav" data-station="5" aria-label="The line"><span class="here"><a data-line href="../../../ride/#station-5">station 5 on the line</a></span></nav>
+<script src="../../../js/station-data.js"></script>
+<script src="../../../js/station-nav.js"></script>
+<!-- END LINE -->
 </body>
 </html>

@@ -423,8 +423,14 @@ abbr {
   svg animate, svg animateTransform { animation-play-state: paused; }
 }
 </style>
+<!-- BEGIN NAVCSS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<link rel="stylesheet" href="../css/station-nav.css">
+<!-- END NAVCSS -->
 </head>
 <body>
+<!-- BEGIN HATCH: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<a class="hatch" data-station="0" href="../ride/#station-0">back to the easy version</a>
+<!-- END HATCH -->
 <nav style="background:#1e293b;padding:0.5rem 1rem;font-family:system-ui,sans-serif;font-size:0.85rem;border-bottom:1px solid #334155;">
   <div style="max-width:1100px;margin:0 auto;display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;">
     <a href="../" style="color:#64748b;text-decoration:none;">&#8592; Web Annex</a>
@@ -2003,5 +2009,8 @@ abbr {
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
 <script src="../js/annex-tracker.js"></script>
 
+<!-- BEGIN LINE: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<nav class="station-nav" data-spur="0" aria-label="The line"><span class="here"><a data-line href="../ride/#spur-cross-domain">back to the line</a></span></nav>
+<!-- END LINE -->
 </body>
 </html>

@@ -101,8 +101,14 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
+<!-- BEGIN NAVCSS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<link rel="stylesheet" href="../css/station-nav.css">
+<!-- END NAVCSS -->
 </head>
 <body>
+<!-- BEGIN HATCH: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<a class="hatch" data-station="9" href="../ride/#station-9">back to the easy version</a>
+<!-- END HATCH -->
 <nav id="topnav" aria-label="Sections">
   <a href="#what">1 &middot; What it is</a>
   <a href="#measured">2 &middot; Measurement</a>
@@ -379,5 +385,10 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 <div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
 </div>
 <script src="../js/annex-tracker.js"></script>
+<!-- BEGIN LINE: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<nav class="station-nav" data-station="9" aria-label="The line"><span class="here"><a data-line href="../ride/#station-9">station 9 on the line</a></span></nav>
+<script src="../js/station-data.js"></script>
+<script src="../js/station-nav.js"></script>
+<!-- END LINE -->
 </body>
 </html>

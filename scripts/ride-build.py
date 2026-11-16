@@ -9,10 +9,13 @@ Derived parts (each between its own markers, or the whole file):
   docs/ride/index.html   the station list, the spur list and the axis legend, as static markup, so a
                          reader without scripts and the conform.py probes see every link the page offers
   docs/js/station-data.js  the station table that js/station-nav.js reads on expert pages
+  every expert page and spur page: three marked blocks, the stylesheet link at the end of <head>, the
+                         hatch (R2) directly after <body>, and the station nav with its two scripts just
+                         before </body>; nothing else on the page is touched
 
 stations.json is the one source of truth; never hand-edit a derived part.
 """
-import argparse, html, json, os, sys
+import argparse, html, json, os, re, sys
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOCS = os.path.join(HERE, "docs")
@@ -98,6 +101,78 @@ def axes_block(axes):
     return "\n".join(L)
 
 
+MARK = "written by scripts/ride-build.py from ride/stations.json, do not hand-edit"
+HATCH = "back to the easy version"
+
+
+def rel(page, target):
+    """A docs-relative target as a link from the docs-relative page."""
+    up = "../" * page.count("/")
+    if target.endswith("/index.html"):
+        target = target[: -len("index.html")]
+    return up + target
+
+
+def line_pages(st):
+    """(page, station row, spur row or None) for every expert, also and spur page, in station order."""
+    by_id = {s["id"]: s for s in st["stations"]}
+    out = []
+    for s in st["stations"]:
+        for p in ([s["expert"]] if s.get("expert") else []) + list(s.get("also") or []):
+            out.append((p, s, None))
+    for sp in st["spurs"]:
+        out.append((sp["expert"], by_id[sp["from"]], sp))
+    return out
+
+
+def hatch_href(page, s):
+    if s.get("start"):
+        return rel(page, s["start"])
+    return rel(page, "ride/index.html") + "#station-" + s["id"]
+
+
+def blocks(page, s, sp):
+    sid = s["id"]
+    head = (f"<!-- BEGIN NAVCSS: {MARK} -->\n"
+            f'<link rel="stylesheet" href="{rel(page, "css/station-nav.css")}">\n<!-- END NAVCSS -->')
+    hatch = (f"<!-- BEGIN HATCH: {MARK} -->\n"
+             f'<a class="hatch" data-station="{sid}" href="{E(hatch_href(page, s))}">{HATCH}</a>\n<!-- END HATCH -->')
+    ride = rel(page, "ride/index.html")
+    if sp is None:
+        nav = (f'<nav class="station-nav" data-station="{sid}" aria-label="The line">'
+               f'<span class="here"><a data-line href="{E(ride)}#station-{sid}">station {sid} on the line</a></span></nav>\n'
+               f'<script src="{rel(page, "js/station-data.js")}"></script>\n'
+               f'<script src="{rel(page, "js/station-nav.js")}"></script>')
+    else:
+        nav = (f'<nav class="station-nav" data-spur="{sid}" aria-label="The line">'
+               f'<span class="here"><a data-line href="{E(ride)}#spur-{E(sp["line"])}">back to the line</a></span></nav>')
+    foot = f"<!-- BEGIN LINE: {MARK} -->\n{nav}\n<!-- END LINE -->"
+    return head, hatch, foot
+
+
+def place(text, name, block, anchor):
+    """Put block between its markers, or, the first time, at anchor(text) -> index."""
+    b, e = f"<!-- BEGIN {name}:", f"<!-- END {name} -->"
+    if b in text:
+        i = text.index(b); j = text.index(e, i) + len(e)
+        return text[:i] + block + text[j:]
+    k = anchor(text)
+    return text[:k] + block + "\n" + text[k:]
+
+
+def after_body(t):
+    m = re.search(r"<body\b[^>]*>\n?", t, re.I)
+    return m.end()
+
+
+def before_head_end(t):
+    return re.search(r"</head>", t, re.I).start()
+
+
+def before_body_end(t):
+    return t.lower().rindex("</body>")
+
+
 def build(st):
     for s in st["stations"]:
         if s.get("expert"):
@@ -146,6 +221,18 @@ def main():
         stale.append("docs/js/station-data.js")
         if not a.check:
             open(data, "w", encoding="utf-8").write(want)
+
+    for page, srow, sp in line_pages(st):
+        f = os.path.join(DOCS, page)
+        t = open(f, encoding="utf-8").read()
+        head, hatch, foot = blocks(page, srow, sp)
+        n = place(t, "NAVCSS", head, before_head_end)
+        n = place(n, "HATCH", hatch, after_body)
+        n = place(n, "LINE", foot, before_body_end)
+        if n != t:
+            stale.append("docs/" + page)
+            if not a.check:
+                open(f, "w", encoding="utf-8").write(n)
 
     print(("stale: " if a.check else "rewrote: ") + (", ".join(stale) if stale else "nothing"))
     sys.exit(1 if (a.check and stale) else 0)

@@ -66,9 +66,9 @@ window.RIDE_STATIONS = [
  {
   "id": "9",
   "title": "The instrument",
-  "expert": null,
+  "expert": "criticality-compass/index.html",
   "start": null,
-  "state": "coming"
+  "state": "live"
  },
  {
   "id": "T",

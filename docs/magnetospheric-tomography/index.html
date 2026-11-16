@@ -111,8 +111,14 @@ svg { border-radius: 6px; }
   * { transition: none !important; }
 }
 </style>
+<!-- BEGIN NAVCSS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<link rel="stylesheet" href="../css/station-nav.css">
+<!-- END NAVCSS -->
 </head>
 <body>
+<!-- BEGIN HATCH: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<a class="hatch" data-station="0" href="../ride/#station-0">back to the easy version</a>
+<!-- END HATCH -->
 <div style="display:flex; gap:8px; align-items:center; padding:6px 0 10px; border-bottom:1px solid #1e293b; margin-bottom:12px; font-size:11px; font-family:'Courier New',monospace;">
 <span style="color:#94a3b8; font-weight:bold;">Magnetospheric Tomography</span> <span style="color:#334155;">|</span>
 <a href="altitude-coherence.html" style="color:#38bdf8; text-decoration:none;">Altitude Coherence &amp; Validation</a> <span style="color:#334155;">|</span>
@@ -12435,4 +12441,7 @@ function togglePlay() {
 }
 </script>
 
+<!-- BEGIN LINE: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<nav class="station-nav" data-spur="0" aria-label="The line"><span class="here"><a data-line href="../ride/#spur-space">back to the line</a></span></nav>
+<!-- END LINE -->
 </body></html>

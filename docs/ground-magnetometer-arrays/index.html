@@ -142,8 +142,14 @@ dl.gl dd { margin: 0; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .progress > span { transition: none; } }
 </style>
+<!-- BEGIN NAVCSS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<link rel="stylesheet" href="../css/station-nav.css">
+<!-- END NAVCSS -->
 </head>
 <body>
+<!-- BEGIN HATCH: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<a class="hatch" data-station="0" href="../ride/#station-0">back to the easy version</a>
+<!-- END HATCH -->
 <main class="container">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
 <marker id="mk-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#34d399"/></marker>
@@ -2355,5 +2361,8 @@ route(false);
 })();
 </script>
 <script src="../js/annex-tracker.js"></script>
+<!-- BEGIN LINE: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<nav class="station-nav" data-spur="0" aria-label="The line"><span class="here"><a data-line href="../ride/#spur-space">back to the line</a></span></nav>
+<!-- END LINE -->
 </body>
 </html>

@@ -242,8 +242,14 @@ a:hover { text-decoration: underline; }
   svg animate, svg animateTransform { animation-play-state: paused; }
 }
 </style>
+<!-- BEGIN NAVCSS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<link rel="stylesheet" href="../css/station-nav.css">
+<!-- END NAVCSS -->
 </head>
 <body>
+<!-- BEGIN HATCH: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<a class="hatch" data-station="0" href="../ride/#station-0">back to the easy version</a>
+<!-- END HATCH -->
 <div style="max-width:900px;margin:0 auto;padding:1rem 1.5rem 0;">
   <a href="../" style="color:#64748b;text-decoration:none;font-size:0.85rem;">&#8592; Web Annex</a>
 </div>
@@ -1681,5 +1687,8 @@ function animateGICDot(dot, x1, y1, x2, y2, duration, delay) {
 document.addEventListener('DOMContentLoaded', setupObserver);
 </script>
 <script src="../js/annex-tracker.js"></script>
+<!-- BEGIN LINE: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
+<nav class="station-nav" data-spur="0" aria-label="The line"><span class="here"><a data-line href="../ride/#spur-space">back to the line</a></span></nav>
+<!-- END LINE -->
 </body>
 </html>
