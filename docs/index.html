@@ -267,6 +267,10 @@ footer {
 .hww { margin: 1.5rem 0; font-size: 0.95rem; }
 .hww a, footer a { color: #93c5fd; }
 footer p { margin: 0.3rem 0; }
+.cli-hint { font-size: 0.8em; opacity: 0.85; }
+.cli-input-line { flex-wrap: wrap; }
+.cli-input-line label { color: #64748b; }
+.cli-input-line #cli-input { min-width: 8rem; }
 </style>
 </head>
 <body>
@@ -302,18 +306,20 @@ how you would tell, and what instrument it would take to check.</p>
   <img src="art/thumbnails/ride.svg" alt="The ride: a monorail across a row of hills, one station on each hilltop" width="600" height="170">
   <span class="board-label">Board here: the ride, one line through the edge &rarr;</span>
 </a>
+<!-- BEGIN STOPS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->
 <p class="stops">Stations:
-<a href="ride/#station-0">0 ticket hall</a> &middot;
+<a href="ride/#station-0">0 ticket hall: why ride?</a> &middot;
 <a href="ride/#station-1">1 the first edge</a> &middot;
 <a href="ride/#station-2">2 hall of mirrors</a> &middot;
 <a href="ride/#station-3">3 an edge with no cliff</a> &middot;
 <a href="ride/#station-4">4 the grade changes</a> &middot;
 <a href="ride/#station-5">5 the workshop</a> &middot;
 <a href="ride/#station-6">6 the tunnel</a> &middot;
-<a href="ride/#station-7">7 beads on a string</a> &middot;
-<a href="ride/#station-8">8 the window that shows the edge coming</a> &middot;
+<a href="ride/#station-7">7 beads on a string</a> (coming) &middot;
+<a href="ride/#station-8">8 the window that shows the edge coming</a> (coming) &middot;
 <a href="ride/#station-9">9 the instrument</a> &middot;
-<a href="ride/#station-T">T the honest ending</a></p>
+<a href="ride/#station-T">T terminus: the honest ending</a></p>
+<!-- END STOPS -->
 </section>
 
 <!-- ============================================================ -->
@@ -423,8 +429,8 @@ how you would tell, and what instrument it would take to check.</p>
 <div class="cli-prompt">
   <div id="cli-output"></div>
   <div class="cli-input-line">
-    <span>$</span>
-    <input id="cli-input" type="text" placeholder="" autocomplete="off" spellcheck="false">
+    <label for="cli-input">$ <span class="cli-hint">site command line (type help, then Enter):</span></label>
+    <input id="cli-input" type="text" placeholder="help" autocomplete="off" spellcheck="false">
   </div>
 </div>
 

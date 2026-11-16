@@ -15,6 +15,7 @@
 <main>
 <h1>The ride</h1>
 <p class="lede">One line runs through every station. The train never leaves the edge.</p>
+<p class="easy-marker">You are on the easy version: the ride. Each station has a "Go deeper" link to its physics page, and every physics page has a link back here.</p>
 
 <section id="station-0-hall" class="hall" aria-labelledby="why-ride">
 <h2 id="why-ride">Ticket hall: why ride?</h2>
@@ -83,83 +84,94 @@ version at the top.</p>
 <dt>up</dt><dd id="axis-z" data-axis="z"><span class="tip" tabindex="0">nearness to criticality<span class="tt">nearness to criticality; a normalised scale from 0 (far from any edge) to 1 (at a critical point); no units</span></span></dd>
 </dl>
 <ol class="stations">
-<li class="station" id="station-0" data-station="0" data-state="live" data-x="0.04" data-y="0.46" data-c="0.9">
+<li class="station" id="station-0" data-station="0" data-state="live" data-title="Ticket hall: why ride?" data-x="0.04" data-y="0.46" data-c="0.9">
   <h3><span class="num">0</span> Ticket hall: why ride?</h3>
   <p class="view">Out of the window: the whole country from above, before you board.</p>
   <p class="carry">Take away: <strong>a ticket hall</strong> &middot; <span class="tip" tabindex="0">poised<span class="tt">poised: sitting at an edge between two kinds of behaviour instead of falling to one side; the word is used in three different senses, set side by side at the terminus</span></span></p>
   <p class="phase" data-layer="map">On the map: the whole surface from above: edges are where behaviour changes.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../poised-state-survey/">Go deeper: the physics version of station 0, Shadows of the Poised State</a><br><a class="switch" data-switch="expert" href="../physical-systems-chart/">Go deeper: also at station 0, the physical-systems chart</a></p>
+  <p class="next"><a class="next-stop" href="#station-1">Next stop: station 1, The first edge &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../poised-state-survey/">Go deeper: the physics version of station 0, Shadows of the Poised State</a><br><a class="switch" data-switch="expert" href="../physical-systems-chart/">Go deeper: also at station 0, the physical-systems chart</a></p>
 </li>
-<li class="station" id="station-1" data-station="1" data-state="live" data-x="0.132" data-y="0.52" data-c="0.9">
+<li class="station" id="station-1" data-station="1" data-state="live" data-title="The first edge" data-x="0.132" data-y="0.52" data-c="0.9">
   <h3><span class="num">1</span> The first edge</h3>
   <p class="view">Out of the window: the track reaches a cliff.</p>
   <p class="carry">Take away: <strong>the cliff</strong> &middot; <span class="tip" tabindex="0">critical point, order parameter<span class="tt">critical point: the exact setting at which a system changes its kind of behaviour, and small pushes have large effects; order parameter: a number that is zero on one side of the change and grows on the other, like the pull of a magnet</span></span></p>
   <p class="phase" data-layer="map">On the map: one critical point; the ride starts at the spike.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../diamond-node/multi-critical/00-what-is-multicriticality.html">Go deeper: the physics version of station 1, What Is Multicriticality?</a></p>
+  <p class="next"><a class="next-stop" href="#station-2">Next stop: station 2, Hall of mirrors &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../diamond-node/multi-critical/00-what-is-multicriticality.html">Go deeper: the physics version of station 1, What Is Multicriticality?</a></p>
 </li>
-<li class="station" id="station-2" data-station="2" data-state="live" data-x="0.224" data-y="0.57" data-c="0.9">
+<li class="station" id="station-2" data-station="2" data-state="live" data-title="Hall of mirrors" data-x="0.224" data-y="0.57" data-c="0.9">
   <h3><span class="num">2</span> Hall of mirrors</h3>
   <p class="view">Out of the window: every cliff looks the same up close.</p>
   <p class="carry">Take away: <strong>the hall of mirrors</strong> &middot; <span class="tip" tabindex="0">universality, fixed point<span class="tt">universality: very different systems share the same numbers near their critical points; fixed point: a state that looks the same after you zoom out, which is why those numbers repeat</span></span></p>
   <p class="phase" data-layer="map">On the map: renormalisation flow to a fixed point: why the exponents repeat.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../renormalization-group/">Go deeper: the physics version of station 2, The Renormalization Group for the Working Mathematician</a></p>
+  <p class="next"><a class="next-stop" href="#station-3">Next stop: station 3, An edge with no cliff &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../renormalization-group/">Go deeper: the physics version of station 2, The Renormalization Group for the Working Mathematician</a></p>
 </li>
-<li class="station" id="station-3" data-station="3" data-state="live" data-x="0.316" data-y="0.58" data-c="0.9">
+<li class="station" id="station-3" data-station="3" data-state="live" data-title="An edge with no cliff" data-x="0.316" data-y="0.58" data-c="0.9">
   <h3><span class="num">3</span> An edge with no cliff</h3>
   <p class="view">Out of the window: the track runs along a ridge.</p>
   <p class="carry">Take away: <strong>the ridge</strong> &middot; <span class="tip" tabindex="0">BKT, stiffness jump<span class="tt">BKT (Berezinskii-Kosterlitz-Thouless): a change in flat, two-dimensional systems in which tiny whirlpools (vortices), bound in pairs, come apart; stiffness jump: the system&#x27;s resistance to being twisted drops suddenly to zero at the change</span></span></p>
   <p class="phase" data-layer="map">On the map: the Kosterlitz-Thouless line: a line of critical states with no local order parameter.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../kosterlitz-thouless/">Go deeper: the physics version of station 3, Kosterlitz-Thouless for the Working Mathematician</a></p>
+  <p class="next"><a class="next-stop" href="#station-4">Next stop: station 4, The grade changes &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../kosterlitz-thouless/">Go deeper: the physics version of station 3, Kosterlitz-Thouless for the Working Mathematician</a></p>
 </li>
-<li class="station" id="station-4" data-station="4" data-state="live" data-x="0.408" data-y="0.55" data-c="0.9">
+<li class="station" id="station-4" data-station="4" data-state="live" data-title="The grade changes" data-x="0.408" data-y="0.55" data-c="0.9">
   <h3><span class="num">4</span> The grade changes</h3>
   <p class="view">Out of the window: same track, different pitch.</p>
   <p class="carry">Take away: <strong>the gradient sign</strong> &middot; <span class="tip" tabindex="0">Ashkin-Teller, four-spin coupling<span class="tt">Ashkin-Teller: a model of two magnets sharing one lattice; four-spin coupling: the strength of the link between the two, which moves the system along a whole line of critical points whose numbers change as you go</span></span></p>
   <p class="phase" data-layer="map">On the map: the Ashkin-Teller line: the exponents vary continuously along the line.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../ashkin-teller/">Go deeper: the physics version of station 4, Ashkin-Teller for the Working Mathematician</a></p>
+  <p class="next"><a class="next-stop" href="#station-5">Next stop: station 5, The workshop &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../ashkin-teller/">Go deeper: the physics version of station 4, Ashkin-Teller for the Working Mathematician</a></p>
 </li>
-<li class="station" id="station-5" data-station="5" data-state="live" data-x="0.5" data-y="0.5" data-c="0.9">
+<li class="station" id="station-5" data-station="5" data-state="live" data-title="The workshop" data-x="0.5" data-y="0.5" data-c="0.9">
   <h3><span class="num">5</span> The workshop</h3>
   <p class="view">Out of the window: how the track is surveyed.</p>
   <p class="carry">Take away: <strong>the surveyor&#x27;s tools</strong> &middot; <span class="tip" tabindex="0">finite-size scaling<span class="tt">finite-size scaling: reading the behaviour of an endless system from simulations of several finite sizes, by watching how what you measure changes with size</span></span></p>
   <p class="phase" data-layer="map">On the map: the model zoo and the tools: finite-size scaling, the Binder cumulant.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../diamond-node/critical-lines/">Go deeper: the physics version of station 5, Critical Lines and Multicritical Points</a><br><a class="switch" data-switch="expert" href="../diamond-node/critical-lines/models/">Go deeper: also at station 5, the models</a><br><a class="switch" data-switch="expert" href="../diamond-node/critical-lines/techniques/">Go deeper: also at station 5, the techniques</a></p>
+  <p class="next"><a class="next-stop" href="#station-6">Next stop: station 6, The tunnel &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../diamond-node/critical-lines/">Go deeper: the physics version of station 5, Critical Lines and Multicritical Points</a><br><a class="switch" data-switch="expert" href="../diamond-node/critical-lines/models/">Go deeper: also at station 5, the models</a><br><a class="switch" data-switch="expert" href="../diamond-node/critical-lines/techniques/">Go deeper: also at station 5, the techniques</a></p>
 </li>
-<li class="station" id="station-6" data-station="6" data-state="live" data-x="0.592" data-y="0.44" data-c="0.9">
+<li class="station" id="station-6" data-station="6" data-state="live" data-title="The tunnel" data-x="0.592" data-y="0.44" data-c="0.9">
   <h3><span class="num">6</span> The tunnel</h3>
   <p class="view">Out of the window: the track jumps.</p>
   <p class="carry">Take away: <strong>the tunnel</strong> &middot; <span class="tip" tabindex="0">first-order, coexistence<span class="tt">first-order: a change with a jump, like ice melting, instead of a smooth critical change; coexistence: both kinds of behaviour present at once, side by side, at the jump; this station&#x27;s peak is the tricritical point where a line turns first-order</span></span></p>
   <p class="phase" data-layer="map">On the map: where a line turns first-order: coexistence, two states at once.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../diamond-node/jumps-and-critical-lines/">Go deeper: the physics version of station 6, Jumps, Slowing, and the Line They Sit On</a></p>
+  <p class="next"><a class="next-stop" href="#station-7">Next stop: station 7, Beads on a string &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../diamond-node/jumps-and-critical-lines/">Go deeper: the physics version of station 6, Jumps, Slowing, and the Line They Sit On</a></p>
 </li>
-<li class="station" id="station-7" data-station="7" data-state="held" data-x="0.684" data-y="0.41" data-c="0.9">
-  <h3><span class="num">7</span> Beads on a string</h3>
+<li class="station" id="station-7" data-station="7" data-state="held" data-title="Beads on a string" data-x="0.684" data-y="0.41" data-c="0.9">
+  <h3><span class="num">7</span> Beads on a string <span class="soon">(coming)</span></h3>
   <p class="view">Out of the window: stops with nothing between them.</p>
   <p class="carry">Take away: <strong>beads</strong> &middot; <span class="tip" tabindex="0">fractional quantum Hall, filling factor<span class="tt">fractional quantum Hall effect: in a thin sheet of electrons in a strong magnetic field, the resistance sits on flat steps at certain fractions and changes sharply between them; filling factor: the number that says how full the electrons&#x27; allowed energy levels are, which picks out the steps</span></span></p>
   <p class="phase" data-layer="map">On the map: a beaded line: critical points lined up on one line, with real valleys between them; in the fractional quantum Hall effect of a two-dimensional electron gas, the sharp changes between plateaus line up this way, one example among several.</p>
   <p class="cite" data-layer="map">Source: Kivelson, S., Lee, D.-H., &amp; Zhang, S.-C. (1992). Global phase diagram in the quantum Hall effect. Physical Review B 46, 2223. doi:10.1103/PhysRevB.46.2223</p>
   <p class="state">Held: this station's page waits on a check before it is written.</p>
+  <p class="next"><a class="next-stop" href="#station-8">Next stop: station 8, The window that shows the edge coming &rarr;</a></p>
 </li>
-<li class="station" id="station-8" data-station="8" data-state="coming" data-x="0.776" data-y="0.43" data-c="0.9">
-  <h3><span class="num">8</span> The window that shows the edge coming</h3>
+<li class="station" id="station-8" data-station="8" data-state="coming" data-title="The window that shows the edge coming" data-x="0.776" data-y="0.43" data-c="0.9">
+  <h3><span class="num">8</span> The window that shows the edge coming <span class="soon">(coming)</span></h3>
   <p class="view">Out of the window: the window fogs before the edge arrives.</p>
   <p class="carry">Take away: <strong>the fogging window</strong> &middot; <span class="tip" tabindex="0">early-warning signal<span class="tt">early-warning signal: a change in how a system jiggles, such as larger and slower swings, that can appear as it nears a tipping point</span></span></p>
   <p class="phase" data-layer="map">On the map: what an instrument reads near the line: variance, autocorrelation; why a detector built for one point does not ask whether the edge is a line.</p>
   <p class="state">Coming: this station has no page yet.</p>
+  <p class="next"><a class="next-stop" href="#station-9">Next stop: station 9, The instrument &rarr;</a></p>
 </li>
-<li class="station" id="station-9" data-station="9" data-state="live" data-x="0.868" data-y="0.49" data-c="0.9">
+<li class="station" id="station-9" data-station="9" data-state="live" data-title="The instrument" data-x="0.868" data-y="0.49" data-c="0.9">
   <h3><span class="num">9</span> The instrument</h3>
   <p class="view">Out of the window: what keeps the train on the line.</p>
   <p class="carry">Take away: <strong>the compass rose</strong> &middot; <span class="tip" tabindex="0">Criticality Compass<span class="tt">Criticality Compass: a planned instrument for telling whether data show critical behaviour spread along a line, do not, or cannot tell, and then following the line; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work</span></span></p>
   <p class="phase" data-layer="map">On the map: the Criticality Compass, a planned instrument set out in a deposited design note; nothing is yet shown to work.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../criticality-compass/">Go deeper: the physics version of station 9, The Criticality Compass</a></p>
+  <p class="next"><a class="next-stop" href="#station-T">Next stop: station T, Terminus: the honest ending &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../criticality-compass/">Go deeper: the physics version of station 9, The Criticality Compass</a></p>
 </li>
-<li class="station" id="station-T" data-station="T" data-state="live" data-x="0.96" data-y="0.54" data-c="0.9">
+<li class="station" id="station-T" data-station="T" data-state="live" data-title="Terminus: the honest ending" data-x="0.96" data-y="0.54" data-c="0.9">
   <h3><span class="num">T</span> Terminus: the honest ending</h3>
   <p class="view">Out of the window: three doors, one not yet opened.</p>
   <p class="carry">Take away: <strong>three doors, one unopened</strong> &middot; <span class="tip" tabindex="0">Poised Realm<span class="tt">Poised Realm: the newest of the three senses of poised, a proposal that some molecules of life sit at the edge between conducting and insulating, where quantum effects can last long enough to matter</span></span></p>
   <p class="phase" data-layer="map">On the map: the three senses of poised, the critics, and what chlorophyll actually shows.</p>
-  <p class="go"><a class="switch" data-switch="expert" href="../poised-state-critics/">Go deeper: the physics version of station T, The Poised State and Its Critics</a><br><a class="switch" data-switch="expert" href="../poised-state-chlorophyll/">Go deeper: also at station T, The Poised Antenna</a></p>
+  <p class="next"><a class="next-stop" href="#station-0">Next stop: station 0, Ticket hall: why ride? (back to the start) &rarr;</a></p>
+  <p class="go"><span class="go-note">For the full physics:</span><br><a class="switch" data-switch="expert" href="../poised-state-critics/">Go deeper: the physics version of station T, The Poised State and Its Critics</a><br><a class="switch" data-switch="expert" href="../poised-state-chlorophyll/">Go deeper: also at station T, The Poised Antenna</a></p>
 </li>
 </ol>
 <h2 id="spurs">Side trips</h2>

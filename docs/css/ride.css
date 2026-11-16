@@ -86,7 +86,16 @@ body[data-view="map"] [data-layer="window"] { display: none; }
 .station[data-state="coming"] .num, .station[data-state="held"] .num { background: transparent; color: var(--track); border: 1px dashed var(--track); }
 .station p { margin: 0.25rem 0; }
 .station .state { color: var(--muted); font-style: italic; }
-.go a.switch { font-size: 0.9rem; }
+.easy-marker { font-size: 0.85rem; color: var(--muted); margin: 0.2rem 0 0; }
+.soon { font-size: 0.85rem; font-weight: 400; color: var(--muted); }
+.station .next { margin-top: 0.7rem; }
+.next-stop { display: inline-block; font-weight: 600; color: #1e1b0b; background: var(--track); border-radius: 8px;
+  padding: 0.35rem 0.8rem; text-decoration: none; }
+.next-stop:hover, .next-stop:focus-visible { background: #fcd34d; }
+.station .go { margin-top: 0.8rem; padding-top: 0.5rem; border-top: 1px solid var(--line); font-size: 0.8rem; line-height: 1.6; color: var(--muted); }
+.station .go a.switch { color: var(--muted); }
+.station .go a.switch:hover { color: var(--accent); }
+.go-note { font-style: italic; }
 .spurs { list-style: none; padding: 0; }
 .spurs li { border-left: 3px solid var(--line); padding-left: 0.8rem; margin-bottom: 1rem; scroll-margin-top: 1rem; }
 

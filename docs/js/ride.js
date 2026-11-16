@@ -16,14 +16,13 @@
 
   var items = Array.prototype.slice.call(document.querySelectorAll('li.station'));
   var stations = items.map(function (li) {
-    var h = li.querySelector('h3');
     return {
       id: li.getAttribute('data-station'),
       state: li.getAttribute('data-state'),
       x: parseFloat(li.getAttribute('data-x')),
       y: parseFloat(li.getAttribute('data-y')),
       c: parseFloat(li.getAttribute('data-c')),
-      title: h ? h.textContent.replace(/\s+/g, ' ').trim() : ''
+      title: li.getAttribute('data-title') || ''
     };
   });
   if (!stations.length) return;
@@ -80,8 +79,8 @@
     while (svg.lastChild && keep.indexOf(svg.lastChild) < 0) svg.removeChild(svg.lastChild);
   }
   function marker(parent, s, cx, cy, r) {
-    var a = el('a', { href: '#station-' + s.id }, parent);
-    tipTitle(a, 'Station ' + s.id + ': ' + s.title + (s.state === 'live' ? '' : ' (' + s.state + ')'));
+    var a = el('a', { href: '#station-' + s.id, 'aria-label': 'Station ' + s.id + ': ' + s.title + (s.state === 'live' ? '' : ' (coming)') }, parent);
+    tipTitle(a, 'Station ' + s.id + ': ' + s.title + (s.state === 'live' ? '' : ' (coming)'));
     el('circle', { cx: cx, cy: cy, r: r, 'class': 'stn' + (s.state === 'live' ? '' : ' hollow') }, a);
     var lab = el('text', { x: cx, y: cy - r - 8, 'class': 'stn-label' }, a);
     lab.textContent = s.id;

@@ -9,6 +9,7 @@ Derived parts (each between its own markers, or the whole file):
   docs/ride/index.html   the station list, the spur list and the axis legend, as static markup, so a
                          reader without scripts and the conform.py probes see every link the page offers
   docs/js/station-data.js  the station table that js/station-nav.js reads on expert pages
+  docs/index.html        the landing page's list of stations, between its STOPS markers
   docs/art/thumbnails/ride.svg  the landing page's small picture of the line (window view, no script)
   every expert page and spur page: three marked blocks, the stylesheet link at the end of <head>, the
                          hatch (R2) directly after <body>, and the station nav with its two scripts just
@@ -45,12 +46,17 @@ def switch(path, label):
     return f'<a class="switch" data-switch="expert" href="{E(href_from_ride(path))}">{E(label)}</a>'
 
 
-def station_block(s):
+SOON = ' <span class="soon">(coming)</span>'
+
+
+def station_block(s, nxt, loops):
     sid = s["id"]
     num = "T" if sid == "T" else sid
+    soon = SOON if s["state"] != "live" else ""
     L = [f'<li class="station" id="station-{sid}" data-station="{sid}" data-state="{s["state"]}" '
+         f'data-title="{E(s["title"])}" '
          f'data-x="{s["map"]["x"]}" data-y="{s["map"]["y"]}" data-c="{s["c"]}">',
-         f'  <h3><span class="num">{num}</span> {E(s["title"])}</h3>',
+         f'  <h3><span class="num">{num}</span> {E(s["title"])}{soon}</h3>',
          f'  <p class="view">Out of the window: {E(s["view"])}.</p>',
          f'  <p class="carry">Take away: <strong>{E(s["carry"]["picture"])}</strong> &middot; '
          + tip(s["carry"]["name"], s["carry"]["gloss"]) + "</p>",
@@ -66,8 +72,11 @@ def station_block(s):
         go.append(switch(s["expert"], f'Go deeper: the physics version of station {num}, {s["expert_title"]}'))
     for p in s.get("also") or []:
         go.append(switch(p, f'Go deeper: also at station {num}, {title_of(p)}'))
+    back = " (back to the start)" if loops else ""
+    L.append(f'  <p class="next"><a class="next-stop" href="#station-{nxt["id"]}">Next stop: station {nxt["id"]}, '
+             f'{E(nxt["title"])}{back} &rarr;</a></p>')
     if go:
-        L.append('  <p class="go">' + "<br>".join(go) + "</p>")
+        L.append('  <p class="go"><span class="go-note">For the full physics:</span><br>' + "<br>".join(go) + "</p>")
     L.append("</li>")
     return "\n".join(L)
 
@@ -200,6 +209,16 @@ def thumbnail(st):
             + "\n".join(dots) + "\n</svg>\n")
 
 
+STOPS_B = "<!-- BEGIN STOPS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->"
+STOPS_E = "<!-- END STOPS -->"
+
+
+def stops(st):
+    items = [f'<a href="ride/#station-{s["id"]}">{s["id"]} {E(s["title"][0].lower() + s["title"][1:])}'
+             + "</a>" + (" (coming)" if s["state"] != "live" else "") for s in st["stations"]]
+    return STOPS_B + '\n<p class="stops">Stations:\n' + " &middot;\n".join(items) + "</p>\n" + STOPS_E
+
+
 def build(st):
     for s in st["stations"]:
         if s.get("expert"):
@@ -213,7 +232,8 @@ def build(st):
         "poised-state-chlorophyll/index.html": "The Poised Antenna",
     })
     block = [BEGIN, axes_block(st["axes"]), '<ol class="stations">']
-    block += [station_block(s) for s in st["stations"]]
+    S = st["stations"]
+    block += [station_block(s, S[(i + 1) % len(S)], i + 1 == len(S)) for i, s in enumerate(S)]
     block += ["</ol>", '<h2 id="spurs">Side trips</h2>',
               "<p>Branch lines leave the main line at a station. They go straight to the full pages, "
               "so each one is a switch.</p>", spur_block(st["spurs"]), END]
@@ -248,6 +268,14 @@ def main():
         stale.append("docs/js/station-data.js")
         if not a.check:
             open(data, "w", encoding="utf-8").write(want)
+
+    land = os.path.join(DOCS, "index.html")
+    t = open(land, encoding="utf-8").read()
+    n = t[: t.index(STOPS_B)] + stops(st) + t[t.index(STOPS_E) + len(STOPS_E):]
+    if n != t:
+        stale.append("docs/index.html")
+        if not a.check:
+            open(land, "w", encoding="utf-8").write(n)
 
     thumb = os.path.join(DOCS, "art", "thumbnails", "ride.svg")
     want = thumbnail(st)
