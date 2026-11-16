@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Criticality Compass, a designed instrument for multivariate criticality: what it measures, how a reading becomes a verdict, what it refuses to say, its declared inputs, its status (a design, not yet shown to work), its relation to the literature, a glossary, and how to cite the design note.">
+<title>The Criticality Compass</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Criticality Compass">
+<meta property="og:description" content="A designed instrument for finding and following multivariate criticality: measurement, verdicts, refusals, status and citation.">
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #cbd5e1;
+  --heading: #f1f5f9;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --muted: #64748b;
+  --line: #94a3b8;
+  --dim: #334155;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 4.5rem 1.5rem 6rem; }
+h1, h2, h3 { font-family: 'Times New Roman', Georgia, serif; color: var(--heading); font-weight: 600; }
+h1 { font-size: 2.6rem; line-height: 1.15; text-align: center; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.subtitle { text-align: center; color: var(--line); font-size: 1.08rem; margin-bottom: 2.5rem; font-style: italic; font-family: Georgia, serif; }
+h2 { font-size: 1.7rem; margin: 3.2rem 0 1rem; padding-bottom: 0.45rem; border-bottom: 1px solid var(--dim); }
+h2 .sn { color: var(--blue); font-size: 0.9em; margin-right: 0.3em; }
+h3 { font-size: 1.2rem; margin: 1.6rem 0 0.7rem; color: var(--line); }
+p { margin-bottom: 1rem; }
+strong { color: var(--heading); }
+a { color: var(--blue); }
+a:focus-visible, .tip:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+ul, ol { margin: 0 0 1rem 1.4rem; }
+li { margin-bottom: 0.45rem; }
+code, .w { font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 0.86em; color: var(--heading); }
+.math { font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading); white-space: nowrap; }
+.math-block {
+  display: block; font-family: 'Times New Roman', Georgia, serif; font-style: italic; color: var(--heading);
+  text-align: center; font-size: 1.1rem; margin: 1.1rem 0; padding: 0.8rem 0.6rem; background: var(--card);
+  border-radius: 8px; border: 1px solid var(--dim); overflow-x: auto; overflow-y: hidden;
+}
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(15, 23, 42, 0.94); border-bottom: 1px solid var(--dim);
+  display: flex; justify-content: center; gap: 0.3rem; padding: 0.5rem 1rem; flex-wrap: wrap;
+}
+nav a { color: var(--line); text-decoration: none; font-size: 0.8rem; padding: 0.25rem 0.55rem; border-radius: 4px; white-space: nowrap; }
+nav a:hover, nav a:focus-visible { color: var(--heading); background: var(--dim); }
+.callout { background: rgba(245,158,11,0.07); border: 1px solid var(--dim); border-left: 3px solid var(--amber); border-radius: 8px; padding: 0.9rem 1.1rem; margin: 1.3rem 0; }
+.callout p:last-child { margin-bottom: 0; }
+.callout .label { display: block; font-size: 0.72rem; letter-spacing: 0.11em; text-transform: uppercase; color: var(--line); margin-bottom: 0.35rem; font-weight: 700; }
+.tablewrap { overflow-x: auto; margin: 1.3rem 0; }
+table.t { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 520px; }
+table.t th { background: var(--dim); color: var(--heading); padding: 0.55rem 0.5rem; text-align: left; font-weight: 600; vertical-align: bottom; }
+table.t td { padding: 0.55rem 0.5rem; border-bottom: 1px solid var(--dim); vertical-align: top; }
+table.t td:first-child { color: var(--heading); font-weight: 600; white-space: nowrap; }
+.ans-mc { color: var(--green); } .ans-not { color: var(--line); } .ans-ct { color: var(--amber); }
+figure { margin: 1.6rem 0; background: var(--card); border: 1px solid var(--dim); border-radius: 12px; padding: 1rem; }
+figure svg { width: 100%; height: auto; display: block; }
+figcaption { font-size: 0.85rem; color: var(--line); margin-top: 0.7rem; line-height: 1.55; }
+dl.gloss { margin: 1rem 0; }
+dl.gloss dt { color: var(--heading); font-weight: 600; margin-top: 0.9rem; }
+dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
+.cite-box { background: var(--card); border: 1px solid var(--dim); border-left: 3px solid var(--cyan); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; overflow-wrap: anywhere; }
+.cite-box p:last-child { margin-bottom: 0; }
+/* Tooltips */
+.tip { position: relative; border-bottom: 1px dotted rgba(148,163,184,0.5); cursor: help; }
+.tip .tt {
+  display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: #1a2744; border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem;
+  font-size: 0.82rem; font-style: normal; font-weight: 400; color: var(--text); width: max-content; max-width: 300px;
+  z-index: 100; line-height: 1.5; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4); text-align: left;
+}
+.tip:hover .tt, .tip:focus .tt { display: block; }
+@media (max-width: 640px) {
+  .tip .tt { position: fixed; left: 1rem; right: 1rem; bottom: auto; top: auto; transform: none; max-width: none; width: auto; }
+}
+/* Footnotes */
+.fn { font-size: 0.65em; vertical-align: super; color: var(--line); text-decoration: none; margin-left: 1px; line-height: 0; }
+.fn:hover { color: var(--heading); }
+.footnotes ol { padding-left: 1.5rem; margin-left: 0; }
+.footnotes li { font-size: 0.84rem; color: var(--line); margin-bottom: 0.5rem; line-height: 1.5; overflow-wrap: anywhere; }
+.footnotes li a { color: var(--line); }
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.4rem; }
+  .container { padding: 6rem 1rem 4rem; }
+  nav a { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<nav id="topnav" aria-label="Sections">
+  <a href="#what">1 &middot; What it is</a>
+  <a href="#measured">2 &middot; Measurement</a>
+  <a href="#verdict">3 &middot; Verdict</a>
+  <a href="#refuses">4 &middot; Refusals</a>
+  <a href="#inputs">5 &middot; Inputs</a>
+  <a href="#status">6 &middot; Status</a>
+  <a href="#literature">7 &middot; Literature</a>
+  <a href="#glossary">8 &middot; Glossary</a>
+  <a href="#cite">9 &middot; Cite</a>
+</nav>
+<div class="container">
+<h1>The Criticality Compass</h1>
+<p class="subtitle">A designed instrument for finding and following multivariate criticality</p>
+
+<div class="callout" role="note">
+<span class="label">Status</span>
+<p>This page restates a design. Nothing in it has been shown to work. The design is fixed by a deposited design note (version&nbsp;0.1, 2026);<sup><a class="fn" href="#fn1" id="fnref1">1</a></sup> results, each with its status, belong in the methods paper that the note says will follow.</p>
+</div>
+
+<!-- ============================================================ 1 -->
+<h2 id="what"><span class="sn">1</span>What it is</h2>
+
+<p><strong>Multivariate criticality (MC)</strong> is critical behaviour spread across more than one tuning parameter: a line of critical points or of <span class="tip" tabindex="0">fixed points<span class="tt">At a fixed point one renormalisation step leaves the observable unchanged (see the needle, Section 2).</span></span>, or a point where such lines meet or end. The Criticality Compass is a design for an instrument that finds MC in a system, follows its lines, and eventually maps their topology.<sup><a class="fn" href="#fn1" id="fnref1-2">1</a></sup> Its targets include the <span class="tip" tabindex="0">BKT<span class="tt">Berezinskii&ndash;Kosterlitz&ndash;Thouless.</span></span> line, lines of continuously varying exponents, and tricritical points.</p>
+
+<p>The design has two parts. The <strong>Detector</strong> takes a declared input, reads each declared point and returns one verdict word; a family layer then reads a run of points and returns one family word. Every word falls under one of <strong>three answers: MC, Not&nbsp;MC, or Can&rsquo;t&nbsp;tell</strong> (Table&nbsp;1). On Not&nbsp;MC the Detector reports the side class it saw and stops. On Can&rsquo;t&nbsp;tell it refuses, and the reason is a value of the output. On MC it hands the declared plane and the MC points to the <strong>Navigator</strong>, which is designed to run in a loop with the simulation or experiment that produces the data: it receives each reading, places it on one side of the line or on it, and returns the next setting. Each trace stops at a typed terminal, and traced lines with their end and meeting points are meant to accumulate into a map of the MC topology. In the current code the two Navigator followers are run directly; the Detector-gated hand-off is the design.<sup><a class="fn" href="#fn1" id="fnref1-3">1</a></sup></p>
+
+<div class="tablewrap">
+<table class="t">
+<caption style="caption-side:top;text-align:left;font-size:0.85rem;color:var(--line);padding-bottom:0.4rem">Table 1. Verdict words and the three answers.</caption>
+<thead><tr><th>Answer</th><th>Word</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td class="ans-mc">MC</td><td><span class="w">LINE</span> (per point)</td><td>flow stopped or slow; probed direction marginal and stable</td></tr>
+<tr><td class="ans-mc">MC</td><td><span class="w">LINE</span> (family)</td><td>every interior point reads LINE, or the exponent varies along the run while neighbour differences stay marginal</td></tr>
+<tr><td class="ans-mc">MC</td><td><span class="w">BKT-END</span> (family)</td><td>a LINE run meets, at one side, a sink run whose starts agree: a candidate end of the BKT kind</td></tr>
+<tr><td class="ans-mc">MC</td><td><span class="w">POINT-MANIFOLD</span> (family)</td><td>exponent constant along the run, neighbour differences irrelevant; its points form a line</td></tr>
+<tr><td class="ans-not">Not MC</td><td><span class="w">POINT</span></td><td>flow stopped; probed coupling relevant; exponent stable with size: an isolated critical point</td></tr>
+<tr><td class="ans-not">Not MC</td><td><span class="w">FIRST-ORDER</span></td><td>the two declared starts coexist</td></tr>
+<tr><td class="ans-not">Not MC</td><td><span class="w">WALKING</span></td><td>flow stopped; exponent crosses between size pairs: pseudo-critical behaviour that would not survive to infinite size</td></tr>
+<tr><td class="ans-not">Not MC</td><td><span class="w">NOT</span></td><td>needle at a trivial sink, or still flowing</td></tr>
+<tr><td class="ans-ct">Can&rsquo;t tell</td><td>14 per-point <span class="w">REFUSE-*</span> words</td><td>the suffix is the reason, e.g. <span class="w">-SLOW</span> (a slow flow that is not a line), <span class="w">-EQUIL</span> (starts not shown equilibrated), <span class="w">-PROBE-INCOMPLETE</span> (a second coupling not probed)</td></tr>
+<tr><td class="ans-ct">Can&rsquo;t tell</td><td>5 family refusals</td><td>e.g. <span class="w">REFUSE-NON-MONOTONE</span>, <span class="w">REFUSE-OFF-MANIFOLD</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ============================================================ 2 -->
+<h2 id="measured"><span class="sn">2</span>What is measured</h2>
+
+<p>The measurement uses a Monte Carlo block-spin renormalisation-group comparison,<sup><a class="fn" href="#fn10" id="fnref10">10</a>,<a class="fn" href="#fn11" id="fnref11">11</a></sup> finite-size scaling<sup><a class="fn" href="#fn9" id="fnref9">9</a></sup> and a replicate interval. Every quantity the decision reads is a <strong>difference of a declared observable across a declared relation</strong>, computed by a small routine that takes no decisions. The relations are the edges on which differences are taken: size pairs, matched blocking levels, a chain of control points, and a pair of <span class="tip" tabindex="0">starts<span class="tt">The declared starts of the chains. The design compares an ordered start with a random one, and a start must be shown equilibrated.</span></span>.<sup><a class="fn" href="#fn1" id="fnref1-4">1</a></sup></p>
+
+<p>The central instrument is the <strong>needle</strong>. Let <span class="math">g</span><sub>1</sub>(<span class="math">L</span>,&nbsp;<span class="math">p</span>) be the declared observable of a system of linear size <span class="math">L</span> after <span class="math">p</span> applications of a blocking map of factor <span class="math">b</span>. The needle compares size <span class="math">L</span> at level <span class="math">p</span>+1 with size <span class="math">L</span>/<span class="math">b</span> at level <span class="math">p</span>; both then have the same <span class="tip" tabindex="0">block-lattice size<span class="tt">L / b<sup>p+1</sup>: the lattice size left after p+1 blocking steps.</span></span>, one blocking step apart. The flow velocity is</p>
+<span class="math-block">v = g<sub>1</sub>(L, p+1) &minus; g<sub>1</sub>(L/b, p).</span>
+<p>If <span class="math">v</span> is zero within its margin, one renormalisation step leaves the observable unchanged at that size: a fixed point at that size. Its sign gives the direction of flow, toward order or disorder. Near a trivial sink <span class="math">v</span> is also near zero, for a trivial reason, so the needle also reads the differences from the declared ordered and disordered sink values.<sup><a class="fn" href="#fn1" id="fnref1-5">1</a></sup></p>
+
+<div class="tablewrap">
+<table class="t">
+<caption style="caption-side:top;text-align:left;font-size:0.85rem;color:var(--line);padding-bottom:0.4rem">Table 2. Six instruments. &Delta; is a difference across a declared edge.</caption>
+<thead><tr><th>Instrument</th><th>Quantity</th><th>Codes</th></tr></thead>
+<tbody>
+<tr><td><span class="w">needle</span></td><td>flow velocity <span class="math">v</span> and the two sink differences</td><td>DIS, MID, ORD; and a flow code (FLOWING, SLOW, STOPPED)</td></tr>
+<tr><td><span class="w">across</span></td><td>exponent of the response across the probed direction on each size edge, from a covariance with the declared conjugate or from differences between neighbouring control points</td><td>RELEVANT, MARGINAL, WEAK, IRRELEVANT, UNRES</td></tr>
+<tr><td><span class="w">stability</span></td><td>change of that exponent between the lower and upper size edges</td><td>STABLE, CROSSING, OFF, UNRES</td></tr>
+<tr><td><span class="w">two_start</span></td><td>difference of a declared observable between the ordered and random starts, per size, over its unit scale</td><td>COEXIST, INDEP, FLUCT, UNRES</td></tr>
+<tr><td><span class="w">along</span></td><td>exponent with <span class="math">L</span> of |&Delta;(<span class="math">L</span>)| across a control edge; read by the family layer</td><td>MARGINAL, RELEVANT, WEAK, IRRELEVANT, UNRES</td></tr>
+<tr><td><span class="w">fluct</span></td><td>exponent with size of the variance of the energy per bond; read only by the order axis, only when the starts agree</td><td>VANISHES, PERSISTS, GROWS, UNRES</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>The interval</h3>
+<p>Each statistic is formed within each of <span class="math">m</span> independent chains, with chain <span class="math">k</span> of one cell paired by index with chain <span class="math">k</span> of every other. The estimate is the median of the per-chain values <span class="math">t</span><sub>1</sub>&hellip;<span class="math">t<sub>m</sub></span>, and the interval is [<span class="math">t</span><sub>(<span class="math">r</span>)</sub>,&nbsp;<span class="math">t</span><sub>(<span class="math">m</span>+1&minus;<span class="math">r</span>)</sub>] in the order statistics. For independent draws from any continuous distribution it contains the median of the per-chain statistic with probability at least</p>
+<span class="math-block">1 &minus; 2 P( Bin(m, &frac12;) &le; r &minus; 1 ),</span>
+<p>the classical rank interval for a median.<sup><a class="fn" href="#fn12" id="fnref12">12</a></sup> The bound is distribution-free and needs no autocorrelation time.<sup><a class="fn" href="#fn1" id="fnref1-6">1</a></sup></p>
+
+<h3>The sign cell</h3>
+<p>Every coded quantity is an interval [<span class="math">x</span><sub>lo</sub>,&nbsp;<span class="math">x</span><sub>hi</sub>] for a change, with a declared margin <span class="math">&epsilon;</span>&nbsp;&ge;&nbsp;0. The cuts are the sorted points (&minus;<span class="math">&epsilon;</span>,&nbsp;0,&nbsp;+<span class="math">&epsilon;</span>). Let <span class="math">n</span><sub>lo</sub> count the cuts strictly below <span class="math">x</span><sub>lo</sub> and <span class="math">n</span><sub>hi</sub> the cuts at or below <span class="math">x</span><sub>hi</sub>. The ten reachable pairs are looked up in a total table that yields eight values: <span class="w">SIG-</span>, <span class="w">NEG</span>, <span class="w">SLOW-</span>, <span class="w">ZERO!</span>, <span class="w">SLOW+</span>, <span class="w">POS</span>, <span class="w">SIG+</span> and <span class="w">UNRES</span>. There is no comparison chain and no fall-through. With <span class="math">&epsilon;</span>&nbsp;=&nbsp;0 only <span class="w">SIG-</span>, <span class="w">UNRES</span> and <span class="w">SIG+</span> are reachable: the three-valued sign. A code table, written in full, then maps each cell to a word for each instrument (Figure&nbsp;1).<sup><a class="fn" href="#fn1" id="fnref1-7">1</a></sup></p>
+
+<figure>
+<svg viewBox="0 0 640 340" role="img" aria-label="The sign-cell strip. Eight example intervals are drawn against the cuts minus epsilon, zero and plus epsilon. An interval entirely below minus epsilon is SIG minus; one reaching from below minus epsilon to between minus epsilon and zero is NEG; one between minus epsilon and zero is SLOW minus; one containing zero inside the margin is ZERO; the mirror images are SLOW plus, POS and SIG plus; one that straddles zero and a margin edge is UNRES. The right column gives the code the across instrument's difference table assigns: IRRELEVANT for SIG minus and NEG, MARGINAL for SLOW minus, ZERO and SLOW plus, RELEVANT for POS and SIG plus, UNRES for UNRES." xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, Menlo, Consolas, monospace">
+  <text x="12" y="24" font-size="12" fill="#94a3b8">cell</text>
+  <text x="310" y="24" font-size="12" fill="#94a3b8" text-anchor="middle">interval [x_lo, x_hi] against the cuts</text>
+  <text x="520" y="24" font-size="12" fill="#94a3b8">across code</text>
+  <!-- margin band and cuts -->
+  <rect x="250" y="36" width="120" height="262" fill="#3b82f6" fill-opacity="0.07"/>
+  <line x1="250" y1="36" x2="250" y2="298" stroke="#94a3b8" stroke-dasharray="4 4"/>
+  <line x1="310" y1="36" x2="310" y2="298" stroke="#f1f5f9" stroke-width="1.2"/>
+  <line x1="370" y1="36" x2="370" y2="298" stroke="#94a3b8" stroke-dasharray="4 4"/>
+  <!-- axis -->
+  <line x1="130" y1="298" x2="490" y2="298" stroke="#64748b"/>
+  <text x="250" y="318" font-size="13" fill="#cbd5e1" text-anchor="middle">&#8722;&#949;</text>
+  <text x="310" y="318" font-size="13" fill="#cbd5e1" text-anchor="middle">0</text>
+  <text x="370" y="318" font-size="13" fill="#cbd5e1" text-anchor="middle">+&#949;</text>
+  <text x="310" y="336" font-size="11" fill="#94a3b8" text-anchor="middle">change in the quantity read</text>
+  <!-- rows: y = 52 + 32 i -->
+  <g font-size="13">
+    <text x="12" y="56" fill="#f1f5f9">SIG-</text>
+    <line x1="154" y1="52" x2="226" y2="52" stroke="#a855f7" stroke-width="6" stroke-linecap="round"/>
+    <text x="520" y="56" fill="#94a3b8">IRRELEVANT</text>
+
+    <text x="12" y="88" fill="#f1f5f9">NEG</text>
+    <line x1="214" y1="84" x2="280" y2="84" stroke="#a855f7" stroke-width="6" stroke-linecap="round"/>
+    <text x="520" y="88" fill="#94a3b8">IRRELEVANT</text>
+
+    <text x="12" y="120" fill="#f1f5f9">SLOW-</text>
+    <line x1="262" y1="116" x2="298" y2="116" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
+    <text x="520" y="120" fill="#94a3b8">MARGINAL</text>
+
+    <text x="12" y="152" fill="#f1f5f9">ZERO!</text>
+    <line x1="280" y1="148" x2="346" y2="148" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
+    <text x="520" y="152" fill="#94a3b8">MARGINAL</text>
+
+    <text x="12" y="184" fill="#f1f5f9">SLOW+</text>
+    <line x1="322" y1="180" x2="358" y2="180" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
+    <text x="520" y="184" fill="#94a3b8">MARGINAL</text>
+
+    <text x="12" y="216" fill="#f1f5f9">POS</text>
+    <line x1="340" y1="212" x2="406" y2="212" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+    <text x="520" y="216" fill="#94a3b8">RELEVANT</text>
+
+    <text x="12" y="248" fill="#f1f5f9">SIG+</text>
+    <line x1="394" y1="244" x2="466" y2="244" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+    <text x="520" y="248" fill="#94a3b8">RELEVANT</text>
+
+    <text x="12" y="280" fill="#f1f5f9">UNRES</text>
+    <line x1="220" y1="276" x2="340" y2="276" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
+    <text x="520" y="280" fill="#94a3b8">UNRES</text>
+  </g>
+</svg>
+<figcaption>Figure 1. The sign cell. Each bar is one example interval for a change; its position against the cuts &minus;&epsilon;, 0 and +&epsilon; alone fixes the cell. The right column shows one code table at work: the cell-to-word map of the <span class="w">across</span> instrument&rsquo;s difference form. Other instruments map the same eight cells to their own words; <span class="w">stability</span>, for example, reads STABLE for the three middle cells and CROSSING for <span class="w">POS</span> and <span class="w">SIG+</span>.<sup><a class="fn" href="#fn1" id="fnref1-8">1</a></sup></figcaption>
+</figure>
+
+<!-- ============================================================ 3 -->
+<h2 id="verdict"><span class="sn">3</span>From reading to verdict</h2>
+
+<p>The codes of one point form its <strong>signature row</strong>: needle, needle_pair, sink, flow, across, stability, two_start, probe, and a drift code. The probe column comes from the declared couplings, never from data: it records whether <span class="w">across</span> probes every coupling.<sup><a class="fn" href="#fn1" id="fnref1-9">1</a></sup></p>
+
+<p><strong>The rulebook is data.</strong> It is a file of rows; each row lists, for some columns, the codes it accepts, and an omitted column accepts every value, nulls included. At load the rulebook is expanded over the whole signature domain and refused unless its rows are pairwise disjoint and together cover the domain. Exactly one row therefore matches any signature, whatever the row order. In words: with the starts independent and the flow stopped, a relevant and stable probed direction gives POINT; marginal and stable gives LINE; relevant or marginal and crossing gives WALKING; an unresolved stability or across gives a refusal. With the starts independent, a slow flow gives LINE only if the probed direction is marginal and stable, and otherwise <span class="w">REFUSE-SLOW</span>. An incomplete or unknown probe turns POINT, LINE or WALKING into a probe refusal.<sup><a class="fn" href="#fn1" id="fnref1-10">1</a></sup></p>
+
+<p><strong>Nothing undeclared is inferred, and a null is a value.</strong> An absent declaration gives a typed null, NOT-MEASURED or NOT-EVALUATED, with its reason. The null travels to the verdict as a <span class="w">REFUSE-*-UNMEASURED</span> word or a probe refusal; it is never an error.<sup><a class="fn" href="#fn1" id="fnref1-11">1</a></sup></p>
+
+<p>Two smaller partitions read the same codes. The <strong>geometry</strong> axis reads needle, flow, across and stability (POINT, LINE, WALKING, NOT, and refusals). The <strong>order</strong> axis reads needle, two_start and fluct: COEXIST-AT-WINDOW where the starts sit apart; FIRST-ORDER-TUNNELLING where the starts agree and the energy fluctuation per bond persists with size; CONTINUOUS where it falls; OFF-WINDOW at a sink; and five refusing values. A compose table, total over geometry and order, maps the pair to a verdict; the fluctuation names the order but moves no verdict. At load a check proves that compose equals the per-point verdict on every row of the signature domain.<sup><a class="fn" href="#fn1" id="fnref1-12">1</a></sup></p>
+
+<p>A line is a property of many points, so a <strong>family layer</strong> reads a declared run of points from their stored per-point results and returns LINE, BKT-END, POINT-MANIFOLD, or one of five refusals. It never re-measures, and its rulebook is held to the same disjoint-and-total check.<sup><a class="fn" href="#fn1" id="fnref1-13">1</a></sup></p>
+
+<!-- ============================================================ 4 -->
+<h2 id="refuses"><span class="sn">4</span>What it refuses to do</h2>
+
+<p>The design states its refusals as rules:<sup><a class="fn" href="#fn1" id="fnref1-14">1</a></sup></p>
+<ul>
+<li><strong>No reading without a declaration.</strong> A table that a declared instrument needs and that is missing is refused; so is a table that no declared instrument needs. A missing measurement becomes a typed null and then a named refusal.</li>
+<li><strong>No interval admitted by its own estimate.</strong> A rule that decides whether an interval may be used, computed from the estimate it guards, selects for its own failures: a low estimate of the autocorrelation time both passes the floor and narrows the interval. Eligibility is therefore declared, as the number of independent chains or an autocorrelation time, and never read from the series it admits.</li>
+<li><strong>No cell with the wrong replicate count.</strong> A cell without exactly <span class="math">m</span> chains, or a declared rank <span class="math">r</span> other than the method&rsquo;s, is refused at declaration.</li>
+<li><strong>No rulebook that leaves a gap or an overlap.</strong> One that is not disjoint and total is refused at load.</li>
+<li><strong>No claim that a line ends from stored data.</strong> In the geometry-only line follower, each side oracle declares its evidence class, and the class owns the set of terminal types. The type for finite stored evidence has no END member, so a follower on stored evidence cannot claim that a line ends, by construction of the types rather than by a check.</li>
+<li><strong>No first-order label from start dependence alone.</strong> The Navigator&rsquo;s start-dependence test never labels a transition first order.</li>
+</ul>
+
+<!-- ============================================================ 5 -->
+<h2 id="inputs"><span class="sn">5</span>Fixed inputs</h2>
+
+<p>Every input is a declaration file plus hashed data files. The declaration holds fixed tables: the instruments to run and, for each point, its provenance (exact truth, navigation, or observed); the axes (the ordered points of the control path or plane, the strictly ascending sizes, and the starts); the observable; the blocking map; the relations on which differences are taken; the conjugate observable and the system&rsquo;s couplings, with which are probed; the sink values and the two-start observable; the interval method with its parameters and one margin per quantity read; and the data, with one hashed entry per point, size, start and chain. A verdict is thus a function of the declaration and the data alone.<sup><a class="fn" href="#fn1" id="fnref1-15">1</a></sup></p>
+
+<!-- ============================================================ 6 -->
+<h2 id="status"><span class="sn">6</span>Status</h2>
+
+<p>The design targets the MC cases below, which are also its known-answer test bed. Each has an exact or high-precision truth, so every verdict is scored right, wrong or refused, never merely plausible.<sup><a class="fn" href="#fn1" id="fnref1-16">1</a></sup></p>
+
+<div class="tablewrap">
+<table class="t">
+<caption style="caption-side:top;text-align:left;font-size:0.85rem;color:var(--line);padding-bottom:0.4rem">Table 3. Target MC cases and the models that carry them.</caption>
+<thead><tr><th>Case</th><th>Models</th></tr></thead>
+<tbody>
+<tr><td>BKT critical line</td><td>XY model; clock models with <span class="math">q</span>&nbsp;&ge;&nbsp;5<sup><a class="fn" href="#fn13" id="fnref13">13</a></sup></td></tr>
+<tr><td>Line of fixed points, continuously varying exponents</td><td>Ashkin&ndash;Teller;<sup><a class="fn" href="#fn14" id="fnref14">14</a></sup> eight-vertex;<sup><a class="fn" href="#fn15" id="fnref15">15</a></sup> six-vertex or ice<sup><a class="fn" href="#fn16" id="fnref16">16</a></sup></td></tr>
+<tr><td>Tricritical point, where a critical line turns first-order</td><td>Blume&ndash;Capel<sup><a class="fn" href="#fn17" id="fnref17">17</a></sup></td></tr>
+<tr><td>Ends and meeting points of lines</td><td>the four-state Potts point at the end of the Ashkin&ndash;Teller line,<sup><a class="fn" href="#fn18" id="fnref18">18</a></sup> with walking behaviour beyond it<sup><a class="fn" href="#fn19" id="fnref19">19</a></sup></td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Development work is under way. Early pieces are being tried on test problems whose answers are known exactly. <strong>Nothing has been shown to work.</strong> There is no real-data confirmatory test yet: real data so far have produced only limitation reports and a refusal. The shipped navigation commands are untested, and no line placed by them has been scored against a known one. Results, each with its status, belong in the methods paper.<sup><a class="fn" href="#fn1" id="fnref1-17">1</a></sup></p>
+
+<p>The code is private for now. It is to be released as the Python package <code>criticality-compass</code> under the Apache-2.0 licence, alongside the methods paper. The design note is released under CC&nbsp;BY&nbsp;4.0.<sup><a class="fn" href="#fn1" id="fnref1-18">1</a></sup></p>
+
+<!-- ============================================================ 7 -->
+<h2 id="literature"><span class="sn">7</span>Relation to the literature</h2>
+
+<p><strong>Early-warning signals.</strong> Critical slowing down near a bifurcation shows up in monitoring data as slower recovery from perturbations, rising lag-1 autocorrelation and increasing variance (Scheffer et&nbsp;al. 2012).<sup><a class="fn" href="#fn3" id="fnref3">3</a></sup> Metric-based and model-based early-warning indicators read these changes in a time series (Dakos et&nbsp;al. 2012).<sup><a class="fn" href="#fn2" id="fnref2">2</a></sup> A learned classifier assigns a bifurcation type to a time series (Bury et&nbsp;al. 2021).<sup><a class="fn" href="#fn4" id="fnref4">4</a></sup> The Compass is designed to read critical geometry under size scaling rather than bifurcation type in time series; the design note describes the two as complementary.<sup><a class="fn" href="#fn1" id="fnref1-19">1</a></sup></p>
+
+<p><strong>The multivariate direction.</strong> The natural fluctuations of a multivariate time series can reveal the direction of lowest resilience, the combination of variables along which recovery is slowest (Weinans et&nbsp;al. 2019).<sup><a class="fn" href="#fn5" id="fnref5">5</a></sup> A comparison of thirteen multivariate indicators across six scenarios found that no single indicator performs best in all of them (Weinans et&nbsp;al. 2021).<sup><a class="fn" href="#fn6" id="fnref6">6</a></sup></p>
+
+<p><strong>Criticality across many parameters.</strong> In a high-dimensional parameter space the critical points need not be isolated: they can form a critical manifold, along which a system can drift while staying critical and reach multicritical points where it is critical in several ways at once (Gross 2021).<sup><a class="fn" href="#fn7" id="fnref7">7</a></sup> In an adaptive network model, homeostatic-plasticity-like rules drive the system to the onset of activity and then, while it stays critical, along the critical manifold (Sormunen, Gross &amp; Saramäki 2023).<sup><a class="fn" href="#fn8" id="fnref8">8</a></sup></p>
+
+<p><strong>Statistical physics.</strong> Finite-size scaling estimates one exponent or crossing point (Fisher &amp; Barber 1972);<sup><a class="fn" href="#fn9" id="fnref9-2">9</a></sup> block-spin comparison by Monte Carlo is prior work (Ma 1976; Swendsen 1979).<sup><a class="fn" href="#fn10" id="fnref10-2">10</a>,<a class="fn" href="#fn11" id="fnref11-2">11</a></sup> For the variety of universality classes in lattice systems, see &Oacute;dor (2004).<sup><a class="fn" href="#fn20" id="fnref20">20</a></sup></p>
+
+<!-- ============================================================ 8 -->
+<h2 id="glossary"><span class="sn">8</span>Glossary</h2>
+<dl class="gloss">
+<dt>input</dt><dd>A declaration file plus hashed data files. Nothing outside it is read or inferred.</dd>
+<dt>point</dt><dd>One of the ordered points of a declared control path or plane, measured at the declared, strictly ascending sizes.</dd>
+<dt>instrument</dt><dd>One declared measurement (needle, across, stability, two_start, along, fluct, and auxiliary forms of these). Each takes differences of a declared observable across declared relations.</dd>
+<dt>relation</dt><dd>The declared edges on which differences are taken: size pairs, matched blocking levels, a chain of control points, a pair of starts.</dd>
+<dt>reading</dt><dd>An estimate (the median over independent chains) with its order-statistic interval, and the interval&rsquo;s sign cell: where it sits among the cuts &minus;&epsilon;, 0, +&epsilon;.</dd>
+<dt>code</dt><dd>A word that a total code table assigns to a sign cell (or to earlier codes); for example <span class="w">SIG+</span> becomes RELEVANT in the across table.</dd>
+<dt>signature row</dt><dd>The codes of one point: needle, needle_pair, sink, flow, across, stability, two_start, probe, drift code.</dd>
+<dt>rulebook</dt><dd>A data file of rows mapping signature rows to verdicts, refused at load unless its rows are pairwise disjoint and cover every possible signature.</dd>
+<dt>verdict</dt><dd>The word given by the one rulebook row that matches a signature row; each word falls under MC, Not MC or Can&rsquo;t tell.</dd>
+<dt>typed null</dt><dd>NOT-MEASURED or NOT-EVALUATED with its reason: a value, not an error, that travels to a named refusal.</dd>
+<dt>case</dt><dd>A target model whose answer is known exactly or to high precision, so that a verdict on it is scored right, wrong or refused.</dd>
+<dt>geometry</dt><dd>The partition that reads needle, flow, across and stability only: POINT, LINE, WALKING, NOT, or a refusal.</dd>
+<dt>order</dt><dd>The partition that reads needle, two_start and fluct only: whether the starts coexist at the window, and when they agree, whether the energy fluctuation per bond persists or falls with size. A compose table turns (geometry, order) into the verdict.</dd>
+</dl>
+
+<!-- ============================================================ 9 -->
+<h2 id="cite"><span class="sn">9</span>How to cite</h2>
+<div class="cite-box">
+<p>Stephenson, B. (2026). <em>The Criticality Compass: design of an instrument for finding and following multivariate criticality &mdash; design note.</em> Version 0.1. Zenodo. <a href="https://doi.org/10.5281/zenodo.23965603">doi:10.5281/zenodo.23965603</a>. Licence CC&nbsp;BY&nbsp;4.0.</p>
+<p>Author: Bruce Stephenson, independent researcher. ORCID <a href="https://orcid.org/0009-0005-6842-6686">0009-0005-6842-6686</a>.</p>
+<p>Correspondence: <a href="mailto:energyscholar@gmail.com">energyscholar@gmail.com</a>.</p>
+</div>
+
+<section class="footnotes" aria-labelledby="refs-h">
+<h2 id="refs-h">References</h2>
+<ol>
+<li id="fn1">The design note, version 0.1 (2026), Zenodo, <a href="https://doi.org/10.5281/zenodo.23965603">doi:10.5281/zenodo.23965603</a>; full reference under <a href="#cite">How to cite</a>. Every statement about the Compass on this page restates it. <a href="#fnref1" aria-label="Back to text">&#8617;</a></li>
+<li id="fn2">Dakos, V., Carpenter, S. R., Brock, W. A., et&nbsp;al. (2012). Methods for detecting early warnings of critical transitions in time series illustrated using simulated ecological data. <em>PLoS ONE</em> 7(7), e41010. <a href="https://doi.org/10.1371/journal.pone.0041010">doi:10.1371/journal.pone.0041010</a> <a href="#fnref2" aria-label="Back to text">&#8617;</a></li>
+<li id="fn3">Scheffer, M., Carpenter, S. R., Lenton, T. M., et&nbsp;al. (2012). Anticipating critical transitions. <em>Science</em> 338(6105), 344&ndash;348. <a href="https://doi.org/10.1126/science.1225244">doi:10.1126/science.1225244</a> <a href="#fnref3" aria-label="Back to text">&#8617;</a></li>
+<li id="fn4">Bury, T. M., et&nbsp;al. (2021). Deep learning for early warning signals of tipping points. <em>Proceedings of the National Academy of Sciences</em> 118(39), e2106140118. <a href="https://doi.org/10.1073/pnas.2106140118">doi:10.1073/pnas.2106140118</a> <a href="#fnref4" aria-label="Back to text">&#8617;</a></li>
+<li id="fn5">Weinans, E., Lever, J. J., Bathiany, S., et&nbsp;al. (2019). Finding the direction of lowest resilience in multivariate complex systems. <em>Journal of the Royal Society Interface</em> 16(159), 20190629. <a href="https://doi.org/10.1098/rsif.2019.0629">doi:10.1098/rsif.2019.0629</a> <a href="#fnref5" aria-label="Back to text">&#8617;</a></li>
+<li id="fn6">Weinans, E., Quax, R., van Nes, E. H., &amp; van de Leemput, I. A. (2021). Evaluating the performance of multivariate indicators of resilience loss. <em>Scientific Reports</em> 11, 9148. <a href="https://doi.org/10.1038/s41598-021-87839-y">doi:10.1038/s41598-021-87839-y</a> <a href="#fnref6" aria-label="Back to text">&#8617;</a></li>
+<li id="fn7">Gross, T. (2021). Not one, but many critical states: a dynamical systems perspective. <em>Frontiers in Neural Circuits</em> 15, 614268. <a href="https://doi.org/10.3389/fncir.2021.614268">doi:10.3389/fncir.2021.614268</a> <a href="#fnref7" aria-label="Back to text">&#8617;</a></li>
+<li id="fn8">Sormunen, S., Gross, T., &amp; Saramäki, J. (2023). Critical drift in a neuro-inspired adaptive network. <em>Physical Review Letters</em> 130, 188401. <a href="https://doi.org/10.1103/PhysRevLett.130.188401">doi:10.1103/PhysRevLett.130.188401</a> <a href="#fnref8" aria-label="Back to text">&#8617;</a></li>
+<li id="fn9">Fisher, M. E., &amp; Barber, M. N. (1972). Scaling theory for finite-size effects in the critical region. <em>Physical Review Letters</em> 28(23), 1516&ndash;1519. <a href="https://doi.org/10.1103/PhysRevLett.28.1516">doi:10.1103/PhysRevLett.28.1516</a> <a href="#fnref9" aria-label="Back to text">&#8617;</a></li>
+<li id="fn10">Ma, S. (1976). Renormalization group by Monte Carlo methods. <em>Physical Review Letters</em> 37(8), 461&ndash;464. <a href="https://doi.org/10.1103/PhysRevLett.37.461">doi:10.1103/PhysRevLett.37.461</a> <a href="#fnref10" aria-label="Back to text">&#8617;</a></li>
+<li id="fn11">Swendsen, R. H. (1979). Monte Carlo renormalization group. <em>Physical Review Letters</em> 42(14), 859&ndash;861. <a href="https://doi.org/10.1103/PhysRevLett.42.859">doi:10.1103/PhysRevLett.42.859</a> <a href="#fnref11" aria-label="Back to text">&#8617;</a></li>
+<li id="fn12">Thompson, W. R. (1936). On confidence ranges for the median and other expectation distributions for populations of unknown distribution form. <em>Annals of Mathematical Statistics</em> 7(3), 122&ndash;128. <a href="https://doi.org/10.1214/aoms/1177732502">doi:10.1214/aoms/1177732502</a> <a href="#fnref12" aria-label="Back to text">&#8617;</a></li>
+<li id="fn13">Berezinskii, V. L. (1972). <em>Soviet Physics JETP</em> 34, 610. Kosterlitz, J. M., &amp; Thouless, D. J. (1973). <em>J. Phys. C</em> 6(7), 1181&ndash;1203, <a href="https://doi.org/10.1088/0022-3719/6/7/010">doi:10.1088/0022-3719/6/7/010</a>. Kosterlitz, J. M. (1974). <em>J. Phys. C</em> 7(6), 1046&ndash;1060, <a href="https://doi.org/10.1088/0022-3719/7/6/005">doi:10.1088/0022-3719/7/6/005</a>. Jos&eacute;, J. V., Kadanoff, L. P., Kirkpatrick, S., &amp; Nelson, D. R. (1977). <em>Phys. Rev. B</em> 16(3), 1217&ndash;1241, <a href="https://doi.org/10.1103/physrevb.16.1217">doi:10.1103/physrevb.16.1217</a>. <a href="#fnref13" aria-label="Back to text">&#8617;</a></li>
+<li id="fn14">Ashkin, J., &amp; Teller, E. (1943). <em>Phys. Rev.</em> 64, 178, <a href="https://doi.org/10.1103/physrev.64.178">doi:10.1103/physrev.64.178</a>. Wu, F. Y., &amp; Lin, K. Y. (1974). <em>J. Phys. C</em> 7, L181&ndash;L184, <a href="https://doi.org/10.1088/0022-3719/7/9/002">doi:10.1088/0022-3719/7/9/002</a>. <a href="#fnref14" aria-label="Back to text">&#8617;</a></li>
+<li id="fn15">Baxter, R. J. (1971). <em>Phys. Rev. Lett.</em> 26, 832, <a href="https://doi.org/10.1103/physrevlett.26.832">doi:10.1103/physrevlett.26.832</a>. Baxter, R. J. (1972). <em>Ann. Phys.</em> 70(1), 193&ndash;228, <a href="https://doi.org/10.1016/0003-4916(72)90335-1">doi:10.1016/0003-4916(72)90335-1</a>. <a href="#fnref15" aria-label="Back to text">&#8617;</a></li>
+<li id="fn16">Lieb, E. H. (1967). <em>Phys. Rev. Lett.</em> 18, 692, <a href="https://doi.org/10.1103/physrevlett.18.692">doi:10.1103/physrevlett.18.692</a>. <a href="#fnref16" aria-label="Back to text">&#8617;</a></li>
+<li id="fn17">Blume, M. (1966). <em>Phys. Rev.</em> 141, 517, <a href="https://doi.org/10.1103/physrev.141.517">doi:10.1103/physrev.141.517</a>. Capel, H. W. (1966). <em>Physica</em> 32(5), 966&ndash;988, <a href="https://doi.org/10.1016/0031-8914(66)90027-9">doi:10.1016/0031-8914(66)90027-9</a>. <a href="#fnref17" aria-label="Back to text">&#8617;</a></li>
+<li id="fn18">Baxter, R. J. (1973). <em>J. Phys. C</em> 6(23), L445&ndash;L448, <a href="https://doi.org/10.1088/0022-3719/6/23/005">doi:10.1088/0022-3719/6/23/005</a>. Wu, F. Y. (1982). The Potts model. <em>Rev. Mod. Phys.</em> 54, 235, <a href="https://doi.org/10.1103/revmodphys.54.235">doi:10.1103/revmodphys.54.235</a>. <a href="#fnref18" aria-label="Back to text">&#8617;</a></li>
+<li id="fn19">Gorbenko, V., Rychkov, S., &amp; Zan, B. (2018). Walking, weak first-order transitions, and complex CFTs. <em>Journal of High Energy Physics</em> 2018(10), 108. <a href="https://doi.org/10.1007/jhep10(2018)108">doi:10.1007/jhep10(2018)108</a> <a href="#fnref19" aria-label="Back to text">&#8617;</a></li>
+<li id="fn20">&Oacute;dor, G. (2004). Universality classes in nonequilibrium lattice systems. <em>Reviews of Modern Physics</em> 76, 663. <a href="https://doi.org/10.1103/RevModPhys.76.663">doi:10.1103/RevModPhys.76.663</a> <a href="#fnref20" aria-label="Back to text">&#8617;</a></li>
+</ol>
+</section>
+
+<div class="scroll-marker" aria-hidden="true"></div>
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #1e293b;font-size:0.85rem"><a href="../" style="color:#94a3b8;text-decoration:none">&larr; Web Annex</a></div>
+</div>
+<script src="../js/annex-tracker.js"></script>
+</body>
+</html>
