@@ -163,7 +163,7 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 
 <div class="tablewrap">
 <table class="t">
-<caption style="caption-side:top;text-align:left;font-size:0.85rem;color:var(--line);padding-bottom:0.4rem">Table 2. Six instruments. &Delta; is a difference across a declared edge.</caption>
+<caption style="caption-side:top;text-align:left;font-size:0.85rem;color:var(--line);padding-bottom:0.4rem">Table 2. Six of the instruments (the note lists eleven, including the ordered-start needle, the drift chain and the reported-only transform). &Delta; is a difference across a declared edge.</caption>
 <thead><tr><th>Instrument</th><th>Quantity</th><th>Codes</th></tr></thead>
 <tbody>
 <tr><td><span class="w">needle</span></td><td>flow velocity <span class="math">v</span> and the two sink differences</td><td>DIS, MID, ORD; and a flow code (FLOWING, SLOW, STOPPED)</td></tr>
@@ -182,7 +182,7 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 <p>the classical rank interval for a median.<sup><a class="fn" href="#fn5" id="fnref5">5</a></sup> The bound is distribution-free and needs no autocorrelation time.<sup><a class="fn" href="#fn1" id="fnref1-7">1</a></sup></p>
 
 <h3>The sign cell</h3>
-<p>Every coded quantity is an interval [<span class="math">x</span><sub>lo</sub>,&nbsp;<span class="math">x</span><sub>hi</sub>] for a change. Each quantity has a declared <strong>margin</strong> <span class="math">&epsilon;</span>&nbsp;&ge;&nbsp;0: a change resolved to lie strictly inside (&minus;<span class="math">&epsilon;</span>,&nbsp;+<span class="math">&epsilon;</span>) counts as equivalent to zero. The <strong>cuts</strong> are the three sorted points &minus;<span class="math">&epsilon;</span>, 0 and +<span class="math">&epsilon;</span>, and the sign cell is fixed by where the two ends of the interval fall among them. It takes one of eight values:<sup><a class="fn" href="#fn1" id="fnref1-8">1</a></sup></p>
+<p>Every coded quantity is an interval [<span class="math">x</span><sub>lo</sub>,&nbsp;<span class="math">x</span><sub>hi</sub>] for a change. Each quantity has a declared <strong>margin</strong> <span class="math">&epsilon;</span>&nbsp;&ge;&nbsp;0; the cell records whether the interval is resolved beyond the margin, resolved inside it (and if so, whether it contains zero), or unresolved. The <strong>cuts</strong> are the three sorted points &minus;<span class="math">&epsilon;</span>, 0 and +<span class="math">&epsilon;</span>, and the sign cell is fixed by where the two ends of the interval fall among them. It takes one of eight values:<sup><a class="fn" href="#fn1" id="fnref1-8">1</a></sup></p>
 <ul>
 <li><span class="w">SIG+</span>: a rise resolved beyond the margin (<span class="math">x</span><sub>lo</sub>&nbsp;&gt;&nbsp;<span class="math">&epsilon;</span>).</li>
 <li><span class="w">POS</span>: a resolved rise whose relation to the margin is unresolved (0&nbsp;&lt;&nbsp;<span class="math">x</span><sub>lo</sub>&nbsp;&le;&nbsp;<span class="math">&epsilon;</span>&nbsp;&le;&nbsp;<span class="math">x</span><sub>hi</sub>).</li>
@@ -256,7 +256,7 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 
 <p><strong>Nothing undeclared is inferred, and a null is a value.</strong> An absent declaration gives a typed null, NOT-MEASURED or NOT-EVALUATED, with its reason. The null travels to the verdict as a <span class="w">REFUSE-*-UNMEASURED</span> word or a probe refusal; it is never an error.<sup><a class="fn" href="#fn1" id="fnref1-13">1</a></sup></p>
 
-<p id="refusal-words">The refusal words named in the design note include, per point: <span class="w">REFUSE-FLOW</span> (an unresolved flow), <span class="w">REFUSE-SLOW</span> (a slow flow that is not a line), <span class="w">REFUSE-EQUIL</span> (starts not shown equilibrated), <span class="w">REFUSE-OFF</span> (stability off), <span class="w">REFUSE-WEAK</span> and <span class="w">REFUSE-IRRELEVANT</span> (the probed direction weak or irrelevant), <span class="w">REFUSE-UNRES</span> (an unresolved stability or across), <span class="w">REFUSE-PROBE-INCOMPLETE</span> and <span class="w">REFUSE-PROBE-UNKNOWN</span>, and the <span class="w">REFUSE-*-UNMEASURED</span> words such as <span class="w">REFUSE-TWO-START-UNMEASURED</span>. Per family: <span class="w">REFUSE-NON-MONOTONE</span>, <span class="w">REFUSE-OFF-MANIFOLD</span>, a refusal for an unreadable bracket, and a refusal for every remaining unclassified cell. The full lists are in the design note.<sup><a class="fn" href="#fn1" id="fnref1-14">1</a></sup></p>
+<p id="refusal-words">The refusal words named in the design note include, per point: <span class="w">REFUSE-FLOW</span> (an unresolved flow), <span class="w">REFUSE-SLOW</span> (a slow flow that is not a line), <span class="w">REFUSE-EQUIL</span> (starts not shown equilibrated), <span class="w">REFUSE-OFF</span> (stability off), <span class="w">REFUSE-WEAK</span> and <span class="w">REFUSE-IRRELEVANT</span> (the probed direction weak or irrelevant), <span class="w">REFUSE-UNRES</span> (an unresolved stability or across), <span class="w">REFUSE-PROBE-INCOMPLETE</span> and <span class="w">REFUSE-PROBE-UNKNOWN</span>, and the <span class="w">REFUSE-*-UNMEASURED</span> words such as <span class="w">REFUSE-TWO-START-UNMEASURED</span>. Per family: <span class="w">REFUSE-NON-MONOTONE</span>, <span class="w">REFUSE-OFF-MANIFOLD</span>, a refusal for an unreadable bracket, and a refusal for every remaining unclassified cell. The note gives the counts, 14 and 5, but does not list every word.<sup><a class="fn" href="#fn1" id="fnref1-14">1</a></sup></p>
 
 <p>Two smaller partitions read the same codes. The <strong>geometry</strong> axis reads needle, flow, across and stability (POINT, LINE, WALKING, NOT, and refusals). The <strong>order</strong> axis reads needle, two_start and fluct: COEXIST-AT-WINDOW where the starts sit apart; FIRST-ORDER-TUNNELLING where the starts agree and the energy fluctuation per bond persists with size; CONTINUOUS where it falls; OFF-WINDOW at a sink; and five refusing values. A compose table, total over geometry and order, maps the pair to a verdict; the fluctuation names the order but moves no verdict. At load a check proves that compose equals the per-point verdict on every row of the signature domain.<sup><a class="fn" href="#fn1" id="fnref1-15">1</a></sup></p>
 
@@ -311,7 +311,7 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 
 <p><strong>Criticality across many parameters.</strong> In a high-dimensional parameter space the critical points need not be isolated: they can form a critical manifold, along which a system can drift while staying critical and reach multicritical points where it is critical in several ways at once (Gross 2021).<sup><a class="fn" href="#fn18" id="fnref18">18</a></sup> In an adaptive network model, homeostatic-plasticity-like rules drive the system to the onset of activity and then, while it stays critical, along the critical manifold (Sormunen, Gross &amp; Saramäki 2023).<sup><a class="fn" href="#fn19" id="fnref19">19</a></sup></p>
 
-<p><strong>Statistical physics.</strong> Finite-size scaling estimates one exponent or crossing point (Fisher &amp; Barber 1972);<sup><a class="fn" href="#fn4" id="fnref4-2">4</a></sup> block-spin comparison by Monte Carlo is prior work (Ma 1976; Swendsen 1979).<sup><a class="fn" href="#fn2" id="fnref2-2">2</a>,<a class="fn" href="#fn3" id="fnref3-2">3</a></sup> For the variety of universality classes in lattice systems, see &Oacute;dor (2004).<sup><a class="fn" href="#fn20" id="fnref20">20</a></sup></p>
+<p><strong>Statistical physics.</strong> Finite-size scaling estimates one exponent or crossing point (Fisher &amp; Barber 1972);<sup><a class="fn" href="#fn4" id="fnref4-2">4</a></sup> block-spin comparison by Monte Carlo is prior work (Ma 1976; Swendsen 1979).<sup><a class="fn" href="#fn2" id="fnref2-2">2</a>,<a class="fn" href="#fn3" id="fnref3-2">3</a></sup> For the variety of universality classes in nonequilibrium lattice systems, see &Oacute;dor (2004).<sup><a class="fn" href="#fn20" id="fnref20">20</a></sup></p>
 
 <!-- ============================================================ 8 -->
 <h2 id="glossary"><span class="sn">8</span>Glossary</h2>
@@ -328,7 +328,7 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 <dt id="g-conjugate">conjugate</dt><dd>The observable conjugate to the control coupling, declared from the Hamiltonian; <span class="w">across</span> reads its covariance with the blocked observable.</dd>
 <dt>input</dt><dd>A declaration file plus hashed data files. Nothing outside it is read or inferred.</dd>
 <dt>point</dt><dd>One of the ordered points of a declared control path or plane, measured at the declared, strictly ascending sizes.</dd>
-<dt>instrument</dt><dd>One declared measurement (needle, across, stability, two_start, along, fluct, and auxiliary forms of these). Each takes differences of a declared observable across declared relations.</dd>
+<dt>instrument</dt><dd>One declared measurement. The note lists eleven: needle, needle_o (the ordered-start needle), needle_chain (the drift chain), across, across_delta, stability, stability_delta, transform (reported only), fluct, two_start and along. Every quantity the rulebook reads is a difference of a declared observable across a declared relation.</dd>
 <dt>relation</dt><dd>The declared edges on which differences are taken: size pairs, matched blocking levels, a chain of control points, a pair of starts.</dd>
 <dt>reading</dt><dd>An estimate (the median over independent chains) with its order-statistic interval, and the interval&rsquo;s sign cell: where it sits among the cuts &minus;&epsilon;, 0, +&epsilon;.</dd>
 <dt>code</dt><dd>A word that a total code table assigns to a sign cell (or to earlier codes); for example <span class="w">SIG+</span> becomes RELEVANT in the across table.</dd>
@@ -344,7 +344,7 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 <!-- ============================================================ 9 -->
 <h2 id="cite"><span class="sn">9</span>How to cite</h2>
 <div class="cite-box">
-<p>Stephenson, B. (2026). <em>The Criticality Compass: design of an instrument for finding and following multivariate criticality &mdash; design note.</em> Version 0.1. Zenodo. <a href="https://doi.org/10.5281/zenodo.23965603">doi:10.5281/zenodo.23965603</a>. Licence CC&nbsp;BY&nbsp;4.0.</p>
+<p>Stephenson, B. (2026). <em>The Criticality Compass: design of an instrument for finding and following multivariate criticality &mdash; design note.</em> Zenodo. <a href="https://doi.org/10.5281/zenodo.23965603">doi:10.5281/zenodo.23965603</a>. Licence CC&nbsp;BY&nbsp;4.0.</p>
 <p>Author: Bruce Stephenson, independent researcher. ORCID <a href="https://orcid.org/0009-0005-6842-6686">0009-0005-6842-6686</a>.</p>
 <p>Correspondence: <a href="mailto:energyscholar@gmail.com">energyscholar@gmail.com</a>.</p>
 </div>
@@ -352,7 +352,7 @@ dl.gloss dd { margin: 0.15rem 0 0 1.2rem; }
 <section class="footnotes" aria-labelledby="refs-h">
 <h2 id="refs-h">References</h2>
 <ol>
-<li id="fn1">The design note, version 0.1 (2026), Zenodo, <a href="https://doi.org/10.5281/zenodo.23965603">doi:10.5281/zenodo.23965603</a>; full reference under <a href="#cite">How to cite</a>. Every statement about the Compass on this page restates it. <a href="#fnref1" aria-label="Back to text">&#8617;</a></li>
+<li id="fn1">The design note (2026), Zenodo, <a href="https://doi.org/10.5281/zenodo.23965603">doi:10.5281/zenodo.23965603</a>; full reference under <a href="#cite">How to cite</a>. Every statement about the Compass on this page restates it. <a href="#fnref1" aria-label="Back to text">&#8617;</a></li>
 <li id="fn2">Ma, S. (1976). Renormalization group by Monte Carlo methods. <em>Physical Review Letters</em> 37(8), 461&ndash;464. <a href="https://doi.org/10.1103/PhysRevLett.37.461">doi:10.1103/PhysRevLett.37.461</a> <a href="#fnref2" aria-label="Back to text">&#8617;</a></li>
 <li id="fn3">Swendsen, R. H. (1979). Monte Carlo renormalization group. <em>Physical Review Letters</em> 42(14), 859&ndash;861. <a href="https://doi.org/10.1103/PhysRevLett.42.859">doi:10.1103/PhysRevLett.42.859</a> <a href="#fnref3" aria-label="Back to text">&#8617;</a></li>
 <li id="fn4">Fisher, M. E., &amp; Barber, M. N. (1972). Scaling theory for finite-size effects in the critical region. <em>Physical Review Letters</em> 28(23), 1516&ndash;1519. <a href="https://doi.org/10.1103/PhysRevLett.28.1516">doi:10.1103/PhysRevLett.28.1516</a> <a href="#fnref4" aria-label="Back to text">&#8617;</a></li>
