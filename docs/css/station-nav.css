@@ -19,6 +19,13 @@ body > a.hatch ~ * .scorecard th { top: 68px; }
 /* On a narrow screen a page's fixed top nav wraps to several rows and covers the page's own title.
    There it takes its own place in the flow instead, still pinned, under the hatch. */
 @media (max-width: 900px) { body > a.hatch ~ nav:not(.station-nav) { position: sticky; } }
+/* In-page links on those pages land under the hatch and the pinned bar, so the scroll stops short by
+   their joint height. A pinned nav's height follows the width (it wraps to more rows on a narrow
+   screen), so the clearance does too: measured hatch + nav is 75px wide, 109px mid, 154px at 320px. */
+html:has(body > a.hatch ~ nav:not(.station-nav)) { scroll-padding-top: 88px; }
+@media (max-width: 1023px) { html:has(body > a.hatch ~ nav:not(.station-nav)) { scroll-padding-top: 122px; } }
+@media (max-width: 640px) { html:has(body > a.hatch ~ nav:not(.station-nav)) { scroll-padding-top: 166px; } }
+html:has(body > a.hatch ~ * .tabbar, body > a.hatch ~ .tabbar) { scroll-padding-top: 96px; }
 @media print { .hatch { display: none; } }
 
 nav.station-nav {
