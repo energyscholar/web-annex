@@ -33,8 +33,8 @@ not argue it; the terminus sets out the evidence and the critics.</p>
 you tell a line from a point; where a line breaks into a jump; and what instrument you would need to
 check the claim that something sits on one.</p>
 <p>Each station leaves you with one picture and one name. Out of the window you see hills, a station on
-each hilltop and dips between them. Switch to the map and the same hills become peaks on a chart of a
-system's settings, lined up along one critical line.</p>
+each hilltop and dips between them. Switch to the map and the same hills become peaks on a chart of control
+settings, beads lined up along one line.</p>
 </section>
 
 <section class="scene" aria-labelledby="scene-h">
@@ -49,17 +49,18 @@ system's settings, lined up along one critical line.</p>
 <figure class="ride-figure">
   <svg id="ride-svg" viewBox="0 0 1000 460" role="img" aria-labelledby="ride-svg-title ride-svg-desc">
     <title id="ride-svg-title">The ride, drawn from the station list</title>
-    <desc id="ride-svg-desc">Window view: a monorail across hills with a station on each hilltop and dips between them. Map view: the same hills as peaks of nearness to criticality over two control settings, lined up on one critical line, with the track riding just below the peak tops. The station list below the picture carries the same information as text.</desc>
+    <desc id="ride-svg-desc">Window view: a monorail across hills with a station on each hilltop and dips between them. Map view: the same hills as peaks of nearness to criticality over two control settings, beads lined up along one line, with the track riding just below the peak tops. The station list below the picture carries the same information as text.</desc>
   </svg>
   <figcaption>
     <p class="cap-window" data-layer="window">Out of the window: hills, a station on each hilltop, dips between them.
       Hollow stations are not built yet. Choose a station below, or press play to ride.</p>
     <div class="cap-map" data-layer="map">
-      <p><strong>The plane is schematic.</strong> Each station is a different physical system, drawn on one
-        shared picture: the directions say what kind of setting each one is, not one measured quantity.
+      <p><strong>The plane is schematic.</strong> Each station is a stop on a picture of the idea. Where a station
+        names a physical system, its peak stands for that system's critical point; the other peaks mark a
+        topic, not a reading. The directions say what kind of setting each one is, not one measured quantity.
         Height is nearness to criticality, from 0 (far from any edge) to 1 (at a critical point). The hills
-        are <strong>beads on one critical line</strong>: peaks lined up, with real valleys between them, not
-        gaps in the data. The track rides at a level just below the peak tops (0.9 of the way up), so it
+        are <strong>beads lined up along one line</strong>: peaks with real valleys between them, drawn
+        here as beads. The track rides at a level just below the peak tops (0.9 of the way up), so it
         threads every peak and crosses each valley on a bridge.</p>
       <p class="honest"><strong>Beaded or broken: one map cannot tell.</strong> From one map you cannot tell
         a beaded line from a broken one. Peaks lined up with real valleys between them, and a line that is
@@ -79,7 +80,7 @@ version at the top.</p>
 <dl class="axes" data-layer="map">
 <dt>across</dt><dd id="axis-x" data-axis="x"><span class="tip" tabindex="0">the knob along the line<span class="tt">the knob along the line; a second control setting, such as a coupling or an applied field, that moves a system along its edge; dimensionless, schematic</span></span></dd>
 <dt>into the picture</dt><dd id="axis-y" data-axis="y"><span class="tip" tabindex="0">temperature, scaled<span class="tt">temperature, scaled; how hard random jiggling pushes against order, relative to the system&#x27;s own edge; dimensionless, schematic</span></span></dd>
-<dt>up</dt><dd id="axis-z" data-axis="z"><span class="tip" tabindex="0">nearness to criticality<span class="tt">nearness to criticality; a normalised reading from 0 (far from any edge) to 1 (at a critical point); no units</span></span></dd>
+<dt>up</dt><dd id="axis-z" data-axis="z"><span class="tip" tabindex="0">nearness to criticality<span class="tt">nearness to criticality; a normalised scale from 0 (far from any edge) to 1 (at a critical point); no units</span></span></dd>
 </dl>
 <ol class="stations">
 <li class="station" id="station-0" data-station="0" data-state="live" data-x="0.04" data-y="0.46" data-c="0.9">
@@ -127,7 +128,7 @@ version at the top.</p>
 <li class="station" id="station-6" data-station="6" data-state="live" data-x="0.592" data-y="0.44" data-c="0.9">
   <h3><span class="num">6</span> The tunnel</h3>
   <p class="view">Out of the window: the track jumps.</p>
-  <p class="carry">Take away: <strong>the tunnel</strong> &middot; <span class="tip" tabindex="0">first-order, coexistence<span class="tt">first-order: a change with a jump, like ice melting, instead of a smooth critical change; coexistence: both kinds of behaviour present at once, side by side, at the jump</span></span></p>
+  <p class="carry">Take away: <strong>the tunnel</strong> &middot; <span class="tip" tabindex="0">first-order, coexistence<span class="tt">first-order: a change with a jump, like ice melting, instead of a smooth critical change; coexistence: both kinds of behaviour present at once, side by side, at the jump; this station&#x27;s peak is the tricritical point where a line turns first-order</span></span></p>
   <p class="phase" data-layer="map">On the map: where a line turns first-order: coexistence, two states at once.</p>
   <p class="go"><a class="switch" data-switch="expert" href="../diamond-node/jumps-and-critical-lines/">Go deeper: the physics version of station 6, Jumps, Slowing, and the Line They Sit On</a></p>
 </li>
@@ -136,19 +137,20 @@ version at the top.</p>
   <p class="view">Out of the window: stops with nothing between them.</p>
   <p class="carry">Take away: <strong>beads</strong> &middot; <span class="tip" tabindex="0">fractional quantum Hall, filling factor<span class="tt">fractional quantum Hall effect: in a thin sheet of electrons in a strong magnetic field, the resistance sits on flat steps at certain fractions and changes sharply between them; filling factor: the number that says how full the electrons&#x27; allowed energy levels are, which picks out the steps</span></span></p>
   <p class="phase" data-layer="map">On the map: a beaded line: critical points lined up on one line, with real valleys between them; in the fractional quantum Hall effect of a two-dimensional electron gas, the sharp changes between plateaus line up this way, one example among several.</p>
+  <p class="cite" data-layer="map">Source: Kivelson, S., Lee, D.-H., &amp; Zhang, S.-C. (1992). Global phase diagram in the quantum Hall effect. Physical Review B 46, 2223. doi:10.1103/PhysRevB.46.2223</p>
   <p class="state">Held: this station's page waits on a check before it is written.</p>
 </li>
 <li class="station" id="station-8" data-station="8" data-state="coming" data-x="0.776" data-y="0.43" data-c="0.9">
   <h3><span class="num">8</span> The window that shows the edge coming</h3>
   <p class="view">Out of the window: the window fogs before the edge arrives.</p>
   <p class="carry">Take away: <strong>the fogging window</strong> &middot; <span class="tip" tabindex="0">early-warning signal<span class="tt">early-warning signal: a change in how a system jiggles, such as larger and slower swings, that can appear as it nears a tipping point</span></span></p>
-  <p class="phase" data-layer="map">On the map: what an instrument reads near the line: variance, autocorrelation; why a point detector misreads a line.</p>
+  <p class="phase" data-layer="map">On the map: what an instrument reads near the line: variance, autocorrelation; why a detector built for one point does not ask whether the edge is a line.</p>
   <p class="state">Coming: this station has no page yet.</p>
 </li>
 <li class="station" id="station-9" data-station="9" data-state="live" data-x="0.868" data-y="0.49" data-c="0.9">
   <h3><span class="num">9</span> The instrument</h3>
   <p class="view">Out of the window: what keeps the train on the line.</p>
-  <p class="carry">Take away: <strong>the compass rose</strong> &middot; <span class="tip" tabindex="0">Criticality Compass<span class="tt">Criticality Compass: a planned instrument for telling whether measurements sit near a critical point, along a critical line, or neither; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work</span></span></p>
+  <p class="carry">Take away: <strong>the compass rose</strong> &middot; <span class="tip" tabindex="0">Criticality Compass<span class="tt">Criticality Compass: a planned instrument for telling whether data show critical behaviour spread along a line, do not, or cannot tell, and then following the line; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work</span></span></p>
   <p class="phase" data-layer="map">On the map: the Criticality Compass, a planned instrument set out in a deposited design note; nothing is yet shown to work.</p>
   <p class="go"><a class="switch" data-switch="expert" href="../criticality-compass/">Go deeper: the physics version of station 9, The Criticality Compass</a></p>
 </li>
@@ -156,7 +158,7 @@ version at the top.</p>
   <h3><span class="num">T</span> Terminus: the honest ending</h3>
   <p class="view">Out of the window: three doors, one not yet opened.</p>
   <p class="carry">Take away: <strong>three doors, one unopened</strong> &middot; <span class="tip" tabindex="0">Poised Realm<span class="tt">Poised Realm: the newest of the three senses of poised, a proposal that some molecules of life sit at the edge between conducting and insulating, where quantum effects can last long enough to matter</span></span></p>
-  <p class="phase" data-layer="map">On the map: the three senses of poised, the critics, and the strongest independent support.</p>
+  <p class="phase" data-layer="map">On the map: the three senses of poised, the critics, and what chlorophyll actually shows.</p>
   <p class="go"><a class="switch" data-switch="expert" href="../poised-state-critics/">Go deeper: the physics version of station T, The Poised State and Its Critics</a><br><a class="switch" data-switch="expert" href="../poised-state-chlorophyll/">Go deeper: also at station T, The Poised Antenna</a></p>
 </li>
 </ol>

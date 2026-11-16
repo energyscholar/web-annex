@@ -38,6 +38,7 @@
         "title": {"type": "string", "minLength": 1},
         "view": {"type": "string", "minLength": 1},
         "phase": {"type": "string", "minLength": 1},
+        "cite": {"type": "string", "pattern": "doi:10\\.\\d{4,}/"},
         "expert": {"oneOf": [{"$ref": "#/$defs/page"}, {"type": "null"}]},
         "expert_title": {"type": ["string", "null"]},
         "also": {"type": "array", "items": {"$ref": "#/$defs/page"}},

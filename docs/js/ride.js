@@ -1,7 +1,7 @@
 /* ride.js: draws the ride map from the static station list on docs/ride/index.html.
  *
  * One geometry, two views. Every station is a bead: a peak of "nearness to criticality" (0..1) at
- * its declared place (x, y) on a schematic plane. The beads sit on one critical line; between them
+ * its declared place (x, y) on a schematic plane. The beads are lined up along one line; between them
  * are real valleys. The track rides at each station's declared level c (just below the peak tops).
  *   window view: the line seen from the side, as hills with a monorail across them
  *   map view:    the surface over the two control settings, drawn as stacked slices
@@ -43,7 +43,7 @@
     for (var i = 0; i < stations.length; i++) m = Math.max(m, bead(x - stations[i].x));
     return m;
   }
-  function lineY(x) {                  // where the critical line sits in the second setting
+  function lineY(x) {                  // where the line of beads sits in the second setting
     var s = stations;
     if (x <= s[0].x) return s[0].y;
     for (var i = 1; i < s.length; i++) {

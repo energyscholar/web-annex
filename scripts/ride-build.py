@@ -55,6 +55,8 @@ def station_block(s):
          f'  <p class="carry">Take away: <strong>{E(s["carry"]["picture"])}</strong> &middot; '
          + tip(s["carry"]["name"], s["carry"]["gloss"]) + "</p>",
          f'  <p class="phase" data-layer="map">On the map: {E(s["phase"])}.</p>']
+    if s.get("cite"):
+        L.append(f'  <p class="cite" data-layer="map">Source: {E(s["cite"])}</p>')
     if s["state"] in STATE_NOTE:
         L.append(f'  <p class="state">{STATE_NOTE[s["state"]]}</p>')
     if s.get("start"):

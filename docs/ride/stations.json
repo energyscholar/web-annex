@@ -1,6 +1,6 @@
 {
  "plane": "schematic",
- "note": "One line through the science tutorials. The plane is schematic: a picture of the idea, not one measured system. Each station is a different physical system placed on one shared drawing.",
+ "note": "One line through the science tutorials. The plane is schematic: a picture of the idea, not one measured system. Each station is a stop on a picture of the idea. Where a station names a physical system, its peak stands for that system's critical point; the other peaks mark a topic, not a reading.",
  "axes": {
   "x": {
    "name": "the knob along the line",
@@ -12,7 +12,7 @@
   },
   "z": {
    "name": "nearness to criticality",
-   "meaning": "a normalised reading from 0 (far from any edge) to 1 (at a critical point); no units"
+   "meaning": "a normalised scale from 0 (far from any edge) to 1 (at a critical point); no units"
   }
  },
  "track_level_meaning": "c is the height the track rides at: a level just below the bead tops, so the track threads every peak and crosses the valleys between them on bridges",
@@ -161,7 +161,7 @@
    "carry": {
     "picture": "the tunnel",
     "name": "first-order, coexistence",
-    "gloss": "first-order: a change with a jump, like ice melting, instead of a smooth critical change; coexistence: both kinds of behaviour present at once, side by side, at the jump"
+    "gloss": "first-order: a change with a jump, like ice melting, instead of a smooth critical change; coexistence: both kinds of behaviour present at once, side by side, at the jump; this station's peak is the tricritical point where a line turns first-order"
    },
    "map": {
     "x": 0.592,
@@ -188,13 +188,14 @@
     "x": 0.684,
     "y": 0.41
    },
-   "c": 0.9
+   "c": 0.9,
+   "cite": "Kivelson, S., Lee, D.-H., & Zhang, S.-C. (1992). Global phase diagram in the quantum Hall effect. Physical Review B 46, 2223. doi:10.1103/PhysRevB.46.2223"
   },
   {
    "id": "8",
    "title": "The window that shows the edge coming",
    "view": "the window fogs before the edge arrives",
-   "phase": "what an instrument reads near the line: variance, autocorrelation; why a point detector misreads a line",
+   "phase": "what an instrument reads near the line: variance, autocorrelation; why a detector built for one point does not ask whether the edge is a line",
    "expert": null,
    "expert_title": null,
    "also": [],
@@ -224,7 +225,7 @@
    "carry": {
     "picture": "the compass rose",
     "name": "Criticality Compass",
-    "gloss": "Criticality Compass: a planned instrument for telling whether measurements sit near a critical point, along a critical line, or neither; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work"
+    "gloss": "Criticality Compass: a planned instrument for telling whether data show critical behaviour spread along a line, do not, or cannot tell, and then following the line; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work"
    },
    "map": {
     "x": 0.868,
@@ -236,7 +237,7 @@
    "id": "T",
    "title": "Terminus: the honest ending",
    "view": "three doors, one not yet opened",
-   "phase": "the three senses of poised, the critics, and the strongest independent support",
+   "phase": "the three senses of poised, the critics, and what chlorophyll actually shows",
    "expert": "poised-state-critics/index.html",
    "expert_title": "The Poised State and Its Critics",
    "also": [
