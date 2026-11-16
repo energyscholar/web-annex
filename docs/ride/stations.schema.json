@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "The line: stations and spurs",
+  "type": "object",
+  "required": ["plane", "axes", "stations", "spurs"],
+  "additionalProperties": false,
+  "properties": {
+    "plane": {"const": "schematic"},
+    "note": {"type": "string"},
+    "track_level_meaning": {"type": "string"},
+    "axes": {
+      "type": "object",
+      "required": ["x", "y", "z"],
+      "additionalProperties": false,
+      "properties": {
+        "x": {"$ref": "#/$defs/axis"},
+        "y": {"$ref": "#/$defs/axis"},
+        "z": {"$ref": "#/$defs/axis"}
+      }
+    },
+    "stations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/station"}},
+    "spurs": {"type": "array", "items": {"$ref": "#/$defs/spur"}}
+  },
+  "$defs": {
+    "axis": {
+      "type": "object",
+      "required": ["name", "meaning"],
+      "additionalProperties": false,
+      "properties": {"name": {"type": "string", "minLength": 1}, "meaning": {"type": "string", "minLength": 1}}
+    },
+    "page": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]*\\.html$"},
+    "station": {
+      "type": "object",
+      "required": ["id", "title", "view", "phase", "expert", "expert_title", "also", "start", "state", "carry", "map", "c"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^([0-9]|T)$"},
+        "title": {"type": "string", "minLength": 1},
+        "view": {"type": "string", "minLength": 1},
+        "phase": {"type": "string", "minLength": 1},
+        "expert": {"oneOf": [{"$ref": "#/$defs/page"}, {"type": "null"}]},
+        "expert_title": {"type": ["string", "null"]},
+        "also": {"type": "array", "items": {"$ref": "#/$defs/page"}},
+        "start": {"oneOf": [{"type": "string", "pattern": "/start/index\\.html$"}, {"type": "null"}]},
+        "state": {"enum": ["live", "coming", "held"]},
+        "carry": {
+          "type": "object", "required": ["picture", "name"], "additionalProperties": false,
+          "properties": {"picture": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1}}
+        },
+        "map": {
+          "type": "object", "required": ["x", "y"], "additionalProperties": false,
+          "properties": {"x": {"type": "number", "minimum": 0, "maximum": 1}, "y": {"type": "number", "minimum": 0, "maximum": 1}}
+        },
+        "c": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "if": {"properties": {"state": {"const": "live"}}},
+      "then": {"properties": {"expert": {"$ref": "#/$defs/page"}, "expert_title": {"type": "string"}}}
+    },
+    "spur": {
+      "type": "object",
+      "required": ["line", "line_title", "from", "expert", "title"],
+      "additionalProperties": false,
+      "properties": {
+        "line": {"enum": ["space", "topology", "cross-domain", "side-window"]},
+        "line_title": {"type": "string", "minLength": 1},
+        "from": {"type": "string", "pattern": "^([0-9]|T)$"},
+        "expert": {"$ref": "#/$defs/page"},
+        "title": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
