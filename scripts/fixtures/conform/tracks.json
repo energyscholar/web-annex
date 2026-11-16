@@ -1,0 +1,24 @@
+{
+ "game_prefixes": [
+  "traveller/",
+  "astral-dawn/",
+  "maps/",
+  "s1*-prep/"
+ ],
+ "tracks": {
+  "science": [
+   "good/index.html",
+   "good/start/index.html",
+   "ok/index.html",
+   "ok/start/index.html",
+   "primitive/index.html",
+   "r2/index.html",
+   "r3/index.html",
+   "r4/index.html",
+   "anim/index.html"
+  ],
+  "how-we-work": [
+   "hww/index.html"
+  ]
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "plane": "schematic",
+ "stations": [
+  {
+   "id": "1",
+   "expert": "good/index.html",
+   "also": [],
+   "start": "good/start/index.html",
+   "state": "live"
+  },
+  {
+   "id": "2",
+   "expert": "ok/index.html",
+   "also": [],
+   "start": "ok/start/index.html",
+   "state": "live"
+  },
+  {
+   "id": "3",
+   "expert": "primitive/index.html",
+   "also": [],
+   "start": null,
+   "state": "live"
+  },
+  {
+   "id": "4",
+   "expert": "r2/index.html",
+   "also": [],
+   "start": null,
+   "state": "live"
+  },
+  {
+   "id": "5",
+   "expert": "r3/index.html",
+   "also": [],
+   "start": null,
+   "state": "live"
+  },
+  {
+   "id": "6",
+   "expert": "r4/index.html",
+   "also": [],
+   "start": null,
+   "state": "live"
+  },
+  {
+   "id": "7",
+   "expert": "anim/index.html",
+   "also": [],
+   "start": null,
+   "state": "live"
+  }
+ ],
+ "spurs": []
+}
