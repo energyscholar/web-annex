@@ -198,3 +198,7 @@ html[data-ride-app="3d"] .station h3 { margin: 0; font-size: 0.95rem; }
 .r3d-lightbox[hidden] { display: none; }
 .r3d-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
 @media (max-width: 640px) { .r3d-img { height: 110px; } }
+
+/* station markers are links (plan 1554, contract 6) */
+a.r3d-sign { text-decoration: none; cursor: pointer; }
+a.r3d-sign:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; border-radius: 4px; }

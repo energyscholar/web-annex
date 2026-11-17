@@ -363,8 +363,13 @@
   /* ------------------------------------------------------------ station signs (HTML, projected) */
   var layer = document.createElement('div');
   layer.className = 'r3d-labels';
+  // each sign is a real link to the station's beginner target (R1): its start/ page if the builder wrote one
+  // (the card's "Ride this station" link), else #station-N on this page. Never an expert page.
   var signs = stations.map(function (s) {
-    var el = document.createElement('span');
+    var el = document.createElement('a'), start = s.li.querySelector('.ride-on a[href]');
+    el.setAttribute('href', start ? start.getAttribute('href') : '#station-' + s.id);
+    el.setAttribute('data-station', s.id);
+    el.setAttribute('aria-label', s.id + ': ' + s.title + (s.state === 'live' ? '' : ' (coming)'));
     el.className = 'r3d-sign' + (s.state === 'live' ? '' : ' hollow');
     var num = document.createElement('span'); num.className = 'n'; num.textContent = s.id;
     var nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = s.title + (s.state === 'live' ? '' : ' (coming)');
@@ -772,6 +777,7 @@
   window.addEventListener('resize', resize);
   resize();
 
+  window.__ride3dTargets = signs.map(function (a) { return a.getAttribute('href'); });
   window.__ride3d = {
     C: C,
     beads: stations.map(function (s) { return { id: s.id, x: s.x, y: s.y }; }),
