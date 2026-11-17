@@ -32,7 +32,10 @@
    "carry": {
     "picture": "a ticket hall",
     "name": "poised",
-    "gloss": "poised: sitting at an edge between two kinds of behaviour instead of falling to one side; the word is used in three different senses, set side by side at the terminus"
+    "terms": [
+     "poised"
+    ],
+    "note": "the word is used in three different senses, set side by side at the terminus"
    },
    "map": {
     "x": 0.04,
@@ -55,7 +58,10 @@
    "carry": {
     "picture": "the cliff",
     "name": "critical point, order parameter",
-    "gloss": "critical point: the exact setting at which a system changes its kind of behaviour, and small pushes have large effects; order parameter: a number that is zero on one side of the change and grows on the other, like the pull of a magnet"
+    "terms": [
+     "critical point",
+     "order parameter"
+    ]
    },
    "map": {
     "x": 0.132,
@@ -78,7 +84,10 @@
    "carry": {
     "picture": "the hall of mirrors",
     "name": "universality, fixed point",
-    "gloss": "universality: very different systems share the same numbers near their critical points; fixed point: a state that looks the same after you zoom out, which is why those numbers repeat"
+    "terms": [
+     "universality",
+     "fixed point"
+    ]
    },
    "map": {
     "x": 0.224,
@@ -101,7 +110,10 @@
    "carry": {
     "picture": "the ridge",
     "name": "BKT, stiffness jump",
-    "gloss": "BKT (Berezinskii-Kosterlitz-Thouless): a change in flat, two-dimensional systems in which tiny whirlpools (vortices), bound in pairs, come apart; stiffness jump: the system's resistance to being twisted drops suddenly to zero at the change"
+    "terms": [
+     "BKT",
+     "stiffness jump"
+    ]
    },
    "map": {
     "x": 0.316,
@@ -124,7 +136,10 @@
    "carry": {
     "picture": "the gradient sign",
     "name": "Ashkin-Teller, four-spin coupling",
-    "gloss": "Ashkin-Teller: a model of two magnets sharing one lattice; four-spin coupling: the strength of the link between the two, which moves the system along a whole line of critical points whose numbers change as you go"
+    "terms": [
+     "Ashkin-Teller",
+     "four-spin coupling"
+    ]
    },
    "map": {
     "x": 0.408,
@@ -150,7 +165,9 @@
    "carry": {
     "picture": "the surveyor's tools",
     "name": "finite-size scaling",
-    "gloss": "finite-size scaling: reading the behaviour of an endless system from simulations of several finite sizes, by watching how what you measure changes with size"
+    "terms": [
+     "finite-size scaling"
+    ]
    },
    "map": {
     "x": 0.5,
@@ -173,7 +190,11 @@
    "carry": {
     "picture": "the tunnel",
     "name": "first-order, coexistence",
-    "gloss": "first-order: a change with a jump, like ice melting, instead of a smooth critical change; coexistence: both kinds of behaviour present at once, side by side, at the jump; this station's peak is the tricritical point where a line turns first-order"
+    "terms": [
+     "first-order",
+     "coexistence"
+    ],
+    "note": "this station's peak is the tricritical point where a line turns first-order"
    },
    "map": {
     "x": 0.592,
@@ -196,7 +217,10 @@
    "carry": {
     "picture": "beads",
     "name": "fractional quantum Hall, filling factor",
-    "gloss": "fractional quantum Hall effect: in a thin sheet of electrons in a strong magnetic field, the resistance sits on flat steps at certain fractions and changes sharply between them; filling factor: the number that says how full the electrons' allowed energy levels are, which picks out the steps"
+    "terms": [
+     "fractional quantum Hall",
+     "filling factor"
+    ]
    },
    "map": {
     "x": 0.684,
@@ -220,7 +244,9 @@
    "carry": {
     "picture": "the fogging window",
     "name": "early-warning signal",
-    "gloss": "early-warning signal: a change in how a system jiggles, such as larger and slower swings, that can appear as it nears a tipping point"
+    "terms": [
+     "early-warning signal"
+    ]
    },
    "map": {
     "x": 0.776,
@@ -243,7 +269,9 @@
    "carry": {
     "picture": "the compass rose",
     "name": "Criticality Compass",
-    "gloss": "Criticality Compass: a planned instrument for telling whether data show critical behaviour spread along a line, do not, or cannot tell, and then following the line; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work"
+    "terms": [
+     "Criticality Compass"
+    ]
    },
    "map": {
     "x": 0.868,
@@ -268,7 +296,9 @@
    "carry": {
     "picture": "three doors, one unopened",
     "name": "Poised Realm",
-    "gloss": "Poised Realm: the newest of the three senses of poised, a proposal that some molecules of life sit at the edge between conducting and insulating, where quantum effects can last long enough to matter"
+    "terms": [
+     "Poised Realm"
+    ]
    },
    "map": {
     "x": 0.96,

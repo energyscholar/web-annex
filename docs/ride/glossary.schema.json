@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "The ride's glossary: one entry per jargon term, up to three levels",
+  "type": "object",
+  "required": ["terms", "jargon_extra"],
+  "additionalProperties": false,
+  "properties": {
+    "note": {"type": "string"},
+    "terms": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/term"}
+    },
+    "jargon_extra": {"type": "array", "items": {"$ref": "#/$defs/extra"}}
+  },
+  "$defs": {
+    "term": {
+      "type": "object",
+      "required": ["l1"],
+      "additionalProperties": false,
+      "properties": {
+        "l1": {"type": "string", "minLength": 1},
+        "l2": {"type": "string", "minLength": 1},
+        "l3": {"type": "string", "minLength": 1},
+        "see_also": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "extra": {
+      "type": "object",
+      "required": ["word", "see"],
+      "additionalProperties": false,
+      "properties": {"word": {"type": "string", "minLength": 1}, "see": {"type": "string", "minLength": 1}}
+    }
+  }
+}

@@ -45,9 +45,10 @@
         "start": {"oneOf": [{"type": "string", "pattern": "/start/index\\.html$"}, {"type": "null"}]},
         "state": {"enum": ["live", "coming", "held"]},
         "carry": {
-          "type": "object", "required": ["picture", "name", "gloss"], "additionalProperties": false,
+          "type": "object", "required": ["picture", "name", "terms"], "additionalProperties": false,
           "properties": {"picture": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1},
-                         "gloss": {"type": "string", "minLength": 1}}
+                         "terms": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+                         "note": {"type": "string", "minLength": 1}}
         },
         "map": {
           "type": "object", "required": ["x", "y"], "additionalProperties": false,
@@ -55,7 +56,9 @@
         },
         "c": {"type": "number", "minimum": 0, "maximum": 1},
         "image": {"type": "string", "pattern": "^img/[a-zA-Z0-9_-]+\\.(svg|webp|png)$"},
-        "image_alt": {"type": "string", "minLength": 1}
+        "image_alt": {"type": "string", "minLength": 1},
+        "expert_image": {"type": "string", "pattern": "^img/[a-zA-Z0-9_-]+\\.(svg|webp|png)$"},
+        "expert_image_alt": {"type": "string", "minLength": 1}
       },
       "if": {"properties": {"state": {"const": "live"}}},
       "then": {"properties": {"expert": {"$ref": "#/$defs/page"}, "expert_title": {"type": "string"}}}

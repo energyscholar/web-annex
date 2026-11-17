@@ -1,0 +1,13 @@
+{
+ "0": "poised: sitting at an edge between two kinds of behaviour instead of falling to one side; the word is used in three different senses, set side by side at the terminus",
+ "1": "critical point: the exact setting at which a system changes its kind of behaviour, and small pushes have large effects; order parameter: a number that is zero on one side of the change and grows on the other, like the pull of a magnet",
+ "2": "universality: very different systems share the same numbers near their critical points; fixed point: a state that looks the same after you zoom out, which is why those numbers repeat",
+ "3": "BKT (Berezinskii-Kosterlitz-Thouless): a change in flat, two-dimensional systems in which tiny whirlpools (vortices), bound in pairs, come apart; stiffness jump: the system's resistance to being twisted drops suddenly to zero at the change",
+ "4": "Ashkin-Teller: a model of two magnets sharing one lattice; four-spin coupling: the strength of the link between the two, which moves the system along a whole line of critical points whose numbers change as you go",
+ "5": "finite-size scaling: reading the behaviour of an endless system from simulations of several finite sizes, by watching how what you measure changes with size",
+ "6": "first-order: a change with a jump, like ice melting, instead of a smooth critical change; coexistence: both kinds of behaviour present at once, side by side, at the jump; this station's peak is the tricritical point where a line turns first-order",
+ "7": "fractional quantum Hall effect: in a thin sheet of electrons in a strong magnetic field, the resistance sits on flat steps at certain fractions and changes sharply between them; filling factor: the number that says how full the electrons' allowed energy levels are, which picks out the steps",
+ "8": "early-warning signal: a change in how a system jiggles, such as larger and slower swings, that can appear as it nears a tipping point",
+ "9": "Criticality Compass: a planned instrument for telling whether data show critical behaviour spread along a line, do not, or cannot tell, and then following the line; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work",
+ "T": "Poised Realm: the newest of the three senses of poised, a proposal that some molecules of life sit at the edge between conducting and insulating, where quantum effects can last long enough to matter"
+}

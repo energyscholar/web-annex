@@ -1,0 +1,136 @@
+{
+ "note": "The ride's glossary (plan 1564). Each key is a term as the ride spells it. l1: plain words, always shown (for a carry term, its old carry.gloss segment verbatim, heading included). l2: an everyday picture-word, one sentence. l3: the physicist's statement, shown only after a deliberate click. see_also: other keys. jargon_extra: words that must be glossed whose explanation lives under another key (see).",
+ "terms": {
+  "poised": {
+   "l1": "poised: sitting at an edge between two kinds of behaviour instead of falling to one side",
+   "l2": "Like a coin standing on its edge instead of lying heads or tails.",
+   "l3": "The word is used in three senses that should be kept apart: Kauffman's \"poised between order and chaos\", for networks of on/off elements such as genes; \"poised at criticality\", the claim that living systems such as networks of neurons or flocks of birds sit near a critical point; and the \"Poised Realm\", a proposal about electrons in the molecules of life. The three share the word and little else, and the evidence for each is different: the terminus sets it out.",
+   "see_also": [
+    "Poised Realm"
+   ]
+  },
+  "critical point": {
+   "l1": "critical point: the exact setting at which a system changes its kind of behaviour, and small pushes have large effects",
+   "l2": "Like a pencil balanced on its tip, where the faintest breath decides which way it falls.",
+   "l3": "A point in the space of control settings where a continuous phase transition happens: the correlation length diverges, fluctuations appear on every length scale, and quantities such as the order parameter and the susceptibility follow power laws in the distance from the point, with exponents called critical exponents. The liquid-gas critical point of water, at about 374 °C and 218 atmospheres, is one example."
+  },
+  "order parameter": {
+   "l1": "order parameter: a number that is zero on one side of the change and grows on the other, like the pull of a magnet",
+   "l2": "Like counting how many people in a crowd face the same way: zero when they face every which way, more as they line up.",
+   "l3": "A quantity whose average is zero in the disordered, symmetric phase and nonzero in the ordered phase, such as the magnetisation of a ferromagnet below its Curie temperature; near a continuous transition it grows as (T_c − T)^β, where β is a critical exponent. Some transitions, such as BKT in two dimensions, have no local order parameter."
+  },
+  "universality": {
+   "l1": "universality: very different systems share the same numbers near their critical points",
+   "l2": "Like different songs that share one rhythm: the tunes differ, the beat is the same.",
+   "l3": "Near a continuous transition the critical exponents and scaling functions depend only on a few features, such as the dimension of space, the symmetry of the order parameter and the range of the interactions, not on microscopic details. Systems that share those features form a universality class: the liquid-gas critical point and a uniaxial magnet are both in the three-dimensional Ising class.",
+   "see_also": [
+    "fixed point"
+   ]
+  },
+  "fixed point": {
+   "l1": "fixed point: a state that looks the same after you zoom out, which is why those numbers repeat",
+   "l2": "Like a fern whose small leaves look like the whole plant: zoom out, and the shape stays the same.",
+   "l3": "A fixed point of the renormalisation-group map: couplings that coarse-graining and rescaling leave unchanged. A critical point flows to an unstable fixed point, and the exponents come from the linearised flow near it, which is why every system that flows to the same fixed point shares them (Wilson, Rev. Mod. Phys. 47, 773, 1975)."
+  },
+  "BKT": {
+   "l1": "BKT (Berezinskii-Kosterlitz-Thouless): a change in flat, two-dimensional systems in which tiny whirlpools (vortices), bound in pairs, come apart",
+   "l2": "Like dancers paired off on a floor who, once the room is warm enough, let go and wander alone.",
+   "l3": "In the two-dimensional XY model and its relatives, bound vortex-antivortex pairs unbind at T_BKT. Below it there is no long-range order, yet correlations fall off as a power law with a temperature-dependent exponent: a whole line of fixed points, critical throughout the phase. Above it the correlation length is finite and grows as exp(b/√(T − T_BKT)) on approach, an essential singularity rather than a power law (Kosterlitz and Thouless, J. Phys. C 6, 1181, 1973).",
+   "see_also": [
+    "stiffness jump"
+   ]
+  },
+  "stiffness jump": {
+   "l1": "stiffness jump: the system's resistance to being twisted drops suddenly to zero at the change",
+   "l2": "Like a spring that keeps its springiness as it warms, then goes slack all at once.",
+   "l3": "The helicity modulus (the superfluid stiffness) does not fall smoothly to zero at T_BKT: it drops from the universal value (2/π) k_B T_BKT straight to zero, the Nelson-Kosterlitz jump (Phys. Rev. Lett. 39, 1201, 1977). Bishop and Reppy saw it in thin helium-4 films (Phys. Rev. Lett. 40, 1727, 1978)."
+  },
+  "Ashkin-Teller": {
+   "l1": "Ashkin-Teller: a model of two magnets sharing one lattice",
+   "l2": "Like two dance troupes sharing one floor, each keeping its own step but nudged by the other.",
+   "l3": "Two Ising spins, σ and τ, on every site of a lattice, coupled by the two-spin terms K(σσ′ + ττ′) and a four-spin term Lσσ′ττ′. In two dimensions its critical points form a segment of the self-dual line, running from two decoupled Ising models (L = 0) to the four-state Potts point, along which some exponents slide continuously while others stay fixed (Ashkin and Teller, Phys. Rev. 64, 178, 1943).",
+   "see_also": [
+    "four-spin coupling"
+   ]
+  },
+  "four-spin coupling": {
+   "l1": "four-spin coupling: the strength of the link between the two, which moves the system along a whole line of critical points whose numbers change as you go",
+   "l2": "Like a dial for how strongly the two troupes keep in step with each other.",
+   "l3": "The coefficient L of the σσ′ττ′ term. At the decoupled Ising point it is exactly marginal, so turning it on moves the model along a line of critical points instead of off it; the correlation-length exponent ν changes continuously along that line, while the scaling dimension of each spin stays at 1/8."
+  },
+  "finite-size scaling": {
+   "l1": "finite-size scaling: reading the behaviour of an endless system from simulations of several finite sizes, by watching how what you measure changes with size",
+   "l2": "Like learning how an ocean behaves from a cup, a bucket and a bathtub, by watching what changes as the container grows.",
+   "l3": "Near a critical point a system of linear size L depends on the setting only through the combination (T − T_c)L^(1/ν), so a measured quantity scales as L^(κ/ν) f((T − T_c)L^(1/ν)), with κ its own exponent. Collapsing the curves for several sizes onto one, or finding where size-independent ratios cross, gives T_c and the exponents."
+  },
+  "first-order": {
+   "l1": "first-order: a change with a jump, like ice melting, instead of a smooth critical change",
+   "l2": "Like ice turning to water: the change comes all at once, with a jump.",
+   "l3": "A transition at which first derivatives of the free energy, such as the energy, the magnetisation or the density, jump. There is latent heat, the correlation length stays finite, and each phase can survive for a while past the transition (metastability), which shows as hysteresis. A measured quantity can peak here too, so a peak alone does not show a critical point.",
+   "see_also": [
+    "coexistence"
+   ]
+  },
+  "coexistence": {
+   "l1": "coexistence: both kinds of behaviour present at once, side by side, at the jump",
+   "l2": "Like a glass of ice water at the melting point: ice and water side by side.",
+   "l3": "At a first-order transition the two phases have equal free energy and can coexist in equilibrium, separated by interfaces. On a phase diagram the settings where this happens form a coexistence line, such as the liquid-vapour line, which ends at the critical point."
+  },
+  "fractional quantum Hall": {
+   "l1": "fractional quantum Hall effect: in a thin sheet of electrons in a strong magnetic field, the resistance sits on flat steps at certain fractions and changes sharply between them",
+   "l2": "Like a staircase: the resistance stays flat on each step and climbs sharply between them.",
+   "l3": "The Hall resistance sits on plateaus at h/(νe²) for fractional filling factors ν such as 1/3. The plateaus are gapped states, not critical ones; the critical points are the transitions between plateaus. The effect is not tied to one material: it is seen in gallium arsenide, graphene, zinc oxide and silicon-germanium (Dean et al., Nature Physics 7, 693, 2011).",
+   "see_also": [
+    "filling factor"
+   ]
+  },
+  "filling factor": {
+   "l1": "filling factor: the number that says how full the electrons' allowed energy levels are, which picks out the steps",
+   "l2": "Like how full the rows of a theatre are: one full row, or a third of a row.",
+   "l3": "ν = nh/(eB), the number of electrons per magnetic flux quantum: how many Landau levels are filled. The plateaus sit at whole-number ν (the integer effect) and at fractions such as 1/3, 2/5 and 5/2 (the fractional effect)."
+  },
+  "early-warning signal": {
+   "l1": "early-warning signal: a change in how a system jiggles, such as larger and slower swings, that can appear as it nears a tipping point",
+   "l2": "Like a spinning top that sways wider and slower before it falls.",
+   "l3": "Rising variance and lag-1 autocorrelation as a system nears a bifurcation, from critical slowing down. Critical slowing down is generic to bifurcations, saddle-node tipping included, so these signals do not by themselves show a continuous critical point (Scheffer et al., Nature 461, 53, 2009)."
+  },
+  "Criticality Compass": {
+   "l1": "Criticality Compass: a planned instrument for telling whether data show critical behaviour spread along a line, do not, or cannot tell, and then following the line; its design note is deposited (doi:10.5281/zenodo.23965603) and nothing is yet shown to work",
+   "l2": "Like a compass that would point along the edge instead of north, once it is built and tested.",
+   "l3": "A proposed instrument in two parts. A Detector would read declared data point by point and give one of three answers: MC (multivariate criticality, critical behaviour spread along a line), Not MC, or Can't tell, refusing with a stated reason when it cannot tell. A Navigator would then follow a line once one is found. It is set out in a deposited design note (doi:10.5281/zenodo.23965603); the hand-off from Detector to Navigator is design only, and nothing is yet shown to work.",
+   "see_also": [
+    "compass rose"
+   ]
+  },
+  "Poised Realm": {
+   "l1": "Poised Realm: the newest of the three senses of poised, a proposal that some molecules of life sit at the edge between conducting and insulating, where quantum effects can last long enough to matter",
+   "l2": "Like standing exactly on a shoreline, neither on land nor at sea.",
+   "l3": "The proposal (Vattay, Kauffman and Niiranen, 2014) that the electronic states of some biomolecules sit at the critical point of the Anderson metal-insulator transition, between spread-out, conducting states and trapped, insulating ones. It is the narrowest and newest of the three senses of poised, and it is untested: the terminus page sets out the evidence.",
+   "see_also": [
+    "poised"
+   ]
+  },
+  "gradient sign": {
+   "l1": "gradient sign: a sign beside a railway that shows how steep the track is; here the steepness stands for the numbers that change as you move along a line of critical points",
+   "l2": "Like a road sign warning how steep the hill ahead is.",
+   "see_also": [
+    "four-spin coupling"
+   ]
+  },
+  "surveyor's tools": {
+   "l1": "surveyor's tools: the instruments used to measure land; here, the methods that pin down where a critical point is, such as comparing simulations of several sizes",
+   "l2": "Like measuring a hill from several distances and seeing where the readings agree.",
+   "see_also": [
+    "finite-size scaling"
+   ]
+  },
+  "compass rose": {
+   "l1": "compass rose: the star of directions printed on a compass or a map; here it stands for the planned instrument that would tell which way a line of critical points runs",
+   "l2": "Like the arrow on a map that shows which way is north.",
+   "see_also": [
+    "Criticality Compass"
+   ]
+  }
+ },
+ "jargon_extra": []
+}

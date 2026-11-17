@@ -15,7 +15,8 @@ Derived parts (each between its own markers, or the whole file):
                          hatch (R2) directly after <body>, and the station nav with its two scripts just
                          before </body>; nothing else on the page is touched
 
-stations.json is the one source of truth; never hand-edit a derived part.
+stations.json is the one source of truth, with docs/ride/glossary.json for the words the tooltips explain;
+never hand-edit a derived part.
 """
 import argparse, html, json, os, re, sys
 
@@ -45,13 +46,28 @@ def tip(name, gloss):
     return (f'<span class="tip" tabindex="0">{E(name)}<span class="tt">{E(gloss)}</span></span>')
 
 
-def term_tips(sid, name, gloss):
-    """One gloss per jargon term (plan 1554, phase 3d). The list keeps its single .tip span, so the page without
-    scripts looks and reads as before (the whole gloss on hover or focus); inside the gloss each term's own part is
-    a .g span with an id, a data-term and a bold heading, which the 3D ride turns into one tooltip per term."""
-    parts = [f'<span class="g" id="gloss-{sid}-{i}" data-term="{E(term)}"><strong>{E(head)}</strong>: {E(text)}</span>'
-             for i, (term, head, text) in enumerate(ride_gloss.split(name, gloss))]
-    return f'<span class="tip terms" tabindex="0">{E(name)}<span class="tt">' + "; ".join(parts) + "</span></span>"
+def levels(key, entry):
+    """A glossary entry as its three levels (plan 1564): .l1 always shown, with its heading bold; .l2 the
+    picture-word; .l3 the physicist's statement, hidden until a reader asks for it."""
+    h, rest = ride_gloss.split_l1(entry["l1"])
+    out = [f'<span class="l1"><strong>{E(h)}</strong>: {E(rest)}</span>' if h is not None
+           else f'<span class="l1">{E(rest)}</span>']
+    if entry.get("l2"):
+        out.append(f' <span class="l2">{E(entry["l2"])}</span>')
+    if entry.get("l3"):
+        out.append(f' <span class="l3" hidden>{E(entry["l3"])}</span>')
+    return "".join(out)
+
+
+def term_tips(sid, carry, terms):
+    """One gloss per jargon term (plan 1554 phase 3d; levels from docs/ride/glossary.json, plan 1564). The list
+    keeps its single .tip span, so the page without scripts reads every term's plain words on hover or focus;
+    inside the gloss each term's part is a .g span with an id and a data-term, which the 3D ride turns into one
+    tooltip per term."""
+    parts = [f'<span class="g" id="gloss-{sid}-{i}" data-term="{E(k)}">{levels(k, terms[k])}</span>'
+             for i, k in enumerate(carry["terms"])]
+    return (f'<span class="tip terms" tabindex="0" data-terms="{E("|".join(carry["terms"]))}">{E(carry["name"])}'
+            '<span class="tt">' + "; ".join(parts) + "</span></span>")
 
 
 def switch(path, label):
@@ -61,7 +77,7 @@ def switch(path, label):
 SOON = ' <span class="soon">(coming)</span>'
 
 
-def station_block(s, nxt, loops):
+def station_block(s, nxt, loops, terms):
     sid = s["id"]
     num = "T" if sid == "T" else sid
     soon = SOON if s["state"] != "live" else ""
@@ -72,7 +88,8 @@ def station_block(s, nxt, loops):
          f'  <h3><span class="num">{num}</span> {E(s["title"])}{soon}</h3>',
          f'  <p class="view">Out of the window: {E(s["view"])}.</p>',
          f'  <p class="carry">Take away: <strong>{E(s["carry"]["picture"])}</strong> &middot; '
-         + term_tips(sid, s["carry"]["name"], s["carry"]["gloss"]) + "</p>",
+         + term_tips(sid, s["carry"], terms)
+         + (f'<span class="note"> &mdash; {E(s["carry"]["note"])}</span>' if s["carry"].get("note") else "") + "</p>",
          f'  <p class="phase" data-layer="map">On the map: {E(s["phase"])}.</p>']
     if s.get("cite"):
         L.append(f'  <p class="cite" data-layer="map">Source: {E(s["cite"])}</p>')
@@ -232,7 +249,7 @@ def stops(st):
     return STOPS_B + '\n<p class="stops">Stations:\n' + " &middot;\n".join(items) + "</p>\n" + STOPS_E
 
 
-def build(st):
+def build(st, terms):
     for s in st["stations"]:
         if s.get("expert"):
             _titles[s["expert"]] = s["expert_title"]
@@ -246,7 +263,7 @@ def build(st):
     })
     block = [BEGIN, axes_block(st["axes"]), '<ol class="stations">']
     S = st["stations"]
-    block += [station_block(s, S[(i + 1) % len(S)], i + 1 == len(S)) for i, s in enumerate(S)]
+    block += [station_block(s, S[(i + 1) % len(S)], i + 1 == len(S), terms) for i, s in enumerate(S)]
     block += ["</ol>", '<h2 id="spurs">Side trips</h2>',
               "<p>Branch lines leave the main line at a station. They go straight to the full pages, "
               "so each one is a switch.</p>", spur_block(st["spurs"]), END]
@@ -265,11 +282,12 @@ def main():
     ap.add_argument("--check", action="store_true")
     a = ap.parse_args()
     st = json.load(open(os.path.join(DOCS, "ride", "stations.json"), encoding="utf-8"))
+    terms = ride_gloss.load(os.path.join(DOCS, "ride", "glossary.json"))["terms"]
     stale = []
 
     ride = os.path.join(DOCS, "ride", "index.html")
     s = open(ride, encoding="utf-8").read()
-    new = s[: s.index(BEGIN)] + build(st) + s[s.index(END) + len(END):]
+    new = s[: s.index(BEGIN)] + build(st, terms) + s[s.index(END) + len(END):]
     if new != s:
         stale.append("docs/ride/index.html")
         if not a.check:

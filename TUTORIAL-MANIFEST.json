@@ -888,8 +888,8 @@
   "path": "ride/index.html",
   "series": "ride",
   "title": "The Ride: One Line Through the Edge",
-  "sha256": "aa697866202d43f4b77b3b88abc47850755fbf45e119031136e656c902548264",
-  "bytes": 25771,
+  "sha256": "14d404a19c49ed193e8c1656db4af78bc8ba5797a8977d83fb86af099317cf50",
+  "bytes": 35228,
   "lines": 196,
   "modified": "2026-11-17",
   "has_meta_description": true,
@@ -897,7 +897,7 @@
   "footnotes": 0,
   "physics_guard": false,
   "anchors_cited": 0,
-  "dois": 2
+  "dois": 3
  },
  {
   "path": "s13-prep/arrest-scenario.html",
