@@ -382,7 +382,9 @@
   }
   var tip = document.createElement('div');
   tip.id = 'r3d-tip'; tip.className = 'r3d-tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true;
+  var tipAnchor = null;
   function showTip(anchor, src) {
+    tipAnchor = anchor;
     tip.innerHTML = src.innerHTML;
     tip.hidden = false;
     var r = anchor.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
@@ -391,7 +393,15 @@
     if (y + th > window.innerHeight - 4) y = Math.max(4, r.top - th - 6);
     tip.style.left = x + 'px'; tip.style.top = y + 'px';
   }
-  function hideTip() { tip.hidden = true; }
+  function hideTip() { tip.hidden = true; tipAnchor = null; }
+  function tipOnScroll() {                           // a focused anchor keeps its tooltip, moved with it
+    if (tip.hidden) return;
+    if (tipAnchor && document.activeElement === tipAnchor) {
+      var r = tipAnchor.getBoundingClientRect(), th = tip.offsetHeight, y = r.bottom + 6;
+      if (y + th > window.innerHeight - 4) y = Math.max(4, r.top - th - 6);
+      tip.style.left = Math.max(4, Math.min(window.innerWidth - tip.offsetWidth - 4, r.left)) + 'px'; tip.style.top = y + 'px';
+    } else hideTip();
+  }
   function withTip(el, src) {                       // a two-way tooltip: on hover and on keyboard focus
     el.addEventListener('mouseenter', function () { showTip(el, src); });
     el.addEventListener('mouseleave', function () { if (document.activeElement !== el) hideTip(); });
@@ -573,6 +583,143 @@
   var controls = document.querySelector('.scene .controls');
   if (controls) { controls.appendChild(resetBtn); controls.appendChild(fsBtn); }
 
+  /* ------------------------------------------------------------ one screen (contract 8) */
+  // The page becomes one viewport-sized app. Nothing is cloned: the station cards themselves become the
+  // accordion rows of the panel, and the rest of the page moves into the toolbar and its two disclosures.
+  // With JS off none of this runs and the page is the stacked cards, as before.
+  function make(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function descFor(id, node) {                       // a visually hidden description that a tooltip copies
+    var d = make('div', 'r3d-desc'); d.id = id;
+    if (typeof node === 'string') d.textContent = node; else d.appendChild(node);
+    return d;
+  }
+  var bar = make('div', 'r3d-bar');
+  var home = document.querySelector('header.top a.home');
+  if (home) bar.appendChild(home);
+  var h1 = document.querySelector('main > h1');
+  if (h1) { h1.classList.add('r3d-title'); bar.appendChild(h1); }
+  var easyP = document.querySelector('.easy-marker');
+  if (easyP) {
+    var easy = make('span', 'r3d-easy', 'Easy version');
+    easy.tabIndex = 0;
+    var easyD = descFor('r3d-easy-desc', easyP);
+    easy.setAttribute('aria-describedby', easyD.id);
+    withTip(easy, easyD);
+    bar.appendChild(easy); bar.appendChild(easyD);
+  }
+  if (controls) bar.appendChild(controls);
+  var pops = [];
+  function disclosure(label, cls) {
+    var d = make('details', 'r3d-pop ' + cls), sm = make('summary', null, label), b = make('div', 'r3d-popbody');
+    d.appendChild(sm); d.appendChild(b);
+    d.addEventListener('toggle', function () {
+      if (d.open) pops.forEach(function (o) { if (o !== d) o.open = false; });
+    });
+    pops.push(d); bar.appendChild(d);
+    return { el: d, body: b, summary: sm };
+  }
+  var about = disclosure('About this map', 'r3d-about');
+  var lede = document.querySelector('main > .lede'), howto = document.querySelector('section.list .howto');
+  var figcap = document.querySelector('.ride-figure figcaption');
+  [lede, figcap, howto].forEach(function (n) { if (n) about.body.appendChild(n); });
+  var trips = disclosure('Side trips', 'r3d-trips');
+  var spurH = document.getElementById('spurs'), spurList = document.querySelector('ul.spurs');
+  var spurIntro = spurH && spurH.nextElementSibling && spurH.nextElementSibling.tagName === 'P' ? spurH.nextElementSibling : null;
+  [spurH, spurIntro, spurList].forEach(function (n) { if (n) trips.body.appendChild(n); });
+  function closePops() { pops.forEach(function (o) { o.open = false; }); }
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key !== 'Escape') return;
+    pops.forEach(function (o) { if (o.open) { o.open = false; o.querySelector('summary').focus(); } });
+  });
+  document.addEventListener('pointerdown', function (ev) {
+    pops.forEach(function (o) { if (o.open && !o.contains(ev.target)) o.open = false; });
+  });
+  document.body.insertBefore(bar, document.body.firstChild);
+
+  // the map paint's caption, in the scene; it opens "About this map", which holds the whole caption
+  var honest = figcap ? figcap.querySelector('.honest strong') : null;
+  if (honest) {
+    var capBtn = make('button', 'r3d-cap', honest.textContent);
+    capBtn.type = 'button'; capBtn.setAttribute('data-layer', 'map');
+    capBtn.addEventListener('click', function () { about.el.open = true; about.summary.focus(); });
+    host.appendChild(capBtn);
+  }
+
+  // the panel: the station list itself, its cards made into accordion rows
+  var panel = document.querySelector('section.list');
+  if (panel) panel.classList.add('r3d-panel');
+  var hall = document.getElementById('station-0-hall');
+  var rows = stations.map(function (s, k) {
+    var li = s.li, h3 = li.querySelector('h3'), btn = make('button', 'r3d-row'), body = make('div', 'r3d-body');
+    btn.type = 'button'; btn.id = 'r3d-row-' + s.id; body.id = 'r3d-body-' + s.id;
+    if (h3) { while (h3.firstChild) btn.appendChild(h3.firstChild); h3.appendChild(btn); }
+    var kids = Array.prototype.slice.call(li.childNodes);
+    kids.forEach(function (n) { if (n !== h3) body.appendChild(n); });
+    li.appendChild(body);
+    if (k === 0 && hall) body.insertBefore(hall, body.firstChild);
+    btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', body.id);
+    var ph = li.querySelector('.phase');
+    var gloss = ph ? ph.textContent.trim().replace(/^On the map:\s*/, '') : s.title;
+    var d = descFor('r3d-gloss-' + s.id, gloss);
+    btn.setAttribute('aria-describedby', d.id);
+    if (h3) h3.appendChild(d);
+    withTip(btn, d);
+    btn.addEventListener('click', function () { openRow(k, true); });
+    btn.addEventListener('keydown', function (ev) {
+      var to = ev.key === 'ArrowDown' ? k + 1 : ev.key === 'ArrowUp' ? k - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? stations.length - 1 : -1;
+      if (to < 0 || to >= stations.length) return;
+      ev.preventDefault(); rows[to].btn.focus();
+    });
+    var next = li.querySelector('a.next-stop');
+    if (next) {
+      next.addEventListener('click', function (ev) { ev.preventDefault(); openRow((k + 1) % stations.length, true); });
+      var prev = make('button', 'r3d-prev', '\u2190 Previous stop');
+      prev.type = 'button';
+      if (k === 0) prev.setAttribute('aria-disabled', 'true');
+      prev.addEventListener('click', function () { if (k > 0) openRow(k - 1, true); });
+      next.parentNode.insertBefore(prev, next);
+    }
+    body.hidden = true;
+    return { li: li, btn: btn, body: body };
+  });
+  function openRow(k, setHash) {
+    for (var i = 0; i < rows.length; i++) {
+      var on = i === k;
+      rows[i].btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      rows[i].body.hidden = !on;
+      rows[i].li.classList.toggle('r3d-open', on);
+    }
+    current = k;
+    u = stations[k].x;
+    focusOn(stations[k]);
+    requestRender();
+    if (panel) panel.scrollTop = Math.max(0, rows[k].li.offsetTop - 4);
+    if (setHash && window.location.hash !== '#station-' + stations[k].id) window.location.hash = '#station-' + stations[k].id;
+  }
+  function stationIndex(id) {
+    for (var i = 0; i < stations.length; i++) if (stations[i].id === id) return i;
+    return -1;
+  }
+  function arrive(hash) {                            // #station-N opens that row; #spur-X opens Side trips too
+    var m = /^#station-(.+)$/.exec(hash || ''), k = m ? stationIndex(m[1]) : -1;
+    if (k >= 0) { closePops(); openRow(k, false); return true; }
+    var spur = /^#spur-/.test(hash || '') ? document.getElementById(hash.slice(1)) : null;
+    if (spur && trips.body.contains(spur)) {
+      var back = spur.querySelector('a[href^="#station-"]');
+      var j = back ? stationIndex(back.getAttribute('href').slice('#station-'.length)) : -1;
+      openRow(j >= 0 ? j : current, false);
+      trips.el.open = true;
+      return true;
+    }
+    return false;
+  }
+  window.addEventListener('hashchange', function () { arrive(window.location.hash); });
+
   /* ------------------------------------------------------------ start */
   var svg = document.getElementById('ride-svg');
   if (svg) { svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('inert', ''); svg.classList.add('r3d-gone'); }
@@ -582,9 +729,10 @@
   host.appendChild(canvas);
   host.appendChild(layer);
   document.body.appendChild(tip);
-  window.addEventListener('scroll', hideTip, true);
+  window.addEventListener('scroll', tipOnScroll, true);
   host.hidden = false;
-  focusOn(stations[current]);
+  if (!arrive(window.location.hash)) openRow(0, false);   // no hash opens station 0
+  setPaint('window');                                     // the first load uses the default paint
   if (window.ResizeObserver) new ResizeObserver(function () { resize(); }).observe(host);
   window.addEventListener('resize', resize);
   resize();

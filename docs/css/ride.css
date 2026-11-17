@@ -131,3 +131,58 @@ html[data-ride-app="3d"] #ride-svg.r3d-gone { position: absolute; width: 1px; he
 .r3d-tip .r3d-tl { display: block; }
 .r3d-tip .r3d-tl + .r3d-tl { margin-top: 0.25rem; }
 .r3d-tip strong { color: var(--heading); }
+
+/* one screen, no scrolling (plan 1554, contract 8): only when js/ride3d.js runs */
+html[data-ride-app="3d"] { height: 100%; overflow: hidden; scroll-behavior: auto; }
+html[data-ride-app="3d"] body { height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+html[data-ride-app="3d"] .top, html[data-ride-app="3d"] .foot, html[data-ride-app="3d"] .axes { display: none; }
+html[data-ride-app="3d"] main { flex: 1 1 auto; min-height: 0; max-width: none; width: 100%; margin: 0; padding: 0; display: flex; }
+html[data-ride-app="3d"] section.scene { flex: 1 1 auto; min-width: 0; min-height: 0; position: relative; }
+html[data-ride-app="3d"] .ride-figure { position: absolute; inset: 0; }
+html[data-ride-app="3d"] .r3d { aspect-ratio: auto; height: 100%; border: 0; border-radius: 0; }
+.r3d-bar { flex: none; position: relative; z-index: 30; display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.5rem;
+  padding: 0.3rem 0.6rem; background: var(--panel); border-bottom: 1px solid var(--line); font-size: 0.85rem; line-height: 1.3; }
+.r3d-bar .home { color: var(--muted); text-decoration: none; }
+.r3d-bar .r3d-title { font-size: 1.15rem; margin: 0; line-height: 1.2; }
+.r3d-bar .controls { margin: 0; gap: 0.35rem; }
+.r3d-bar .toggle button, .r3d-bar .play, .r3d-bar .controls .r3d-reset, .r3d-bar .controls .r3d-fs { padding: 0.2rem 0.5rem; font-size: 0.82rem; }
+.r3d-easy { color: var(--muted); border-bottom: 1px dotted var(--muted); cursor: help; }
+.r3d-easy:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
+.r3d-pop > summary { cursor: pointer; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 0.2rem 0.5rem; list-style: none; }
+.r3d-pop > summary::-webkit-details-marker { display: none; }
+.r3d-pop > summary::after { content: " \25BE"; color: var(--muted); }
+.r3d-pop[open] > summary { background: #334a6d; color: var(--heading); }
+.r3d-pop > summary:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
+.r3d-popbody { position: absolute; left: 0.5rem; top: calc(100% + 4px); width: min(640px, calc(100vw - 1rem)); max-height: calc(100vh - 7rem); max-height: calc(100dvh - 7rem);
+  overflow-y: auto; overscroll-behavior: contain; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 0.6rem 0.9rem;
+  font-size: 0.9rem; line-height: 1.55; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); }
+.r3d-popbody h2 { font-size: 1rem; margin: 0.2rem 0 0.4rem; }
+.r3d-popbody .lede { margin: 0 0 0.5rem; }
+.r3d-popbody figcaption { margin: 0; }
+html[data-ride-app="3d"] .r3d-trips #spurs { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
+.r3d-cap { position: absolute; left: 0.6rem; bottom: 0.6rem; z-index: 3; max-width: calc(100% - 1.2rem); text-align: left; font: inherit; font-size: 0.82rem;
+  color: var(--heading); background: rgba(11, 18, 34, 0.85); border: 1px solid var(--track); border-radius: 8px; padding: 0.25rem 0.6rem; cursor: pointer; }
+.r3d-cap:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
+.r3d-panel { flex: none; width: clamp(300px, 30vw, 420px); overflow-y: auto; overscroll-behavior: contain; position: relative;
+  border-left: 1px solid var(--line); padding: 0.4rem 0.6rem; font-size: 0.9rem; line-height: 1.5; }
+.r3d-panel > h2 { font-size: 0.95rem; margin: 0.1rem 0 0.4rem; color: var(--muted); }
+html[data-ride-app="3d"] .station { padding: 0; margin: 0 0 0.35rem; }
+html[data-ride-app="3d"] .station h3 { margin: 0; font-size: 0.95rem; }
+.r3d-row { display: block; width: 100%; text-align: left; font: inherit; font-weight: 600; color: var(--heading); background: none; border: 0;
+  padding: 0.35rem 0.6rem; cursor: pointer; border-radius: 10px; }
+.r3d-row:hover { background: #26354d; }
+.r3d-row:focus-visible { outline: 2px solid var(--track); outline-offset: -2px; }
+.station.r3d-open { border-color: var(--track); }
+.r3d-body { padding: 0 0.7rem 0.6rem; }
+.r3d-body .hall { background: none; border: 0; padding: 0; }
+.r3d-body .hall h2 { font-size: 0.95rem; margin: 0.3rem 0; }
+.r3d-prev { font: inherit; font-weight: 600; border: 1px solid var(--track); color: var(--track); background: none; border-radius: 8px;
+  padding: 0.35rem 0.7rem; margin: 0 0.4rem 0.3rem 0; cursor: pointer; }
+.r3d-prev[aria-disabled="true"] { opacity: 0.4; cursor: default; }
+.r3d-prev:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
+@media (max-width: 640px) {
+  html[data-ride-app="3d"] main { flex-direction: column; }
+  .r3d-panel { width: auto; height: 40vh; height: 40dvh; border-left: 0; border-top: 1px solid var(--line); }
+  .r3d-bar { gap: 0.25rem 0.35rem; padding: 0.25rem 0.4rem; }
+  .r3d-bar .r3d-title { font-size: 1rem; }
+}
