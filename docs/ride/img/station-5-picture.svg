@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="A surveyor&#x27;s three instruments set up near, in the middle and far from a hill. Their sight lines all meet at one spot on the hilltop: where the readings agree." font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<rect width="640" height="200" fill="#13203a"/>
+<path d="M380,158 C450,158 470,70 540,70 C600,70 610,150 640,158 Z" fill="#1f3b2f" stroke="#3f7a5c" stroke-width="3"/>
+<line x1="0" y1="158" x2="640" y2="158" stroke="#94a3b8" stroke-width="2"/>
+<line x1="60" y1="118" x2="46" y2="158" stroke="#f1f5f9" stroke-width="3"/><line x1="60" y1="118" x2="74" y2="158" stroke="#f1f5f9" stroke-width="3"/><rect x="48" y="110" width="24" height="10" rx="2" fill="#fbbf24"/>
+<line x1="200" y1="118" x2="186" y2="158" stroke="#f1f5f9" stroke-width="3"/><line x1="200" y1="118" x2="214" y2="158" stroke="#f1f5f9" stroke-width="3"/><rect x="188" y="110" width="24" height="10" rx="2" fill="#fbbf24"/>
+<line x1="330" y1="118" x2="316" y2="158" stroke="#f1f5f9" stroke-width="3"/><line x1="330" y1="118" x2="344" y2="158" stroke="#f1f5f9" stroke-width="3"/><rect x="318" y="110" width="24" height="10" rx="2" fill="#fbbf24"/>
+<path d="M60,135 L540,70 M200,135 L540,70 M330,135 L540,70" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="8 6" fill="none"/>
+<circle cx="540" cy="70" r="9" fill="#dc2626" stroke="#f1f5f9" stroke-width="2"/>
+<text x="60" y="190" font-size="28" font-weight="600" text-anchor="middle" fill="#f1f5f9">far</text>
+<text x="200" y="190" font-size="28" font-weight="600" text-anchor="middle" fill="#f1f5f9">middle</text>
+<text x="330" y="190" font-size="28" font-weight="600" text-anchor="middle" fill="#f1f5f9">near</text>
+<text x="630" y="42" font-size="28" font-weight="600" text-anchor="end" fill="#f1f5f9">they agree here</text>
+</svg>

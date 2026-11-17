@@ -42,8 +42,10 @@
     "y": 0.46
    },
    "c": 0.9,
-   "image": "img/station-0.webp",
-   "image_alt": "The five-feature radar chart from the poised-state survey: five axes, criticality one of them, on which systems such as the brain, the heart and glass are compared."
+   "image": "img/station-0-picture.svg",
+   "image_alt": "A ticket hall: a ticket window under a sign reading Tickets, and a ticket whose destination reads 'to the edge', with a small hilltop drawn on it.",
+   "expert_image": "img/station-0.webp",
+   "expert_image_alt": "The five-feature radar chart from the poised-state survey: five axes, criticality one of them, on which systems such as the brain, the heart and glass are compared."
   },
   {
    "id": "1",
@@ -94,8 +96,10 @@
     "y": 0.57
    },
    "c": 0.9,
-   "image": "img/station-2.webp",
-   "image_alt": "A flow diagram in a plane of two couplings, with a stable low-temperature fixed point, a stable high-temperature fixed point, and an unstable critical fixed point on the critical surface between them."
+   "image": "img/station-2-picture.svg",
+   "image_alt": "A hall of mirrors: three mirrors, each further down the hall and smaller than the last, with an arrow between them; each shows the same cliff shape. Zoom out, and the cliff still looks the same.",
+   "expert_image": "img/station-2.webp",
+   "expert_image_alt": "A flow diagram in a plane of two couplings, with a stable low-temperature fixed point, a stable high-temperature fixed point, and an unstable critical fixed point on the critical surface between them."
   },
   {
    "id": "3",
@@ -120,8 +124,10 @@
     "y": 0.58
    },
    "c": 0.9,
-   "image": "img/station-3.webp",
-   "image_alt": "Superfluid density against temperature, falling smoothly and then dropping to zero exactly where it meets a universal straight line."
+   "image": "img/station-3-picture.svg",
+   "image_alt": "A long ridge seen from the side, with the railway running along its crest from one end to the other: the edge here is a whole line, not a single peak.",
+   "expert_image": "img/station-3.webp",
+   "expert_image_alt": "Superfluid density against temperature, falling smoothly and then dropping to zero exactly where it meets a universal straight line."
   },
   {
    "id": "4",
@@ -146,8 +152,10 @@
     "y": 0.55
    },
    "c": 0.9,
-   "image": "img/station-4.webp",
-   "image_alt": "The Ashkin-Teller phase diagram in the unit square of X and Z, with the critical segment of the self-dual line running from X0 to X4."
+   "image": "img/station-4-picture.svg",
+   "image_alt": "Three gradient signs beside one long level line of track: the first sign shows a gentle slope, the next steeper, the last steeper still. The line is the same; the pitch it stands for changes as you go.",
+   "expert_image": "img/station-4.webp",
+   "expert_image_alt": "The Ashkin-Teller phase diagram in the unit square of X and Z, with the critical segment of the self-dual line running from X0 to X4."
   },
   {
    "id": "5",
@@ -174,8 +182,10 @@
     "y": 0.5
    },
    "c": 0.9,
-   "image": "img/station-5.svg",
-   "image_alt": "A lattice of spins coarse-grained three times over, each step a smaller block copy of the one before."
+   "image": "img/station-5-picture.svg",
+   "image_alt": "A surveyor's three instruments set up near, in the middle and far from a hill. Their sight lines all meet at one spot on the hilltop: where the readings agree.",
+   "expert_image": "img/station-5.svg",
+   "expert_image_alt": "A lattice of spins coarse-grained three times over, each step a smaller block copy of the one before."
   },
   {
    "id": "6",
@@ -278,8 +288,10 @@
     "y": 0.49
    },
    "c": 0.9,
-   "image": "img/station-9.webp",
-   "image_alt": "The sign-cell strip: eight example intervals drawn against the cuts at minus epsilon, zero and plus epsilon, each with the code the instrument assigns to it."
+   "image": "img/station-9-picture.svg",
+   "image_alt": "A compass rose drawn in dashed outline, because the instrument is planned and not yet built: its needle lies along a dashed line of track running across the picture instead of pointing north.",
+   "expert_image": "img/station-9.webp",
+   "expert_image_alt": "The sign-cell strip: eight example intervals drawn against the cuts at minus epsilon, zero and plus epsilon, each with the code the instrument assigns to it."
   },
   {
    "id": "T",
@@ -305,8 +317,10 @@
     "y": 0.54
    },
    "c": 0.9,
-   "image": "img/station-T.webp",
-   "image_alt": "A rank-frequency plot on log-log axes, the counts against their rank, with a reference line of slope minus one and a fitted slope of minus 0.99."
+   "image": "img/station-T-picture.svg",
+   "image_alt": "Three doors in a wall. The first two stand open, labelled edge of chaos and criticality. The third, labelled Poised Realm, is still shut: not yet tested.",
+   "expert_image": "img/station-T.webp",
+   "expert_image_alt": "A rank-frequency plot on log-log axes, the counts against their rank, with a reference line of slope minus one and a fitted slope of minus 0.99."
   }
  ],
  "spurs": [

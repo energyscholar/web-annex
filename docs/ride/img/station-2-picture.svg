@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="A hall of mirrors: three mirrors, each further down the hall and smaller than the last, with an arrow between them; each shows the same cliff shape. Zoom out, and the cliff still looks the same." font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<rect width="640" height="200" fill="#13203a"/>
+<rect x="20" y="56" width="180" height="136" rx="54" ry="16" fill="#1e2f52" stroke="#fbbf24" stroke-width="4"/>
+<path d="M52.5,178.0 L68.6,175.7 L77.8,155.0 L87.0,159.6 L98.5,132.0 L107.7,143.5 L116.9,118.2 L133.0,113.6 L144.5,143.5 L158.3,150.4 L167.5,178.0" fill="none" stroke="#f1f5f9" stroke-width="3.5" stroke-linejoin="round"/>
+<rect x="262" y="86" width="140" height="106" rx="42" ry="16" fill="#1e2f52" stroke="#fbbf24" stroke-width="4"/>
+<path d="M287.0,178.0 L299.6,176.2 L306.8,160.0 L314.0,163.6 L323.0,142.0 L330.2,151.0 L337.4,131.2 L350.0,127.6 L359.0,151.0 L369.8,156.4 L377.0,178.0" fill="none" stroke="#f1f5f9" stroke-width="3.5" stroke-linejoin="round"/>
+<rect x="466" y="112" width="104" height="80" rx="31" ry="16" fill="#1e2f52" stroke="#fbbf24" stroke-width="4"/>
+<path d="M485.0,178.0 L494.2,176.7 L499.5,164.8 L504.8,167.4 L511.4,151.6 L516.7,158.2 L522.0,143.7 L531.2,141.0 L537.8,158.2 L545.7,162.2 L551.0,178.0" fill="none" stroke="#f1f5f9" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M210,140 H250 M240,130 L250,140 L240,150" stroke="#fbbf24" stroke-width="4" fill="none"/>
+<path d="M412,150 H452 M442,140 L452,150 L442,160" stroke="#fbbf24" stroke-width="4" fill="none"/>
+<text x="320" y="40" font-size="30" font-weight="600" text-anchor="middle" fill="#f1f5f9">zoom out: it looks the same</text>
+</svg>

@@ -191,6 +191,13 @@ html[data-ride-app="3d"] .station h3 { margin: 0; font-size: 0.95rem; }
 .r3d-zoom:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
 .r3d-img { display: block; width: 100%; height: 180px; object-fit: contain; }
 .r3d-fig figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+/* the expert figure behind "the physics figure" (plan 1564): closed by default, the deeper level */
+.r3d-expert { margin-top: 0.2rem; }
+.r3d-expert-btn { font: inherit; font-size: 0.8rem; padding: 0.15rem 0.5rem; border: 1px solid var(--line); border-radius: 6px;
+  background: transparent; color: var(--track); cursor: pointer; }
+.r3d-expert-btn:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
+.r3d-expert-note { margin: 0.3rem 0 0.2rem; font-size: 0.78rem; color: var(--muted); border-left: 3px solid var(--track); padding-left: 0.4rem; }
+.r3d-expert-img { display: block; width: 100%; height: auto; max-height: 60vh; object-fit: contain; }
 .r3d-lightbox { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem;
   background: rgba(2, 6, 18, 0.9); cursor: zoom-out; }
 .r3d-lightbox[hidden] { display: none; }

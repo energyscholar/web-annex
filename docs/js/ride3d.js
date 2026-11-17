@@ -738,6 +738,35 @@
   lightbox.addEventListener('click', closeLightbox);
   lightbox.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') { ev.stopPropagation(); closeLightbox(); } });
   document.body.appendChild(lightbox);
+  // the expert figure (plan 1564): one deliberate click away, behind "the physics figure"; nothing is fetched or shown
+  // until the reader asks for it (R1), and it opens large in the same lightbox as the picture
+  function expertFigure(li, src, alt) {
+    var box = make('div', 'r3d-expert'), btn = make('button', 'r3d-expert-btn', 'the physics figure \u25b8');
+    var panel = make('div', 'r3d-expert-panel'), img = null;
+    btn.type = 'button'; panel.id = 'r3d-expert-' + li.getAttribute('data-station'); panel.hidden = true;
+    btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', panel.id);
+    btn.addEventListener('click', function () {
+      var open = panel.hidden;
+      if (open && !img) {
+        var z = make('button', 'r3d-zoom r3d-expert-zoom');
+        z.type = 'button';
+        img = make('img', 'r3d-expert-img'); img.alt = alt; img.decoding = 'async'; img.src = src;
+        z.appendChild(img);
+        z.addEventListener('click', function () {
+          lbImg.src = img.src; lbImg.alt = img.alt; lbFrom = z;
+          lightbox.setAttribute('aria-label', img.alt);
+          lightbox.hidden = false; lightbox.focus();
+        });
+        panel.appendChild(make('p', 'r3d-expert-note', 'More precisely: the figure from the full page.'));
+        panel.appendChild(z);
+      }
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.textContent = 'the physics figure ' + (open ? '\u25be' : '\u25b8');
+    });
+    box.appendChild(btn); box.appendChild(panel);
+    return box;
+  }
   function picture(li) {
     var src = li.getAttribute('data-image'), alt = li.getAttribute('data-image-alt');
     if (!src) return null;
@@ -753,6 +782,8 @@
     fig.appendChild(zoomBtn);
     var pic = li.querySelector('.carry strong');
     if (pic) fig.appendChild(make('figcaption', null, visibleText(pic)));
+    var ex = li.getAttribute('data-expert-image');
+    if (ex) fig.appendChild(expertFigure(li, ex, li.getAttribute('data-expert-image-alt') || ''));
     return { el: fig, img: img };
   }
   var rows = stations.map(function (s, k) {

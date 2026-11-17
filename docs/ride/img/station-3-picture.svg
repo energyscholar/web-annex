@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="A long ridge seen from the side, with the railway running along its crest from one end to the other: the edge here is a whole line, not a single peak." font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<rect width="640" height="200" fill="#13203a"/>
+<path d="M0,190 L0,170 C60,160 90,95 140,90 L500,90 C550,95 580,160 640,170 L640,190 Z" fill="#1f3b2f" stroke="#3f7a5c" stroke-width="3"/>
+<path d="M150,170 C200,150 260,140 320,170 M360,175 C420,140 470,150 520,172" stroke="#3f7a5c" stroke-width="2" fill="none"/>
+<line x1="130" y1="84" x2="510" y2="84" stroke="#fbbf24" stroke-width="5" stroke-dasharray="16 8"/>
+<rect x="300" y="62" width="70" height="20" rx="5" fill="#f1f5f9"/><circle cx="315" cy="84" r="5" fill="#13203a"/><circle cx="355" cy="84" r="5" fill="#13203a"/>
+<text x="320" y="40" font-size="30" font-weight="600" text-anchor="middle" fill="#f1f5f9">the edge is a line, not a point</text>
+<text x="320" y="140" font-size="28" font-weight="500" text-anchor="middle" fill="#f1f5f9">the track runs along the top</text>
+</svg>
