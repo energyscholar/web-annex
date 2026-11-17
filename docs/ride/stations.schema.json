@@ -31,7 +31,7 @@
     "page": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]*\\.html$"},
     "station": {
       "type": "object",
-      "required": ["id", "title", "view", "phase", "expert", "expert_title", "also", "start", "state", "carry", "map", "c"],
+      "required": ["id", "title", "view", "phase", "expert", "expert_title", "also", "start", "state", "carry", "map", "c", "image", "image_alt"],
       "additionalProperties": false,
       "properties": {
         "id": {"type": "string", "pattern": "^([0-9]|T)$"},
@@ -53,7 +53,9 @@
           "type": "object", "required": ["x", "y"], "additionalProperties": false,
           "properties": {"x": {"type": "number", "minimum": 0, "maximum": 1}, "y": {"type": "number", "minimum": 0, "maximum": 1}}
         },
-        "c": {"type": "number", "minimum": 0, "maximum": 1}
+        "c": {"type": "number", "minimum": 0, "maximum": 1},
+        "image": {"type": "string", "pattern": "^img/[a-zA-Z0-9_-]+\\.(svg|webp|png)$"},
+        "image_alt": {"type": "string", "minLength": 1}
       },
       "if": {"properties": {"state": {"const": "live"}}},
       "then": {"properties": {"expert": {"$ref": "#/$defs/page"}, "expert_title": {"type": "string"}}}

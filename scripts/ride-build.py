@@ -55,7 +55,8 @@ def station_block(s, nxt, loops):
     soon = SOON if s["state"] != "live" else ""
     L = [f'<li class="station" id="station-{sid}" data-station="{sid}" data-state="{s["state"]}" '
          f'data-title="{E(s["title"])}" '
-         f'data-x="{s["map"]["x"]}" data-y="{s["map"]["y"]}" data-c="{s["c"]}">',
+         f'data-x="{s["map"]["x"]}" data-y="{s["map"]["y"]}" data-c="{s["c"]}" '
+         f'data-image="{E(s["image"])}" data-image-alt="{E(s["image_alt"])}">',
          f'  <h3><span class="num">{num}</span> {E(s["title"])}{soon}</h3>',
          f'  <p class="view">Out of the window: {E(s["view"])}.</p>',
          f'  <p class="carry">Take away: <strong>{E(s["carry"]["picture"])}</strong> &middot; '

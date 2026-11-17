@@ -186,3 +186,15 @@ html[data-ride-app="3d"] .station h3 { margin: 0; font-size: 0.95rem; }
   .r3d-bar { gap: 0.25rem 0.35rem; padding: 0.25rem 0.4rem; }
   .r3d-bar .r3d-title { font-size: 1rem; }
 }
+
+/* each stop's picture (plan 1554, contract 10; ruling 6) */
+.r3d-fig { margin: 0.2rem 0 0.4rem; }
+.r3d-zoom { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 8px; background: #0b1222; cursor: zoom-in; }
+.r3d-zoom:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; }
+.r3d-img { display: block; width: 100%; height: 180px; object-fit: contain; }
+.r3d-fig figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+.r3d-lightbox { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem;
+  background: rgba(2, 6, 18, 0.9); cursor: zoom-out; }
+.r3d-lightbox[hidden] { display: none; }
+.r3d-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+@media (max-width: 640px) { .r3d-img { height: 110px; } }

@@ -654,6 +654,38 @@
   var panel = document.querySelector('section.list');
   if (panel) panel.classList.add('r3d-panel');
   var hall = document.getElementById('station-0-hall');
+  // each stop's picture: a local file named by the builder (data-image, data-image-alt); its caption is
+  // the station's own take-away picture. Lazy except the open row's; a tap shows it large.
+  var lightbox = make('div', 'r3d-lightbox'), lbImg = make('img');
+  lightbox.hidden = true; lightbox.setAttribute('role', 'dialog'); lightbox.setAttribute('aria-modal', 'true');
+  lightbox.appendChild(lbImg);
+  var lbFrom = null;
+  function closeLightbox() {
+    if (lightbox.hidden) return;
+    lightbox.hidden = true;
+    if (lbFrom) lbFrom.focus();
+  }
+  lightbox.tabIndex = -1;
+  lightbox.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') { ev.stopPropagation(); closeLightbox(); } });
+  document.body.appendChild(lightbox);
+  function picture(li) {
+    var src = li.getAttribute('data-image'), alt = li.getAttribute('data-image-alt');
+    if (!src) return null;
+    var fig = make('figure', 'r3d-fig'), zoomBtn = make('button', 'r3d-zoom'), img = make('img', 'r3d-img');
+    img.loading = 'lazy'; img.decoding = 'async'; img.alt = alt || ''; img.src = src;   // lazy before src
+    zoomBtn.type = 'button';
+    zoomBtn.appendChild(img);
+    zoomBtn.addEventListener('click', function () {
+      lbImg.src = img.src; lbImg.alt = img.alt; lbFrom = zoomBtn;
+      lightbox.setAttribute('aria-label', img.alt);
+      lightbox.hidden = false; lightbox.focus();
+    });
+    fig.appendChild(zoomBtn);
+    var pic = li.querySelector('.carry strong');
+    if (pic) fig.appendChild(make('figcaption', null, pic.textContent));
+    return { el: fig, img: img };
+  }
   var rows = stations.map(function (s, k) {
     var li = s.li, h3 = li.querySelector('h3'), btn = make('button', 'r3d-row'), body = make('div', 'r3d-body');
     btn.type = 'button'; btn.id = 'r3d-row-' + s.id; body.id = 'r3d-body-' + s.id;
@@ -662,6 +694,8 @@
     kids.forEach(function (n) { if (n !== h3) body.appendChild(n); });
     li.appendChild(body);
     if (k === 0 && hall) body.insertBefore(hall, body.firstChild);
+    var fig = picture(li);                           // the image comes first, so it shows without scrolling
+    if (fig) body.insertBefore(fig.el, body.firstChild);
     btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', body.id);
     var ph = li.querySelector('.phase');
     var gloss = ph ? ph.textContent.trim().replace(/^On the map:\s*/, '') : s.title;
@@ -685,7 +719,7 @@
       next.parentNode.insertBefore(prev, next);
     }
     body.hidden = true;
-    return { li: li, btn: btn, body: body };
+    return { li: li, btn: btn, body: body, img: fig ? fig.img : null };
   });
   function openRow(k, setHash) {
     for (var i = 0; i < rows.length; i++) {
@@ -693,6 +727,7 @@
       rows[i].btn.setAttribute('aria-expanded', on ? 'true' : 'false');
       rows[i].body.hidden = !on;
       rows[i].li.classList.toggle('r3d-open', on);
+      if (on && rows[i].img) rows[i].img.loading = 'eager';
     }
     current = k;
     u = stations[k].x;

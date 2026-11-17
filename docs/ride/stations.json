@@ -38,7 +38,9 @@
     "x": 0.04,
     "y": 0.46
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-0.webp",
+   "image_alt": "The five-feature radar chart from the poised-state survey: five axes, criticality one of them, on which systems such as the brain, the heart and glass are compared."
   },
   {
    "id": "1",
@@ -59,7 +61,9 @@
     "x": 0.132,
     "y": 0.52
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-1.webp",
+   "image_alt": "A phase diagram with temperature along the bottom and pressure up the side, where the boundary between phase A and phase B ends at a critical point."
   },
   {
    "id": "2",
@@ -80,7 +84,9 @@
     "x": 0.224,
     "y": 0.57
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-2.webp",
+   "image_alt": "A flow diagram in a plane of two couplings, with a stable low-temperature fixed point, a stable high-temperature fixed point, and an unstable critical fixed point on the critical surface between them."
   },
   {
    "id": "3",
@@ -101,7 +107,9 @@
     "x": 0.316,
     "y": 0.58
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-3.webp",
+   "image_alt": "Superfluid density against temperature, falling smoothly and then dropping to zero exactly where it meets a universal straight line."
   },
   {
    "id": "4",
@@ -122,7 +130,9 @@
     "x": 0.408,
     "y": 0.55
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-4.webp",
+   "image_alt": "The Ashkin-Teller phase diagram in the unit square of X and Z, with the critical segment of the self-dual line running from X0 to X4."
   },
   {
    "id": "5",
@@ -146,7 +156,9 @@
     "x": 0.5,
     "y": 0.5
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-5.svg",
+   "image_alt": "A lattice of spins coarse-grained three times over, each step a smaller block copy of the one before."
   },
   {
    "id": "6",
@@ -167,7 +179,9 @@
     "x": 0.592,
     "y": 0.44
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-6.webp",
+   "image_alt": "Steady states against the setting c: an S-shaped curve with a dashed unstable middle branch, where the two stable branches overlap and the followed path makes a hysteresis loop."
   },
   {
    "id": "7",
@@ -189,6 +203,8 @@
     "y": 0.41
    },
    "c": 0.9,
+   "image": "img/station-7.svg",
+   "image_alt": "A side view of a beaded line: five peaks reach the top with deep valleys between them, and a level dashed track runs just below the summits.",
    "cite": "Kivelson, S., Lee, D.-H., & Zhang, S.-C. (1992). Global phase diagram in the quantum Hall effect. Physical Review B 46, 2223. doi:10.1103/PhysRevB.46.2223"
   },
   {
@@ -210,7 +226,9 @@
     "x": 0.776,
     "y": 0.43
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-8.svg",
+   "image_alt": "A window whose right half fogs over, with a jiggling trace behind it whose swings grow larger and slower towards a dashed line at the right."
   },
   {
    "id": "9",
@@ -231,7 +249,9 @@
     "x": 0.868,
     "y": 0.49
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-9.webp",
+   "image_alt": "The sign-cell strip: eight example intervals drawn against the cuts at minus epsilon, zero and plus epsilon, each with the code the instrument assigns to it."
   },
   {
    "id": "T",
@@ -254,7 +274,9 @@
     "x": 0.96,
     "y": 0.54
    },
-   "c": 0.9
+   "c": 0.9,
+   "image": "img/station-T.webp",
+   "image_alt": "A rank-frequency plot on log-log axes, the counts against their rank, with a reference line of slope minus one and a fitted slope of minus 0.99."
   }
  ],
  "spurs": [

@@ -9,6 +9,7 @@ Checks, each printed as one line, exit 1 on any failure:
   schema    stations.json and tracks.json validate against their schemas (jsonschema)
   paths     every non-null expert / also / spur path exists under the docs root
   live      every live station names an expert page
+  images    every station names an image and its alt text, and the image file exists under docs/ride/
   ids       station ids are unique; every spur leaves from a station that exists; no page is listed twice
   game      no game-tree prefix appears anywhere in stations.json
   tracks    every non-game page is on exactly one track, and every tracked page exists
@@ -71,6 +72,13 @@ def main():
         listed += [p for p in [s.get("expert")] + list(s.get("also") or []) + [s.get("start")] if p]
     listed += [s.get("expert") for s in spurs if s.get("expert")]
     check("paths", [p for p in listed if not os.path.isfile(os.path.join(a.root, p))])
+
+    ride = os.path.join(a.root, "ride")
+    probs = [f"station {s.get('id', '?')} has no image" for s in stations if not s.get("image")]
+    probs += [f"station {s.get('id', '?')} has no image_alt" for s in stations if not (s.get("image_alt") or "").strip()]
+    probs += [f"station {s.get('id', '?')}: missing {s['image']}" for s in stations
+              if s.get("image") and not os.path.isfile(os.path.join(ride, s["image"]))]
+    check("images", probs)
 
     check("live", [s.get("id", "?") for s in stations if s.get("state") == "live" and not s.get("expert")])
 
