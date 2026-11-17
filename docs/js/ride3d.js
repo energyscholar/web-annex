@@ -167,7 +167,7 @@
   /* ------------------------------------------------------------ the camera */
   var DEF = { yaw: -0.62, pitch: 0.5, dist: 1.75 };
   var cam = { yaw: DEF.yaw, pitch: DEF.pitch, dist: DEF.dist, tx: 0, ty: 0, tz: 0 };
-  var PITCH_MIN = 0.12, PITCH_MAX = 1.45, DIST_MIN = 0.9, DIST_MAX = 4.5;
+  var PITCH_MIN = 0.12, PITCH_MAX = 1.45, DIST_MIN = 0.9, DIST_MAX = 4.5;   // DIST_MAX grows to the framing distance
   var basis = { ox: 0, oy: 0, oz: 0, rx: 0, ry: 0, ux: 0, uy: 0, uz: 0, fx: 0, fy: 0, fz: 0, f: 1, cx: 0, cy: 0 };
   function setBasis(w, h) {
     var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch), cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
@@ -188,7 +188,36 @@
     out.z = z; out.x = basis.cx + basis.f * xc / z; out.y = basis.cy - basis.f * yc / z;
     return out;
   }
-  function focusOn(s) { cam.tx = WX(s.x); cam.ty = WY(s.y); cam.tz = s.c * HZ; }
+  function focusOn(s) { cam.tx = WX(s.x); cam.ty = WY(s.y); cam.tz = s.c * HZ; autoFrame = false; }
+  // the whole line in view: aim at the middle of the beads, then take the nearest distance at which every
+  // station sign (and the bead under it) projects inside the canvas with a margin for the sign itself
+  var autoFrame = false;
+  function fits(w, h) {
+    setBasis(w, h);
+    var mx = Math.min(36, w * 0.08), mt = 30, mb = 14;
+    for (var i = 0; i < stations.length; i++) {
+      var st = stations[i];
+      for (var j = 0; j < 2; j++) {
+        var q = project(WX(st.x), WY(st.y), j ? HZ * 1.16 : st.c * HZ);
+        if (q.z < NEAR || q.x < mx || q.x > w - mx - 24 || q.y < mt || q.y > h - mb) return false;
+      }
+    }
+    return true;
+  }
+  function frameAll() {
+    cam.yaw = DEF.yaw; cam.pitch = DEF.pitch;
+    var lo = Infinity, hi = -Infinity, ylo = Infinity, yhi = -Infinity;
+    stations.forEach(function (st) { lo = Math.min(lo, st.x); hi = Math.max(hi, st.x); ylo = Math.min(ylo, st.y); yhi = Math.max(yhi, st.y); });
+    cam.tx = WX((lo + hi) / 2); cam.ty = WY((ylo + yhi) / 2); cam.tz = HZ * 0.6;
+    var w = W_PX, h = H_PX, a = 0.5, b = 0.5;
+    if (w > 1 && h > 1) {
+      while (b < 40) { cam.dist = b; if (fits(w, h)) break; a = b; b *= 1.5; }
+      for (var it = 0; it < 30; it++) { cam.dist = (a + b) / 2; if (fits(w, h)) b = cam.dist; else a = cam.dist; }
+      cam.dist = b;
+    } else cam.dist = DEF.dist;
+    DIST_MAX = Math.max(4.5, cam.dist * 1.6);
+    autoFrame = true;
+  }
 
   /* ------------------------------------------------------------ drawing */
   var W_PX = 0, H_PX = 0, DPR = 1;
@@ -431,29 +460,57 @@
     layer.appendChild(el); layer.appendChild(d);
     return { el: el, at: A.at, w: 0, h: 0 };
   });
-  function placeAxes() {
-    var on = paint === 'map';
-    for (var k = 0; k < axisLabels.length; k++) {
-      var A = axisLabels[k], el = A.el;
-      el.style.display = on ? '' : 'none';
-      if (!on) continue;
-      if (!A.w) { A.w = el.offsetWidth; A.h = el.offsetHeight; }
-      var p = project(WX(A.at[0]), WY(A.at[1]), A.at[2] * HZ);
-      var x = p.x - A.w / 2, y = p.y - A.h / 2;
-      if (p.z < NEAR) { x = 4; y = 4 + k * (A.h + 4); }
-      // keep the label inside the scene's box whatever the camera does
-      x = Math.max(4, Math.min(W_PX - A.w - 4, x)); y = Math.max(4, Math.min(H_PX - A.h - 4, y));
-      el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)';
+  var narrow = false, capEl = null;
+  function meets(a, b) { return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h; }
+  // the first spot near (x, y) whose box, padded by 2 px, meets none already taken; inside the scene's box
+  function spot(x, y, w, h, taken) {
+    var g = 2, steps = [[0, 0]], dy = h + g, dx = w / 2 + g, i;
+    for (i = 1; i <= 4; i++) { steps.push([0, -i * dy]); steps.push([0, i * dy]); }
+    for (i = 1; i <= 4; i++) { steps.push([dx * i, 0]); steps.push([-dx * i, 0]); steps.push([dx * i, -dy]); steps.push([-dx * i, -dy]); }
+    var first = null;
+    for (i = 0; i < steps.length; i++) {
+      var bx = Math.max(g, Math.min(W_PX - w - g, x + steps[i][0])), by = Math.max(g, Math.min(H_PX - h - g, y + steps[i][1]));
+      var box = { x: bx - g, y: by - g, w: w + 2 * g, h: h + 2 * g };
+      if (!first) first = box;
+      var free = true;
+      for (var t = 0; t < taken.length && free; t++) if (meets(box, taken[t])) free = false;
+      if (free) return box;
     }
+    return first;
   }
   function placeLabels() {
-    placeAxes();
-    for (var k = 0; k < stations.length; k++) {
-      var s = stations[k], p = project(WX(s.x), WY(s.y), HZ * 1.16), el = signs[k];
+    var on = paint === 'map', k, el;
+    // writes that change sizes first, then one read pass, then transforms only
+    for (k = 0; k < axisLabels.length; k++) axisLabels[k].el.style.display = on ? '' : 'none';
+    var proj = stations.map(function (s, k) {
+      var p = project(WX(s.x), WY(s.y), HZ * 1.16);
       var vis = p.z > NEAR && p.x > -40 && p.x < W_PX + 40 && p.y > -20 && p.y < H_PX + 20;
-      el.style.display = vis ? '' : 'none';
-      if (vis) el.style.transform = 'translate(' + p.x.toFixed(1) + 'px,' + p.y.toFixed(1) + 'px)';
-      el.classList.toggle('cur', k === current);
+      signs[k].style.display = vis ? '' : 'none';
+      signs[k].classList.toggle('cur', k === current);
+      return { k: k, x: p.x, y: p.y, z: p.z, vis: vis };
+    });
+    if (!capEl) capEl = host.querySelector('.r3d-cap');
+    var taken = [];
+    if (capEl && capEl.offsetWidth) taken.push({ x: capEl.offsetLeft - 2, y: capEl.offsetTop - 2, w: capEl.offsetWidth + 4, h: capEl.offsetHeight + 4 });
+    var sw = signs.map(function (e) { return e.offsetWidth; }), sh = signs.map(function (e) { return e.offsetHeight; });
+    var aw = axisLabels.map(function (A) { return A.el.offsetWidth; }), ah = axisLabels.map(function (A) { return A.el.offsetHeight; });
+    // the signs: the current station first, then nearest to the camera first
+    var order = proj.filter(function (q) { return q.vis; }).sort(function (a, b) {
+      return (a.k === current ? -1 : 0) - (b.k === current ? -1 : 0) || a.z - b.z;
+    });
+    order.forEach(function (q) {
+      var w = sw[q.k], h = sh[q.k], box = spot(q.x - 10, q.y - h, w, h, taken);
+      taken.push(box);
+      signs[q.k].style.transform = 'translate(' + (box.x + 2).toFixed(1) + 'px,' + (box.y + 2).toFixed(1) + 'px)';
+    });
+    if (!on) return;
+    for (k = 0; k < axisLabels.length; k++) {
+      var A = axisLabels[k], p = project(WX(A.at[0]), WY(A.at[1]), A.at[2] * HZ);
+      var x = p.x - aw[k] / 2, y = p.y - ah[k] / 2;
+      if (p.z < NEAR) { x = 4; y = 4 + k * (ah[k] + 4); }
+      var b = spot(x, y, aw[k], ah[k], taken);
+      taken.push(b);
+      A.el.style.transform = 'translate(' + (b.x + 2).toFixed(1) + 'px,' + (b.y + 2).toFixed(1) + 'px)';
     }
   }
 
@@ -465,15 +522,19 @@
     DPR = Math.min(2, window.devicePixelRatio || 1);
     W_PX = Math.max(1, Math.round(r.width)); H_PX = Math.max(1, Math.round(r.height));
     canvas.width = Math.round(W_PX * DPR); canvas.height = Math.round(H_PX * DPR);
+    narrow = !!(window.matchMedia && window.matchMedia('(max-width: 640px)').matches);
+    host.classList.toggle('r3d-narrow', narrow);
+    if (autoFrame) frameAll();                        // still the framed view: re-frame for the new size
     render();
   }
 
   /* ------------------------------------------------------------ turning it */
   function rotate(dyaw, dpitch) {
+    autoFrame = false;
     cam.yaw += dyaw;
     cam.pitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, cam.pitch + dpitch));
   }
-  function zoom(f) { cam.dist = Math.min(DIST_MAX, Math.max(DIST_MIN, cam.dist * f)); }
+  function zoom(f) { autoFrame = false; cam.dist = Math.min(DIST_MAX, Math.max(DIST_MIN, cam.dist * f)); }
   var pointers = {}, pinch = 0;
   canvas.addEventListener('pointerdown', function (ev) {
     pointers[ev.pointerId] = { x: ev.clientX, y: ev.clientY };
@@ -515,7 +576,7 @@
     else hit = false;
     if (hit) { ev.preventDefault(); requestRender(); }
   });
-  function resetView() { cam.yaw = DEF.yaw; cam.pitch = DEF.pitch; cam.dist = DEF.dist; focusOn(stations[current]); requestRender(); }
+  function resetView() { frameAll(); requestRender(); }
 
   /* ------------------------------------------------------------ the train */
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -771,7 +832,8 @@
   document.body.appendChild(tip);
   window.addEventListener('scroll', tipOnScroll, true);
   host.hidden = false;
-  if (!arrive(window.location.hash)) openRow(0, false);   // no hash opens station 0
+  var landed = arrive(window.location.hash);
+  if (!landed) { openRow(0, false); autoFrame = true; }  // no hash opens station 0, with the whole line in view
   setPaint('window');                                     // the first load uses the default paint
   if (window.ResizeObserver) new ResizeObserver(function () { resize(); }).observe(host);
   window.addEventListener('resize', resize);

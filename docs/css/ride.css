@@ -113,7 +113,7 @@ html[data-ride-app="3d"] #ride-svg.r3d-gone { position: absolute; width: 1px; he
 .r3d canvas:focus { outline: 3px solid var(--track); outline-offset: -3px; }
 .r3d-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .r3d-sign { position: absolute; left: 0; top: 0; display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap;
-  transform-origin: 0 0; margin: -0.75rem 0 0 -0.6rem; pointer-events: auto; font-size: 0.75rem; line-height: 1.2; color: #0f172a; }
+  transform-origin: 0 0; margin: 0; pointer-events: auto; font-size: 0.75rem; line-height: 1.2; color: #0f172a; }
 .r3d-sign .n { display: inline-block; min-width: 1.3rem; text-align: center; padding: 0.05rem 0.25rem; border-radius: 4px; background: #f1f5f9; border: 1px solid #0f172a; font-weight: 700; }
 .r3d-sign.hollow .n { background: #1e293b; color: #f1f5f9; border-style: dashed; border-color: #f1f5f9; }
 .r3d-sign .nm { display: none; padding: 0.05rem 0.4rem; border-radius: 4px; background: rgba(241, 245, 249, 0.92); }
@@ -202,3 +202,8 @@ html[data-ride-app="3d"] .station h3 { margin: 0; font-size: 0.95rem; }
 /* station markers are links (plan 1554, contract 6) */
 a.r3d-sign { text-decoration: none; cursor: pointer; }
 a.r3d-sign:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; border-radius: 4px; }
+
+/* labels placed without overlap (plan 1554, phase 3b): narrow screens show numbers only until hover or focus,
+   and the map's callout lives in "About this map" there */
+.r3d-narrow .r3d-sign.cur:not(:hover):not(:focus-within) .nm { display: none; }
+@media (max-width: 640px) { .r3d-cap { display: none; } }
