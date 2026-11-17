@@ -435,7 +435,8 @@
     var r = anchor.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
     var x = Math.max(4, Math.min(window.innerWidth - tw - 4, r.left));
     var y = r.bottom + 6;
-    if (y + th > window.innerHeight - 4) y = Math.max(4, r.top - th - 6);
+    if (y + th > window.innerHeight - 4) y = r.top - th - 6;              // no room below: above the term
+    y = Math.max(4, Math.min(window.innerHeight - th - 4, y));
     tip.style.left = x + 'px'; tip.style.top = y + 'px';
   }
   function hideTip() { tip.hidden = true; tipAnchor = null; }
@@ -453,6 +454,53 @@
     el.addEventListener('focus', function () { showTip(el, src); });
     el.addEventListener('blur', hideTip);
     el.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') hideTip(); });
+  }
+  function wireTerm(t, g) {                          // one term and its own gloss part (.g) from ride-build
+    t.setAttribute('aria-describedby', g.id);
+    t.setAttribute('role', 'button');
+    withTip(t, g);
+    var was = false;
+    t.addEventListener('pointerdown', function (ev) { was = ev.pointerType !== 'mouse' && !tip.hidden && tipAnchor === t; });
+    t.addEventListener('click', function () {
+      if (was) { hideTip(); t.blur(); } else showTip(t, g);
+      was = false;
+    });
+    t.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); if (tip.hidden || tipAnchor !== t) showTip(t, g); else hideTip(); }
+    });
+  }
+  function splitTerms(list) {                        // .tip.terms "BKT, stiffness jump" -> one focusable term each
+    var tt = list.querySelector('.tt'), parts = tt ? tt.querySelectorAll('.g[data-term]') : [];
+    if (!parts.length) return;
+    var box = document.createElement('span'); box.className = 'tip-terms';
+    Array.prototype.forEach.call(parts, function (g, i) {
+      if (i) box.appendChild(document.createTextNode(', '));
+      var t = document.createElement('span'); t.className = 'tip term'; t.tabIndex = 0;
+      t.setAttribute('data-term', g.getAttribute('data-term'));
+      t.textContent = g.getAttribute('data-term');
+      box.appendChild(t);
+      wireTerm(t, g);
+    });
+    tt.setAttribute('aria-hidden', 'true');          // read through aria-describedby, once per term
+    box.appendChild(tt);
+    list.parentNode.replaceChild(box, list);
+  }
+  document.addEventListener('pointerdown', function (ev) {
+    if (tip.hidden || !tipAnchor) return;
+    if (tipAnchor.contains(ev.target) || tip.contains(ev.target)) return;
+    hideTip();
+  }, true);
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && !tip.hidden) hideTip(); });
+  Array.prototype.forEach.call(document.querySelectorAll('.station .carry .tip.terms'), splitTerms);
+  var hinted = false;                                // the first station that opens says how to read the dotted words
+  function hintOnce(li) {
+    if (hinted) return;
+    var carry = li.querySelector('.carry');
+    if (!carry || !carry.querySelector('.tip.term')) return;
+    var h = document.createElement('p'); h.className = 'r3d-hint';
+    h.textContent = 'Tap a dotted word for a plain explanation.';
+    carry.parentNode.insertBefore(h, carry);
+    hinted = true;
   }
   var AXES = [{ k: 'x', at: [0.5, -0.07, 0] }, { k: 'y', at: [-0.07, 0.5, 0] }, { k: 'z', at: [0, 1, 1.12] }];
   var axisLabels = AXES.map(function (A) {
@@ -805,6 +853,7 @@
       rows[i].body.hidden = !on;
       rows[i].li.classList.toggle('r3d-open', on);
       if (on && rows[i].img) rows[i].img.loading = 'eager';
+      if (on) hintOnce(rows[i].li);
     }
     current = k;
     u = stations[k].x;

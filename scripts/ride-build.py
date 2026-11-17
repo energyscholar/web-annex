@@ -19,6 +19,9 @@ stations.json is the one source of truth; never hand-edit a derived part.
 """
 import argparse, html, json, os, re, sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ride_gloss  # noqa: E402
+
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOCS = os.path.join(HERE, "docs")
 BEGIN = "<!-- BEGIN STATIONS: written by scripts/ride-build.py from ride/stations.json, do not hand-edit -->"
@@ -42,6 +45,15 @@ def tip(name, gloss):
     return (f'<span class="tip" tabindex="0">{E(name)}<span class="tt">{E(gloss)}</span></span>')
 
 
+def term_tips(sid, name, gloss):
+    """One gloss per jargon term (plan 1554, phase 3d). The list keeps its single .tip span, so the page without
+    scripts looks and reads as before (the whole gloss on hover or focus); inside the gloss each term's own part is
+    a .g span with an id, a data-term and a bold heading, which the 3D ride turns into one tooltip per term."""
+    parts = [f'<span class="g" id="gloss-{sid}-{i}" data-term="{E(term)}"><strong>{E(head)}</strong>: {E(text)}</span>'
+             for i, (term, head, text) in enumerate(ride_gloss.split(name, gloss))]
+    return f'<span class="tip terms" tabindex="0">{E(name)}<span class="tt">' + "; ".join(parts) + "</span></span>"
+
+
 def switch(path, label):
     return f'<a class="switch" data-switch="expert" href="{E(href_from_ride(path))}">{E(label)}</a>'
 
@@ -60,7 +72,7 @@ def station_block(s, nxt, loops):
          f'  <h3><span class="num">{num}</span> {E(s["title"])}{soon}</h3>',
          f'  <p class="view">Out of the window: {E(s["view"])}.</p>',
          f'  <p class="carry">Take away: <strong>{E(s["carry"]["picture"])}</strong> &middot; '
-         + tip(s["carry"]["name"], s["carry"]["gloss"]) + "</p>",
+         + term_tips(sid, s["carry"]["name"], s["carry"]["gloss"]) + "</p>",
          f'  <p class="phase" data-layer="map">On the map: {E(s["phase"])}.</p>']
     if s.get("cite"):
         L.append(f'  <p class="cite" data-layer="map">Source: {E(s["cite"])}</p>')
