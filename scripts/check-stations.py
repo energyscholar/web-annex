@@ -17,6 +17,13 @@ Checks, each printed as one line, exit 1 on any failure:
             jargon_extra "see" is a glossary key; every key has an L1 that opens with the key and a colon; the
             18 flagged terms (ride_gloss.L2_REQUIRED) have an L2; every term of a station with a "Go deeper"
             page has an L3 (plan 1564, ruling O5)
+  jargon    in the built docs/ride/index.html, the FIRST occurrence of every jargon word (glossary keys and
+            jargon_extra words; whole words, any case, longest first) in each block is a tooltip for its key:
+            inside a .tip.gl with that data-term, or a carry .tip.terms that lists it. Blocks: each station card
+            (station 0 with its ticket-hall section), About this map (.lede, the figure caption, .howto), Side
+            trips (#spurs, its intro, ul.spurs), and every other text element on its own. Not scanned: tooltip
+            bodies (.tt), attributes, the cite line, the picture SVG, scripts. A first occurrence inside link text
+            is reported as such: a tooltip cannot sit inside a link (plan 1564, ruling O3)
   ids       station ids are unique; every spur leaves from a station that exists; no page is listed twice
   game      no game-tree prefix appears anywhere in stations.json
   tracks    every non-game page is on exactly one track, and every tracked page exists
@@ -44,6 +51,120 @@ def walk_pages(root, game_prefixes):
 
 def game_regex(prefixes):
     return re.compile("|".join(fnmatch.translate(p).replace(r"\Z", "").replace("(?s:", "(?:") for p in prefixes))
+
+
+INLINE = {"span", "strong", "em", "a", "b", "i", "abbr", "code", "sup", "sub", "small", "mark", "q", "cite"}
+VOID = {"br", "img", "meta", "link", "input", "hr", "source", "wbr"}
+SKIP_TAGS = {"script", "style", "svg", "head", "template"}
+PLAIN = {"html", "body", "main", "section", "div", "figure", "header", "footer", "nav", "ol"}
+
+
+def jargon_problems(page, gl):
+    """The O3 jargon check over the built ride page (see the module docstring, "jargon")."""
+    from html.parser import HTMLParser
+    words = ride_gloss.jargon(gl)
+    terms = gl.get("terms") or {}
+    pat = ride_gloss.pattern(words)
+    lower = {w.lower(): w for w in words}
+    blocks, order = {}, []
+    probs = []
+
+    class P(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack, self.n, self.after_spurs = [], 0, False
+
+        def top(self, key, default=None):
+            for f in reversed(self.stack):
+                if f.get(key) is not None:
+                    return f[key]
+            return default
+
+        def emit(self, text):
+            if self.top("skip"):
+                return
+            b = self.top("block")
+            if b is None:
+                if not text.strip():
+                    return
+                self.n += 1
+                b = f"loose text {self.n}"
+            if b not in blocks:
+                blocks[b] = []; order.append(b)
+            blocks[b].append((text, self.top("link", False), self.top("anchor")))
+
+        def handle_starttag(self, tag, attrs):
+            at = dict(attrs)
+            cls = (at.get("class") or "").split()
+            f = {"tag": tag}
+            if tag in SKIP_TAGS or "tt" in cls or (tag == "p" and "cite" in cls):
+                f["skip"] = True
+            if tag == "a":
+                f["link"] = True
+            if "tip" in cls and "gl" in cls:
+                k = at.get("data-term")
+                if k not in terms:
+                    probs.append(f"a tooltip names {k!r}, which is not a glossary key")
+                f["anchor"] = (id(f), {k})
+            elif "tip" in cls and "terms" in cls:
+                f["anchor"] = (id(f), set((at.get("data-terms") or "").split("|")))
+            blk = None
+            if tag == "li" and "station" in cls:
+                blk = "station " + at.get("data-station", "?")
+            elif tag == "section" and at.get("id") == "station-0-hall":
+                blk = "station 0"                     # the ticket hall opens station 0's card at runtime
+            elif (tag == "p" and ("lede" in cls or "howto" in cls)) or (tag == "figcaption" and self.top("figure")):
+                blk = "About this map"
+            elif (tag == "h2" and at.get("id") == "spurs") or (tag == "ul" and "spurs" in cls) or (tag == "p" and self.after_spurs):
+                blk = "Side trips"
+            elif self.top("block") is None and tag not in PLAIN and tag not in VOID:
+                self.n += 1
+                blk = f"<{tag}> {self.n}"
+            if tag == "figure" and "ride-figure" in cls:
+                f["figure"] = True
+            if blk and self.top("block") is None:
+                f["block"] = blk
+            self.after_spurs = False
+            if tag not in INLINE:
+                self.emit("\n")
+            if tag not in VOID:
+                self.stack.append(f)
+
+        def handle_endtag(self, tag):
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i]["tag"] == tag:
+                    f = self.stack[i]
+                    del self.stack[i:]
+                    if tag == "h2" and f.get("block") == "Side trips":
+                        self.after_spurs = True
+                    break
+            if tag not in INLINE:
+                self.emit("\n")
+
+        def handle_data(self, data):
+            self.emit(data)
+
+    P().feed(open(page, encoding="utf-8").read())
+    for b in order:
+        segs, text, starts = blocks[b], "", []
+        for s in segs:
+            starts.append(len(text)); text += s[0]
+        import bisect
+
+        def at(i):
+            return segs[bisect.bisect_right(starts, i) - 1]
+        seen = set()
+        for m in pat.finditer(text):
+            w = lower[m.group(0).lower()]
+            if w in seen:
+                continue
+            seen.add(w)
+            key, s0, s1 = words[w], at(m.start()), at(m.end() - 1)
+            if s0[1]:
+                probs.append(f"{b}: the first {m.group(0)!r} is inside link text (stop and report: no tooltip can sit in a link)")
+            elif not (s0[2] and s1[2] and s0[2][0] == s1[2][0] and key in s0[2][1]):
+                probs.append(f"{b}: the first {m.group(0)!r} is not a tooltip")
+    return probs
 
 
 def main():
@@ -143,6 +264,8 @@ def main():
     probs += [f"{k!r} has no L3 (its station has a Go deeper page)" for k in deep
               if k in terms and not ((terms.get(k) or {}).get("l3") or "").strip()]
     check("glossary", probs)
+
+    check("jargon", jargon_problems(os.path.join(a.root, "ride", "index.html"), gl))
 
     check("live", [s.get("id", "?") for s in stations if s.get("state") == "live" and not s.get("expert")])
 

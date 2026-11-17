@@ -46,3 +46,23 @@ def roundtrip(carry, terms):
     if carry.get("note"):
         parts.append(carry["note"])
     return "; ".join(parts)
+
+
+# ---- the jargon list and its matcher (plan 1564, ruling O3); shared by ride-build.py and check-stations.py ----
+import re  # noqa: E402
+
+
+def jargon(gl):
+    """{word: key}: every glossary key (as itself) and every jargon_extra word (as the key it points to)."""
+    out = {k: k for k in gl.get("terms") or {}}
+    for x in gl.get("jargon_extra") or []:
+        out[x["word"]] = x["see"]
+    return out
+
+
+def pattern(words):
+    """One case-insensitive regex for whole-word matches, longest word first, so that at any position the longest
+    word wins ("Poised Realm" before "poised") and a word inside a longer one ("critical point" inside
+    "tricritical point") never matches: a word may not touch a letter, digit, underscore or hyphen."""
+    ws = sorted(set(words), key=lambda w: (-len(w), w))
+    return re.compile(r"(?<![\w-])(" + "|".join(re.escape(w) for w in ws) + r")(?![\w-])", re.I)

@@ -6,6 +6,7 @@
  *   GT.withTip(anchor, src);          // a two-way tooltip on anchor: hover and keyboard focus; src's content is shown
  *   GT.wireTerm(term, g);             // one jargon term: also tap or click, Enter or Space; describedby g
  *   GT.splitTerms(list);              // a builder's .tip.terms list -> one focusable term per .g[data-term]
+ *   GT.wireGlosses(root);             // every glossed word (.tip.gl, plan 1564) under root -> one term each
  *   GT.show(anchor, src); GT.hide(); GT.el
  *
  * A gloss from docs/ride/glossary.json (scripts/ride-build.py) has up to three levels: .l1, the plain words, always
@@ -27,7 +28,7 @@
     tip.setAttribute('role', 'tooltip');
     tip.tabIndex = -1;                               // a click on its text keeps the focus inside it
     tip.hidden = true;
-    var anchor = null, timer = null, pressing = false;
+    var anchor = null, timer = null, pressing = false, pend = null, pendFor = null;
 
     function el(tag, cls, text) {
       var e = document.createElement(tag);
@@ -66,7 +67,7 @@
         });
         tip.appendChild(more); tip.appendChild(deep);
         tip.setAttribute('role', 'dialog');          // it holds a control, so it is not a plain tooltip
-        var g = src.getAttribute && src.getAttribute('data-term');
+        var g = (src.getAttribute && src.getAttribute('data-term')) || (anchor && anchor.getAttribute('data-term'));
         if (g) tip.setAttribute('aria-label', g);
       }
     }
@@ -86,8 +87,9 @@
       tip.style.top = y + 'px';
     }
     function cancel() { if (timer) { clearTimeout(timer); timer = null; } }
+    function unpend() { if (pend) { clearTimeout(pend); pend = null; pendFor = null; } }
     function show(a, src) {
-      cancel();
+      cancel(); unpend();
       if (anchor === a && !tip.hidden) return;        // already open for this term: keep its state (L3 open or not)
       anchor = a;
       render(src);
@@ -95,7 +97,7 @@
       tip.scrollTop = 0;
       place();
     }
-    function hide() { cancel(); tip.hidden = true; anchor = null; }
+    function hide() { cancel(); unpend(); tip.hidden = true; anchor = null; }
     function focusInside() { return tip.contains(document.activeElement); }
     function later() { cancel(); timer = setTimeout(function () { timer = null; if (!focusInside() && document.activeElement !== anchor) hide(); }, 200); }
     function controls() { return Array.prototype.slice.call(tip.querySelectorAll('button')); }
@@ -107,7 +109,7 @@
       return i >= 0 ? all[i + 1] || null : null;
     }
 
-    tip.addEventListener('mouseenter', cancel);
+    tip.addEventListener('mouseenter', function () { cancel(); unpend(); });   // the reader reached the open tooltip
     tip.addEventListener('mouseleave', function () { if (document.activeElement !== anchor && !focusInside()) later(); });
     tip.addEventListener('pointerdown', function () { pressing = true; setTimeout(function () { pressing = false; }, 0); });
     tip.addEventListener('focusout', function (ev) {
@@ -129,8 +131,20 @@
     });
 
     function withTip(a, src) {                       // a two-way tooltip: on hover and on keyboard focus
-      a.addEventListener('mouseenter', function () { show(a, src); });
-      a.addEventListener('mouseleave', function () { if (document.activeElement !== a && !focusInside()) later(); });
+      a.addEventListener('mouseenter', function () {
+        // hover intent: while another term's tooltip is open under the pointer's way, this term takes over only if
+        // the pointer rests on it, so a reader crossing it on the way into the open tooltip keeps that tooltip
+        if (!tip.hidden && anchor && anchor !== a && document.activeElement !== anchor && !focusInside()) {
+          cancel(); unpend(); pendFor = a;
+          pend = setTimeout(function () { pend = null; pendFor = null; show(a, src); }, 250);
+          return;
+        }
+        show(a, src);
+      });
+      a.addEventListener('mouseleave', function () {
+        if (pendFor === a) unpend();
+        if (document.activeElement !== a && !focusInside()) later();
+      });
       a.addEventListener('focus', function () { show(a, src); });
       a.addEventListener('blur', function (ev) {
         var to = ev.relatedTarget;
@@ -175,6 +189,21 @@
       box.appendChild(tt);
       list.parentNode.replaceChild(box, list);
     }
+    function holder() {                              // one hidden home for every glossed word's levels, read by id
+      var h = document.getElementById('gl-levels');
+      if (!h) { h = document.createElement('div'); h.id = 'gl-levels'; h.hidden = true; document.body.appendChild(h); }
+      return h;
+    }
+    function wireGlosses(root) {                     // a glossed word: its levels (.tt) leave the word and are read through
+      Array.prototype.forEach.call((root || document).querySelectorAll('.tip.gl'), function (a) {   // aria-describedby
+        var tt = a.querySelector('.tt');
+        if (!tt || !tt.id) return;
+        tt.classList.add('gl-tt');
+        tt.setAttribute('aria-hidden', 'true');
+        holder().appendChild(tt);                    // out of the block, so the block's text is what the reader sees
+        wireTerm(a, tt);
+      });
+    }
     function onScroll(ev) {                          // a focused anchor keeps its tooltip, moved with it
       if (tip.hidden) return;
       if (ev && ev.target && ev.target.nodeType === 1 && tip.contains(ev.target)) return;   // the tooltip's own scroll
@@ -191,7 +220,7 @@
       document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && !tip.hidden) hide(); });
     }
     return { el: tip, mount: mount, show: show, hide: hide, place: place, withTip: withTip, wireTerm: wireTerm,
-             splitTerms: splitTerms, anchor: function () { return anchor; } };
+             splitTerms: splitTerms, wireGlosses: wireGlosses, anchor: function () { return anchor; } };
   }
 
   window.GlossTip = { create: create };

@@ -214,11 +214,11 @@ html[data-ride-app="3d"] .station.r3d-open .next { position: sticky; bottom: 0; 
 
 /* one tooltip per jargon term (plan 1554, phase 3d). Without scripts the list is one .tip as before; the 3D ride
    splits it into one dotted, focusable term each and shows each gloss in the tooltip layer (#r3d-tip), outside the panel. */
-html[data-ride-app="3d"] .tip-terms .tip.term { cursor: pointer; border-bottom: 1px dotted var(--track); }
-html[data-ride-app="3d"] .tip-terms .tip.term::after { content: "?"; display: inline-block; margin-left: 0.15em; width: 1.05em; height: 1.05em;
+html[data-ride-app="3d"] .tip-terms .tip.term, html[data-ride-app="3d"] .tip.gl { cursor: pointer; border-bottom: 1px dotted var(--track); }
+html[data-ride-app="3d"] .tip-terms .tip.term::after, html[data-ride-app="3d"] .tip.gl::after { content: "?"; display: inline-block; margin-left: 0.15em; width: 1.05em; height: 1.05em;
   border: 1px solid var(--track); border-radius: 50%; font-size: 0.7em; line-height: 1em; text-align: center; color: var(--track);
   vertical-align: 0.25em; }
-html[data-ride-app="3d"] .tip-terms > .tt { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
+html[data-ride-app="3d"] .tip-terms > .tt, html[data-ride-app="3d"] .gl-tt { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
   clip-path: inset(50%); white-space: nowrap; padding: 0; border: 0; }
-html[data-ride-app="3d"] .tip-terms .tip.term:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; border-radius: 3px; }
+html[data-ride-app="3d"] .tip-terms .tip.term:focus-visible, html[data-ride-app="3d"] .tip.gl:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; border-radius: 3px; }
 .r3d-hint { margin: 0.3rem 0 0.2rem; font-size: 0.82rem; color: var(--muted); }

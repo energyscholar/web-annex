@@ -434,6 +434,7 @@
     return c.textContent;
   }
   Array.prototype.forEach.call(document.querySelectorAll('.station .carry .tip.terms'), splitTerms);
+  GT.wireGlosses(document);                          // every other glossed word on the page (plan 1564)
   var hinted = false;                                // the first station that opens says how to read the dotted words
   function hintOnce(li) {
     if (hinted) return;

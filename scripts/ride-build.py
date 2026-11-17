@@ -70,6 +70,81 @@ def term_tips(sid, carry, terms):
             '<span class="tt">' + "; ".join(parts) + "</span></span>")
 
 
+GL_END = "<!--/gl-->"   # closes a gloss's levels, so a hand-placed gloss outside the markers can be refilled
+
+
+def gl_span(key, word_html, tid, terms):
+    """One glossed word (plan 1564, ruling O3): the word, dotted, with its levels in a .tt. Without scripts the .tt
+    shows on hover and focus, as every .tip does; gloss-tip.js turns it into the shared tooltip."""
+    return (f'<span class="tip gl" tabindex="0" data-term="{E(key)}">{word_html}'
+            f'<span class="tt" id="{tid}">{levels(key, terms[key])}{GL_END}</span></span>')
+
+
+def gloss_first(markup, gl, prefix, skip_h3=False, seen=None):
+    """Wrap the first occurrence of every jargon word in markup (this builder's own escaped output for one block) in a
+    gloss, using the shared matcher in ride_gloss.py. Text inside a tooltip (.tt), a link, a station heading (it
+    becomes a button) or the cite line is never wrapped; a jargon word there still counts as its block's first
+    occurrence, and check-stations "jargon" reports it. A carry tag's terms count as glossed where they stand."""
+    words = ride_gloss.jargon(gl)
+    esc = {E(w).lower(): w for w in words}
+    pat = ride_gloss.pattern([E(w) for w in words])
+    seen = set() if seen is None else seen
+    out, stack, n = [], [], 0
+    for piece in re.split(r"(<[^>]+>)", markup):
+        if piece.startswith("<!--"):
+            out.append(piece); continue
+        if piece.startswith("</"):
+            if stack:
+                stack.pop()
+            out.append(piece); continue
+        if piece.startswith("<"):
+            tag = re.match(r"<(\w+)", piece).group(1).lower()
+            cls = (re.search(r'class="([^"]*)"', piece) or [None, ""])[1].split()
+            # "skip": not scanned at all (a tooltip body, a carry tag, the cite line); "count": visible but never
+            # wrapped (a link, a station heading), so a word there is still its block's first occurrence
+            hide = (stack[-1] if stack and stack[-1] else
+                    "skip" if ("tt" in cls or "terms" in cls or (tag == "p" and "cite" in cls)) else
+                    "count" if (tag == "a" or (tag == "h3" and skip_h3)) else None)
+            if "terms" in cls:
+                seen.update(html.unescape(re.search(r'data-terms="([^"]*)"', piece).group(1)).split("|"))
+            if tag not in ("br", "img"):
+                stack.append(hide)
+            out.append(piece); continue
+        hidden = stack[-1] if stack else None
+        if hidden == "skip":
+            out.append(piece); continue
+        res, last = [], 0
+        for m in pat.finditer(piece):
+            w = esc[m.group(0).lower()]
+            if w in seen:
+                continue
+            seen.add(w)
+            if hidden:
+                continue
+            n += 1
+            res.append(piece[last:m.start()])
+            res.append(gl_span(words[w], m.group(0), f"{prefix}{n}", gl["terms"]))
+            last = m.end()
+        res.append(piece[last:])
+        out.append("".join(res))
+    return "".join(out)
+
+
+def refill(markup, gl, prefix="gl-"):
+    """Refill every hand-placed gloss (outside the builder's markers) from the glossary: a
+    <span class="tip gl" tabindex="0" data-term="KEY">word</span>, with or without its levels."""
+    n = [0]
+
+    def one(m):
+        n[0] += 1
+        key = html.unescape(m.group(1))
+        if key not in gl["terms"]:
+            raise SystemExit(f"ride-build: a hand-placed gloss names {key!r}, which is not in docs/ride/glossary.json")
+        return gl_span(key, m.group(2), f"{prefix}{n[0]}", gl["terms"])
+    return re.sub(r'<span class="tip gl" tabindex="0" data-term="([^"]*)">([^<]*)(?:<span class="tt" id="[^"]*">.*?'
+                  + re.escape(GL_END) + r"</span>)?</span>", one, markup, flags=re.S)
+
+
 def switch(path, label):
     return f'<a class="switch" data-switch="expert" href="{E(href_from_ride(path))}">{E(label)}</a>'
 
@@ -77,7 +152,8 @@ def switch(path, label):
 SOON = ' <span class="soon">(coming)</span>'
 
 
-def station_block(s, nxt, loops, terms):
+def station_block(s, nxt, loops, gl):
+    terms = gl["terms"]
     sid = s["id"]
     num = "T" if sid == "T" else sid
     soon = SOON if s["state"] != "live" else ""
@@ -108,7 +184,7 @@ def station_block(s, nxt, loops, terms):
     if go:
         L.append('  <p class="go"><span class="go-note">For the full physics:</span><br>' + "<br>".join(go) + "</p>")
     L.append("</li>")
-    return "\n".join(L)
+    return gloss_first("\n".join(L), gl, f"gl-{sid}-", skip_h3=True)
 
 
 _titles = {}
@@ -249,7 +325,7 @@ def stops(st):
     return STOPS_B + '\n<p class="stops">Stations:\n' + " &middot;\n".join(items) + "</p>\n" + STOPS_E
 
 
-def build(st, terms):
+def build(st, gl):
     for s in st["stations"]:
         if s.get("expert"):
             _titles[s["expert"]] = s["expert_title"]
@@ -263,10 +339,11 @@ def build(st, terms):
     })
     block = [BEGIN, axes_block(st["axes"]), '<ol class="stations">']
     S = st["stations"]
-    block += [station_block(s, S[(i + 1) % len(S)], i + 1 == len(S), terms) for i, s in enumerate(S)]
-    block += ["</ol>", '<h2 id="spurs">Side trips</h2>',
-              "<p>Branch lines leave the main line at a station. They go straight to the full pages, "
-              "so each one is a switch.</p>", spur_block(st["spurs"]), END]
+    block += [station_block(s, S[(i + 1) % len(S)], i + 1 == len(S), gl) for i, s in enumerate(S)]
+    trips = "\n".join(['<h2 id="spurs">Side trips</h2>',
+                       "<p>Branch lines leave the main line at a station. They go straight to the full pages, "
+                       "so each one is a switch.</p>", spur_block(st["spurs"])])
+    block += ["</ol>", gloss_first(trips, gl, "gl-trips-"), END]
     return "\n".join(block)
 
 
@@ -282,12 +359,13 @@ def main():
     ap.add_argument("--check", action="store_true")
     a = ap.parse_args()
     st = json.load(open(os.path.join(DOCS, "ride", "stations.json"), encoding="utf-8"))
-    terms = ride_gloss.load(os.path.join(DOCS, "ride", "glossary.json"))["terms"]
+    gl = ride_gloss.load(os.path.join(DOCS, "ride", "glossary.json"))
     stale = []
 
     ride = os.path.join(DOCS, "ride", "index.html")
     s = open(ride, encoding="utf-8").read()
-    new = s[: s.index(BEGIN)] + build(st, terms) + s[s.index(END) + len(END):]
+    new = (refill(s[: s.index(BEGIN)], gl) + build(st, gl)
+           + refill(s[s.index(END) + len(END):], gl, "gl-after-"))
     if new != s:
         stale.append("docs/ride/index.html")
         if not a.check:
