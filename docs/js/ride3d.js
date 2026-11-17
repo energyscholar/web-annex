@@ -202,6 +202,10 @@
         if (q.z < NEAR || q.x < mx || q.x > w - mx - 24 || q.y < mt || q.y > h - mb) return false;
       }
     }
+    for (var t = 0; t <= 1; t += 0.5) {
+      var a = project(WX(0), WY(1), t * HZ);
+      if (a.z < NEAR || a.x < 6 || a.x > w - 34 || a.y < 14 || a.y > h - 8) return false;
+    }
     return true;
   }
   function frameAll() {
@@ -340,17 +344,24 @@
     }
     ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.6; ctx.stroke();
   }
+  var tickBoxes = [];
   function drawAxes() {
     var o = [WX(0), WY(0), 0];
     seg(o, [WX(1), WY(0), 0], '#cbd5e1', 1.5);
     seg(o, [WX(0), WY(1), 0], '#cbd5e1', 1.5);
     seg([WX(0), WY(1), 0], [WX(0), WY(1), HZ], '#cbd5e1', 1.5);
     ctx.fillStyle = '#cbd5e1'; ctx.font = '12px system-ui, sans-serif';
+    tickBoxes = [];
     for (var t = 0; t <= 1; t += 0.5) {
       var p = project(WX(0), WY(1), t * HZ);
       if (p.z < NEAR) continue;
       ctx.beginPath(); ctx.moveTo(p.x - 4, p.y); ctx.lineTo(p.x + 4, p.y); ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.5; ctx.stroke();
-      ctx.fillText(t === 0.5 ? '0.5' : String(t), p.x + 7, p.y + 4);
+      var txt = t === 0.5 ? '0.5' : String(t), tw = ctx.measureText(txt).width, tx = p.x + 7, ty = p.y + 4;
+      // the label stays inside the scene whatever the camera does: the side of the tick with room, then clamped
+      if (tx + tw > W_PX - 4) tx = p.x - 7 - tw;
+      tx = Math.max(4, Math.min(W_PX - tw - 4, tx)); ty = Math.max(13, Math.min(H_PX - 5, ty));
+      ctx.fillText(txt, tx, ty);
+      tickBoxes.push({ text: txt, l: tx, t: ty - 11, r: tx + tw, b: ty + 3 });
     }
   }
   function seg(a, b, color, width) {
@@ -845,6 +856,7 @@
     beads: stations.map(function (s) { return { id: s.id, x: s.x, y: s.y }; }),
     meshMin: meshMin, meshMax: meshMax, quadCount: NQ, grid: [NX, NY], frameTimes: frameTimes,
     rotate: function (a, b) { rotate(a, b); }, renderNow: render, paint: function () { return paint; },
+    ticks: function () { return paint === 'map' ? tickBoxes.slice() : []; },
     camera: function () { return { yaw: cam.yaw, pitch: cam.pitch, dist: cam.dist, tx: cam.tx, ty: cam.ty }; }
   };
 })();

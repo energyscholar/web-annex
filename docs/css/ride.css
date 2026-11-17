@@ -207,3 +207,9 @@ a.r3d-sign:focus-visible { outline: 2px solid var(--track); outline-offset: 2px;
    and the map's callout lives in "About this map" there */
 .r3d-narrow .r3d-sign.cur:not(:hover):not(:focus-within) .nm { display: none; }
 @media (max-width: 640px) { .r3d-cap { display: none; } }
+
+/* the Previous / Next stop row stays at the foot of the panel or sheet while the card scrolls above it
+   (plan 1554, phase 3c) */
+html[data-ride-app="3d"] .station.r3d-open .next { position: sticky; bottom: 0; z-index: 2; margin: 0.7rem -0.7rem 0; border-radius: 0 0 10px 10px;
+  padding: 0.45rem 0.7rem 0.35rem; background: var(--panel); border-top: 1px solid var(--line);
+  box-shadow: 0 0.6rem 0 0.1rem var(--panel); }   /* covers the panel's own bottom padding, so no text shows under it */
