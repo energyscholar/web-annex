@@ -103,6 +103,7 @@ body[data-view="map"] [data-layer="window"] { display: none; }
 .tip .tt { display: none; position: absolute; left: 0; top: calc(100% + 4px); z-index: 20; width: max-content; max-width: min(320px, 80vw);
   background: #0b1222; border: 1px solid var(--line); border-radius: 8px; padding: 0.5rem 0.7rem; font-size: 0.85rem; font-weight: 400; color: var(--text); line-height: 1.45; }
 .tip:hover .tt, .tip:focus .tt { display: block; }
+.tip .tt .l2 { font-style: italic; }   /* the picture-word; the physicist's level (.l3) stays hidden without scripts */
 
 /* ---- the 3D scene (js/ride3d.js; plan 1554). Everything below applies only when the app runs. ---- */
 html[data-ride-app="3d"] #ride-svg.r3d-gone { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); border: 0; }
@@ -125,12 +126,9 @@ html[data-ride-app="3d"] #ride-svg.r3d-gone { position: absolute; width: 1px; he
   color: #e2e8f0; background: rgba(11, 18, 34, 0.82); border: 1px solid #475569; border-bottom-style: dotted; border-radius: 4px; padding: 0.05rem 0.4rem; }
 .r3d-axis:focus-visible, .r3d-axis:focus { outline: 2px solid var(--track); outline-offset: 1px; }
 .r3d-desc { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
-.r3d-tip { position: fixed; z-index: 50; max-width: min(320px, calc(100vw - 8px)); background: #0b1222; border: 1px solid var(--line); border-radius: 8px;
-  padding: 0.5rem 0.7rem; font-size: 0.85rem; line-height: 1.45; color: var(--text); pointer-events: none; }
-.r3d-tip[hidden] { display: none; }
+/* the tooltip layer itself (#r3d-tip) is styled by css/gloss-tip.css (plan 1564) */
 .r3d-tip .r3d-tl { display: block; }
 .r3d-tip .r3d-tl + .r3d-tl { margin-top: 0.25rem; }
-.r3d-tip strong { color: var(--heading); }
 
 /* one screen, no scrolling (plan 1554, contract 8): only when js/ride3d.js runs */
 html[data-ride-app="3d"] { height: 100%; overflow: hidden; scroll-behavior: auto; }
@@ -223,5 +221,4 @@ html[data-ride-app="3d"] .tip-terms .tip.term::after { content: "?"; display: in
 html[data-ride-app="3d"] .tip-terms > .tt { display: block; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
   clip-path: inset(50%); white-space: nowrap; padding: 0; border: 0; }
 html[data-ride-app="3d"] .tip-terms .tip.term:focus-visible { outline: 2px solid var(--track); outline-offset: 2px; border-radius: 3px; }
-html[data-ride-app="3d"] .r3d-tip { pointer-events: auto; }
 .r3d-hint { margin: 0.3rem 0 0.2rem; font-size: 0.82rem; color: var(--muted); }

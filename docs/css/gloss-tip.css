@@ -1,0 +1,16 @@
+/* gloss-tip.css: the tooltip layer of docs/js/gloss-tip.js (plan 1564, ruling O4; from plan 1554 phase 3d).
+   One layer outside every panel, so it is never clipped; it keeps its own scroll when a long level is opened. */
+.gloss-tip { position: fixed; z-index: 50; max-width: min(320px, calc(100vw - 8px)); overflow-y: auto; overscroll-behavior: contain;
+  background: #0b1222; border: 1px solid var(--line, #334155); border-radius: 8px; padding: 0.5rem 0.7rem; font-size: 0.85rem;
+  line-height: 1.45; color: var(--text, #e2e8f0); pointer-events: auto; box-sizing: border-box; }
+.gloss-tip[hidden] { display: none; }
+.gloss-tip:focus { outline: none; }
+.gloss-tip strong { color: var(--heading, #f8fafc); }
+.gloss-tip .gt-l2 { margin-top: 0.3rem; font-style: italic; }
+.gloss-tip .gt-label { font-style: normal; color: var(--muted, #94a3b8); }
+.gloss-tip .gt-more { display: inline-block; margin-top: 0.4rem; font: inherit; font-size: 0.8rem; color: var(--track, #fbbf24);
+  background: none; border: 1px solid var(--track, #fbbf24); border-radius: 6px; padding: 0.15rem 0.5rem; cursor: pointer; }
+.gloss-tip .gt-more:focus-visible { outline: 2px solid var(--track, #fbbf24); outline-offset: 2px; }
+.gloss-tip .gt-l3 { margin-top: 0.4rem; padding: 0.4rem 0 0 0.6rem; border-left: 3px solid var(--track, #fbbf24); }
+.gloss-tip .gt-l3[hidden] { display: none; }
+.gloss-tip .gt-deeper { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem; }

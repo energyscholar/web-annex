@@ -425,72 +425,14 @@
     if (tt) meaning = tt.textContent.trim().replace(name + '; ', '');
     return { name: name, meaning: meaning };
   }
-  var tip = document.createElement('div');
-  tip.id = 'r3d-tip'; tip.className = 'r3d-tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true;
-  var tipAnchor = null;
-  function showTip(anchor, src) {
-    tipAnchor = anchor;
-    tip.innerHTML = src.innerHTML;
-    tip.hidden = false;
-    var r = anchor.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
-    var x = Math.max(4, Math.min(window.innerWidth - tw - 4, r.left));
-    var y = r.bottom + 6;
-    if (y + th > window.innerHeight - 4) y = r.top - th - 6;              // no room below: above the term
-    y = Math.max(4, Math.min(window.innerHeight - th - 4, y));
-    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  // the tooltip layer and its terms: docs/js/gloss-tip.js (plan 1564, ruling O4), loaded before this script
+  var GT = window.GlossTip.create({ id: 'r3d-tip', className: 'r3d-tip' });
+  var tip = GT.el, withTip = GT.withTip, hideTip = GT.hide, splitTerms = GT.splitTerms;
+  function visibleText(node) {                       // a node's own words, without the tooltip text inside it
+    var c = node.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll('.tt'), function (x) { x.parentNode.removeChild(x); });
+    return c.textContent;
   }
-  function hideTip() { tip.hidden = true; tipAnchor = null; }
-  function tipOnScroll() {                           // a focused anchor keeps its tooltip, moved with it
-    if (tip.hidden) return;
-    if (tipAnchor && document.activeElement === tipAnchor) {
-      var r = tipAnchor.getBoundingClientRect(), th = tip.offsetHeight, y = r.bottom + 6;
-      if (y + th > window.innerHeight - 4) y = Math.max(4, r.top - th - 6);
-      tip.style.left = Math.max(4, Math.min(window.innerWidth - tip.offsetWidth - 4, r.left)) + 'px'; tip.style.top = y + 'px';
-    } else hideTip();
-  }
-  function withTip(el, src) {                       // a two-way tooltip: on hover and on keyboard focus
-    el.addEventListener('mouseenter', function () { showTip(el, src); });
-    el.addEventListener('mouseleave', function () { if (document.activeElement !== el) hideTip(); });
-    el.addEventListener('focus', function () { showTip(el, src); });
-    el.addEventListener('blur', hideTip);
-    el.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') hideTip(); });
-  }
-  function wireTerm(t, g) {                          // one term and its own gloss part (.g) from ride-build
-    t.setAttribute('aria-describedby', g.id);
-    t.setAttribute('role', 'button');
-    withTip(t, g);
-    var was = false;
-    t.addEventListener('pointerdown', function (ev) { was = ev.pointerType !== 'mouse' && !tip.hidden && tipAnchor === t; });
-    t.addEventListener('click', function () {
-      if (was) { hideTip(); t.blur(); } else showTip(t, g);
-      was = false;
-    });
-    t.addEventListener('keydown', function (ev) {
-      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); if (tip.hidden || tipAnchor !== t) showTip(t, g); else hideTip(); }
-    });
-  }
-  function splitTerms(list) {                        // .tip.terms "BKT, stiffness jump" -> one focusable term each
-    var tt = list.querySelector('.tt'), parts = tt ? tt.querySelectorAll('.g[data-term]') : [];
-    if (!parts.length) return;
-    var box = document.createElement('span'); box.className = 'tip-terms';
-    Array.prototype.forEach.call(parts, function (g, i) {
-      if (i) box.appendChild(document.createTextNode(', '));
-      var t = document.createElement('span'); t.className = 'tip term'; t.tabIndex = 0;
-      t.setAttribute('data-term', g.getAttribute('data-term'));
-      t.textContent = g.getAttribute('data-term');
-      box.appendChild(t);
-      wireTerm(t, g);
-    });
-    tt.setAttribute('aria-hidden', 'true');          // read through aria-describedby, once per term
-    box.appendChild(tt);
-    list.parentNode.replaceChild(box, list);
-  }
-  document.addEventListener('pointerdown', function (ev) {
-    if (tip.hidden || !tipAnchor) return;
-    if (tipAnchor.contains(ev.target) || tip.contains(ev.target)) return;
-    hideTip();
-  }, true);
-  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && !tip.hidden) hideTip(); });
   Array.prototype.forEach.call(document.querySelectorAll('.station .carry .tip.terms'), splitTerms);
   var hinted = false;                                // the first station that opens says how to read the dotted words
   function hintOnce(li) {
@@ -762,6 +704,7 @@
     pops.forEach(function (o) { if (o.open) { o.open = false; o.querySelector('summary').focus(); } });
   });
   document.addEventListener('pointerdown', function (ev) {
+    if (tip.contains(ev.target)) return;            // a tooltip opened from inside a disclosure keeps it open
     pops.forEach(function (o) { if (o.open && !o.contains(ev.target)) o.open = false; });
   });
   document.body.insertBefore(bar, document.body.firstChild);
@@ -808,7 +751,7 @@
     });
     fig.appendChild(zoomBtn);
     var pic = li.querySelector('.carry strong');
-    if (pic) fig.appendChild(make('figcaption', null, pic.textContent));
+    if (pic) fig.appendChild(make('figcaption', null, visibleText(pic)));
     return { el: fig, img: img };
   }
   var rows = stations.map(function (s, k) {
@@ -823,7 +766,7 @@
     if (fig) body.insertBefore(fig.el, body.firstChild);
     btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', body.id);
     var ph = li.querySelector('.phase');
-    var gloss = ph ? ph.textContent.trim().replace(/^On the map:\s*/, '') : s.title;
+    var gloss = ph ? visibleText(ph).trim().replace(/^On the map:\s*/, '') : s.title;
     var d = descFor('r3d-gloss-' + s.id, gloss);
     btn.setAttribute('aria-describedby', d.id);
     if (h3) h3.appendChild(d);
@@ -889,8 +832,7 @@
   canvas.setAttribute('aria-label', 'A landscape you can turn: one peak for each station, lined up along one line with valleys between them, and a level monorail that runs through each summit in a tunnel and crosses each valley on a bridge.');
   host.appendChild(canvas);
   host.appendChild(layer);
-  document.body.appendChild(tip);
-  window.addEventListener('scroll', tipOnScroll, true);
+  GT.mount();
   host.hidden = false;
   var landed = arrive(window.location.hash);
   if (!landed) { openRow(0, false); autoFrame = true; }  // no hash opens station 0, with the whole line in view
