@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="description" content="Thomas's partial intelligence summary on Garoo's Council of 41: seven blocs, who is corrupt, and who counts the amnesty vote.">
+<title>The Council of 41 — Partial Summary</title>
+<style>
+/* Layout: ORACLE dark look shared with the other Astral Dawn pages; a cover block, then one native accordion per bloc. */
+:root{
+  --bg:#0a0d13; --panel:#10151f; --text:#c8d0dc; --head:#eef2f7; --muted:#7d8ea4; --line:#1d2735;
+  --amber:#f0b429; --green:#3fb950; --blue:#58a6ff; --red:#f85149;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  color-scheme:dark;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font:16px/1.6 var(--sans)}
+.wrap{max-width:820px;margin:0 auto;padding-block:1.5rem 4rem;padding-inline:16px}
+.banner{background:var(--red);color:#fff;text-align:center;font:700 .82rem/1.4 var(--mono);letter-spacing:.22em;padding:.45rem .5rem;border-radius:3px}
+.cover{border:1px solid var(--line);border-left:3px solid var(--amber);background:var(--panel);padding:.9rem 1rem;margin:.8rem 0 1.4rem;font:.8rem/1.7 var(--mono)}
+.cover .row{display:flex;gap:.6rem;flex-wrap:wrap}
+.cover .k{color:var(--muted);min-width:5.5em}
+.cover .v{color:var(--head)}
+h1{font:700 clamp(1.5rem,4vw,2.1rem)/1.15 var(--sans);color:var(--head);margin:.4rem 0 .6rem;text-wrap:balance}
+.summary{max-width:68ch;margin-bottom:1rem}
+.key{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 1.6rem;font:.7rem var(--mono);color:var(--muted);align-items:center}
+h2{font:700 .8rem/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--green);
+  margin:2rem 0 .7rem;padding:.5rem .8rem;background:#0d1420;border-left:3px solid var(--green)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:4px;margin-bottom:.6rem}
+details[open]{border-color:#2b3a50}
+summary{cursor:pointer;list-style:none;padding:.75rem 1rem;display:flex;flex-wrap:wrap;gap:.3rem .7rem;align-items:baseline}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸";color:var(--amber);font-family:var(--mono)}
+details[open] summary::before{content:"▾"}
+summary .n{font-weight:700;color:var(--head)}
+summary .l{color:var(--muted);font-size:.88rem}
+summary .s{font:.74rem var(--mono);color:var(--amber)}
+.body{padding:0 1rem .9rem;border-top:1px solid var(--line)}
+.ln{padding:.45rem 0;border-bottom:1px dashed var(--line);font-size:.94rem}
+.ln:last-child{border-bottom:0}
+.ln b{color:var(--muted);font:700 .7rem var(--mono);letter-spacing:.1em;text-transform:uppercase;display:block}
+.ln.lever{color:var(--head)}
+.ln.lever b{color:var(--amber)}
+.tag{display:inline-block;font:700 .64rem var(--mono);letter-spacing:.08em;padding:.05rem .4rem;border-radius:3px;margin-right:.3rem;vertical-align:1px;color:var(--bg)}
+.c{background:var(--green)} .p{background:var(--blue)} .r{background:var(--amber)} .u{background:var(--muted)}
+.v{font:700 .68rem var(--mono);letter-spacing:.1em;padding:.08rem .45rem;border-radius:3px;border:1px solid}
+.v.clean{color:var(--green);border-color:var(--green)}
+.v.comp{color:var(--red);border-color:var(--red)}
+.v.unk{color:var(--muted);border-color:var(--muted)}
+.rx{display:inline-block;background:#000;color:#000;height:1.05em;vertical-align:-.15em;border-radius:1px;user-select:none;margin:0 .1em}
+.ex{font:600 .66rem var(--mono);font-variant:small-caps;color:var(--muted);margin:0 .25em 0 .1em}
+.stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font:700 .74rem var(--mono);letter-spacing:.14em;padding:.2rem .6rem;transform:rotate(-1.5deg);margin:.2rem 0 .8rem}
+.exlegend{font:.72rem/1.6 var(--mono);color:var(--muted);margin:-.8rem 0 1.4rem}
+table{border-collapse:collapse;width:100%;font-size:.88rem;margin:.6rem 0}
+th,td{border:1px solid var(--line);padding:.3rem .5rem;text-align:left}
+th{color:var(--muted);font:600 .72rem var(--mono);letter-spacing:.06em}
+td.num{text-align:right;font-family:var(--mono)}
+.sig{margin-top:2.2rem;font:.9rem/1.6 var(--mono);color:var(--head)}
+.sig .c-mark{color:var(--green);font-size:1.3rem;font-weight:700}
+.foot{margin-top:2rem;color:var(--muted);font:.75rem/1.6 var(--mono);border-top:1px solid var(--line);padding-top:.8rem}
+summary:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="banner">SECRET — EYES ONLY</div>
+<div class="cover">
+  <div class="row"><span class="k">FILE</span><span class="v">GAR/41/PART-ONE</span></div>
+  <div class="row"><span class="k">FROM</span><span class="v">T.</span></div>
+  <div class="row"><span class="k">TO</span><span class="v">The crew, ISS <i>Astral Dawn</i>. Captain to hold.</span></div>
+  <div class="row"><span class="k">DATE</span><span class="v">Tonight, a few hours after you asked</span></div>
+  <div class="row"><span class="k">STATUS</span><span class="v">PARTIAL. Roughly half the traffic read. More to follow.</span></div>
+</div>
+
+<h1>The Council of 41: who is bent</h1>
+<p class="summary">You asked who on the Council is corrupt. The honest answer is that some of them are, I can prove a
+little of it, and I suspect a good deal more. The forty-one are the Provisional Authority's governing body. They sit in
+Arco-1, they alone can pass an amnesty, and they do not vote as forty-one. They vote as seven blocs. Two of those blocs
+mean every word of the revolution. Three are filling their pockets or their files. One will vote for whoever controls
+the paperwork, and that is its leader. Read the tags. I have tried not to dress up a rumour as a fact. I spent twenty
+years catching other men doing that.</p>
+<p class="summary">You will find the names blacked out. That is not distrust. It is how they stay alive, and how you
+stay useful to me. The redactions are mine, made before this left my hands, and there is no other copy. You get what
+was learned and how sure I am of it. You do not get who told me.</p>
+<div class="stamp">RELEASED IN PART — handling: crew only</div>
+<p class="exlegend">Exemptions applied: (b)(1) source identity · (b)(3) collection method · (b)(6) personal privacy</p>
+
+<div class="key">KEY:
+  <span class="tag c">CONFIRMED</span> two sources or a document
+  <span class="tag p">PROBABLE</span> one good source
+  <span class="tag r">RUMOUR</span> corridor talk
+  <span class="tag u">UNKNOWN</span> a hole
+</div>
+
+<h2>The seven blocs · 41 seats</h2>
+
+<details>
+<summary><span class="n">The Unmasked</span><span class="l">Cllr Tova Renn</span><span class="s">7 seats</span><span class="v clean">CLEAN</span></summary>
+<div class="body">
+  <div class="ln"><b>Leader</b>An Arco-2 lift technician who walked out of the manufactories masked on the first day. Thin, tired, and still believes.</div>
+  <div class="ln"><b>Says</b>Repeal the health statutes, open the twelve thousand beds, feed the terraces properly.</div>
+  <div class="ln"><b>Wants</b>Exactly that. This is the rare bloc whose public and private aims match.</div>
+  <div class="ln"><b>Amnesty</b><span class="tag p">PROBABLE</span>Split 4 to 3. The four will vote for amnesty if it comes with a public truth-telling, with the victims speaking first. The three want trials.</div>
+  <div class="ln"><b>Food / ships</b>Raschev's harvest should be bought, not taken. They would sell a hull before they would let the wards stay dark.</div>
+  <div class="ln"><b>Corruption</b><span class="tag c">CONFIRMED</span>None found. Renn lives in the same terrace flat she had before the revolution. It has been checked twice, by <span class="rx" style="width:9ch" aria-label="redacted"></span><span class="ex">(b)(1)</span>.</div>
+  <div class="ln lever"><b>Lever</b>The Heroes' name. They watched the broadcasts. Bring them a truth process with real names in it and they will carry the hall for you.</div>
+</div>
+</details>
+
+<details>
+<summary><span class="n">The Reckoning</span><span class="l">Cllr Bastien Kroll</span><span class="s">8 seats</span><span class="v comp">COMPROMISED</span></summary>
+<div class="body">
+  <div class="ln"><b>Leader</b>A concourse orator and Kella's loudest voice in the chamber. He promised heads, and he means to deliver some.</div>
+  <div class="ln"><b>Says</b>No forgiveness for the Directorate. Try them, hang them, and take what the old order took.</div>
+  <div class="ln"><b>Wants</b>The confiscations. Every upper-terrace household condemned by his tribunals has its property seized, and that property is handed out.</div>
+  <div class="ln"><b>Amnesty</b><span class="tag c">CONFIRMED</span>All eight against. An amnesty ends the tribunals.</div>
+  <div class="ln"><b>Food / ships</b>Take the harvest, as promised. Venn holds over Raschev on Kroll's insistence. Selling a hull to Raschev would be treason.</div>
+  <div class="ln"><b>Corruption</b><span class="tag p">PROBABLE</span>Seized flats and workshops are reallocated through two Reckoning clerks, and at least eleven have gone to members' relations. <span class="tag r">RUMOUR</span>Kroll's brother runs a scrip exchange off the Arco-1 concourse.</div>
+  <div class="ln lever"><b>Lever</b>The allocation lists. If his own concourse learns who got the confiscated flats, Kroll loses the street, and the street is all he has.</div>
+</div>
+</details>
+
+<details>
+<summary><span class="n">The Belt</span><span class="l">Cllr Nkem</span><span class="s">6 seats</span><span class="v clean">CLEAN</span></summary>
+<div class="body">
+  <div class="ln"><b>Leader</b>Nkem, of the farm belt. Patient, numerate, distrusted in the arcologies for being right too early.</div>
+  <div class="ln"><b>Says</b>The four grams are politics, not scarcity. Let the trade flow and the hunger ends.</div>
+  <div class="ln"><b>Wants</b>Honest trade with Raschev, paid in something real, and the Belt's own produce counted fairly.</div>
+  <div class="ln"><b>Amnesty</b><span class="tag p">PROBABLE</span>Six for, if the Directorate's engineers go back to running the machines.</div>
+  <div class="ln"><b>Food / ships</b>Buy the harvest. Nkem would trade a hull for a ten-year supply contract and call it cheap.</div>
+  <div class="ln"><b>Corruption</b><span class="tag c">CONFIRMED</span>Nkem is clean. <span class="tag u">UNKNOWN</span>Nkem keeps production tables under lock that I have not seen. If they show what I think, they are the best evidence on Garoo.</div>
+  <div class="ln lever"><b>Lever</b>Ask for the tables, in person. Nkem will not hand them to a courier. Nkem might hand them to the Heroes of Raschev.</div>
+</div>
+</details>
+
+<details>
+<summary><span class="n">The Roll</span><span class="l">Cllr Hesper Vaun</span><span class="s">5 seats</span><span class="v unk">UNKNOWN</span></summary>
+<div class="body">
+  <div class="ln"><b>Leader</b>Keeper of the Roll, the register of every post on Garoo, from ward clerk to freighter purser. Quiet, polite, never on the concourse.</div>
+  <div class="ln"><b>Says</b>Nothing in public. She has given one speech, about procedure.</div>
+  <div class="ln"><b>Wants</b><span class="tag p">PROBABLE</span>The appointments. Since the revolution, more than four hundred posts have been filled through her office, and a growing number of the people who fill them owe her.</div>
+  <div class="ln"><b>Amnesty</b><span class="tag u">UNKNOWN</span>Her five vote together, and she has not said which way. She also sets the order paper, so she decides when a motion is read.</div>
+  <div class="ln"><b>Food / ships</b>No stated view. She will want to choose who signs the transfer.</div>
+  <div class="ln"><b>Corruption</b><span class="tag r">RUMOUR</span>Her people have approached the Sutyn Chancery about the seals. If she gets Ilse Sutyn's bank keys, she controls the frozen Imperial credits. Reported by <span class="rx" style="width:8ch" aria-label="redacted"></span><span class="ex">(b)(1)</span>. One meeting, at <span class="rx" style="width:10ch" aria-label="redacted"></span><span class="ex">(b)(6)</span>, on <span class="rx" style="width:6ch" aria-label="redacted"></span><span class="ex">(b)(6)</span>.</div>
+  <div class="ln lever"><b>Lever</b>Power, not money. Offer her the clerkship of the settlement, with her name on the paperwork, and she may bring you the count.</div>
+</div>
+</details>
+
+<details>
+<summary><span class="n">The Watch</span><span class="l">Warden-Cllr Sabine Orlo</span><span class="s">5 seats</span><span class="v comp">COMPROMISED</span></summary>
+<div class="body">
+  <div class="ln"><b>Leader</b>She commands the Concourse Watch, which replaced the Health Police in the arcologies. Hard, competent, and keeps lists.</div>
+  <div class="ln"><b>Says</b>Order first. Nobody can feed a world that is still settling scores in the corridors.</div>
+  <div class="ln"><b>Wants</b>The files. She holds the old Directorate's detention records and a great many new ones besides.</div>
+  <div class="ln"><b>Amnesty</b><span class="tag p">PROBABLE</span>For in private, against in public. Some of the four hundred dead in the burning weeks died with Watch men present. She wants those weeks covered, quietly.</div>
+  <div class="ln"><b>Food / ships</b>Will escort what the Council orders. Wants Grieve's boats under her and not the chamber.</div>
+  <div class="ln"><b>Corruption</b><span class="tag c">CONFIRMED</span>The Highport strongroom. Watch men opened it in the second week. The Directorate's ledger and the Treasury's receipt differ by about <span class="rx" style="width:7ch" aria-label="redacted"></span><span class="ex">(b)(3)</span> in Imperial credit notes. Two independent reports agree: <span class="rx" style="width:9ch" aria-label="redacted"></span><span class="ex">(b)(1)</span> and <span class="rx" style="width:9ch" aria-label="redacted"></span><span class="ex">(b)(1)</span>. <span class="tag p">PROBABLE</span>Old-guard families buy "safe-conduct" chits from her sergeants.</div>
+  <div class="ln lever"><b>Lever</b>The strongroom count. Use it once, in private, and never in the chamber. Do not show the papers. Describe them.</div>
+</div>
+</details>
+
+<details>
+<summary><span class="n">The Provisioners</span><span class="l">Cllr Dorrit Fane</span><span class="s">4 seats</span><span class="v comp">COMPROMISED</span></summary>
+<div class="body">
+  <div class="ln"><b>Leader</b>She chairs the Provisioning Committee, which handles the food, the ration lines and the scrip issue. She is charming and well fed.</div>
+  <div class="ln"><b>Says</b>Supply is a technical matter. Leave it to the committee.</div>
+  <div class="ln"><b>Wants</b>Wealth, and nobody looking.</div>
+  <div class="ln"><b>Amnesty</b><span class="tag p">PROBABLE</span>For an amnesty <i>without</i> truth. Any public disclosure would reach her books first.</div>
+  <div class="ln"><b>Food / ships</b>Wants the convoys restored on any terms. She does not care about ships.</div>
+  <div class="ln"><b>Corruption</b><span class="tag c">CONFIRMED</span>The Raschev luxuries, meaning the coffee, the cheese and the live animals, mostly never reach the terraces. They are sold at the A-port to offworld buyers for Imperial credits. I have seen copies of the manifests, obtained by <span class="rx" style="width:10ch" aria-label="redacted"></span><span class="ex">(b)(1)</span> through <span class="rx" style="width:8ch" aria-label="redacted"></span><span class="ex">(b)(3)</span>. <span class="tag p">PROBABLE</span>Scrip is printed past the committee's authorised issue. <span class="tag r">RUMOUR</span>Her people and Mandane's have been talking. They want the same kind of amnesty.</div>
+  <div class="ln lever"><b>Lever</b>She is the villain the concourse is waiting for. Expose her, and SIC can say the promise was stolen rather than broken. A word of advice: avoid the word "cream" on Garoo. You know why.</div>
+</div>
+</details>
+
+<details>
+<summary><span class="n">The Chamber</span><span class="l">Chair Amsel</span><span class="s">6 seats</span><span class="v unk">UNKNOWN</span></summary>
+<div class="body">
+  <div class="ln"><b>Leader</b>Amsel chairs the Council. She is a moderate who wants the settlement to carry the Council's name, not Kella's. Her bloc includes the three service seats, one of them Commodore Grieve's.</div>
+  <div class="ln"><b>Says</b>"A quarter of Garoo wants them hanged. The rest want bread."</div>
+  <div class="ln"><b>Wants</b>A chamber that governs, rather than following the concourse.</div>
+  <div class="ln"><b>Amnesty</b><span class="tag p">PROBABLE</span>Six for. Amsel wants it to name what it forgives. Grieve wants it to cover his crews.</div>
+  <div class="ln"><b>Food / ships</b>Grieve's five SDBs answer to the Council "when the council answers to something". They are not starships and cannot make the jump to Raschev. Do not ask him for them.</div>
+  <div class="ln"><b>Corruption</b><span class="tag p">PROBABLE</span>Amsel is clean. <span class="tag r">RUMOUR</span>One of the Chamber's civilian members is paid by Summersun for berth allocations. <span class="tag u">UNKNOWN</span>Which member. That is why the verdict says UNKNOWN.</div>
+  <div class="ln lever"><b>Lever</b>Her name on the settlement. Grieve's price is a council worth answering to. Show him one.</div>
+</div>
+</details>
+
+<h2>Closing sections</h2>
+
+<details>
+<summary><span class="n">The amnesty count</span><span class="l">21 of 41 to pass</span></summary>
+<div class="body">
+  <table>
+    <tr><th>Bloc</th><th>Seats</th><th>Likely vote</th></tr>
+    <tr><td>Chamber</td><td class="num">6</td><td>For</td></tr>
+    <tr><td>Belt</td><td class="num">6</td><td>For</td></tr>
+    <tr><td>Unmasked</td><td class="num">7</td><td>4 for, if there is a truth process · 3 against</td></tr>
+    <tr><td>Roll</td><td class="num">5</td><td>Vaun decides</td></tr>
+    <tr><td>Watch</td><td class="num">5</td><td>For, if it is quiet · against, if it is public</td></tr>
+    <tr><td>Provisioners</td><td class="num">4</td><td>For, without truth · against, with it</td></tr>
+    <tr><td>Reckoning</td><td class="num">8</td><td>Against</td></tr>
+  </table>
+  <div class="ln"><b>Reading</b>A truth-telling amnesty starts with 16 firm votes. With Vaun's five it reaches 21 exactly. An amnesty with no truth in it can also reach 21, by trading the four Unmasked votes for the Watch and the Provisioners. In my professional opinion, that would be the worse amnesty.</div>
+  <div class="ln lever"><b>Who counts it</b>Vaun, in the chamber. She holds the swing five and the order paper. Kella, on the concourse: the Reckoning and the three doubtful Unmasked take their cue from her. You need one of them. With both, the vote is safe.</div>
+</div>
+</details>
+
+<details>
+<summary><span class="n">Open questions</span><span class="l">still working</span></summary>
+<div class="body">
+  <div class="ln"><span class="tag u">UNKNOWN</span>Kella herself. I have nothing against her personally, and I have looked. I will not pretend that proves anything.</div>
+  <div class="ln"><span class="tag u">UNKNOWN</span>Where the strongroom difference went. It may be offworld already. It may be under Orlo's floor.</div>
+  <div class="ln"><span class="tag u">UNKNOWN</span>Whether Vaun has reached Ilse Sutyn. The Chancery clerk Ferrand would know. He is not one of mine.</div>
+  <div class="ln"><span class="tag u">UNKNOWN</span>Which Chamber member Summersun pays.</div>
+  <div class="ln"><span class="tag u">UNKNOWN</span>What is in Nkem's tables.</div>
+  <div class="ln"><span class="tag u">UNKNOWN</span>Who on the Council is keeping Venn without orders, and why. Kroll, I suspect. I suspect it only.</div>
+  <div class="ln"><span class="tag r">RUMOUR</span>A second channel between the Provisioners and the old guard. If it exists, it runs through <span class="rx" style="width:11ch" aria-label="redacted"></span><span class="ex">(b)(1)</span>. I will say no more about it until I am sure.</div>
+</div>
+</details>
+
+<details>
+<summary><span class="n">Source protection</span><span class="l">burn after reading</span></summary>
+<div class="body">
+  <div class="ln"><b>Sources</b><span class="rx" style="width:10ch" aria-label="redacted"></span><span class="ex">(b)(1)</span> · <span class="rx" style="width:8ch" aria-label="redacted"></span><span class="ex">(b)(1)</span> · <span class="rx" style="width:11ch" aria-label="redacted"></span><span class="ex">(b)(1)</span> · <span class="rx" style="width:7ch" aria-label="redacted"></span><span class="ex">(b)(1)</span> · <span class="rx" style="width:9ch" aria-label="redacted"></span><span class="ex">(b)(1)</span>. That is the number of them, and it is all you get.</div>
+  <div class="ln"><b>Channel</b>Collected by <span class="rx" style="width:12ch" aria-label="redacted"></span><span class="ex">(b)(3)</span>, carried by <span class="rx" style="width:9ch" aria-label="redacted"></span><span class="ex">(b)(3)</span>, and read here by <span class="rx" style="width:10ch" aria-label="redacted"></span><span class="ex">(b)(3)</span>.</div>
+  <div class="ln"><b>How they burn</b>
+    · If you quote a document word for word, the wording itself identifies who saw it.<br>
+    · If you name a figure exactly, it tells the other side which copy leaked.<br>
+    · If you confront two people with the same fact, they will compare who could have known it.<br>
+    · If a leak follows the ship's movements too neatly, someone will do the arithmetic.<br>
+    · If you speculate about my people, in a bar or on the ship's channel, you make that speculation part of the record.</div>
+  <div class="ln"><b>Rules</b>Paraphrase everything. Let the evidence turn up from somewhere other than me. Never guess aloud at who
+  told me, not even among yourselves. Do not ask me either. When you have read this, delete it, and do not forward it to the
+  ship's general channel. Captain, that means you.</div>
+</div>
+</details>
+
+<div class="sig">
+  More when the rest of the traffic is read. Do not wait for it to act.<br><br>
+  <span class="c-mark">T.</span><br>
+  <span style="color:var(--muted);font-size:.78rem">written in green ink, out of old habit</span>
+</div>
+
+<p class="foot">GAR/41/PART-ONE · one copy · not for retransmission</p>
+</div>
+</body>
+</html>
